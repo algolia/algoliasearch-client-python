@@ -15,7 +15,7 @@ To setup your project, follow these steps:
 from algoliasearch import algoliasearch
 
 client = algoliasearch.Client("YourApplicationID", 'YourAPIKey', 
-                              ["api-u1-1.algolia.io", "api-u1-2.algolia.io", "api-u1-3.algolia.io"])
+                              ["user-1.algolia.io", "user-2.algolia.io", "user-3.algolia.io"])
 ```
 
 General Principle
