@@ -81,7 +81,6 @@ class Client:
     Get the index object initialized (no server call needed for initialization)
 
     @param indexName the name of index
-    @param callback the result callback with one argument (the Index instance)
     """
     def initIndex(self, indexName):
         return Index(self.headers, self.hosts, indexName)
@@ -179,9 +178,6 @@ class Index:
     Override the content of object
     
     @param object contains the javascript object to save, the object must contains an objectID attribute
-    @param callback (optional) the result callback with two arguments:
-           success: boolean set to true if the request was successfull
-           content: the server answer that updateAt and taskID
     """
     def saveObject(self, obj):
         return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(obj["objectID"])), obj)
