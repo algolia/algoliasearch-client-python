@@ -1,0 +1,1 @@
+from algoliasearch import algoliasearch
