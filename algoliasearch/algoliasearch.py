@@ -29,24 +29,12 @@ import time
 
 POOL_MANAGER = urllib3.PoolManager()
 
-# Object returned by all API method
-class Answer:
-    def __init__(self, hasError, errorMsg, content):
-        self.error = hasError
-        self.errorMsg = errorMsg
-        self.content = content
-
-    # Returns True if the API call failed
-    def hasError(self):
-        return self.error
-
-    # Returns error message when hasError() == True
-    def getErrorMessage(self):
-        return self.errorMsg
-
-    # Returns answer content when hasError() == False
-    def getContent(self):
-        return self.content
+# Exception launched by Algolia Client when an error occured
+class AlgoliaException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 """ 
 Entry point in the Python API.
@@ -316,14 +304,16 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
             response = conn.urlopen(method, request, headers = headers, body = obj)
             content = json.loads(response.data)
             if response.status == 400:
-                return Answer(True, content["message"], None)
+                raise AlgoliaException(content["message"])
             elif response.status == 403:
-                return Answer(True, "Invalid Application-ID or API-Key", None)
+                raise AlgoliaException("Invalid Application-ID or API-Key")
             elif response.status == 404:
-                return Answer(True, "Resource does not exist", None)
+                raise AlgoliaException("Resource does not exist")
             elif response.status == 200:
-                return Answer(False, None, json.loads(response.data))
+                return json.loads(response.data)
+        except AlgoliaException, e:
+            raise e
         except:
             pass
-    return Answer(True, "Unreachable host", None)
+    raise AlgoliaException("Unreachable host")
 

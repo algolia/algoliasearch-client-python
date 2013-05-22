@@ -18,15 +18,6 @@ client = algoliasearch.Client("YourApplicationID", 'YourAPIKey',
                               ["user-1.algolia.io", "user-2.algolia.io", "user-3.algolia.io"])
 ```
 
-General Principle
--------------
-
-All API calls will return an object <em>Answer</em> that will expose three methods
-
- 1. hasError() that returns true if an error occured
- 2. errorMsg() that describes the error
- 3. getContent() that return the deserialized json object of API when there is no error
-
 Search 
 -------------
 To perform a search, you have just to initialize the index and perform a call to search.<br/>
@@ -99,8 +90,7 @@ Example with automatic `objectID` assignement:
 ```python
 res = index.addObject({"name": "San Francisco", 
                        "population": 805235})
-if not res.hasError():
-    print "ObjectID=%s" % res.getContent()["objectID"]
+print "ObjectID=%s" % res.["objectID"]
 ```
 
 Example with manual `objectID` assignement:
@@ -108,8 +98,7 @@ Example with manual `objectID` assignement:
 ```python
 res = index.addObject({"name": "San Francisco", 
                        "population": 805235}, "myID")
-if not res.hasError():
-    print "ObjectID=%s" % res.getContent()["objectID"]
+print "ObjectID=%s" % res.["objectID"]
 ```
 
 Update an existing object in the Index
@@ -189,7 +178,6 @@ You can easily retrieve settings and update them:
 
 ```python
 settings = index.getSettings();
-if not settings.hasError():
-    settings.getContent()["customRanking"] = ["desc(population)", "asc(name)"]
-    index.setSettings(settings.getContent())
+settings.["customRanking"] = ["desc(population)", "asc(name)"]
+index.setSettings(settings)
 ```
