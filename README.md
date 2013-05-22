@@ -183,7 +183,7 @@ We have four available criteria:
 The standard order is ["typo", "geo", position", "custom"]
  * **customRanking**: (array of strings) lets you specify part of the ranking.<br/>
 The syntax of this condition is an array of strings containing attributes prefixed by asc (ascending order) or desc (descending order) operator.<br/>
-For example `"customRanking" => ["desc(population)", "asc(name)"]`
+For example `"customRanking": ["desc(population)", "asc(name)"]`
 
 You can easily retrieve settings and update them:
 
