@@ -8,10 +8,12 @@ Setup
 To setup your project, follow these steps:
 
  1. Install [urllib3](https://pypi.python.org/pypi/urllib3)
- 2. Install AlgoliaSearch 
+ 2. Install AlgoliaSearch using pip:
+
  <code>
 pip install https://github.com/algolia/algoliasearch-client-python/zipball/master
 </code>
+
 Or from the sources:
 <code>
 python setup.py install
