@@ -113,7 +113,7 @@ class Client:
              - editSettings : allows to change index settings (https only)
     """
     def addUserKey(self, acls):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", acls)
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", {"acl": acls} )
 
 """
 Contains all the functions related to one index
