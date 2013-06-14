@@ -187,7 +187,7 @@ You can retrieve all settings using the `getSettings` function. The result will 
  * **attributesToIndex**: (array of strings) the list of fields you want to index.<br/>By default all textual attributes of your objects are indexed, but you should update it to get optimal results.<br/>This parameter has two important uses:
  * *Limit the attributes to index*.<br/>For example if you store a binary image in base64, you want to store it and be able to retrieve it but you don't want to search in the base64 string.
  * *Control part of the ranking*.<br/>Matches in attributes at the beginning of the list will be considered more important than matches in attributes further down the list. 
-  * **ranking**: (array of strings) controls the way results are sorted.<br/>We have four available criteria: 
+ * **ranking**: (array of strings) controls the way results are sorted.<br/>We have four available criteria: 
   * **typo**: sort according to number of typos,
   * **geo**: sort according to decreassing distance when performing a geo-location based search,
   * **position**: sort according to the proximity of query words in the object, 
