@@ -191,7 +191,7 @@ You can retrieve all settings using the `getSettings` function. The result will 
   * **typo**: sort according to number of typos,
   * **geo**: sort according to decreassing distance when performing a geo-location based search,
   * **position**: sort according to the proximity of query words in the object, 
-  * **custom**: sort according to a user defined formula.<br/>The standard order is ["typo", "geo", position", "custom"]
+  * **custom**: sort according to a user defined formula set in **customRanking** attribute.<br/>The standard order is ["typo", "geo", position", "custom"]
  * **customRanking**: (array of strings) lets you specify part of the ranking.<br/>The syntax of this condition is an array of strings containing attributes prefixed by asc (ascending order) or desc (descending order) operator.
  For example `"customRanking" => ["desc(population)", "asc(name)"]`
 
