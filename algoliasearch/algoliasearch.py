@@ -75,7 +75,7 @@ class Client:
     Return an object of the form {"deletedAt": "2013-01-18T15:33:13.556Z"}
     """
     def deleteIndex(self, indexName):
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % urllib.quote(indexName))
+        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % urllib.quote(indexName.encode('utf8')))
 
     """
     Get the index object initialized (no server call needed for initialization)
@@ -124,7 +124,7 @@ class Index:
         self.hosts = hosts
         self.headers = headers
         self.indexName = indexName
-        self.urlIndexName = urllib.quote(self.indexName)
+        self.urlIndexName = urllib.quote(self.indexName.encode('utf8'))
 
     """
     Add an object in this index
@@ -138,7 +138,7 @@ class Index:
         if objectID is None:
             return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s" % self.urlIndexName, content)
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID)), content)
+            return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID.encode('utf8'))), content)
 
     """
     Add several objects
@@ -159,7 +159,7 @@ class Index:
     @param attributesToRetrieve (optional) if set, contains the list of attributes to retrieve as a string separated by a comma
     """
     def getObject(self, objectID, attributesToRetrieve = None):
-        objID = urllib.quote(objectID)
+        objID = urllib.quote(objectID.encode('utf8'))
         if (attributesToRetrieve == None):
             return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.urlIndexName, objID))
         else:
@@ -172,7 +172,7 @@ class Index:
            object must contains an objectID attribute
     """
     def partialUpdateObject(self, partialObject):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, urllib.quote(partialObject["objectID"])), partialObject)
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, urllib.quote(partialObject["objectID"].encode('utf8'))), partialObject)
 
     """
     Override the content of object
@@ -180,7 +180,7 @@ class Index:
     @param object contains the object to save, the object must contains an objectID attribute
     """
     def saveObject(self, obj):
-        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(obj["objectID"])), obj)
+        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(obj["objectID"].encode('utf8'))), obj)
 
     """
     Override the content of several objects
@@ -200,7 +200,7 @@ class Index:
     @param objectID the unique identifier of object to delete
     """
     def deleteObject(self, objectID):
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID)))
+        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID.encode('utf8'))))
 
     """
     Search inside the index
@@ -241,9 +241,9 @@ class Index:
     """
     def search(self, query, args = None):
         if args == None:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, urllib.quote(query)))
+            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, urllib.quote(query.encode('utf8'))))
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, urllib.quote(query), urllib.urlencode(args)))
+            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, urllib.quote(query.encode('utf8')), urllib.urlencode(args)))
 
     """
     Wait the publication of a task on the server. 
