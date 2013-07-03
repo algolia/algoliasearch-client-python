@@ -105,8 +105,7 @@ class Client:
     @param acls the list of ACL for this key. Defined by an array of strings that 
            can contains the following values:
              - search: allow to search (https and http)
-             - addObject: allows to add a new object in the index (https only)
-             - updateObject : allows to change content of an existing object (https only)
+             - addObject: allows to add/update a new object in the index (https only)
              - deleteObject : allows to delete an existing object (https only)
              - deleteIndex : allows to delete index content (https only)
              - settings : allows to get index settings (https only)
@@ -326,8 +325,7 @@ class Index:
     @param acls the list of ACL for this key. Defined by an array of strings that 
            can contains the following values:
              - search: allow to search (https and http)
-             - addObject: allows to add a new object in the index (https only)
-             - updateObject : allows to change content of an existing object (https only)
+             - addObject: allows to add/update a new object in the index (https only)
              - deleteObject : allows to delete an existing object (https only)
              - deleteIndex : allows to delete index content (https only)
              - settings : allows to get index settings (https only)

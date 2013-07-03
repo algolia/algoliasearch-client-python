@@ -74,7 +74,7 @@ To perform a search, you just need to initialize the index and perform a call to
 You can use the following optional arguments:
 
  * **attributes**: a string that contains the names of attributes to retrieve separated by a comma.<br/>By default all attributes are retrieved.
- * **attributesToHighlight**: a string that contains the names of attributes to highlight separated by a comma.<br/>By default indexed attributes are highlighted.
+ * **attributesToHighlight**: a string that contains the names of attributes to highlight separated by a comma.<br/>By default indexed attributes are highlighted. Numerical attributes cannot be highlighted. A **matchLevel** is returned for each highlighted attribute and can contain: "full" if all the query terms were found in the attribute, "partial" if only some of the query terms were found, or "none" if none of the query terms were found.
  * **attributesToSnippet**: a string that contains the names of attributes to snippet alongside the number of words to return (syntax is 'attributeName:nbWords'). Attributes are separated by a comma (Example: "attributesToSnippet=name:10,content:10").<br/>By default no snippet is computed.
  * **minWordSizeForApprox1**: the minimum number of characters in a query word to accept one typo in this word.<br/>Defaults to 3.
  * **minWordSizeForApprox2**: the minimum number of characters in a query word to accept two typos in this word.<br/>Defaults to 7.
@@ -207,7 +207,8 @@ You can retrieve all settings using the `getSettings` function. The result will 
  * **minWordSizeForApprox2**: (integer) the minimum number of characters to accept two typos (default = 7).
  * **hitsPerPage**: (integer) the number of hits per page (default = 10).
  * **attributesToRetrieve**: (array of strings) default list of attributes to retrieve in objects.
- * **attributesToHighlight**: (array of strings) default list of attributes to highlight
+ * **attributesToHighlight**: (array of strings) default list of attributes to highlight.
+
  * **attributesToSnippet**: (array of strings) default list of attributes to snippet alongside the number of words to return (syntax is 'attributeName:nbWords')<br/>By default no snippet is computed.
  * **attributesToIndex**: (array of strings) the list of fields you want to index.<br/>By default all textual attributes of your objects are indexed, but you should update it to get optimal results.<br/>This parameter has two important uses:
   * *Limits the attributes to index*.<br/>For example if you store a binary image in base64, you want to store it and be able to retrieve it but you don't want to search in the base64 string.
@@ -262,8 +263,7 @@ index.listUserKeys()
 
 Each key is defined by a set of rights that specify the authorized actions. The different rights are:
  * **search**: allows to search,
- * **addObject**: allows to add a new object in the index,
- * **updateObject**: allows to change content of an existing object,
+ * **addObject**: allows to add/update a new object in the index,
  * **deleteObject**: allows to delete an existing object,
  * **deleteIndex**: allows to delete index content,
  * **settings**: allows to get index settings,
