@@ -342,7 +342,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
             obj = None
             if body != None:
                 obj = json.dumps(body)
-            conn = POOL_MANAGER.connection_from_host(host, scheme = 'https', port=8080)
+            conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
             response = conn.urlopen(method, request, headers = headers, body = obj)
             content = json.loads(response.data)
             if response.status == 400:
