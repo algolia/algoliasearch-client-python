@@ -4,6 +4,25 @@ Algolia Search API Client for Python
 This Python client let you easily use the Algolia Search API from your backend.
 The service is currently in Beta, you can request an invite on our [website](http://www.algolia.com/pricing/).
 
+Table of Content
+-------------
+**Get started**
+
+1. [Setup](#setup) 
+1. [Quick Start](#quick-start)
+
+**Commands reference**
+
+1. [Search](#search)
+1. [Add a new object](#add-a-new-object-in-the-index)
+1. [Update an object](#update-an-existing-obect-in-the-index)
+1. [Get an object](#get-an-object)
+1. [Delete an object](#delete-an-object)
+1. [Index settings](#index-settings)
+1. [Delete an index](#delete-an-index)
+1. [Security / User API Keys](#security--user-api-keys)
+
+
 Setup
 -------------
 To setup your project, follow these steps:
@@ -162,11 +181,11 @@ Get an object
 You can easily retrieve an object using its `objectID` and optionnaly a list of attributes you want to retrieve (using comma as separator):
 
 ```python
-// Retrieves all attributes
+# Retrieves all attributes
 index.getObject("myID");
-// Retrieves name and population attributes
+# Retrieves name and population attributes
 res = index.getObject("myID", "name,population");
-// Retrieves only the name attribute
+# Retrieves only the name attribute
 res = index.getObject("myID", "name");
 ```
 
@@ -191,19 +210,21 @@ You can retrieve all settings using the `getSettings` function. The result will 
  * **attributesToHighlight**: (array of strings) default list of attributes to highlight
  * **attributesToSnippet**: (array of strings) default list of attributes to snippet alongside the number of words to return (syntax is 'attributeName:nbWords')<br/>By default no snippet is computed.
  * **attributesToIndex**: (array of strings) the list of fields you want to index.<br/>By default all textual attributes of your objects are indexed, but you should update it to get optimal results.<br/>This parameter has two important uses:
- * *Limit the attributes to index*.<br/>For example if you store a binary image in base64, you want to store it and be able to retrieve it but you don't want to search in the base64 string.
- * *Control part of the ranking*.<br/>Matches in attributes at the beginning of the list will be considered more important than matches in attributes further down the list. 
- * **ranking**: (array of strings) controls the way results are sorted.<br/>We have four available criteria: 
+  * *Limits the attributes to index*.<br/>For example if you store a binary image in base64, you want to store it and be able to retrieve it but you don't want to search in the base64 string.
+  * *Controls part of the ranking*.<br/>Matches in attributes at the beginning of the list will be considered more important than matches in attributes further down the list. 
+ * **ranking**: (array of strings) controls the way hits are sorted.<br/>We have five available criteria:
   * **typo**: sort according to number of typos,
-  * **geo**: sort according to decreassing distance when performing a geo-location based search,
-  * **position**: sort according to the proximity of query words in the object, 
-  * **custom**: sort according to a user defined formula set in **customRanking** attribute.<br/>The standard order is ["typo", "geo", position", "custom"]
+  * **geo**: sort according to decreasing distance when performing a geo-location based search,
+  * **proximity**: sort according to the proximity of query words in hits, 
+  * **attribute**: sort according to the order of attributes defined by **attributesToIndex**,
+  * **custom**: sort according to a user defined formula set in **customRanking** attribute.
+  <br/>The default order is `["typo", "geo", "proximity", "attribute", "custom"]`. We strongly recommend to keep this configuration.
+ * **customRanking**: (array of strings) lets you specify part of the ranking.<br/>The syntax of this condition is an array of strings containing attributes prefixed by asc (ascending order) or desc (descending order) operator.
+ For example `"customRanking" => ["desc(population)", "asc(name)"]`
  * **queryType**: select how the query words are interpreted:
   * **prefixAll**: all query words are interpreted as prefixes (default behavior).
   * **prefixLast**: only the last word is interpreted as a prefix. This option is recommended if you have a lot of content to speedup the processing.
   * **prefixNone**: no query word is interpreted as a prefix. This option is not recommended.
- * **customRanking**: (array of strings) lets you specify part of the ranking.<br/>The syntax of this condition is an array of strings containing attributes prefixed by asc (ascending order) or desc (descending order) operator.
- For example `"customRanking" => ["desc(population)", "asc(name)"]`
 
 You can easily retrieve settings or update them:
 
@@ -215,3 +236,71 @@ print settings
 ```python
 index.setSettings({"customRanking": ["desc(population)", "asc(name)"]})
 ```
+
+Delete an index
+-------------
+You can delete an index using its name:
+
+```python
+client.deleteIndex("cities")
+```
+
+Security / User API Keys
+-------------
+
+The admin API key provides full control of all your indexes. 
+You can also generate user API keys to control security. 
+These API keys can be restricted to a set of operations or/and restricted to a given index.
+
+To list existing keys, you can use `listUserKeys` method:
+```python
+# Lists global API Keys
+client.listUserKeys()
+# Lists API Keys that can access only to this index
+index.listUserKeys()
+```
+
+Each key is defined by a set of rights that specify the authorized actions. The different rights are:
+ * **search**: allows to search,
+ * **addObject**: allows to add a new object in the index,
+ * **updateObject**: allows to change content of an existing object,
+ * **deleteObject**: allows to delete an existing object,
+ * **deleteIndex**: allows to delete index content,
+ * **settings**: allows to get index settings,
+ * **editSettings**: allows to change index settings.
+
+Example of API Key creation:
+```python
+# Creates a new global API key that can only perform search actions
+res = client.addUserKey(["search"])
+print res["key"]
+# Creates a new API key that can only perform search action on this index
+res = index.addUserKey(["search"])
+print res["key"]
+```
+You can also create a temporary API key that will be valid only for a specific period of time (in seconds):
+```python
+# Creates a new global API key that is valid for 300 seconds
+res = client.addUserKey(["search"], 300)
+print res["key"]
+# Creates a new index specific API key valid for 300 seconds
+res = index.addUserKey(["search"], 300)
+print res["key"]
+```
+
+Get the rights of a given key:
+```python
+# Gets the rights of a global key
+print = client.getUserKeyACL("f420238212c54dcfad07ea0aa6d5c45f")
+# Gets the rights of an index specific key
+print index.getUserKeyACL("71671c38001bf3ac857bc82052485107")
+```
+
+Delete an existing key:
+```python
+# Deletes a global key
+print = client.deleteUserKey("f420238212c54dcfad07ea0aa6d5c45f")
+# Deletes an index specific key
+print index.deleteUserKey("71671c38001bf3ac857bc82052485107")
+```
+

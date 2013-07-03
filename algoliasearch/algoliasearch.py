@@ -111,9 +111,10 @@ class Client:
              - deleteIndex : allows to delete index content (https only)
              - settings : allows to get index settings (https only)
              - editSettings : allows to change index settings (https only)
+    @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
     """
-    def addUserKey(self, acls):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", {"acl": acls} )
+    def addUserKey(self, acls, validity = 0):
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", {"acl": acls, "validity": validity} )          
 
 """
 Contains all the functions related to one index
@@ -305,6 +306,37 @@ class Index:
     def setSettings(self, settings):
         return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/settings" % self.urlIndexName, settings)
 
+    """
+    List all existing user keys of this index with their associated ACLs
+    """
+    def listUserKeys(self):
+        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/keys" % self.urlIndexName)
+
+    # Get ACL of a user key associated to this index
+    def getUserKeyACL(self, key):
+        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
+
+    # Delete an existing user key associated to this index
+    def deleteUserKey(self, key):
+        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
+
+    """
+    Create a new user key associated to this index (can only access to this index)
+
+    @param acls the list of ACL for this key. Defined by an array of strings that 
+           can contains the following values:
+             - search: allow to search (https and http)
+             - addObject: allows to add a new object in the index (https only)
+             - updateObject : allows to change content of an existing object (https only)
+             - deleteObject : allows to delete an existing object (https only)
+             - deleteIndex : allows to delete index content (https only)
+             - settings : allows to get index settings (https only)
+             - editSettings : allows to change index settings (https only)
+    @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
+    """
+    def addUserKey(self, acls, validity = 0):
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/keys" % self.urlIndexName, {"acl": acls, "validity": validity} )   
+
 # Util function used to send request
 def AlgoliaUtils_request(headers, hosts, method, request, body = None):
     for host in hosts:
@@ -312,7 +344,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
             obj = None
             if body != None:
                 obj = json.dumps(body)
-            conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
+            conn = POOL_MANAGER.connection_from_host(host, scheme = 'https', port=8080)
             response = conn.urlopen(method, request, headers = headers, body = obj)
             content = json.loads(response.data)
             if response.status == 400:
@@ -325,7 +357,8 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
                 return json.loads(response.data)
         except AlgoliaException, e:
             raise e
-        except:
+        except Exception as inst:
+            print inst
             pass
     raise AlgoliaException("Unreachable host")
 
