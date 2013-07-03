@@ -263,7 +263,7 @@ index.listUserKeys()
 
 Each key is defined by a set of rights that specify the authorized actions. The different rights are:
  * **search**: allows to search,
- * **addObject**: allows to add/update a new object in the index,
+ * **addObject**: allows to add/update an object in the index,
  * **deleteObject**: allows to delete an existing object,
  * **deleteIndex**: allows to delete index content,
  * **settings**: allows to get index settings,
