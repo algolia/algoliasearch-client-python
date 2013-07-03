@@ -357,8 +357,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
                 return json.loads(response.data)
         except AlgoliaException, e:
             raise e
-        except Exception as inst:
-            print inst
+        except:
             pass
     raise AlgoliaException("Unreachable host")
 
