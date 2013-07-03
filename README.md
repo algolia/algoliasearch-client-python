@@ -208,7 +208,6 @@ You can retrieve all settings using the `getSettings` function. The result will 
  * **hitsPerPage**: (integer) the number of hits per page (default = 10).
  * **attributesToRetrieve**: (array of strings) default list of attributes to retrieve in objects.
  * **attributesToHighlight**: (array of strings) default list of attributes to highlight.
-
  * **attributesToSnippet**: (array of strings) default list of attributes to snippet alongside the number of words to return (syntax is 'attributeName:nbWords')<br/>By default no snippet is computed.
  * **attributesToIndex**: (array of strings) the list of fields you want to index.<br/>By default all textual attributes of your objects are indexed, but you should update it to get optimal results.<br/>This parameter has two important uses:
   * *Limits the attributes to index*.<br/>For example if you store a binary image in base64, you want to store it and be able to retrieve it but you don't want to search in the base64 string.
@@ -291,7 +290,7 @@ print res["key"]
 Get the rights of a given key:
 ```python
 # Gets the rights of a global key
-print = client.getUserKeyACL("f420238212c54dcfad07ea0aa6d5c45f")
+print client.getUserKeyACL("f420238212c54dcfad07ea0aa6d5c45f")
 # Gets the rights of an index specific key
 print index.getUserKeyACL("71671c38001bf3ac857bc82052485107")
 ```
@@ -299,7 +298,7 @@ print index.getUserKeyACL("71671c38001bf3ac857bc82052485107")
 Delete an existing key:
 ```python
 # Deletes a global key
-print = client.deleteUserKey("f420238212c54dcfad07ea0aa6d5c45f")
+print client.deleteUserKey("f420238212c54dcfad07ea0aa6d5c45f")
 # Deletes an index specific key
 print index.deleteUserKey("71671c38001bf3ac857bc82052485107")
 ```
