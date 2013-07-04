@@ -25,7 +25,6 @@ Table of Content
 1. [Batch writes](#batch-writes)
 1. [Security / User API Keys](#security--user-api-keys)
 
-
 Setup
 -------------
 To setup your project, follow these steps:
