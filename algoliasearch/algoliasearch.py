@@ -190,7 +190,7 @@ class Index:
     def saveObjects(self, objects):
         requests = []
         for obj in objects:
-            requests.append({"action": "updateObject", "objetID": obj["objectID"], "body": obj})
+            requests.append({"action": "updateObject", "objectID": obj["objectID"], "body": obj})
         request = {"requests": requests}
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
 
@@ -255,10 +255,7 @@ class Index:
     def waitTask(self, taskID, timeBeforeRetry = 100):
         while True:
             res = AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/task/%d/" % (self.urlIndexName, taskID))
-            if res.hasError():
-                return res;
-            content = res.getContent()
-            if (content["status"] == "published"):
+            if (res["status"] == "published"):
                 return res
             time.sleep(timeBeforeRetry / 1000)
 
