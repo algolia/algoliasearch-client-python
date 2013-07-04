@@ -51,7 +51,7 @@ index = client.initIndex("cities")
 batch = json.load(open('1000-cities.json'))
 index.addObjects(batch["objects"])
 ```
-The [1000-cities.json](https://github.com/algolia/algoliasearch-client-python/blob/master/1000-cities.json) file contains city names extracted from [Geonames](http://www.geonames.org) as an array of objects.
+The [1000-cities.json](https://github.com/algolia/algoliasearch-client-python/blob/master/1000-cities.json) file contains city names extracted from [Geonames](http://www.geonames.org).
 
 You can then start to search for a city name (even with typos):
 ```python
