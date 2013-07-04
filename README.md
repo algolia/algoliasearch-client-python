@@ -259,24 +259,26 @@ client.deleteIndex("cities")
 Wait indexing
 -------------
 
-All write operations return a `taskID` when the job is securely stored on our infrastructure but not when the job is published in your index. You can easily wait indexing using the `waitTask` method on the `taskID` returned by a write operation.
+All write operations return a `taskID` when the job is securely stored on our infrastructure but not when the job is published in your index. Even if it's extremely fast, you can easily ensure indexing is complete using the `waitTask` method on the `taskID` returned by a write operation.
 
-For example to wait for indexing of a new object:
+For example, to wait for indexing of a new object:
 ```python
 res = index.addObject({"name": "San Francisco", 
                        "population": 805235})
 index.waitTask(res["taskID"])
 ```
 
+If you want to ensure multiple objects have been indexed, you can only check the biggest taskID.
+
 Batch writes
 -------------
 
-You may want to perform multiple operations with one API call to reduce latency.
-We expose two methods to perform batch:
- * `addObjects`: add an array of object using automatic `objectID` assignement
- * `saveObjects`: add or update an array of object that contains an `objectID` attribute
+You may want to perform multiple operations with a single API call to reduce latency.
+We expose two methods to perform batches:
+ * `addObjects`: add an array of objects using automatic `objectID` assignement,
+ * `saveObjects`: add or update an array of objects that contain an `objectID` attribute.
 
-Example using automatic `objectID` assignement
+Example using automatic `objectID` assignement:
 ```python
 res = index.addObjects([{"name": "San Francisco", 
                          "population": 805235},
