@@ -31,13 +31,12 @@ To setup your project, follow these steps:
 
  1. Install [urllib3](https://pypi.python.org/pypi/urllib3)
  2. Install AlgoliaSearch using pip: <code>pip install https://github.com/algolia/algoliasearch-client-python/zipball/master</code> or from the sources: <code>python setup.py install</code>.
- 2. Initialize the client with your ApplicationID, API-Key and list of hostnames (you can find all of them on your Algolia account)
+ 2. Initialize the client with your ApplicationID and API-Key (you can find all of them on your Algolia account)
 
 ```python
 from algoliasearch import algoliasearch
 
-client = algoliasearch.Client("YourApplicationID", 'YourAPIKey', 
-  ["YourHostname-1.algolia.io", "YourHostname-2.algolia.io", "YourHostname-3.algolia.io"])
+client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
 ```
 
 Quick Start

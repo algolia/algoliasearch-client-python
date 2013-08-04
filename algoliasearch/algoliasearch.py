@@ -48,8 +48,11 @@ class Client:
     @param apiKey a valid API key for the service
     @param hostsArray the list of hosts that you have received for the service
     """
-    def __init__(self, applicationID, apiKey, hostsArray):
-        self.hosts = hostsArray
+    def __init__(self, applicationID, apiKey, hostsArray = None):
+        if (hostsArray == None):
+          self.hosts = ["%s-1.algolia.io" % applicationID, "%s-2.algolia.io" % applicationID, "%s-3.algolia.io" % applicationID]
+        else:
+          self.hosts = hostsArray
         random.shuffle(self.hosts)
         self.applicationID = applicationID
         self.apiKey = apiKey
