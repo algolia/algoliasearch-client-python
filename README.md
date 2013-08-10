@@ -43,28 +43,39 @@ Quick Start
 -------------
 This quick start is a 30 seconds tutorial where you can discover how to index and search objects.
 
-Without any prior-configuration, you can index the 1000 world's biggest cities in the ```cities``` index with the following code:
+Without any prior-configuration, you can index [500 contacts](https://github.com/algolia/algoliasearch-client-ruby/blob/master/contacts.json) in the ```contacts``` index with the following code:
 ```python
-index = client.initIndex("cities")
-batch = json.load(open('1000-cities.json'))
-index.addObjects(batch["objects"])
-```
-The [1000-cities.json](https://github.com/algolia/algoliasearch-client-python/blob/master/1000-cities.json) file contains city names extracted from [Geonames](http://www.geonames.org).
-
-You can then start to search for a city name (even with typos):
-```python
-print index.search("san fran")
-print index.search("loz anqel")
+index = client.initIndex("contact")
+batch = json.load(open('contacts.json'))
+index.addObjects(batch)
 ```
 
-Settings can be customized to tune the index behavior. For example you can add a custom sort by population to the already good out-of-the-box relevance to raise bigger cities above smaller ones. To update the settings, use the following code:
+You can then start to search for a contact firstname, lastname, company, ... (even with typos):
 ```python
-index.setSettings({"customRanking": ["desc(population)", "asc(name)"]})
+# search by firstname
+print index.search("jimmie")
+# search a firstname with typo
+print index.search("jimie")
+# search for a company
+print index.search("california paint")
+# search for a firstname & company
+print index.search("jimmie paint")
 ```
 
-And then search for all cities that start with an "s":
+Settings can be customized to tune the search behavior. For example you can add a custom sort by number of followers to the already good out-of-the-box relevance:
 ```python
-print index.search("s")
+index.setSettings({"customRanking": ["desc(followers)"]})
+```
+You can also configure the list of attributes you want to index by order of importance (first = most important):
+```python
+index.setSettings({"attributesToIndex": ["lastname", "firstname", "company", 
+                                         "email", "city", "address"]})
+```
+
+Since the engine is designed to suggest results as you type, you'll generally search by prefix. In this case the order of attributes is very important to decide which hit is the best:
+```ruby
+print index.search("or")
+print index.search("jim")
 ```
 
 Search
@@ -91,38 +102,66 @@ You can use the following optional arguments:
  * **tags**: filter the query by a set of tags. You can AND tags by separating them by commas. To OR tags, you must add parentheses. For example, `tags=tag1,(tag2,tag3)` means *tag1 AND (tag2 OR tag3)*.<br/>At indexing, tags should be added in the _tags attribute of objects (for example `{"_tags":["tag1","tag2"]}` )
 
 ```python
-index = client.initIndex("cities")
+index = client.initIndex("contacts")
 res = index.search("query string")
-res = index.search("query string", { "attributes": "population,name", "hitsPerPage": 20})
+res = index.search("query string", { "attributes": "fistname,lastname", "hitsPerPage": 20})
 ```
 
 The server response will look like:
 
 ```javascript
 {
-    "hits":[
-            { "name": "Betty Jane Mccamey",
-              "company": "Vita Foods Inc.",
-              "email": "betty@mccamey.com",
-              "objectID": "6891Y2usk0",
-              "_highlightResult": {"name": {"value": "Betty <em>Jan</em>e Mccamey", "matchLevel": "full"}, 
-                                   "company": {"value": "Vita Foods Inc.", "matchLevel": "none"},
-                                   "email": {"value": "betty@mccamey.com", "matchLevel": "none"} }
-            },
-            { "name": "Gayla Geimer Dan", 
-              "company": "Ortman Mccain Co", 
-              "email": "gayla@geimer.com", 
-              "objectID": "ap78784310" 
-              "_highlightResult": {"name": {"value": "Gayla Geimer <em>Dan</em>", "matchLevel": "full" },
-                                   "company": {"value": "Ortman Mccain Co", "matchLevel": "none" },
-                                   "email": {"highlighted": "gayla@geimer.com", "matchLevel": "none" } }
-            }],
-    "page":0,
-    "nbHits":2,
-    "nbPages":1,
-    "hitsPerPage:":20,
-    "processingTimeMS":1,
-    "query":"jan"
+  "hits": [
+    {
+      "firstname": "Jimmie",
+      "lastname": "Barninger",
+      "company": "California Paint & Wlpaper Str",
+      "address": "Box #-4038",
+      "city": "Modesto",
+      "county": "Stanislaus",
+      "state": "CA",
+      "zip": "95352",
+      "phone": "209-525-7568",
+      "fax": "209-525-4389",
+      "email": "jimmie@barninger.com",
+      "web": "http://www.jimmiebarninger.com",
+      "followers": 3947,
+      "objectID": "433",
+      "_highlightResult": {
+        "firstname": {
+          "value": "<em>Jimmie</em>",
+          "matchLevel": "partial"
+        },
+        "lastname": {
+          "value": "Barninger",
+          "matchLevel": "none"
+        },
+        "company": {
+          "value": "California <em>Paint</em> & Wlpaper Str",
+          "matchLevel": "partial"
+        },
+        "address": {
+          "value": "Box #-4038",
+          "matchLevel": "none"
+        },
+        "city": {
+          "value": "Modesto",
+          "matchLevel": "none"
+        },
+        "email": {
+          "value": "<em>jimmie</em>@barninger.com",
+          "matchLevel": "partial"
+        }
+      }
+    }
+  ],
+  "page": 0,
+  "nbHits": 1,
+  "nbPages": 1,
+  "hitsPerPage": 20,
+  "processingTimeMS": 1,
+  "query": "jimmie paint",
+  "params": "query=jimmie+paint&"
 }
 ```
 
@@ -140,16 +179,16 @@ Objects are schema less, you don't need any configuration to start indexing. The
 Example with automatic `objectID` assignement:
 
 ```python
-res = index.addObject({"name": "San Francisco", 
-                       "population": 805235})
+res = index.addObject({"firstname": "Jimmie", 
+                       "lastname": "Barninger"})
 print "ObjectID=%s" % res["objectID"]
 ```
 
 Example with manual `objectID` assignement:
 
 ```python
-res = index.addObject({"name": "San Francisco", 
-                       "population": 805235}, "myID")
+res = index.addObject({"firstname": "Jimmie", 
+                       "lastname": "Barninger"}, "myID")
 print "ObjectID=%s" % res["objectID"]
 ```
 
@@ -164,15 +203,16 @@ You have two options to update an existing object:
 Example to replace all the content of an existing object:
 
 ```python
-index.saveObject({"name": "San Francisco", 
-                  "population": 805235, 
+index.saveObject({"firstname": "Jimmie", 
+                  "lastname": "Barninger", 
+                  "city": "New York"
                   "objectID": "myID"})
 ```
 
-Example to update only the population attribute of an existing object:
+Example to update only the city attribute of an existing object:
 
 ```python
-index.partialUpdateObject({"population": 805235, 
+index.partialUpdateObject({"city": "San Francisco", 
                            "objectID": "myID"})
 ```
 
@@ -184,10 +224,10 @@ You can easily retrieve an object using its `objectID` and optionnaly a list of 
 ```python
 # Retrieves all attributes
 index.getObject("myID");
-# Retrieves name and population attributes
-res = index.getObject("myID", "name,population");
-# Retrieves only the name attribute
-res = index.getObject("myID", "name");
+# Retrieves firstname and lastname attributes
+res = index.getObject("myID", "firstname,lastname");
+# Retrieves only the firstname attribute
+res = index.getObject("myID", "firstname");
 ```
 
 Delete an object
@@ -236,7 +276,7 @@ print settings
 ```
 
 ```python
-index.setSettings({"customRanking": ["desc(population)", "asc(name)"]})
+index.setSettings({"customRanking": ["desc(followers)"]})
 ```
 
 List indexes
@@ -252,7 +292,7 @@ Delete an index
 You can delete an index using its name:
 
 ```python
-client.deleteIndex("cities")
+client.deleteIndex("contacts")
 ```
 
 Wait indexing
@@ -262,8 +302,8 @@ All write operations return a `taskID` when the job is securely stored on our in
 
 For example, to wait for indexing of a new object:
 ```python
-res = index.addObject({"name": "San Francisco", 
-                       "population": 805235})
+res = index.addObject({"firstname": "Jimmie", 
+                       "lastname": "Barninger"})
 index.waitTask(res["taskID"])
 ```
 
@@ -279,20 +319,20 @@ We expose two methods to perform batches:
 
 Example using automatic `objectID` assignement:
 ```python
-res = index.addObjects([{"name": "San Francisco", 
-                         "population": 805235},
-                        {"name":"Los Angeles",
-                         "population":3792621}])
+res = index.addObjects([{"firstname": "Jimmie", 
+                         "lastname": "Barninger"},
+                        {"firstname": "Warren", 
+                         "lastname": "Speach"}])
 ```
 
 Example with user defined `objectID` (add or update):
 ```python
-res = index.saveObjects([{"name": "San Francisco", 
-                         "population": 805235,
-                         "objectID": "SFO"},
-                        {"name":"Los Angeles",
-                         "population":3792621,
-                         "objectID":"LA"}])
+res = index.saveObjects([{"firstname": "Jimmie", 
+                          "lastname": "Barninger",
+                         "objectID": "myID1"},
+                        {"firstname": "Warren", 
+                         "lastname": "Speach",
+                         "objectID": "myID2"}])
 ```
 
 Security / User API Keys
