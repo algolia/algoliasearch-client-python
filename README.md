@@ -43,7 +43,7 @@ Quick Start
 -------------
 This quick start is a 30 seconds tutorial where you can discover how to index and search objects.
 
-Without any prior-configuration, you can index [500 contacts](https://github.com/algolia/algoliasearch-client-ruby/blob/master/contacts.json) in the ```contacts``` index with the following code:
+Without any prior-configuration, you can index [500 contacts](https://github.com/algolia/algoliasearch-client-python/blob/master/contacts.json) in the ```contacts``` index with the following code:
 ```python
 index = client.initIndex("contact")
 batch = json.load(open('contacts.json'))
