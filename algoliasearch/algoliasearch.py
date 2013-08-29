@@ -353,7 +353,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
                 raise AlgoliaException("Invalid Application-ID or API-Key")
             elif response.status == 404:
                 raise AlgoliaException("Resource does not exist")
-            elif response.status == 200:
+            elif response.status == 200 or response.status == 201:
                 return json.loads(response.data)
         except AlgoliaException, e:
             raise e
