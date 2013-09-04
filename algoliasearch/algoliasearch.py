@@ -81,6 +81,26 @@ class Client:
         return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % urllib.quote(indexName.encode('utf8')))
 
     """
+    Move an index
+
+    @param indexName the name of index to move
+    @param destination contains the new name of index
+    """
+    def moveIndex(self, indexName, destination):
+        request = {"operation": "move", "destination": urllib.quote(destination.encode('utf8'))}
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(indexName.encode('utf8')), request)
+
+    """
+    Copy an index
+
+    @param indexName the name of index to copy
+    @param destination name of the new index (it it already exists, it will be replaced)
+    """
+    def copyIndex(self, indexName, destination):
+        request = {"operation": "copy", "destination": urllib.quote(destination.encode('utf8'))}
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(indexName.encode('utf8')), request)
+
+    """
     Get the index object initialized (no server call needed for initialization)
 
     @param indexName the name of index
@@ -142,6 +162,7 @@ class Index:
             return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s" % self.urlIndexName, content)
         else:
             return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID.encode('utf8'))), content)
+
 
     """
     Add several objects
