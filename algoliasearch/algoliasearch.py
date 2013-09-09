@@ -224,6 +224,8 @@ class Index:
     @param objectID the unique identifier of object to delete
     """
     def deleteObject(self, objectID):
+        if (len(objectID) == 0):
+            raise AlgoliaException("objectID is required")
         return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID.encode('utf8'))))
 
     """
