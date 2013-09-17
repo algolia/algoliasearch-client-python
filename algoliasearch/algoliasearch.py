@@ -81,24 +81,33 @@ class Client:
         return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % urllib.quote(indexName.encode('utf8')))
 
     """
-    Move an index
+    Move an existing index.
 
-    @param indexName the name of index to move
-    @param destination contains the new name of index
+    @param srcIndexName the name of index to copy.
+    @param dstIndexName the new index name that will contains a copy of srcIndexName (destination will be overriten if it already exist).
     """
-    def moveIndex(self, indexName, destination):
-        request = {"operation": "move", "destination": urllib.quote(destination.encode('utf8'))}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(indexName.encode('utf8')), request)
+    def moveIndex(self, srcIndexName, dstIndexName):
+        request = {"operation": "move", "destination": dstIndexName}
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(srcIndexName.encode('utf8')), request)
+    
+    """
+    Copy an existing index.
 
+    @param srcIndexName the name of index to copy.
+    @param dstIndexName the new index name that will contains a copy of srcIndexName (destination will be overriten if it already exist).
     """
-    Copy an index
+    def copyIndex(self, srcIndexName, dstIndexName):
+        request = {"operation": "copy", "destination": dstIndexName}
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(srcIndexName.encode('utf8')), request)
+    
+    """
+    Return last logs entries.
 
-    @param indexName the name of index to copy
-    @param destination name of the new index (it it already exists, it will be replaced)
+    @param offset Specify the first entry to retrieve (0-based, 0 is the most recent log entry).
+    @param length Specify the maximum number of entries to retrieve starting at offset. Maximum allowed value: 1000.
     """
-    def copyIndex(self, indexName, destination):
-        request = {"operation": "copy", "destination": urllib.quote(destination.encode('utf8'))}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(indexName.encode('utf8')), request)
+    def getLogs(self, offset = 0, length = 10):
+        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d" % (offset, length))
 
     """
     Get the index object initialized (no server call needed for initialization)
@@ -235,6 +244,10 @@ class Index:
     @param args (optional) if set, contains an associative array with query parameters:
       - attributes: a string that contains attribute names to retrieve separated by a comma. 
         By default all attributes are retrieved.
+      - numerics: specify the list of numeric filters you want to apply separated by a comma. 
+        The syntax of one filter is `attributeName` followed by `operand` followed by `value`. 
+        Supported operands are `<`, `<=`, `=`, `>` and `>=`. 
+        You can have multiple conditions on one attribute like for example `numerics=price>100,price<1000`.
       - attributesToHighlight: a string that contains attribute names to highlight separated by a comma. 
         By default indexed attributes are highlighted.
       - attributesToSnippet: a string that contains the names of attributes to snippet alongside the 
@@ -302,7 +315,7 @@ class Index:
          words to return (syntax is 'attributeName:nbWords').
          By default no snippet is computed.
        - attributesToIndex: (array of strings) the list of fields you want to index. 
-         By default all textual attributes of your objects are indexed, but you should update it to get optimal 
+         By default all textual and numerical attributes of your objects are indexed, but you should update it to get optimal 
          results. This parameter has two important uses:
             - Limit the attributes to index. 
               For example if you store a binary image in base64, you want to store it in the index but you 
