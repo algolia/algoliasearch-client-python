@@ -23,7 +23,11 @@ THE SOFTWARE.
 """
 import json
 import random
-import urllib
+import sys
+if sys.version < '3':
+  from urllib import quote
+else:
+  from urllib.parse import quote
 import urllib3
 import time
 
@@ -78,7 +82,7 @@ class Client:
     Return an object of the form {"deletedAt": "2013-01-18T15:33:13.556Z"}
     """
     def deleteIndex(self, indexName):
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % urllib.quote(indexName.encode('utf8')))
+        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(indexName.encode('utf8')))
 
     """
     Move an existing index.
@@ -88,7 +92,7 @@ class Client:
     """
     def moveIndex(self, srcIndexName, dstIndexName):
         request = {"operation": "move", "destination": dstIndexName}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(srcIndexName.encode('utf8')), request)
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % quote(srcIndexName.encode('utf8')), request)
     
     """
     Copy an existing index.
@@ -98,7 +102,7 @@ class Client:
     """
     def copyIndex(self, srcIndexName, dstIndexName):
         request = {"operation": "copy", "destination": dstIndexName}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % urllib.quote(srcIndexName.encode('utf8')), request)
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(srcIndexName.encode('utf8'))), request)
     
     """
     Return last logs entries.
@@ -156,7 +160,7 @@ class Index:
         self.hosts = hosts
         self.headers = headers
         self.indexName = indexName
-        self.urlIndexName = urllib.quote(self.indexName.encode('utf8'))
+        self.urlIndexName = quote(self.indexName.encode('utf8'))
 
     """
     Add an object in this index
@@ -170,7 +174,7 @@ class Index:
         if objectID is None:
             return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s" % self.urlIndexName, content)
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID.encode('utf8'))), content)
+            return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))), content)
 
 
     """
@@ -192,7 +196,7 @@ class Index:
     @param attributesToRetrieve (optional) if set, contains the list of attributes to retrieve as a string separated by a comma
     """
     def getObject(self, objectID, attributesToRetrieve = None):
-        objID = urllib.quote(objectID.encode('utf8'))
+        objID = quote(objectID.encode('utf8'))
         if (attributesToRetrieve == None):
             return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.urlIndexName, objID))
         else:
@@ -205,7 +209,7 @@ class Index:
            object must contains an objectID attribute
     """
     def partialUpdateObject(self, partialObject):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, urllib.quote(partialObject["objectID"].encode('utf8'))), partialObject)
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'))), partialObject)
 
     """
     Override the content of object
@@ -213,7 +217,7 @@ class Index:
     @param object contains the object to save, the object must contains an objectID attribute
     """
     def saveObject(self, obj):
-        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(obj["objectID"].encode('utf8'))), obj)
+        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(obj["objectID"].encode('utf8'))), obj)
 
     """
     Override the content of several objects
@@ -235,7 +239,7 @@ class Index:
     def deleteObject(self, objectID):
         if (len(objectID) == 0):
             raise AlgoliaException("objectID is required")
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, urllib.quote(objectID.encode('utf8'))))
+        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))))
 
     """
     Search inside the index
@@ -280,9 +284,9 @@ class Index:
     """
     def search(self, query, args = None):
         if args == None:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, urllib.quote(query.encode('utf8'))))
+            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, urllib.quote(query.encode('utf8')), urllib.urlencode(args)))
+            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urllib.urlencode(args)))
 
     """
     Wait the publication of a task on the server. 
@@ -385,7 +389,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
                 obj = json.dumps(body)
             conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
             response = conn.urlopen(method, request, headers = headers, body = obj)
-            content = json.loads(response.data)
+            content = json.loads(response.data.decode('utf-8'))
             if response.status == 400:
                 raise AlgoliaException(content["message"])
             elif response.status == 403:
@@ -394,9 +398,9 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
                 raise AlgoliaException("Resource does not exist")
             elif response.status == 200 or response.status == 201:
                 return json.loads(response.data)
-        except AlgoliaException, e:
+        except AlgoliaException as e:
             raise e
-        except:
+        except Exception as e:
             pass
     raise AlgoliaException("Unreachable host")
 
