@@ -31,9 +31,8 @@ Setup
 -------------
 To setup your project, follow these steps:
 
- 1. Install [urllib3](https://pypi.python.org/pypi/urllib3)
- 2. Install AlgoliaSearch using pip: <code>pip install https://github.com/algolia/algoliasearch-client-python/zipball/master</code> or from the [sources](https://github.com/algolia/algoliasearch-client-python/archive/master.zip): <code>python setup.py install</code>.
- 3. Initialize the client with your ApplicationID and API-Key. You can find all of them on [your Algolia account](http://www.algolia.com/users/edit).
+ 1. Install AlgoliaSearch using pip: <code>pip install algoliasearch</code>.
+ 1. Initialize the client with your ApplicationID and API-Key. You can find all of them on [your Algolia account](http://www.algolia.com/users/edit).
 
 ```python
 from algoliasearch import algoliasearch
