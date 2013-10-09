@@ -7,7 +7,7 @@ setup(  name='algoliasearch',
         description='Algolia Search API Client for Python',
         url='https://github.com/algolia/algoliasearch-client-python',
         packages = ["algoliasearch"],
-        requires = ['urllib3'],
+        install_requires = ['urllib3'],
         keywords = ['algolia', 'pyalgolia', 'search', 'backend'],
         classifiers = [
         'Intended Audience :: Developers',
