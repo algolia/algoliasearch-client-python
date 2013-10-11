@@ -28,6 +28,7 @@ if sys.version < '3':
   from urllib import quote
 else:
   from urllib.parse import quote
+from urllib import urlencode
 import urllib3
 import time
 
@@ -286,7 +287,7 @@ class Index:
         if args == None:
             return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urllib.urlencode(args)))
+            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
 
     """
     Wait the publication of a task on the server. 
