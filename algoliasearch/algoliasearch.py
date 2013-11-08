@@ -307,6 +307,11 @@ class Index:
         if args == None:
             return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
         else:
+            for k, v in args.iteritems():
+                if isinstance(v, (list, tuple)):
+                    args[k] = json.dumps(v)
+                else:
+                    args[k] = v
             return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
 
     """
