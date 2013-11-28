@@ -65,7 +65,8 @@ class Client:
         self.headers = {
             'Content-Type': 'application/json; charset=utf-8',
             'X-Algolia-API-Key': self.apiKey,
-            'X-Algolia-Application-Id': self.applicationID
+            'X-Algolia-Application-Id': self.applicationID,
+            'User-Agent': 'Algolia Search for python'
         }
 
     """
@@ -424,19 +425,20 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
             if body != None:
                 obj = json.dumps(body)
             conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
-            response = conn.urlopen(method, request, headers = headers, body = obj)
-            content = json.loads(response.data.decode('utf-8'))
-            if response.status == 400:
+            answer  = conn.urlopen(method, request, headers = headers, body = obj)
+            content = json.loads(answer.data.decode('utf-8'))
+            if answer.status == 400:
                 raise AlgoliaException(content["message"])
-            elif response.status == 403:
+            elif answer.status == 403:
                 raise AlgoliaException("Invalid Application-ID or API-Key")
-            elif response.status == 404:
+            elif answer.status == 404:
                 raise AlgoliaException("Resource does not exist")
-            elif response.status == 200 or response.status == 201:
-                return json.loads(response.data)
+            elif answer.status == 200 or answer.status == 201:
+                return content
         except AlgoliaException as e:
             raise e
         except Exception as e:
+            print (e)
             pass
     raise AlgoliaException("Unreachable host")
 
