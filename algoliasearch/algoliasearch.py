@@ -27,13 +27,13 @@ import sys
 if sys.version < '3':
   from urllib import quote
   from urllib import urlencode
+  from StringIO import StringIO 
 else:
   from urllib.parse import quote
   from urllib.parse import urlencode
-import urllib3
+  from io import StringIO
+import pycurl
 import time
-
-POOL_MANAGER = urllib3.PoolManager()
 
 # Exception launched by Algolia Client when an error occured
 class AlgoliaException(Exception):
@@ -62,12 +62,20 @@ class Client:
         random.shuffle(self.hosts)
         self.applicationID = applicationID
         self.apiKey = apiKey
-        self.headers = {
-            'Content-Type': 'application/json; charset=utf-8',
-            'X-Algolia-API-Key': self.apiKey,
-            'X-Algolia-Application-Id': self.applicationID,
-            'User-Agent': 'Algolia Search for python'
-        }
+        self.sessions = []
+        for host in self.hosts:
+            c = pycurl.Curl()
+            c.fp = None
+            c.setopt(pycurl.CONNECTTIMEOUT, 30)
+            c.setopt(pycurl.TIMEOUT, 30)
+            c.setopt(pycurl.ENCODING, '')
+            c.setopt(pycurl.HTTPHEADER, [
+                'Content-Type: application/json; charset=utf-8',
+                'X-Algolia-API-Key: ' + self.apiKey,
+                'X-Algolia-Application-Id: ' + self.applicationID,
+                'User-Agent: Algolia Search for python'
+            ])
+            self.sessions.append({"host": host, "session": c})
 
     """
     List all existing indexes
@@ -76,7 +84,7 @@ class Client:
                   {"name": "notes", "createdAt": "2013-01-18T15:33:13.556Z"}]}
     """
     def listIndexes(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/")
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/")
 
     """
     Delete an index
@@ -85,7 +93,7 @@ class Client:
     Return an object of the form {"deletedAt": "2013-01-18T15:33:13.556Z"}
     """
     def deleteIndex(self, indexName):
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(indexName.encode('utf8')))
+        return AlgoliaUtils_request(self.sessions, "DELETE", "/1/indexes/%s" % quote(indexName.encode('utf8')))
 
     """
     Move an existing index.
@@ -95,7 +103,7 @@ class Client:
     """
     def moveIndex(self, srcIndexName, dstIndexName):
         request = {"operation": "move", "destination": dstIndexName}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % quote(srcIndexName.encode('utf8')), request)
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/operation" % quote(srcIndexName.encode('utf8')), request)
     
     """
     Copy an existing index.
@@ -105,7 +113,7 @@ class Client:
     """
     def copyIndex(self, srcIndexName, dstIndexName):
         request = {"operation": "copy", "destination": dstIndexName}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(srcIndexName.encode('utf8'))), request)
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/operation" % (quote(srcIndexName.encode('utf8'))), request)
     
     """
     Return last logs entries.
@@ -114,7 +122,7 @@ class Client:
     @param length Specify the maximum number of entries to retrieve starting at offset. Maximum allowed value: 1000.
     """
     def getLogs(self, offset = 0, length = 10):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d" % (offset, length))
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/logs?offset=%d&length=%d" % (offset, length))
 
     """
     Get the index object initialized (no server call needed for initialization)
@@ -122,21 +130,21 @@ class Client:
     @param indexName the name of index
     """
     def initIndex(self, indexName):
-        return Index(self.headers, self.hosts, indexName)
+        return Index(self.sessions, indexName)
 
     """
     List all existing user keys with their associated ACLs
     """
     def listUserKeys(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/keys")
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/keys")
 
     # Get ACL of a user key
     def getUserKeyACL(self, key):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/keys/%s" % key)
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/keys/%s" % key)
 
     # Delete an existing user key
     def deleteUserKey(self, key):
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/keys/%s" % key)
+        return AlgoliaUtils_request(self.sessions, "DELETE", "/1/keys/%s" % key)
 
     """
     Create a new user key
@@ -154,16 +162,15 @@ class Client:
     @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited) 
     """
     def addUserKey(self, acls, validity = 0, maxQueriesPerIPPerHour = 0, maxHitsPerQuery = 0):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/keys", {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
 
 """
 Contains all the functions related to one index
 You should use Client.initIndex(indexName) to retrieve this object
 """
 class Index:
-    def __init__(self, headers, hosts, indexName):
-        self.hosts = hosts
-        self.headers = headers
+    def __init__(self, sessions, indexName):
+        self.sessions = sessions
         self.indexName = indexName
         self.urlIndexName = quote(self.indexName.encode('utf8'))
 
@@ -177,9 +184,9 @@ class Index:
     """
     def addObject(self, content, objectID = None):
         if objectID is None:
-            return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s" % self.urlIndexName, content)
+            return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s" % self.urlIndexName, content)
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))), content)
+            return AlgoliaUtils_request(self.sessions, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))), content)
 
 
     """
@@ -192,7 +199,7 @@ class Index:
         for obj in objects:
             requests.append({"action": "addObject", "body": obj})
         request = {"requests": requests}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
 
     """
     Get an object from this index
@@ -203,9 +210,9 @@ class Index:
     def getObject(self, objectID, attributesToRetrieve = None):
         objID = quote(objectID.encode('utf8'))
         if (attributesToRetrieve == None):
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.urlIndexName, objID))
+            return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/%s" % (self.urlIndexName, objID))
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.urlIndexName, objID, attributesToRetrieve))
+            return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.urlIndexName, objID, attributesToRetrieve))
 
     """
     Update partially an object (only update attributes passed in argument)
@@ -214,7 +221,7 @@ class Index:
            object must contains an objectID attribute
     """
     def partialUpdateObject(self, partialObject):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'))), partialObject)
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'))), partialObject)
 
     """
     Override the content of object
@@ -222,7 +229,7 @@ class Index:
     @param object contains the object to save, the object must contains an objectID attribute
     """
     def saveObject(self, obj):
-        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(obj["objectID"].encode('utf8'))), obj)
+        return AlgoliaUtils_request(self.sessions, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(obj["objectID"].encode('utf8'))), obj)
 
     """
     Override the content of several objects
@@ -234,7 +241,7 @@ class Index:
         for obj in objects:
             requests.append({"action": "updateObject", "objectID": obj["objectID"], "body": obj})
         request = {"requests": requests}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
 
     """
     Delete an object from the index 
@@ -244,7 +251,7 @@ class Index:
     def deleteObject(self, objectID):
         if (len(objectID) == 0):
             raise AlgoliaException("objectID is required")
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))))
+        return AlgoliaUtils_request(self.sessions, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))))
 
     """
     Search inside the index
@@ -306,14 +313,14 @@ class Index:
     """
     def search(self, query, args = None):
         if args == None:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
+            return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
         else:
             for k, v in args.iteritems():
                 if isinstance(v, (list, tuple)):
                     args[k] = json.dumps(v)
                 else:
                     args[k] = v
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
+            return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
 
     """
     Wait the publication of a task on the server. 
@@ -324,18 +331,18 @@ class Index:
     """
     def waitTask(self, taskID, timeBeforeRetry = 100):
         while True:
-            res = AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/task/%d/" % (self.urlIndexName, taskID))
+            res = AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/task/%d/" % (self.urlIndexName, taskID))
             if (res["status"] == "published"):
                 return res
             time.sleep(timeBeforeRetry / 1000)
 
     # Get settings of this index
     def getSettings(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/settings" % self.urlIndexName)
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/settings" % self.urlIndexName)
   
     # This function deletes the index content. Settings and index specific API keys are kept untouched.
     def clearIndex(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/clear" % self.urlIndexName)
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/clear" % self.urlIndexName)
 
     """
       Set settings for this index
@@ -383,21 +390,21 @@ class Index:
  
      """
     def setSettings(self, settings):
-        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/settings" % self.urlIndexName, settings)
+        return AlgoliaUtils_request(self.sessions, "PUT", "/1/indexes/%s/settings" % self.urlIndexName, settings)
 
     """
     List all existing user keys of this index with their associated ACLs
     """
     def listUserKeys(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/keys" % self.urlIndexName)
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/keys" % self.urlIndexName)
 
     # Get ACL of a user key associated to this index
     def getUserKeyACL(self, key):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
 
     # Delete an existing user key associated to this index
     def deleteUserKey(self, key):
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
+        return AlgoliaUtils_request(self.sessions, "DELETE", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
 
     """
     Create a new user key associated to this index (can only access to this index)
@@ -415,25 +422,45 @@ class Index:
     @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited) 
     """
     def addUserKey(self, acls, validity = 0, maxQueriesPerIPPerHour = 0, maxHitsPerQuery = 0):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/keys" % self.urlIndexName, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/keys" % self.urlIndexName, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
 
 # Util function used to send request
-def AlgoliaUtils_request(headers, hosts, method, request, body = None):
-    for host in hosts:
+def AlgoliaUtils_request(sessions, method, request, body = None):
+    for session in sessions:
         try:
             obj = None
             if body != None:
                 obj = json.dumps(body)
-            conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
-            answer  = conn.urlopen(method, request, headers = headers, body = obj)
-            content = json.loads(answer.data.decode('utf-8'))
-            if answer.status == 400:
+            c = session["session"]
+            c.setopt(pycurl.URL, "https://" + session["host"] + request)
+            c.setopt(pycurl.CONNECTTIMEOUT, 30)
+            c.setopt(pycurl.FAILONERROR, False)
+            storage = StringIO()
+            c.setopt(pycurl.WRITEFUNCTION, storage.write)
+
+            if (method == "GET"):
+                c.setopt(pycurl.CUSTOMREQUEST, 'GET')
+                c.setopt(pycurl.HTTPGET, True)
+                c.setopt(pycurl.POST, False)
+            elif (method == "POST"):
+                c.setopt(pycurl.CUSTOMREQUEST, 'POST')
+                c.setopt(pycurl.POST, True)
+                c.setopt(pycurl.POSTFIELDS, obj)
+            elif (method == "DELETE"):
+                c.setopt(pycurl.CUSTOMREQUEST, 'DELETE')
+            elif (method == "PUT"):
+                c.setopt(pycurl.CUSTOMREQUEST, 'PUT')
+                c.setopt(pycurl.POSTFIELDS, obj)
+            c.perform()
+            http_code = c.getinfo(pycurl.HTTP_CODE)
+            content = json.loads(storage.getvalue().decode('utf-8'))
+            if http_code == 400:
                 raise AlgoliaException(content["message"])
-            elif answer.status == 403:
+            elif http_code == 403:
                 raise AlgoliaException("Invalid Application-ID or API-Key")
-            elif answer.status == 404:
+            elif http_code == 404:
                 raise AlgoliaException("Resource does not exist")
-            elif answer.status == 200 or answer.status == 201:
+            elif http_code == 200 or http_code == 201:
                 return content
         except AlgoliaException as e:
             raise e
