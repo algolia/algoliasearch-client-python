@@ -323,6 +323,16 @@ class Index:
             return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
 
     """
+     Browse all index content
+     
+     @param page Pagination parameter used to select the page to retrieve.
+                 Page is zero-based and defaults to 0. Thus, to retrieve the 10th page you need to set page=9
+     @param hitsPerPage: Pagination parameter used to select the number of hits per page. Defaults to 1000.
+    """
+    def browse(self, page = 0, hitsPerPage = 1000):
+        return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/browse?page=%d&hitsPerPage=%d" % (self.urlIndexName, page, hitsPerPage))
+
+    """
     Wait the publication of a task on the server. 
     All server task are asynchronous and you can check with this method that the task is published.
 
