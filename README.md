@@ -37,6 +37,7 @@ Table of Content
 1. [Batch writes](#batch-writes)
 1. [Security / User API Keys](#security--user-api-keys)
 1. [Copy or rename an index](#copy-or-rename-an-index)
+1. [Backup / Retrieve all index content](#backup--retrieve-all-index-content)
 1. [Logs](#logs)
 
 Setup
@@ -221,11 +222,11 @@ You can easily retrieve an object using its `objectID` and optionnaly a list of 
 
 ```python
 # Retrieves all attributes
-index.getObject("myID");
+index.getObject("myID")
 # Retrieves firstname and lastname attributes
-res = index.getObject("myID", "firstname,lastname");
+res = index.getObject("myID", "firstname,lastname")
 # Retrieves only the firstname attribute
-res = index.getObject("myID", "firstname");
+res = index.getObject("myID", "firstname")
 ```
 
 Delete an object
@@ -257,7 +258,9 @@ You can retrieve all settings using the `getSettings` function. The result will 
   * **geo**: sort according to decreassing distance when performing a geo-location based search,
   * **proximity**: sort according to the proximity of query words in hits,
   * **attribute**: sort according to the order of attributes defined by attributesToIndex,
-  * **exact**: sort according to the number of words that are matched identical to query word (and not as a prefix),
+  * **exact**: 
+    * if the user query contains one word: sort objects having an attribute that is exactly the query word before others. For example if you search for the "V" TV show, you want to find it with the "V" query and avoid to have all popular TV show starting by the v letter before it.
+    * if the user query contains multiple words: sort according to the number of words that matched exactly (and not as a prefix).
   * **custom**: sort according to a user defined formula set in **customRanking** attribute.<br/>The standard order is ["typo", "geo", "proximity", "attribute", "exact", "custom"]
  * **customRanking**: (array of strings) lets you specify part of the ranking.<br/>The syntax of this condition is an array of strings containing attributes prefixed by asc (ascending order) or desc (descending order) operator.
 For example `"customRanking" => ["desc(population)", "asc(name)"]`  
@@ -272,7 +275,7 @@ For example `"customRanking" => ["desc(population)", "asc(name)"]`
 You can easily retrieve settings or update them:
 
 ```python
-settings = index.getSettings();
+settings = index.getSettings()
 print settings
 ```
 
@@ -370,6 +373,7 @@ index.listUserKeys()
 
 Each key is defined by a set of rights that specify the authorized actions. The different rights are:
  * **search**: allows to search,
+ * **browse**: allow to retrieve all index content via the browse API,
  * **addObject**: allows to add/update an object in the index,
  * **deleteObject**: allows to delete an existing object,
  * **deleteIndex**: allows to delete index content,
@@ -436,6 +440,19 @@ The move command is particularly useful is you want to update a big index atomic
 ```python
 # Rename MyNewIndex in MyIndex (and overwrite it)
 print client.moveIndex("MyNewIndex", "MyIndex")
+```
+
+Backup / Retrieve all index content
+-------------
+
+You can retrieve all index content for backup purpose of for analytics using the browse method. 
+This method retrieve 1000 objects by API call and support pagination.
+
+```python
+# Get first page
+print index.browse(0)
+# Get second page
+print index.browse(1)
 ```
 
 Logs
