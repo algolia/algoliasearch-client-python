@@ -224,6 +224,20 @@ class Index:
         return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'))), partialObject)
 
     """
+    Partially Override the content of several objects
+
+    @param objects contains an array of objects to update (each object must contains a objectID attribute)
+    """
+    def partialUpdateObjects(self, objects):
+        requests = []
+        for obj in objects:
+            requests.append({"action": "partialUpdateObject", "objectID": obj["objectID"], "body": obj})
+        request = {"requests": requests}
+        return AlgoliaUtils_request(self.sessions, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
+
+    """
+
+    """
     Override the content of object
     
     @param object contains the object to save, the object must contains an objectID attribute
