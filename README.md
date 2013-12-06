@@ -325,6 +325,7 @@ You may want to perform multiple operations with a single API call to reduce lat
 We expose two methods to perform batches:
  * `addObjects`: add an array of objects using automatic `objectID` assignement,
  * `saveObjects`: add or update an array of objects that contain an `objectID` attribute.
+ * `partialUpdateObjects`: partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated, other will remain unchanged)
 
 Example using automatic `objectID` assignement:
 ```python
@@ -342,6 +343,14 @@ res = index.saveObjects([{"firstname": "Jimmie",
                         {"firstname": "Warren", 
                          "lastname": "Speach",
                          "objectID": "myID2"}])
+```
+
+Example that update only the `firstname` attribute:
+```python
+res = index.partialUpdateObjects([{"firstname": "Jimmie", 
+                                   "objectID": "myID1"},
+                                  {"firstname": "Warren", 
+                                   "objectID": "myID2"}])
 ```
 
 Security / User API Keys
