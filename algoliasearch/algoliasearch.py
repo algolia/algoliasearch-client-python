@@ -441,6 +441,7 @@ class Index:
 
 # Util function used to send request
 def AlgoliaUtils_request(headers, hosts, method, request, body = None):
+    last_e = None
     for host in hosts:
         try:
             obj = None
@@ -460,7 +461,10 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
         except AlgoliaException as e:
             raise e
         except Exception as e:
-            print (e)
+            last_e = e
             pass
-    raise AlgoliaException("Unreachable host")
+    if last_e is not None:
+        raise last_e
+    else:
+        raise AlgoliaException("Unreachable host")
 
