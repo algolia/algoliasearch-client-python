@@ -32,6 +32,7 @@ else:
   from urllib.parse import urlencode
 import urllib3
 import time
+import datetime
 
 POOL_MANAGER = urllib3.PoolManager()
 
@@ -446,7 +447,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
         try:
             obj = None
             if body != None:
-                obj = json.dumps(body)
+                obj = json.dumps(body, cls = JSONEncoderWithDatetime)
             conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
             answer  = conn.urlopen(method, request, headers = headers, body = obj)
             content = json.loads(answer.data.decode('utf-8'))
@@ -468,3 +469,8 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
     else:
         raise AlgoliaException("Unreachable host")
 
+class JSONEncoderWithDatetime(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return int(time.mktime(obj.timetuple()))
+        return json.JSONEncoder.default(self, obj)
