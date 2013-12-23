@@ -70,6 +70,34 @@ class Client:
         }
 
     """
+    Allow to use IP rate limit when you have a proxy between end-user and Algolia.
+    This option will set the X-Forwarded-For HTTP header with the client IP and the X-Forwarded-API-Key with the API Key having rate limits.
+    @param adminAPIKey the admin API Key you can find in your dashboard
+    @param endUserIP the end user IP (you can use both IPV4 or IPV6 syntax)
+    @param rateLimitAPIKey the API key on which you have a rate limit
+    """
+    def enableRateLimitForward(self, adminAPIKey, endUserIP, rateLimitAPIKey):
+        self.headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+            'X-Algolia-API-Key': adminAPIKey,
+            'X-Forwarded-For': endUserIP,
+            'X-Forwarded-API-Key': rateLimitAPIKey,
+            'X-Algolia-Application-Id': self.applicationID,
+            'User-Agent': 'Algolia Search for python'
+        }
+
+    """
+    Disable IP rate limit enabled with enableRateLimitForward() function
+    """
+    def disableRateLimitForward(self):
+        self.headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+            'X-Algolia-API-Key': self.apiKey,
+            'X-Algolia-Application-Id': self.applicationID,
+            'User-Agent': 'Algolia Search for python'
+        }
+
+    """
     List all existing indexes
     return an object of the form 
        {"items": [{ "name": "contacts", "createdAt": "2013-01-18T15:33:13.556Z"},
@@ -122,7 +150,7 @@ class Client:
     @param indexName the name of index
     """
     def initIndex(self, indexName):
-        return Index(self.headers, self.hosts, indexName)
+        return Index(self, indexName)
 
     """
     List all existing user keys with their associated ACLs
@@ -161,9 +189,9 @@ Contains all the functions related to one index
 You should use Client.initIndex(indexName) to retrieve this object
 """
 class Index:
-    def __init__(self, headers, hosts, indexName):
-        self.hosts = hosts
-        self.headers = headers
+    def __init__(self, client, indexName):
+        self.hosts = client.hosts
+        self.client = client
         self.indexName = indexName
         self.urlIndexName = quote(self.indexName.encode('utf8'))
 
@@ -177,9 +205,9 @@ class Index:
     """
     def addObject(self, content, objectID = None):
         if objectID is None:
-            return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s" % self.urlIndexName, content)
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s" % self.urlIndexName, content)
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))), content)
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))), content)
 
 
     """
@@ -192,7 +220,7 @@ class Index:
         for obj in objects:
             requests.append({"action": "addObject", "body": obj})
         request = {"requests": requests}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
 
     """
     Get an object from this index
@@ -203,9 +231,9 @@ class Index:
     def getObject(self, objectID, attributesToRetrieve = None):
         objID = quote(objectID.encode('utf8'))
         if (attributesToRetrieve == None):
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.urlIndexName, objID))
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.urlIndexName, objID))
         else:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.urlIndexName, objID, attributesToRetrieve))
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.urlIndexName, objID, attributesToRetrieve))
 
     """
     Update partially an object (only update attributes passed in argument)
@@ -214,7 +242,7 @@ class Index:
            object must contains an objectID attribute
     """
     def partialUpdateObject(self, partialObject):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'))), partialObject)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'))), partialObject)
 
     """
     Partially Override the content of several objects
@@ -234,7 +262,7 @@ class Index:
     @param object contains the object to save, the object must contains an objectID attribute
     """
     def saveObject(self, obj):
-        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(obj["objectID"].encode('utf8'))), obj)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(obj["objectID"].encode('utf8'))), obj)
 
     """
     Override the content of several objects
@@ -246,7 +274,7 @@ class Index:
         for obj in objects:
             requests.append({"action": "updateObject", "objectID": obj["objectID"], "body": obj})
         request = {"requests": requests}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.urlIndexName, request)
 
     """
     Delete an object from the index 
@@ -256,7 +284,7 @@ class Index:
     def deleteObject(self, objectID):
         if (len(objectID) == 0):
             raise AlgoliaException("objectID is required")
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))))
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))))
 
     """
     Search inside the index
@@ -315,17 +343,22 @@ class Index:
          - prefixNone: no query word is interpreted as a prefix. This option is not recommended.
       - optionalWords: a string that contains the list of words that should be considered as optional when found in the query. 
         The list of words is comma separated.
+      - distinct: If set to 1, enable the distinct feature (disabled by default) if the attributeForDistinct index setting is set. 
+        This feature is similar to the SQL "distinct" keyword: when enabled in a query with the distinct=1 parameter, 
+        all hits containing a duplicate value for the attributeForDistinct attribute are removed from results. 
+        For example, if the chosen attribute is show_name and several hits have the same value for show_name, then only the best 
+        one is kept and others are removed.
     """
     def search(self, query, args = None):
         if args == None:
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
         else:
             for k, v in args.iteritems():
                 if isinstance(v, (list, tuple)):
                     args[k] = json.dumps(v)
                 else:
                     args[k] = v
-            return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
 
     """
      Browse all index content
@@ -346,18 +379,18 @@ class Index:
     """
     def waitTask(self, taskID, timeBeforeRetry = 100):
         while True:
-            res = AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/task/%d/" % (self.urlIndexName, taskID))
+            res = AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/task/%d/" % (self.urlIndexName, taskID))
             if (res["status"] == "published"):
                 return res
             time.sleep(timeBeforeRetry / 1000)
 
     # Get settings of this index
     def getSettings(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/settings" % self.urlIndexName)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/settings" % self.urlIndexName)
   
     # This function deletes the index content. Settings and index specific API keys are kept untouched.
     def clearIndex(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/clear" % self.urlIndexName)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/clear" % self.urlIndexName)
 
     """
       Set settings for this index
@@ -383,13 +416,20 @@ class Index:
              this behavior if you add your attribute inside `unordered(AttributeName)`, for example attributesToIndex: ["title", "unordered(text)"].
        - attributesForFaceting: (array of strings) The list of fields you want to use for faceting. 
          All strings in the attribute selected for faceting are extracted and added as a facet. If set to null, no attribute is used for faceting.
+       - attributeForDistinct: (string) The attribute name used for the Distinct feature. This feature is similar to the SQL "distinct" keyword: when enabled 
+         in query with the distinct=1 parameter, all hits containing a duplicate value for this attribute are removed from results. 
+         For example, if the chosen attribute is show_name and several hits have the same value for show_name, then only the best one is kept and others are removed.
        - ranking: (array of strings) controls the way results are sorted.
          We have six available criteria: 
           - typo: sort according to number of typos,
           - geo: sort according to decreassing distance when performing a geo-location based search,
           - proximity: sort according to the proximity of query words in hits,
           - attribute: sort according to the order of attributes defined by attributesToIndex,
-          - exact: sort according to the number of words that are matched identical to query word (and not as a prefix),
+          - exact: 
+              - if the user query contains one word: sort objects having an attribute that is exactly the query word before others. 
+                For example if you search for the "V" TV show, you want to find it with the "V" query and avoid to have all popular TV 
+                show starting by the v letter before it.
+              - if the user query contains multiple words: sort according to the number of words that matched exactly (and not as a prefix).
           - custom: sort according to a user defined formula set in **customRanking** attribute.
          The standard order is ["typo", "geo", "proximity", "attribute", "exact", "custom"]
        - customRanking: (array of strings) lets you specify part of the ranking.
@@ -405,21 +445,21 @@ class Index:
  
      """
     def setSettings(self, settings):
-        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/indexes/%s/settings" % self.urlIndexName, settings)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/settings" % self.urlIndexName, settings)
 
     """
     List all existing user keys of this index with their associated ACLs
     """
     def listUserKeys(self):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/keys" % self.urlIndexName)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/keys" % self.urlIndexName)
 
     # Get ACL of a user key associated to this index
     def getUserKeyACL(self, key):
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
 
     # Delete an existing user key associated to this index
     def deleteUserKey(self, key):
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.urlIndexName, key))
 
     """
     Create a new user key associated to this index (can only access to this index)
@@ -437,7 +477,7 @@ class Index:
     @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited) 
     """
     def addUserKey(self, acls, validity = 0, maxQueriesPerIPPerHour = 0, maxHitsPerQuery = 0):
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/keys" % self.urlIndexName, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/keys" % self.urlIndexName, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
 
 # Util function used to send request
 def AlgoliaUtils_request(headers, hosts, method, request, body = None):
@@ -452,9 +492,9 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
             if answer.status == 400:
                 raise AlgoliaException(content["message"])
             elif answer.status == 403:
-                raise AlgoliaException("Invalid Application-ID or API-Key")
+                raise AlgoliaException(content["message"])
             elif answer.status == 404:
-                raise AlgoliaException("Resource does not exist")
+                raise AlgoliaException(content["message"])
             elif answer.status == 200 or answer.status == 201:
                 return content
         except AlgoliaException as e:
