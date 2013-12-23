@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(  name='algoliasearch',
-        version='1.2.1',
+        version='1.2.2',
         description='Algolia Search API Client for Python',
         url='https://github.com/algolia/algoliasearch-client-python',
         packages = ["algoliasearch"],
