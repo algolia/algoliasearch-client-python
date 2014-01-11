@@ -15,6 +15,8 @@ Algolia’s Search API makes it easy to deliver a great search experience in you
 
 This Python client let you easily use the Algolia Search API from your backend.
 
+[![Build Status](https://travis-ci.org/algolia/algoliasearch-client-python.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-python) [![PyPI version](https://badge.fury.io/py/algoliasearch.png)](http://badge.fury.io/py/algoliasearch) [![Code Climate](https://codeclimate.com/github/algolia/algoliasearch-client-python.png)](https://codeclimate.com/github/algolia/algoliasearch-client-python)
+
 Table of Content
 -------------
 **Get started**
