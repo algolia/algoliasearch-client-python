@@ -1,0 +1,16 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+install:
+  - pip install . --use-mirrors
+  - pip install -r requirements.txt --use-mirrors
+  - pip install -r tests/requirements.txt --use-mirrors
+script: 
+  - nosetests
+env:
+  global:
+  - secure: bMkS5vSbz5Stp/XQodi21ZL1bVaOkU6/QFagQxs8MfGLcpAuCbOZRkVuUZ2KvUFtXTcL5D7H+U50RJUrafUbMXBKDVAs4myEnvhom9o5HsoQGzkRTO/nLtnJMWYeQpAAM2uAK56Clil2NvnHEeZh4OeRlUwcbnMKQteKPCxOAqc=
+  - secure: YsgfY1fzyBAtzUqAe8Xa9m//73RbE4QwpXOQNJKjTBdTbWSadRuR+nRlFwaj5bBtiI52SF5JfXVykyjJCXPaRwRLkiFG0wq8LZjKmba+3JjAjmcgWaEjFpnYqNBOeAq9WOMHEdlilBYfJO1CDBsb9Xf/jtogwSE2WwLuSYtNm0A=
