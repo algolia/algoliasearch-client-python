@@ -24,3 +24,7 @@ class ClientTest(unittest.TestCase):
     results = index.search('pa')
     self.assertEquals(len(results['hits']), 1)
     self.assertEquals('Paris', results['hits'][0]['name'])
+
+    index.addObjects([ { 'name': 'Los Angeles' }, { 'name': 'Los Gatos'} ])
+    results = index.search('los')
+    self.assertEquals(len(results['hits']), 2)

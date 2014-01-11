@@ -225,7 +225,7 @@ class Index:
         for obj in objects:
             requests.append({"action": "addObject", "body": obj})
         request = {"requests": requests}
-        return batch(request)
+        return self.batch(request)
 
     def getObject(self, objectID, attributesToRetrieve = None):
         """
@@ -259,7 +259,7 @@ class Index:
         for obj in objects:
             requests.append({"action": "partialUpdateObject", "objectID": obj["objectID"], "body": obj})
         request = {"requests": requests}
-        return batch(request)
+        return self.batch(request)
 
     def saveObject(self, obj):
         """
@@ -279,7 +279,7 @@ class Index:
         for obj in objects:
             requests.append({"action": "updateObject", "objectID": obj["objectID"], "body": obj})
         request = {"requests": requests}
-        return batch(request)
+        return self.batch(request)
 
     def deleteObject(self, objectID):
         """
@@ -492,7 +492,7 @@ class Index:
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/keys" % self.urlIndexName, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
 
-    def batch(request):
+    def batch(self, request):
         """
         Send a batch request
         """
