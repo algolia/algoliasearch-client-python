@@ -123,7 +123,7 @@ class ClientTest(unittest.TestCase):
 
   def test_log(self):
     res = self.client.getLogs()
-    self.assertGreater(len(res['logs']), 0)
+    self.assertTrue(len(res['logs']) > 0)
 
   def test_batch(self):
     self.index.batch({'requests': [{ 'action': 'addObject', 'body':{'name': 'San Francisco'}}   \
