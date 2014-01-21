@@ -373,7 +373,7 @@ class Index:
                      Page is zero-based and defaults to 0. Thus, to retrieve the 10th page you need to set page=9
          @param hitsPerPage: Pagination parameter used to select the number of hits per page. Defaults to 1000.
         """
-        return AlgoliaUtils_request(self.sessions, "GET", "/1/indexes/%s/browse?page=%d&hitsPerPage=%d" % (self.urlIndexName, page, hitsPerPage))
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/browse?page=%d&hitsPerPage=%d" % (self.urlIndexName, page, hitsPerPage))
 
     def waitTask(self, taskID, timeBeforeRetry = 100):
         """
