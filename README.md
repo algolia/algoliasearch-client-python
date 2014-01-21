@@ -89,7 +89,7 @@ index.setSettings({"attributesToIndex": ["lastname", "firstname", "company",
 ```
 
 Since the engine is designed to suggest results as you type, you'll generally search by prefix. In this case the order of attributes is very important to decide which hit is the best:
-```ruby
+```python
 print index.search("or")
 print index.search("jim")
 ```
@@ -229,7 +229,7 @@ Example to replace all the content of an existing object:
 ```python
 index.saveObject({"firstname": "Jimmie", 
                   "lastname": "Barninger", 
-                  "city": "New York"
+                  "city": "New York",
                   "objectID": "myID"})
 ```
 
