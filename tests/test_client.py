@@ -34,7 +34,7 @@ class ClientTest(unittest.TestCase):
     task = self.index.partialUpdateObjects([{ 'name': 'San Francisco', 'objectID': results['hits'][0]['objectID']},
                                 { 'name': 'San Marina', 'objectID': results['hits'][1]['objectID']}])
     self.index.waitTask(task['taskID'])
-    results = self.index.search('san')
+    results = self.index.search('san', { "attributesToRetrieve": ["name"], "hitsPerPage": 20})
     self.assertEquals(len(results['hits']), 2)
 
   def test_getObject(self):
@@ -64,6 +64,8 @@ class ClientTest(unittest.TestCase):
     res = self.index.deleteObject(results['hits'][0]['objectID'])
     results = self.index.search('')
     self.assertEquals(len(results['hits']), 0)
+
+    self.assertRaises(algoliasearch.AlgoliaException, self.index.deleteObject, "")
 
   def test_listIndexes(self):
     new_index = self.client.initIndex(safe_index_name('listIndex'))
@@ -137,12 +139,33 @@ class ClientTest(unittest.TestCase):
     res = self.index.search('')
     self.assertEquals(len(res['hits']), 4)
 
+  def test_user_key(self):
+    res = self.index.listUserKeys()
+    newKey = self.index.addUserKey(['search'])
+    self.assertTrue(newKey['key'] != "")
+    resAfter = self.index.listUserKeys()
+    self.assertEquals(len(res['keys']) + 1, len(resAfter['keys']))
+    key = self.index.getUserKeyACL(newKey['key'])
+    self.assertEquals(key['acl'][0], 'search')
+    task = self.index.deleteUserKey(newKey['key'])
+    resEnd = self.index.listUserKeys()
+    self.assertEquals(len(res['keys']), len(res['keys']))
 
-  def test_checkFunctions(self):
-    
-    task = self.index.addObject({'name': 'San Francisco'})
-    self.index.waitTask(task['taskID'])
-    setting = self.index.getSettings()
-    userkey = self.index.listUserKeys()
+    res = self.client.listUserKeys()
+    newKey = self.client.addUserKey(['search'])
+    self.assertTrue(newKey['key'] != "")
+    resAfter = self.client.listUserKeys()
+    self.assertEquals(len(res['keys']) + 1, len(resAfter['keys']))
+    key = self.client.getUserKeyACL(newKey['key'])
+    self.assertEquals(key['acl'][0], 'search')
+    task = self.client.deleteUserKey(newKey['key'])
+    resEnd = self.client.listUserKeys()
+    self.assertEquals(len(res['keys']), len(res['keys']))
 
+
+  def test_settings(self):
+    self.index.setSettings({'attributesToRetrieve': ['name']})
+    settings = self.index.getSettings()
+    self.assertEquals(len(settings['attributesToRetrieve']), 1)
+    self.assertEquals(settings['attributesToRetrieve'][0], 'name')
     
