@@ -1,5 +1,6 @@
 import unittest
 import os
+import time
 
 from algoliasearch import algoliasearch
 
@@ -71,6 +72,7 @@ class ClientTest(unittest.TestCase):
     new_index = self.client.initIndex(safe_index_name('listIndex'))
     try:
       self.client.deleteIndex(safe_index_name('listIndex'))
+      time.sleep(4) # Dirty but temporary
     except algoliasearch.AlgoliaException:
       pass
     res = self.client.listIndexes()
@@ -149,7 +151,7 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(key['acl'][0], 'search')
     task = self.index.deleteUserKey(newKey['key'])
     resEnd = self.index.listUserKeys()
-    self.assertEquals(len(res['keys']), len(res['keys']))
+    self.assertEquals(len(res['keys']), len(resEnd['keys']))
 
     res = self.client.listUserKeys()
     newKey = self.client.addUserKey(['search'])
@@ -160,7 +162,7 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(key['acl'][0], 'search')
     task = self.client.deleteUserKey(newKey['key'])
     resEnd = self.client.listUserKeys()
-    self.assertEquals(len(res['keys']), len(res['keys']))
+    self.assertEquals(len(res['keys']), len(resEnd['keys']))
 
 
   def test_settings(self):
