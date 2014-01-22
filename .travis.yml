@@ -8,8 +8,11 @@ install:
   - pip install . --use-mirrors
   - pip install -r requirements.txt --use-mirrors
   - pip install -r tests/requirements.txt --use-mirrors
+  - pip install coveralls
 script: 
-  - nosetests
+  - nosetests --with-coverage --cover-package=algoliasearch
+after_success:
+  coveralls
 env:
   global:
   - secure: bMkS5vSbz5Stp/XQodi21ZL1bVaOkU6/QFagQxs8MfGLcpAuCbOZRkVuUZ2KvUFtXTcL5D7H+U50RJUrafUbMXBKDVAs4myEnvhom9o5HsoQGzkRTO/nLtnJMWYeQpAAM2uAK56Clil2NvnHEeZh4OeRlUwcbnMKQteKPCxOAqc=
