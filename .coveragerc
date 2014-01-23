@@ -2,5 +2,3 @@
 omit =
     */python?.?/*
     */site-packages/nose/*
-    *build*
-    *tests*
