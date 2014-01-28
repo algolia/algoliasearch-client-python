@@ -1,6 +1,8 @@
 Algolia Search API Client for Python
 ==================
 
+
+
 [Algolia Search](http://www.algolia.com) is a search API that provides hosted full-text, numerical and faceted search.
 Algolia’s Search API makes it easy to deliver a great search experience in your apps & websites providing:
 
@@ -13,7 +15,7 @@ Algolia’s Search API makes it easy to deliver a great search experience in you
  * 99.99% SLA
  * first-class data security
 
-This Python client let you easily use the Algolia Search API from your backend.
+This Python client let you easily use the Algolia Search API from your backend. It wraps [Algolia's REST API](http://www.algolia.com/doc/rest_api).
 
 [![Build Status](https://travis-ci.org/algolia/algoliasearch-client-python.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-python) [![PyPI version](https://badge.fury.io/py/algoliasearch.png)](http://badge.fury.io/py/algoliasearch) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-python/badge.png)](https://coveralls.io/r/algolia/algoliasearch-client-python)
 
@@ -21,12 +23,14 @@ Table of Content
 -------------
 **Get started**
 
-1. [Setup](#setup) 
+1. [Setup](#setup)
 1. [Quick Start](#quick-start)
+
 
 **Commands reference**
 
 1. [Search](#search)
+
 1. [Add a new object](#add-a-new-object-in-the-index)
 1. [Update an object](#update-an-existing-object-in-the-index)
 1. [Get an object](#get-an-object)
@@ -41,6 +45,8 @@ Table of Content
 1. [Copy or rename an index](#copy-or-rename-an-index)
 1. [Backup / Retrieve all index content](#backup--retrieve-all-index-content)
 1. [Logs](#logs)
+
+
 
 Setup
 -------------
@@ -57,6 +63,7 @@ client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
 
 Quick Start
 -------------
+
 This quick start is a 30 seconds tutorial where you can discover how to index and search objects.
 
 Without any prior-configuration, you can index [500 contacts](https://github.com/algolia/algoliasearch-client-python/blob/master/contacts.json) in the ```contacts``` index with the following code:
@@ -82,6 +89,7 @@ Settings can be customized to tune the search behavior. For example you can add 
 ```python
 index.setSettings({"customRanking": ["desc(followers)"]})
 ```
+
 You can also configure the list of attributes you want to index by order of importance (first = most important):
 ```python
 index.setSettings({"attributesToIndex": ["lastname", "firstname", "company", 
@@ -94,13 +102,16 @@ print index.search("or")
 print index.search("jim")
 ```
 
+
+
+
 Search
 -------------
-> **Opening note:** If you are building a web application, you may be more interested in using our [javascript client](https://github.com/algolia/algoliasearch-client-js) to send queries. It brings two benefits: (i) your users get a better response time by avoiding to go through your servers, and (ii) it will offload your servers of unnecessary tasks.
+ **Opening note:** If you are building a web application, you may be more interested in using our [javascript client](https://github.com/algolia/algoliasearch-client-js) to send queries. It brings two benefits: (i) your users get a better response time by avoiding to go through your servers, and (ii) it will offload your servers of unnecessary tasks.
 
-To perform a search, you just need to initialize the index and perform a call to the search function.<br/>
+To perform a search, you just need to initialize the index and perform a call to the search function.
+
 You can use the following optional arguments:
-
 
 ### Query parameters
 
@@ -188,6 +199,7 @@ The server response will look like:
   "params": "query=jimmie+paint&attributesToRetrieve=firstname,lastname&hitsPerPage=50"
 }
 ```
+
 
 Add a new object in the Index
 -------------
@@ -290,6 +302,7 @@ For example `"customRanking" => ["desc(population)", "asc(name)"]`
   * **prefixAll**: all query words are interpreted as prefixes,
   * **prefixLast**: only the last word is interpreted as a prefix (default behavior),
   * **prefixNone**: no query word is interpreted as a prefix. This option is not recommended.
+ * **slaves**: The list of indexes on which you want to replicate all write operations. In order to get response times in milliseconds, we pre-compute part of the ranking during indexing. If you want to use different ranking configurations depending of the use-case, you need to create one index per ranking configuration. This option enables you to perform write operations only on this index, and to automatically update slave indexes with the same operations.
 
 #### Default query parameters (can be overwrite by query)
  * **minWordSizefor1Typo**: (integer) the minimum number of characters to accept one typo (default = 3).
@@ -340,7 +353,7 @@ index.clearIndex()
 Wait indexing
 -------------
 
-All write operations return a `taskID` when the job is securely stored on our infrastructure but not when the job is published in your index. Even if it's extremely fast, you can easily ensure indexing is complete using the `waitTask` method on the `taskID` returned by a write operation.
+All write operations return a `taskID` when the job is securely stored on our infrastructure but not when the job is published in your index. Even if it's extremely fast, you can easily ensure indexing is complete using the `waitTask` method on the `taskID` returned by a write operation. 
 
 For example, to wait for indexing of a new object:
 ```python
@@ -349,15 +362,16 @@ res = index.addObject({"firstname": "Jimmie",
 index.waitTask(res["taskID"])
 ```
 
+
 If you want to ensure multiple objects have been indexed, you can only check the biggest taskID.
 
 Batch writes
 -------------
 
-You may want to perform multiple operations with a single API call to reduce latency.
-We expose two methods to perform batches:
- * `addObjects`: add an array of objects using automatic `objectID` assignement,
- * `saveObjects`: add or update an array of objects that contain an `objectID` attribute.
+You may want to perform multiple operations with one API call to reduce latency.
+We expose three methods to perform batch:
+ * `addObjects`: add an array of object using automatic `objectID` assignement
+ * `saveObjects`: add or update an array of object that contains an `objectID` attribute
  * `partialUpdateObjects`: partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated, other will remain unchanged)
 
 Example using automatic `objectID` assignement:
@@ -372,10 +386,10 @@ Example with user defined `objectID` (add or update):
 ```python
 res = index.saveObjects([{"firstname": "Jimmie", 
                           "lastname": "Barninger",
-                         "objectID": "myID1"},
-                        {"firstname": "Warren", 
-                         "lastname": "Speach",
-                         "objectID": "myID2"}])
+                           "objectID": "myID1"},
+                          {"firstname": "Warren", 
+                          "lastname": "Speach",
+                           "objectID": "myID2"}])
 ```
 
 Example that update only the `firstname` attribute:
@@ -419,12 +433,15 @@ print res["key"]
 res = index.addUserKey(["search"])
 print res["key"]
 ```
+
 You can also create an API Key with advanced restrictions:
 
  * Add a validity period: the key will be valid only for a specific period of time (in seconds),
  * Specify the maximum number of API calls allowed from an IP address per hour. Each time an API call is performed with this key, a check is performed. If the IP at the origin of the call did more than this number of calls in the last hour, a 403 code is returned. Defaults to 0 (no rate limit). This parameter can be used to protect you from attempts at retrieving your entire content by massively querying the index.
 
+
   Note: If you are sending the query through your servers, you must use the `enableRateLimitForward("TheAdminAPIKey", "EndUserIP", "APIKeyWithRateLimit")` function to enable rate-limit.
+
  * Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited). This parameter can be used to protect you from attempts at retrieving your entire content by massively querying the index.
 
 ```python
@@ -511,3 +528,8 @@ print client.getLogs()
 # Get last 100 log entries
 print client.getLogs(0, 100)
 ```
+
+
+
+
+
