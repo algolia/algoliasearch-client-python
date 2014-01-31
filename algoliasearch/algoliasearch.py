@@ -511,7 +511,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
         try:
             obj = None
             if body != None:
-                obj = json.dumps(body, cls = JSONEncoderWithDatetime)
+                obj = json.dumps(body, cls = JSONEncoderWithDatetimeAndDefaultToString)
             conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
             answer  = conn.urlopen(method, request, headers = headers, body = obj)
             content = json.loads(answer.data.decode('utf-8'))
@@ -533,9 +533,11 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
     else:
         raise AlgoliaException("Unreachable host")
 
-class JSONEncoderWithDatetime(json.JSONEncoder):
+class JSONEncoderWithDatetimeAndDefaultToString(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.datetime):
             return int(time.mktime(obj.timetuple()))
-        return json.JSONEncoder.default(self, obj)
-
+        try:
+            return json.JSONEncoder.default(self, obj)
+        except:
+            return str(obj)
