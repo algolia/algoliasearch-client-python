@@ -91,7 +91,8 @@ class ClientTest(unittest.TestCase):
     self.index.waitTask(task['taskID'])
     results = self.index.search('')
     self.assertEquals(len(results['hits']), 1)
-    self.index.clearIndex()
+    task = self.index.clearIndex()
+    self.index.waitTask(task['taskID'])
     results = self.index.search('')
     self.assertEquals(len(results['hits']), 0)
 
