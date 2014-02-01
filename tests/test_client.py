@@ -161,23 +161,36 @@ class ClientTest(unittest.TestCase):
     newKey = self.index.addUserKey(['search'])
     self.assertTrue(newKey['key'] != "")
     resAfter = self.index.listUserKeys()
-    self.assertEquals(len(res['keys']) + 1, len(resAfter['keys']))
+    is_present = False
+    for it in resAfter['keys']:
+      is_present = is_present or it['value'] == newKey['key']
+    self.assertTrue(is_present)
     key = self.index.getUserKeyACL(newKey['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.index.deleteUserKey(newKey['key'])
     resEnd = self.index.listUserKeys()
-    self.assertEquals(len(res['keys']), len(resEnd['keys']))
+    is_present = False
+    for it in resEnd['keys']:
+      is_present = is_present or it['value'] == newKey['key']
+    self.assertTrue(not is_present)
+
 
     res = self.client.listUserKeys()
     newKey = self.client.addUserKey(['search'])
     self.assertTrue(newKey['key'] != "")
     resAfter = self.client.listUserKeys()
-    self.assertEquals(len(res['keys']) + 1, len(resAfter['keys']))
+    is_present = False
+    for it in resAfter['keys']:
+      is_present = is_present or it['value'] == newKey['key']
+    self.assertTrue(is_present)
     key = self.client.getUserKeyACL(newKey['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.client.deleteUserKey(newKey['key'])
     resEnd = self.client.listUserKeys()
-    self.assertEquals(len(res['keys']), len(resEnd['keys']))
+    is_present = False
+    for it in resEnd['keys']:
+      is_present = is_present or it['value'] == newKey['key']
+    self.assertTrue(not is_present)
 
 
   def test_settings(self):
