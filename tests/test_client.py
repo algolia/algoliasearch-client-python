@@ -81,7 +81,10 @@ class ClientTest(unittest.TestCase):
     task = new_index.addObject({'name': 'San Francisco'})
     new_index.waitTask(task['taskID'])
     resAfter = self.client.listIndexes()
-    self.assertEquals(len(res['items']) + 1, len(resAfter['items']))
+    is_present = False
+    for it in resAfter['items']:
+      is_present = is_present or it['name'] == safe_index_name('listIndex') 
+    self.assertEquals(is_present, True)
 
   def test_clearIndex(self):
     task = self.index.addObject({'name': 'San Francisco'})
