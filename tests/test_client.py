@@ -4,7 +4,7 @@ import unittest
 import os
 import time
 import sys
-
+import unicodedata
 
 from algoliasearch import algoliasearch
 
@@ -201,21 +201,25 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(settings['attributesToRetrieve'][0], 'name')
     
   def test_URLEncode(self):
+    try:
+      name = "a/go/?" + unichr(224)
+    except Exception:
+      name = "a/go/?à" 
 
-    task = self.index.saveObject({"name": "San Francisco", "objectID": u"a/go/?\xe0"})
+    task = self.index.saveObject({"name": "San Francisco", "objectID": name})
     self.index.waitTask(task['taskID'])
     
-    obj = self.index.getObject(u"a/go/?\xe0", 'name')
+    obj = self.index.getObject(name, 'name')
     self.assertEquals(obj['name'], 'San Francisco')
 
-    task = self.index.partialUpdateObject({"name": "San Diego", "objectID": u"a/go/?\xe0"})
+    task = self.index.partialUpdateObject({"name": "San Diego", "objectID": name})
     self.index.waitTask(task['taskID'])
-    obj = self.index.getObject(u"a/go/?\xe0")
+    obj = self.index.getObject(name)
     self.assertEquals(obj['name'], 'San Diego')
 
-    task = self.index.saveObjects([{"name": "Los Angeles", "objectID": u"a/go/?\xe0"}])
+    task = self.index.saveObjects([{"name": "Los Angeles", "objectID": name}])
     self.index.waitTask(task['taskID'])
 
-    obj = self.index.getObject(u"a/go/?\xe0")
+    obj = self.index.getObject(name)
     self.assertEquals(obj['name'], 'Los Angeles')
 
