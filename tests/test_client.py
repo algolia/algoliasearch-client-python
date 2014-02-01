@@ -126,6 +126,11 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(results['hits'][0]['name'], 'San Francisco')
 
   def test_browse(self):
+    try:
+      task = self.index.clearIndex()
+      self.index.waitTask(task['taskID'])
+    except algoliasearch.AlgoliaException:
+      pass
     task = self.index.addObject({'name': 'San Francisco'})
     self.index.waitTask(task['taskID'])
     res = self.index.browse()
