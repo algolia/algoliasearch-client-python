@@ -3,6 +3,8 @@
 import unittest
 import os
 import time
+import sys
+
 
 from algoliasearch import algoliasearch
 

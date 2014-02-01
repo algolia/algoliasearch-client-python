@@ -11,6 +11,8 @@ install:
   - pip install coveralls
 script: 
   - nosetests --with-coverage --cover-package=algoliasearch
+before_install:
+  export PYTHONIOENCODING=UTF-8
 after_success:
   coveralls
 env:
