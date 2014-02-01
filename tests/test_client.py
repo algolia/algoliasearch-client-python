@@ -116,6 +116,7 @@ class ClientTest(unittest.TestCase):
     task = self.index.addObject({'name': 'San Francisco'})
     self.index.waitTask(task['taskID'])
     task = self.client.moveIndex(safe_index_name('towns'), safe_index_name('city'))
+    self.index.waitTask(task['taskID'])
     results = new_index.search('')
     self.assertEquals(len(results['hits']), 1)
     self.assertEquals(results['hits'][0]['name'], 'San Francisco')
@@ -168,7 +169,8 @@ class ClientTest(unittest.TestCase):
 
 
   def test_settings(self):
-    self.index.setSettings({'attributesToRetrieve': ['name']})
+    task = self.index.setSettings({'attributesToRetrieve': ['name']})
+    self.index.waitTask(task['taskID'])
     settings = self.index.getSettings()
     self.assertEquals(len(settings['attributesToRetrieve']), 1)
     self.assertEquals(settings['attributesToRetrieve'][0], 'name')
