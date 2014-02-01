@@ -137,11 +137,12 @@ class ClientTest(unittest.TestCase):
     self.assertTrue(len(res['logs']) > 0)
 
   def test_batch(self):
-    self.index.batch({'requests': [{ 'action': 'addObject', 'body':{'name': 'San Francisco'}}   \
+    task = self.index.batch({'requests': [{ 'action': 'addObject', 'body':{'name': 'San Francisco'}}   \
       , { 'action': 'addObject', 'body':{'name': 'Los Angeles'}}                          \
       , { 'action': 'updateObject', 'body':{'name': 'San Diego'}, 'objectID':'42'}    \
       , { 'action': 'updateObject', 'body':{'name': 'Los Gatos'}, 'objectID':'43'}    \
       ]})
+    self.index.waitTask(task['taskID'])
     obj = self.index.getObject("42")
     self.assertEquals(obj['name'], 'San Diego')
 
