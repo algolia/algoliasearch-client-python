@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 """
 Copyright (c) 2013 Algolia
 http://www.algolia.com/
@@ -114,7 +115,7 @@ class Client:
         @param indexName the name of index to delete
         Return an object of the form {"deletedAt": "2013-01-18T15:33:13.556Z"}
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(indexName.encode('utf8')))
+        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(indexName, safe=''))
 
     def moveIndex(self, srcIndexName, dstIndexName):
         """
@@ -124,7 +125,7 @@ class Client:
         @param dstIndexName the new index name that will contains a copy of srcIndexName (destination will be overriten if it already exist).
         """
         request = {"operation": "move", "destination": dstIndexName}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % quote(srcIndexName.encode('utf8')), request)
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % quote(srcIndexName.encode('utf8'), safe=''), request)
 
     def copyIndex(self, srcIndexName, dstIndexName):
         """
@@ -134,7 +135,7 @@ class Client:
         @param dstIndexName the new index name that will contains a copy of srcIndexName (destination will be overriten if it already exist).
         """
         request = {"operation": "copy", "destination": dstIndexName}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(srcIndexName.encode('utf8'))), request)
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(srcIndexName.encode('utf8'), safe='')), request)
 
     def getLogs(self, offset = 0, length = 10):
         """
@@ -198,7 +199,7 @@ class Index:
         self.hosts = client.hosts
         self.client = client
         self.indexName = indexName
-        self.urlIndexName = quote(self.indexName.encode('utf8'))
+        self.urlIndexName = quote(self.indexName.encode('utf8'), safe='')
 
     def addObject(self, content, objectID = None):
         """
@@ -212,7 +213,7 @@ class Index:
         if objectID is None:
             return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s" % self.urlIndexName, content)
         else:
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))), content)
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'), safe='')), content)
 
 
     def addObjects(self, objects):
@@ -234,7 +235,7 @@ class Index:
         @param objectID the unique identifier of the object to retrieve
         @param attributesToRetrieve (optional) if set, contains the list of attributes to retrieve as a string separated by a comma
         """
-        objID = quote(objectID.encode('utf8'))
+        objID = quote(objectID.encode('utf8'), safe='')
         if (attributesToRetrieve == None):
             return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.urlIndexName, objID))
         else:
@@ -247,7 +248,7 @@ class Index:
         @param partialObject contains the object attributes to override, the
                object must contains an objectID attribute
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'))), partialObject)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.urlIndexName, quote(partialObject["objectID"].encode('utf8'), safe='')), partialObject)
 
     def partialUpdateObjects(self, objects):
         """
@@ -267,7 +268,7 @@ class Index:
 
         @param object contains the object to save, the object must contains an objectID attribute
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(obj["objectID"].encode('utf8'))), obj)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.urlIndexName, quote(obj["objectID"].encode('utf8'), safe='')), obj)
 
     def saveObjects(self, objects):
         """
@@ -289,7 +290,7 @@ class Index:
         """
         if (len(objectID) == 0):
             raise AlgoliaException("objectID is required")
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'))))
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.urlIndexName, quote(objectID.encode('utf8'), safe='')))
 
     def search(self, query, args = None):
         """
@@ -356,7 +357,7 @@ class Index:
             one is kept and others are removed.
         """
         if args == None:
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'))))
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'), safe='')))
         else:
             try:
                 iteritems = args.iteritems(); #Python3.X Fix
@@ -367,7 +368,7 @@ class Index:
                     args[k] = json.dumps(v)
                 else:
                     args[k] = v
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8')), urlencode(args)))
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8'), safe=''), urlencode(args)))
 
     def browse(self, page = 0, hitsPerPage = 1000):
         """

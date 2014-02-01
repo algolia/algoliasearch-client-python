@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 import os
 import time
@@ -171,3 +173,22 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(len(settings['attributesToRetrieve']), 1)
     self.assertEquals(settings['attributesToRetrieve'][0], 'name')
     
+  def test_URLEncode(self):
+
+    task = self.index.saveObject({"name": "San Francisco", "objectID": u"a/go/?à"})
+    self.index.waitTask(task['taskID'])
+    
+    obj = self.index.getObject(u"a/go/?à", 'name')
+    self.assertEquals(obj['name'], 'San Francisco')
+
+    task = self.index.partialUpdateObject({"name": "San Diego", "objectID": u"a/go/?à"})
+    self.index.waitTask(task['taskID'])
+    obj = self.index.getObject(u"a/go/?à")
+    self.assertEquals(obj['name'], 'San Diego')
+
+    task = self.index.saveObjects([{"name": "Los Angeles", "objectID": u"a/go/?à"}])
+    self.index.waitTask(task['taskID'])
+
+    obj = self.index.getObject(u"a/go/?à")
+    self.assertEquals(obj['name'], 'Los Angeles')
+
