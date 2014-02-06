@@ -16,16 +16,36 @@ def safe_index_name(name):
 
 class ClientTest(unittest.TestCase):
   def setUp(self):
+    try:
+      self.name = unichr(224) + "lgol?" + unichr(224) + "-python"
+      self.name2 = unichr(224) + "lgol?" + unichr(224) + "2-python"
+      self.nameObj = unichr(224) + "/go/?" + unichr(224) + "2-python"
+    except Exception:
+      self.name = "àlgol?à-python" 
+      self.name2 = "àlgol?à2-python" 
+      self.nameObj = "à/go/?à2-python" 
+
     self.client = algoliasearch.Client(os.environ['ALGOLIA_APPLICATION_ID'], os.environ['ALGOLIA_API_KEY'])
-    index_name = safe_index_name('towns')
+    index_name = safe_index_name(self.name)
     try:
       self.client.deleteIndex(index_name)
     except algoliasearch.AlgoliaException:
       pass
     self.index = self.client.initIndex(index_name)
 
+  def tearDown(self):
+    try:
+      self.client.deleteIndex(self.name)
+    except algoliasearch.AlgoliaException:
+      pass
+    try:
+      self.client.deleteIndex(self.name2)
+    except algoliasearch.AlgoliaException:
+      pass
+
+
   def test_addObject(self):
-    task = self.index.addObject({ 'name': 'Paris' }, "42")
+    task = self.index.addObject({ 'name': 'Paris' }, self.nameObj)
     self.index.waitTask(task['taskID'])
     results = self.index.search('pa')
     self.assertEquals(len(results['hits']), 1)
@@ -44,21 +64,21 @@ class ClientTest(unittest.TestCase):
 
   def test_getObject(self):
 
-    task = self.index.saveObject({"name": "San Francisco", "objectID": "32"})
+    task = self.index.saveObject({"name": "San Francisco", "objectID": self.nameObj})
     self.index.waitTask(task['taskID'])
     
-    obj = self.index.getObject("32", 'name')
+    obj = self.index.getObject(self.nameObj, 'name')
     self.assertEquals(obj['name'], 'San Francisco')
 
-    task = self.index.partialUpdateObject({"name": "San Diego", "objectID": "32"})
+    task = self.index.partialUpdateObject({"name": "San Diego", "objectID": self.nameObj})
     self.index.waitTask(task['taskID'])
-    obj = self.index.getObject("32")
+    obj = self.index.getObject(self.nameObj)
     self.assertEquals(obj['name'], 'San Diego')
 
-    task = self.index.saveObjects([{"name": "Los Angeles", "objectID": "32"}])
+    task = self.index.saveObjects([{"name": "Los Angeles", "objectID": self.nameObj}])
     self.index.waitTask(task['taskID'])
 
-    obj = self.index.getObject("32")
+    obj = self.index.getObject(self.nameObj)
     self.assertEquals(obj['name'], 'Los Angeles')
 
   def test_deleteObject(self):
@@ -73,9 +93,9 @@ class ClientTest(unittest.TestCase):
     self.assertRaises(algoliasearch.AlgoliaException, self.index.deleteObject, "")
 
   def test_listIndexes(self):
-    new_index = self.client.initIndex(safe_index_name('listIndex'))
+    new_index = self.client.initIndex(safe_index_name(self.name))
     try:
-      self.client.deleteIndex(safe_index_name('listIndex'))
+      self.client.deleteIndex(safe_index_name(self.name))
       time.sleep(4) # Dirty but temporary
     except algoliasearch.AlgoliaException:
       pass
@@ -85,7 +105,7 @@ class ClientTest(unittest.TestCase):
     resAfter = self.client.listIndexes()
     is_present = False
     for it in resAfter['items']:
-      is_present = is_present or it['name'] == safe_index_name('listIndex') 
+      is_present = is_present or it['name'] == safe_index_name(self.name) 
     self.assertEquals(is_present, True)
 
   def test_clearIndex(self):
@@ -99,29 +119,29 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(len(results['hits']), 0)
 
   def test_copy(self):
-    new_index = self.client.initIndex(safe_index_name('city'))
+    new_index = self.client.initIndex(safe_index_name(self.name2))
     try:
-      self.client.deleteIndex(safe_index_name('city'))
+      self.client.deleteIndex(safe_index_name(self.name2))
     except algoliasearch.AlgoliaException:
       pass
     res = self.client.listIndexes()
     task = self.index.addObject({'name': 'San Francisco'})
     self.index.waitTask(task['taskID'])
-    task = self.client.copyIndex(safe_index_name('towns'), safe_index_name('city'))
+    task = self.client.copyIndex(safe_index_name(self.name), safe_index_name(self.name2))
     results = new_index.search('')
     self.assertEquals(len(results['hits']), 1)
     self.assertEquals(results['hits'][0]['name'], 'San Francisco')
 
   def test_move(self):
-    new_index = self.client.initIndex(safe_index_name('city'))
+    new_index = self.client.initIndex(safe_index_name(self.name2))
     try:
-      self.client.deleteIndex(safe_index_name('city'))
+      self.client.deleteIndex(safe_index_name(self.name2))
     except algoliasearch.AlgoliaException:
       pass
     res = self.client.listIndexes()
     task = self.index.addObject({'name': 'San Francisco'})
     self.index.waitTask(task['taskID'])
-    task = self.client.moveIndex(safe_index_name('towns'), safe_index_name('city'))
+    task = self.client.moveIndex(safe_index_name(self.name), safe_index_name(self.name2))
     self.index.waitTask(task['taskID'])
     results = new_index.search('')
     self.assertEquals(len(results['hits']), 1)
@@ -147,7 +167,7 @@ class ClientTest(unittest.TestCase):
     task = self.index.batch({'requests': [{ 'action': 'addObject', 'body':{'name': 'San Francisco'}}   \
       , { 'action': 'addObject', 'body':{'name': 'Los Angeles'}}                          \
       , { 'action': 'updateObject', 'body':{'name': 'San Diego'}, 'objectID':'42'}    \
-      , { 'action': 'updateObject', 'body':{'name': 'Los Gatos'}, 'objectID':'43'}    \
+      , { 'action': 'updateObject', 'body':{'name': 'Los Gatos'}, 'objectID':self.nameObj}    \
       ]})
     self.index.waitTask(task['taskID'])
     obj = self.index.getObject("42")
@@ -201,25 +221,21 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(settings['attributesToRetrieve'][0], 'name')
     
   def test_URLEncode(self):
-    try:
-      name = "a/go/?" + unichr(224)
-    except Exception:
-      name = "a/go/?à" 
 
-    task = self.index.saveObject({"name": "San Francisco", "objectID": name})
+    task = self.index.saveObject({"name": "San Francisco", "objectID": self.nameObj})
     self.index.waitTask(task['taskID'])
     
-    obj = self.index.getObject(name, 'name')
+    obj = self.index.getObject(self.nameObj, 'name')
     self.assertEquals(obj['name'], 'San Francisco')
 
-    task = self.index.partialUpdateObject({"name": "San Diego", "objectID": name})
+    task = self.index.partialUpdateObject({"name": "San Diego", "objectID": self.nameObj})
     self.index.waitTask(task['taskID'])
-    obj = self.index.getObject(name)
+    obj = self.index.getObject(self.nameObj)
     self.assertEquals(obj['name'], 'San Diego')
 
-    task = self.index.saveObjects([{"name": "Los Angeles", "objectID": name}])
+    task = self.index.saveObjects([{"name": "Los Angeles", "objectID": self.nameObj}])
     self.index.waitTask(task['taskID'])
 
-    obj = self.index.getObject(name)
+    obj = self.index.getObject(self.nameObj)
     self.assertEquals(obj['name'], 'Los Angeles')
 
