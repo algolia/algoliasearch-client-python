@@ -115,7 +115,7 @@ class Client:
         @param indexName the name of index to delete
         Return an object of the form {"deletedAt": "2013-01-18T15:33:13.556Z"}
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(indexName, safe=''))
+        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(indexName.encode('utf8'), safe=''))
 
     def moveIndex(self, srcIndexName, dstIndexName):
         """
