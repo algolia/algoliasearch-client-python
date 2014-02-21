@@ -176,6 +176,19 @@ class ClientTest(unittest.TestCase):
     res = self.index.search('')
     self.assertEquals(len(res['hits']), 4)
 
+  def test_batchDelete(self):
+    task = self.index.batch({'requests': [{ 'action': 'addObject', 'body':{'name': 'San Francisco', 'objectID' : '40'}}   \
+      , { 'action': 'addObject', 'body':{'name': 'Los Angeles', 'objectID' : '41'}}                          \
+      , { 'action': 'updateObject', 'body':{'name': 'San Diego'}, 'objectID':'42'}    \
+      , { 'action': 'updateObject', 'body':{'name': 'Los Gatos'}, 'objectID': self.nameObj}    \
+      ]})
+    self.index.waitTask(task['taskID'])
+    task = self.index.deleteObjects(['40', '41', '42', self.nameObj])
+    self.index.waitTask(task['taskID'])
+
+    res = self.index.search('')
+    self.assertEquals(len(res['hits']), 0)
+
   def test_user_key(self):
     res = self.index.listUserKeys()
     newKey = self.index.addUserKey(['search'])

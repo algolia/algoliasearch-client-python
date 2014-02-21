@@ -282,6 +282,18 @@ class Index:
         request = {"requests": requests}
         return self.batch(request)
 
+    def deleteObjects(self, objects):
+        """
+        delete several objects
+
+        @param objects contains an array of objectID to delete
+        """
+        requests = []
+        for obj in objects:
+            requests.append({"action": "deleteObject", "body": { "objectID" : obj}})
+        request = {"requests": requests}
+        return self.batch(request)
+
     def deleteObject(self, objectID):
         """
         Delete an object from the index
