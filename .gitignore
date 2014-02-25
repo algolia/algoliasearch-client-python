@@ -12,7 +12,10 @@ develop-eggs
 .installed.cfg
 scratch
 env
+env3
 venv
+
+MANIFEST
 
 # Installer logs
 pip-log.txt
