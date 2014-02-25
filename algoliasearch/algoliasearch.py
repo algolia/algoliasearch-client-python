@@ -195,7 +195,7 @@ class Client:
             params['indexes'] = indexes
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", params)
 
-    def generate_secured_api_key(self, private_api_key, tag_filters, user_token = None):
+    def generateSecuredApiKey(self, private_api_key, tag_filters, user_token = None):
         """
         Generate a secured and public API Key from a list of tagFilters and an
         optional user token identifying the current user
