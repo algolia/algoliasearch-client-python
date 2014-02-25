@@ -3,8 +3,7 @@
 import unittest
 import os
 import time
-import sys
-import unicodedata
+import hashlib
 
 from algoliasearch import algoliasearch
 
@@ -251,4 +250,15 @@ class ClientTest(unittest.TestCase):
 
     obj = self.index.getObject(self.nameObj)
     self.assertEquals(obj['name'], 'Los Angeles')
+
+  def test_secured_keys(self):
+    self.assertEquals('143fec7bef6f16f6aa127a4949948a966816fa154e67a811e516c2549dbe2a8b', hashlib.sha256('my_api_key(public,user1)').hexdigest())
+    key = self.client.generate_secured_api_key('my_api_key', '(public,user1)')
+    self.assertEquals(key, hashlib.sha256('my_api_key(public,user1)').hexdigest())
+    key = self.client.generate_secured_api_key('my_api_key', '(public,user1)', 42)
+    self.assertEquals(key, hashlib.sha256('my_api_key(public,user1)42').hexdigest())
+    key = self.client.generate_secured_api_key('my_api_key', ['public'])
+    self.assertEquals(key, hashlib.sha256('my_api_keypublic').hexdigest())
+    key = self.client.generate_secured_api_key('my_api_key', ['public', ['premium','vip']])
+    self.assertEquals(key, hashlib.sha256('my_api_keypublic,(premium,vip)').hexdigest())
 

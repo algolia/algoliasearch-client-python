@@ -34,6 +34,7 @@ else:
 import urllib3
 import time
 import datetime
+import hashlib
 
 POOL_MANAGER = urllib3.PoolManager()
 
@@ -172,7 +173,7 @@ class Client:
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/keys/%s" % key)
 
-    def addUserKey(self, acls, validity = 0, maxQueriesPerIPPerHour = 0, maxHitsPerQuery = 0):
+    def addUserKey(self, acls, validity = 0, maxQueriesPerIPPerHour = 0, maxHitsPerQuery = 0, indexes = None):
         """
         Create a new user key
 
@@ -187,8 +188,25 @@ class Client:
         @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
         @param maxQueriesPerIPPerHour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
+        @param indexes the optional list of targeted indexes
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery} )
+        params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": maxQueriesPerIPPerHour, "maxHitsPerQuery": maxHitsPerQuery}
+        if not indexes is None:
+            params['indexes'] = indexes
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", params)
+
+    def generate_secured_api_key(self, private_api_key, tag_filters, user_token = None):
+        """
+        Generate a secured and public API Key from a list of tagFilters and an
+        optional user token identifying the current user
+ 
+        @param private_api_key your private API Key
+        @param tag_filters the list of tags applied to the query (used as security)
+        @param user_token an optional token identifying the current user
+        """
+        if type(tag_filters) is list:
+            tag_filters = ','.join(map(lambda t: ''.join(['(', ','.join(t), ')']) if type(t) is list else str(t), tag_filters))
+        return hashlib.sha256(''.join([private_api_key, str(tag_filters), str(user_token or '')])).hexdigest()
 
 class Index:
     """
