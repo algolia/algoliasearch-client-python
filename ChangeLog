@@ -1,5 +1,12 @@
 CHANGELOG
 
+2014-02-24  1.2.7
+
+      * Added deleteObjects
+      * Added generateSecuredApiKey based on an API Key, tagFilters and optional user token
+      * Ability to specify a list of indexes targeted by a user API key
+      * Missing UTF-8 encoding while generating DELETE URL
+
 2014-02-01  1.2.6
 
       * Fixed encoding of objectID with slash

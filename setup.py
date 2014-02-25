@@ -2,8 +2,11 @@
 
 from distutils.core import setup
 
+import os
+execfile(os.path.join('algoliasearch', 'version.py'))
+
 setup(  name='algoliasearch',
-        version='1.2.6',
+        version=VERSION,
         description='Algolia Search API Client for Python',
         url='https://github.com/algolia/algoliasearch-client-python',
         packages = ["algoliasearch"],

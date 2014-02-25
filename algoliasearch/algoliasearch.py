@@ -35,6 +35,7 @@ import urllib3
 import time
 import datetime
 import hashlib
+from version import VERSION
 
 POOL_MANAGER = urllib3.PoolManager()
 
@@ -69,7 +70,7 @@ class Client:
             'Content-Type': 'application/json; charset=utf-8',
             'X-Algolia-API-Key': self.apiKey,
             'X-Algolia-Application-Id': self.applicationID,
-            'User-Agent': 'Algolia Search for python'
+            'User-Agent': ('Algolia Search for python %s' % VERSION)
         }
 
     def enableRateLimitForward(self, adminAPIKey, endUserIP, rateLimitAPIKey):
