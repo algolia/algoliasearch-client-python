@@ -24,6 +24,7 @@ THE SOFTWARE.
 """
 import json
 import random
+import os
 import sys
 if sys.version < '3':
   from urllib import quote
@@ -35,6 +36,8 @@ import urllib3
 import time
 import datetime
 import hashlib
+
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from version import VERSION
 
 POOL_MANAGER = urllib3.PoolManager()
@@ -207,7 +210,7 @@ class Client:
         """
         if type(tag_filters) is list:
             tag_filters = ','.join(map(lambda t: ''.join(['(', ','.join(t), ')']) if type(t) is list else str(t), tag_filters))
-        return hashlib.sha256(''.join([private_api_key, str(tag_filters), str(user_token or '')])).hexdigest()
+        return hashlib.sha256(''.join([private_api_key, str(tag_filters), str(user_token or '')]).encode('utf-8')).hexdigest()
 
 class Index:
     """

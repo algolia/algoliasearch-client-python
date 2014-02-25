@@ -3,7 +3,12 @@
 from distutils.core import setup
 
 import os
-execfile(os.path.join('algoliasearch', 'version.py'))
+import sys
+
+if sys.version < '3':
+    execfile(os.path.join('algoliasearch', 'version.py'))
+else:
+    exec(open("algoliasearch/version.py").read())
 
 setup(  name='algoliasearch',
         version=VERSION,
