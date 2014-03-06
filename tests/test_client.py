@@ -261,3 +261,11 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(key, hashlib.sha256('my_api_keypublic'.encode('utf-8')).hexdigest())
     key = self.client.generateSecuredApiKey('my_api_key', ['public', ['premium','vip']])
     self.assertEquals(key, hashlib.sha256('my_api_keypublic,(premium,vip)'.encode('utf-8')).hexdigest())
+
+  def test_multipleQueries(self):
+    task = self.index.addObject({ 'name': 'Paris' }, self.nameObj)
+    self.index.waitTask(task['taskID'])
+    results = self.client.multipleQueries([{"indexName" : safe_index_name(self.name), "query" : ""}])
+    self.assertEquals(len(results['results']), 1)
+    self.assertEquals(len(results['results'][0]['hits']), 1)
+    self.assertEquals('Paris', results['results'][0]['hits'][0]['name'])
