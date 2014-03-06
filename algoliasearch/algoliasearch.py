@@ -104,6 +104,19 @@ class Client:
             'User-Agent': 'Algolia Search for python'
         }
 
+
+    def multipleQueries(self, queries, indexNameKey = "indexName"):
+        """
+        This method allows to query multiple indexes with one API call
+        """
+        requests = []
+        for query in queries:
+            indexName = query[indexNameKey]
+            del query[indexNameKey]
+            requests.append({"indexName": indexName, "params": urlencode(query)})
+        body = {"requests": requests}
+        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/*/queries", body)
+
     def listIndexes(self):
         """
         List all existing indexes
