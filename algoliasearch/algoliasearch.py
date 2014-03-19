@@ -224,7 +224,7 @@ class Client:
         """
         if type(tag_filters) is list:
             tag_filters = ','.join(map(lambda t: ''.join(['(', ','.join(t), ')']) if type(t) is list else str(t), tag_filters))
-        return hmac.new(private_api_key, ''.join([str(tag_filters), str(user_token or '')]),  hashlib.sha256).hexdigest()
+        return hmac.new(str.encode(private_api_key), str.encode(''.join([str(tag_filters), str(user_token or '')])),  hashlib.sha256).hexdigest()
 
 class Index:
     """
