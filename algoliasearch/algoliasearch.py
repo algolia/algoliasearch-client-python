@@ -156,14 +156,14 @@ class Client:
         request = {"operation": "copy", "destination": dstIndexName}
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(srcIndexName.encode('utf8'), safe='')), request)
 
-    def getLogs(self, offset = 0, length = 10):
+    def getLogs(self, offset = 0, length = 10, onlyErrors = False):
         """
         Return last logs entries.
 
         @param offset Specify the first entry to retrieve (0-based, 0 is the most recent log entry).
         @param length Specify the maximum number of entries to retrieve starting at offset. Maximum allowed value: 1000.
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d" % (offset, length))
+        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d&onlyErrors=%s" % (offset, length, onlyErrors))
 
     def initIndex(self, indexName):
         """
