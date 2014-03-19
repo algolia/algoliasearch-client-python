@@ -4,6 +4,7 @@ import unittest
 import os
 import time
 import hashlib
+import hmac
 
 from algoliasearch import algoliasearch
 
@@ -189,6 +190,8 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(len(res['hits']), 0)
 
   def test_user_key(self):
+    task = self.index.addObject({ 'name': 'Paris' }, self.nameObj)
+    self.index.waitTask(task['taskID'])
     res = self.index.listUserKeys()
     newKey = self.index.addUserKey(['search'])
     self.assertTrue(newKey['key'] != "")
@@ -254,13 +257,13 @@ class ClientTest(unittest.TestCase):
   def test_secured_keys(self):
     self.assertEquals('143fec7bef6f16f6aa127a4949948a966816fa154e67a811e516c2549dbe2a8b', hashlib.sha256('my_api_key(public,user1)'.encode('utf-8')).hexdigest())
     key = self.client.generateSecuredApiKey('my_api_key', '(public,user1)')
-    self.assertEquals(key, hashlib.sha256('my_api_key(public,user1)'.encode('utf-8')).hexdigest())
+    self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'), '(public,user1)'.encode('utf-8'), hashlib.sha256).hexdigest())
     key = self.client.generateSecuredApiKey('my_api_key', '(public,user1)', 42)
-    self.assertEquals(key, hashlib.sha256('my_api_key(public,user1)42'.encode('utf-8')).hexdigest())
+    self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'), '(public,user1)42'.encode('utf-8'), hashlib.sha256).hexdigest())
     key = self.client.generateSecuredApiKey('my_api_key', ['public'])
-    self.assertEquals(key, hashlib.sha256('my_api_keypublic'.encode('utf-8')).hexdigest())
+    self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'), 'public'.encode('utf-8'), hashlib.sha256).hexdigest())
     key = self.client.generateSecuredApiKey('my_api_key', ['public', ['premium','vip']])
-    self.assertEquals(key, hashlib.sha256('my_api_keypublic,(premium,vip)'.encode('utf-8')).hexdigest())
+    self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'), 'public,(premium,vip)'.encode('utf-8'), hashlib.sha256).hexdigest())
 
   def test_multipleQueries(self):
     task = self.index.addObject({ 'name': 'Paris' }, self.nameObj)

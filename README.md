@@ -521,6 +521,8 @@ print client.deleteUserKey("f420238212c54dcfad07ea0aa6d5c45f")
 print index.deleteUserKey("71671c38001bf3ac857bc82052485107")
 ```
 
+
+
 You may have a single index containing per-user data. In that case, all records should be tagged with their associated user_id in order to add a `tagFilters=(public,user_42)` filter at query time to retrieve only what a user has access to. If you're using the [JavaScript client](http://github.com/algolia/algoliasearch-client-js), it will result in a security breach since the user is able to modify the `tagFilters` you've set modifying the code from the browser. To keep using the JavaScript client (recommended for optimal latency) and target secured records, you can generate secured API key from your backend:
 
 ```python
@@ -563,6 +565,8 @@ This public API key must then be used in your JavaScript code as follow:
   });
 </script>
 ```
+
+
 
 Copy or rename an index
 -------------

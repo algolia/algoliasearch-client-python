@@ -36,6 +36,7 @@ import urllib3
 import time
 import datetime
 import hashlib
+import hmac
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from version import VERSION
@@ -223,7 +224,7 @@ class Client:
         """
         if type(tag_filters) is list:
             tag_filters = ','.join(map(lambda t: ''.join(['(', ','.join(t), ')']) if type(t) is list else str(t), tag_filters))
-        return hashlib.sha256(''.join([private_api_key, str(tag_filters), str(user_token or '')]).encode('utf-8')).hexdigest()
+        return hmac.new(private_api_key, ''.join([str(tag_filters), str(user_token or '')]),  hashlib.sha256).hexdigest()
 
 class Index:
     """
