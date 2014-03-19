@@ -255,7 +255,7 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(obj['name'], 'Los Angeles')
 
   def test_secured_keys(self):
-    self.assertEquals('143fec7bef6f16f6aa127a4949948a966816fa154e67a811e516c2549dbe2a8b', hashlib.sha256('my_api_key(public,user1)'.encode('utf-8')).hexdigest())
+    self.assertEquals('1fd74b206c64fb49fdcd7a5f3004356cd3bdc9d9aba8733656443e64daafc417', hmac.new('my_api_key'.encode('utf-8'), '(public,user1)'.encode('utf-8'), hashlib.sha256).hexdigest())
     key = self.client.generateSecuredApiKey('my_api_key', '(public,user1)')
     self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'), '(public,user1)'.encode('utf-8'), hashlib.sha256).hexdigest())
     key = self.client.generateSecuredApiKey('my_api_key', '(public,user1)', 42)
