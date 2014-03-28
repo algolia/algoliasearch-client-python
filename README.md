@@ -213,6 +213,9 @@ You can use the following optional arguments:
  * **optionalWords**: a string that contains the list of words that should be considered as optional when found in the query. The list of words is comma separated.
  * **minWordSizefor1Typo**: the minimum number of characters in a query word to accept one typo in this word.<br/>Defaults to 3.
  * **minWordSizefor2Typos**: the minimum number of characters in a query word to accept two typos in this word.<br/>Defaults to 7.
+ * **advancedSyntax**: Enable the advanced query syntax. Defaults to 0 (false).
+    * **Phrase query**: a phrase query defines a particular sequence of terms. A phrase query is build by Algolia's query parser for words surrounded by `"`. For example, `"search engine"` will retrieve records having `search` next to `engine` only. Typo-tolerance is _disabled_ on phrase queries.
+    * **Prohibit operator**: The prohibit operator excludes records that contain the term after the `-` symbol. For example `search -engine` will retrieve records containing `search` but not `engine`.
 
 #### Pagination parameters
 
