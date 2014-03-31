@@ -585,7 +585,10 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
 class JSONEncoderWithDatetimeAndDefaultToString(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.datetime):
-            return int(time.mktime(obj.timetuple()))
+            try:
+                return int(time.mktime(obj.timetuple()))
+            except:
+                return 0
         try:
             return json.JSONEncoder.default(self, obj)
         except:
