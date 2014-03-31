@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-03-30  1.2.9
+
+      * Fixed invalid date->timestamp conversion
+
 2014-02-24  1.2.8
 
       * Fixed python3 compatibility
