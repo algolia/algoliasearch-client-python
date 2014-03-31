@@ -34,12 +34,14 @@ class ClientTest(unittest.TestCase):
     self.index = self.client.initIndex(index_name)
 
   def tearDown(self):
+    index_name = safe_index_name(self.name)
     try:
-      self.client.deleteIndex(self.name)
+      self.client.deleteIndex(index_name)
     except algoliasearch.AlgoliaException:
       pass
+    index_name2 = safe_index_name(self.name2)
     try:
-      self.client.deleteIndex(self.name2)
+      self.client.deleteIndex(index_name2)
     except algoliasearch.AlgoliaException:
       pass
 
