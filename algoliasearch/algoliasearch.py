@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 """
 Copyright (c) 2013 Algolia
 http://www.algolia.com/
@@ -26,6 +26,8 @@ import json
 import random
 import os
 import sys
+import decimal
+
 if sys.version < '3':
   from urllib import quote
   from urllib import urlencode
@@ -217,7 +219,7 @@ class Client:
         """
         Generate a secured and public API Key from a list of tagFilters and an
         optional user token identifying the current user
- 
+
         @param private_api_key your private API Key
         @param tag_filters the list of tags applied to the query (used as security)
         @param user_token an optional token identifying the current user
@@ -589,6 +591,8 @@ class JSONEncoderWithDatetimeAndDefaultToString(json.JSONEncoder):
                 return int(time.mktime(obj.timetuple()))
             except:
                 return 0
+        if isinstance(obj, decimal.Decimal):
+            return float(obj)
         try:
             return json.JSONEncoder.default(self, obj)
         except:

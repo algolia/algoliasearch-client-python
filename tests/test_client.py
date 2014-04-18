@@ -5,6 +5,7 @@ import os
 import time
 import hashlib
 import hmac
+from decimal import *
 
 from algoliasearch import algoliasearch
 
@@ -21,9 +22,9 @@ class ClientTest(unittest.TestCase):
       self.name2 = unichr(224) + "lgol?" + unichr(224) + "2-python"
       self.nameObj = unichr(224) + "/go/?" + unichr(224) + "2-python"
     except Exception:
-      self.name = "àlgol?à-python" 
-      self.name2 = "àlgol?à2-python" 
-      self.nameObj = "à/go/?à2-python" 
+      self.name = "àlgol?à-python"
+      self.name2 = "àlgol?à2-python"
+      self.nameObj = "à/go/?à2-python"
 
     self.client = algoliasearch.Client(os.environ['ALGOLIA_APPLICATION_ID'], os.environ['ALGOLIA_API_KEY'])
     index_name = safe_index_name(self.name)
@@ -68,7 +69,7 @@ class ClientTest(unittest.TestCase):
 
     task = self.index.saveObject({"name": "San Francisco", "objectID": self.nameObj})
     self.index.waitTask(task['taskID'])
-    
+
     obj = self.index.getObject(self.nameObj, 'name')
     self.assertEquals(obj['name'], 'San Francisco')
 
@@ -107,7 +108,7 @@ class ClientTest(unittest.TestCase):
     resAfter = self.client.listIndexes()
     is_present = False
     for it in resAfter['items']:
-      is_present = is_present or it['name'] == safe_index_name(self.name) 
+      is_present = is_present or it['name'] == safe_index_name(self.name)
     self.assertEquals(is_present, True)
 
   def test_clearIndex(self):
@@ -236,12 +237,12 @@ class ClientTest(unittest.TestCase):
     settings = self.index.getSettings()
     self.assertEquals(len(settings['attributesToRetrieve']), 1)
     self.assertEquals(settings['attributesToRetrieve'][0], 'name')
-    
+
   def test_URLEncode(self):
 
     task = self.index.saveObject({"name": "San Francisco", "objectID": self.nameObj})
     self.index.waitTask(task['taskID'])
-    
+
     obj = self.index.getObject(self.nameObj, 'name')
     self.assertEquals(obj['name'], 'San Francisco')
 
@@ -274,3 +275,20 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(len(results['results']), 1)
     self.assertEquals(len(results['results'][0]['hits']), 1)
     self.assertEquals('Paris', results['results'][0]['hits'][0]['name'])
+
+  def test_decimal(self):
+
+    value = Decimal('3.14')
+    task = self.index.saveObject({"value": value, "objectID": self.nameObj})
+    self.index.waitTask(task['taskID'])
+
+    obj = self.index.getObject(self.nameObj)
+    self.assertEquals(obj['value'], float(value))
+
+  def test_float(self):
+    value = float('3.14')
+    task = self.index.saveObject({"value": value, "objectID": self.nameObj})
+    self.index.waitTask(task['taskID'])
+
+    obj = self.index.getObject(self.nameObj)
+    self.assertEquals(obj['value'], value)
