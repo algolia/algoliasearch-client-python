@@ -90,6 +90,7 @@ class ClientTest(unittest.TestCase):
     results = self.index.search('')
     self.assertEquals(len(results['hits']), 1)
     res = self.index.deleteObject(results['hits'][0]['objectID'])
+    self.index.waitTask(res['taskID'])
     results = self.index.search('')
     self.assertEquals(len(results['hits']), 0)
 
@@ -131,6 +132,7 @@ class ClientTest(unittest.TestCase):
     task = self.index.addObject({'name': 'San Francisco'})
     self.index.waitTask(task['taskID'])
     task = self.client.copyIndex(safe_index_name(self.name), safe_index_name(self.name2))
+    self.index.waitTask(task['taskID'])
     results = new_index.search('')
     self.assertEquals(len(results['hits']), 1)
     self.assertEquals(results['hits'][0]['name'], 'San Francisco')
@@ -197,6 +199,7 @@ class ClientTest(unittest.TestCase):
     self.index.waitTask(task['taskID'])
     res = self.index.listUserKeys()
     newKey = self.index.addUserKey(['search'])
+    time.sleep(1)
     self.assertTrue(newKey['key'] != "")
     resAfter = self.index.listUserKeys()
     is_present = False
@@ -206,6 +209,7 @@ class ClientTest(unittest.TestCase):
     key = self.index.getUserKeyACL(newKey['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.index.deleteUserKey(newKey['key'])
+    time.sleep(1)
     resEnd = self.index.listUserKeys()
     is_present = False
     for it in resEnd['keys']:
@@ -215,6 +219,7 @@ class ClientTest(unittest.TestCase):
 
     res = self.client.listUserKeys()
     newKey = self.client.addUserKey(['search'])
+    time.sleep(1)
     self.assertTrue(newKey['key'] != "")
     resAfter = self.client.listUserKeys()
     is_present = False
@@ -224,6 +229,7 @@ class ClientTest(unittest.TestCase):
     key = self.client.getUserKeyACL(newKey['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.client.deleteUserKey(newKey['key'])
+    time.sleep(1)
     resEnd = self.client.listUserKeys()
     is_present = False
     for it in resEnd['keys']:
