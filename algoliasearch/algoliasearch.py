@@ -454,7 +454,7 @@ class Index:
         filters = []
 
         for key in refinements:
-            r = map(lambda x: key + ":" + x, refinements[key])
+            r = list(map(lambda x: key + ":" + x, refinements[key]))
 
             if (str(key) in disjunctive_refinements):
                 filters.append(r)
@@ -469,7 +469,7 @@ class Index:
 
             for key in refinements:
                 if key != disjunctive_facet:
-                    r = map(lambda x: key + ":" + x, refinements[key])
+                    r = list(map(lambda x: key + ":" + x, refinements[key]))
 
                     if (str(key) in disjunctive_refinements):
                         filters.append(r)
