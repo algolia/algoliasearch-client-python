@@ -423,6 +423,80 @@ class Index:
                     args[k] = v
             return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8'), safe=''), urlencode(args)))
 
+    def flatten(self, lst):
+      return sum( ([x] if not isinstance(x, list) else flatten(x)
+               for x in lst), [] )
+
+    def searchDisjunctiveFaceting(self, query, disjunctive_facets, params = {}, refinements = {}):
+        """
+        Perform a search with disjunctive facets generating as many queries as number of disjunctive facets
+
+        @param query the query
+        @param disjunctive_facets the array of disjunctive facets
+        @param params a hash representing the regular query parameters
+        @param refinements a hash ("string" -> ["array", "of", "refined", "values"]) representing the current refinements
+                            ex: { "my_facet1" => ["my_value1", ["my_value2"], "my_disjunctive_facet1" => ["my_value1", "my_value2"] }
+        """
+        if not(isinstance(disjunctive_facets, str)) and not(isinstance(disjunctive_facets, list)):
+            raise AlgoliaException("Argument \"disjunctive_facets\" must be a String or an Array")
+        if not(isinstance(refinements, dict)):
+            raise AlgoliaException("Argument \"refinements\" must be a Hash of Arrays")
+
+        if isinstance(disjunctive_facets, str):
+            disjunctive_facets = disjunctive_facets.split(',')
+
+        disjunctive_refinements = {}
+        for key in refinements.keys():
+          if (key in disjunctive_facets):
+              disjunctive_refinements[key] = refinements[key]
+
+        queries = []
+        filters = []
+
+        for key in refinements:
+            r = map(lambda x: key + ":" + x, refinements[key])
+
+            if (str(key) in disjunctive_refinements):
+                filters.append(r)
+            else:
+                filters += r
+        params["indexName"] = self.indexName
+        params["query"] = query
+        params["facetFilters"] = filters
+        queries.append(dict(params))
+        for disjunctive_facet in disjunctive_facets:
+            filters = []
+
+            for key in refinements:
+                if key != disjunctive_facet:
+                    r = map(lambda x: key + ":" + x, refinements[key])
+
+                    if (str(key) in disjunctive_refinements):
+                        filters.append(r)
+                    else:
+                        filters += r
+
+            params["indexName"] = self.indexName
+            params["query"] = query
+            params["facetFilters"] = filters
+            params["page"] = 0
+            params["hitsPerPage"] = 1
+            params["facets"] = disjunctive_facet
+            queries.append(dict(params))
+        answers = self.client.multipleQueries(queries)
+
+        aggregated_answer = answers['results'][0]
+        aggregated_answer['disjunctiveFacets'] = {}
+        for i in range(1, len(answers['results'])):
+            for facet in answers['results'][i]['facets']:
+                aggregated_answer['disjunctiveFacets'][facet] = answers['results'][i]['facets'][facet]
+                if (not facet in disjunctive_refinements):
+                  continue
+                for r in disjunctive_refinements[facet]:
+                    if aggregated_answer['disjunctiveFacets'][facet][r] == None:
+                        aggregated_answer['disjunctiveFacets'][facet][r] = 0
+        return aggregated_answer
+
     def browse(self, page = 0, hitsPerPage = 1000):
         """
          Browse all index content

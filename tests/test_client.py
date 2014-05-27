@@ -298,3 +298,43 @@ class ClientTest(unittest.TestCase):
 
     obj = self.index.getObject(self.nameObj)
     self.assertEquals(obj['value'], value)
+
+  def test_disjunctive_faceting(self):
+    self.index.setSettings({"attributesForFacetting" : [ 'city', 'stars', 'facilities']})
+    task = self.index.addObjects([
+      { "name" : 'Hotel A', "stars" : '*', "facilities" : ['wifi', 'bath', 'spa'], "city" : 'Paris' },
+      { "name" : 'Hotel B', "stars" : '*', "facilities" : ['wifi'], "city" : 'Paris' },
+      { "name" : 'Hotel C', "stars" : '**', "facilities" : ['bath'], "city" : 'San Francisco' },
+      { "name" : 'Hotel D', "stars" : '****', "facilities" : ['spa'], "city" : 'Paris' },
+      { "name" : 'Hotel E', "stars" : '****', "facilities" : ['spa'], "city" : 'New York' },
+      ])
+    self.index.waitTask(task['taskID'])
+
+    answer = self.index.searchDisjunctiveFaceting('h', ['stars', 'facilities'], { "facets" : "city"})
+    self.assertEquals(answer['nbHits'], 5)
+    self.assertEquals(len(answer['facets']), 1)
+    self.assertEquals(len(answer['disjunctiveFacets']), 2)
+
+    answer = self.index.searchDisjunctiveFaceting('h', ['stars', 'facilities'], { "facets" : "city"}, { "stars" : ["*"]})
+    self.assertEquals(answer['nbHits'], 2)
+    self.assertEquals(len(answer['facets']), 1)
+    self.assertEquals(len(answer['disjunctiveFacets']), 2)
+    self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
+    self.assertEquals(answer['disjunctiveFacets']['stars']['**'], 1)
+    self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 2)
+
+
+    answer = self.index.searchDisjunctiveFaceting('h', ['stars', 'facilities'], { "facets" : "city"}, { "stars": ['*'], "city": ["Paris"]})
+    self.assertEquals(answer['nbHits'], 2)
+    self.assertEquals(len(answer['facets']), 1)
+    self.assertEquals(len(answer['disjunctiveFacets']), 2)
+    self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
+    self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 1)
+
+    answer = self.index.searchDisjunctiveFaceting('h', ['stars', 'facilities'], { "facets" : "city"}, { "stars": ['*', '****'], "city": ["Paris"]})
+    self.assertEquals(answer['nbHits'], 3)
+    self.assertEquals(len(answer['facets']), 1)
+    self.assertEquals(len(answer['disjunctiveFacets']), 2)
+    self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
+    self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 1)
+
