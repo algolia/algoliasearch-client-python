@@ -116,6 +116,9 @@ class Client:
         for query in queries:
             indexName = query[indexNameKey]
             del query[indexNameKey]
+            for key in query.keys():
+                if isinstance(query[key], (list, dict, tuple)):
+                    query[key] = json.dumps(query[key], cls = JSONEncoderWithDatetimeAndDefaultToString)
             requests.append({"indexName": indexName, "params": urlencode(query)})
         body = {"requests": requests}
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/*/queries", body)
