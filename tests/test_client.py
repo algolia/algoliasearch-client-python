@@ -90,7 +90,6 @@ class ClientTest(unittest.TestCase):
     self.index.waitTask(task['taskID'])
 
     objs = self.index.getObjects(["1", "2"])
-    print objs
     self.assertEquals(objs["results"][0]['name'], 'San Francisco')
     self.assertEquals(objs["results"][1]['name'], 'Los Angeles')
 
