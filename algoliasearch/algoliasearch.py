@@ -282,6 +282,18 @@ class Index:
         else:
             return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.urlIndexName, objID, attributesToRetrieve))
 
+    def getObjects(self, objectIDs):
+        """
+        Get several objects from this index
+
+        @param objectIDs the array of unique identifier of objects to retrieve
+        """
+        requests = []
+        for objectID in objectIDs:
+            req = { "indexName" : self.indexName, "objectID": objectID}
+            requests.append(req)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/*/objects", { "requests" : requests});
+
     def partialUpdateObject(self, partialObject):
         """
         Update partially an object (only update attributes passed in argument)
@@ -322,6 +334,26 @@ class Index:
             requests.append({"action": "updateObject", "objectID": obj["objectID"], "body": obj})
         request = {"requests": requests}
         return self.batch(request)
+
+    def deleteByQuery(self, query, params = {}):
+        """
+        Delete all objects matching a query
+
+        @param query the query string
+        @param params the optional query parameters
+        """
+        params['hitsPerPage'] = 1000
+        params['attributesToRetrieve'] = ['objectID']
+
+        res = self.search(query, params)
+        while (res['nbHits'] != 0):
+            objectIDs = []
+            for elt in res['hits']:
+                objectIDs.append(elt['objectID'])
+            task = self.deleteObjects(objectIDs)
+            self.waitTask(task['taskID'])
+            res = self.search(query, params)
+
 
     def deleteObjects(self, objects):
         """

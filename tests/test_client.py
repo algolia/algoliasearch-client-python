@@ -84,6 +84,16 @@ class ClientTest(unittest.TestCase):
     obj = self.index.getObject(self.nameObj)
     self.assertEquals(obj['name'], 'Los Angeles')
 
+  def test_getObjects(self):
+
+    task = self.index.addObjects([{"name": "San Francisco", "objectID": "1"}, {"name": "Los Angeles", "objectID": "2"}])
+    self.index.waitTask(task['taskID'])
+
+    objs = self.index.getObjects(["1", "2"])
+    print objs
+    self.assertEquals(objs["results"][0]['name'], 'San Francisco')
+    self.assertEquals(objs["results"][1]['name'], 'Los Angeles')
+
   def test_deleteObject(self):
     task = self.index.addObject({'name': 'San Francisco'})
     self.index.waitTask(task['taskID'])
@@ -194,12 +204,25 @@ class ClientTest(unittest.TestCase):
     res = self.index.search('')
     self.assertEquals(len(res['hits']), 0)
 
+  def test_deleteByQuery(self):
+    task = self.index.batch({'requests': [ \
+        { 'action': 'addObject', 'body':{'name': 'San Francisco', 'objectID' : '40'}}   \
+      , { 'action': 'addObject', 'body':{'name': 'San Francisco', 'objectID' : '41'}}   \
+      , { 'action': 'addObject', 'body':{'name': 'Los Angeles', 'objectID' : '42'}}                          \
+      ]})
+    self.index.waitTask(task['taskID'])
+    self.index.deleteByQuery("San Francisco")
+
+    res = self.index.search('')
+    self.assertEquals(len(res['hits']), 1)
+
+
   def test_user_key(self):
     task = self.index.addObject({ 'name': 'Paris' }, self.nameObj)
     self.index.waitTask(task['taskID'])
     res = self.index.listUserKeys()
     newKey = self.index.addUserKey(['search'])
-    time.sleep(1)
+    time.sleep(3)
     self.assertTrue(newKey['key'] != "")
     resAfter = self.index.listUserKeys()
     is_present = False
@@ -209,7 +232,7 @@ class ClientTest(unittest.TestCase):
     key = self.index.getUserKeyACL(newKey['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.index.deleteUserKey(newKey['key'])
-    time.sleep(1)
+    time.sleep(3)
     resEnd = self.index.listUserKeys()
     is_present = False
     for it in resEnd['keys']:
@@ -219,7 +242,7 @@ class ClientTest(unittest.TestCase):
 
     res = self.client.listUserKeys()
     newKey = self.client.addUserKey(['search'])
-    time.sleep(1)
+    time.sleep(3)
     self.assertTrue(newKey['key'] != "")
     resAfter = self.client.listUserKeys()
     is_present = False
@@ -229,7 +252,7 @@ class ClientTest(unittest.TestCase):
     key = self.client.getUserKeyACL(newKey['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.client.deleteUserKey(newKey['key'])
-    time.sleep(1)
+    time.sleep(3)
     resEnd = self.client.listUserKeys()
     is_present = False
     for it in resEnd['keys']:
