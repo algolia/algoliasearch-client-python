@@ -513,6 +513,9 @@ class Index:
             params["facetFilters"] = filters
             params["page"] = 0
             params["hitsPerPage"] = 1
+            params["attributesToRetrieve"] = []
+            params["attributesToHighlight"] = []
+            params["attributesToSnippet"] = []
             params["facets"] = disjunctive_facet
             queries.append(dict(params))
         answers = self.client.multipleQueries(queries)
