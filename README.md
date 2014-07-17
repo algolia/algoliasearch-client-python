@@ -323,6 +323,12 @@ res = index.getObject("myID", "firstname,lastname")
 res = index.getObject("myID", "firstname")
 ```
 
+You can also retrieve a set of objects:
+
+```python
+res = index.getObjects(["myID1", "myID2"])
+```
+
 Delete an object
 -------------
 
