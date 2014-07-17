@@ -1,5 +1,10 @@
 CHANGELOG
 
+2014-07-17  1.2.11
+
+      * Added getObjects
+      * Added deleteByQuery
+
 2014-04-18  1.2.10
 
       * Fixed decimal JSON serialization
