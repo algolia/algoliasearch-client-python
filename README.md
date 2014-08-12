@@ -149,16 +149,16 @@ print index.search("jim")
 Documentation
 ================
 
-Check our [online documentation](http://www.algolia.com/doc/guides/python):
- * [Initial Import](http://www.algolia.com/doc/guides/python#InitialImport)
- * [Ranking &amp; Relevance](http://www.algolia.com/doc/guides/python#RankingRelevance)
- * [Indexing](http://www.algolia.com/doc/guides/python#Indexing)
- * [Search](http://www.algolia.com/doc/guides/python#Search)
- * [Sorting](http://www.algolia.com/doc/guides/python#Sorting)
- * [Filtering](http://www.algolia.com/doc/guides/python#Filtering)
- * [Faceting](http://www.algolia.com/doc/guides/python#Faceting)
- * [Geo-Search](http://www.algolia.com/doc/guides/python#Geo-Search)
- * [Security](http://www.algolia.com/doc/guides/python#Security)
+Check our [online documentation](http://www.algolia.com/doc/python):
+ * [Initial Import](http://www.algolia.com/doc/python#InitialImport)
+ * [Ranking &amp; Relevance](http://www.algolia.com/doc/python#RankingRelevance)
+ * [Indexing](http://www.algolia.com/doc/python#Indexing)
+ * [Search](http://www.algolia.com/doc/python#Search)
+ * [Sorting](http://www.algolia.com/doc/python#Sorting)
+ * [Filtering](http://www.algolia.com/doc/python#Filtering)
+ * [Faceting](http://www.algolia.com/doc/python#Faceting)
+ * [Geo-Search](http://www.algolia.com/doc/python#Geo-Search)
+ * [Security](http://www.algolia.com/doc/python#Security)
  * [REST API](http://www.algolia.com/doc/rest)
 
 Tutorials
