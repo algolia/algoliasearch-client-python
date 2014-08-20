@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-08-20  1.2.12
+
+      * Fixed boolean-based query parameter encoding
+
 2014-07-17  1.2.11
 
       * Added getObjects
