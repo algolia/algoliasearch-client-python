@@ -360,3 +360,9 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
     self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 1)
 
+  def test_encodeBoolean(self):
+    task = self.index.addObject({ 'score': 3525 }, self.nameObj)
+    self.index.waitTask(task['taskID'])
+    results = self.index.search('353', { "allowTyposOnNumericTokens" : False})
+    self.assertEquals(len(results['hits']), 0)
+

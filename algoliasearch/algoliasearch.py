@@ -444,16 +444,15 @@ class Index:
         if args == None:
             return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.urlIndexName, quote(query.encode('utf8'), safe='')))
         else:
+            params = {}
             try:
                 iteritems = args.iteritems(); #Python3.X Fix
             except AttributeError:
                 iteritems = args.items();
             for k, v in iteritems:
-                if isinstance(v, (list, tuple)):
-                    args[k] = json.dumps(v)
-                else:
-                    args[k] = v
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8'), safe=''), urlencode(args)))
+                    params[k] = json.dumps(v)
+
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8'), safe=''), urlencode(params)))
 
     def flatten(self, lst):
       return sum( ([x] if not isinstance(x, list) else flatten(x)
