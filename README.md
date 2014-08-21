@@ -649,7 +649,7 @@ You may have a single index containing per-user data. In that case, all records 
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'public' if they are visible by all users
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', '(public,user_42)')
+public_key = client.generateSecuredApiKey('YourSearchOnlyApiKey', '(public,user_42)')
 ```
 
 This public API key must then be used in your JavaScript code as follow:
@@ -670,7 +670,7 @@ You can mix rate limits and secured API keys setting an extra `user_token` attri
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'public' if they are visible by all users
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generate_secured_api_key('YourRateLimitedApiKey', '(public,user_42)', 'user_42')
+public_key = client.generateSecuredApiKey('YourRateLimitedApiKey', '(public,user_42)', 'user_42')
 ```
 
 This public API key must then be used in your JavaScript code as follow:
