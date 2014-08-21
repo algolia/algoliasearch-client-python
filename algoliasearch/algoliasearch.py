@@ -553,7 +553,7 @@ class Index:
             res = AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/task/%d/" % (self.urlIndexName, taskID))
             if (res["status"] == "published"):
                 return res
-            time.sleep(timeBeforeRetry / 1000)
+            time.sleep(timeBeforeRetry / 1000.)
 
     def getSettings(self):
         """
