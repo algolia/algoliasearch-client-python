@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-08-21  1.2.13
+
+      * Fixed waitTask's sleep
+
 2014-08-20  1.2.12
 
       * Fixed boolean-based query parameter encoding
