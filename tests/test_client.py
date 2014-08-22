@@ -366,3 +366,15 @@ class ClientTest(unittest.TestCase):
     results = self.index.search('353', { "allowTyposOnNumericTokens" : False})
     self.assertEquals(len(results['hits']), 0)
 
+  def test_attributeToRetrieve(self):
+    task = self.index.addObject({ 'name': 'Paris', 'short_name': 'Pa' }, self.nameObj)
+    self.index.waitTask(task['taskID'])
+    results = self.index.search('', { 'attributesToRetrieve':['name', 'short_name']})
+    self.assertEquals(len(results['hits']), 1)
+    self.assertEquals('Paris', results['hits'][0]['name'])
+    self.assertEquals('Pa', results['hits'][0]['short_name'])
+
+    results = self.index.search('', { 'attributesToRetrieve': "name,short_name"})
+    self.assertEquals(len(results['hits']), 1)
+    self.assertEquals('Paris', results['hits'][0]['name'])
+    self.assertEquals('Pa', results['hits'][0]['short_name'])

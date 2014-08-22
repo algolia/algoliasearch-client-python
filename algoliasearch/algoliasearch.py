@@ -117,7 +117,7 @@ class Client:
             indexName = query[indexNameKey]
             del query[indexNameKey]
             for key in query.keys():
-                if isinstance(query[key], (list, dict, tuple)):
+                if isinstance(query[key], (list, dict, tuple, bool)):
                     query[key] = json.dumps(query[key], cls = JSONEncoderWithDatetimeAndDefaultToString)
             requests.append({"indexName": indexName, "params": urlencode(query)})
         body = {"requests": requests}
@@ -450,7 +450,10 @@ class Index:
             except AttributeError:
                 iteritems = args.items();
             for k, v in iteritems:
+                if isinstance(v, (list, dict, tuple, bool)):
                     params[k] = json.dumps(v)
+                else:
+                    params[k] = v
 
             return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.urlIndexName, quote(query.encode('utf8'), safe=''), urlencode(params)))
 
