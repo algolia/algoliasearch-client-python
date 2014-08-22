@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-08-22  1.2.14
+
+      * More fixes around bool/json serialization
+
 2014-08-21  1.2.13
 
       * Fixed waitTask's sleep
