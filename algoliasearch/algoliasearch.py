@@ -75,7 +75,7 @@ to start using Algolia Search API
 class Client:
     """
     Algolia Search library initialization
-    @paramapplication_id the application ID you have in your admin interface
+    @param application_id the application ID you have in your admin interface
     @param api_key a valid API key for the service
     @param hosts_array the list of hosts that you have received for the service
     """
