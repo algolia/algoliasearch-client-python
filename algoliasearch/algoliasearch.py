@@ -39,9 +39,24 @@ import time
 import datetime
 import hashlib
 import hmac
+import warnings
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from version import VERSION
+
+def deprecated(func):
+    """This is a decorator which can be used to mark functions
+    as deprecated. It will result in a warning being emmitted
+    when the function is used."""
+    def newFunc(*args, **kwargs):
+        warnings.warn("Call to deprecated function %s." % func.__name__,
+                      category=DeprecationWarning)
+        return func(*args, **kwargs)
+    newFunc.__name__ = func.__name__
+    newFunc.__doc__ = func.__doc__
+    newFunc.__dict__.update(func.__dict__)
+    return newFunc
+
 
 POOL_MANAGER = urllib3.PoolManager()
 
@@ -79,6 +94,9 @@ class Client:
             'User-Agent': ('Algolia Search for python %s' % VERSION)
         }
 
+    @deprecated
+    def enableRateLimitForward(self, admin_api_key, end_user_ip, rate_limit_api_key):
+        return self.enable_rate_limit_forward(admin_api_key, end_user_ip, rate_limit_api_key)
     def enable_rate_limit_forward(self, admin_api_key, end_user_ip, rate_limit_api_key):
         """
         Allow to use IP rate limit when you have a proxy between end-user and Algolia.
@@ -96,6 +114,9 @@ class Client:
             'User-Agent': 'Algolia Search for python'
         }
 
+    @deprecated
+    def disableRateLimitForward(self):
+        return self.disable_rate_limit_forward()
     def disable_rate_limit_forward(self):
         """
         Disable IP rate limit enabled with enable_rate_limit_forward() function
@@ -107,7 +128,9 @@ class Client:
             'User-Agent': 'Algolia Search for python'
         }
 
-
+    @deprecated
+    def multipleQueries(self, queries, index_name_key = "indexName"):
+        return self.multiple_queries(queries, index_name_key)
     def multiple_queries(self, queries, index_name_key = "indexName"):
         """
         This method allows to query multiple indexes with one API call
@@ -123,6 +146,9 @@ class Client:
         body = {"requests": requests}
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/*/queries", body)
 
+    @deprecated
+    def listIndexes(self):
+        return self.list_indexes()
     def list_indexes(self):
         """
         List all existing indexes
@@ -132,6 +158,9 @@ class Client:
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/")
 
+    @deprecated
+    def deleteIndex(self, index_name):
+        return self.delete_index(index_name)
     def delete_index(self, index_name):
         """
         Delete an index
@@ -141,6 +170,9 @@ class Client:
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(index_name.encode('utf8'), safe=''))
 
+    @deprecated
+    def moveIndex(self, src_index_name, dst_index_name):
+        return self.move_index(src_index_name, dst_index_name)
     def move_index(self, src_index_name, dst_index_name):
         """
         Move an existing index.
@@ -151,6 +183,9 @@ class Client:
         request = {"operation": "move", "destination": dst_index_name}
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % quote(src_index_name.encode('utf8'), safe=''), request)
 
+    @deprecated
+    def copyIndex(self, src_index_name, dst_index_name):
+        return self.copy_index(src_index_name, dst_index_name)
     def copy_index(self, src_index_name, dst_index_name):
         """
         Copy an existing index.
@@ -161,6 +196,9 @@ class Client:
         request = {"operation": "copy", "destination": dst_index_name}
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(src_index_name.encode('utf8'), safe='')), request)
 
+    @deprecated
+    def getLogs(self, offset = 0, length = 10, only_errors = False):
+        return self.get_logs(offset, length, only_errors)
     def get_logs(self, offset = 0, length = 10, only_errors = False):
         """
         Return last logs entries.
@@ -170,6 +208,9 @@ class Client:
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d&only_errors=%s" % (offset, length, only_errors))
 
+    @deprecated
+    def initIndex(self, index_name):
+        return self.init_index(index_name)
     def init_index(self, index_name):
         """
         Get the index object initialized (no server call needed for initialization)
@@ -178,24 +219,36 @@ class Client:
         """
         return Index(self, index_name)
 
+    @deprecated
+    def listUserKeys(self):
+        return self.list_user_keys()
     def list_user_keys(self):
         """
         List all existing user keys with their associated ACLs
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/keys")
 
+    @deprecated
+    def getUserKeyACL(self, key):
+        return self.get_user_key_acl(key)
     def get_user_key_acl(self, key):
         """"
         Get ACL of a user key
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/keys/%s" % key)
 
+    @deprecated
+    def deleteUserKey(self, key):
+        return self.delete_user_key(key)
     def delete_user_key(self, key):
         """
         Delete an existing user key
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/keys/%s" % key)
 
+    @deprecated
+    def addUserKey(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
+        return self.add_user_key(acls, validity, max_queries_per_ip_per_hour, max_hits_per_query, indexes)
     def add_user_key(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
         """
         Create a new user key
@@ -218,6 +271,9 @@ class Client:
             params['indexes'] = indexes
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", params)
 
+    @deprecated
+    def generateSecuredApiKey(self, private_api_key, tag_filters, user_token = None):
+        return self.generate_secured_api_key(private_api_key, tag_filters, user_token)
     def generate_secured_api_key(self, private_api_key, tag_filters, user_token = None):
         """
         Generate a secured and public API Key from a list of tag_filters and an
@@ -242,6 +298,9 @@ class Index:
         self.index_name = index_name
         self.url_index_name = quote(self.index_name.encode('utf8'), safe='')
 
+    @deprecated
+    def addObject(self, content, object_id = None):
+        return self.add_object(content, object_id)
     def add_object(self, content, object_id = None):
         """
         Add an object in this index
@@ -256,7 +315,9 @@ class Index:
         else:
             return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(object_id.encode('utf8'), safe='')), content)
 
-
+    @deprecated
+    def addObjects(self, objects):
+        return self.add_objects(objects)
     def add_objects(self, objects):
         """
         Add several objects
@@ -269,6 +330,9 @@ class Index:
         request = {"requests": requests}
         return self.batch(request)
 
+    @deprecated
+    def getObject(self, object_id, attributes_to_retrieve = None):
+        return self.get_object(object_id, attributes_to_retrieve)
     def get_object(self, object_id, attributes_to_retrieve = None):
         """
         Get an object from this index
@@ -282,6 +346,9 @@ class Index:
         else:
             return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.url_index_name, obj_id, attributes_to_retrieve))
 
+    @deprecated
+    def getObjects(self, object_ids):
+        return self.get_objects(object_ids)
     def get_objects(self, object_ids):
         """
         Get several objects from this index
@@ -294,6 +361,9 @@ class Index:
             requests.append(req)
         return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/*/objects", { "requests" : requests});
 
+    @deprecated
+    def partialUpdateObject(self, partial_object):
+        return self.partial_update_object(partial_object)
     def partial_update_object(self, partial_object):
         """
         Update partially an object (only update attributes passed in argument)
@@ -303,6 +373,9 @@ class Index:
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.url_index_name, quote(partial_object["objectID"].encode('utf8'), safe='')), partial_object)
 
+    @deprecated
+    def partialUpdateObjects(self, objects):
+        return self.partial_update_objects(objects)
     def partial_update_objects(self, objects):
         """
         Partially Override the content of several objects
@@ -315,6 +388,9 @@ class Index:
         request = {"requests": requests}
         return self.batch(request)
 
+    @deprecated
+    def saveObject(self, obj):
+        return self.save_object(obj)
     def save_object(self, obj):
         """
         Override the content of object
@@ -323,6 +399,9 @@ class Index:
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(obj["objectID"].encode('utf8'), safe='')), obj)
 
+    @deprecated
+    def saveObjects(self, objects):
+        return self.save_objects(objects)
     def save_objects(self, objects):
         """
         Override the content of several objects
@@ -335,6 +414,9 @@ class Index:
         request = {"requests": requests}
         return self.batch(request)
 
+    @deprecated
+    def deleteByQuery(self, query, params = {}):
+        return self.delete_by_query(query, params)
     def delete_by_query(self, query, params = {}):
         """
         Delete all objects matching a query
@@ -354,7 +436,9 @@ class Index:
             self.wait_task(task['taskID'])
             res = self.search(query, params)
 
-
+    @deprecated
+    def deleteObjects(self, objects):
+        return self.delete_objects(objects)
     def delete_objects(self, objects):
         """
         delete several objects
@@ -367,6 +451,9 @@ class Index:
         request = {"requests": requests}
         return self.batch(request)
 
+    @deprecated
+    def deleteObject(self, object_id):
+        return self.delete_object(object_id)
     def delete_object(self, object_id):
         """
         Delete an object from the index
@@ -461,6 +548,9 @@ class Index:
       return sum( ([x] if not isinstance(x, list) else flatten(x)
                for x in lst), [] )
 
+    @deprecated
+    def searchDisjunctiveFaceting(self, query, disjunctive_facets, params = {}, refinements = {}):
+        return self.search_disjunctive_faceting(query, disjunctive_facets, params, refinements)
     def search_disjunctive_faceting(self, query, disjunctive_facets, params = {}, refinements = {}):
         """
         Perform a search with disjunctive facets generating as many queries as number of disjunctive facets
@@ -544,6 +634,9 @@ class Index:
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/browse?page=%d&hitsPerPage=%d" % (self.url_index_name, page, hits_per_page))
 
+    @deprecated
+    def waitTask(self, task_id, time_before_retry = 100):
+        return self.wait_task(task_id, time_before_retry)
     def wait_task(self, task_id, time_before_retry = 100):
         """
         Wait the publication of a task on the server.
@@ -558,18 +651,27 @@ class Index:
                 return res
             time.sleep(time_before_retry / 1000.)
 
+    @deprecated
+    def getSettings(self):
+        return self.get_settings()
     def get_settings(self):
         """
         Get settings of this index
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/settings" % self.url_index_name)
 
+    @deprecated
+    def clearIndex(self):
+        return self.clear_index()
     def clear_index(self):
         """
         This function deletes the index content. Settings and index specific API keys are kept untouched.
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/clear" % self.url_index_name)
 
+    @deprecated
+    def setSettings(self, settings):
+        return self.set_settings(settings)
     def set_settings(self, settings):
         """
           Set settings for this index
@@ -625,24 +727,36 @@ class Index:
          """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/settings" % self.url_index_name, settings)
 
+    @deprecated
+    def listUserKeys(self):
+        return self.list_user_keys()
     def list_user_keys(self):
         """
         List all existing user keys of this index with their associated ACLs
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/keys" % self.url_index_name)
 
+    @deprecated
+    def getUserKeyACL(self, key):
+        return self.get_user_key_acl(key)
     def get_user_key_acl(self, key):
         """
         Get ACL of a user key associated to this index
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/keys/%s" % (self.url_index_name, key))
 
+    @deprecated
+    def deleteUserKey(self, key):
+        return self.delete_user_key(key)
     def delete_user_key(self, key):
         """
         Delete an existing user key associated to this index
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.url_index_name, key))
 
+    @deprecated
+    def addUserKey(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
+        return self.add_user_key(acls, validity, max_queries_per_ip_per_hour, max_hits_per_query)
     def add_user_key(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
         """
         Create a new user key associated to this index (can only access to this index)
