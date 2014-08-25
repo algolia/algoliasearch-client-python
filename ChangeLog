@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-08-25  1.3.0
+
+      * Use snake-case everywhere (backward compatible)
+
 2014-08-22  1.2.14
 
       * More fixes around bool/json serialization
