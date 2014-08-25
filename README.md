@@ -82,9 +82,9 @@ This quick start is a 30 seconds tutorial where you can discover how to index an
 
 Without any prior-configuration, you can index [500 contacts](https://github.com/algolia/algoliasearch-client-python/blob/master/contacts.json) in the ```contacts``` index with the following code:
 ```python
-index = client.initIndex("contact")
+index = client.init_index("contact")
 batch = json.load(open('contacts.json'))
-index.addObjects(batch)
+index.add_objects(batch)
 ```
 
 You can then start to search for a contact firstname, lastname, company, ... (even with typos):
@@ -101,12 +101,12 @@ print index.search("jimmie paint")
 
 Settings can be customized to tune the search behavior. For example you can add a custom sort by number of followers to the already good out-of-the-box relevance:
 ```python
-index.setSettings({"customRanking": ["desc(followers)"]})
+index.set_settings({"customRanking": ["desc(followers)"]})
 ```
 
 You can also configure the list of attributes you want to index by order of importance (first = most important):
 ```python
-index.setSettings({"attributesToIndex": ["lastname", "firstname", "company", 
+index.set_settings({"attributesToIndex": ["lastname", "firstname", "company", 
                                          "email", "city", "address"]})
 ```
 
@@ -193,7 +193,7 @@ Objects are schema less, you don't need any configuration to start indexing. The
 Example with automatic `objectID` assignement:
 
 ```python
-res = index.addObject({"firstname": "Jimmie", 
+res = index.add_object({"firstname": "Jimmie", 
                        "lastname": "Barninger"})
 print "ObjectID=%s" % res["objectID"]
 ```
@@ -201,7 +201,7 @@ print "ObjectID=%s" % res["objectID"]
 Example with manual `objectID` assignement:
 
 ```python
-res = index.addObject({"firstname": "Jimmie", 
+res = index.add_object({"firstname": "Jimmie", 
                        "lastname": "Barninger"}, "myID")
 print "ObjectID=%s" % res["objectID"]
 ```
@@ -217,7 +217,7 @@ You have two options to update an existing object:
 Example to replace all the content of an existing object:
 
 ```python
-index.saveObject({"firstname": "Jimmie", 
+index.save_object({"firstname": "Jimmie", 
                   "lastname": "Barninger", 
                   "city": "New York",
                   "objectID": "myID"})
@@ -226,7 +226,7 @@ index.saveObject({"firstname": "Jimmie",
 Example to update only the city attribute of an existing object:
 
 ```python
-index.partialUpdateObject({"city": "San Francisco", 
+index.partial_update_object({"city": "San Francisco", 
                            "objectID": "myID"})
 ```
 
@@ -317,7 +317,7 @@ You can also use a string array encoding (for example `numericFilters: ["price>1
 **Note**: This feature is disabled if the query string is empty and there isn't any `tagFilters`, nor any `facetFilters`, nor any `numericFilters` parameters.
 
 ```python
-index = client.initIndex("contacts")
+index = client.init_index("contacts")
 res = index.search("query string")
 res = index.search("query string", { "attributesToRetrieve": "fistname,lastname", "hitsPerPage": 20})
 ```
@@ -367,7 +367,7 @@ You can send multiple queries with a single API call using a batch of queries:
 # perform 3 queries in a single API call:
 # - 1st query targets index `categories`
 # - 2nd and 3rd queries target index `products` 
-results = self.client.multipleQueries([{"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3}
+results = self.client.multiple_queries([{"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3}
   , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3, "tagFilters": "promotion"}
   , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 10}])
 
@@ -386,17 +386,17 @@ You can easily retrieve an object using its `objectID` and optionnaly a list of 
 
 ```python
 # Retrieves all attributes
-index.getObject("myID")
+index.get_object("myID")
 # Retrieves firstname and lastname attributes
-res = index.getObject("myID", "firstname,lastname")
+res = index.get_object("myID", "firstname,lastname")
 # Retrieves only the firstname attribute
-res = index.getObject("myID", "firstname")
+res = index.get_object("myID", "firstname")
 ```
 
 You can also retrieve a set of objects:
 
 ```python
-res = index.getObjects(["myID1", "myID2"])
+res = index.get_objects(["myID1", "myID2"])
 ```
 
 Delete an object
@@ -405,7 +405,7 @@ Delete an object
 You can delete an object using its `objectID`:
 
 ```python
-index.deleteObject("myID")
+index.delete_object("myID")
 ```
 
 
@@ -416,14 +416,14 @@ You can delete all objects matching a single query with the following code. Inte
 
 ```python
 params = {}
-index.deleteByQuery("John", params)
+index.delete_by_query("John", params)
 ```
 
 
 Index Settings
 -------------
 
-You can retrieve all settings using the `getSettings` function. The result will contains the following attributes:
+You can retrieve all settings using the `get_settings` function. The result will contains the following attributes:
 
 
 #### Indexing parameters
@@ -481,20 +481,20 @@ For example `"customRanking" => ["desc(population)", "asc(name)"]`
 You can easily retrieve settings or update them:
 
 ```python
-settings = index.getSettings()
+settings = index.get_settings()
 print settings
 ```
 
 ```python
-index.setSettings({"customRanking": ["desc(followers)"]})
+index.set_settings({"customRanking": ["desc(followers)"]})
 ```
 
 List indices
 -------------
-You can list all your indices with their associated information (number of entries, disk size, etc.) with the `listIndexes` method:
+You can list all your indices with their associated information (number of entries, disk size, etc.) with the `list_indexes` method:
 
 ```python
-print client.listIndexes()
+print client.list_indexes()
 ```
 
 Delete an index
@@ -502,7 +502,7 @@ Delete an index
 You can delete an index using its name:
 
 ```python
-client.deleteIndex("contacts")
+client.delete_index("contacts")
 ```
 
 Clear an index
@@ -510,7 +510,7 @@ Clear an index
 You can delete the index content without removing settings and index specific API keys with the clearIndex command:
 
 ```python
-index.clearIndex()
+index.clear_index()
 ```
 
 Wait indexing
@@ -520,9 +520,9 @@ All write operations return a `taskID` when the job is securely stored on our in
 
 For example, to wait for indexing of a new object:
 ```python
-res = index.addObject({"firstname": "Jimmie", 
+res = index.add_object({"firstname": "Jimmie", 
                        "lastname": "Barninger"})
-index.waitTask(res["taskID"])
+index.wait_task(res["taskID"])
 ```
 
 
@@ -533,14 +533,14 @@ Batch writes
 
 You may want to perform multiple operations with one API call to reduce latency.
 We expose three methods to perform batch:
- * `addObjects`: add an array of object using automatic `objectID` assignement
- * `saveObjects`: add or update an array of object that contains an `objectID` attribute
- * `deleteObjects`: delete an array of objectIDs
- * `partialUpdateObjects`: partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated, other will remain unchanged)
+ * `add_objects`: add an array of object using automatic `objectID` assignement
+ * `save_objects`: add or update an array of object that contains an `objectID` attribute
+ * `delete_objects`: delete an array of objectIDs
+ * `partial_update_objects`: partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated, other will remain unchanged)
 
 Example using automatic `objectID` assignement:
 ```python
-res = index.addObjects([{"firstname": "Jimmie", 
+res = index.add_objects([{"firstname": "Jimmie", 
                          "lastname": "Barninger"},
                         {"firstname": "Warren", 
                          "lastname": "Speach"}])
@@ -548,7 +548,7 @@ res = index.addObjects([{"firstname": "Jimmie",
 
 Example with user defined `objectID` (add or update):
 ```python
-res = index.saveObjects([{"firstname": "Jimmie", 
+res = index.save_objects([{"firstname": "Jimmie", 
                           "lastname": "Barninger",
                            "objectID": "myID1"},
                           {"firstname": "Warren", 
@@ -558,12 +558,12 @@ res = index.saveObjects([{"firstname": "Jimmie",
 
 Example that delete a set of records:
 ```python
-res = index.deleteObjects(["myID1", "myID2"])
+res = index.delete_objects(["myID1", "myID2"])
 ```
 
 Example that update only the `firstname` attribute:
 ```python
-res = index.partialUpdateObjects([{"firstname": "Jimmie", 
+res = index.partial_update_objects([{"firstname": "Jimmie", 
                                    "objectID": "myID1"},
                                   {"firstname": "Warren", 
                                    "objectID": "myID2"}])
@@ -578,12 +578,12 @@ The admin API key provides full control of all your indices.
 You can also generate user API keys to control security.
 These API keys can be restricted to a set of operations or/and restricted to a given index.
 
-To list existing keys, you can use `listUserKeys` method:
+To list existing keys, you can use `list_user_keys` method:
 ```python
 # Lists global API Keys
-client.listUserKeys()
+client.list_user_keys()
 # Lists API Keys that can access only to this index
-index.listUserKeys()
+index.list_user_keys()
 ```
 
 Each key is defined by a set of rights that specify the authorized actions. The different rights are:
@@ -598,10 +598,10 @@ Each key is defined by a set of rights that specify the authorized actions. The 
 Example of API Key creation:
 ```python
 # Creates a new global API key that can only perform search actions
-res = client.addUserKey(["search"])
+res = client.add_user_key(["search"])
 print res["key"]
 # Creates a new API key that can only perform search action on this index
-res = index.addUserKey(["search"])
+res = index.add_user_key(["search"])
 print res["key"]
 ```
 
@@ -611,34 +611,34 @@ You can also create an API Key with advanced restrictions:
  * Specify the maximum number of API calls allowed from an IP address per hour. Each time an API call is performed with this key, a check is performed. If the IP at the origin of the call did more than this number of calls in the last hour, a 403 code is returned. Defaults to 0 (no rate limit). This parameter can be used to protect you from attempts at retrieving your entire content by massively querying the index.
 
 
-  Note: If you are sending the query through your servers, you must use the `enableRateLimitForward("TheAdminAPIKey", "EndUserIP", "APIKeyWithRateLimit")` function to enable rate-limit.
+  Note: If you are sending the query through your servers, you must use the `enable_rate_limit_forward("TheAdminAPIKey", "EndUserIP", "APIKeyWithRateLimit")` function to enable rate-limit.
 
  * Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited). This parameter can be used to protect you from attempts at retrieving your entire content by massively querying the index.
  * Specify the list of targeted indices, you can target all indices starting by a prefix or finishing by a suffix with the '*' character (for example "dev_*" matches all indices starting by "dev_" and "*_dev" matches all indices finishing by "_dev"). Defaults to all indices if empty of blank.
 
 ```python
 # Creates a new global API key that is valid for 300 seconds
-res = client.addUserKey(["search"], 300)
+res = client.add_user_key(["search"], 300)
 print res["key"]
 # Creates a new index specific API key valid for 300 seconds, with a rate limit of 100 calls per hour per IP and a maximum of 20 hits
-res = index.addUserKey(["search"], 300, 100, 20)
+res = index.add_user_key(["search"], 300, 100, 20)
 print res["key"]
 ```
 
 Get the rights of a given key:
 ```python
 # Gets the rights of a global key
-print client.getUserKeyACL("f420238212c54dcfad07ea0aa6d5c45f")
+print client.get_user_key_acl("f420238212c54dcfad07ea0aa6d5c45f")
 # Gets the rights of an index specific key
-print index.getUserKeyACL("71671c38001bf3ac857bc82052485107")
+print index.get_user_key_acl("71671c38001bf3ac857bc82052485107")
 ```
 
 Delete an existing key:
 ```python
 # Deletes a global key
-print client.deleteUserKey("f420238212c54dcfad07ea0aa6d5c45f")
+print client.delete_user_key("f420238212c54dcfad07ea0aa6d5c45f")
 # Deletes an index specific key
-print index.deleteUserKey("71671c38001bf3ac857bc82052485107")
+print index.delete_user_key("71671c38001bf3ac857bc82052485107")
 ```
 
 
@@ -649,7 +649,7 @@ You may have a single index containing per-user data. In that case, all records 
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'public' if they are visible by all users
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generateSecuredApiKey('YourSearchOnlyApiKey', '(public,user_42)')
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', '(public,user_42)')
 ```
 
 This public API key must then be used in your JavaScript code as follow:
@@ -670,7 +670,7 @@ You can mix rate limits and secured API keys setting an extra `user_token` attri
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'public' if they are visible by all users
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generateSecuredApiKey('YourRateLimitedApiKey', '(public,user_42)', 'user_42')
+public_key = client.generate_secured_api_key('YourRateLimitedApiKey', '(public,user_42)', 'user_42')
 ```
 
 This public API key must then be used in your JavaScript code as follow:
@@ -696,9 +696,9 @@ You can easily copy or rename an existing index using the `copy` and `move` comm
 
 ```python
 # Rename MyIndex in MyIndexNewName
-print client.moveIndex("MyIndex", "MyIndexNewName")
+print client.move_index("MyIndex", "MyIndexNewName")
 # Copy MyIndex in MyIndexCopy
-print client.copyIndex("MyIndex", "MyIndexCopy")
+print client.copy_index("MyIndex", "MyIndexCopy")
 ```
 
 The move command is particularly useful is you want to update a big index atomically from one version to another. For example, if you recreate your index `MyIndex` each night from a database by batch, you just have to:
@@ -707,7 +707,7 @@ The move command is particularly useful is you want to update a big index atomic
 
 ```python
 # Rename MyNewIndex in MyIndex (and overwrite it)
-print client.moveIndex("MyNewIndex", "MyIndex")
+print client.move_index("MyNewIndex", "MyIndex")
 ```
 
 Backup / Retrieve all index content
@@ -743,9 +743,9 @@ You can retrieve the logs of your last 1000 API calls and browse them using the 
 
 ```python
 # Get last 10 log entries
-print client.getLogs()
+print client.get_logs()
 # Get last 100 log entries
-print client.getLogs(0, 100)
+print client.get_logs(0, 100)
 ```
 
 
