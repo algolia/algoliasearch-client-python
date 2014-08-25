@@ -228,7 +228,7 @@ class ClientTest(unittest.TestCase):
     for it in res_after['keys']:
       is_present = is_present or it['value'] == new_key['key']
     self.assertTrue(is_present)
-    key = self.index.get_user_key_a_c_l(new_key['key'])
+    key = self.index.get_user_key_acl(new_key['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.index.delete_user_key(new_key['key'])
     time.sleep(3)
@@ -248,7 +248,7 @@ class ClientTest(unittest.TestCase):
     for it in res_after['keys']:
       is_present = is_present or it['value'] == new_key['key']
     self.assertTrue(is_present)
-    key = self.client.get_user_key_a_c_l(new_key['key'])
+    key = self.client.get_user_key_acl(new_key['key'])
     self.assertEquals(key['acl'][0], 'search')
     task = self.client.delete_user_key(new_key['key'])
     time.sleep(3)

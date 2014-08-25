@@ -184,7 +184,7 @@ class Client:
         """
         return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/keys")
 
-    def get_user_key_a_c_l(self, key):
+    def get_user_key_acl(self, key):
         """"
         Get ACL of a user key
         """
@@ -631,7 +631,7 @@ class Index:
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/keys" % self.url_index_name)
 
-    def get_user_key_a_c_l(self, key):
+    def get_user_key_acl(self, key):
         """
         Get ACL of a user key associated to this index
         """
