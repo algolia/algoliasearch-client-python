@@ -625,6 +625,15 @@ res = index.add_user_key(["search"], 300, 100, 20)
 print res["key"]
 ```
 
+Update the rights of an existing key:
+```python
+# Update an existing global API key that is valid for 300 seconds
+res = client.update_user_key("myAPIKey", ["search"], 300)
+print res["key"]
+# Update an existing index specific API key valid for 300 seconds, with a rate limit of 100 calls per hour per IP and a maximum of 20 hits
+res = index.update_user_key("myAPIKey", ["search"], 300, 100, 20)
+print res["key"]
+```
 Get the rights of a given key:
 ```python
 # Gets the rights of a global key
