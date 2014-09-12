@@ -271,6 +271,28 @@ class Client:
             params['indexes'] = indexes
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", params)
 
+    def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
+        """
+        Update a user key
+
+        @param acls the list of ACL for this key. Defined by an array of strings that
+               can contains the following values:
+                 - search: allow to search (https and http)
+                 - addObject: allows to add/update an object in the index (https only)
+                 - deleteObject : allows to delete an existing object (https only)
+                 - deleteIndex : allows to delete index content (https only)
+                 - settings : allows to get index settings (https only)
+                 - editSettings : allows to change index settings (https only)
+        @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
+        @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
+        @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
+        @param indexes the optional list of targeted indexes
+        """
+        params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
+        if not indexes is None:
+            params['indexes'] = indexes
+        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/keys/" + key, params)
+
     @deprecated
     def generateSecuredApiKey(self, private_api_key, tag_filters, user_token = None):
         return self.generate_secured_api_key(private_api_key, tag_filters, user_token)
@@ -774,6 +796,24 @@ class Index:
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         """
         return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/keys" % self.url_index_name, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
+
+    def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
+        """
+        Update a user key associated to this index (can only access to this index)
+
+        @param acls the list of ACL for this key. Defined by an array of strings that
+               can contains the following values:
+                 - search: allow to search (https and http)
+                 - addObject: allows to add/update an object in the index (https only)
+                 - deleteObject : allows to delete an existing object (https only)
+                 - deleteIndex : allows to delete index content (https only)
+                 - settings : allows to get index settings (https only)
+                 - editSettings : allows to change index settings (https only)
+        @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
+        @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
+        @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
+        """
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
 
     def batch(self, request):
         """
