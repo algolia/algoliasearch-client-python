@@ -18,7 +18,6 @@ setup(  name='algoliasearch',
         description='Algolia Search API Client for Python',
         url='https://github.com/algolia/algoliasearch-client-python',
         packages = ["algoliasearch"],
-        data_files = [('resources', 'resources/ca-bundle.crt')],
         install_requires = ['urllib3 >= 1.8.2'],
         keywords = ['algolia', 'pyalgolia', 'search', 'backend', 'hosted', 'cloud', 'full-text search', 'faceted search'],
         classifiers = [
