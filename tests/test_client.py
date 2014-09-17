@@ -386,3 +386,19 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(len(results['hits']), 1)
     self.assertEquals('Paris', results['hits'][0]['name'])
     self.assertEquals('Pa', results['hits'][0]['short_name'])
+
+  def test_subclassing(self):
+    class SubClient(algoliasearch.Client):
+      def __init__(self, *args, **kwargs):
+        super(SubClient, self).__init__(*args, **kwargs)
+        self._my_thing = 20
+
+      @property
+      def my_thing(self):
+        return self._my_thing
+
+    sub = SubClient(os.environ['ALGOLIA_APPLICATION_ID'], os.environ['ALGOLIA_API_KEY'])
+    self.assertEquals(20, sub.my_thing)
+    res = self.client.list_indexes()
+    self.assertIn('items', res)
+

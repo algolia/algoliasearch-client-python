@@ -72,7 +72,7 @@ Entry point in the Python API.
 You should instanciate a Client object with your ApplicationID, ApiKey and Hosts
 to start using Algolia Search API
 """
-class Client:
+class Client(object):
     """
     Algolia Search library initialization
     @param application_id the application ID you have in your admin interface
@@ -309,7 +309,7 @@ class Client:
             tag_filters = ','.join(map(lambda t: ''.join(['(', ','.join(t), ')']) if type(t) is list else str(t), tag_filters))
         return hmac.new(str.encode(private_api_key), str.encode(''.join([str(tag_filters), str(user_token or '')])),  hashlib.sha256).hexdigest()
 
-class Index:
+class Index(object):
     """
     Contains all the functions related to one index
     You should use Client.init_index(index_name) to retrieve this object
