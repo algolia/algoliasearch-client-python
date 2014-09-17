@@ -58,7 +58,7 @@ def deprecated(func):
     return newFunc
 
 
-POOL_MANAGER = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.dirname(__file__), "../resources/ca-bundle.crt"))
+POOL_MANAGER = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
 
 # Exception launched by Algolia Client when an error occured
 class AlgoliaException(Exception):
