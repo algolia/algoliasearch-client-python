@@ -335,7 +335,7 @@ class Index(object):
         if object_id is None:
             return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s" % self.url_index_name, content)
         else:
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(object_id.encode('utf8'), safe='')), content)
+            return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(str(object_id).encode('utf8'), safe='')), content)
 
     @deprecated
     def addObjects(self, objects):
@@ -362,7 +362,7 @@ class Index(object):
         @param object_id the unique identifier of the object to retrieve
         @param attributes_to_retrieve (optional) if set, contains the list of attributes to retrieve as a string separated by a comma
         """
-        obj_id = quote(object_id.encode('utf8'), safe='')
+        obj_id = quote(str(object_id).encode('utf8'), safe='')
         if (attributes_to_retrieve == None):
             return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.url_index_name, obj_id))
         else:
@@ -393,7 +393,7 @@ class Index(object):
         @param partial_object contains the object attributes to override, the
                object must contains an objectID attribute
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.url_index_name, quote(partial_object["objectID"].encode('utf8'), safe='')), partial_object)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.url_index_name, quote(str(partial_object["objectID"]).encode('utf8'), safe='')), partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
@@ -419,7 +419,7 @@ class Index(object):
 
         @param object contains the object to save, the object must contains an objectID attribute
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(obj["objectID"].encode('utf8'), safe='')), obj)
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(str(obj["objectID"]).encode('utf8'), safe='')), obj)
 
     @deprecated
     def saveObjects(self, objects):
@@ -482,9 +482,9 @@ class Index(object):
 
         @param object_id the unique identifier of object to delete
         """
-        if (len(object_id) == 0):
+        if (len(str(object_id)) == 0):
             raise AlgoliaException("object_id is required")
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.url_index_name, quote(object_id.encode('utf8'), safe='')))
+        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.url_index_name, quote(str(object_id).encode('utf8'), safe='')))
 
     def search(self, query, args = None):
         """
