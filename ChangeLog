@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-10-11  1.3.10
+
+     * Do not assume that objectIDs are strings.
+
 2014-09-17  1.3.9
 
      * Making Client and Index new-style python classes for easier extension
