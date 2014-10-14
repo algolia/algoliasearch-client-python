@@ -111,7 +111,7 @@ class Client(object):
             'X-Forwarded-For': end_user_ip,
             'X-Forwarded-API-Key': rate_limit_api_key,
             'X-Algolia-Application-Id': self.application_id,
-            'User-Agent': 'Algolia Search for python'
+            'User-Agent': ('Algolia Search for python %s' % VERSION)
         }
 
     @deprecated
@@ -125,8 +125,14 @@ class Client(object):
             'Content-Type': 'application/json; charset=utf-8',
             'X-Algolia-API-Key': self.api_key,
             'X-Algolia-Application-Id': self.application_id,
-            'User-Agent': 'Algolia Search for python'
+            'User-Agent': ('Algolia Search for python %s' % VERSION)
         }
+
+    def set_extra_header(self, key, value):
+        """
+        Allow to set custom header
+        """
+        self.headers[key] = value
 
     @deprecated
     def multipleQueries(self, queries, index_name_key = "indexName"):
