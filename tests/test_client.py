@@ -400,5 +400,5 @@ class ClientTest(unittest.TestCase):
     sub = SubClient(os.environ['ALGOLIA_APPLICATION_ID'], os.environ['ALGOLIA_API_KEY'])
     self.assertEquals(20, sub.my_thing)
     res = self.client.list_indexes()
-    self.assertIn('items', res)
+    self.assertTrue('items' in res)
 
