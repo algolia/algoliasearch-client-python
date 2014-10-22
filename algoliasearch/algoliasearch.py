@@ -831,7 +831,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
     """
     Util function used to send request
     """
-    last_e = None
+    exceptions = {}
     for host in hosts:
         try:
             obj = None
@@ -851,12 +851,9 @@ def AlgoliaUtils_request(headers, hosts, method, request, body = None):
         except AlgoliaException as e:
             raise e
         except Exception as e:
-            last_e = e
+            exceptions[host] = e.message
             pass
-    if last_e is not None:
-        raise last_e
-    else:
-        raise AlgoliaException("Unreachable host")
+    raise AlgoliaException(("%s %s" % ("Unreachable host:", exceptions)))
 
 class JSONEncoderWithDatetimeAndDefaultToString(json.JSONEncoder):
     def default(self, obj):
