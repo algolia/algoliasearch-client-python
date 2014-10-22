@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-10-22  1.3.11
+
+     * Add more informations when hosts are unreachable
+
 2014-10-11  1.3.10
 
      * Do not assume that objectIDs are strings.
