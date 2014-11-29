@@ -81,7 +81,7 @@ class Client(object):
     """
     def __init__(self, application_id, api_key, hosts_array = None):
         if (hosts_array == None):
-          self.hosts = ["%s-1.algolia.io" % application_id, "%s-2.algolia.io" % application_id, "%s-3.algolia.io" % application_id]
+          self.hosts = ["%s-1.algolia.net" % application_id, "%s-2.algolia.net" % application_id, "%s-3.algolia.net" % application_id]
         else:
           self.hosts = hosts_array
         random.shuffle(self.hosts)

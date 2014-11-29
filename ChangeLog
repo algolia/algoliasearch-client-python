@@ -1,5 +1,9 @@
 CHANGELOG
 
+2014-11-29  1.4.0
+
+     * Moved API calls to algolia.net domain instead of algolia.io domain
+
 2014-10-22  1.3.11
 
      * Add more informations when hosts are unreachable
