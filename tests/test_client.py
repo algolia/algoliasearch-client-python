@@ -116,10 +116,10 @@ class ClientTest(unittest.TestCase):
     task = new_index.add_object({'name': 'San Francisco'})
     new_index.wait_task(task['taskID'])
     res_after = self.client.list_indexes()
-    is_present = False
+    contains = False
     for it in res_after['items']:
-      is_present = is_present or it['name'] == safe_index_name(self.name)
-    self.assertEquals(is_present, True)
+      contains = contains or it['name'] == safe_index_name(self.name)
+    self.assertEquals(contains, True)
 
   def test_clearIndex(self):
     task = self.index.add_object({'name': 'San Francisco'})
@@ -221,50 +221,50 @@ class ClientTest(unittest.TestCase):
     self.index.wait_task(task['taskID'])
     res = self.index.list_user_keys()
     new_key = self.index.add_user_key(['search'])
-    time.sleep(3)
+    time.sleep(5)
     self.assertTrue(new_key['key'] != "")
     res_after = self.index.list_user_keys()
-    is_present = False
+    contains = False
     for it in res_after['keys']:
-      is_present = is_present or it['value'] == new_key['key']
-    self.assertTrue(is_present)
+      contains = contains or it['value'] == new_key['key']
+    self.assertTrue(contains)
     key = self.index.get_user_key_acl(new_key['key'])
     self.assertEquals(key['acl'][0], 'search')
     new_key = self.index.update_user_key(new_key['key'], ['addObject'])
-    time.sleep(3)
+    time.sleep(5)
     key = self.index.get_user_key_acl(new_key['key'])
     self.assertEquals(key['acl'][0], 'addObject')
     task = self.index.delete_user_key(new_key['key'])
-    time.sleep(3)
+    time.sleep(5)
     res_end = self.index.list_user_keys()
-    is_present = False
+    contains = False
     for it in res_end['keys']:
-      is_present = is_present or it['value'] == new_key['key']
-    self.assertTrue(not is_present)
+      contains = contains or it['value'] == new_key['key']
+    self.assertTrue(not contains)
 
 
     res = self.client.list_user_keys()
     new_key = self.client.add_user_key(['search'])
-    time.sleep(3)
+    time.sleep(5)
     self.assertTrue(new_key['key'] != "")
     res_after = self.client.list_user_keys()
-    is_present = False
+    contains = False
     for it in res_after['keys']:
-      is_present = is_present or it['value'] == new_key['key']
-    self.assertTrue(is_present)
+      contains = contains or it['value'] == new_key['key']
+    self.assertTrue(contains)
     key = self.client.get_user_key_acl(new_key['key'])
     self.assertEquals(key['acl'][0], 'search')
     new_key = self.client.update_user_key(new_key['key'], ['addObject'])
-    time.sleep(3)
+    time.sleep(5)
     key = self.client.get_user_key_acl(new_key['key'])
     self.assertEquals(key['acl'][0], 'addObject')
     task = self.client.delete_user_key(new_key['key'])
-    time.sleep(3)
+    time.sleep(5)
     res_end = self.client.list_user_keys()
-    is_present = False
+    contains = False
     for it in res_end['keys']:
-      is_present = is_present or it['value'] == new_key['key']
-    self.assertTrue(not is_present)
+      contains = contains or it['value'] == new_key['key']
+    self.assertTrue(not contains)
 
 
   def test_settings(self):
