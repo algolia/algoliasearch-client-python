@@ -203,16 +203,21 @@ class Client(object):
         return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(src_index_name.encode('utf8'), safe='')), request)
 
     @deprecated
-    def getLogs(self, offset = 0, length = 10, only_errors = False):
-        return self.get_logs(offset, length, only_errors)
-    def get_logs(self, offset = 0, length = 10, only_errors = False):
+    def getLogs(self, offset = 0, length = 10, type = "error"):
+        return self.get_logs(offset, length, type)
+    def get_logs(self, offset = 0, length = 10, type = "error"):
         """
         Return last logs entries.
 
         @param offset Specify the first entry to retrieve (0-based, 0 is the most recent log entry).
         @param length Specify the maximum number of entries to retrieve starting at offset. Maximum allowed value: 1000.
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d&only_errors=%s" % (offset, length, only_errors))
+        if isinstance(type, bool):
+          if type:
+            type = "error"
+          else:
+            type = "all"
+        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d&type=%s" % (offset, length, type))
 
     @deprecated
     def initIndex(self, index_name):
