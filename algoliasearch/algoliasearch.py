@@ -87,7 +87,7 @@ class Client(object):
         random.shuffle(self.hosts)
         self.application_id = application_id
         self.api_key = api_key
-        self.timeout = 60;
+        self.timeout = urllib3.util.timeout.Timeout(connect = 1.0, read = 30.0)
         self.headers = {
             'Content-Type': 'application/json; charset=utf-8',
             'X-Algolia-API-Key': self.api_key,
@@ -135,11 +135,11 @@ class Client(object):
         """
         self.headers[key] = value
 
-    def set_timeout(self, value):
+    def set_timeout(self, connect_timeout, read_timeout):
         """
         Allow to set the connection timeout in second
         """
-        self.timeout = value
+        self.timeout = urllib3.util.timeout.Timeout(connect = connect_timeout, read = read_timeout)
 
     @deprecated
     def multipleQueries(self, queries, index_name_key = "indexName"):
