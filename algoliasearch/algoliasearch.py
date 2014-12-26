@@ -87,7 +87,7 @@ class Client(object):
         random.shuffle(self.hosts)
         self.application_id = application_id
         self.api_key = api_key
-        self.timeout = 60000;
+        self.timeout = 60;
         self.headers = {
             'Content-Type': 'application/json; charset=utf-8',
             'X-Algolia-API-Key': self.api_key,
@@ -137,7 +137,7 @@ class Client(object):
 
     def set_timeout(self, value):
         """
-        Allow to set the connection timeout
+        Allow to set the connection timeout in second
         """
         self.timeout = value
 
