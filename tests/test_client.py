@@ -174,7 +174,7 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(res['hits'][0]['name'], 'San Francisco')
 
   def test_log(self):
-    res = self.client.get_logs(0, 1, True)
+    res = self.client.get_logs(0, 1, False)
     self.assertTrue(len(res['logs']) > 0)
 
   def test_batch(self):
