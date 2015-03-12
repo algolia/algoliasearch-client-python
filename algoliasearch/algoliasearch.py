@@ -644,11 +644,12 @@ class Index(object):
             params["query"] = query
             params["facetFilters"] = filters
             params["page"] = 0
-            params["hitsPerPage"] = 1
+            params["hitsPerPage"] = 0
             params["attributesToRetrieve"] = []
             params["attributesToHighlight"] = []
             params["attributesToSnippet"] = []
             params["facets"] = disjunctive_facet
+            params["analytics"] = False
             queries.append(dict(params))
         answers = self.client.multiple_queries(queries)
 
