@@ -39,7 +39,7 @@ import hashlib
 import hmac
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-from version import VERSION
+from .version import VERSION
 
 POOL_MANAGER = urllib3.PoolManager()
 
