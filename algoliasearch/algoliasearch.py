@@ -42,7 +42,7 @@ import hmac
 import warnings
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-from version import VERSION
+from .version import VERSION
 
 def deprecated(func):
     """This is a decorator which can be used to mark functions
