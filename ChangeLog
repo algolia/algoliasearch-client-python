@@ -1,8 +1,11 @@
 CHANGELOG
 
+2015-03-13  1.5.1
+     * Fixed ImportError with Python 3.4
+
 2014-12-26  1.5.0
      * Added timeout (connect timeout = 1s & read timeout = 30s). Can be overrided with set_timeout method
-	
+
 2014-11-29  1.4.0
 
      * Moved API calls to algolia.net domain instead of algolia.io domain
