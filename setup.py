@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 import os
 import sys
@@ -15,7 +18,10 @@ setup(  name='algoliasearch',
         description='Algolia Search API Client for Python',
         url='https://github.com/algolia/algoliasearch-client-python',
         packages = ["algoliasearch"],
-        install_requires = ['urllib3'],
+        package_dir={'algoliasearch': 'algoliasearch'},
+        package_data={'algoliasearch': ['resources/*.crt']},
+        include_package_data = True,
+        install_requires = ['urllib3 >= 1.8.2'],
         keywords = ['algolia', 'pyalgolia', 'search', 'backend', 'hosted', 'cloud', 'full-text search', 'faceted search'],
         classifiers = [
         'Intended Audience :: Developers',

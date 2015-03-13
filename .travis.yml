@@ -1,21 +1,20 @@
 language: python
 python:
-  - "2.6"
-  - "2.7"
-  - "3.2"
-  - "3.3"
+- '2.6'
+- '2.7'
+- '3.2'
+- '3.3'
+- '3.4'
 install:
-  - pip install . --use-mirrors
-  - pip install -r requirements.txt --use-mirrors
-  - pip install -r tests/requirements.txt --use-mirrors
-  - pip install coveralls
-script: 
-  - nosetests --with-coverage --cover-package=algoliasearch
-before_install:
-  export PYTHONIOENCODING=UTF-8
-after_success:
-  coveralls
+- pip install . --use-mirrors
+- pip install -r requirements.txt --use-mirrors
+- pip install -r tests/requirements.txt --use-mirrors
+- pip install coveralls
+script:
+- nosetests --with-coverage --cover-package=algoliasearch
+before_install: export PYTHONIOENCODING=UTF-8
+after_success: coveralls
 env:
   global:
-  - secure: bMkS5vSbz5Stp/XQodi21ZL1bVaOkU6/QFagQxs8MfGLcpAuCbOZRkVuUZ2KvUFtXTcL5D7H+U50RJUrafUbMXBKDVAs4myEnvhom9o5HsoQGzkRTO/nLtnJMWYeQpAAM2uAK56Clil2NvnHEeZh4OeRlUwcbnMKQteKPCxOAqc=
-  - secure: YsgfY1fzyBAtzUqAe8Xa9m//73RbE4QwpXOQNJKjTBdTbWSadRuR+nRlFwaj5bBtiI52SF5JfXVykyjJCXPaRwRLkiFG0wq8LZjKmba+3JjAjmcgWaEjFpnYqNBOeAq9WOMHEdlilBYfJO1CDBsb9Xf/jtogwSE2WwLuSYtNm0A=
+  - secure: Y9TqHgaEdpqEQcBUOf31JazpqpFcR7CdZMi1zO30UncxOegcvMhHEoIrUYb2oT3BSEPH9kcFuiEOn2QjC4AtRuniRjMXvSUMaDESdyE8Y/lymF8BANfVfrHFDgpNCSgHYCTS7+6lLwD0t84Jwdd1NUeGnXRLTrDFhs428/lwEFg=
+  - secure: gAMD1lgQsWICjSJ30Zvw0a6VFjaS9z81sf2XHabq/uaA+Ld1lNjZlc2AhaVOWWhGQ8CrJ2bf+hovaPug8qbBvxH8w+v/6YQOrBTTOuHMqtNpkfLL5H2wBgVOy6d+1WfLcqMxaQ0QN7SldNouD53gkez2DMfnbV4CYFHKOYLIjGA=

@@ -1,5 +1,58 @@
 CHANGELOG
 
+2014-12-26  1.5.0
+     * Added timeout (connect timeout = 1s & read timeout = 30s). Can be overrided with set_timeout method
+	
+2014-11-29  1.4.0
+
+     * Moved API calls to algolia.net domain instead of algolia.io domain
+
+2014-10-22  1.3.11
+
+     * Add more informations when hosts are unreachable
+
+2014-10-11  1.3.10
+
+     * Do not assume that objectIDs are strings.
+
+2014-09-17  1.3.9
+
+     * Making Client and Index new-style python classes for easier extension
+
+2014-09-15  1.3.{2,3,4,5,6,7,8}
+
+     * Fixed resources/ca-bundle.crt inclusion
+
+2014-09-14  1.3.1
+
+     * Added update_user_key & update_user_key
+
+2014-08-25  1.3.0
+
+      * Use snake-case everywhere (backward compatible)
+
+2014-08-22  1.2.14
+
+      * More fixes around bool/json serialization
+
+2014-08-21  1.2.13
+
+      * Fixed waitTask's sleep
+
+2014-08-20  1.2.12
+
+      * Fixed boolean-based query parameter encoding
+
+2014-07-17  1.2.11
+
+      * Added getObjects
+      * Added deleteByQuery
+
+2014-04-18  1.2.10
+
+      * Fixed decimal JSON serialization
+      * Force urllib3>=1.8.1 dependency to work-around a GAE bug (https://github.com/shazow/urllib3/issues/356)
+
 2014-03-30  1.2.9
 
       * Fixed invalid date->timestamp conversion
