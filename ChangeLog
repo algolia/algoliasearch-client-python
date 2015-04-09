@@ -1,5 +1,10 @@
 CHANGELOG
 
+2015-04-09  1.5.2
+     * Better retry strategy using two different provider (Improve high-availability of the solution, retry is done on algolianet.com)
+     * Read operations are performed to APPID-dsn.algolia.net domain first to leverage Distributed Search Network (select the closest location)
+     * Improved timeout strategy: increasse timeout after 2 trials & have a different read timeout for search operations
+
 2015-03-13  1.5.1
      * Fixed ImportError with Python 3.4
 
