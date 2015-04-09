@@ -866,7 +866,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, timeout, body = None):
             content = json.loads(answer.data.decode('utf-8'))
             if answer.status / 100 == 4:
                 raise AlgoliaException(content["message"])
-            elif answer.status /100 == 0:
+            elif answer.status /100 == 2:
                 return content
         except AlgoliaException as e:
             raise e
