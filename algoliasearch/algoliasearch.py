@@ -81,10 +81,12 @@ class Client(object):
     """
     def __init__(self, application_id, api_key, hosts_array = None):
         if (hosts_array == None):
-          self.hosts = ["%s-1.algolia.net" % application_id, "%s-2.algolia.net" % application_id, "%s-3.algolia.net" % application_id]
+          self.read_hosts = ["%s-dsn.algolia.net" % application_id, "%s-1.algolianet.com" % application_id, "%s-2.algolianet.com" % application_id, "%s-3.algolianet.com" % application_id]
+          self.write_hosts = ["%s.algolia.net" % application_id, "%s-1.algolianet.com" % application_id, "%s-2.algolianet.com" % application_id, "%s-3.algolianet.com" % application_id]
         else:
-          self.hosts = hosts_array
-        random.shuffle(self.hosts)
+          self.read_hosts = hosts_array
+          self.write_hosts = hosts_array
+
         self.application_id = application_id
         self.api_key = api_key
         self.timeout = urllib3.util.timeout.Timeout(connect = 1.0, read = 30.0)
@@ -157,7 +159,7 @@ class Client(object):
                     query[key] = json.dumps(query[key], cls = JSONEncoderWithDatetimeAndDefaultToString)
             requests.append({"indexName": index_name, "params": urlencode(query)})
         body = {"requests": requests}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/*/queries", self.timeout, body)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "POST", "/1/indexes/*/queries", self.timeout, body)
 
     @deprecated
     def listIndexes(self):
@@ -169,7 +171,7 @@ class Client(object):
            {"items": [{ "name": "contacts", "created_at": "2013-01-18T15:33:13.556Z"},
                       {"name": "notes", "created_at": "2013-01-18T15:33:13.556Z"}]}
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/indexes/", self.timeout)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "GET", "/1/indexes/", self.timeout)
 
     @deprecated
     def deleteIndex(self, index_name):
@@ -181,7 +183,7 @@ class Client(object):
         @param index_name the name of index to delete
         Return an object of the form {"deleted_at": "2013-01-18T15:33:13.556Z"}
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/indexes/%s" % quote(index_name.encode('utf8'), safe=''), self.timeout)
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "DELETE", "/1/indexes/%s" % quote(index_name.encode('utf8'), safe=''), self.timeout)
 
     @deprecated
     def moveIndex(self, src_index_name, dst_index_name):
@@ -194,7 +196,7 @@ class Client(object):
         @param dst_index_name the new index name that will contains a copy of src_index_name (destination will be overriten if it already exist).
         """
         request = {"operation": "move", "destination": dst_index_name}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % quote(src_index_name.encode('utf8'), safe=''), self.timeout, request)
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "POST", "/1/indexes/%s/operation" % quote(src_index_name.encode('utf8'), safe=''), self.timeout, request)
 
     @deprecated
     def copyIndex(self, src_index_name, dst_index_name):
@@ -207,7 +209,7 @@ class Client(object):
         @param dst_index_name the new index name that will contains a copy of src_index_name (destination will be overriten if it already exist).
         """
         request = {"operation": "copy", "destination": dst_index_name}
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/indexes/%s/operation" % (quote(src_index_name.encode('utf8'), safe='')), self.timeout, request)
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "POST", "/1/indexes/%s/operation" % (quote(src_index_name.encode('utf8'), safe='')), self.timeout, request)
 
     @deprecated
     def getLogs(self, offset = 0, length = 10, type = "all"):
@@ -224,7 +226,7 @@ class Client(object):
             type = "error"
           else:
             type = "all"
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/logs?offset=%d&length=%d&type=%s" % (offset, length, type), self.timeout)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "GET", "/1/logs?offset=%d&length=%d&type=%s" % (offset, length, type), self.timeout)
 
     @deprecated
     def initIndex(self, index_name):
@@ -244,7 +246,7 @@ class Client(object):
         """
         List all existing user keys with their associated ACLs
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/keys", self.timeout)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "GET", "/1/keys", self.timeout)
 
     @deprecated
     def getUserKeyACL(self, key):
@@ -253,7 +255,7 @@ class Client(object):
         """"
         Get ACL of a user key
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "GET", "/1/keys/%s" % key, self.timeout)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "GET", "/1/keys/%s" % key, self.timeout)
 
     @deprecated
     def deleteUserKey(self, key):
@@ -262,7 +264,7 @@ class Client(object):
         """
         Delete an existing user key
         """
-        return AlgoliaUtils_request(self.headers, self.hosts, "DELETE", "/1/keys/%s" % key, self.timeout)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "DELETE", "/1/keys/%s" % key, self.timeout)
 
     @deprecated
     def addUserKey(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
@@ -287,7 +289,7 @@ class Client(object):
         params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
         if not indexes is None:
             params['indexes'] = indexes
-        return AlgoliaUtils_request(self.headers, self.hosts, "POST", "/1/keys", self.timeout, params)
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "POST", "/1/keys", self.timeout, params)
 
     def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
         """
@@ -309,7 +311,7 @@ class Client(object):
         params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
         if not indexes is None:
             params['indexes'] = indexes
-        return AlgoliaUtils_request(self.headers, self.hosts, "PUT", "/1/keys/" + key, self.timeout, params)
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "PUT", "/1/keys/" + key, self.timeout, params)
 
     @deprecated
     def generateSecuredApiKey(self, private_api_key, tag_filters, user_token = None):
@@ -333,7 +335,8 @@ class Index(object):
     You should use Client.init_index(index_name) to retrieve this object
     """
     def __init__(self, client, index_name):
-        self.hosts = client.hosts
+        self.read_hosts = client.read_hosts
+        self.write_hosts = client.write_hosts
         self.client = client
         self.index_name = index_name
         self.url_index_name = quote(self.index_name.encode('utf8'), safe='')
@@ -351,9 +354,9 @@ class Index(object):
           (if the attribute already exist the old object will be overwrite)
         """
         if object_id is None:
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s" % self.url_index_name, self.client.timeout, content)
+            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s" % self.url_index_name, self.client.timeout, content)
         else:
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(("%s" % object_id).encode('utf8'), safe='')), self.client.timeout, content)
+            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(("%s" % object_id).encode('utf8'), safe='')), self.client.timeout, content)
 
     @deprecated
     def addObjects(self, objects):
@@ -382,9 +385,9 @@ class Index(object):
         """
         obj_id = quote(("%s" % object_id).encode('utf8'), safe='')
         if (attributes_to_retrieve == None):
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s" % (self.url_index_name, obj_id), self.client.timeout)
+            return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/%s" % (self.url_index_name, obj_id), self.client.timeout)
         else:
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.url_index_name, obj_id, attributes_to_retrieve), self.client.timeout)
+            return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/%s?attributes=%s" % (self.url_index_name, obj_id, attributes_to_retrieve), self.client.timeout)
 
     @deprecated
     def getObjects(self, object_ids):
@@ -399,7 +402,7 @@ class Index(object):
         for object_id in object_ids:
             req = { "indexName" : self.index_name, "objectID": object_id}
             requests.append(req)
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/*/objects", self.client.timeout, { "requests" : requests});
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "POST", "/1/indexes/*/objects", self.client.timeout, { "requests" : requests});
 
     @deprecated
     def partialUpdateObject(self, partial_object):
@@ -411,7 +414,7 @@ class Index(object):
         @param partial_object contains the object attributes to override, the
                object must contains an objectID attribute
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/%s/partial" % (self.url_index_name, quote(("%s" % partial_object["objectID"]).encode('utf8'), safe='')), self.client.timeout, partial_object)
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "POST", "/1/indexes/%s/%s/partial" % (self.url_index_name, quote(("%s" % partial_object["objectID"]).encode('utf8'), safe='')), self.client.timeout, partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
@@ -437,7 +440,7 @@ class Index(object):
 
         @param object contains the object to save, the object must contains an objectID attribute
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(("%s" % obj["objectID"]).encode('utf8'), safe='')), self.client.timeout, obj)
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "PUT", "/1/indexes/%s/%s" % (self.url_index_name, quote(("%s" % obj["objectID"]).encode('utf8'), safe='')), self.client.timeout, obj)
 
     @deprecated
     def saveObjects(self, objects):
@@ -502,7 +505,7 @@ class Index(object):
         """
         if (len("%s" % object_id) == 0):
             raise AlgoliaException("object_id is required")
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/%s" % (self.url_index_name, quote(("%s" % object_id).encode('utf8'), safe='')), self.client.timeout)
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "DELETE", "/1/indexes/%s/%s" % (self.url_index_name, quote(("%s" % object_id).encode('utf8'), safe='')), self.client.timeout)
 
     def search(self, query, args = None):
         """
@@ -569,7 +572,7 @@ class Index(object):
             one is kept and others are removed.
         """
         if args == None:
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s" % (self.url_index_name, quote(query.encode('utf8'), safe='')), self.client.timeout)
+            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s" % (self.url_index_name, quote(query.encode('utf8'), safe='')), self.client.timeout)
         else:
             params = {}
             try:
@@ -582,7 +585,7 @@ class Index(object):
                 else:
                     params[k] = v
 
-            return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.url_index_name, quote(query.encode('utf8'), safe=''), urlencode(params)), self.client.timeout)
+            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.url_index_name, quote(query.encode('utf8'), safe=''), urlencode(params)), self.client.timeout)
 
     def flatten(self, lst):
       return sum( ([x] if not isinstance(x, list) else flatten(x)
@@ -673,7 +676,7 @@ class Index(object):
                      Page is zero-based and defaults to 0. Thus, to retrieve the 10th page you need to set page=9
          @param hits_per_page: Pagination parameter used to select the number of hits per page. Defaults to 1000.
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/browse?page=%d&hitsPerPage=%d" % (self.url_index_name, page, hits_per_page), self.client.timeout)
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/browse?page=%d&hitsPerPage=%d" % (self.url_index_name, page, hits_per_page), self.client.timeout)
 
     @deprecated
     def waitTask(self, task_id, time_before_retry = 100):
@@ -687,7 +690,7 @@ class Index(object):
         @param time_before_retry the time in milliseconds before retry (default = 100ms)
         """
         while True:
-            res = AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/task/%d/" % (self.url_index_name, task_id), self.client.timeout)
+            res = AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/task/%d/" % (self.url_index_name, task_id), self.client.timeout)
             if (res["status"] == "published"):
                 return res
             time.sleep(time_before_retry / 1000.)
@@ -699,7 +702,7 @@ class Index(object):
         """
         Get settings of this index
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/settings" % self.url_index_name, self.client.timeout)
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/settings" % self.url_index_name, self.client.timeout)
 
     @deprecated
     def clearIndex(self):
@@ -708,7 +711,7 @@ class Index(object):
         """
         This function deletes the index content. Settings and index specific API keys are kept untouched.
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/clear" % self.url_index_name, self.client.timeout)
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s/clear" % self.url_index_name, self.client.timeout)
 
     @deprecated
     def setSettings(self, settings):
@@ -766,7 +769,7 @@ class Index(object):
            - optionalWords: (array of strings) Specify a list of words that should be considered as optional when found in the query.
 
          """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/settings" % self.url_index_name, self.client.timeout, settings)
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "PUT", "/1/indexes/%s/settings" % self.url_index_name, self.client.timeout, settings)
 
     @deprecated
     def listUserKeys(self):
@@ -775,7 +778,7 @@ class Index(object):
         """
         List all existing user keys of this index with their associated ACLs
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/keys" % self.url_index_name, self.client.timeout)
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/keys" % self.url_index_name, self.client.timeout)
 
     @deprecated
     def getUserKeyACL(self, key):
@@ -784,7 +787,7 @@ class Index(object):
         """
         Get ACL of a user key associated to this index
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "GET", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout)
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout)
 
     @deprecated
     def deleteUserKey(self, key):
@@ -793,7 +796,7 @@ class Index(object):
         """
         Delete an existing user key associated to this index
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout)
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout)
 
     @deprecated
     def addUserKey(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
@@ -814,7 +817,7 @@ class Index(object):
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/keys" % self.url_index_name, self.client.timeout, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s/keys" % self.url_index_name, self.client.timeout, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
 
     def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
         """
@@ -832,13 +835,13 @@ class Index(object):
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "PUT", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "PUT", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
 
     def batch(self, request):
         """
         Send a batch request
         """
-        return AlgoliaUtils_request(self.client.headers, self.hosts, "POST", "/1/indexes/%s/batch" % self.url_index_name, self.client.timeout, request)
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s/batch" % self.url_index_name, self.client.timeout, request)
 
 def AlgoliaUtils_request(headers, hosts, method, request, timeout, body = None):
     """
