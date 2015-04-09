@@ -864,9 +864,9 @@ def AlgoliaUtils_request(headers, hosts, method, request, timeout, body = None):
                 timeout = urllib3.util.timeout.Timeout(connect = timeout.connect_timeout + 2, read = timeout.read_timeout + 10)
             answer  = conn.urlopen(method, request, headers = headers, body = obj, timeout=timeout)
             content = json.loads(answer.data.decode('utf-8'))
-            if answer.status / 100 == 4:
+            if int(answer.status / 100) == 4:
                 raise AlgoliaException(content["message"])
-            elif answer.status /100 == 2:
+            elif int(answer.status /100) == 2:
                 return content
         except AlgoliaException as e:
             raise e
