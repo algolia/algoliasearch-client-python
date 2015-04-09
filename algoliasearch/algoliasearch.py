@@ -90,6 +90,8 @@ class Client(object):
         self.application_id = application_id
         self.api_key = api_key
         self.timeout = urllib3.util.timeout.Timeout(connect = 1.0, read = 30.0)
+        self.search_timeout = urllib3.util.timeout.Timeout(connect = 1.0, read = 5.0)
+
         self.headers = {
             'Content-Type': 'application/json; charset=utf-8',
             'X-Algolia-API-Key': self.api_key,
@@ -137,11 +139,13 @@ class Client(object):
         """
         self.headers[key] = value
 
-    def set_timeout(self, connect_timeout, read_timeout):
+    def set_timeout(self, connect_timeout, read_timeout, search_timeout = None):
         """
         Allow to set the connection timeout in second
         """
         self.timeout = urllib3.util.timeout.Timeout(connect = connect_timeout, read = read_timeout)
+        if (search_timeout != None):
+            self.search_timeout = urllib3.util.timeout.Timeout(connect = connect_timeout, read = search_timeout)
 
     @deprecated
     def multipleQueries(self, queries, index_name_key = "indexName"):
@@ -159,7 +163,7 @@ class Client(object):
                     query[key] = json.dumps(query[key], cls = JSONEncoderWithDatetimeAndDefaultToString)
             requests.append({"indexName": index_name, "params": urlencode(query)})
         body = {"requests": requests}
-        return AlgoliaUtils_request(self.headers, self.read_hosts, "POST", "/1/indexes/*/queries", self.timeout, body)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "POST", "/1/indexes/*/queries", self.search_timeout, body)
 
     @deprecated
     def listIndexes(self):
@@ -572,7 +576,7 @@ class Index(object):
             one is kept and others are removed.
         """
         if args == None:
-            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s" % (self.url_index_name, quote(query.encode('utf8'), safe='')), self.client.timeout)
+            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s" % (self.url_index_name, quote(query.encode('utf8'), safe='')), self.client.search_timeout)
         else:
             params = {}
             try:
@@ -585,7 +589,7 @@ class Index(object):
                 else:
                     params[k] = v
 
-            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.url_index_name, quote(query.encode('utf8'), safe=''), urlencode(params)), self.client.timeout)
+            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.url_index_name, quote(query.encode('utf8'), safe=''), urlencode(params)), self.client.search_timeout)
 
     def flatten(self, lst):
       return sum( ([x] if not isinstance(x, list) else flatten(x)
@@ -848,12 +852,16 @@ def AlgoliaUtils_request(headers, hosts, method, request, timeout, body = None):
     Util function used to send request
     """
     exceptions = {}
+    cnt = 0
     for host in hosts:
+        cnt += 1
         try:
             obj = None
             if body != None:
                 obj = json.dumps(body, cls = JSONEncoderWithDatetimeAndDefaultToString)
             conn = POOL_MANAGER.connection_from_host(host, scheme = 'https')
+            if cnt == 3:
+                timeout = urllib3.util.timeout.Timeout(connect = timeout.connect_timeout + 2, read = timeout.read_timeout + 10)
             answer  = conn.urlopen(method, request, headers = headers, body = obj, timeout=timeout)
             content = json.loads(answer.data.decode('utf-8'))
             if answer.status == 400:
