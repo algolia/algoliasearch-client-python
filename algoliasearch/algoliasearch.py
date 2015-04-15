@@ -150,7 +150,7 @@ class Client(object):
     @deprecated
     def multipleQueries(self, queries, index_name_key = "indexName"):
         return self.multiple_queries(queries, index_name_key)
-    def multiple_queries(self, queries, index_name_key = "indexName"):
+    def multiple_queries(self, queries, index_name_key = "indexName", strategy = "none"):
         """
         This method allows to query multiple indexes with one API call
         """
@@ -163,7 +163,7 @@ class Client(object):
                     query[key] = json.dumps(query[key], cls = JSONEncoderWithDatetimeAndDefaultToString)
             requests.append({"indexName": index_name, "params": urlencode(query)})
         body = {"requests": requests}
-        return AlgoliaUtils_request(self.headers, self.read_hosts, "POST", "/1/indexes/*/queries", self.search_timeout, body)
+        return AlgoliaUtils_request(self.headers, self.read_hosts, "POST", "/1/indexes/*/queries?strategy=" + strategy, self.search_timeout, body)
 
     @deprecated
     def listIndexes(self):
@@ -230,7 +230,7 @@ class Client(object):
             type = "error"
           else:
             type = "all"
-        return AlgoliaUtils_request(self.headers, self.read_hosts, "GET", "/1/logs?offset=%d&length=%d&type=%s" % (offset, length, type), self.timeout)
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "GET", "/1/logs?offset=%d&length=%d&type=%s" % (offset, length, type), self.timeout)
 
     @deprecated
     def initIndex(self, index_name):
@@ -268,7 +268,7 @@ class Client(object):
         """
         Delete an existing user key
         """
-        return AlgoliaUtils_request(self.headers, self.read_hosts, "DELETE", "/1/keys/%s" % key, self.timeout)
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "DELETE", "/1/keys/%s" % key, self.timeout)
 
     @deprecated
     def addUserKey(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
@@ -293,7 +293,11 @@ class Client(object):
         params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
         if not indexes is None:
             params['indexes'] = indexes
+        return self.add_api_key(params)
+
+    def add_api_key(self, params):
         return AlgoliaUtils_request(self.headers, self.write_hosts, "POST", "/1/keys", self.timeout, params)
+
 
     def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
         """
@@ -315,6 +319,9 @@ class Client(object):
         params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
         if not indexes is None:
             params['indexes'] = indexes
+        return self.update_api_key(key, params)
+
+    def update_api_key(self, key, params):
         return AlgoliaUtils_request(self.headers, self.write_hosts, "PUT", "/1/keys/" + key, self.timeout, params)
 
     @deprecated
@@ -331,6 +338,18 @@ class Client(object):
         """
         if type(tag_filters) is list:
             tag_filters = ','.join(map(lambda t: ''.join(['(', ','.join(t), ')']) if type(t) is list else str(t), tag_filters))
+        if type(tag_filters) is dict:
+            try:
+                iteritems = tag_filters.iteritems(); #Python3.X Fix
+            except AttributeError:
+                iteritems = tag_filters.items();
+            tag_filters = {}
+            for k, v in iteritems:
+                if isinstance(v, (list, dict, tuple, bool)):
+                    tag_filters[k] = json.dumps(v)
+                else:
+                    tag_filters[k] = v
+            tag_filters = urlencode(tag_filters)
         return hmac.new(str.encode(private_api_key), str.encode(''.join([str(tag_filters), str(user_token or '')])),  hashlib.sha256).hexdigest()
 
 class Index(object):
@@ -418,7 +437,7 @@ class Index(object):
         @param partial_object contains the object attributes to override, the
                object must contains an objectID attribute
         """
-        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "POST", "/1/indexes/%s/%s/partial" % (self.url_index_name, quote(("%s" % partial_object["objectID"]).encode('utf8'), safe='')), self.client.timeout, partial_object)
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s/%s/partial" % (self.url_index_name, quote(("%s" % partial_object["objectID"]).encode('utf8'), safe='')), self.client.timeout, partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
@@ -576,7 +595,7 @@ class Index(object):
             one is kept and others are removed.
         """
         if args == None:
-            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s" % (self.url_index_name, quote(query.encode('utf8'), safe='')), self.client.search_timeout)
+            return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s?query=%s" % (self.url_index_name, quote(query.encode('utf8'), safe='')), self.client.search_timeout)
         else:
             params = {}
             try:
@@ -589,7 +608,7 @@ class Index(object):
                 else:
                     params[k] = v
 
-            return AlgoliaUtils_request(self.client.headers, self.write_hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.url_index_name, quote(query.encode('utf8'), safe=''), urlencode(params)), self.client.search_timeout)
+            return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s?query=%s&%s" % (self.url_index_name, quote(query.encode('utf8'), safe=''), urlencode(params)), self.client.search_timeout)
 
     def flatten(self, lst):
       return sum( ([x] if not isinstance(x, list) else flatten(x)
@@ -821,7 +840,11 @@ class Index(object):
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         """
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s/keys" % self.url_index_name, self.client.timeout, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
+        params= {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
+        return self.add_api_key(params)
+
+    def add_api_key(self, params):
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s/keys" % self.url_index_name, self.client.timeout, params)
 
     def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
         """
@@ -839,7 +862,11 @@ class Index(object):
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         """
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "PUT", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout, {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query} )
+        params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
+        return self.update_api_key(key, params)
+
+    def update_api_key(self, key, params):
+        return AlgoliaUtils_request(self.client.headers, self.write_hosts, "PUT", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout, params)
 
     def batch(self, request):
         """
