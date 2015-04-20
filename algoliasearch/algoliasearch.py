@@ -271,57 +271,92 @@ class Client(object):
         return AlgoliaUtils_request(self.headers, self.write_hosts, "DELETE", "/1/keys/%s" % key, self.timeout)
 
     @deprecated
-    def addUserKey(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
-        return self.add_user_key(acls, validity, max_queries_per_ip_per_hour, max_hits_per_query, indexes)
-    def add_user_key(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
+    def addUserKey(self, obj, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
+        return self.add_user_key(obj, validity, max_queries_per_ip_per_hour, max_hits_per_query, indexes)
+    def add_user_key(self, obj, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
         """
         Create a new user key
 
-        @param acls the list of ACL for this key. Defined by an array of strings that
-               can contains the following values:
-                 - search: allow to search (https and http)
-                 - addObject: allows to add/update an object in the index (https only)
-                 - deleteObject : allows to delete an existing object (https only)
-                 - deleteIndex : allows to delete index content (https only)
-                 - settings : allows to get index settings (https only)
-                 - editSettings : allows to change index settings (https only)
+        @param obj can be two different parameters:
+          The list of parameters for this key. Defined by a NSDictionary that
+          can contains the following values:
+            - acl: array of string
+            - indices: array of string
+            - validity: int
+            - referers: array of string
+            - description: string
+            - maxHitsPerQuery: integer
+            - queryParameters: string
+            - maxQueriesPerIPPerHour: integer
+          Or the list of ACL for this key. Defined by an array of NSString that
+          can contains the following values:
+            - search: allow to search (https and http)
+            - addObject: allows to add/update an object in the index (https only)
+            - deleteObject : allows to delete an existing object (https only)
+            - deleteIndex : allows to delete index content (https only)
+            - settings : allows to get index settings (https only)
+            - editSettings : allows to change index settings (https only)
         @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         @param indexes the optional list of targeted indexes
         """
-        params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
+        if obj is dict:
+            params = obj
+        else:
+            params = {"acl": obj}
+        if validity != 0:
+            params["validity"] = validity
+        if max_queries_per_ip_per_hour != 0:
+            params["maxQueriesPerIPPerHour"] = max_queries_per_ip_per_hour
+        if max_hits_per_query != 0:
+            params["maxHitsPerQuery"] = max_hits_per_query
         if not indexes is None:
             params['indexes'] = indexes
-        return self.add_api_key(params)
-
-    def add_api_key(self, params):
         return AlgoliaUtils_request(self.headers, self.write_hosts, "POST", "/1/keys", self.timeout, params)
+        
 
 
-    def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
+    def update_user_key(self, key, obj, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0, indexes = None):
         """
         Update a user key
 
-        @param acls the list of ACL for this key. Defined by an array of strings that
-               can contains the following values:
-                 - search: allow to search (https and http)
-                 - addObject: allows to add/update an object in the index (https only)
-                 - deleteObject : allows to delete an existing object (https only)
-                 - deleteIndex : allows to delete index content (https only)
-                 - settings : allows to get index settings (https only)
-                 - editSettings : allows to change index settings (https only)
+        @param obj can be two different parameters:
+          The list of parameters for this key. Defined by a NSDictionary that
+          can contains the following values:
+            - acl: array of string
+            - indices: array of string
+            - validity: int
+            - referers: array of string
+            - description: string
+            - maxHitsPerQuery: integer
+            - queryParameters: string
+            - maxQueriesPerIPPerHour: integer
+          Or the list of ACL for this key. Defined by an array of NSString that
+          can contains the following values:
+            - search: allow to search (https and http)
+            - addObject: allows to add/update an object in the index (https only)
+            - deleteObject : allows to delete an existing object (https only)
+            - deleteIndex : allows to delete index content (https only)
+            - settings : allows to get index settings (https only)
+            - editSettings : allows to change index settings (https only)
         @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         @param indexes the optional list of targeted indexes
         """
-        params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
+        if obj is dict:
+            params = obj
+        else:
+            params = {"acl": obj}
+        if validity != 0:
+            params["validity"] = validity
+        if max_queries_per_ip_per_hour != 0:
+            params["maxQueriesPerIPPerHour"] = max_queries_per_ip_per_hour
+        if max_hits_per_query != 0:
+            params["maxHitsPerQuery"] = max_hits_per_query
         if not indexes is None:
             params['indexes'] = indexes
-        return self.update_api_key(key, params)
-
-    def update_api_key(self, key, params):
         return AlgoliaUtils_request(self.headers, self.write_hosts, "PUT", "/1/keys/" + key, self.timeout, params)
 
     @deprecated
@@ -822,50 +857,84 @@ class Index(object):
         return AlgoliaUtils_request(self.client.headers, self.write_hosts, "DELETE", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout)
 
     @deprecated
-    def addUserKey(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
-        return self.add_user_key(acls, validity, max_queries_per_ip_per_hour, max_hits_per_query)
-    def add_user_key(self, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
+    def addUserKey(self, obj, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
+        return self.add_user_key(obj, validity, max_queries_per_ip_per_hour, max_hits_per_query)
+    def add_user_key(self, obj, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
         """
         Create a new user key associated to this index (can only access to this index)
 
-        @param acls the list of ACL for this key. Defined by an array of strings that
-               can contains the following values:
-                 - search: allow to search (https and http)
-                 - addObject: allows to add/update an object in the index (https only)
-                 - deleteObject : allows to delete an existing object (https only)
-                 - deleteIndex : allows to delete index content (https only)
-                 - settings : allows to get index settings (https only)
-                 - editSettings : allows to change index settings (https only)
+        @param obj can be two different parameters:
+          The list of parameters for this key. Defined by a NSDictionary that
+          can contains the following values:
+            - acl: array of string
+            - indices: array of string
+            - validity: int
+            - referers: array of string
+            - description: string
+            - maxHitsPerQuery: integer
+            - queryParameters: string
+            - maxQueriesPerIPPerHour: integer
+          Or the list of ACL for this key. Defined by an array of NSString that
+          can contains the following values:
+            - search: allow to search (https and http)
+            - addObject: allows to add/update an object in the index (https only)
+            - deleteObject : allows to delete an existing object (https only)
+            - deleteIndex : allows to delete index content (https only)
+            - settings : allows to get index settings (https only)
+            - editSettings : allows to change index settings (https only)
         @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         """
-        params= {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
-        return self.add_api_key(params)
-
-    def add_api_key(self, params):
+        if obj is dict:
+            params = obj
+        else:
+            params = {"acl": obj}
+        if validity != 0:
+            params["validity"] = validity
+        if max_queries_per_ip_per_hour != 0:
+            params["maxQueriesPerIPPerHour"] = max_queries_per_ip_per_hour
+        if max_hits_per_query != 0:
+            params["maxHitsPerQuery"] = max_hits_per_query
         return AlgoliaUtils_request(self.client.headers, self.write_hosts, "POST", "/1/indexes/%s/keys" % self.url_index_name, self.client.timeout, params)
 
-    def update_user_key(self, key, acls, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
+    def update_user_key(self, key, obj, validity = 0, max_queries_per_ip_per_hour = 0, max_hits_per_query = 0):
         """
         Update a user key associated to this index (can only access to this index)
 
-        @param acls the list of ACL for this key. Defined by an array of strings that
-               can contains the following values:
-                 - search: allow to search (https and http)
-                 - addObject: allows to add/update an object in the index (https only)
-                 - deleteObject : allows to delete an existing object (https only)
-                 - deleteIndex : allows to delete index content (https only)
-                 - settings : allows to get index settings (https only)
-                 - editSettings : allows to change index settings (https only)
+        @param obj can be two different parameters:
+          The list of parameters for this key. Defined by a NSDictionary that
+          can contains the following values:
+            - acl: array of string
+            - indices: array of string
+            - validity: int
+            - referers: array of string
+            - description: string
+            - maxHitsPerQuery: integer
+            - queryParameters: string
+            - maxQueriesPerIPPerHour: integer
+          Or the list of ACL for this key. Defined by an array of NSString that
+          can contains the following values:
+            - search: allow to search (https and http)
+            - addObject: allows to add/update an object in the index (https only)
+            - deleteObject : allows to delete an existing object (https only)
+            - deleteIndex : allows to delete index content (https only)
+            - settings : allows to get index settings (https only)
+            - editSettings : allows to change index settings (https only)
         @param validity the number of seconds after which the key will be automatically removed (0 means no time limit for this key)
         @param max_queries_per_ip_per_hour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
         @param max_hits_per_query Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
         """
-        params = {"acl": acls, "validity": validity, "maxQueriesPerIPPerHour": max_queries_per_ip_per_hour, "maxHitsPerQuery": max_hits_per_query}
-        return self.update_api_key(key, params)
-
-    def update_api_key(self, key, params):
+        if obj is dict:
+            params = obj
+        else:
+            params = {"acl": obj}
+        if validity != 0:
+            params["validity"] = validity
+        if max_queries_per_ip_per_hour != 0:
+            params["maxQueriesPerIPPerHour"] = max_queries_per_ip_per_hour
+        if max_hits_per_query != 0:
+            params["maxHitsPerQuery"] = max_hits_per_query
         return AlgoliaUtils_request(self.client.headers, self.write_hosts, "PUT", "/1/indexes/%s/keys/%s" % (self.url_index_name, key), self.client.timeout, params)
 
     def batch(self, request):
