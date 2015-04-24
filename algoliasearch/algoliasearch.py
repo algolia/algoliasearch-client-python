@@ -119,6 +119,20 @@ class Client(object):
             'User-Agent': ('Algolia Search for python %s' % VERSION)
         }
 
+    def set_end_user_ip(self, end_user_ip):
+        """
+        Allow to forward an end user IP to the backend for geoip geoloc
+        This option will set the X-Forwarded-For HTTP header with the client IP
+        @param end_user_ip the end user IP (you can use both IPV4 or IPV6 syntax)
+        """
+        self.headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+            'X-Algolia-API-Key': self.api_key,
+            'X-Forwarded-For': end_user_ip,
+            'X-Algolia-Application-Id': self.application_id,
+            'User-Agent': ('Algolia Search for python %s' % VERSION)
+        }
+
     @deprecated
     def disableRateLimitForward(self):
         return self.disable_rate_limit_forward()
