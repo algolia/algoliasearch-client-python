@@ -387,6 +387,19 @@ class ClientTest(unittest.TestCase):
     self.assertEquals('Paris', results['hits'][0]['name'])
     self.assertEquals('Pa', results['hits'][0]['short_name'])
 
+  def test_batch_multiple_indexes(self):
+    task = self.client.batch([{ 'action': 'addObject', 'indexName': self.name, 'body':{'name': 'San Francisco'}}   \
+      , { 'action': 'addObject', 'indexName': self.name, 'body':{'name': 'Los Angeles'}}                          \
+      , { 'action': 'updateObject', 'indexName': self.name, 'body':{'name': 'San Diego'}, 'objectID':'42'}    \
+      , { 'action': 'updateObject', 'indexName': self.name, 'body':{'name': 'Los Gatos'}, 'objectID':self.name_obj}    \
+      ])
+    self.index.wait_task(task['taskID'][self.name])
+    obj = self.index.get_object("42")
+    self.assertEquals(obj['name'], 'San Diego')
+
+    res = self.index.search('')
+    self.assertEquals(len(res['hits']), 4)
+
   def test_subclassing(self):
     class SubClient(algoliasearch.Client):
       def __init__(self, *args, **kwargs):

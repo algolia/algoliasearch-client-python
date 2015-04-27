@@ -179,6 +179,12 @@ class Client(object):
         body = {"requests": requests}
         return AlgoliaUtils_request(self.headers, self.read_hosts, "POST", "/1/indexes/*/queries?strategy=" + strategy, self.search_timeout, body)
 
+    def batch(self, requests):
+        """
+        Send a batch request targetting multiple indices
+        """
+        return AlgoliaUtils_request(self.headers, self.write_hosts, "POST", "/1/indexes/*/batch", self.timeout, {"requests": requests})
+
     @deprecated
     def listIndexes(self):
         return self.list_indexes()
