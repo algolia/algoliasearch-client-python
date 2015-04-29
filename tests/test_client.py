@@ -388,12 +388,12 @@ class ClientTest(unittest.TestCase):
     self.assertEquals('Pa', results['hits'][0]['short_name'])
 
   def test_batch_multiple_indexes(self):
-    task = self.client.batch([{ 'action': 'addObject', 'indexName': self.name, 'body':{'name': 'San Francisco'}}   \
-      , { 'action': 'addObject', 'indexName': self.name, 'body':{'name': 'Los Angeles'}}                          \
-      , { 'action': 'updateObject', 'indexName': self.name, 'body':{'name': 'San Diego'}, 'objectID':'42'}    \
-      , { 'action': 'updateObject', 'indexName': self.name, 'body':{'name': 'Los Gatos'}, 'objectID':self.name_obj}    \
+    task = self.client.batch([{ 'action': 'addObject', 'indexName': self.index.index_name, 'body':{'name': 'San Francisco'}}   \
+      , { 'action': 'addObject', 'indexName': self.index.index_name, 'body':{'name': 'Los Angeles'}}                          \
+      , { 'action': 'updateObject', 'indexName': self.index.index_name, 'body':{'name': 'San Diego'}, 'objectID':'42'}    \
+      , { 'action': 'updateObject', 'indexName': self.index.index_name, 'body':{'name': 'Los Gatos'}, 'objectID':self.name_obj}    \
       ])
-    self.index.wait_task(task['taskID'][self.name])
+    self.index.wait_task(task['taskID'][self.index.index_name])
     obj = self.index.get_object("42")
     self.assertEquals(obj['name'], 'San Diego')
 
