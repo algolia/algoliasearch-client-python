@@ -987,7 +987,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, timeout, body = None):
         except AlgoliaException as e:
             raise e
         except Exception as e:
-            exceptions[host] = e.message
+            exceptions[host] = str(e)
             pass
     raise AlgoliaException(("%s %s" % ("Unreachable host:", exceptions)))
 
