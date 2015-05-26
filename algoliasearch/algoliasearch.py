@@ -57,8 +57,11 @@ def deprecated(func):
     newFunc.__dict__.update(func.__dict__)
     return newFunc
 
-
-POOL_MANAGER = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
+# Detect the http_proxy env variable to activate the proxy
+if os.environ.get('http_proxy') is not None:
+    POOL_MANAGER = urllib3.ProxyManager(os.environ.get('http_proxy'), cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
+else:
+    POOL_MANAGER = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
 
 # Exception launched by Algolia Client when an error occured
 class AlgoliaException(Exception):
