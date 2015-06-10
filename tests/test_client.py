@@ -173,6 +173,21 @@ class ClientTest(unittest.TestCase):
     self.assertEquals(len(res['hits']), 1)
     self.assertEquals(res['hits'][0]['name'], 'San Francisco')
 
+  def test_browse_with_cursor(self):
+    try:
+      task = self.index.clear_index()
+      self.index.wait_task(task['taskID'])
+    except algoliasearch.AlgoliaException:
+      pass
+    task = self.index.add_object({'name': 'San Francisco'})
+    self.index.wait_task(task['taskID'])
+    res = self.index.browse_all({"query": ""})
+    hits = []
+    for hit in res:
+      hits.append(hit)
+    self.assertEquals(len(hits), 1)
+    self.assertEquals(hits[0]['name'], 'San Francisco')
+
   def test_log(self):
     res = self.client.get_logs(0, 1, False)
     self.assertTrue(len(res['logs']) > 0)

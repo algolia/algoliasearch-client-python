@@ -67,6 +67,39 @@ class AlgoliaException(Exception):
     def __str__(self):
         return repr(self.value)
 
+# Iterator on index
+class IndexIterator:
+
+    def __init__(self, index, params, cursor = ""):
+        self.index = index
+        self.cursor = cursor
+        self.params = params
+        self.pos = 0
+        self.answer = None
+
+    def __iter__(self):
+        self.pos = 0
+        self.answer = { "cursor": self.cursor}
+        self.load_next_page()
+        return self
+
+    def __next__(self):
+        self.__next__()
+
+    def next(self):
+        while True:
+            if self.pos < len(self.answer["hits"]):
+                self.pos += 1
+                return self.answer["hits"][self.pos - 1]
+            if "cursor" in self.answer and self.answer.cursor != None and len(self.answer.cursor) > 0:
+                self.load_next_page()
+                continue
+            raise StopIteration
+
+    def load_next_page(self):
+        self.answer = self.index.browse_from(self.params, self.answer.get("cursor", None))
+
+
 """
 Entry point in the Python API.
 You should instanciate a Client object with your ApplicationID, ApiKey and Hosts
@@ -746,6 +779,7 @@ class Index(object):
                         aggregated_answer['disjunctiveFacets'][facet][r] = 0
         return aggregated_answer
 
+    @deprecated
     def browse(self, page = 0, hits_per_page = 1000):
         """
          Browse all index content
@@ -755,6 +789,37 @@ class Index(object):
          @param hits_per_page: Pagination parameter used to select the number of hits per page. Defaults to 1000.
         """
         return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/browse?page=%d&hitsPerPage=%d" % (self.url_index_name, page, hits_per_page), self.client.timeout)
+
+    def browse_from(self, args, cursor = None):
+        """
+         Browse all index content
+
+         @param params contains the list of query parameter in a dictionary
+         @param cursor the position to start the browse
+        """
+        params = {}
+        try:
+            iteritems = args.iteritems(); #Python3.X Fix
+        except AttributeError:
+            iteritems = args.items();
+        for k, v in iteritems:
+            if isinstance(v, (list, dict, tuple, bool)):
+                params[k] = json.dumps(v)
+            else:
+                params[k] = v
+        cursorParam = ""
+        if cursor != None and len(cursor) > 0:
+            cursorParam = "&cursor=%s" % cursor
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts, "GET", "/1/indexes/%s/browse?%s%s" % (self.url_index_name, params, cursorParam), self.client.timeout)
+
+    def browse_all(self, params):
+        """
+         Browse all index content
+
+         @param params contains the list of query parameter in a dictionary
+         @return an iterator on the index content
+        """
+        return IndexIterator(self, params, None)
 
     @deprecated
     def waitTask(self, task_id, time_before_retry = 100):
