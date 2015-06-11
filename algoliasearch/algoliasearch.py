@@ -84,7 +84,7 @@ class IndexIterator:
         return self
 
     def __next__(self):
-        self.__next__()
+        self.next()
 
     def next(self):
         while True:
