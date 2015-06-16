@@ -775,7 +775,7 @@ class Index(object):
                 if (not facet in disjunctive_refinements):
                   continue
                 for r in disjunctive_refinements[facet]:
-                    if aggregated_answer['disjunctiveFacets'][facet][r] == None:
+                    if aggregated_answer['disjunctiveFacets'][facet].get(r, None) == None:
                         aggregated_answer['disjunctiveFacets'][facet][r] = 0
         return aggregated_answer
 
