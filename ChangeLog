@@ -1,5 +1,9 @@
 CHANGELOG
 
+2015-06-16 1.5.5
+     * Fix issue with non existing facet in the result set for the disjunctive faceting method
+     * Add browse_from and browse_all methods
+
 2015-05-04  1.5.4
      * Add new methods to add/update api key
      * Add batch method to target multiple indices
