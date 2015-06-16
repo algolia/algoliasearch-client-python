@@ -58,8 +58,11 @@ def deprecated(func):
     return newFunc
 
 # Detect the http_proxy env variable to activate the proxy
-if os.environ.get('http_proxy') is not None:
-    POOL_MANAGER = urllib3.ProxyManager(os.environ.get('http_proxy'), cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
+http_proxy = os.environ.get('http_proxy') or os.environ.get('HTTP_PROXY') or os.environ.get('https_proxy') or os.environ.get('HTTPS_PROXY')
+
+# if proxy is set, use it for connecting to algolia host
+if http_proxy is not None:
+    POOL_MANAGER = urllib3.ProxyManager(http_proxy, cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
 else:
     POOL_MANAGER = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
 
