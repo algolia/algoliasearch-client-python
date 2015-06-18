@@ -1,2 +1,3 @@
-include LICENSE.txt
+include LICENSE
+include README.md
 recursive-include algoliasearch/resources *
