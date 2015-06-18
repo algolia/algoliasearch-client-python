@@ -17,9 +17,9 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 
 path_version = os.path.join(os.path.dirname(__file__), 'algoliasearch/version.py')
 if sys.version_info[0] == 3:
-    execfile(path_version)
-else:
     exec(open(path_version).read())
+else:
+    execfile(path_version)
 
 
 setup(

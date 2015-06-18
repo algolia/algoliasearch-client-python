@@ -6,9 +6,9 @@ python:
 - '3.3'
 - '3.4'
 install:
-- pip install . --use-mirrors
-- pip install -r requirements.txt --use-mirrors
-- pip install -r tests/requirements.txt --use-mirrors
+- pip install --upgrade pip
+- pip install .
+- pip install -r tests/requirements.txt
 - pip install coveralls
 script:
 - nosetests --with-coverage --cover-package=algoliasearch
