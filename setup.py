@@ -12,8 +12,13 @@ except ImportError:
 # Allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
-    README = readme.read()
+path_readme = os.path.join(os.path.dirname(__file__), 'README.md')
+try:
+    import pypandoc
+    README = pypandoc.convert(path_readme, 'rst')
+except (IOError, ImportError):
+    with open(path_readme) as readme:
+        README = readme.read()
 
 path_version = os.path.join(os.path.dirname(__file__), 'algoliasearch/version.py')
 if sys.version_info[0] == 3:
@@ -34,7 +39,7 @@ setup(
     description = 'Algolia Search API Client for Python',
     long_description = README,
     author = 'Algolia Team',
-    author_email = 'hey@algolia.com',
+    author_email = 'support@algolia.com',
     url = 'https://github.com/algolia/algoliasearch-client-python',
     keywords = ['algolia', 'pyalgolia', 'search', 'backend', 'hosted', 'cloud',
         'full-text search', 'faceted search'],
