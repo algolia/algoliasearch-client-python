@@ -13,8 +13,8 @@ from algoliasearch import algoliasearch
 def safe_index_name(name):
     if 'TRAVIS' not in os.environ:
         return name
-    id = os.environ['TRAVIS_JOB_NUMBER'].split('.')[-1]
-    return '%s_travis-%s' % (name, id)
+    job = os.environ['TRAVIS_JOB_NUMBER']
+    return '%s_travis-%s' % (name, job)
 
 
 class ClientTest(unittest.TestCase):
