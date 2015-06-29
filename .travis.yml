@@ -1,20 +1,17 @@
 language: python
-python:
-- '2.6'
-- '2.7'
-- '3.2'
-- '3.3'
-- '3.4'
 install:
 - pip install --upgrade pip
-- pip install .
-- pip install -r tests/requirements.txt
-- pip install coveralls
+- pip install tox
 script:
-- nosetests --with-coverage --cover-package=algoliasearch
-before_install: export PYTHONIOENCODING=UTF-8
-after_success: coveralls
+- tox
 env:
+  matrix:
+  - TOXENV=py26
+  - TOXENV=py27
+  - TOXENV=py32
+  - TOXENV=py33
+  - TOXENV=py34
+  - TOXENV=coveralls
   global:
-  - secure: Y9TqHgaEdpqEQcBUOf31JazpqpFcR7CdZMi1zO30UncxOegcvMhHEoIrUYb2oT3BSEPH9kcFuiEOn2QjC4AtRuniRjMXvSUMaDESdyE8Y/lymF8BANfVfrHFDgpNCSgHYCTS7+6lLwD0t84Jwdd1NUeGnXRLTrDFhs428/lwEFg=
-  - secure: gAMD1lgQsWICjSJ30Zvw0a6VFjaS9z81sf2XHabq/uaA+Ld1lNjZlc2AhaVOWWhGQ8CrJ2bf+hovaPug8qbBvxH8w+v/6YQOrBTTOuHMqtNpkfLL5H2wBgVOy6d+1WfLcqMxaQ0QN7SldNouD53gkez2DMfnbV4CYFHKOYLIjGA=
+  - secure: S/H779PQk4yKOmP3HbcsrdJjls5cDQDekYhvW0nvlsSkw7L+nqEhV92Lk+JMIPOYeug66NmBSqCIhLC6NHp6TK3Z6y7wNO1JeVdtl+X7b7acRNAkMz9GqkZgLP05LyB1kGUpKfzEejxvKcKQ4iAkEVVu4N5IXcO92Y/IIMuKOe4=
+  - secure: Xtw10xjgdPiWrG6BZ+2B1UlkCBEtpVoHwttXj1nmroWqpIGOLDiAHVxgORe+mt4lIvDe2+cWJRRIeuY8f1xkbkR/FjNMf7iGbNJiARvcUe3ivX29cwOCyghN7IliyikHLwhntQcx2UFBDlMyYH5DqZYVzo22IyUFmPBMS58WqO4=
