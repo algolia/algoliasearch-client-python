@@ -3,6 +3,8 @@
 
 
 
+
+
 [Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
 
 Our Python client lets you easily use the [Algolia Search API](https://www.algolia.com/doc/rest_api) from your backend. It wraps the [Algolia Search REST API](http://www.algolia.com/doc/rest_api).
@@ -295,7 +297,7 @@ You can use the following optional arguments:
  * **removeWordsIfNoResults**: This option is used to select a strategy in order to avoid having an empty result page. There are three different options:
   * **lastWords**: When a query does not return any results, the last word will be added as optional. The process is repeated with n-1 word, n-2 word, ... until there are results.
   * **firstWords**: When a query does not return any results, the first word will be added as optional. The process is repeated with second word, third word, ... until there are results.
-  * **allOptional**: When a query does not return any results, a second trial will be made with all words as optional. This is equivalent to transforming the AND operand between query terms to an OR operand. 
+  * **allOptional**: When a query does not return any results, a second trial will be made with all words as optional. This is equivalent to transforming the AND operand between query terms to an OR operand.
   * **none**: No specific processing is done when a query does not return any results (default behavior).
  * **minWordSizefor1Typo**: The minimum number of characters in a query word to accept one typo in this word.<br/>Defaults to 4.
  * **minWordSizefor2Typos**: The minimum number of characters in a query word to accept two typos in this word.<br/>Defaults to 8.
@@ -590,7 +592,7 @@ Batch writes
 -------------
 
 You may want to perform multiple operations with one API call to reduce latency.
-We expose three methods to perform batch operations:
+We expose four methods to perform batch operations:
  * `add_objects`: Add an array of objects using automatic `objectID` assignment.
  * `save_objects`: Add or update an array of objects that contains an `objectID` attribute.
  * `delete_objects`: Delete an array of objectIDs.
@@ -844,16 +846,20 @@ Backup / Retrieve of all index content
 -------------
 
 You can retrieve all index content for backup purposes or for SEO using the browse method.
-This method can retrieve up to 1,000 objects per call and supports full text search, filters.
+This method can retrieve up to 1,000 objects per call and supports full text search and filters but the distinct feature is not available
 Unlike the search method, the sort by typo, proximity, geo distance and matched words is not applied, the hits are only sorted by numeric attributes specified in the ranking and the custom ranking.
 
 You can browse the index:
 
 ```python
 # Iterate with a filter over the index
-res = self.index.browse_all({"query": "test", "numericFilters": "i<42"});
+res = self.index.browse_all({"query": "test", "numericFilters": "i<42"})
 for hit in res
 	# Do something
+
+# Retrieve the next cursor from the browse method
+res = self.index.browse_from({"query": "test", "numericFilters": "i<42"}, None)
+print res["cursor"]
 ```
 
 Logs
