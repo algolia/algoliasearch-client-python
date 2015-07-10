@@ -700,14 +700,14 @@ You can also create an API Key with advanced settings:
 ```python
 # Creates a new index specific API key valid for 300 seconds, with a rate limit of 100 calls per hour per IP and a maximum of 20 hits
 
-params = {                                                         	\
-	'validity': 300,												\
-	'maxQueriesPerIPPerHour': 100,									\
-	'maxHitsPerQuery': 20,											\
-	'indexes': ['dev_*'],											\
-	'referers': ['algolia.com/*'],									\
-	'queryParameters': 'typoTolerance=strict&ignorePlurals=false',	\
-	'description': 'Limited search only API key for algolia.com'	\
+params = {
+	'validity': 300,
+	'maxQueriesPerIPPerHour': 100,
+	'maxHitsPerQuery': 20,
+	'indexes': ['dev_*'],
+	'referers': ['algolia.com/*'],
+	'queryParameters': 'typoTolerance=strict&ignorePlurals=false',
+	'description': 'Limited search only API key for algolia.com'
 }
 
 res = client.add_user_key(params)
