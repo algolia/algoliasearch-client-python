@@ -1,5 +1,8 @@
 CHANGELOG
 
+2015-07-10 1.5.8
+	* Add the ability to use the api behind a proxy
+
 2015-06-16 1.5.5
      * Fix issue with non existing facet in the result set for the disjunctive faceting method
      * Add browse_from and browse_all methods
@@ -118,11 +121,11 @@ CHANGELOG
 2013-12-10  1.1.6
 
       * Improved readability of search & settings parameters
-      
+
 2013-12-06  1.1.5
 
       * Added browse method
-	
+
 2013-12-06  1.1.3
 
       * Added partialUpdateObjects method

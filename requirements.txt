@@ -1,2 +1,4 @@
 urllib3
 tox
+wheel
+pypandoc
