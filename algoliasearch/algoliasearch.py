@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 '''
 Copyright (c) 2013 Algolia
 http://www.algolia.com/
@@ -44,7 +43,6 @@ else:
 
 import urllib3
 
-
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from .version import VERSION
 
@@ -55,6 +53,7 @@ def deprecated(func):
     as deprecated. It will result in a warning being emmitted
     when the function is used.
     '''
+
     def newFunc(*args, **kwargs):
         warnings.warn('Call to deprecated function %s.' % func.__name__,
                       category=DeprecationWarning)
@@ -66,13 +65,22 @@ def deprecated(func):
     return newFunc
 
 # Detect the http_proxy env variable to activate the proxy
-http_proxy = os.environ.get('http_proxy') or os.environ.get('HTTP_PROXY') or os.environ.get('https_proxy') or os.environ.get('HTTPS_PROXY')
+http_proxy = os.environ.get('http_proxy') or os.environ.get(
+    'HTTP_PROXY') or os.environ.get('https_proxy') or os.environ.get(
+        'HTTPS_PROXY')
 
 # if proxy is set, use it for connecting to algolia host
 if http_proxy is not None:
-    POOL_MANAGER = urllib3.ProxyManager(http_proxy, cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
+    POOL_MANAGER = urllib3.ProxyManager(
+        http_proxy,
+        cert_reqs='CERT_REQUIRED',
+        ca_certs=os.path.join(os.path.split(__file__)[0],
+                              "resources/ca-bundle.crt"))
 else:
-    POOL_MANAGER = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=os.path.join(os.path.split(__file__)[0], "resources/ca-bundle.crt"))
+    POOL_MANAGER = urllib3.PoolManager(
+        cert_reqs='CERT_REQUIRED',
+        ca_certs=os.path.join(os.path.split(__file__)[0],
+                              "resources/ca-bundle.crt"))
 
 
 class AlgoliaException(Exception):
@@ -251,9 +259,10 @@ class Client(object):
                 {'indexName': index_name,
                  'params': urlencode(query)})
         body = {'requests': requests}
-        return AlgoliaUtils_request(self.headers, self.read_hosts, 'POST',
-                                    '/1/indexes/*/queries?strategy=' +
-                                    strategy, self.search_timeout, body)
+        return AlgoliaUtils_request(
+            self.headers, self.read_hosts, 'POST',
+            '/1/indexes/*/queries?strategy=' + strategy, self.search_timeout,
+            body)
 
     def batch(self, requests):
         '''Send a batch request targetting multiple indices.'''
@@ -323,9 +332,10 @@ class Client(object):
         '''
         request = {'operation': 'copy', 'destination': dst_index_name}
         return AlgoliaUtils_request(self.headers, self.write_hosts, 'POST',
-                                    '/1/indexes/%s/operation' %
-                                    (quote(src_index_name.encode('utf8'),
-                                           safe='')), self.timeout, request)
+                                    '/1/indexes/%s/operation' % (
+                                        quote(src_index_name.encode('utf8'),
+                                              safe='')
+                                    ), self.timeout, request)
 
     @deprecated
     def getLogs(self, offset=0, length=10, type='all'):
@@ -516,8 +526,8 @@ class Client(object):
         '''
         if type(tag_filters) is list:
             tag_filters = ','.join(
-                map(lambda t: ''.join(['(', ','.join(t), ')'])
-                    if type(t) is list else str(t), tag_filters))
+                map(lambda t: ''.join(['(', ','.join(t), ')']) if
+                    type(t) is list else str(t), tag_filters))
         if type(tag_filters) is dict:
             try:
                 iteritems = tag_filters.iteritems()
@@ -609,9 +619,9 @@ class Index(object):
         else:
             return AlgoliaUtils_request(
                 self.client.headers, self.read_hosts, 'GET',
-                '/1/indexes/%s/%s?attributes=%s' %
-                (self.url_index_name, obj_id,
-                 attributes_to_retrieve), self.client.timeout)
+                '/1/indexes/%s/%s?attributes=%s' % (
+                    self.url_index_name, obj_id, attributes_to_retrieve
+                ), self.client.timeout)
 
     @deprecated
     def getObjects(self, object_ids):
@@ -682,8 +692,8 @@ class Index(object):
             an objectID attribute
         '''
         return AlgoliaUtils_request(
-            self.client.headers, self.write_hosts, 'PUT', '/1/indexes/%s/%s' %
-            (self.url_index_name, quote(
+            self.client.headers, self.write_hosts, 'PUT',
+            '/1/indexes/%s/%s' % (self.url_index_name, quote(
                 ('%s' % obj['objectID']).encode('utf8'),
                 safe='')), self.client.timeout, obj)
 
@@ -762,10 +772,11 @@ class Index(object):
         if (len('%s' % object_id) == 0):
             raise AlgoliaException('object_id is required')
         return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'DELETE', '/1/indexes/%s/%s' %
-                                    (self.url_index_name, quote(
-                                        ('%s' % object_id).encode('utf8'),
-                                        safe='')), self.client.timeout)
+                                    'DELETE', '/1/indexes/%s/%s' % (
+                                        self.url_index_name, quote(
+                                            ('%s' % object_id).encode('utf8'),
+                                            safe='')
+                                    ), self.client.timeout)
 
     def search(self, query, args=None):
         '''
@@ -879,11 +890,11 @@ class Index(object):
         '''
         if args == None:
             return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                        'GET', '/1/indexes/%s?query=%s' %
-                                        (self.url_index_name,
-                                         quote(query.encode('utf8'),
-                                               safe='')),
-                                        self.client.search_timeout)
+                                        'GET', '/1/indexes/%s?query=%s' % (
+                                            self.url_index_name,
+                                            quote(query.encode('utf8'),
+                                                  safe='')
+                                        ), self.client.search_timeout)
         else:
             params = {}
             try:
@@ -898,11 +909,11 @@ class Index(object):
                     params[k] = v
 
             return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                        'GET', '/1/indexes/%s?query=%s&%s' %
-                                        (self.url_index_name,
-                                         quote(query.encode('utf8'),
-                                               safe=''), urlencode(params)),
-                                        self.client.search_timeout)
+                                        'GET', '/1/indexes/%s?query=%s&%s' % (
+                                            self.url_index_name,
+                                            quote(query.encode('utf8'),
+                                                  safe=''), urlencode(params)
+                                        ), self.client.search_timeout)
 
     def flatten(self, lst):
         return sum(([x] if not isinstance(x, list) else flatten(x)
@@ -988,7 +999,9 @@ class Index(object):
         aggregated_answer['disjunctiveFacets'] = {}
         for i in range(1, len(answers['results'])):
             for facet in answers['results'][i]['facets']:
-                aggregated_answer['disjunctiveFacets'][facet] = answers['results'][i]['facets'][facet]
+                aggregated_answer['disjunctiveFacets'][
+                    facet
+                ] = answers['results'][i]['facets'][facet]
                 if (not facet in disjunctive_refinements):
                     continue
                 for r in disjunctive_refinements[facet]:
@@ -1063,9 +1076,9 @@ class Index(object):
         '''
         while True:
             res = AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                       'GET', '/1/indexes/%s/task/%d/' %
-                                       (self.url_index_name,
-                                        task_id), self.client.timeout)
+                                       'GET', '/1/indexes/%s/task/%d/' % (
+                                           self.url_index_name, task_id
+                                       ), self.client.timeout)
             if (res['status'] == 'published'):
                 return res
             time.sleep(time_before_retry / 1000.)
@@ -1204,9 +1217,9 @@ class Index(object):
     def get_user_key_acl(self, key):
         '''Get ACL of a user key associated to this index.'''
         return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                    'GET', '/1/indexes/%s/keys/%s' %
-                                    (self.url_index_name,
-                                     key), self.client.timeout)
+                                    'GET', '/1/indexes/%s/keys/%s' % (
+                                        self.url_index_name, key
+                                    ), self.client.timeout)
 
     @deprecated
     def deleteUserKey(self, key):
@@ -1215,9 +1228,9 @@ class Index(object):
     def delete_user_key(self, key):
         '''Delete an existing user key associated to this index.'''
         return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'DELETE', '/1/indexes/%s/keys/%s' %
-                                    (self.url_index_name,
-                                     key), self.client.timeout)
+                                    'DELETE', '/1/indexes/%s/keys/%s' % (
+                                        self.url_index_name, key
+                                    ), self.client.timeout)
 
     @deprecated
     def addUserKey(self, obj,
@@ -1321,9 +1334,9 @@ class Index(object):
         if max_hits_per_query != 0:
             params['maxHitsPerQuery'] = max_hits_per_query
         return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'PUT', '/1/indexes/%s/keys/%s' %
-                                    (self.url_index_name,
-                                     key), self.client.timeout, params)
+                                    'PUT', '/1/indexes/%s/keys/%s' % (
+                                        self.url_index_name, key
+                                    ), self.client.timeout, params)
 
     def batch(self, request):
         '''Send a batch request.'''
