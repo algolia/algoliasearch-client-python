@@ -24,7 +24,6 @@ THE SOFTWARE.
 '''
 
 import json
-import random
 import os
 import sys
 import decimal
@@ -117,8 +116,8 @@ class IndexIterator:
             if self.pos < len(self.answer['hits']):
                 self.pos += 1
                 return self.answer['hits'][self.pos - 1]
-            if 'cursor' in self.answer and self.answer.cursor != None and len(
-                self.answer.cursor) > 0:
+            if 'cursor' in self.answer and self.answer.cursor and len(
+                    self.answer.cursor) > 0:
                 self.load_next_page()
                 continue
             raise StopIteration
@@ -143,7 +142,7 @@ class Client(object):
         @param api_key a valid API key for the service
         @param hosts_array the list of hosts that you have received for the service
         '''
-        if (hosts_array == None):
+        if not hosts_array:
             self.read_hosts = ['%s-dsn.algolia.net' % application_id,
                                '%s-1.algolianet.com' % application_id,
                                '%s-2.algolianet.com' % application_id,
@@ -233,7 +232,7 @@ class Client(object):
         '''Allow to set the connection timeout in second.'''
         self.timeout = urllib3.util.timeout.Timeout(connect=connect_timeout,
                                                     read=read_timeout)
-        if (search_timeout != None):
+        if search_timeout:
             self.search_timeout = urllib3.util.timeout.Timeout(
                 connect=connect_timeout,
                 read=search_timeout)
@@ -453,7 +452,7 @@ class Client(object):
             params['maxQueriesPerIPPerHour'] = max_queries_per_ip_per_hour
         if max_hits_per_query != 0:
             params['maxHitsPerQuery'] = max_hits_per_query
-        if not indexes is None:
+        if indexes:
             params['indexes'] = indexes
         return AlgoliaUtils_request(self.headers, self.write_hosts, 'POST',
                                     '/1/keys', self.timeout, params)
@@ -503,7 +502,7 @@ class Client(object):
             params['maxQueriesPerIPPerHour'] = max_queries_per_ip_per_hour
         if max_hits_per_query != 0:
             params['maxHitsPerQuery'] = max_hits_per_query
-        if not indexes is None:
+        if indexes:
             params['indexes'] = indexes
         return AlgoliaUtils_request(self.headers, self.write_hosts, 'PUT',
                                     '/1/keys/' + key, self.timeout, params)
@@ -531,7 +530,7 @@ class Client(object):
         if type(tag_filters) is dict:
             try:
                 iteritems = tag_filters.iteritems()
-                #Python3.X Fix
+                #  Python3.X Fix
             except AttributeError:
                 iteritems = tag_filters.items()
             tag_filters = {}
@@ -612,7 +611,7 @@ class Index(object):
             of attributes to retrieve as a string separated by a comma
         '''
         obj_id = quote(('%s' % object_id).encode('utf8'), safe='')
-        if (attributes_to_retrieve == None):
+        if not attributes_to_retrieve:
             return AlgoliaUtils_request(
                 self.client.headers, self.read_hosts, 'GET', '/1/indexes/%s/%s'
                 % (self.url_index_name, obj_id), self.client.timeout)
@@ -888,7 +887,7 @@ class Index(object):
                 for show_name, then only the best one is kept and others are
                 removed.
         '''
-        if args == None:
+        if not args:
             return AlgoliaUtils_request(self.client.headers, self.read_hosts,
                                         'GET', '/1/indexes/%s?query=%s' % (
                                             self.url_index_name,
@@ -899,7 +898,7 @@ class Index(object):
             params = {}
             try:
                 iteritems = args.iteritems()
-                #Python3.X Fix
+                #  Python3.X Fix
             except AttributeError:
                 iteritems = args.items()
             for k, v in iteritems:
@@ -914,10 +913,6 @@ class Index(object):
                                             quote(query.encode('utf8'),
                                                   safe=''), urlencode(params)
                                         ), self.client.search_timeout)
-
-    def flatten(self, lst):
-        return sum(([x] if not isinstance(x, list) else flatten(x)
-                    for x in lst), [])
 
     @deprecated
     def searchDisjunctiveFaceting(self, query, disjunctive_facets,
@@ -941,7 +936,7 @@ class Index(object):
             { 'my_facet1' => ['my_value1', ['my_value2'], 'my_disjunctive_facet1' => ['my_value1', 'my_value2'] }
         '''
         if not (isinstance(disjunctive_facets, str)) and not (
-            isinstance(disjunctive_facets, list)):
+                isinstance(disjunctive_facets, list)):
             raise AlgoliaException(
                 'Argument \'disjunctive_facets\' must be a String or an Array')
         if not (isinstance(refinements, dict)):
@@ -1002,11 +997,11 @@ class Index(object):
                 aggregated_answer['disjunctiveFacets'][
                     facet
                 ] = answers['results'][i]['facets'][facet]
-                if (not facet in disjunctive_refinements):
+                if facet not in disjunctive_refinements:
                     continue
                 for r in disjunctive_refinements[facet]:
-                    if aggregated_answer['disjunctiveFacets'][facet].get(
-                        r, None) == None:
+                    if not aggregated_answer['disjunctiveFacets'][facet].get(
+                            r, None):
                         aggregated_answer['disjunctiveFacets'][facet][r] = 0
         return aggregated_answer
 
@@ -1036,7 +1031,7 @@ class Index(object):
         params = {}
         try:
             iteritems = args.iteritems()
-            #Python3.X Fix
+            #  Python3.X Fix
         except AttributeError:
             iteritems = args.items()
         for k, v in iteritems:
@@ -1045,7 +1040,7 @@ class Index(object):
             else:
                 params[k] = v
         cursorParam = ''
-        if cursor != None and len(cursor) > 0:
+        if cursor and len(cursor) > 0:
             cursorParam = '&cursor=%s' % cursor
         return AlgoliaUtils_request(self.client.headers, self.read_hosts,
                                     'GET', '/1/indexes/%s/browse?%s%s' %
@@ -1354,7 +1349,7 @@ def AlgoliaUtils_request(headers, hosts, method, request, timeout, body=None):
         cnt += 1
         try:
             obj = None
-            if body != None:
+            if body:
                 obj = json.dumps(body,
                                  cls=JSONEncoderWithDatetimeAndDefaultToString)
             conn = POOL_MANAGER.connection_from_host(host, scheme='https')
