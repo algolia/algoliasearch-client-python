@@ -89,17 +89,15 @@ class AlgoliaException(Exception):
 class IndexIterator:
     '''Iterator on index.'''
 
-    def __init__(self, index, params, cursor=''):
+    def __init__(self, index, params={}, cursor=None):
         self.index = index
-        self.cursor = cursor
         self.params = params
+        self.cursor = cursor
         self.pos = 0
         self.answer = None
 
     def __iter__(self):
-        self.pos = 0
-        self.answer = {'cursor': self.cursor}
-        self.load_next_page()
+        self.__load_next_page()
         return self
 
     def __next__(self):
@@ -110,15 +108,16 @@ class IndexIterator:
             if self.pos < len(self.answer['hits']):
                 self.pos += 1
                 return self.answer['hits'][self.pos - 1]
-            if 'cursor' in self.answer and self.answer.cursor and len(
-                    self.answer.cursor) > 0:
-                self.load_next_page()
+            elif self.cursor and len(self.cursor) > 0:
+                self.__load_next_page()
                 continue
-            raise StopIteration
+            else:
+                raise StopIteration
 
-    def load_next_page(self):
-        self.answer = self.index.browse_from(self.params,
-                                             self.answer.get('cursor', None))
+    def __load_next_page(self):
+        self.answer = self.index.browse_from(self.params, self.cursor)
+        self.pos = 0
+        self.cursor = self.answer.get('cursor', None)
 
 
 class Client(object):
@@ -1015,40 +1014,38 @@ class Index(object):
             '/1/indexes/%s/browse?page=%d&hitsPerPage=%d' %
             (self.url_index_name, page, hits_per_page), self.client.timeout)
 
-    def browse_from(self, args, cursor=None):
+    def browse_from(self, params={}, cursor=None):
         '''
          Browse all index content.
 
          @param params contains the list of query parameter in a dictionary
          @param cursor the position to start the browse
         '''
-        params = {}
         try:
-            iteritems = args.iteritems()
-            #  Python3.X Fix
+            iteritems = params.iteritems()
         except AttributeError:
-            iteritems = args.items()
-        for k, v in iteritems:
-            if isinstance(v, (list, dict, tuple, bool)):
-                params[k] = json.dumps(v)
-            else:
-                params[k] = v
-        cursorParam = ''
-        if cursor and len(cursor) > 0:
-            cursorParam = '&cursor=%s' % cursor
-        return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                    'GET', '/1/indexes/%s/browse?%s%s' %
-                                    (self.url_index_name, params,
-                                     cursorParam), self.client.timeout)
+            iteritems = params.items()
+        # Impossible to use dict comprehensions because of py26...
+        params = dict((k, json.dumps(v)) for k, v in iteritems)
 
-    def browse_all(self, params):
+        if cursor and len(cursor) > 0:
+            url_params = 'cursor=%s' % cursor
+        else:
+            url_params = urlencode(params)
+
+        return AlgoliaUtils_request(self.client.headers, self.read_hosts,
+                                    'GET', '/1/indexes/%s/browse?%s' %
+                                    (self.url_index_name, url_params),
+                                    self.client.timeout)
+
+    def browse_all(self, params={}):
         '''
          Browse all index content.
 
          @param params contains the list of query parameter in a dictionary
          @return an iterator on the index content
         '''
-        return IndexIterator(self, params, None)
+        return IndexIterator(self, params=params)
 
     @deprecated
     def waitTask(self, task_id, time_before_retry=100):
