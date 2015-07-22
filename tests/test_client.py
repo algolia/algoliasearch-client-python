@@ -210,7 +210,7 @@ class ClientTest(unittest.TestCase):
 
         self.assertEquals(len(hits), 3)
         for elt in hits:
-            self.assertIn(elt, ('San Francisco', 'Paris', 'New York'))
+            self.assertTrue(elt in ('San Francisco', 'Paris', 'New York'))
 
     def test_log(self):
         res = self.client.get_logs(0, 1, False)
