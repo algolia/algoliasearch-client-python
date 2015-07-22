@@ -1,5 +1,8 @@
 CHANGELOG
 
+2015-07-23 1.5.9
+	* Fix browse_all and browse_from methods
+
 2015-07-10 1.5.8
 	* Add the ability to use the api behind a proxy
 
