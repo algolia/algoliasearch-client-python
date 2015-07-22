@@ -1022,7 +1022,7 @@ class Index(object):
          @param params contains the list of query parameter in a dictionary
          @param cursor the position to start the browse
         '''
-        params = {}
+        params = []
         try:
             iteritems = args.iteritems()
             #  Python3.X Fix
@@ -1030,9 +1030,10 @@ class Index(object):
             iteritems = args.items()
         for k, v in iteritems:
             if isinstance(v, (list, dict, tuple, bool)):
-                params[k] = json.dumps(v)
+                params.append(k + '=' + json.dumps(v))
             else:
-                params[k] = v
+                params.append(k + '=' + v)
+        params = '&'.join(params)
         cursorParam = ''
         if cursor and len(cursor) > 0:
             cursorParam = '&cursor=%s' % cursor
