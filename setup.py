@@ -35,7 +35,10 @@ setup(
     package_dir = {'algoliasearch': 'algoliasearch'},
     packages_data = {'algoliasearch': ['ressources/*.crt']},
     include_package_data = True,
-    install_requires = ['urllib3 >= 1.8.2'],
+    install_requires = [
+        'urllib3 >= 1.8.2',
+        "urllib3[secure]"
+    ],
     description = 'Algolia Search API Client for Python',
     long_description = README,
     author = 'Algolia Team',

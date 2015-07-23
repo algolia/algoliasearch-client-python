@@ -25,20 +25,18 @@ THE SOFTWARE.
 
 import json
 import os
-import sys
 import decimal
 import time
 import datetime
 import warnings
 
-if sys.version < '3':
-    from urllib import quote
-    from urllib import urlencode
-else:
-    from urllib.parse import quote
-    from urllib.parse import urlencode
-
 import urllib3
+
+try:
+    import urllib3.contrib.pyopenssl
+    urllib3.contrib.pyopenssl.inject_into_urllib3()
+except ImportError:
+    pass  # Python 3.x
 
 
 # Detect the http_proxy env variable to activate the proxy
