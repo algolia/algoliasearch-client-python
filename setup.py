@@ -20,7 +20,8 @@ except (IOError, ImportError):
     with open(path_readme) as readme:
         README = readme.read()
 
-path_version = os.path.join(os.path.dirname(__file__), 'algoliasearch/version.py')
+path_version = os.path.join(os.path.dirname(__file__),
+                            'algoliasearch/version.py')
 if sys.version_info[0] == 3:
     exec(open(path_version).read())
 else:
@@ -28,25 +29,25 @@ else:
 
 
 setup(
-    name = 'algoliasearch',
-    version = VERSION,
-    license = 'MIT License',
-    packages = ['algoliasearch'],
-    package_dir = {'algoliasearch': 'algoliasearch'},
-    packages_data = {'algoliasearch': ['ressources/*.crt']},
-    include_package_data = True,
-    install_requires = [
+    name='algoliasearch',
+    version=VERSION,
+    license='MIT License',
+    packages=['algoliasearch'],
+    package_dir={'algoliasearch': 'algoliasearch'},
+    packages_data={'algoliasearch': ['ressources/*.crt']},
+    include_package_data=True,
+    install_requires=[
         'urllib3 >= 1.8.2',
-        "urllib3[secure]"
+        'urllib3[secure]'
     ],
-    description = 'Algolia Search API Client for Python',
-    long_description = README,
-    author = 'Algolia Team',
-    author_email = 'support@algolia.com',
-    url = 'https://github.com/algolia/algoliasearch-client-python',
-    keywords = ['algolia', 'pyalgolia', 'search', 'backend', 'hosted', 'cloud',
-        'full-text search', 'faceted search'],
-    classifiers = [
+    description='Algolia Search API Client for Python',
+    long_description=README,
+    author='Algolia Team',
+    author_email='support@algolia.com',
+    url='https://github.com/algolia/algoliasearch-client-python',
+    keywords=['algolia', 'pyalgolia', 'search', 'backend', 'hosted', 'cloud',
+              'full-text search', 'faceted search'],
+    classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
