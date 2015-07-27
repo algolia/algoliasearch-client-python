@@ -410,7 +410,7 @@ class Index(object):
 
         disjunctive_refinements = {}
         for key in refinements.keys():
-            if (key in disjunctive_facets):
+            if key in disjunctive_facets:
                 disjunctive_refinements[key] = refinements[key]
 
         queries = []
@@ -419,14 +419,27 @@ class Index(object):
         for key in refinements:
             r = list(map(lambda x: key + ':' + x, refinements[key]))
 
-            if (str(key) in disjunctive_refinements):
+            if str(key) in disjunctive_refinements:
                 filters.append(r)
             else:
                 filters += r
-        params['indexName'] = self.index_name
-        params['query'] = query
-        params['facetFilters'] = filters
+
+        params.update({
+            'indexName': self.index_name,
+            'query': query,
+            'facetFilters': filters
+        })
         queries.append(dict(params))
+
+        params.update({
+            'page': 0,
+            'hitsPerPage': 0,
+            'attributesToRetrieve': [],
+            'attributesToHighlight': [],
+            'attributesToSnippet': [],
+            'analytics': False
+        })
+
         for disjunctive_facet in disjunctive_facets:
             filters = []
 
@@ -439,32 +452,26 @@ class Index(object):
                     else:
                         filters += r
 
-            params['indexName'] = self.index_name
-            params['query'] = query
             params['facetFilters'] = filters
-            params['page'] = 0
-            params['hitsPerPage'] = 0
-            params['attributesToRetrieve'] = []
-            params['attributesToHighlight'] = []
-            params['attributesToSnippet'] = []
             params['facets'] = disjunctive_facet
-            params['analytics'] = False
             queries.append(dict(params))
+
         answers = self.client.multiple_queries(queries)
 
         aggregated_answer = answers['results'][0]
         aggregated_answer['disjunctiveFacets'] = {}
         for i in range(1, len(answers['results'])):
             for facet in answers['results'][i]['facets']:
-                aggregated_answer['disjunctiveFacets'][
-                    facet
-                ] = answers['results'][i]['facets'][facet]
+                aggregated_answer['disjunctiveFacets'][facet] = (
+                        answers['results'][i]['facets'][facet])
+
                 if facet not in disjunctive_refinements:
                     continue
+
                 for r in disjunctive_refinements[facet]:
-                    if not aggregated_answer['disjunctiveFacets'][facet].get(
-                            r, None):
+                    if r not in aggregated_answer['disjunctiveFacets'][facet]:
                         aggregated_answer['disjunctiveFacets'][facet][r] = 0
+
         return aggregated_answer
 
     @deprecated
