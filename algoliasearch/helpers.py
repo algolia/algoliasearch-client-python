@@ -24,6 +24,9 @@ THE SOFTWARE.
 
 import warnings
 import json
+import decimal
+import time
+import datetime
 
 try:
     from urllib import quote
@@ -73,6 +76,19 @@ def urlify(e):
         return 'true' if e else 'false'
     else:
         return e
+
+
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, decimal.Decimal):
+            return float(obj)
+        elif isinstance(obj, datetime.datetime):
+            try:
+                return int(time.mktime(obj.timetuple()))
+            except:
+                return 0
+
+        return json.JSONEncoder.default(self, obj)
 
 
 class AlgoliaException(Exception):

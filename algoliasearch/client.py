@@ -23,6 +23,7 @@ THE SOFTWARE.
 """
 
 import os
+import json
 import hmac
 import hashlib
 
@@ -38,6 +39,7 @@ from .version import VERSION
 from .index import Index
 
 from .helpers import AlgoliaException
+from .helpers import CustomJSONEncoder
 from .helpers import deprecated
 from .helpers import safe
 from .helpers import urlify
@@ -464,6 +466,8 @@ class Client(object):
         """Perform an HTTPS request with retry logic."""
         if params:
             params = urlify(params)
+        if body:
+            body = json.dumps(body, cls=CustomJSONEncoder)
 
         timeout = self.search_timeout if is_search else self.timeout
         exceptions_hosts = {}
@@ -477,7 +481,7 @@ class Client(object):
             try:
                 res = self._session.request(
                             method, 'https://%s%s' % (host, path),
-                            params=params, json=body, timeout=timeout)
+                            params=params, data=body, timeout=timeout)
 
                 res.raise_for_status()
                 return res.json()

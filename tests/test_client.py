@@ -368,6 +368,17 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(results['results'][0]['hits']), 1)
         self.assertEquals('Paris', results['results'][0]['hits'][0]['name'])
 
+    def test_decimal(self):
+        value = Decimal('3.14')
+        task = self.index.save_object({
+            'value': value,
+            'objectID': self.name_obj
+        })
+        self.index.wait_task(task['taskID'])
+
+        obj = self.index.get_object(self.name_obj)
+        self.assertEquals(obj['value'], float(value))
+
     def test_float(self):
         value = float('3.14')
         task = self.index.save_object(
