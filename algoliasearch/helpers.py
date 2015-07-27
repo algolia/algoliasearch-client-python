@@ -23,6 +23,7 @@ THE SOFTWARE.
 """
 
 import warnings
+import json
 
 try:
     from urllib import quote
@@ -67,7 +68,7 @@ def urlify(e):
 
         return dict((k, urlify(v)) for k, v in iteritems)
     elif isinstance(e, (list, tuple)):
-        return ','.join(str(urlify(x)) for x in e) if len(e) else '[]'
+        return json.dumps(e)
     elif isinstance(e, bool):
         return 'true' if e else 'false'
     else:

@@ -373,7 +373,7 @@ class Index(object):
                 for show_name, then only the best one is kept and others are
                 removed.
         """
-        args['query'] = safe(query)
+        args['query'] = query
         return self._perform_request(self.read_hosts, '', 'GET', params=args,
                                      is_search=True)
 

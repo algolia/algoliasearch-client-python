@@ -450,7 +450,7 @@ class Client(object):
                     map(lambda t: ''.join(['(', ','.join(t), ')']) if
                         isinstance(t, (list, tuple)) else t, tag_filters))
         elif isinstance(tag_filters, dict):
-            tag_filters = urlencode(tag_filters)
+            tag_filters = urlencode(urlify(tag_filters))
 
         return hmac.new(str.encode(private_api_key),
                         str.encode(''.join([tag_filters, str(user_token)])),
