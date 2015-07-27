@@ -40,6 +40,7 @@ from .index import Index
 from .helpers import AlgoliaException
 from .helpers import deprecated
 from .helpers import safe
+from .helpers import urlify
 
 
 class Client(object):
@@ -185,7 +186,7 @@ class Client(object):
 
             requests.append({
                 'indexName': index_name,
-                'params': urlencode(query)
+                'params': urlencode(urlify(query))
             })
 
         return self._perform_request(
@@ -459,15 +460,7 @@ class Client(object):
                          is_search=False):
         """Perform an HTTPS request with retry logic."""
         if params:
-            try:
-                iteritems = params.iteritems()
-            except AttributeError:
-                iteritems = params.items()
-            for k, v in iteritems:
-                if isinstance(v, (list, tuple)):
-                    params[k] = ','.join(v)
-                elif isinstance(v, bool):
-                    params[k] = 1 if v else 0
+            params = urlify(params)
 
         timeout = self.search_timeout if is_search else self.timeout
         exceptions_hosts = {}

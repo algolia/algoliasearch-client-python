@@ -49,11 +49,29 @@ def deprecated(func):
 
 
 def safe(e):
+    """Returns a safe string for URL."""
     try:
         e = unicode(e)
     except NameError:
         e = str(e)
     return quote(e.encode('utf-8'), safe='')
+
+
+def urlify(e):
+    """Return dict/list/value that can be used as URL parameters."""
+    if isinstance(e, dict):
+        try:
+            iteritems = e.iteritems()
+        except AttributeError:
+            iteritems = e.items()
+
+        return dict((k, urlify(v)) for k, v in iteritems)
+    elif isinstance(e, (list, tuple)):
+        return ','.join(str(urlify(x)) for x in e) if len(e) else '[]'
+    elif isinstance(e, bool):
+        return 'true' if e else 'false'
+    else:
+        return e
 
 
 class AlgoliaException(Exception):

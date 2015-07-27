@@ -24,14 +24,9 @@ THE SOFTWARE.
 
 import time
 
+from .helpers import AlgoliaException
 from .helpers import deprecated
 from .helpers import safe
-from .helpers import AlgoliaException
-
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
 
 
 class IndexIterator:
@@ -453,7 +448,7 @@ class Index(object):
             params['attributesToHighlight'] = []
             params['attributesToSnippet'] = []
             params['facets'] = disjunctive_facet
-            params['analytics'] = 'false'
+            params['analytics'] = False
             queries.append(dict(params))
         answers = self.client.multiple_queries(queries)
 
