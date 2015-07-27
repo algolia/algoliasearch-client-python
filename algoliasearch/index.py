@@ -767,8 +767,11 @@ class Index(object):
 
     def batch(self, requests):
         """Send a batch requests."""
+        if isinstance(requests, (list, tuple)):
+            requests = {'requests': requests}
+
         return self._perform_request(self.write_hosts, '/batch', 'POST',
-                                     body={'requests': requests})
+                                     body=requests)
 
     def _perform_request(self, hosts, path, method, params=None, body=None,
                          is_search=False):

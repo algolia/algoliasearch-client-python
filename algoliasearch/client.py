@@ -195,8 +195,11 @@ class Client(object):
 
     def batch(self, requests):
         """Send a batch request targetting multiple indices."""
+        if isinstance(requests, (list, tuple)):
+            requests = {'requests': requests}
+
         return self._perform_request(self.write_hosts, '/1/indexes/*/batch',
-                                     'POST', body={'requests': requests})
+                                     'POST', body=requests)
 
     @deprecated
     def listIndexes(self):
