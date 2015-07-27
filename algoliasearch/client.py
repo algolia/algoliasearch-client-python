@@ -41,8 +41,6 @@ from .helpers import AlgoliaException
 from .helpers import deprecated
 from .helpers import safe
 
-import json
-
 
 class Client(object):
     """
@@ -74,8 +72,8 @@ class Client(object):
 
         self.app_id = app_id
         self.api_key = api_key
-        self._timeout = (1, 30)
-        self._search_timeout = (1, 5)
+        self.timeout = (1, 30)
+        self.search_timeout = (1, 5)
 
         self._session = Session()
         self._session.verify = os.path.join(os.path.dirname(__file__),
@@ -169,24 +167,6 @@ class Client(object):
         """
         self.timeout = (connect_timeout, read_timeout)
         self.search_timeout = (connect_timeout, search_timeout)
-
-    @property
-    def timeout(self):
-        """Request timeout."""
-        return self._timeout
-
-    @timeout.setter
-    def _set_timeout(self, value):
-        self._timeout = value
-
-    @property
-    def search_timeout(self):
-        """Timeout for all search query."""
-        return self._search_timeout
-
-    @search_timeout.setter
-    def _set_search_timeout(self, value):
-        self._search_timeout = value
 
     @deprecated
     def multipleQueries(self, queries, index_name_key='indexName'):
