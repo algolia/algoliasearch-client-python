@@ -121,9 +121,6 @@ class ClientTest(unittest.TestCase):
         results = self.index.search('')
         self.assertEquals(len(results['hits']), 0)
 
-        self.assertRaises(algoliasearch.AlgoliaException,
-                          self.index.deleteObject, "")
-
     def test_listIndexes(self):
         new_index = self.client.initIndex(safe_index_name(self.name))
         try:
@@ -199,11 +196,11 @@ class ClientTest(unittest.TestCase):
         self.assertTrue(len(res['logs']) > 0)
 
     def test_batch(self):
-        task = self.index.batch({'requests': [{'action': 'addObject', 'body': {'name': 'San Francisco'}}   \
+        task = self.index.batch([{'action': 'addObject', 'body': {'name': 'San Francisco'}}   \
       , {'action': 'addObject', 'body': {'name': 'Los Angeles'}}                          \
       , {'action': 'updateObject', 'body': {'name': 'San Diego'}, 'objectID': '42'}    \
       , {'action': 'updateObject', 'body': {'name': 'Los Gatos'}, 'objectID': self.nameObj}    \
-      ]})
+      ])
         self.index.waitTask(task['taskID'])
         obj = self.index.getObject("42")
         self.assertEquals(obj['name'], 'San Diego')
@@ -212,11 +209,11 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(res['hits']), 4)
 
     def test_batchDelete(self):
-        task = self.index.batch({'requests': [{'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
+        task = self.index.batch([{'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
       , {'action': 'addObject', 'body': {'name': 'Los Angeles', 'objectID': '41'}}                          \
       , {'action': 'updateObject', 'body': {'name': 'San Diego'}, 'objectID': '42'}    \
       , {'action': 'updateObject', 'body': {'name': 'Los Gatos'}, 'objectID': self.nameObj}    \
-      ]})
+      ])
         self.index.waitTask(task['taskID'])
         task = self.index.deleteObjects(['40', '41', '42', self.nameObj])
         self.index.waitTask(task['taskID'])
@@ -225,13 +222,15 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(res['hits']), 0)
 
     def test_deleteByQuery(self):
-        task = self.index.batch({'requests': [ \
+        task = self.index.batch([
         {'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
       , {'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '41'}}   \
       , {'action': 'addObject', 'body': {'name': 'Los Angeles', 'objectID': '42'}}                          \
-      ]})
+      ])
         self.index.waitTask(task['taskID'])
-        self.index.deleteByQuery("San Francisco")
+
+        task = self.index.deleteByQuery("San Francisco")
+        self.index.waitTask(task['taskID'])
 
         res = self.index.search('')
         self.assertEquals(len(res['hits']), 1)
@@ -341,17 +340,6 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(results['results']), 1)
         self.assertEquals(len(results['results'][0]['hits']), 1)
         self.assertEquals('Paris', results['results'][0]['hits'][0]['name'])
-
-    def test_decimal(self):
-
-        value = Decimal('3.14')
-        task = self.index.saveObject(
-            {"value": value,
-             "objectID": self.nameObj})
-        self.index.waitTask(task['taskID'])
-
-        obj = self.index.getObject(self.nameObj)
-        self.assertEquals(obj['value'], float(value))
 
     def test_float(self):
         value = float('3.14')

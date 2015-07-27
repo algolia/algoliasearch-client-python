@@ -121,9 +121,6 @@ class ClientTest(unittest.TestCase):
         results = self.index.search('')
         self.assertEquals(len(results['hits']), 0)
 
-        self.assertRaises(algoliasearch.AlgoliaException,
-                          self.index.delete_object, '')
-
     def test_listIndexes(self):
         new_index = self.client.init_index(safe_index_name(self.name))
         try:
@@ -217,11 +214,11 @@ class ClientTest(unittest.TestCase):
         self.assertTrue(len(res['logs']) > 0)
 
     def test_batch(self):
-        task = self.index.batch({'requests': [{'action': 'addObject', 'body': {'name': 'San Francisco'}}   \
+        task = self.index.batch([{'action': 'addObject', 'body': {'name': 'San Francisco'}}   \
       , {'action': 'addObject', 'body': {'name': 'Los Angeles'}}                          \
       , {'action': 'updateObject', 'body': {'name': 'San Diego'}, 'objectID': '42'}    \
       , {'action': 'updateObject', 'body': {'name': 'Los Gatos'}, 'objectID': self.name_obj}    \
-      ]})
+      ])
         self.index.wait_task(task['taskID'])
         obj = self.index.get_object('42')
         self.assertEquals(obj['name'], 'San Diego')
@@ -230,11 +227,11 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(res['hits']), 4)
 
     def test_batchDelete(self):
-        task = self.index.batch({'requests': [{'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
+        task = self.index.batch([{'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
       , {'action': 'addObject', 'body': {'name': 'Los Angeles', 'objectID': '41'}}                          \
       , {'action': 'updateObject', 'body': {'name': 'San Diego'}, 'objectID': '42'}    \
       , {'action': 'updateObject', 'body': {'name': 'Los Gatos'}, 'objectID': self.name_obj}    \
-      ]})
+      ])
         self.index.wait_task(task['taskID'])
         task = self.index.delete_objects(['40', '41', '42', self.name_obj])
         self.index.wait_task(task['taskID'])
@@ -243,13 +240,15 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(res['hits']), 0)
 
     def test_deleteByQuery(self):
-        task = self.index.batch({'requests': [ \
+        task = self.index.batch([ \
         {'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
       , {'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '41'}}   \
       , {'action': 'addObject', 'body': {'name': 'Los Angeles', 'objectID': '42'}}                          \
-      ]})
+      ])
         self.index.wait_task(task['taskID'])
-        self.index.delete_by_query('San Francisco')
+
+        task = self.index.delete_by_query('San Francisco')
+        self.index.wait_task(task['taskID'])
 
         res = self.index.search('')
         self.assertEquals(len(res['hits']), 1)
@@ -369,17 +368,6 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(results['results'][0]['hits']), 1)
         self.assertEquals('Paris', results['results'][0]['hits'][0]['name'])
 
-    def test_decimal(self):
-
-        value = Decimal('3.14')
-        task = self.index.save_object(
-            {'value': value,
-             'objectID': self.name_obj})
-        self.index.wait_task(task['taskID'])
-
-        obj = self.index.get_object(self.name_obj)
-        self.assertEquals(obj['value'], float(value))
-
     def test_float(self):
         value = float('3.14')
         task = self.index.save_object(
@@ -398,31 +386,27 @@ class ClientTest(unittest.TestCase):
             'stars': '*',
             'facilities': ['wifi', 'bath', 'spa'],
             'city': 'Paris'
-        },
-                                       {
-                                           'name': 'Hotel B',
-                                           'stars': '*',
-                                           'facilities': ['wifi'],
-                                           'city': 'Paris'
-                                       },
-                                       {
-                                           'name': 'Hotel C',
-                                           'stars': '**',
-                                           'facilities': ['bath'],
-                                           'city': 'San Francisco'
-                                       },
-                                       {
-                                           'name': 'Hotel D',
-                                           'stars': '****',
-                                           'facilities': ['spa'],
-                                           'city': 'Paris'
-                                       },
-                                       {
-                                           'name': 'Hotel E',
-                                           'stars': '****',
-                                           'facilities': ['spa'],
-                                           'city': 'New York'
-                                       }, ])
+        }, {
+            'name': 'Hotel B',
+            'stars': '*',
+            'facilities': ['wifi'],
+            'city': 'Paris'
+        }, {
+            'name': 'Hotel C',
+            'stars': '**',
+            'facilities': ['bath'],
+            'city': 'San Francisco'
+        }, {
+            'name': 'Hotel D',
+            'stars': '****',
+            'facilities': ['spa'],
+            'city': 'Paris'
+        }, {
+            'name': 'Hotel E',
+            'stars': '****',
+            'facilities': ['spa'],
+            'city': 'New York'
+        }, ])
         self.index.wait_task(task['taskID'])
 
         answer = self.index.search_disjunctive_faceting(
