@@ -9,6 +9,8 @@ try:
 except ImportError:
     import unittest
 
+from algoliasearch.helpers import AlgoliaException
+
 from .helpers import safe_index_name
 from .helpers import get_api_client
 from .helpers import FakeData
@@ -150,6 +152,30 @@ class IndexWithReadOnlyDataTest(IndexTest):
         self.assertDictContainsSubset(self.objs[0], res['results'][1])
         self.assertDictContainsSubset(self.objs[2], res['results'][2])
 
+    def test_browse(self):
+        res = self.index.browse(page=0, hits_per_page=2)
+        self.assertEqual(res['page'], 0)
+        self.assertEqual(res['nbHits'], 5)
+        self.assertEqual(res['hitsPerPage'], 2)
+
+        for i in range(5):
+            res = self.index.browse(page=i, hits_per_page=1)
+            self.assertIn(res['hits'][0]['objectID'], self.objectIDs)
+
+    def browse_all(self):
+        params = {
+            'hitsPerPage': 2,
+            'attributesToRetrieve': ['objectID']
+        }
+
+        res_ids = []
+        for record in self.index.browse_all(params):
+            self.assertIn('objectID', record)
+            self.assertEqual(len(dict.keys), 1)
+            res_ids.append(record['objectID'])
+
+        self.assertSetEqual(set(self.objectIDs), set(res_ids))
+
     def test_algolia_exception(self):
         pass
 
@@ -170,7 +196,7 @@ class IndexWithModifiableDataTest(IndexTest):
         task = self.index.delete_object(self.objectIDs[2])
         self.index.wait_task(task['taskID'])
 
-        params = {'query': '', 'attributesToRetrieve': ['objectID']}
+        params = {'attributesToRetrieve': ['objectID']}
         res_ids = [obj['objectID'] for obj in self.index.browse_all(params)]
         self.assertEqual(len(res_ids), 4)
         self.assertNotIn(self.objectIDs[2], res_ids)
@@ -181,11 +207,47 @@ class IndexWithModifiableDataTest(IndexTest):
         task = self.index.delete_objects(self.objectIDs[0:3])
         self.index.wait_task(task['taskID'])
 
-        params = {'query': '', 'attributesToRetrieve': ['objectID']}
+        params = {'attributesToRetrieve': ['objectID']}
         res_ids = [obj['objectID'] for obj in self.index.browse_all(params)]
         self.assertEqual(len(res_ids), 2)
-        self.assertNotIn(self.objectIDs[0], res_ids)
-        self.assertNotIn(self.objectIDs[1], res_ids)
-        self.assertNotIn(self.objectIDs[2], res_ids)
+        for i in range(3):
+            self.assertNotIn(self.objectIDs[0], res_ids)
         for elt in res_ids:
             self.assertIn(elt, self.objectIDs)
+
+    def test_batch(self):
+        requests = [
+            {
+                'action': 'addObject',
+                'body': self.factory.fake_contact()
+            }, {
+                'action': 'addObject',
+                'body': self.factory.fake_contact()
+            }
+        ]
+
+        task = self.index.batch({'requests': requests})
+        self.index.wait_task(task['taskID'])
+        res = self.index.search('', {'hitsPerPage': 0})
+        self.assertEqual(res['nbHits'], 7)
+
+        body_update = dict(self.objs[2])
+        body_update['name'] = 'Jòseph Diã'
+        requests = [
+            {
+                'action': 'updateObject',
+                'body': body_update,
+                'objectID': self.objectIDs[2]
+            }, {
+                'action': 'deleteObject',
+                'objectID': self.objectIDs[0]
+            }
+        ]
+
+        task = self.index.batch(requests)
+        self.index.wait_task(task['taskID'])
+        res = self.index.get_object(self.objectIDs[2])
+        self.assertDictContainsSubset(body_update, res)
+
+        with self.assertRaisesRegexp(AlgoliaException, 'does not exist'):
+            self.index.get_object(self.objectIDs[0])

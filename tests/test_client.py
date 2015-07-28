@@ -108,65 +108,9 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(results['hits']), 1)
         self.assertEquals(results['hits'][0]['name'], 'San Francisco')
 
-    def test_browse(self):
-        try:
-            task = self.index.clear_index()
-            self.index.wait_task(task['taskID'])
-        except algoliasearch.AlgoliaException:
-            pass
-        task = self.index.add_object({'name': 'San Francisco'})
-        self.index.wait_task(task['taskID'])
-        res = self.index.browse()
-        self.assertEquals(len(res['hits']), 1)
-        self.assertEquals(res['hits'][0]['name'], 'San Francisco')
-
-    def test_browse_with_cursor(self):
-        self.index.clear_index()
-        task = self.index.add_objects([
-            {'name': 'San Francisco'},
-            {'name': 'Paris'},
-            {'name': 'New York'}
-        ])
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.browse_all({'query': '', 'hitsPerPage': 2})
-        hits = []
-        for hit in res:
-            hits.append(hit['name'])
-
-        self.assertEquals(len(hits), 3)
-        for elt in hits:
-            self.assertTrue(elt in ('San Francisco', 'Paris', 'New York'))
-
     def test_log(self):
         res = self.client.get_logs(0, 1, False)
         self.assertTrue(len(res['logs']) > 0)
-
-    def test_batch(self):
-        task = self.index.batch([{'action': 'addObject', 'body': {'name': 'San Francisco'}}   \
-      , {'action': 'addObject', 'body': {'name': 'Los Angeles'}}                          \
-      , {'action': 'updateObject', 'body': {'name': 'San Diego'}, 'objectID': '42'}    \
-      , {'action': 'updateObject', 'body': {'name': 'Los Gatos'}, 'objectID': self.name_obj}    \
-      ])
-        self.index.wait_task(task['taskID'])
-        obj = self.index.get_object('42')
-        self.assertEquals(obj['name'], 'San Diego')
-
-        res = self.index.search('')
-        self.assertEquals(len(res['hits']), 4)
-
-    def test_batchDelete(self):
-        task = self.index.batch([{'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
-      , {'action': 'addObject', 'body': {'name': 'Los Angeles', 'objectID': '41'}}                          \
-      , {'action': 'updateObject', 'body': {'name': 'San Diego'}, 'objectID': '42'}    \
-      , {'action': 'updateObject', 'body': {'name': 'Los Gatos'}, 'objectID': self.name_obj}    \
-      ])
-        self.index.wait_task(task['taskID'])
-        task = self.index.delete_objects(['40', '41', '42', self.name_obj])
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.search('')
-        self.assertEquals(len(res['hits']), 0)
 
     def test_deleteByQuery(self):
         task = self.index.batch([ \
