@@ -1,4 +1,8 @@
-urllib3
 tox
 wheel
 pypandoc
+
+# Dev
+requests[security]
+nose2
+fake-factory

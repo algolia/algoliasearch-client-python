@@ -123,6 +123,9 @@ class Index(object):
         """
         path = '/%s' % safe(object_id)
         if attributes_to_retrieve:
+            if isinstance(attributes_to_retrieve, list):
+                attributes_to_retrieve = ','.join(attributes_to_retrieve)
+
             params = {'attributes': attributes_to_retrieve}
             return self._perform_request(self.read_hosts, path, 'GET',
                                          params=params)
