@@ -421,12 +421,14 @@ class Client(object):
         if not isinstance(obj, dict):
             obj = {'acl': obj}
 
-        if validity:
+        # Check with `is not None`, because 0 is evaluated to False
+        if validity is not None:
             obj['validity'] = validity
-        if max_queries_per_ip_per_hour:
+        if max_queries_per_ip_per_hour is not None:
             obj['maxQueriesPerIPPerHour'] = max_queries_per_ip_per_hour
-        if max_hits_per_query:
+        if max_hits_per_query is not None:
             obj['maxHitsPerQuery'] = max_hits_per_query
+
         if indexes:
             obj['indexes'] = indexes
 

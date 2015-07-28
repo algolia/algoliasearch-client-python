@@ -49,7 +49,7 @@ class IndexIterator:
             if self.pos < len(self.answer['hits']):
                 self.pos += 1
                 return self.answer['hits'][self.pos - 1]
-            elif self.cursor and len(self.cursor) > 0:
+            elif self.cursor:
                 self._load_next_page()
                 continue
             else:
@@ -88,7 +88,7 @@ class Index(object):
         @param object_id (optional) an object_id you want to attribute to this object
             (if the attribute already exist the old object will be overwrite)
         """
-        if object_id:
+        if object_id is not None:
             return self._perform_request(self.write_hosts,
                                          '/%s' % safe(object_id), 'PUT',
                                          body=content)
@@ -754,11 +754,12 @@ class Index(object):
         if not isinstance(obj, dict):
             obj = {'acl': obj}
 
-        if validity:
+        # Check with `is not None`, because 0 is evaluated to False
+        if validity is not None:
             obj['validity'] = validity
-        if max_queries_per_ip_per_hour:
+        if max_queries_per_ip_per_hour is not None:
             obj['maxQueriesPerIPPerHour'] = max_queries_per_ip_per_hour
-        if max_hits_per_query:
+        if max_hits_per_query is not None:
             obj['maxHitsPerQuery'] = max_hits_per_query
 
         path = '/keys/%s' % key

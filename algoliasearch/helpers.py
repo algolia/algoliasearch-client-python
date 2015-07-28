@@ -71,7 +71,7 @@ def urlify(e):
 
         return dict((k, urlify(v)) for k, v in iteritems)
     elif isinstance(e, (list, tuple)):
-        return json.dumps(e)
+        return json.dumps(e, cls=CustomJSONEncoder)
     elif isinstance(e, bool):
         return 'true' if e else 'false'
     else:
