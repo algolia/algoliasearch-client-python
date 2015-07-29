@@ -73,8 +73,8 @@ class Client(object):
             self.read_hosts = hosts_array
             self.write_hosts = hosts_array
 
-        self.app_id = app_id
-        self.api_key = api_key
+        self._app_id = app_id
+        self._api_key = api_key
         self.timeout = (1, 30)
         self.search_timeout = (1, 5)
 
@@ -88,6 +88,14 @@ class Client(object):
             'User-Agent': 'Algolia Search for Python %s' % VERSION
         }
 
+    @property
+    def app_id(self):
+        return self._app_id
+
+    @property
+    def api_key(self):
+        return self._api_key
+
     @deprecated
     def enableRateLimitForward(self, admin_api_key, end_user_ip,
                                rate_limit_api_key):
@@ -99,7 +107,6 @@ class Client(object):
         Algolia. This option will set the X-Forwarded-For HTTP header with the
         client IP and the X-Forwarded-API-Key with the API Key having rate limits.
 
-        @param admin_api_key the admin API Key you can find in your dashboard
         @param end_user_ip the end user IP (you can use both IPV4 or IPV6 syntax)
         @param rate_limit_api_key the API key on which you have a rate limit
         """
@@ -140,10 +147,11 @@ class Client(object):
         Allow to set custom headers.
 
         >>> client.set_extra_header(Private=True)
-        >>> client.set_extra_header({
+        >>> myHeaders = {
         ...     'X-User': 223254,
         ...     'X-Privacy-Settings': 'NSA-Free'
-        ... })
+        ... }
+        >>> client.set_extra_header(**myHeaders)
         """
         self.headers.update(kwargs)
 

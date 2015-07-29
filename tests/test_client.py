@@ -50,68 +50,6 @@ class ClientTest(unittest.TestCase):
         except algoliasearch.AlgoliaException:
             pass
 
-    def test_listIndexes(self):
-        new_index = self.client.init_index(safe_index_name(self.name))
-        try:
-            self.client.delete_index(safe_index_name(self.name))
-            time.sleep(4)  # Dirty but temporary
-        except algoliasearch.AlgoliaException:
-            pass
-        res = self.client.list_indexes()
-        task = new_index.add_object({'name': 'San Francisco'})
-        new_index.wait_task(task['taskID'])
-        res_after = self.client.list_indexes()
-        contains = False
-        for it in res_after['items']:
-            contains = contains or it['name'] == safe_index_name(self.name)
-        self.assertEquals(contains, True)
-
-    def test_clearIndex(self):
-        task = self.index.add_object({'name': 'San Francisco'})
-        self.index.wait_task(task['taskID'])
-        results = self.index.search('')
-        self.assertEquals(len(results['hits']), 1)
-        task = self.index.clear_index()
-        self.index.wait_task(task['taskID'])
-        results = self.index.search('')
-        self.assertEquals(len(results['hits']), 0)
-
-    def test_copy(self):
-        new_index = self.client.init_index(safe_index_name(self.name2))
-        try:
-            self.client.delete_index(safe_index_name(self.name2))
-        except algoliasearch.AlgoliaException:
-            pass
-        res = self.client.list_indexes()
-        task = self.index.add_object({'name': 'San Francisco'})
-        self.index.wait_task(task['taskID'])
-        task = self.client.copy_index(safe_index_name(self.name),
-                                      safe_index_name(self.name2))
-        self.index.wait_task(task['taskID'])
-        results = new_index.search('')
-        self.assertEquals(len(results['hits']), 1)
-        self.assertEquals(results['hits'][0]['name'], 'San Francisco')
-
-    def test_move(self):
-        new_index = self.client.init_index(safe_index_name(self.name2))
-        try:
-            self.client.delete_index(safe_index_name(self.name2))
-        except algoliasearch.AlgoliaException:
-            pass
-        res = self.client.list_indexes()
-        task = self.index.add_object({'name': 'San Francisco'})
-        self.index.wait_task(task['taskID'])
-        task = self.client.move_index(safe_index_name(self.name),
-                                      safe_index_name(self.name2))
-        self.index.wait_task(task['taskID'])
-        results = new_index.search('')
-        self.assertEquals(len(results['hits']), 1)
-        self.assertEquals(results['hits'][0]['name'], 'San Francisco')
-
-    def test_log(self):
-        res = self.client.get_logs(0, 1, False)
-        self.assertTrue(len(res['logs']) > 0)
-
     def test_deleteByQuery(self):
         task = self.index.batch([ \
         {'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
@@ -183,7 +121,6 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(settings['attributesToRetrieve'][0], 'name')
 
     def test_URLEncode(self):
-
         task = self.index.save_object(
             {'name': 'San Francisco',
              'objectID': self.name_obj})
@@ -364,19 +301,3 @@ class ClientTest(unittest.TestCase):
 
         res = self.index.search('')
         self.assertEquals(len(res['hits']), 4)
-
-    def test_subclassing(self):
-        class SubClient(algoliasearch.Client):
-            def __init__(self, *args, **kwargs):
-                super(SubClient, self).__init__(*args, **kwargs)
-                self._my_thing = 20
-
-            @property
-            def my_thing(self):
-                return self._my_thing
-
-        sub = SubClient(os.environ['ALGOLIA_APPLICATION_ID'],
-                        os.environ['ALGOLIA_API_KEY'])
-        self.assertEquals(20, sub.my_thing)
-        res = self.client.list_indexes()
-        self.assertTrue('items' in res)
