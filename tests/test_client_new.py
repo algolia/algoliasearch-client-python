@@ -38,8 +38,8 @@ class ClientTest(unittest.TestCase):
             cls.client.delete_index(name)
 
 
-class ClientWithoutDataTest(ClientTest):
-    """Tests that use two index without initial data."""
+class ClientNoDataOperationsTest(ClientTest):
+    """Tests that use two index and don't make any data operations."""
 
     def test_rate_limit_forward(self):
         hearders_rate_limit = {
@@ -167,3 +167,63 @@ class ClientWithDataTest(ClientTest):
         res_names = [elt['name'] for elt in res['items']]
         self.assertNotIn(self.index_name[0], res_names)
         self.assertIn(self.index_name[1], res_names)
+
+    def test_batch_multiple_indexes(self):
+        params = {'hitsPerPage': 0}
+        requests = [
+            {
+                'action': 'addObject',
+                'indexName': self.index_name[0],
+                'body': self.factory.fake_contact()
+            }, {
+                'action': 'addObject',
+                'indexName': self.index_name[1],
+                'body': self.factory.fake_contact()
+            }, {
+                'action': 'addObject',
+                'indexName': self.index_name[0],
+                'body': self.factory.fake_contact()
+            }
+        ]
+
+        task = self.client.batch({'requests': requests})
+        for i, name in enumerate(self.index_name):
+            self.index[i].wait_task(task['taskID'][name])
+
+        res = self.index[0].search('', params)
+        self.assertEqual(res['nbHits'], 7)
+        res = self.index[1].search('', params)
+        self.assertEqual(res['nbHits'], 6)
+
+        requests = [
+            {
+                'action': 'deleteObject',
+                'indexName': self.index_name[0],
+                'objectID': self.objectsIDs[0][2]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[1],
+                'objectID': self.objectsIDs[1][1]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[1],
+                'objectID': self.objectsIDs[1][0]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[0],
+                'objectID': self.objectsIDs[0][3]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[1],
+                'objectID': self.objectsIDs[1][2]
+            }
+        ]
+
+        task = self.client.batch(requests)
+        for i, name in enumerate(self.index_name):
+            self.index[i].wait_task(task['taskID'][name])
+
+        res = self.index[0].search('', params)
+        self.assertEqual(res['nbHits'], 5)
+        res = self.index[1].search('', params)
+        self.assertEqual(res['nbHits'], 3)

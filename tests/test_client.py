@@ -265,39 +265,3 @@ class ClientTest(unittest.TestCase):
         self.assertEquals(len(answer['disjunctiveFacets']), 2)
         self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
         self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 1)
-
-    def test_encodeBoolean(self):
-        task = self.index.add_object({'score': 3525}, self.name_obj)
-        self.index.wait_task(task['taskID'])
-        results = self.index.search('353',
-                                    {'allowTyposOnNumericTokens': False})
-        self.assertEquals(len(results['hits']), 0)
-
-    def test_attributeToRetrieve(self):
-        task = self.index.add_object({'name': 'Paris',
-                                      'short_name': 'Pa'}, self.name_obj)
-        self.index.wait_task(task['taskID'])
-        results = self.index.search(
-            '', {'attributesToRetrieve': ['name', 'short_name']})
-        self.assertEquals(len(results['hits']), 1)
-        self.assertEquals('Paris', results['hits'][0]['name'])
-        self.assertEquals('Pa', results['hits'][0]['short_name'])
-
-        results = self.index.search(
-            '', {'attributesToRetrieve': 'name,short_name'})
-        self.assertEquals(len(results['hits']), 1)
-        self.assertEquals('Paris', results['hits'][0]['name'])
-        self.assertEquals('Pa', results['hits'][0]['short_name'])
-
-    def test_batch_multiple_indexes(self):
-        task = self.client.batch([{'action': 'addObject', 'indexName': self.index.index_name, 'body': {'name': 'San Francisco'}}   \
-      , {'action': 'addObject', 'indexName': self.index.index_name, 'body': {'name': 'Los Angeles'}}                          \
-      , {'action': 'updateObject', 'indexName': self.index.index_name, 'body': {'name': 'San Diego'}, 'objectID': '42'}    \
-      , {'action': 'updateObject', 'indexName': self.index.index_name, 'body': {'name': 'Los Gatos'}, 'objectID': self.name_obj}    \
-      ])
-        self.index.wait_task(task['taskID'][self.index.index_name])
-        obj = self.index.get_object('42')
-        self.assertEquals(obj['name'], 'San Diego')
-
-        res = self.index.search('')
-        self.assertEquals(len(res['hits']), 4)

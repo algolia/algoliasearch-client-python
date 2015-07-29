@@ -45,4 +45,4 @@ def safe_index_name(name):
     if 'TRAVIS' not in os.environ:
         return name
     job = os.environ['TRAVIS_JOB_NUMBER']
-    return '{}_travis-{}'.format(name, job)
+    return '{0}_travis-{1}'.format(name, job)

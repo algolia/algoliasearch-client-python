@@ -169,12 +169,55 @@ class IndexWithReadOnlyDataTest(IndexTest):
         }
 
         res_ids = []
-        for record in self.index.browse_all(params):
+        it = self.index.browse_all(params)
+        for record in it:
+            self.assertEqual(len(record.keys()), 1)
             self.assertIn('objectID', record)
-            self.assertEqual(len(dict.keys), 1)
             res_ids.append(record['objectID'])
 
+        self.assertEqual(it.answer['nbPages'], 3)
+        self.assertEqual(len(res_ids), 5)
         self.assertSetEqual(set(self.objectIDs), set(res_ids))
+
+    def test_search(self):
+        res = self.index.search('')
+        self.assertEqual(res['nbHits'], 5)
+
+        res = self.index.search('', {'hitsPerPage': 2})
+        self.assertEqual(res['nbHits'], 5)
+        self.assertEqual(res['hitsPerPage'], 2)
+
+        res = self.index.search('', {
+            'attributesToRetrieve': ['name', 'email']
+        })
+        res_keys = res['hits'][0].keys()
+        self.assertIn('name', res_keys)
+        self.assertIn('email', res_keys)
+        self.assertNotIn('phone', res_keys)
+        self.assertNotIn('city', res_keys)
+        self.assertNotIn('country', res_keys)
+
+        res = self.index.search('', {
+            'attributesToRetrieve': 'name,email'
+        })
+        res_keys = res['hits'][0].keys()
+        self.assertIn('name', res_keys)
+        self.assertIn('email', res_keys)
+        self.assertNotIn('phone', res_keys)
+        self.assertNotIn('city', res_keys)
+        self.assertNotIn('country', res_keys)
+
+        res = self.index.search('', {'analytics': False})
+        self.assertEqual(res['nbHits'], 5)
+        try:
+            self.assertRegexpMatches(res['params'], r'analytics=false')
+        except AttributeError:
+            self.assertRegex(res['params'], r'analytics=false')
+
+        res = self.index.search(self.objs[2]['name'][:3])
+        self.assertGreaterEqual(res['nbHits'], 1)
+        res_ids = [elt['objectID'] for elt in res['hits']]
+        self.assertIn(self.objectIDs[2], res_ids)
 
     def test_algolia_exception(self):
         pass
