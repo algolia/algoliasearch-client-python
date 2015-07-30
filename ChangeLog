@@ -1,5 +1,10 @@
 CHANGELOG
 
+2015-07-30 1.6.0
+	* Rewrite all the package. The API Client is 100% backward compatible.
+	* Switch from urllib3 to requests
+	* Various fix
+
 2015-07-23 1.5.9
 	* Fix browse_all and browse_from methods
 
