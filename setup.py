@@ -33,7 +33,6 @@ setup(
     version=VERSION,
     license='MIT License',
     packages=['algoliasearch'],
-    package_dir={'algoliasearch': 'algoliasearch'},
     packages_data={'algoliasearch': ['ressources/*.crt']},
     include_package_data=True,
     install_requires=['requests[security]'],
