@@ -1,29 +1,44 @@
-import json
-import sys
+# -*- coding: utf-8 -*-
+"""
+Copyright (c) 2013 Algolia
+http://www.algolia.com/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+"""
+
 import time
 
-if sys.version < '3':
-    from urllib import quote
-    from urllib import urlencode
-else:
-    from urllib.parse import quote
-    from urllib.parse import urlencode
-
-from .helpers import deprecated, AlgoliaUtils_request, AlgoliaException
+from .helpers import AlgoliaException
+from .helpers import deprecated
+from .helpers import safe
 
 
 class IndexIterator:
-    '''Iterator on index.'''
+    """Iterator on index."""
 
     def __init__(self, index, params={}, cursor=None):
         self.index = index
         self.params = params
         self.cursor = cursor
-        self.pos = 0
-        self.answer = None
 
     def __iter__(self):
-        self.__load_next_page()
+        self._load_next_page()
         return self
 
     def __next__(self):
@@ -34,142 +49,131 @@ class IndexIterator:
             if self.pos < len(self.answer['hits']):
                 self.pos += 1
                 return self.answer['hits'][self.pos - 1]
-            elif self.cursor and len(self.cursor) > 0:
-                self.__load_next_page()
+            elif self.cursor:
+                self._load_next_page()
                 continue
             else:
                 raise StopIteration
 
-    def __load_next_page(self):
+    def _load_next_page(self):
         self.answer = self.index.browse_from(self.params, self.cursor)
         self.pos = 0
         self.cursor = self.answer.get('cursor', None)
 
 
 class Index(object):
-    '''
+    """
     Contains all the functions related to one index.
-    You should use yourClient.init_index(index_name) to retrieve this object.
-    '''
+
+    >>> index = client.init_index('myIndexName')
+    """
 
     def __init__(self, client, index_name):
         self.read_hosts = client.read_hosts
         self.write_hosts = client.write_hosts
         self.client = client
         self.index_name = index_name
-        self.url_index_name = quote(self.index_name.encode('utf8'), safe='')
+        self._request_path = '/1/indexes/%s' % safe(self.index_name)
 
     @deprecated
     def addObject(self, content, object_id=None):
         return self.add_object(content, object_id)
 
     def add_object(self, content, object_id=None):
-        '''
+        """
         Add an object in this index.
 
         @param content contains the object to add inside the index.
             The object is represented by an associative array
         @param object_id (optional) an object_id you want to attribute to this object
             (if the attribute already exist the old object will be overwrite)
-        '''
-        if object_id is None:
-            return AlgoliaUtils_request(
-                self.client.headers, self.write_hosts, 'POST', '/1/indexes/%s'
-                % self.url_index_name, self.client.timeout, content)
+        """
+        if object_id is not None:
+            return self._perform_request(self.write_hosts,
+                                         '/%s' % safe(object_id), 'PUT',
+                                         body=content)
         else:
-            return AlgoliaUtils_request(
-                self.client.headers, self.write_hosts, 'PUT',
-                '/1/indexes/%s/%s' % (self.url_index_name, quote(
-                    ('%s' % object_id).encode('utf8'),
-                    safe='')), self.client.timeout, content)
+            return self._perform_request(self.write_hosts, '', 'POST',
+                                         body=content)
 
     @deprecated
     def addObjects(self, objects):
         return self.add_objects(objects)
 
     def add_objects(self, objects):
-        '''
+        """
         Add several objects.
 
         @param objects contains an array of objects to add
-        '''
-        requests = []
-        for obj in objects:
-            requests.append({'action': 'addObject', 'body': obj})
-        request = {'requests': requests}
-        return self.batch(request)
+        """
+        requests = [{'action': 'addObject', 'body': obj} for obj in objects]
+        return self.batch(requests)
 
     @deprecated
     def getObject(self, object_id, attributes_to_retrieve=None):
         return self.get_object(object_id, attributes_to_retrieve)
 
     def get_object(self, object_id, attributes_to_retrieve=None):
-        '''
+        """
         Get an object from this index.
 
         @param object_id the unique identifier of the object to retrieve
         @param attributes_to_retrieve (optional) if set, contains the list
             of attributes to retrieve as a string separated by a comma
-        '''
-        obj_id = quote(('%s' % object_id).encode('utf8'), safe='')
-        if not attributes_to_retrieve:
-            return AlgoliaUtils_request(
-                self.client.headers, self.read_hosts, 'GET', '/1/indexes/%s/%s'
-                % (self.url_index_name, obj_id), self.client.timeout)
+        """
+        path = '/%s' % safe(object_id)
+        if attributes_to_retrieve:
+            if isinstance(attributes_to_retrieve, list):
+                attributes_to_retrieve = ','.join(attributes_to_retrieve)
+
+            params = {'attributes': attributes_to_retrieve}
+            return self._perform_request(self.read_hosts, path, 'GET',
+                                         params=params)
         else:
-            return AlgoliaUtils_request(
-                self.client.headers, self.read_hosts, 'GET',
-                '/1/indexes/%s/%s?attributes=%s' % (
-                    self.url_index_name, obj_id, attributes_to_retrieve
-                ), self.client.timeout)
+            return self._perform_request(self.read_hosts, path, 'GET')
 
     @deprecated
     def getObjects(self, object_ids):
         return self.get_objects(object_ids)
 
     def get_objects(self, object_ids):
-        '''
+        """
         Get several objects from this index.
 
         @param object_ids the array of unique identifier of objects to retrieve
-        '''
-        requests = []
-        for object_id in object_ids:
-            req = {'indexName': self.index_name, 'objectID': object_id}
-            requests.append(req)
-        return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                    'POST', '/1/indexes/*/objects',
-                                    self.client.timeout,
-                                    {'requests': requests})
+        """
+        requests = [{'indexName': self.index_name, 'objectID': object_id}
+                    for object_id in object_ids]
+        path = '/1/indexes/*/objects'  # Use client._perform_request()
+        return self.client._perform_request(self.read_hosts, path, 'POST',
+                                            body={'requests': requests})
 
     @deprecated
     def partialUpdateObject(self, partial_object):
         return self.partial_update_object(partial_object)
 
     def partial_update_object(self, partial_object):
-        '''
+        """
         Update partially an object (only update attributes passed in argument).
 
         @param partial_object contains the object attributes to override, the
             object must contains an objectID attribute
-        '''
-        return AlgoliaUtils_request(
-            self.client.headers, self.write_hosts, 'POST',
-            '/1/indexes/%s/%s/partial' % (self.url_index_name, quote(
-                ('%s' % partial_object['objectID']).encode('utf8'),
-                safe='')), self.client.timeout, partial_object)
+        """
+        path = '/%s/partial' % safe(partial_object['objectID'])
+        return self._perform_request(self.write_hosts, path, 'POST',
+                                     body=partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
         return self.partial_update_objects(objects)
 
     def partial_update_objects(self, objects):
-        '''
+        """
         Partially Override the content of several objects.
 
         @param objects contains an array of objects to update (each object
             must contains a objectID attribute)
-        '''
+        """
         requests = []
         for obj in objects:
             requests.append({
@@ -177,37 +181,33 @@ class Index(object):
                 'objectID': obj['objectID'],
                 'body': obj
             })
-        request = {'requests': requests}
-        return self.batch(request)
+        return self.batch(requests)
 
     @deprecated
     def saveObject(self, obj):
         return self.save_object(obj)
 
     def save_object(self, obj):
-        '''
+        """
         Override the content of object.
 
         @param object contains the object to save, the object must contains
             an objectID attribute
-        '''
-        return AlgoliaUtils_request(
-            self.client.headers, self.write_hosts, 'PUT',
-            '/1/indexes/%s/%s' % (self.url_index_name, quote(
-                ('%s' % obj['objectID']).encode('utf8'),
-                safe='')), self.client.timeout, obj)
+        """
+        path = '/%s' % safe(obj['objectID'])
+        return self._perform_request(self.write_hosts, path, 'PUT', body=obj)
 
     @deprecated
     def saveObjects(self, objects):
         return self.save_objects(objects)
 
     def save_objects(self, objects):
-        '''
+        """
         Override the content of several objects.
 
         @param objects contains an array of objects to update (each object
             must contains a objectID attribute)
-        '''
+        """
         requests = []
         for obj in objects:
             requests.append({
@@ -215,71 +215,59 @@ class Index(object):
                 'objectID': obj['objectID'],
                 'body': obj
             })
-        request = {'requests': requests}
-        return self.batch(request)
+        return self.batch(requests)
 
     @deprecated
     def deleteByQuery(self, query, params={}):
         return self.delete_by_query(query, params)
 
     def delete_by_query(self, query, params={}):
-        '''
+        """
         Delete all objects matching a query.
 
         @param query the query string
         @param params the optional query parameters
-        '''
+        """
+        params['query'] = safe(query)
         params['hitsPerPage'] = 1000
         params['attributesToRetrieve'] = ['objectID']
 
-        res = self.search(query, params)
-        while (res['nbHits'] != 0):
-            object_ids = []
-            for elt in res['hits']:
-                object_ids.append(elt['objectID'])
-            task = self.delete_objects(object_ids)
-            self.wait_task(task['taskID'])
-            res = self.search(query, params)
-
-    @deprecated
-    def deleteObjects(self, objects):
-        return self.delete_objects(objects)
-
-    def delete_objects(self, objects):
-        '''
-        delete several objects.
-
-        @param objects contains an array of object_id to delete
-        '''
-        requests = []
-        for obj in objects:
-            requests.append(
-                {'action': 'deleteObject',
-                 'body': {'objectID': obj}})
-        request = {'requests': requests}
-        return self.batch(request)
+        return self.delete_objects(
+                    obj['objectID'] for obj in self.browse_all(params))
 
     @deprecated
     def deleteObject(self, object_id):
         return self.delete_object(object_id)
 
     def delete_object(self, object_id):
-        '''
+        """
         Delete an object from the index.
 
         @param object_id the unique identifier of object to delete
-        '''
-        if (len('%s' % object_id) == 0):
-            raise AlgoliaException('object_id is required')
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'DELETE', '/1/indexes/%s/%s' % (
-                                        self.url_index_name, quote(
-                                            ('%s' % object_id).encode('utf8'),
-                                            safe='')
-                                    ), self.client.timeout)
+        """
+        path = '/%s' % safe(object_id)
+        return self._perform_request(self.write_hosts, path, 'DELETE')
 
-    def search(self, query, args=None):
-        '''
+    @deprecated
+    def deleteObjects(self, objects):
+        return self.delete_objects(objects)
+
+    def delete_objects(self, objects):
+        """
+        Delete several objects.
+
+        @param objects contains an array of object_id to delete
+        """
+        requests = []
+        for obj in objects:
+            requests.append({
+                'action': 'deleteObject',
+                'body': {'objectID': obj}
+            })
+        return self.batch(requests)
+
+    def search(self, query, args={}):
+        """
         Search inside the index.
 
         @param query the full text query
@@ -387,33 +375,10 @@ class Index(object):
                 attribute is show_name and several hits have the same value
                 for show_name, then only the best one is kept and others are
                 removed.
-        '''
-        if not args:
-            return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                        'GET', '/1/indexes/%s?query=%s' % (
-                                            self.url_index_name,
-                                            quote(query.encode('utf8'),
-                                                  safe='')
-                                        ), self.client.search_timeout)
-        else:
-            params = {}
-            try:
-                iteritems = args.iteritems()
-                #  Python3.X Fix
-            except AttributeError:
-                iteritems = args.items()
-            for k, v in iteritems:
-                if isinstance(v, (list, dict, tuple, bool)):
-                    params[k] = json.dumps(v)
-                else:
-                    params[k] = v
-
-            return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                        'GET', '/1/indexes/%s?query=%s&%s' % (
-                                            self.url_index_name,
-                                            quote(query.encode('utf8'),
-                                                  safe=''), urlencode(params)
-                                        ), self.client.search_timeout)
+        """
+        args['query'] = query
+        return self._perform_request(self.read_hosts, '', 'GET', params=args,
+                                     is_search=True)
 
     @deprecated
     def searchDisjunctiveFaceting(self, query, disjunctive_facets,
@@ -425,7 +390,7 @@ class Index(object):
     def search_disjunctive_faceting(self, query, disjunctive_facets,
                                     params={},
                                     refinements={}):
-        '''
+        """
         Perform a search with disjunctive facets generating as many queries as
         number of disjunctive facets.
 
@@ -435,9 +400,8 @@ class Index(object):
         @param refinements a hash ('string' -> ['array', 'of', 'refined', 'values'])
             representing the current refinements. Ex:
             { 'my_facet1' => ['my_value1', ['my_value2'], 'my_disjunctive_facet1' => ['my_value1', 'my_value2'] }
-        '''
-        if not (isinstance(disjunctive_facets, str)) and not (
-                isinstance(disjunctive_facets, list)):
+        """
+        if not isinstance(disjunctive_facets, (str, list)):
             raise AlgoliaException(
                 'Argument \'disjunctive_facets\' must be a String or an Array')
         if not (isinstance(refinements, dict)):
@@ -449,7 +413,7 @@ class Index(object):
 
         disjunctive_refinements = {}
         for key in refinements.keys():
-            if (key in disjunctive_facets):
+            if key in disjunctive_facets:
                 disjunctive_refinements[key] = refinements[key]
 
         queries = []
@@ -458,14 +422,27 @@ class Index(object):
         for key in refinements:
             r = list(map(lambda x: key + ':' + x, refinements[key]))
 
-            if (str(key) in disjunctive_refinements):
+            if str(key) in disjunctive_refinements:
                 filters.append(r)
             else:
                 filters += r
-        params['indexName'] = self.index_name
-        params['query'] = query
-        params['facetFilters'] = filters
+
+        params.update({
+            'indexName': self.index_name,
+            'query': query,
+            'facetFilters': filters
+        })
         queries.append(dict(params))
+
+        params.update({
+            'page': 0,
+            'hitsPerPage': 0,
+            'attributesToRetrieve': [],
+            'attributesToHighlight': [],
+            'attributesToSnippet': [],
+            'analytics': False
+        })
+
         for disjunctive_facet in disjunctive_facets:
             filters = []
 
@@ -478,37 +455,31 @@ class Index(object):
                     else:
                         filters += r
 
-            params['indexName'] = self.index_name
-            params['query'] = query
             params['facetFilters'] = filters
-            params['page'] = 0
-            params['hitsPerPage'] = 0
-            params['attributesToRetrieve'] = []
-            params['attributesToHighlight'] = []
-            params['attributesToSnippet'] = []
             params['facets'] = disjunctive_facet
-            params['analytics'] = False
             queries.append(dict(params))
+
         answers = self.client.multiple_queries(queries)
 
         aggregated_answer = answers['results'][0]
         aggregated_answer['disjunctiveFacets'] = {}
         for i in range(1, len(answers['results'])):
             for facet in answers['results'][i]['facets']:
-                aggregated_answer['disjunctiveFacets'][
-                    facet
-                ] = answers['results'][i]['facets'][facet]
+                aggregated_answer['disjunctiveFacets'][facet] = (
+                        answers['results'][i]['facets'][facet])
+
                 if facet not in disjunctive_refinements:
                     continue
+
                 for r in disjunctive_refinements[facet]:
-                    if not aggregated_answer['disjunctiveFacets'][facet].get(
-                            r, None):
+                    if r not in aggregated_answer['disjunctiveFacets'][facet]:
                         aggregated_answer['disjunctiveFacets'][facet][r] = 0
+
         return aggregated_answer
 
     @deprecated
     def browse(self, page=0, hits_per_page=1000):
-        '''
+        """
          Browse all index content.
 
          @param page Pagination parameter used to select the page to retrieve.
@@ -516,43 +487,30 @@ class Index(object):
             page you need to set page=9
          @param hits_per_page: Pagination parameter used to select the number
             of hits per page. Defaults to 1000.
-        '''
-        return AlgoliaUtils_request(
-            self.client.headers, self.read_hosts, 'GET',
-            '/1/indexes/%s/browse?page=%d&hitsPerPage=%d' %
-            (self.url_index_name, page, hits_per_page), self.client.timeout)
+        """
+        params = {'page': page, 'hitsPerPage': hits_per_page}
+        return self._perform_request(self.read_hosts, '/browse', 'GET',
+                                     params=params)
 
     def browse_from(self, params={}, cursor=None):
-        '''
+        """
          Browse all index content.
 
          @param params contains the list of query parameter in a dictionary
          @param cursor the position to start the browse
-        '''
-        try:
-            iteritems = params.iteritems()
-        except AttributeError:
-            iteritems = params.items()
-        # Impossible to use dict comprehensions because of py26...
-        params = dict((k, json.dumps(v)) for k, v in iteritems)
-
-        if cursor and len(cursor) > 0:
-            url_params = 'cursor=%s' % cursor
-        else:
-            url_params = urlencode(params)
-
-        return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                    'GET', '/1/indexes/%s/browse?%s' %
-                                    (self.url_index_name, url_params),
-                                    self.client.timeout)
+        """
+        if cursor:
+            params = {'cursor': cursor}
+        return self._perform_request(self.read_hosts, '/browse', 'GET',
+                                     params=params)
 
     def browse_all(self, params={}):
-        '''
+        """
          Browse all index content.
 
          @param params contains the list of query parameter in a dictionary
          @return an iterator on the index content
-        '''
+        """
         return IndexIterator(self, params=params)
 
     @deprecated
@@ -560,52 +518,46 @@ class Index(object):
         return self.wait_task(task_id, time_before_retry)
 
     def wait_task(self, task_id, time_before_retry=100):
-        '''
+        """
         Wait the publication of a task on the server.
         All server task are asynchronous and you can check with this method
         that the task is published.
 
         @param task_id the id of the task returned by server
         @param time_before_retry the time in milliseconds before retry (default = 100ms)
-        '''
+        """
+        path = '/task/%d' % task_id
         while True:
-            res = AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                       'GET', '/1/indexes/%s/task/%d/' % (
-                                           self.url_index_name, task_id
-                                       ), self.client.timeout)
-            if (res['status'] == 'published'):
+            res = self._perform_request(self.read_hosts, path, 'GET')
+            if res['status'] == 'published':
                 return res
-            time.sleep(time_before_retry / 1000.)
+            time.sleep(time_before_retry / 1000.0)
 
     @deprecated
     def getSettings(self):
         return self.get_settings()
 
     def get_settings(self):
-        '''Get settings of this index.'''
-        return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                    'GET', '/1/indexes/%s/settings' %
-                                    self.url_index_name, self.client.timeout)
+        """Get settings of this index."""
+        return self._perform_request(self.read_hosts, '/settings', 'GET')
 
     @deprecated
     def clearIndex(self):
         return self.clear_index()
 
     def clear_index(self):
-        '''
+        """
         This function deletes the index content. Settings and index specific
         API keys are kept untouched.
-        '''
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'POST', '/1/indexes/%s/clear' %
-                                    self.url_index_name, self.client.timeout)
+        """
+        return self._perform_request(self.write_hosts, '/clear', 'POST')
 
     @deprecated
     def setSettings(self, settings):
         return self.set_settings(settings)
 
     def set_settings(self, settings):
-        '''
+        """
         Set settings for this index.
 
         @param settigns the settings object that can contains :
@@ -686,59 +638,47 @@ class Index(object):
             after the highlighted parts in the query result (default to '</em>').
             - optionalWords: (array of strings) Specify a list of words that
             should be considered as optional when found in the query.
-        '''
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'PUT', '/1/indexes/%s/settings' %
-                                    self.url_index_name, self.client.timeout,
-                                    settings)
+        """
+        return self._perform_request(self.write_hosts, '/settings', 'PUT',
+                                     body=settings)
 
     @deprecated
     def listUserKeys(self):
         return self.list_user_keys()
 
     def list_user_keys(self):
-        '''
+        """
         List all existing user keys of this index with their associated ACLs.
-        '''
-        return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                    'GET', '/1/indexes/%s/keys' %
-                                    self.url_index_name, self.client.timeout)
+        """
+        return self._perform_request(self.read_hosts, '/keys', 'GET')
 
     @deprecated
     def getUserKeyACL(self, key):
         return self.get_user_key_acl(key)
 
     def get_user_key_acl(self, key):
-        '''Get ACL of a user key associated to this index.'''
-        return AlgoliaUtils_request(self.client.headers, self.read_hosts,
-                                    'GET', '/1/indexes/%s/keys/%s' % (
-                                        self.url_index_name, key
-                                    ), self.client.timeout)
+        """Get ACL of a user key associated to this index."""
+        path = '/keys/%s' % key
+        return self._perform_request(self.read_hosts, path, 'GET')
 
     @deprecated
     def deleteUserKey(self, key):
         return self.delete_user_key(key)
 
     def delete_user_key(self, key):
-        '''Delete an existing user key associated to this index.'''
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'DELETE', '/1/indexes/%s/keys/%s' % (
-                                        self.url_index_name, key
-                                    ), self.client.timeout)
+        """Delete an existing user key associated to this index."""
+        path = '/keys/%s' % key
+        return self._perform_request(self.write_hosts, path, 'DELETE')
 
     @deprecated
-    def addUserKey(self, obj,
-                   validity=0,
-                   max_queries_per_ip_per_hour=0,
+    def addUserKey(self, obj, validity=0, max_queries_per_ip_per_hour=0,
                    max_hits_per_query=0):
         return self.add_user_key(obj, validity, max_queries_per_ip_per_hour,
                                  max_hits_per_query)
 
-    def add_user_key(self, obj,
-                     validity=0,
-                     max_queries_per_ip_per_hour=0,
+    def add_user_key(self, obj, validity=0, max_queries_per_ip_per_hour=0,
                      max_hits_per_query=0):
-        '''
+        """
         Create a new user key associated to this index (can only access to
         this index).
 
@@ -768,26 +708,23 @@ class Index(object):
             rate limit)
         @param max_hits_per_query Specify the maximum number of hits this
             API key can retrieve in one call. Defaults to 0 (unlimited)
-        '''
-        if obj is dict:
-            params = obj
-        else:
-            params = {'acl': obj}
-        if validity != 0:
-            params['validity'] = validity
-        if max_queries_per_ip_per_hour != 0:
-            params['maxQueriesPerIPPerHour'] = max_queries_per_ip_per_hour
-        if max_hits_per_query != 0:
-            params['maxHitsPerQuery'] = max_hits_per_query
-        return AlgoliaUtils_request(
-            self.client.headers, self.write_hosts, 'POST', '/1/indexes/%s/keys'
-            % self.url_index_name, self.client.timeout, params)
+        """
+        if not isinstance(obj, dict):
+            obj = {'acl': obj}
 
-    def update_user_key(self, key, obj,
-                        validity=0,
-                        max_queries_per_ip_per_hour=0,
-                        max_hits_per_query=0):
-        '''
+        obj.update({
+            'validity': validity,
+            'maxQueriesPerIPPerHour': max_queries_per_ip_per_hour,
+            'maxHitsPerQuery': max_hits_per_query
+        })
+
+        return self._perform_request(self.write_hosts, '/keys', 'POST',
+                                     body=obj)
+
+    def update_user_key(self, key, obj, validity=None,
+                        max_queries_per_ip_per_hour=None,
+                        max_hits_per_query=None):
+        """
         Update a user key associated to this index (can only access to this index).
 
         @param obj can be two different parameters:
@@ -816,26 +753,33 @@ class Index(object):
             limit).
         @param max_hits_per_query Specify the maximum number of hits this API
             key can retrieve in one call. Defaults to 0 (unlimited)
-        '''
-        if obj is dict:
-            params = obj
-        else:
-            params = {'acl': obj}
-        if validity != 0:
-            params['validity'] = validity
-        if max_queries_per_ip_per_hour != 0:
-            params['maxQueriesPerIPPerHour'] = max_queries_per_ip_per_hour
-        if max_hits_per_query != 0:
-            params['maxHitsPerQuery'] = max_hits_per_query
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'PUT', '/1/indexes/%s/keys/%s' % (
-                                        self.url_index_name, key
-                                    ), self.client.timeout, params)
+        """
+        if not isinstance(obj, dict):
+            obj = {'acl': obj}
 
-    def batch(self, request):
-        '''Send a batch request.'''
-        return AlgoliaUtils_request(self.client.headers, self.write_hosts,
-                                    'POST', '/1/indexes/%s/batch' %
-                                    self.url_index_name, self.client.timeout,
-                                    request)
+        # Check with `is not None`, because 0 is evaluated to False
+        if validity is not None:
+            obj['validity'] = validity
+        if max_queries_per_ip_per_hour is not None:
+            obj['maxQueriesPerIPPerHour'] = max_queries_per_ip_per_hour
+        if max_hits_per_query is not None:
+            obj['maxHitsPerQuery'] = max_hits_per_query
 
+        path = '/keys/%s' % key
+        return self._perform_request(self.write_hosts, path, 'PUT',
+                                     body=obj)
+
+    def batch(self, requests):
+        """Send a batch requests."""
+        if isinstance(requests, (list, tuple)):
+            requests = {'requests': requests}
+
+        return self._perform_request(self.write_hosts, '/batch', 'POST',
+                                     body=requests)
+
+    def _perform_request(self, hosts, path, method, params=None, body=None,
+                         is_search=False):
+        """Perform an HTTPS request with retry logic."""
+        return self.client._perform_request(
+                        hosts, '%s%s' % (self._request_path, path), method,
+                        params=params, body=body, is_search=is_search)
