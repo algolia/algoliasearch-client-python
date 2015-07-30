@@ -1,267 +1,247 @@
 # -*- coding: utf-8 -*-
 
-import unittest
-import os
-import time
-import hashlib
-import hmac
-from decimal import *
+from __future__ import unicode_literals
 
-from algoliasearch import algoliasearch
+from random import randint
 
+try:
+    import unittest2 as unittest  # py26
+except ImportError:
+    import unittest
 
-def safe_index_name(name):
-    if 'TRAVIS' not in os.environ:
-        return name
-    job = os.environ['TRAVIS_JOB_NUMBER']
-    return '%s_travis-%s' % (name, job)
+from algoliasearch.client import Client
+
+from .helpers import safe_index_name
+from .helpers import get_api_client
+from .helpers import FakeData
 
 
 class ClientTest(unittest.TestCase):
-    def setUp(self):
-        try:
-            self.name = unichr(224) + 'lgol?' + unichr(224) + '-python'
-            self.name2 = unichr(224) + 'lgol?' + unichr(224) + '2-python'
-            self.name_obj = unichr(224) + '/go/?' + unichr(224) + '2-python'
-        except Exception:
-            self.name = 'àlgol?à-python'
-            self.name2 = 'àlgol?à2-python'
-            self.name_obj = 'à/go/?à2-python'
+    """Abstract class for all client tests."""
 
-        self.client = algoliasearch.Client(
-            os.environ['ALGOLIA_APPLICATION_ID'],
-            os.environ['ALGOLIA_API_KEY'])
-        index_name = safe_index_name(self.name)
-        try:
-            self.client.delete_index(index_name)
-        except algoliasearch.AlgoliaException:
-            pass
-        self.index = self.client.init_index(index_name)
+    @classmethod
+    def setUpClass(cls):
+        cls.client = get_api_client()
+        cls.index_name = [
+            safe_index_name('àlgol?à1-python{0}'.format(randint(1, 1000))),
+            safe_index_name('àlgol?à2-python{0}'.format(randint(1, 1000))),
+        ]
+        cls.index = [cls.client.init_index(name) for name in cls.index_name]
+        for name in cls.index_name:
+            cls.client.delete_index(name)
+
+        cls.factory = FakeData()
+
+    @classmethod
+    def tearDownClass(cls):
+        for name in cls.index_name:
+            cls.client.delete_index(name)
+
+
+class ClientNoDataOperationsTest(ClientTest):
+    """Tests that use two index and don't make any data operations."""
+
+    def test_rate_limit_forward(self):
+        hearders_rate_limit = {
+            'X-Forwarded-For': '127.0.0.1',
+            'X-Forwarded-API-Key': 'userSearchKey'
+        }
+
+        self.client.enable_rate_limit_forward('127.0.0.1', 'userSearchKey')
+        self.assertDictContainsSubset(hearders_rate_limit, self.client.headers)
+
+        self.client.disable_rate_limit_forward()
+        for key in hearders_rate_limit.keys():
+            self.assertNotIn(key, self.client.headers)
+
+    def test_set_end_user_ip(self):
+        self.client.set_end_user_ip('192.168.0.1')
+        self.assertIn('X-Forwarded-For', self.client.headers)
+        self.assertEqual(self.client.headers['X-Forwarded-For'], '192.168.0.1')
+
+    def test_set_extra_headers(self):
+        self.client.set_extra_headers(Private=True)
+        self.assertIn('Private', self.client.headers)
+        self.assertEqual(self.client.headers['Private'], True)
+
+        self.client.set_extra_headers(**{
+            'X-User': 223254,
+            'X-Privacy-Settings': 'NSA-Free'
+        })
+        self.assertIn('X-User', self.client.headers)
+        self.assertEqual(self.client.headers['X-User'], 223254)
+        self.assertIn('X-Privacy-Settings', self.client.headers)
+        self.assertEqual(self.client.headers['X-Privacy-Settings'], 'NSA-Free')
+
+    def test_get_logs(self):
+        res = self.client.get_logs(length=1)
+        self.assertEqual(len(res['logs']), 1)
+
+        res = self.client.get_logs(length=3)
+        self.assertEqual(len(res['logs']), 3)
+
+    def test_change_api_key(self):
+        client = get_api_client()
+        client.api_key = 'your_api_key'
+        self.assertEqual(client._api_key, 'your_api_key')
+        self.assertEqual(client.headers['X-Algolia-API-Key'], 'your_api_key')
+
+    def test_subclassing_client(self):
+        class SubClient(Client):
+            def __init__(self, user_name, *args, **kwargs):
+                super(SubClient, self).__init__(*args, **kwargs)
+                self._user_name = user_name
+                self.set_extra_headers(**{'X-User': user_name})
+
+            @property
+            def user_name(self):
+                return self._user_name
+
+        sub_client = SubClient('algolia', 'myAppID', 'myApiKey')
+        self.assertEqual(sub_client.app_id, 'myAppID')
+        self.assertEqual(sub_client.api_key, 'myApiKey')
+        self.assertEqual(sub_client.user_name, 'algolia')
+        self.assertIn('X-User', sub_client.headers)
+        self.assertEqual(sub_client.headers['X-User'], 'algolia')
+
+
+class ClientWithDataTest(ClientTest):
+    """Tests that use two index with initial data."""
+
+    def setUp(self):
+        self.objs = [
+            self.factory.fake_contact(5),
+            self.factory.fake_contact(5)
+        ]
+        task = [self.index[i].add_objects(self.objs[i]) for i in range(2)]
+        self.objectsIDs = []
+        for i, t in enumerate(task):
+            self.index[i].wait_task(t['taskID'])
+            self.objectsIDs.append(t['objectIDs'])
 
     def tearDown(self):
-        index_name = safe_index_name(self.name)
-        try:
-            self.client.delete_index(index_name)
-        except algoliasearch.AlgoliaException:
-            pass
-        index_name2 = safe_index_name(self.name2)
-        try:
-            self.client.delete_index(index_name2)
-        except algoliasearch.AlgoliaException:
-            pass
+        for index in self.index:
+            index.clear_index()
 
-    def test_deleteByQuery(self):
-        task = self.index.batch([ \
-        {'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '40'}}   \
-      , {'action': 'addObject', 'body': {'name': 'San Francisco', 'objectID': '41'}}   \
-      , {'action': 'addObject', 'body': {'name': 'Los Angeles', 'objectID': '42'}}                          \
-      ])
-        self.index.wait_task(task['taskID'])
+    def test_list_indexes(self):
+        res = self.client.list_indexes()
+        res_names = [elt['name'] for elt in res['items']]
+        for name in self.index_name:
+            self.assertIn(name, res_names)
 
-        task = self.index.delete_by_query('San Francisco')
-        self.index.wait_task(task['taskID'])
+    def test_clear_index(self):
+        task = self.index[0].clear_index()
+        self.index[0].wait_task(task['taskID'])
+        res = self.index[0].search('')
+        self.assertEqual(res['nbHits'], 0)
 
-        res = self.index.search('')
-        self.assertEquals(len(res['hits']), 1)
+        res = self.index[1].search('', {'hitsPerPage': 0})
+        self.assertEqual(res['nbHits'], 5)
 
-    def test_user_key(self):
-        task = self.index.add_object({'name': 'Paris'}, self.name_obj)
-        self.index.wait_task(task['taskID'])
-        res = self.index.list_user_keys()
-        new_key = self.index.add_user_key(['search'])
-        time.sleep(5)
-        self.assertTrue(new_key['key'] != '')
-        res_after = self.index.list_user_keys()
-        contains = False
-        for it in res_after['keys']:
-            contains = contains or it['value'] == new_key['key']
-        self.assertTrue(contains)
-        key = self.index.get_user_key_acl(new_key['key'])
-        self.assertEquals(key['acl'][0], 'search')
-        new_key = self.index.update_user_key(new_key['key'], ['addObject'])
-        time.sleep(5)
-        key = self.index.get_user_key_acl(new_key['key'])
-        self.assertEquals(key['acl'][0], 'addObject')
-        task = self.index.delete_user_key(new_key['key'])
-        time.sleep(5)
-        res_end = self.index.list_user_keys()
-        contains = False
-        for it in res_end['keys']:
-            contains = contains or it['value'] == new_key['key']
-        self.assertTrue(not contains)
+    def test_copy(self):
+        task = self.client.copy_index(self.index_name[0], self.index_name[1])
+        self.index[0].wait_task(task['taskID'])
 
-        res = self.client.list_user_keys()
-        new_key = self.client.add_user_key(['search'])
-        time.sleep(5)
-        self.assertTrue(new_key['key'] != '')
-        res_after = self.client.list_user_keys()
-        contains = False
-        for it in res_after['keys']:
-            contains = contains or it['value'] == new_key['key']
-        self.assertTrue(contains)
-        key = self.client.get_user_key_acl(new_key['key'])
-        self.assertEquals(key['acl'][0], 'search')
-        new_key = self.client.update_user_key(new_key['key'], ['addObject'])
-        time.sleep(5)
-        key = self.client.get_user_key_acl(new_key['key'])
-        self.assertEquals(key['acl'][0], 'addObject')
-        task = self.client.delete_user_key(new_key['key'])
-        time.sleep(5)
-        res_end = self.client.list_user_keys()
-        contains = False
-        for it in res_end['keys']:
-            contains = contains or it['value'] == new_key['key']
-        self.assertTrue(not contains)
+        res = self.client.list_indexes()
+        res_names = [elt['name'] for elt in res['items']]
+        for name in self.index_name:
+            self.assertIn(name, res_names)
 
-    def test_settings(self):
-        task = self.index.set_settings({'attributesToRetrieve': ['name']})
-        self.index.wait_task(task['taskID'])
-        settings = self.index.get_settings()
-        self.assertEquals(len(settings['attributesToRetrieve']), 1)
-        self.assertEquals(settings['attributesToRetrieve'][0], 'name')
+        res = [index.search('') for index in self.index]
+        self.assertListEqual(res[0]['hits'], res[1]['hits'])
 
-    def test_URLEncode(self):
-        task = self.index.save_object(
-            {'name': 'San Francisco',
-             'objectID': self.name_obj})
-        self.index.wait_task(task['taskID'])
+    def test_move(self):
+        task = self.client.move_index(self.index_name[0], self.index_name[1])
+        self.index[0].wait_task(task['taskID'])
 
-        obj = self.index.get_object(self.name_obj, 'name')
-        self.assertEquals(obj['name'], 'San Francisco')
+        res = self.client.list_indexes()
+        res_names = [elt['name'] for elt in res['items']]
+        self.assertNotIn(self.index_name[0], res_names)
+        self.assertIn(self.index_name[1], res_names)
 
-        task = self.index.partial_update_object(
-            {'name': 'San Diego',
-             'objectID': self.name_obj})
-        self.index.wait_task(task['taskID'])
-        obj = self.index.get_object(self.name_obj)
-        self.assertEquals(obj['name'], 'San Diego')
+        res = self.index[1].search('', {'attributesToRetrieve': ['objectID']})
+        res_ids = [elt['objectID'] for elt in res['hits']]
+        for elt in res_ids:
+            self.assertIn(elt, self.objectsIDs[0])
+            self.assertNotIn(elt, self.objectsIDs[1])
 
-        task = self.index.save_objects(
-            [{'name': 'Los Angeles',
-              'objectID': self.name_obj}])
-        self.index.wait_task(task['taskID'])
+    def test_delete_index(self):
+        task = self.client.delete_index(self.index_name[0])
+        self.index[0].wait_task(task['taskID'])
 
-        obj = self.index.get_object(self.name_obj)
-        self.assertEquals(obj['name'], 'Los Angeles')
+        res = self.client.list_indexes()
+        res_names = [elt['name'] for elt in res['items']]
+        self.assertNotIn(self.index_name[0], res_names)
+        self.assertIn(self.index_name[1], res_names)
 
-    def test_secured_keys(self):
-        self.assertEquals(
-            '1fd74b206c64fb49fdcd7a5f3004356cd3bdc9d9aba8733656443e64daafc417',
-            hmac.new('my_api_key'.encode('utf-8'), '(public,user1)'.encode(
-                'utf-8'), hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key('my_api_key',
-                                                   '(public,user1)')
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        '(public,user1)'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key('my_api_key',
-                                                   '(public,user1)', 42)
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        '(public,user1)42'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key('my_api_key', ['public'])
-        self.assertEquals(key, hmac.new('my_api_key'.encode(
-            'utf-8'), 'public'.encode('utf-8'), hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key(
-            'my_api_key', ['public', ['premium', 'vip']])
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        'public,(premium,vip)'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
+    def test_batch_multiple_indexes(self):
+        params = {'hitsPerPage': 0}
+        requests = [
+            {
+                'action': 'addObject',
+                'indexName': self.index_name[0],
+                'body': self.factory.fake_contact()
+            }, {
+                'action': 'addObject',
+                'indexName': self.index_name[1],
+                'body': self.factory.fake_contact()
+            }, {
+                'action': 'addObject',
+                'indexName': self.index_name[0],
+                'body': self.factory.fake_contact()
+            }
+        ]
 
-    def test_multipleQueries(self):
-        task = self.index.add_object({'name': 'Paris'}, self.name_obj)
-        self.index.wait_task(task['taskID'])
-        results = self.client.multiple_queries(
-            [{'indexName': safe_index_name(self.name),
-              'query': ''}])
-        self.assertEquals(len(results['results']), 1)
-        self.assertEquals(len(results['results'][0]['hits']), 1)
-        self.assertEquals('Paris', results['results'][0]['hits'][0]['name'])
+        task = self.client.batch({'requests': requests})
+        for i, name in enumerate(self.index_name):
+            self.index[i].wait_task(task['taskID'][name])
 
-    def test_decimal(self):
-        value = Decimal('3.14')
-        task = self.index.save_object({
-            'value': value,
-            'objectID': self.name_obj
-        })
-        self.index.wait_task(task['taskID'])
+        res = self.index[0].search('', params)
+        self.assertEqual(res['nbHits'], 7)
+        res = self.index[1].search('', params)
+        self.assertEqual(res['nbHits'], 6)
 
-        obj = self.index.get_object(self.name_obj)
-        self.assertEquals(obj['value'], float(value))
+        requests = [
+            {
+                'action': 'deleteObject',
+                'indexName': self.index_name[0],
+                'objectID': self.objectsIDs[0][2]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[1],
+                'objectID': self.objectsIDs[1][1]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[1],
+                'objectID': self.objectsIDs[1][0]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[0],
+                'objectID': self.objectsIDs[0][3]
+            }, {
+                'action': 'deleteObject',
+                'indexName': self.index_name[1],
+                'objectID': self.objectsIDs[1][2]
+            }
+        ]
 
-    def test_float(self):
-        value = float('3.14')
-        task = self.index.save_object(
-            {'value': value,
-             'objectID': self.name_obj})
-        self.index.wait_task(task['taskID'])
+        task = self.client.batch(requests)
+        for i, name in enumerate(self.index_name):
+            self.index[i].wait_task(task['taskID'][name])
 
-        obj = self.index.get_object(self.name_obj)
-        self.assertEquals(obj['value'], value)
+        res = self.index[0].search('', params)
+        self.assertEqual(res['nbHits'], 5)
+        res = self.index[1].search('', params)
+        self.assertEqual(res['nbHits'], 3)
 
-    def test_disjunctive_faceting(self):
-        self.index.set_settings(
-            {'attributesForFacetting': ['city', 'stars', 'facilities']})
-        task = self.index.add_objects([{
-            'name': 'Hotel A',
-            'stars': '*',
-            'facilities': ['wifi', 'bath', 'spa'],
-            'city': 'Paris'
-        }, {
-            'name': 'Hotel B',
-            'stars': '*',
-            'facilities': ['wifi'],
-            'city': 'Paris'
-        }, {
-            'name': 'Hotel C',
-            'stars': '**',
-            'facilities': ['bath'],
-            'city': 'San Francisco'
-        }, {
-            'name': 'Hotel D',
-            'stars': '****',
-            'facilities': ['spa'],
-            'city': 'Paris'
-        }, {
-            'name': 'Hotel E',
-            'stars': '****',
-            'facilities': ['spa'],
-            'city': 'New York'
-        }, ])
-        self.index.wait_task(task['taskID'])
+    def test_multiple_queries(self):
+        res = self.client.multiple_queries([
+            {'indexName': self.index_name[0], 'query': ''},
+            {'indexName': self.index_name[1], 'query': ''}
+        ])
 
-        answer = self.index.search_disjunctive_faceting(
-            'h', ['stars', 'facilities'], {'facets': 'city'})
-        self.assertEquals(answer['nbHits'], 5)
-        self.assertEquals(len(answer['facets']), 1)
-        self.assertEquals(len(answer['disjunctiveFacets']), 2)
-
-        answer = self.index.search_disjunctive_faceting('h', [
-            'stars', 'facilities'
-        ], {'facets': 'city'}, {'stars': ['*']})
-        self.assertEquals(answer['nbHits'], 2)
-        self.assertEquals(len(answer['facets']), 1)
-        self.assertEquals(len(answer['disjunctiveFacets']), 2)
-        self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
-        self.assertEquals(answer['disjunctiveFacets']['stars']['**'], 1)
-        self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 2)
-
-        answer = self.index.search_disjunctive_faceting('h', [
-            'stars', 'facilities'
-        ], {'facets': 'city'}, {'stars': ['*'],
-                                'city': ['Paris']})
-        self.assertEquals(answer['nbHits'], 2)
-        self.assertEquals(len(answer['facets']), 1)
-        self.assertEquals(len(answer['disjunctiveFacets']), 2)
-        self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
-        self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 1)
-
-        answer = self.index.search_disjunctive_faceting('h', [
-            'stars', 'facilities'
-        ], {'facets': 'city'}, {'stars': ['*', '****'],
-                                'city': ['Paris']})
-        self.assertEquals(answer['nbHits'], 3)
-        self.assertEquals(len(answer['facets']), 1)
-        self.assertEquals(len(answer['disjunctiveFacets']), 2)
-        self.assertEquals(answer['disjunctiveFacets']['stars']['*'], 2)
-        self.assertEquals(answer['disjunctiveFacets']['stars']['****'], 1)
+        self.assertEqual(len(res['results']), 2)
+        for i, res in enumerate(res['results']):
+            res_ids = [elt['objectID'] for elt in res['hits']]
+            for elt in self.objectsIDs[i]:
+                self.assertIn(elt, res_ids)

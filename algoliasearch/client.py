@@ -96,6 +96,11 @@ class Client(object):
     def api_key(self):
         return self._api_key
 
+    @api_key.setter
+    def api_key(self, value):
+        self._api_key = value
+        self.set_extra_headers(**{'X-Algolia-API-Key': value})
+
     @deprecated
     def enableRateLimitForward(self, admin_api_key, end_user_ip,
                                rate_limit_api_key):
@@ -140,7 +145,7 @@ class Client(object):
 
         This API is deprecated, please use `set_extra_headers(**kwargs)`.
         """
-        self.set_extra_headers(key=value)
+        self.set_extra_headers(**{key: value})
 
     def set_extra_headers(self, **kwargs):
         """

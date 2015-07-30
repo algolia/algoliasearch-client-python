@@ -2,7 +2,10 @@
 
 from __future__ import unicode_literals
 
+import time
 from random import randint
+from decimal import Decimal
+from datetime import datetime
 
 try:
     import unittest2 as unittest  # py26
@@ -91,6 +94,22 @@ class IndexWithoutDataTest(IndexTest):
         for obj, obj_res in zip(objs, res['results']):
             self.assertDictEqual(obj, obj_res)
 
+    def test_encode_decimal(self):
+        value = Decimal('3.14')
+        task = self.index.add_object({'pi': value})
+        self.index.wait_task(task['taskID'])
+
+        res = self.index.get_object(task['objectID'])
+        self.assertEqual(res['pi'], float(value))
+
+    def test_encode_datetime(self):
+        value = datetime.now()
+        task = self.index.add_object({'now': value})
+        self.index.wait_task(task['taskID'])
+
+        res = self.index.get_object(task['objectID'])
+        self.assertEqual(res['now'], time.mktime(value.timetuple()))
+
 
 class IndexWithReadOnlyDataTest(IndexTest):
     """Tests that use one index with initial data (read only)."""
@@ -103,6 +122,22 @@ class IndexWithReadOnlyDataTest(IndexTest):
         task = cls.index.add_objects(cls.objs)
         cls.index.wait_task(task['taskID'])
         cls.objectIDs = task['objectIDs']
+
+    def test_settings(self):
+        task = self.index.set_settings({
+            'attributesToHighlight': ['name'],
+            'minProximity': 2
+        })
+        self.index.wait_task(task['taskID'])
+
+        res = self.index.get_settings()
+        self.assertListEqual(res['attributesToHighlight'], ['name'])
+
+        # reset settings
+        task = self.index.set_settings({
+            'attributesToHighlight': None,
+            'minProximity': 1
+        })
 
     def test_get_object(self):
         res = self.index.get_object(self.objectIDs[3])
@@ -257,6 +292,13 @@ class IndexWithModifiableDataTest(IndexTest):
             self.assertNotIn(self.objectIDs[0], res_ids)
         for elt in res_ids:
             self.assertIn(elt, self.objectIDs)
+
+    def test_delete_by_query(self):
+        task = self.index.delete_by_query(self.objs[2]['name'][:3])
+        self.index.wait_task(task['taskID'])
+
+        res = self.index.search('', {'hitsPerPage': 0})
+        self.assertTrue(res['nbHits'] < 5)
 
     def test_batch(self):
         requests = [
