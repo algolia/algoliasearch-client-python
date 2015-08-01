@@ -1,5 +1,8 @@
 CHANGELOG
 
+2015-08-02 1.6.2
+	* Search now uses POST request instead of GET
+
 2015-07-30 1.6.1
 	* Fix PyPI build
 
