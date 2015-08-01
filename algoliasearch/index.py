@@ -24,8 +24,14 @@ THE SOFTWARE.
 
 import time
 
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
+
 from .helpers import AlgoliaException
 from .helpers import deprecated
+from .helpers import urlify
 from .helpers import safe
 
 
@@ -377,8 +383,9 @@ class Index(object):
                 removed.
         """
         args['query'] = query
-        return self._perform_request(self.read_hosts, '', 'GET', params=args,
-                                     is_search=True)
+        params = {'params': urlencode(urlify(args))}
+        return self._perform_request(self.read_hosts, '/query', 'POST',
+                                     body=params, is_search=True)
 
     @deprecated
     def searchDisjunctiveFaceting(self, query, disjunctive_facets,
