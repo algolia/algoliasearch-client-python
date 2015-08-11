@@ -35,7 +35,7 @@ setup(
     packages=['algoliasearch'],
     packages_data={'algoliasearch': ['ressources/*.crt']},
     include_package_data=True,
-    install_requires=['requests[security]'],
+    install_requires=['requests[security] >= 2.4.1'],
     description='Algolia Search API Client for Python',
     long_description=README,
     author='Algolia Team',
