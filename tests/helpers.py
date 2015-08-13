@@ -11,7 +11,7 @@ from algoliasearch.client import Client
 
 class FakeData(object):
     def __init__(self):
-        self._fake = Factory.create('fr_FR')
+        self._fake = Factory.create('zh_CN')
         self._fake.seed(4242)
         self._generated_id = []
 

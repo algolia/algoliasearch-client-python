@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import sys
 import warnings
 import json
 import decimal
@@ -32,6 +33,9 @@ try:
     from urllib import quote
 except ImportError:
     from urllib.parse import quote
+
+
+PY2 = (sys.version_info[0] == 2)
 
 
 def deprecated(func):
@@ -52,13 +56,16 @@ def deprecated(func):
     return newFunc
 
 
+def encode(e):
+    """Unicode helper for Python 2.x"""
+    if PY2 and isinstance(e, unicode):
+        e = e.encode('utf-8')
+    return e
+
+
 def safe(e):
     """Returns a safe string for URL."""
-    try:
-        e = unicode(e)
-    except NameError:
-        e = str(e)
-    return quote(e.encode('utf-8'), safe='')
+    return quote(encode(e), safe='')
 
 
 def urlify(e):
@@ -75,7 +82,7 @@ def urlify(e):
     elif isinstance(e, bool):
         return 'true' if e else 'false'
     else:
-        return e
+        return encode(e)
 
 
 class CustomJSONEncoder(json.JSONEncoder):
