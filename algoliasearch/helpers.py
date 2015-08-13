@@ -95,7 +95,10 @@ class CustomJSONEncoder(json.JSONEncoder):
             except:
                 return 0
 
-        return json.JSONEncoder.default(self, obj)
+        try:
+            return json.JSONEncoder.default(self, obj)
+        except:
+            return str(obj)
 
 
 class AlgoliaException(Exception):
