@@ -249,13 +249,10 @@ class IndexWithReadOnlyDataTest(IndexTest):
         except AttributeError:
             self.assertRegex(res['params'], r'analytics=false')
 
-        res = self.index.search(self.objs[2]['name'][:3])
+        res = self.index.search(self.objs[2]['name'][0])
         self.assertGreaterEqual(res['nbHits'], 1)
         res_ids = [elt['objectID'] for elt in res['hits']]
         self.assertIn(self.objectIDs[2], res_ids)
-
-    def test_algolia_exception(self):
-        pass
 
 
 class IndexWithModifiableDataTest(IndexTest):
@@ -294,7 +291,7 @@ class IndexWithModifiableDataTest(IndexTest):
             self.assertIn(elt, self.objectIDs)
 
     def test_delete_by_query(self):
-        task = self.index.delete_by_query(self.objs[2]['name'][:3])
+        task = self.index.delete_by_query(self.objs[2]['name'][0])
         self.index.wait_task(task['taskID'])
 
         res = self.index.search('', {'hitsPerPage': 0})

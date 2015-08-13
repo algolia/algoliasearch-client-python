@@ -234,7 +234,7 @@ class Index(object):
         @param query the query string
         @param params the optional query parameters
         """
-        params['query'] = safe(query)
+        params['query'] = query
         params['hitsPerPage'] = 1000
         params['attributesToRetrieve'] = ['objectID']
 
