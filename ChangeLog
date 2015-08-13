@@ -1,5 +1,8 @@
 CHANGELOG
 
+2015-08-13 1.6.3
+	* Fix issue with unicode query
+
 2015-08-02 1.6.2
 	* Search now uses POST request instead of GET
 
