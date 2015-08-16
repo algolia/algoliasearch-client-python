@@ -10,6 +10,8 @@
 Our Python client lets you easily use the [Algolia Search API](https://www.algolia.com/doc/rest_api) from your backend. It wraps the [Algolia Search REST API](http://www.algolia.com/doc/rest_api).
 
 
+
+
 [![Build Status](https://travis-ci.org/algolia/algoliasearch-client-python.svg?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-python) [![PyPI version](https://badge.fury.io/py/algoliasearch.svg?branch=master)](http://badge.fury.io/py/algoliasearch) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-python/badge.svg?branch=master)](https://coveralls.io/r/algolia/algoliasearch-client-python)
 
 
@@ -53,8 +55,7 @@ To setup your project, follow these steps:
 
 
 
-
- 1. Install AlgoliaSearch using pip: <code>pip install algoliasearch</code>.
+ 1. Install AlgoliaSearch using pip: `pip install --upgrade algoliasearch`.
  1. Initialize the client with your ApplicationID and API-Key. You can find all of them on [your Algolia account](http://www.algolia.com/users/edit).
 
 ```python
@@ -845,6 +846,7 @@ The move command is particularly useful if you want to update a big index atomic
 print client.move_index("MyNewIndex", "MyIndex")
 ```
 
+
 Backup / Retrieve of all index content
 -------------
 
@@ -864,6 +866,8 @@ for hit in res
 res = self.index.browse_from({"query": "test", "numericFilters": "i<42"}, None)
 print res["cursor"]
 ```
+
+
 
 Logs
 -------------

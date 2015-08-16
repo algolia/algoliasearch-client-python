@@ -97,8 +97,11 @@ class CustomJSONEncoder(json.JSONEncoder):
 
         try:
             return json.JSONEncoder.default(self, obj)
-        except:
-            return str(obj)
+        except TypeError:
+            if PY2:
+                return unicode(obj)
+            else:
+                return str(obj)
 
 
 class AlgoliaException(Exception):
