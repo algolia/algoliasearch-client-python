@@ -1,5 +1,8 @@
 CHANGELOG
 
+2015-08-17 1.6.4
+	* The JSON encoder fallback to unicode/str if it raises TypeError
+
 2015-08-13 1.6.3
 	* Fix issue with unicode query
 
