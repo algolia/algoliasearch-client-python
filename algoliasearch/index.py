@@ -127,7 +127,7 @@ class Index(object):
         @param attributes_to_retrieve (optional) if set, contains the list
             of attributes to retrieve as a string separated by a comma
         """
-        path = '/%s' % safe(object_id)
+        path = '/%s' % safe(str(object_id))
         if attributes_to_retrieve:
             if isinstance(attributes_to_retrieve, list):
                 attributes_to_retrieve = ','.join(attributes_to_retrieve)
