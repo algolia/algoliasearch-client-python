@@ -148,7 +148,7 @@ class Index(object):
 
         @param object_ids the array of unique identifier of objects to retrieve
         """
-        requests = [{'indexName': self.index_name, 'objectID': object_id}
+        requests = [{'indexName': self.index_name, 'objectID': "%s" % object_id}
                     for object_id in object_ids]
         path = '/1/indexes/*/objects'  # Use client._perform_request()
         return self.client._perform_request(self.read_hosts, path, 'POST',
@@ -165,7 +165,7 @@ class Index(object):
         @param partial_object contains the object attributes to override, the
             object must contains an objectID attribute
         """
-        path = '/%s/partial' % safe(partial_object['objectID'])
+        path = '/%s/partial' % safe("%s" % partial_object['objectID'])
         return self._perform_request(self.write_hosts, path, 'POST',
                                      body=partial_object)
 
@@ -184,7 +184,7 @@ class Index(object):
         for obj in objects:
             requests.append({
                 'action': 'partialUpdateObject',
-                'objectID': obj['objectID'],
+                'objectID': "%s" % obj['objectID'],
                 'body': obj
             })
         return self.batch(requests)
@@ -200,7 +200,7 @@ class Index(object):
         @param object contains the object to save, the object must contains
             an objectID attribute
         """
-        path = '/%s' % safe(obj['objectID'])
+        path = '/%s' % safe("%s" % obj['objectID'])
         return self._perform_request(self.write_hosts, path, 'PUT', body=obj)
 
     @deprecated
@@ -218,7 +218,7 @@ class Index(object):
         for obj in objects:
             requests.append({
                 'action': 'updateObject',
-                'objectID': obj['objectID'],
+                'objectID': "%s" % obj['objectID'],
                 'body': obj
             })
         return self.batch(requests)
@@ -268,7 +268,7 @@ class Index(object):
         for obj in objects:
             requests.append({
                 'action': 'deleteObject',
-                'body': {'objectID': obj}
+                'body': {'objectID': "%s" % obj}
             })
         return self.batch(requests)
 

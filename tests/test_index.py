@@ -73,7 +73,7 @@ class IndexWithoutDataTest(IndexTest):
 
     def test_save_object(self):
         obj = self.factory.fake_contact()
-        obj['objectID'] = '4242'
+        obj['objectID'] = 4242
         task = self.index.save_object(obj)
         self.index.wait_task(task['taskID'])
 
