@@ -33,6 +33,7 @@ from .helpers import AlgoliaException
 from .helpers import deprecated
 from .helpers import urlify
 from .helpers import safe
+import sys
 
 
 class IndexIterator:
@@ -81,6 +82,13 @@ class Index(object):
         self.index_name = index_name
         self._request_path = '/1/indexes/%s' % safe(self.index_name)
 
+    def is_string_type(self, obj):
+
+        if sys.version_info[0] >= 3:
+            return type(obj) is str
+        else:
+            return type(obj) is str or type(obj) is unicode
+
     @deprecated
     def addObject(self, content, object_id=None):
         return self.add_object(content, object_id)
@@ -94,7 +102,7 @@ class Index(object):
         @param object_id (optional) an object_id you want to attribute to this object
             (if the attribute already exist the old object will be overwrite)
         """
-        if not type(object_id) is str and not type(object_id) is unicode:
+        if not self.is_string_type(object_id):
                 object_id = str(object_id)
         if object_id is not None:
             return self._perform_request(self.write_hosts,
@@ -129,7 +137,7 @@ class Index(object):
         @param attributes_to_retrieve (optional) if set, contains the list
             of attributes to retrieve as a string separated by a comma
         """
-        if not type(object_id) is str and not type(object_id) is unicode:
+        if not self.is_string_type(object_id):
             object_id = str(object_id)
         path = '/%s' % safe(object_id)
         if attributes_to_retrieve:
@@ -155,7 +163,7 @@ class Index(object):
         
         requests = []
         for object_id in object_ids:
-            if not type(object_id) is str and not type(object_id) is unicode:
+            if not self.is_string_type(object_id):
                 object_id = str(object_id)
             requests.append({'indexName': self.index_name, 'objectID': object_id})
         path = '/1/indexes/*/objects'  # Use client._perform_request()
@@ -173,7 +181,7 @@ class Index(object):
         @param partial_object contains the object attributes to override, the
             object must contains an objectID attribute
         """
-        if not type(partial_object['objectID']) is str and not type(partial_object['objectID']) is unicode:
+        if not self.is_string_type(partial_object['objectID']):
             partial_object['objectID'] = str(partial_object['objectID'])
         path = '/%s/partial' % safe(partial_object['objectID'])
         return self._perform_request(self.write_hosts, path, 'POST',
@@ -192,7 +200,7 @@ class Index(object):
         """
         requests = []
         for obj in objects:
-            if not type(obj['objectID']) is str and not type(obj['objectID']) is unicode:
+            if not self.is_string_type(obj['objectID']):
                 obj['objectID'] = str(obj['objectID'])
             requests.append({
                 'action': 'partialUpdateObject',
@@ -212,7 +220,7 @@ class Index(object):
         @param object contains the object to save, the object must contains
             an objectID attribute
         """
-        if not type(obj['objectID']) is str and not type(obj['objectID']) is unicode:
+        if not self.is_string_type(obj['objectID']):
                 obj['objectID'] = str(obj['objectID'])
         path = '/%s' % safe(obj['objectID'])
         return self._perform_request(self.write_hosts, path, 'PUT', body=obj)
@@ -230,7 +238,7 @@ class Index(object):
         """
         requests = []
         for obj in objects:
-            if not type(obj['objectID']) is str and not type(obj['objectID']) is unicode:
+            if not self.is_string_type(obj['objectID']):
                 obj['objectID'] = str(obj['objectID'])
             requests.append({
                 'action': 'updateObject',
@@ -267,7 +275,7 @@ class Index(object):
 
         @param object_id the unique identifier of object to delete
         """
-        if not type(object_id) is str and not type(object_id) is unicode:
+        if not self.is_string_type(object_id):
             object_id = str(object_id)
         path = '/%s' % safe(object_id)
         return self._perform_request(self.write_hosts, path, 'DELETE')
@@ -284,7 +292,7 @@ class Index(object):
         """
         requests = []
         for obj in objects:
-            if not type(obj) is str and not type(obj) is unicode:
+            if not self.is_string_type(obj):
                 obj = str(obj)
             requests.append({
                 'action': 'deleteObject',
