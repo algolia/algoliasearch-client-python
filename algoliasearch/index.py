@@ -38,7 +38,10 @@ from .helpers import safe
 class IndexIterator:
     """Iterator on index."""
 
-    def __init__(self, index, params={}, cursor=None):
+    def __init__(self, index, params=None, cursor=None):
+        if params is None:
+            params = {}
+
         self.index = index
         self.params = params
         self.cursor = cursor
@@ -230,16 +233,19 @@ class Index(object):
         return self.batch(requests)
 
     @deprecated
-    def deleteByQuery(self, query, params={}):
+    def deleteByQuery(self, query, params=None):
         return self.delete_by_query(query, params)
 
-    def delete_by_query(self, query, params={}):
+    def delete_by_query(self, query, params=None):
         """
         Delete all objects matching a query.
 
         @param query the query string
         @param params the optional query parameters
         """
+        if params is None:
+            params = {}
+
         params['query'] = query
         params['hitsPerPage'] = 1000
         params['attributesToRetrieve'] = ['objectID']
@@ -278,7 +284,7 @@ class Index(object):
             })
         return self.batch(requests)
 
-    def search(self, query, args={}):
+    def search(self, query, args=None):
         """
         Search inside the index.
 
@@ -388,6 +394,9 @@ class Index(object):
                 for show_name, then only the best one is kept and others are
                 removed.
         """
+        if args is None:
+            args = {}
+
         args['query'] = query
         params = {'params': urlencode(urlify(args))}
         return self._perform_request(self.read_hosts, '/query', 'POST',
@@ -395,14 +404,12 @@ class Index(object):
 
     @deprecated
     def searchDisjunctiveFaceting(self, query, disjunctive_facets,
-                                  params={},
-                                  refinements={}):
+                                  params=None, refinements=None):
         return self.search_disjunctive_faceting(query, disjunctive_facets,
                                                 params, refinements)
 
     def search_disjunctive_faceting(self, query, disjunctive_facets,
-                                    params={},
-                                    refinements={}):
+                                    params=None, refinements=None):
         """
         Perform a search with disjunctive facets generating as many queries as
         number of disjunctive facets.
@@ -414,6 +421,11 @@ class Index(object):
             representing the current refinements. Ex:
             { 'my_facet1' => ['my_value1', ['my_value2'], 'my_disjunctive_facet1' => ['my_value1', 'my_value2'] }
         """
+        if params is None:
+            params = {}
+        if refinements is None:
+            refinements = {}
+
         if not isinstance(disjunctive_facets, (str, list)):
             raise AlgoliaException(
                 'Argument \'disjunctive_facets\' must be a String or an Array')
@@ -505,19 +517,21 @@ class Index(object):
         return self._perform_request(self.read_hosts, '/browse', 'GET',
                                      params=params)
 
-    def browse_from(self, params={}, cursor=None):
+    def browse_from(self, params=None, cursor=None):
         """
          Browse all index content.
 
          @param params contains the list of query parameter in a dictionary
          @param cursor the position to start the browse
         """
+        if params is None:
+            params = {}
         if cursor:
             params = {'cursor': cursor}
         return self._perform_request(self.read_hosts, '/browse', 'GET',
                                      params=params)
 
-    def browse_all(self, params={}):
+    def browse_all(self, params=None):
         """
          Browse all index content.
 
