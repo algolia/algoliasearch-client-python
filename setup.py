@@ -20,6 +20,7 @@ except (IOError, ImportError):
     with open(path_readme) as readme:
         README = readme.read()
 
+VERSION = None
 path_version = os.path.join(os.path.dirname(__file__),
                             'algoliasearch/version.py')
 if sys.version_info[0] == 3:
@@ -35,6 +36,7 @@ setup(
     packages=['algoliasearch'],
     packages_data={'algoliasearch': ['ressources/*.crt']},
     include_package_data=True,
+    zip_safe=False,  # Because of the certificate
     install_requires=['requests[security] >= 2.4.1'],
     description='Algolia Search API Client for Python',
     long_description=README,
@@ -49,7 +51,16 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Topic :: Internet',
         'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: Indexing/Search',
+        'Development Status :: 5 - Production/Stable',
     ]
 )
