@@ -65,7 +65,10 @@ def encode(e):
 
 def safe(e):
     """Returns a safe string for URL."""
-    return quote(encode(e), safe='')
+    if PY2 and isinstance(e, unicode):
+        return quote(e.encode('utf-8'), safe='')
+    else:
+        return quote(str(e), safe='')
 
 
 def urlify(e):

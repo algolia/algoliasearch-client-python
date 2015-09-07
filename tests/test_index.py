@@ -78,6 +78,7 @@ class IndexWithoutDataTest(IndexTest):
         self.index.wait_task(task['taskID'])
 
         res = self.index.get_object(obj['objectID'])
+        obj['objectID'] = '4242'  # The backends always returns str(objectID)
         self.assertDictEqual(obj, res)
 
     def test_save_objects(self):
