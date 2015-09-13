@@ -12,6 +12,7 @@ env:
   - TOXENV=py32
   - TOXENV=py33
   - TOXENV=py34
+  - TOXENV=py35
   - TOXENV=coveralls-py2
   - TOXENV=coveralls-py3
   global:
