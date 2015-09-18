@@ -265,12 +265,18 @@ index.partial_update_object({"price": { "value": 42, "_operation": "Increment"},
                            "objectID": "myID"})
 ```
 
+Note: Here we are incrementing the value by `42`. To increment just by one, put
+`value:1`.
+
 Example to decrement a numeric value:
 
 ```python
 index.partial_update_object({"price": { "value": 42, "_operation": "Decrement"}, 
                            "objectID": "myID"})
 ```
+
+Note: Here we are decrementing the value by `42`. To decrement just by one, put
+`value:1`.
 
 Search
 -------------
