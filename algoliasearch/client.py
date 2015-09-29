@@ -85,6 +85,7 @@ class Client(object):
             'X-Algolia-API-Key': self.api_key,
             'X-Algolia-Application-Id': self.app_id,
             'Content-Type': 'application/json',
+            'Accept-encoding': 'gzip',
             'User-Agent': 'Algolia Search for Python %s' % VERSION
         }
 
