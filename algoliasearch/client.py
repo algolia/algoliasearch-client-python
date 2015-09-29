@@ -84,7 +84,7 @@ class Client(object):
         self._session.headers = {
             'X-Algolia-API-Key': self.api_key,
             'X-Algolia-Application-Id': self.app_id,
-            'Content-Type': 'application/json',
+            'Content-Type': 'gzip',
             'Accept-encoding': 'gzip',
             'User-Agent': 'Algolia Search for Python %s' % VERSION
         }
