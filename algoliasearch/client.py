@@ -503,7 +503,7 @@ class Client(object):
                 return res.json()
             except exceptions.HTTPError:
                 raise AlgoliaException(res.json()['message'])
-            except exceptions.Timeout as e:
+            except exceptions.RequestException as e:
                 exceptions_hosts[host] = str(e)
                 pass
 
