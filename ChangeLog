@@ -1,5 +1,8 @@
 CHANGELOG
 
+2015-10-07 1.6.8
+	* Catch all exceptions in the retry strategy
+
 2015-10-06 1.6.7
 	* Fix an issue with the handling of connection errors
 
