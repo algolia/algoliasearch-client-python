@@ -499,9 +499,9 @@ class Client(object):
                             method, 'https://%s%s' % (host, path),
                             params=params, data=body, timeout=timeout)
 
-                if (res.status_code / 100 == 2 and res.json != None):
+                if (int(res.status_code / 100) == 2 and res.json != None):
                     return res.json()
-                elif (res.status_code / 100 == 4):
+                elif (int(res.status_code / 100) == 4):
                     message = "HttpCode: %d" % res.status_code
                     if res.json != None and 'message' in res.json():
                         message = res.json()['message']
