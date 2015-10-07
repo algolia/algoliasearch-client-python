@@ -49,6 +49,14 @@ class ClientTest(unittest.TestCase):
         except algoliasearch.AlgoliaException:
             pass
 
+    def test_wrong_app_id(self):
+        client = algoliasearch.Client("fakeappID", "blabla")
+        try:
+            client.listIndexes()
+            self.assertTrue(False)
+        except algoliasearch.AlgoliaException as e:
+            pass
+
     def test_secured_keys(self):
         self.assertEquals(
             '1fd74b206c64fb49fdcd7a5f3004356cd3bdc9d9aba8733656443e64daafc417',
