@@ -503,8 +503,8 @@ class Client(object):
                     return res.json()
                 elif (res.status_code / 100 == 4):
                     message = "HttpCode: %d" % res.status_code
-                    if res.json != None and 'message' in res.json:
-                        message = res.json['message']
+                    if res.json != None and 'message' in res.json():
+                        message = res.json()['message']
                     raise AlgoliaException(message)
                 # Not 2XX or 4XX
                 res.raise_for_status()
