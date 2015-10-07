@@ -57,6 +57,14 @@ class ClientTest(unittest.TestCase):
         except algoliasearch.AlgoliaException as e:
             pass
 
+    def test_retry(self):
+      try:
+          client = algoliasearch.Client(os.environ['ALGOLIA_APPLICATION_ID'], os.environ['ALGOLIA_API_KEY'], ["fakeapp-1.algolia.io", "fakeapp-2.algolia.io", os.environ['ALGOLIA_APPLICATION_ID'] + ".algolia.io"])
+          client.listIndexes
+      except algoliasearch.AlgoliaException as e:
+          self.assertTrue(false)
+
+
     def test_secured_keys(self):
         self.assertEquals(
             '1fd74b206c64fb49fdcd7a5f3004356cd3bdc9d9aba8733656443e64daafc417',
