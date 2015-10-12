@@ -508,6 +508,8 @@ class Client(object):
                     raise AlgoliaException(message)
                 # Not 2XX or 4XX
                 res.raise_for_status()
+            except AlgoliaException as e:
+                raise e
             except Exception as e:
                 exceptions_hosts[host] = str(e)
                 pass
