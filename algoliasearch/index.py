@@ -249,6 +249,9 @@ class Index(object):
         params['query'] = query
         params['hitsPerPage'] = 1000
         params['attributesToRetrieve'] = ['objectID']
+        params['attributesToSnippet'] = []
+        params['attributesToHighlight'] = []
+        params['distinct'] = False
 
         return self.delete_objects(
                     obj['objectID'] for obj in self.browse_all(params))
