@@ -472,7 +472,7 @@ class Client(object):
                     map(lambda t: ''.join(['(', ','.join(t), ')']) if
                         isinstance(t, (list, tuple)) else t, queryParameters))
             queryParameters = {'tagFilters': queryParameters}
-        elif isinstance(queryParameters, (str, unicode)) and not '=' in queryParameters: #TagFilter
+        elif not isinstance(queryParameters, dict) and not '=' in queryParameters: #TagFilter
             queryParameters = {'tagFilters': queryParameters}
 
         if isinstance(queryParameters, dict): #New API Key generator
