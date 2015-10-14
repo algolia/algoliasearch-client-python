@@ -74,29 +74,11 @@ class ClientTest(unittest.TestCase):
             }})
         self.index.batch(batch)
 
-    def test_secured_keys(self):
-        self.assertEquals(
-            '1fd74b206c64fb49fdcd7a5f3004356cd3bdc9d9aba8733656443e64daafc417',
-            hmac.new('my_api_key'.encode('utf-8'), '(public,user1)'.encode(
-                'utf-8'), hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key('my_api_key',
-                                                   '(public,user1)')
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        '(public,user1)'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key('my_api_key',
-                                                   '(public,user1)', 42)
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        '(public,user1)42'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key('my_api_key', ['public'])
-        self.assertEquals(key, hmac.new('my_api_key'.encode(
-            'utf-8'), 'public'.encode('utf-8'), hashlib.sha256).hexdigest())
-        key = self.client.generate_secured_api_key(
-            'my_api_key', ['public', ['premium', 'vip']])
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        'public,(premium,vip)'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
+    def test_new_secured_keys(self):
+        self.assertEquals("MDZkNWNjNDY4M2MzMDA0NmUyNmNkZjY5OTMzYjVlNmVlMTk1NTEwMGNmNTVjZmJhMmIwOTIzYjdjMTk2NTFiMnRhZ0ZpbHRlcnM9JTI4cHVibGljJTJDdXNlcjElMjk=", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", "(public,user1)"));
+        self.assertEquals("MDZkNWNjNDY4M2MzMDA0NmUyNmNkZjY5OTMzYjVlNmVlMTk1NTEwMGNmNTVjZmJhMmIwOTIzYjdjMTk2NTFiMnRhZ0ZpbHRlcnM9JTI4cHVibGljJTJDdXNlcjElMjk=", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)"}));
+        self.assertEquals("ZDU0N2YzZjA3NGZkZGM2OTUxNzY3NzhkZDI3YWFkMjhhNzU5OTBiOGIyYTgyYzFmMjFjZTY4NTA0ODNiN2I1ZnVzZXJUb2tlbj00MiZ0YWdGaWx0ZXJzPSUyOHB1YmxpYyUyQ3VzZXIxJTI5", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)", 'userToken': '42'}));
+        self.assertEquals("ZDU0N2YzZjA3NGZkZGM2OTUxNzY3NzhkZDI3YWFkMjhhNzU5OTBiOGIyYTgyYzFmMjFjZTY4NTA0ODNiN2I1ZnVzZXJUb2tlbj00MiZ0YWdGaWx0ZXJzPSUyOHB1YmxpYyUyQ3VzZXIxJTI5", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)"}, '42'));
 
     def test_disjunctive_faceting(self):
         self.index.set_settings(

@@ -308,29 +308,6 @@ class ClientTest(unittest.TestCase):
         obj = self.index.getObject(self.nameObj)
         self.assertEquals(obj['name'], 'Los Angeles')
 
-    def test_secured_keys(self):
-        self.assertEquals(
-            '1fd74b206c64fb49fdcd7a5f3004356cd3bdc9d9aba8733656443e64daafc417',
-            hmac.new('my_api_key'.encode('utf-8'), '(public,user1)'.encode(
-                'utf-8'), hashlib.sha256).hexdigest())
-        key = self.client.generateSecuredApiKey('my_api_key', '(public,user1)')
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        '(public,user1)'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
-        key = self.client.generateSecuredApiKey('my_api_key', '(public,user1)',
-                                                42)
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        '(public,user1)42'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
-        key = self.client.generateSecuredApiKey('my_api_key', ['public'])
-        self.assertEquals(key, hmac.new('my_api_key'.encode(
-            'utf-8'), 'public'.encode('utf-8'), hashlib.sha256).hexdigest())
-        key = self.client.generateSecuredApiKey('my_api_key',
-                                                ['public', ['premium', 'vip']])
-        self.assertEquals(key, hmac.new('my_api_key'.encode('utf-8'),
-                                        'public,(premium,vip)'.encode('utf-8'),
-                                        hashlib.sha256).hexdigest())
-
     def test_multipleQueries(self):
         task = self.index.addObject({'name': 'Paris'}, self.nameObj)
         self.index.waitTask(task['taskID'])

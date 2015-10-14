@@ -26,6 +26,7 @@ import os
 import json
 import hmac
 import hashlib
+import base64
 
 try:
     from urllib import urlencode
@@ -456,26 +457,31 @@ class Client(object):
         return self.generate_secured_api_key(private_api_key, tag_filters,
                                              user_token)
 
-    def generate_secured_api_key(self, private_api_key, tag_filters,
+    def generate_secured_api_key(self, private_api_key, queryParameters,
                                  user_token=''):
         """
-        Generate a secured and public API Key from a list of tag_filters and an
+        Generate a secured and public API Key from a dict of query parameters and an
         optional user token identifying the current user.
 
         @param private_api_key your private API Key
-        @param tag_filters the list of tags applied to the query (used as security)
+        @param queryParameters the dict of query parameters applied to the query (used as security)
         @param user_token an optional token identifying the current user
         """
-        if isinstance(tag_filters, (list, tuple)):
-            tag_filters = ','.join(
+        if isinstance(queryParameters, (list, tuple)): #List of tags
+            queryParameters = ','.join(
                     map(lambda t: ''.join(['(', ','.join(t), ')']) if
-                        isinstance(t, (list, tuple)) else t, tag_filters))
-        elif isinstance(tag_filters, dict):
-            tag_filters = urlencode(urlify(tag_filters))
+                        isinstance(t, (list, tuple)) else t, queryParameters))
+            queryParameters = {'tagFilters': queryParameters}
+        elif isinstance(queryParameters, (str, unicode)) and not '=' in queryParameters: #TagFilter
+            queryParameters = {'tagFilters': queryParameters}
 
-        return hmac.new(str.encode(private_api_key),
-                        str.encode(''.join([tag_filters, str(user_token)])),
-                        hashlib.sha256).hexdigest()
+        if isinstance(queryParameters, dict): #New API Key generator
+            if user_token != None and user_token != '':
+                queryParameters['userToken'] = user_token
+            queryParameters = urlencode(urlify(queryParameters))
+
+        return base64.b64encode("%s%s" % (hmac.new(str.encode(private_api_key)
+                , queryParameters, hashlib.sha256).hexdigest(), queryParameters))
 
     def _perform_request(self, hosts, path, method, params=None, body=None,
                          is_search=False):
