@@ -5,6 +5,7 @@ import os
 import time
 import hashlib
 import hmac
+import sys
 
 from algoliasearch import algoliasearch
 
