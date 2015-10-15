@@ -480,6 +480,7 @@ class Client(object):
                 queryParameters['userToken'] = user_token
             queryParameters = urlencode(urlify(queryParameters))
 
+        queryParameters = queryParameters.encode('utf-8')
         return base64.b64encode("%s%s" % (hmac.new(str.encode(private_api_key)
                 , queryParameters, hashlib.sha256).hexdigest(), queryParameters))
 
