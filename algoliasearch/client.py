@@ -480,9 +480,8 @@ class Client(object):
                 queryParameters['userToken'] = user_token
             queryParameters = urlencode(urlify(queryParameters))
 
-        queryParameters = queryParameters.encode('utf-8')
-        return base64.b64encode("%s%s" % (hmac.new(str.encode(private_api_key)
-                , queryParameters, hashlib.sha256).hexdigest(), queryParameters))
+        securedKey = hmac.new(private_api_key.encode('utf-8'), queryParameters.encode('utf-8'), hashlib.sha256).hexdigest()
+        return str(base64.b64encode(("%s%s" % (securedKey, queryParameters)).encode('utf-8')).decode('utf-8'))
 
     def _perform_request(self, hosts, path, method, params=None, body=None,
                          is_search=False):
