@@ -82,7 +82,7 @@ class ClientTest(unittest.TestCase):
             self.assertEquals("ZDU0N2YzZjA3NGZkZGM2OTUxNzY3NzhkZDI3YWFkMjhhNzU5OTBiOGIyYTgyYzFmMjFjZTY4NTA0ODNiN2I1ZnVzZXJUb2tlbj00MiZ0YWdGaWx0ZXJzPSUyOHB1YmxpYyUyQ3VzZXIxJTI5", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)", 'userToken': '42'}));
             self.assertEquals("ZDU0N2YzZjA3NGZkZGM2OTUxNzY3NzhkZDI3YWFkMjhhNzU5OTBiOGIyYTgyYzFmMjFjZTY4NTA0ODNiN2I1ZnVzZXJUb2tlbj00MiZ0YWdGaWx0ZXJzPSUyOHB1YmxpYyUyQ3VzZXIxJTI5", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)"}, '42'));
         else:
-            self.assertEquals("OGYwN2NlNTdlOGM2ZmM4MjA5NGM0ZmYwNTk3MDBkNzMzZjQ0MDI3MWZjNTNjM2Y3YTAzMWM4NTBkMzRiNTM5YnRhZ0ZpbHRlcnM9JTI4cHVibGljJTJDdXNlcjElMjkmdXNlclRva2VuPTQy", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)"}, 'userToken': '42'));
+            self.assertEquals("OGYwN2NlNTdlOGM2ZmM4MjA5NGM0ZmYwNTk3MDBkNzMzZjQ0MDI3MWZjNTNjM2Y3YTAzMWM4NTBkMzRiNTM5YnRhZ0ZpbHRlcnM9JTI4cHVibGljJTJDdXNlcjElMjkmdXNlclRva2VuPTQy", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)", 'userToken': '42'}));
             self.assertEquals("OGYwN2NlNTdlOGM2ZmM4MjA5NGM0ZmYwNTk3MDBkNzMzZjQ0MDI3MWZjNTNjM2Y3YTAzMWM4NTBkMzRiNTM5YnRhZ0ZpbHRlcnM9JTI4cHVibGljJTJDdXNlcjElMjkmdXNlclRva2VuPTQy", self.client.generate_secured_api_key("182634d8894831d5dbce3b3185c50881", {'tagFilters': "(public,user1)"}, '42'));
 
 
