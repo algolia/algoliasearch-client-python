@@ -1,5 +1,10 @@
 CHANGELOG
 
+2015-10-16 1.7.0
+	* Remove the retry on 4XX errors
+	* Add new secured api key
+	* Fix bug with distinct on the deleteByQuery method
+
 2015-10-07 1.6.8
 	* Catch all exceptions in the retry strategy
 
