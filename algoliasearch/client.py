@@ -29,6 +29,7 @@ import hashlib
 import base64
 
 APPENGINE = 'APPENGINE_RUNTIME' in os.environ
+APPENGINE_STUB = False
 
 try:
     from urllib import urlencode
