@@ -27,9 +27,10 @@ import json
 import hmac
 import hashlib
 import base64
-
+import sys
+    
 APPENGINE = 'APPENGINE_RUNTIME' in os.environ
-APPENGINE_STUB = False
+SSL_CERTIFICATE_DOMAIN = 'algolia.net'
 
 try:
     from urllib import urlencode
@@ -38,9 +39,6 @@ except ImportError:
 
 if APPENGINE:
     from google.appengine.api import urlfetch
-    import sys
-    if 'google.appengine.api.apiproxy_stub_map' in sys.modules.keys():
-        APPENGINE_STUB = True
     APPENGINE_METHODS = {
         'GET' : urlfetch.GET,
         'POST' : urlfetch.POST,
@@ -84,7 +82,8 @@ class Client(object):
             self.write_hosts = ['%s.algolia.net' % app_id,
                                 '%s-1.algolianet.com' % app_id,
                                 '%s-2.algolianet.com' % app_id,
-                                '%s-3.algolianet.com' % app_id]
+                                '%s-3.algolianet.com' % app_id
+                            ]
         else:
             self.read_hosts = hosts_array
             self.write_hosts = hosts_array
@@ -101,11 +100,12 @@ class Client(object):
             'X-Algolia-API-Key': self.api_key,
             'X-Algolia-Application-Id': self.app_id,
             'Content-Type': 'gzip',
-            'Accept-encoding': 'gzip',
+            'Accept-Encoding': 'gzip',
             'User-Agent': 'Algolia Search for Python %s' % VERSION
         }
-        if APPENGINE_STUB:
-            self.disable_gzip_compression()
+        # Fix for AppEngine bug when using urlfetch_stub
+        if 'google.appengine.api.apiproxy_stub_map' in sys.modules.keys():
+            self._session.headers.pop('Accept-Encoding', None)
 
     @property
     def app_id(self):
@@ -157,11 +157,6 @@ class Client(object):
         self.headers.pop('X-Forwarded-For', None)
         self.headers.pop('X-Forwarded-API-Key', None)
 
-    def disable_gzip_compression(self):
-        """Disable GZIP compression."""
-        self.headers.pop('Content-Type', None)
-        self.headers.pop('Accept-encoding', None)
-        
     @deprecated
     def set_extra_header(self, key, value):
         """
@@ -506,7 +501,11 @@ class Client(object):
         return str(base64.b64encode(("%s%s" % (securedKey, queryParameters)).encode('utf-8')).decode('utf-8'))
 
     def _perform_appengine_request(self, host, path, method, timeout, params=None, data=None):
-        """Perform an HTTPS request with AppEngine's urlfetch."""
+        """
+        Perform an HTTPS request with AppEngine's urlfetch. SSL certificate will not validate when 
+        the request is on a domain which is not a aloglia.net subdomain, a SNI is not available by
+        default on GAE. Hence, we do set validate_certificate to False when calling those domains.
+        """
         method = APPENGINE_METHODS.get(method)
         if isinstance(timeout, tuple):
             timeout = timeout[1]
@@ -514,7 +513,7 @@ class Client(object):
         url = params and '%s?%s' %(url, urlencode(urlify(params))) or url
         res = urlfetch.fetch(url=url, method=method, payload=data,
                                 headers=self.headers, deadline=timeout,
-                                validate_certificate=True)
+                                validate_certificate=host.endswith(SSL_CERTIFICATE_DOMAIN))
         content = res.content != None and json.loads(res.content) or None
         if (int(res.status_code / 100) == 2 and content):
             return content
