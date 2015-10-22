@@ -1,8 +1,6 @@
 # Algolia Search API Client for Python
 
-
-
-
+> **When using this fork on Google AppEngine, it will use `urlfetch` instead of using the `request` module. Please be aware of [urlfetch's limits](https://cloud.google.com/appengine/docs/python/urlfetch/). To run unit tests on the AppEngine stub, you need to define a APPENGINE_RUNTIME enviroment variable.**
 
 [Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
 
