@@ -104,7 +104,6 @@ class Client(object):
             'User-Agent': 'Algolia Search for Python %s' % VERSION
         }
         if APPENGINE_STUB:
-            print 'disble gzip'
             self.disable_gzip_compression()
 
     @property
@@ -512,7 +511,6 @@ class Client(object):
     def _perform_appengine_request(self, host, path, method, timeout, params=None, data=None):
         """Perform an HTTPS request with AppEngine's urlfetch."""
         method = APPENGINE_METHODS.get(method)
-        print "USING APPENGINE"
         if isinstance(timeout, tuple):
             timeout = timeout[1]
         url = 'https://%s%s' % (host, path)
