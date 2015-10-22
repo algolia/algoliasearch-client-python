@@ -36,7 +36,12 @@ class FakeData(object):
                 return str(new_id)
 
 
-def get_api_client():
+def get_api_client():    
+    if 'APPENGINE_RUNTIME' in os.environ:
+        from google.appengine.api import apiproxy_stub_map 
+        from google.appengine.api import urlfetch_stub
+        apiproxy_stub_map.apiproxy = apiproxy_stub_map.APIProxyStubMap() 
+        apiproxy_stub_map.apiproxy.RegisterStub('urlfetch',  urlfetch_stub.URLFetchServiceStub())
     return Client(os.environ['ALGOLIA_APPLICATION_ID'],
                   os.environ['ALGOLIA_API_KEY'])
 
