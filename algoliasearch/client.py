@@ -187,10 +187,6 @@ class Client(object):
     def headers(self):
         return self._session.headers
 
-    @property
-    def verify(self):
-        return self._session.verify
-
     @deprecated
     def set_timeout(self, connect_timeout, read_timeout, search_timeout=5):
         """
