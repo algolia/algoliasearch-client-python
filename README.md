@@ -64,7 +64,7 @@ from algoliasearch import algoliasearch
 client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
 ```
 
-**Note**: If you use this API Client with Google AppEngine (Thanks [@apassant](https://github.com/apassant)), it will use `urlfetch` instead of using the `request` module. Please be aware of [urlfetch's limits](https://cloud.google.com/appengine/docs/python/urlfetch/), and not that calls will still fail when calling algolianet.com domains ("Invalid and/or missing SSL certificate for URL"), unless you sent the env vairable `APPENGINE_ALGOLIA_CERTS=False`. To run unit tests on the AppEngine stub, you need to define a `APPENGINE_RUNTIME` enviroment variable.
+**Note**: If you use this API Client with Google AppEngine (Thanks [@apassant](https://github.com/apassant)), it will use `urlfetch` instead of using the `request` module. Please be aware of [urlfetch's limits](https://cloud.google.com/appengine/docs/python/urlfetch/), and note that SSL certificates will not be verified for calls to domains other than algolia.net due to the lack of SNI support in `urlfetch`. To run unit tests on the AppEngine stub, please define an `APPENGINE_RUNTIME` enviroment variable.
 
 
 
