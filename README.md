@@ -1,6 +1,7 @@
 # Algolia Search API Client for Python
 
-> **When using this fork on Google AppEngine, it will use `urlfetch` instead of using the `request` module. Please be aware of [urlfetch's limits](https://cloud.google.com/appengine/docs/python/urlfetch/), and not that calls will still fail when calling algolianet.com domains ("Invalid and/or missing SSL certificate for URL"), unless you sent the env vairable APPENGINE_ALGOLIA_CERTS=False. To run unit tests on the AppEngine stub, you need to define a APPENGINE_RUNTIME enviroment variable.**
+
+
 
 
 [Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
@@ -62,6 +63,8 @@ from algoliasearch import algoliasearch
 
 client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
 ```
+
+**Note**: If you use this API Client with Google AppEngine (Thanks [@apassant](https://github.com/apassant)), it will use `urlfetch` instead of using the `request` module. Please be aware of [urlfetch's limits](https://cloud.google.com/appengine/docs/python/urlfetch/), and not that calls will still fail when calling algolianet.com domains ("Invalid and/or missing SSL certificate for URL"), unless you sent the env vairable `APPENGINE_ALGOLIA_CERTS=False`. To run unit tests on the AppEngine stub, you need to define a `APPENGINE_RUNTIME` enviroment variable.
 
 
 
