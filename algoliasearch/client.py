@@ -27,12 +27,25 @@ import json
 import hmac
 import hashlib
 import base64
+import sys
+    
+APPENGINE = 'APPENGINE_RUNTIME' in os.environ
+SSL_CERTIFICATE_DOMAIN = 'algolia.net'
 
 try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
 
+if APPENGINE:
+    from google.appengine.api import urlfetch
+    APPENGINE_METHODS = {
+        'GET' : urlfetch.GET,
+        'POST' : urlfetch.POST,
+        'PUT' : urlfetch.PUT,
+        'DELETE' : urlfetch.DELETE
+    }
+    
 from requests import Session
 from requests import exceptions
 
@@ -63,13 +76,14 @@ class Client(object):
         """
         if not hosts_array:
             self.read_hosts = ['%s-dsn.algolia.net' % app_id,
-                               '%s-1.algolianet.com' % app_id,
-                               '%s-2.algolianet.com' % app_id,
-                               '%s-3.algolianet.com' % app_id]
-            self.write_hosts = ['%s.algolia.net' % app_id,
                                 '%s-1.algolianet.com' % app_id,
                                 '%s-2.algolianet.com' % app_id,
                                 '%s-3.algolianet.com' % app_id]
+            self.write_hosts = ['%s.algolia.net' % app_id,
+                                '%s-1.algolianet.com' % app_id,
+                                '%s-2.algolianet.com' % app_id,
+                                '%s-3.algolianet.com' % app_id
+                            ]
         else:
             self.read_hosts = hosts_array
             self.write_hosts = hosts_array
@@ -86,9 +100,12 @@ class Client(object):
             'X-Algolia-API-Key': self.api_key,
             'X-Algolia-Application-Id': self.app_id,
             'Content-Type': 'gzip',
-            'Accept-encoding': 'gzip',
+            'Accept-Encoding': 'gzip',
             'User-Agent': 'Algolia Search for Python %s' % VERSION
         }
+        # Fix for AppEngine bug when using urlfetch_stub
+        if 'google.appengine.api.apiproxy_stub_map' in sys.modules.keys():
+            self._session.headers.pop('Accept-Encoding', None)
 
     @property
     def app_id(self):
@@ -483,6 +500,46 @@ class Client(object):
         securedKey = hmac.new(private_api_key.encode('utf-8'), queryParameters.encode('utf-8'), hashlib.sha256).hexdigest()
         return str(base64.b64encode(("%s%s" % (securedKey, queryParameters)).encode('utf-8')).decode('utf-8'))
 
+    def _perform_appengine_request(self, host, path, method, timeout, params=None, data=None):
+        """
+        Perform an HTTPS request with AppEngine's urlfetch. SSL certificate will not validate when 
+        the request is on a domain which is not a aloglia.net subdomain, a SNI is not available by
+        default on GAE. Hence, we do set validate_certificate to False when calling those domains.
+        """
+        method = APPENGINE_METHODS.get(method)
+        if isinstance(timeout, tuple):
+            timeout = timeout[1]
+        url = 'https://%s%s' % (host, path)
+        url = params and '%s?%s' %(url, urlencode(urlify(params))) or url
+        res = urlfetch.fetch(url=url, method=method, payload=data,
+                                headers=self.headers, deadline=timeout,
+                                validate_certificate=host.endswith(SSL_CERTIFICATE_DOMAIN))
+        content = res.content != None and json.loads(res.content) or None
+        if (int(res.status_code / 100) == 2 and content):
+            return content
+        elif (int(res.status_code / 100) == 4):
+            message = "HttpCode: %d" % res.status_code
+            if content and content.get('message'):
+                message = content['message']
+            raise AlgoliaException(message)
+        else:
+            mesage = '%s Server Error: %s' % (res.status_code, res.content)
+            raise Exception(http_error_msg, response=res)
+
+    def _perform_session_request(self, host, path, method, timeout, params=None, data=None):
+        """Perform an HTTPS request with request's Session."""
+        res = self._session.request(
+                    method, 'https://%s%s' % (host, path),
+                    params=params, data=data, timeout=timeout)
+        if (int(res.status_code / 100) == 2 and res.json != None):
+            return res.json()
+        elif (int(res.status_code / 100) == 4):
+            message = "HttpCode: %d" % res.status_code
+            if res.json != None and 'message' in res.json():
+                message = res.json()['message']
+            raise AlgoliaException(message)
+        res.raise_for_status()
+        
     def _perform_request(self, hosts, path, method, params=None, body=None,
                          is_search=False):
         """Perform an HTTPS request with retry logic."""
@@ -490,7 +547,6 @@ class Client(object):
             params = urlify(params)
         if body:
             body = json.dumps(body, cls=CustomJSONEncoder)
-
         timeout = self.search_timeout if is_search else self.timeout
         exceptions_hosts = {}
         for i, host in enumerate(hosts):
@@ -499,21 +555,9 @@ class Client(object):
                     timeout = (timeout[0] + 2, timeout[1] + 10)
                 else:
                     timeout += 10
-
             try:
-                res = self._session.request(
-                            method, 'https://%s%s' % (host, path),
-                            params=params, data=body, timeout=timeout)
-
-                if (int(res.status_code / 100) == 2 and res.json != None):
-                    return res.json()
-                elif (int(res.status_code / 100) == 4):
-                    message = "HttpCode: %d" % res.status_code
-                    if res.json != None and 'message' in res.json():
-                        message = res.json()['message']
-                    raise AlgoliaException(message)
-                # Not 2XX or 4XX
-                res.raise_for_status()
+                _request = APPENGINE and self._perform_appengine_request or self._perform_session_request
+                return _request(host, path, method, timeout, params=params, data=body)
             except AlgoliaException as e:
                 raise e
             except Exception as e:
