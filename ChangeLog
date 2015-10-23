@@ -1,5 +1,8 @@
 CHANGELOG
 
+2015-10-23 1.7.1
+	* Add compatibility with Google Appengine
+
 2015-10-16 1.7.0
 	* Remove the retry on 4XX errors
 	* Add new secured api key
