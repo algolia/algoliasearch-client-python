@@ -2,7 +2,7 @@ language: python
 sudo: false
 before_script:
 - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.27.zip
-- unzip google_appengine_1.9.27.zip 
+- unzip -q google_appengine_1.9.27.zip 
 - export PYTHONPATH=$PYTHONPATH:./google_appengine/
 install:
 - pip install --upgrade pip
