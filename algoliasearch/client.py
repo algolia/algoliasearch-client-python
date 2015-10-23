@@ -522,7 +522,7 @@ class Client(object):
             if content and content.get('message'):
                 message = content['message']
             raise AlgoliaException(message)
-        elif (int(res.status_code / 100) == 5):
+        else:
             mesage = '%s Server Error: %s' % (res.status_code, res.content)
             raise Exception(http_error_msg, response=res)
 
