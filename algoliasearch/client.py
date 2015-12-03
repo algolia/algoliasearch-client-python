@@ -561,7 +561,7 @@ class Client(object):
             except AlgoliaException as e:
                 raise e
             except Exception as e:
-                exceptions_hosts[host] = str(e)
+                exceptions_hosts[host] = "%s: %s" % (e.__class__.__name__, str(e))
                 pass
 
         # Impossible to connect
