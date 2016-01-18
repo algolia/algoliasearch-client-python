@@ -37,7 +37,7 @@ setup(
     packages_data={'algoliasearch': ['ressources/*.crt']},
     include_package_data=True,
     zip_safe=False,  # Because of the certificate
-    install_requires=['requests[security] >= 2.4.1'],
+    install_requires=['requests[security] >= 2.9.1'],
     description='Algolia Search API Client for Python',
     long_description=README,
     author='Algolia Team',

@@ -3,6 +3,6 @@ wheel
 pypandoc
 
 # Dev
-requests[security]
+requests[security]>=2.9.1
 nose2
 fake-factory
