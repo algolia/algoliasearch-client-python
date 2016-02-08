@@ -802,7 +802,7 @@ You may have a single index containing per user data. In that case, all records 
 ```python
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'tagFilters': 'user_42')
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'tagFilters': 'user_42'})
 ```
 
 This public API key can then be used in your JavaScript code as follow:
