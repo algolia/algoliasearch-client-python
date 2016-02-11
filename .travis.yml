@@ -5,6 +5,7 @@ before_script:
 - unzip -q google_appengine_1.9.27.zip
 install:
 - pip install --upgrade pip
+- pip install -I 'virtualenv<14.0'
 - pip install tox
 script:
 - tox
