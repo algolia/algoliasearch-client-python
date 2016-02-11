@@ -240,7 +240,7 @@ class ClientTest(unittest.TestCase):
         self.index.waitTask(task['taskID'])
         res = self.index.listUserKeys()
         newKey = self.index.addUserKey(['search'])
-        time.sleep(3)
+        time.sleep(5)
         self.assertTrue(newKey['key'] != "")
         resAfter = self.index.listUserKeys()
         is_present = False
@@ -250,7 +250,7 @@ class ClientTest(unittest.TestCase):
         key = self.index.getUserKeyACL(newKey['key'])
         self.assertEquals(key['acl'][0], 'search')
         task = self.index.deleteUserKey(newKey['key'])
-        time.sleep(3)
+        time.sleep(5)
         resEnd = self.index.listUserKeys()
         is_present = False
         for it in resEnd['keys']:
@@ -259,7 +259,7 @@ class ClientTest(unittest.TestCase):
 
         res = self.client.listUserKeys()
         newKey = self.client.addUserKey(['search'])
-        time.sleep(3)
+        time.sleep(5)
         self.assertTrue(newKey['key'] != "")
         resAfter = self.client.listUserKeys()
         is_present = False
@@ -269,7 +269,7 @@ class ClientTest(unittest.TestCase):
         key = self.client.getUserKeyACL(newKey['key'])
         self.assertEquals(key['acl'][0], 'search')
         task = self.client.deleteUserKey(newKey['key'])
-        time.sleep(3)
+        time.sleep(5)
         resEnd = self.client.listUserKeys()
         is_present = False
         for it in resEnd['keys']:
