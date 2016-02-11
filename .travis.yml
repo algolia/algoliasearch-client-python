@@ -8,6 +8,7 @@ install:
 - pip install tox
 script:
 - tox
+python: 3.5
 env:
   matrix:
   - TOXENV=py26
