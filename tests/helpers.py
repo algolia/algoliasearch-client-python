@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import os
+import time
 from random import randint
 
 from faker import Factory
@@ -36,7 +37,7 @@ class FakeData(object):
                 return str(new_id)
 
 
-def get_api_client():    
+def get_api_client():
     if 'APPENGINE_RUNTIME' in os.environ:
         from google.appengine.api import apiproxy_stub_map 
         from google.appengine.api import urlfetch_stub
@@ -51,3 +52,25 @@ def safe_index_name(name):
         return name
     job = os.environ['TRAVIS_JOB_NUMBER']
     return '{0}_travis-{1}'.format(name, job)
+
+
+def wait_key(index, key, block=None):
+    for i in range(60):
+        try:
+            k = index.get_user_key_acl(key)
+            if block is None or block(k):
+                return
+        except:
+            pass
+        # Not found.
+        time.sleep(1)
+
+
+def wait_missing_key(index, key):
+    for i in range(60):
+        try:
+            index.get_user_key_acl(key)
+            time.sleep(1)
+        except:
+            # Not found.
+            return
