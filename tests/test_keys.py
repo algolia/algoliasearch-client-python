@@ -15,6 +15,7 @@ except ImportError:
 from .helpers import safe_index_name
 from .helpers import get_api_client
 from .helpers import FakeData
+from .helpers import wait_key, wait_missing_key
 
 
 class KeyTest(unittest.TestCase):
@@ -64,7 +65,7 @@ class KeyTest(unittest.TestCase):
     def test_get_user_key(self):
         res = self.client.add_user_key(['search'])
         key = res['key']
-        time.sleep(5)
+        wait_key(self.client, key)
 
         res = self.client.get_user_key_acl(key)
         self.assertEqual(res['value'], key)
@@ -79,12 +80,13 @@ class KeyTest(unittest.TestCase):
             res = self.client.add_user_key(['search'])
             keys.append(res['key'])
 
-        time.sleep(5)
+        for k in keys:
+            wait_key(self.client, k)
 
         res = self.client.update_user_key(keys[0], ['addObject'],
                                           max_queries_per_ip_per_hour=5)
         self.assertGreater(len(res['key']), 0)
-        time.sleep(5)
+        wait_key(self.client, keys[0], lambda k: k['acl'] == ['addObject'])
         res = self.client.get_user_key_acl(keys[0])
         self.assertSetEqual(set(res['acl']), set(['addObject']))
         self.assertEqual(res['maxQueriesPerIPPerHour'], 5)
@@ -92,7 +94,8 @@ class KeyTest(unittest.TestCase):
         res = self.client.update_user_key(keys[1], ['deleteObject'],
                                           max_hits_per_query=10)
         self.assertGreater(len(res['key']), 0)
-        time.sleep(5)
+
+        wait_key(self.client, keys[1], lambda k: k['acl'] == ['deleteObject'])
         res = self.client.get_user_key_acl(keys[1])
         self.assertSetEqual(set(res['acl']), set(['deleteObject']))
         self.assertEqual(res['maxHitsPerQuery'], 10)
@@ -100,7 +103,7 @@ class KeyTest(unittest.TestCase):
         res = self.client.update_user_key(keys[2], ['settings', 'search'],
                                           validity=60)
         self.assertGreater(len(res['key']), 0)
-        time.sleep(5)
+        wait_key(self.client, keys[2], lambda k: set(k['acl']) == set(['settings', 'search']))
         res = self.client.get_user_key_acl(keys[2])
         self.assertSetEqual(set(res['acl']), set(['settings', 'search']))
         self.assertIn('validity', res)
@@ -112,10 +115,10 @@ class KeyTest(unittest.TestCase):
     def test_delete_user_keys(self):
         res = self.client.add_user_key(['search'])
         key = res['key']
-        time.sleep(5)
+        wait_key(self.client, res['key'])
 
         self.client.delete_user_key(key)
-        time.sleep(5)
+        wait_missing_key(self.client, res['key'])
 
         res = self.client.list_user_keys()
         res_keys = [elt['value'] for elt in res['keys']]
@@ -150,7 +153,7 @@ class KeyTest(unittest.TestCase):
     def test_index_get_user_key(self):
         res = self.index.add_user_key(['search'])
         key = res['key']
-        time.sleep(5)
+        wait_key(self.index, res['key'])
 
         res = self.index.get_user_key_acl(key)
         self.assertEqual(res['value'], key)
@@ -165,12 +168,13 @@ class KeyTest(unittest.TestCase):
             res = self.index.add_user_key(['search'])
             keys.append(res['key'])
 
-        time.sleep(5)
+        for k in keys:
+            wait_key(self.index, k)
 
         res = self.index.update_user_key(keys[0], ['addObject'],
                                          max_queries_per_ip_per_hour=5)
         self.assertGreater(len(res['key']), 0)
-        time.sleep(5)
+        wait_key(self.index, keys[0], lambda k: k['acl'] == ['addObject'])
         res = self.index.get_user_key_acl(keys[0])
         self.assertSetEqual(set(res['acl']), set(['addObject']))
         self.assertEqual(res['maxQueriesPerIPPerHour'], 5)
@@ -178,7 +182,7 @@ class KeyTest(unittest.TestCase):
         res = self.index.update_user_key(keys[1], ['deleteObject'],
                                          max_hits_per_query=10)
         self.assertGreater(len(res['key']), 0)
-        time.sleep(5)
+        wait_key(self.index, keys[1], lambda k: k['acl'] == ['deleteObject'])
         res = self.index.get_user_key_acl(keys[1])
         self.assertSetEqual(set(res['acl']), set(['deleteObject']))
         self.assertEqual(res['maxHitsPerQuery'], 10)
@@ -186,7 +190,7 @@ class KeyTest(unittest.TestCase):
         res = self.index.update_user_key(keys[2], ['settings', 'search'],
                                          validity=60)
         self.assertGreater(len(res['key']), 0)
-        time.sleep(5)
+        wait_key(self.index, keys[2], lambda k: set(k['acl']) == set(['search', 'settings']))
         res = self.index.get_user_key_acl(keys[2])
         self.assertSetEqual(set(res['acl']), set(['settings', 'search']))
         self.assertIn('validity', res)
@@ -198,10 +202,10 @@ class KeyTest(unittest.TestCase):
     def test_index_delete_user_keys(self):
         res = self.index.add_user_key(['search'])
         key = res['key']
-        time.sleep(5)
+        wait_key(self.index, res['key'])
 
         self.index.delete_user_key(key)
-        time.sleep(5)
+        wait_missing_key(self.index, res['key'])
 
         res = self.index.list_user_keys()
         res_keys = [elt['value'] for elt in res['keys']]
