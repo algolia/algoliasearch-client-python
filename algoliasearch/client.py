@@ -27,6 +27,7 @@ import json
 import hmac
 import hashlib
 import base64
+import random
 import sys
     
 APPENGINE = 'APPENGINE_RUNTIME' in os.environ
@@ -75,15 +76,18 @@ class Client(object):
         @param hosts_array the list of hosts that you have received for the service
         """
         if not hosts_array:
-            self.read_hosts = ['%s-dsn.algolia.net' % app_id,
-                                '%s-1.algolianet.com' % app_id,
-                                '%s-2.algolianet.com' % app_id,
-                                '%s-3.algolianet.com' % app_id]
-            self.write_hosts = ['%s.algolia.net' % app_id,
-                                '%s-1.algolianet.com' % app_id,
-                                '%s-2.algolianet.com' % app_id,
-                                '%s-3.algolianet.com' % app_id
-                            ]
+            fallbacks = [
+                '%s-1.algolianet.com' % app_id,
+                '%s-2.algolianet.com' % app_id,
+                '%s-3.algolianet.com' % app_id,
+            ]
+            random.shuffle(fallbacks)
+
+            self.read_hosts = ['%s-dsn.algolia.net' % app_id]
+            self.read_hosts.extend(fallbacks)
+            self.write_hosts = ['%s.algolia.net' % app_id]
+            self.write_hosts.extend(fallbacks)
+
         else:
             self.read_hosts = hosts_array
             self.write_hosts = hosts_array
