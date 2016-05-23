@@ -3,6 +3,8 @@
 from __future__ import unicode_literals
 
 from random import randint
+import time
+import os
 
 try:
     import unittest2 as unittest  # py26
@@ -103,6 +105,24 @@ class ClientNoDataOperationsTest(ClientTest):
         self.assertEqual(sub_client.user_name, 'algolia')
         self.assertIn('X-User', sub_client.headers)
         self.assertEqual(sub_client.headers['X-User'], 'algolia')
+
+    def test_dns_timeout(self):
+        app_id = os.environ['ALGOLIA_APPLICATION_ID']
+
+        hosts = [
+            '%s-dsn.algolia.biz' % app_id,
+            '%s-dsn.algolia.net' % app_id,
+            '%s-1.algolianet.com' % app_id,
+            '%s-2.algolianet.com' % app_id,
+            '%s-3.algolianet.com' % app_id,
+        ]
+
+        client = Client(app_id, os.environ['ALGOLIA_API_KEY'], hosts)
+        client.set_timeout(5, 2)
+
+        now = time.time()
+        indices = client.list_indexes()
+        self.assertLess(now + 5, time.time())
 
 
 class ClientWithDataTest(ClientTest):
