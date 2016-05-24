@@ -1109,7 +1109,7 @@ You can send multiple queries with a single API call using a batch of queries:
 # - 1st query targets index `categories`
 # - 2nd and 3rd queries target index `products` 
 results = self.client.multiple_queries([{"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3}
-  , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3, "tagFilters": "promotion"}
+  , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3, "filters": "promotion"}
   , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 10}])
 
 print results["results"]
@@ -1949,12 +1949,12 @@ Example:
 
 ```python
 # Iterate with a filter over the index
-res = self.index.browse_all({"query": "test", "numericFilters": "i<42"})
+res = self.index.browse_all({"query": "test", "filters": "i<42"})
 for hit in res
 	# Do something
 
 # Retrieve the next cursor from the browse method
-res = self.index.browse_from({"query": "test", "numericFilters": "i<42"}, None)
+res = self.index.browse_from({"query": "test", "filters": "i<42"}, None)
 print res["cursor"]
 ```
 
@@ -2180,7 +2180,7 @@ You may have a single index containing **per user** data. In that case, all reco
 ```python
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'tagFilters': 'user_42'})
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'filters': 'user_42'})
 ```
 
 This public API key can then be used in your JavaScript code as follow:
@@ -2205,7 +2205,7 @@ You can mix rate limits and secured API keys by setting a `userToken` query para
 ```python
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'tagFilters': 'user_42', 'userToken': 'user_42'})
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'filters': 'user_42', 'userToken': 'user_42'})
 ```
 
 This public API key can then be used in your JavaScript code as follow:
