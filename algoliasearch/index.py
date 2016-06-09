@@ -5,7 +5,7 @@ http://www.algolia.com/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
+in the Software without restriction, including without limitation the rights lw1
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
@@ -78,8 +78,6 @@ class Index(object):
     """
 
     def __init__(self, client, index_name):
-        self.read_hosts = client.read_hosts
-        self.write_hosts = client.write_hosts
         self.client = client
         self.index_name = index_name
         self._request_path = '/1/indexes/%s' % safe(self.index_name)
@@ -99,12 +97,10 @@ class Index(object):
             (if the attribute already exist the old object will be overwrite)
         """
         if object_id is not None:
-            return self._perform_request(self.write_hosts,
-                                         '/%s' % safe(object_id), 'PUT',
-                                         body=content)
+            path = '/%s' % safe(object_id)
+            return self._req(False, path, 'PUT', data=content)
         else:
-            return self._perform_request(self.write_hosts, '', 'POST',
-                                         body=content)
+            return self._req(False, '', 'POST', data=content)
 
     @deprecated
     def addObjects(self, objects):
@@ -137,10 +133,9 @@ class Index(object):
                 attributes_to_retrieve = ','.join(attributes_to_retrieve)
 
             params = {'attributes': attributes_to_retrieve}
-            return self._perform_request(self.read_hosts, path, 'GET',
-                                         params=params)
+            return self._req(True, path, 'GET', params)
         else:
-            return self._perform_request(self.read_hosts, path, 'GET')
+            return self._req(True, path, 'GET')
 
     @deprecated
     def getObjects(self, object_ids):
@@ -159,9 +154,9 @@ class Index(object):
                 'indexName': self.index_name,
                 'objectID': object_id
             })
+        data = {'requests': requests}
         path = '/1/indexes/*/objects'  # Use client._perform_request()
-        return self.client._perform_request(self.read_hosts, path, 'POST',
-                                            body={'requests': requests})
+        return self.client._req(True, path, 'POST', data=data)
 
     @deprecated
     def partialUpdateObject(self, partial_object):
@@ -175,8 +170,7 @@ class Index(object):
             object must contains an objectID attribute
         """
         path = '/%s/partial' % safe(partial_object['objectID'])
-        return self._perform_request(self.write_hosts, path, 'POST',
-                                     body=partial_object)
+        return self._req(False, path, 'POST', data=partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
@@ -210,7 +204,7 @@ class Index(object):
             an objectID attribute
         """
         path = '/%s' % safe(obj['objectID'])
-        return self._perform_request(self.write_hosts, path, 'PUT', body=obj)
+        return self._req(False, path, 'PUT', data=obj)
 
     @deprecated
     def saveObjects(self, objects):
@@ -253,8 +247,8 @@ class Index(object):
         params['attributesToHighlight'] = []
         params['distinct'] = False
 
-        return self.delete_objects(
-                    obj['objectID'] for obj in self.browse_all(params))
+        ids = (o['objectID'] for o in self.browse_all(params))
+        return self.delete_objects(ids)
 
     @deprecated
     def deleteObject(self, object_id):
@@ -267,7 +261,7 @@ class Index(object):
         @param object_id the unique identifier of object to delete
         """
         path = '/%s' % safe(object_id)
-        return self._perform_request(self.write_hosts, path, 'DELETE')
+        return self._req(False, path, 'DELETE')
 
     @deprecated
     def deleteObjects(self, objects):
@@ -402,8 +396,7 @@ class Index(object):
 
         args['query'] = query
         params = {'params': urlencode(urlify(args))}
-        return self._perform_request(self.read_hosts, '/query', 'POST',
-                                     body=params, is_search=True)
+        return self._req(True, '/query', 'POST', data=params)
 
     @deprecated
     def searchDisjunctiveFaceting(self, query, disjunctive_facets,
@@ -517,8 +510,7 @@ class Index(object):
             of hits per page. Defaults to 1000.
         """
         params = {'page': page, 'hitsPerPage': hits_per_page}
-        return self._perform_request(self.read_hosts, '/browse', 'GET',
-                                     params=params)
+        return self._req(True, '/browse', 'GET', params)
 
     def browse_from(self, params=None, cursor=None):
         """
@@ -531,8 +523,7 @@ class Index(object):
             params = {}
         if cursor:
             params = {'cursor': cursor}
-        return self._perform_request(self.read_hosts, '/browse', 'GET',
-                                     params=params)
+        return self._req(True, '/browse', 'GET', params)
 
     def browse_all(self, params=None):
         """
@@ -649,7 +640,7 @@ class Index(object):
         """
         path = '/task/%d' % task_id
         while True:
-            res = self._perform_request(self.read_hosts, path, 'GET')
+            res = self._req(True, path, 'GET')
             if res['status'] == 'published':
                 return res
             time.sleep(time_before_retry / 1000.0)
@@ -661,8 +652,7 @@ class Index(object):
     def get_settings(self):
         """Get settings of this index."""
         params = {'getVersion': 2}
-        return self._perform_request(self.read_hosts, '/settings', 'GET',
-                                     params=params)
+        return self._req(True, '/settings', 'GET', params)
 
     @deprecated
     def clearIndex(self):
@@ -673,7 +663,7 @@ class Index(object):
         This function deletes the index content. Settings and index specific
         API keys are kept untouched.
         """
-        return self._perform_request(self.write_hosts, '/clear', 'POST')
+        return self._req(False, '/clear', 'POST')
 
     @deprecated
     def setSettings(self, settings):
@@ -762,8 +752,7 @@ class Index(object):
             - optionalWords: (array of strings) Specify a list of words that
             should be considered as optional when found in the query.
         """
-        return self._perform_request(self.write_hosts, '/settings', 'PUT',
-                                     body=settings)
+        return self._req(False, '/settings', 'PUT', data=settings)
 
     @deprecated
     def listUserKeys(self):
@@ -773,7 +762,7 @@ class Index(object):
         """
         List all existing user keys of this index with their associated ACLs.
         """
-        return self._perform_request(self.read_hosts, '/keys', 'GET')
+        return self._req(True, '/keys', 'GET')
 
     @deprecated
     def getUserKeyACL(self, key):
@@ -782,7 +771,7 @@ class Index(object):
     def get_user_key_acl(self, key):
         """Get ACL of a user key associated to this index."""
         path = '/keys/%s' % key
-        return self._perform_request(self.read_hosts, path, 'GET')
+        return self._req(True, path, 'GET')
 
     @deprecated
     def deleteUserKey(self, key):
@@ -791,7 +780,7 @@ class Index(object):
     def delete_user_key(self, key):
         """Delete an existing user key associated to this index."""
         path = '/keys/%s' % key
-        return self._perform_request(self.write_hosts, path, 'DELETE')
+        return self._req(False, path, 'DELETE')
 
     @deprecated
     def addUserKey(self, obj, validity=0, max_queries_per_ip_per_hour=0,
@@ -841,8 +830,7 @@ class Index(object):
             'maxHitsPerQuery': max_hits_per_query
         })
 
-        return self._perform_request(self.write_hosts, '/keys', 'POST',
-                                     body=obj)
+        return self._req(False, '/keys', 'POST', data=obj)
 
     def update_user_key(self, key, obj, validity=None,
                         max_queries_per_ip_per_hour=None,
@@ -889,20 +877,16 @@ class Index(object):
             obj['maxHitsPerQuery'] = max_hits_per_query
 
         path = '/keys/%s' % key
-        return self._perform_request(self.write_hosts, path, 'PUT',
-                                     body=obj)
+        return self._req(False, path, 'PUT', data=obj)
 
     def batch(self, requests):
         """Send a batch requests."""
         if isinstance(requests, (list, tuple)):
             requests = {'requests': requests}
 
-        return self._perform_request(self.write_hosts, '/batch', 'POST',
-                                     body=requests)
+        return self._req(False, '/batch', 'POST', data=requests)
 
-    def _perform_request(self, hosts, path, method, params=None, body=None,
-                         is_search=False):
+    def _req(self, is_search, path, meth, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
-        return self.client._perform_request(
-                        hosts, '%s%s' % (self._request_path, path), method,
-                        params=params, body=body, is_search=is_search)
+        path = '%s%s' % (self._request_path, path)
+        return self.client._req(is_search, path, meth, params, data)
