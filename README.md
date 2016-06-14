@@ -192,7 +192,7 @@ Check our [online guides](https://www.algolia.com/doc):
 Add a new object to the Index
 ==================
 
-Each entry in an index has a unique identifier called `objectID`. There are two ways to add en entry to the index:
+Each entry in an index has a unique identifier called `objectID`. There are two ways to add an entry to the index:
 
  1. Using automatic `objectID` assignment. You will be able to access it in the answer.
  2. Supplying your own `objectID`.
@@ -302,7 +302,7 @@ Search
 
 To perform a search, you only need to initialize the index and perform a call to the search function.
 
-The search query allows only to retrieve 1000 hits, if you need to retrieve more than 1000 hits for seo, you can use [Backup / Retrieve all index content](#backup--retrieve-of-all-index-content)
+The search query allows only to retrieve 1000 hits, if you need to retrieve more than 1000 hits for seo, you can use [Backup / Retrieve all index content](#backup--export-an-index)
 
 ```python
 index = client.init_index("contacts")
@@ -961,7 +961,7 @@ You can also use a string array encoding (for example `numericFilters: ["price>1
         </div>
       </td>
       <td class='client-readme-param-content'>
-        <p>Filter the query by a set of tags. You can AND tags by separating them with commas. To OR tags, you must add parentheses. For example, <code>tags=tag1,(tag2,tag3)</code> means <em>tag1 AND (tag2 OR tag3)</em>. You can also use a string array encoding. For example, <code>tagFilters: [&quot;tag1&quot;,[&quot;tag2&quot;,&quot;tag3&quot;]]</code> means <em>tag1 AND (tag2 OR tag3)</em>.</p>
+        <p>Filter the query by a set of tags. You can AND tags by separating them with commas. To OR tags, you must add parentheses. For example, <code>tagFilters=tag1,(tag2,tag3)</code> means <em>tag1 AND (tag2 OR tag3)</em>. You can also use a string array encoding. For example, <code>tagFilters: [&quot;tag1&quot;,[&quot;tag2&quot;,&quot;tag3&quot;]]</code> means <em>tag1 AND (tag2 OR tag3)</em>. Negations are supported via the <code>-</code> operator, prefixing the value. For example: <code>tagFilters=tag1,-tag2</code>.</p>
 
 <p>At indexing, tags should be added in the <strong>_tags</strong> attribute of objects. For example <code>{&quot;_tags&quot;:[&quot;tag1&quot;,&quot;tag2&quot;]}</code>.</p>
 
@@ -1045,8 +1045,10 @@ You can also use a string array encoding (for example `numericFilters: ["price>1
       </td>
       <td class='client-readme-param-content'>
         <p>Filter the query with numeric, facet or/and tag filters. The syntax is a SQL like syntax, you can use the OR and AND keywords. The syntax for the underlying numeric, facet and tag filters is the same than in the other filters:
-<code>available=1 AND (category:Book OR NOT category:Ebook) AND public</code>
+<code>available=1 AND (category:Book OR NOT category:Ebook) AND _tags:public</code>
 <code>date: 1441745506 TO 1441755506 AND inStock &gt; 0 AND author:&quot;John Doe&quot;</code></p>
+
+<p>If no attribute name is specified, the filter applies to <code>_tags</code>. For example: <code>public OR user_42</code> will translate to <code>_tags:public OR _tags:user_42</code>.</p>
 
 <p>The list of keywords is:</p>
 
@@ -1109,7 +1111,7 @@ You can send multiple queries with a single API call using a batch of queries:
 # - 1st query targets index `categories`
 # - 2nd and 3rd queries target index `products` 
 results = self.client.multiple_queries([{"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3}
-  , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3, "filters": "promotion"}
+  , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 3, "filters": "_tags:promotion"}
   , {"indexName" : "categories", "query" : myQueryString, "hitsPerPage": 10}])
 
 print results["results"]
@@ -1152,11 +1154,11 @@ You can delete an object using its `objectID`:
 index.delete_object("myID")
 ```
 
-
 Delete by query
 ==================
 
 You can delete all objects matching a single query with the following code. Internally, the API client performs the query, deletes all matching hits, and waits until the deletions have been applied.
+
 
 ```python
 params = {}
@@ -1465,6 +1467,38 @@ To get a full description of how the Ranking works, you can have a look at our <
       </td>
       <td class='client-readme-param-content'>
         <p>List of attributes on which you want to disable typo tolerance (must be a subset of the <code>attributesToIndex</code> index setting). By default the list is empty.</p>
+
+      </td>
+    </tr>
+    
+  
+    <tr>
+      <td valign='top'>
+        <div class='client-readme-param-container'>
+          <div class='client-readme-param-container-inner'>
+            <div class='client-readme-param-name'><code>disablePrefixOnAttributes</code></div>
+            <div class="client-readme-param-meta"><div><em>Type: <strong>string array</strong></em></div></div>
+          </div>
+        </div>
+      </td>
+      <td class='client-readme-param-content'>
+        <p>List of attributes on which you want to disable prefix matching (must be a subset of the <code>attributesToIndex</code> index setting). This setting is useful on attributes that contain string that should not be matched as a prefix (for example a product SKU). By default the list is empty.</p>
+
+      </td>
+    </tr>
+    
+  
+    <tr>
+      <td valign='top'>
+        <div class='client-readme-param-container'>
+          <div class='client-readme-param-container-inner'>
+            <div class='client-readme-param-name'><code>disableExactOnAttributes</code></div>
+            <div class="client-readme-param-meta"><div><em>Type: <strong>string array</strong></em></div></div>
+          </div>
+        </div>
+      </td>
+      <td class='client-readme-param-content'>
+        <p>List of attributes on which you want to disable the computation of <code>exact</code> criteria (must be a subset of the <code>attributesToIndex</code> index setting). By default the list is empty.</p>
 
       </td>
     </tr>
@@ -2180,7 +2214,7 @@ You may have a single index containing **per user** data. In that case, all reco
 ```python
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'filters': 'user_42'})
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'filters': '_tags:user_42'})
 ```
 
 This public API key can then be used in your JavaScript code as follow:
@@ -2205,7 +2239,7 @@ You can mix rate limits and secured API keys by setting a `userToken` query para
 ```python
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'user_XXXX' if they are visible by user XXXX
-public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'filters': 'user_42', 'userToken': 'user_42'})
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'filters': '_tags:user_42', 'userToken': 'user_42'})
 ```
 
 This public API key can then be used in your JavaScript code as follow:
