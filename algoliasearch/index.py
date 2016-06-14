@@ -543,6 +543,97 @@ class Index(object):
         """
         return IndexIterator(self, params=params)
 
+    def save_synonym(self, content, object_id, forward_to_slaves=False):
+        """
+        Add a synonym in this index.
+
+        @param content contains the synonyms set to add to the index.
+            The object is represented by an associative array
+        @param object_id unique identifier for the new synonym.
+            If the identifier already exists, the old synonym is replaced
+        @param forward_to_slaves (optional) should the changes be forwarded to
+            slave indexes
+        """
+        path = '/synonyms/%s' % safe(object_id)
+        params = {'forwardToSlaves': forward_to_slaves}
+        return self._perform_request(self.write_hosts, path, 'PUT',
+                                     body=content, params=params)
+
+    def batch_synonyms(self, synonyms, forward_to_slaves=False,
+                       replace_existing_synonyms=False):
+        """
+        Add several synonyms in this index.
+
+        @param synonyms array of synonyms to add
+        @param forward_to_slaves (optional) should the changes be forwarded to
+            slave indexes
+        @param replace_existing_synonyms (optional) should the index be cleared
+            of existing synonyms
+        """
+        params = {
+            'forwardToSlaves': forward_to_slaves,
+            'replaceExistingSynonyms': replace_existing_synonyms
+        }
+
+        return self._perform_request(self.write_hosts, '/synonyms/batch',
+                                     'POST', body=synonyms, params=params)
+
+    def get_synonym(self, object_id):
+        """
+        Get a synonym from this index.
+
+        @param object_id unique identifier of the synonym to retrieve
+        """
+        path = '/synonyms/%s' % safe(object_id)
+        return self._perform_request(self.read_hosts, path, 'GET')
+
+    def delete_synonym(self, object_id, forward_to_slaves=False):
+        """
+        Delete a synonym from the index.
+
+        @param object_id the unique identifier of the synonyms set to delete
+        @param forward_to_slaves (optional) should the changes be forwarded to
+            slave indexes
+        """
+        path = '/synonyms/%s' % safe(object_id)
+        params = {'forwardToSlaves': forward_to_slaves}
+        return self._perform_request(self.write_hosts, path, 'DELETE',
+                                     params=params)
+
+    def clear_synonyms(self, forward_to_slaves=False):
+        """
+        Delete all synonyms from the index.
+
+        @param forward_to_slaves (optional) should the changes be forwarded to
+            slave indexes
+        """
+        path = '/synonyms/clear'
+        params = {'forwardToSlaves': forward_to_slaves}
+        return self._perform_request(self.write_hosts, path, 'POST',
+                                     params=params)
+
+    def search_synonyms(self, query, types=[], page=0, hits_per_page=100):
+        """
+        Search for synonyms from this index.
+
+        @param query the full text query
+        @param types (optional) the types of the synonyms to search for.
+        @param page (optional integer) the page to fetch
+        @param hits_per_page (optional integer) the number of hits per page
+        """
+        if isinstance(types, str):
+            types = [] if len(types) == 0 else [types]
+
+        body = {
+            'query': query,
+            'type': ','.join(types),
+            'page': page,
+            'hitsPerPage': hits_per_page
+        }
+
+        return self._perform_request(self.read_hosts, '/synonyms/search',
+                                     'POST', body=body, is_search=True)
+
     @deprecated
     def waitTask(self, task_id, time_before_retry=100):
         return self.wait_task(task_id, time_before_retry)
@@ -569,7 +660,9 @@ class Index(object):
 
     def get_settings(self):
         """Get settings of this index."""
-        return self._perform_request(self.read_hosts, '/settings', 'GET')
+        params = {'getVersion': 2}
+        return self._perform_request(self.read_hosts, '/settings', 'GET',
+                                     params=params)
 
     @deprecated
     def clearIndex(self):

@@ -111,6 +111,28 @@ class IndexWithoutDataTest(IndexTest):
         res = self.index.get_object(task['objectID'])
         self.assertEqual(res['now'], time.mktime(value.timetuple()))
 
+    def test_synonyms(self):
+        task = self.index.add_object({'name': '589 Howard St., San Francisco'})
+        task = self.index.batch_synonyms([
+            {'objectID': 'city', 'type': 'synonym',
+             'synonyms': ['San Francisco', 'SF']},
+            {'objectID': 'street', 'type': 'altCorrection1',
+             'word': 'Street', 'corrections': ['St']}
+        ])
+        self.index.wait_task(task['taskID'])
+        task = self.index.get_synonym("city")
+        self.assertEqual('city', task['objectID'])
+        task = self.index.search('Howard Street SF')
+        self.assertEqual(1, int(task['nbHits']))
+        task = self.index.delete_synonym('street')
+        self.index.waitTask(task['taskID'])
+        task = self.index.search_synonyms('', ['synonym'], 0, 5)
+        self.assertEqual(1, int(task['nbHits']))
+        task = self.index.clear_synonyms()
+        self.index.wait_task(task['taskID'])
+        task = self.index.search_synonyms('', hits_per_page=5)
+        self.assertEqual(0, int(task['nbHits']))
+
 
 class IndexWithReadOnlyDataTest(IndexTest):
     """Tests that use one index with initial data (read only)."""
