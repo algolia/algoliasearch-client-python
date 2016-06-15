@@ -125,7 +125,7 @@ class IndexWithoutDataTest(IndexTest):
         task = self.index.search('Howard Street SF')
         self.assertEqual(1, int(task['nbHits']))
         task = self.index.delete_synonym('street')
-        self.index.waitTask(task['taskID'])
+        self.index.wait_task(task['taskID'])
         task = self.index.search_synonyms('', ['synonym'], 0, 5)
         self.assertEqual(1, int(task['nbHits']))
         task = self.index.clear_synonyms()

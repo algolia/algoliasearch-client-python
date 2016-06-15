@@ -155,7 +155,7 @@ class Index(object):
                 'objectID': object_id
             })
         data = {'requests': requests}
-        path = '/1/indexes/*/objects'  # Use client._perform_request()
+        path = '/1/indexes/*/objects'  # Use client._req()
         return self.client._req(True, path, 'POST', data=data)
 
     @deprecated
@@ -547,8 +547,7 @@ class Index(object):
         """
         path = '/synonyms/%s' % safe(object_id)
         params = {'forwardToSlaves': forward_to_slaves}
-        return self._perform_request(self.write_hosts, path, 'PUT',
-                                     body=content, params=params)
+        return self._req(False, path, 'PUT', params, content)
 
     def batch_synonyms(self, synonyms, forward_to_slaves=False,
                        replace_existing_synonyms=False):
@@ -566,8 +565,7 @@ class Index(object):
             'replaceExistingSynonyms': replace_existing_synonyms
         }
 
-        return self._perform_request(self.write_hosts, '/synonyms/batch',
-                                     'POST', body=synonyms, params=params)
+        return self._req(False, '/synonyms/batch', 'POST', params, synonyms)
 
     def get_synonym(self, object_id):
         """
@@ -576,7 +574,7 @@ class Index(object):
         @param object_id unique identifier of the synonym to retrieve
         """
         path = '/synonyms/%s' % safe(object_id)
-        return self._perform_request(self.read_hosts, path, 'GET')
+        return self._req(True, path, 'GET')
 
     def delete_synonym(self, object_id, forward_to_slaves=False):
         """
@@ -588,8 +586,7 @@ class Index(object):
         """
         path = '/synonyms/%s' % safe(object_id)
         params = {'forwardToSlaves': forward_to_slaves}
-        return self._perform_request(self.write_hosts, path, 'DELETE',
-                                     params=params)
+        return self._req(False, path, 'DELETE', params)
 
     def clear_synonyms(self, forward_to_slaves=False):
         """
@@ -600,8 +597,7 @@ class Index(object):
         """
         path = '/synonyms/clear'
         params = {'forwardToSlaves': forward_to_slaves}
-        return self._perform_request(self.write_hosts, path, 'POST',
-                                     params=params)
+        return self._req(False, path, 'POST', params)
 
     def search_synonyms(self, query, types=[], page=0, hits_per_page=100):
         """
@@ -615,15 +611,14 @@ class Index(object):
         if isinstance(types, str):
             types = [] if len(types) == 0 else [types]
 
-        body = {
+        data = {
             'query': query,
             'type': ','.join(types),
             'page': page,
             'hitsPerPage': hits_per_page
         }
 
-        return self._perform_request(self.read_hosts, '/synonyms/search',
-                                     'POST', body=body, is_search=True)
+        return self._req(True, '/synonyms/search', 'POST', data=data)
 
     @deprecated
     def waitTask(self, task_id, time_before_retry=100):
