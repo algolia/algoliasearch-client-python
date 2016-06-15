@@ -1,7 +1,11 @@
 CHANGELOG
 
+2016-06-15 1.9.0
+    * Implement the new synonym API functions
+	* Ensure the hosts are chosen randomly when retrying for better balancing
+
 2016-02-11 1.8.0
-  * Upgrade to requests[security]>=2.9.1 to fix the underlying SNI issues
+    * Upgrade to requests[security]>=2.9.1 to fix the underlying SNI issues
 
 2015-10-23 1.7.1
 	* Add compatibility with Google Appengine
