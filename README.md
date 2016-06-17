@@ -7,6 +7,11 @@
 
 
 
+We implemented an asynchronous version of the client that may suit your need if
+you are using a framework such as `aiohttp` in your backend. This version can
+be found [here](https://github.com/algolia/algoliasearch-client-python-async).
+
+
 
 <!--NO_HTML-->
 
