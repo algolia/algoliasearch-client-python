@@ -1243,6 +1243,13 @@ print settings
 index.set_settings({"customRanking": ["desc(followers)"]})
 ```
 
+## Slave settings
+
+You can forward all settings updates to the slaves of an index by using the `forwardToSlaves` option:
+
+```python
+index.set_settings({"customRanking": ["desc(followers)"]}, True)
+```
 
 ## Indexing parameters
 
