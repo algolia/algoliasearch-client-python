@@ -211,7 +211,6 @@ class Client(object):
                          strategy='none'):
         """This method allows to query multiple indexes with one API call."""
         path = '/1/indexes/*/queries'
-        params = {'strategy': strategy}
 
         requests = []
         for query in queries:
@@ -222,8 +221,8 @@ class Client(object):
                 'params': urlencode(urlify(query))
             })
 
-        data = {'requests': requests}
-        return self._req(True, path, 'POST', params, data)
+        data = {'requests': requests, 'strategy': strategy}
+        return self._req(True, path, 'POST', data=data)
 
     def batch(self, requests):
         """Send a batch request targeting multiple indices."""
