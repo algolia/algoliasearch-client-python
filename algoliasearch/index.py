@@ -664,10 +664,11 @@ class Index(object):
     def setSettings(self, settings):
         return self.set_settings(settings)
 
-    def set_settings(self, settings):
+    def set_settings(self, settings, forward_to_slaves=True):
         """
         Set settings for this index.
 
+        @param forward_to_slaves Forward the changes to slaves (default = True)
         @param settigns the settings object that can contains :
             - minWordSizefor1Typo: (integer) the minimum number of characters
             to accept one typo (default = 3).
@@ -747,7 +748,8 @@ class Index(object):
             - optionalWords: (array of strings) Specify a list of words that
             should be considered as optional when found in the query.
         """
-        return self._req(False, '/settings', 'PUT', data=settings)
+        params = {'forwardToSlaves': forward_to_slaves}
+        return self._req(False, '/settings', 'PUT', params, settings)
 
     @deprecated
     def listUserKeys(self):
