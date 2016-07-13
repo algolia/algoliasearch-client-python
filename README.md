@@ -2043,8 +2043,9 @@ The REST API lets your interact directly with Algolia platforms from anything th
 
 
 
+## Troubleshooting
 
-**Unreachable hosts error?**
+### Unreachable hosts
 
 If you are seeing an error for `Unreachable hosts` when pushing data to Algolia, this is caused by `PyOpenSSL` and older versions of Python. You can see [more information here](https://github.com/algolia/algoliasearch-client-python/issues/30).
 
