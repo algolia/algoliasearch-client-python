@@ -70,6 +70,7 @@ Manage Indices
 1. [Move an index](#move-index---moveindex)
 
 Api Keys
+
 1. [Generate API keys](#generate-key---generatesecuredapikey)
 
 Advanced
@@ -1690,6 +1691,8 @@ print res["cursor"]
 ```
 
 
+
+
 ### List api keys - `list_api_keys`
 
 To list existing keys, you can use:
@@ -1901,8 +1904,6 @@ print client.get_user_key_acl("f420238212c54dcfad07ea0aa6d5c45f")
 # Gets the rights of an index specific key
 print index.get_user_key_acl("71671c38001bf3ac857bc82052485107")
 ```
-
-
 
 ### Multiple queries - `multiple_queries`
 
