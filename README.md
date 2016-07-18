@@ -30,9 +30,9 @@ Our Python client lets you easily use the [Algolia Search API](https://www.algol
 
 **Getting Started**
 
-1. [Setup](#setup)
+1. [Getting started](#getting-started)
 1. [Quick Start](#quick-start)
-1. [Guides & Tutorials](#guides-tutorials)
+1. [Guides & Tutorials](#guides--tutorials)
 
 
 **Commands Reference**
@@ -88,7 +88,7 @@ Advanced
 1. [Wait for operations](#wait-for-operations---wait_task)
 1. [Multiple queries](#multiple-queries---multiple_queries)
 1. [Delete by query](#delete-by-query---delete_by_query)
-1. [Backup / Export an index](#backup-/-export-an-index---browse)
+1. [Backup / Export an index](#backup-)-export-an-index---browse)
 1. [List api keys](#list-api-keys---list_api_keys)
 1. [Add user key](#add-user-key---add_user_key)
 1. [Update user key](#update-user-key---update_user_key)
