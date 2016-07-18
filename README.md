@@ -1680,7 +1680,7 @@ index.search('another query', function(err, content) {
 
 ## Synonyms
 
-### Save synonym - `saveSynonym`
+### Save synonym - `save_synonym`
 
 This method saves a single synonym record into the index.
 
@@ -1693,7 +1693,7 @@ index.save_synonym({
   'synonyms': ['car', 'vehicle', 'auto']
 }, 'a-unique-identifier', True)
 
-### Batch synonyms - `batchSynonyms`
+### Batch synonyms - `batch_synonyms`
 
 Use the batch method to create a large number of synonyms at once,
 forward them to slave indices if desired,
@@ -1735,7 +1735,7 @@ Forward the deletion to slave indices by setting the forwardToSlaves parameter t
 # Delete and forward to slaves
 index.delete_synonym('a-unique-identifier', True)
 
-### Clear all synonyms - `clearSynonyms`
+### Clear all synonyms - `clear_synonyms`
 
 This is a convenience method to delete all synonyms at once.
 It should not be used on a production index to then push a new list of synonyms:
@@ -1748,14 +1748,14 @@ use the batch method with the replaceExistingSynonyms parameter set to true.
 # Clear synonyms and forward to slaves
 index.clear_synonyms(True)
 
-### Get synonym - `getSynonym`
+### Get synonym - `get_synonym`
 
 Search for synonym records by their objectID or by the text they contain.
 Both methods are covered here.
 
 synonym = index.get_synonym('a-unique-identifier')
 
-### Search synonyms - `searchSynonyms`
+### Search synonyms - `search_synonyms`
 
 Search for synonym records similar to how you’d search normally.
 
@@ -1886,7 +1886,7 @@ Each key is defined by a set of permissions that specify the authorized actions.
  * **analytics**: Allowed to retrieve analytics through the analytics API.
  * **listIndexes**: Allowed to list all accessible indexes.
 
-### Add user key - `addUserKey`
+### Add user key - `add_user_key`
 
 To create API keys:
 
@@ -2036,7 +2036,7 @@ res = client.add_user_key(params)
 print res["key"]
 ```
 
-### Update user key - `updateUserKey`
+### Update user key - `update_user_key`
 
 To update the permissions of an existing key:
 ```python
