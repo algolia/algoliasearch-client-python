@@ -2,7 +2,7 @@
 
 # Algolia Search API Client for Python
 
-<!--/NO_HTML-->
+
 
 
 
@@ -13,11 +13,13 @@ be found [here](https://github.com/algolia/algoliasearch-client-python-async).
 
 
 
-<!--NO_HTML-->
+
+
+
 
 [Algolia Search](https://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
 
-<!--/NO_HTML-->
+
 
 Our Python client lets you easily use the [Algolia Search API](https://www.algolia.com/doc/rest) from your backend. It wraps the [Algolia Search REST API](https://www.algolia.com/doc/rest).
 
@@ -29,10 +31,9 @@ Our Python client lets you easily use the [Algolia Search API](https://www.algol
 
 
 
-<!--NO_HTML-->
 
-Table of Contents
------------------
+## Table of Contents
+
 **Getting Started**
 
 1. [Setup](#setup)
@@ -90,12 +91,9 @@ Advanced
 1. [Get Logs](#get-logs---getlogs)
 
 
-<!--/NO_HTML-->
 
-<!--NO_HTML-->
+## Guides & Tutorials
 
-Guides & Tutorials
-================
 Check our [online guides](https://www.algolia.com/doc):
  * [Data Formatting](https://www.algolia.com/doc/indexing/formatting-your-data)
  * [Import and Synchronize data](https://www.algolia.com/doc/indexing/import-synchronize-data/python)
@@ -111,13 +109,14 @@ Check our [online guides](https://www.algolia.com/doc):
  * [REST API](https://www.algolia.com/doc/rest)
 
 
+
+
+
+
+
+
+
 <!--/NO_HTML-->
-
-
-
-
-
-
 
 
 
@@ -500,7 +499,7 @@ index.delete_by_query("John", params)
 
 
 
-### Wait for an indexing operation - `wait_task`
+### Wait for operations - `wait_task`
 
 All write operations in Algolia are asynchronous by design.
 
@@ -2044,8 +2043,9 @@ The REST API lets your interact directly with Algolia platforms from anything th
 
 
 
+## Troubleshooting
 
-**Unreachable hosts error?**
+### Unreachable hosts
 
 If you are seeing an error for `Unreachable hosts` when pushing data to Algolia, this is caused by `PyOpenSSL` and older versions of Python. You can see [more information here](https://github.com/algolia/algoliasearch-client-python/issues/30).
 
