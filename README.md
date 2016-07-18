@@ -39,62 +39,62 @@ Our Python client lets you easily use the [Algolia Search API](https://www.algol
 
 Getting started
 
-1. [Init Index](#install-and-init---initindex)
+1. [Install and init](#install-and-init---init_index)
 
 Search
 
-1. [Search](#search)
-1. [Find by id](#find-by-ids---getobjects)
+1. [Search in an index](#search-in-an-index---search)
+1. [Find by IDs](#find-by-ids---get_objects)
 
 Indexing
 
-1. [Add objects](#add-objects---addobjects)
-1. [Update objects](#update-objects---saveobjects)
-1. [Partial Update objects](#partial-update---partialupdateobjects)
-1. [Delete objects](#delete-objects---deleteobjects)
+1. [Add objects](#add-objects---add_objects)
+1. [Update objects](#update-objects---save_objects)
+1. [Partial update](#partial-update---partial_update_objects)
+1. [Delete objects](#delete-objects---delete_objects)
 
 Settings
 
-1. [Get settings](#get-settings---getsettings)
-1. [Set settings](#set-settings---setsettings)
+1. [Get settings](#get-settings---get_settings)
+1. [Set settings](#set-settings---)
 
 Manage Indices
 
-1. [List indices](#list-indices---listindexes)
-1. [Delete an index](#delete-index---deleteindex)
-1. [Clear an index](#clear-index---clearindex)
-1. [Copy an index](#copy-index---copyindex)
-1. [Move an index](#move-index---moveindex)
+1. [List indices](#list-indices---list_indexes)
+1. [Delete index](#delete-index---delete_index)
+1. [Clear index](#clear-index---clear_index)
+1. [Copy index](#copy-index---copy_index)
+1. [Move index](#move-index---move_index)
 
 Api Keys
 
-1. [Generate API keys](#generate-key---generatesecuredapikey)
+1. [Generate key](#generate-key---generate_secured_api_key)
 
 
 Synonyms
 
-1. [Save synonym](#save-synonym)
-1. [Batch synonyms](#batch-synonyms)
+1. [Save synonym](#save-synonym---save_synonym)
+1. [Batch synonyms](#batch-synonyms---batch_synonyms)
 1. [Editing Synonyms](#editing-synonyms)
-1. [Delete Synonyms](#delete-synonyms)
-1. [Clear all synonyms](#clear-all-synonyms)
-1. [Get synonym](#get-synonym)
-1. [Search synonyms](#search-synonym)
+1. [Delete Synonyms](#delete-synonyms---delete_synonyms)
+1. [Clear all synonyms](#clear-all-synonyms---clear_synonyms)
+1. [Get synonym](#get-synonym---get_synonym)
+1. [Search synonyms](#search-synonyms---search_synonyms)
 
 
 Advanced
 
 1. [Custom batch](#custom-batch---batch)
-1. [Wait for an indexing operation](#wait-for-an-indexing-operation---waittask)
-1. [Multiple queries](#multiple-queries---multiplequeries)
-1. [Delete by query](#delete-by-query---deletebyquery)
-1. [Backup / Export an index](#backup--export-an-index---browse)
-1. [List api keys](#list-api-keys---listapikeys)
-1. [Add user key](#add-user-key---adduserkey)
-1. [Update user key](#update-user-key---updateuserkey)
-1. [Delete user key](#delete-user-key---deleteuserkey)
-1. [Get key permissions](#get-key-permissions---getuserkeyacl)
-1. [Get Logs](#get-logs---getlogs)
+1. [Wait for operations](#wait-for-operations---wait_task)
+1. [Multiple queries](#multiple-queries---multiple_queries)
+1. [Delete by query](#delete-by-query---delete_by_query)
+1. [Backup / Export an index](#backup-/-export-an-index---browse)
+1. [List api keys](#list-api-keys---list_api_keys)
+1. [Add user key](#add-user-key---add_user_key)
+1. [Update user key](#update-user-key---update_user_key)
+1. [Delete user key](#delete-user-key---delete_user_key)
+1. [Get key permissions](#get-key-permissions---get_user_key_acl)
+1. [Get Logs](#get-logs---get_logs)
 
 
 
@@ -1687,11 +1687,13 @@ This method saves a single synonym record into the index.
 In this example, we specify true to forward the creation to slave indices.
 By default the behavior is to save only on the specified index.
 
+```python
 index.save_synonym({
   'objectID': 'a-unique-identifier',
   'type': 'synonym',
   'synonyms': ['car', 'vehicle', 'auto']
 }, 'a-unique-identifier', True)
+```
 
 ### Batch synonyms - `batch_synonyms`
 
@@ -1704,6 +1706,7 @@ You should always use replaceExistingSynonyms to atomically replace all synonyms
 on a production index. This is the only way to ensure the index always
 has a full list of synonyms to use during the indexing of the new list.
 
+```python
 # Batch synonyms, with slave forwarding and atomic replacement of existing synonyms
 index.batch_synonyms([{
   'objectID': 'a-unique-identifier',
@@ -1714,6 +1717,7 @@ index.batch_synonyms([{
   'type': 'synonym',
   'synonyms': ['street', 'st']
 }], True, True)
+```
 
 ### Editing Synonyms
 
@@ -1732,8 +1736,10 @@ Use the normal index delete method to delete synonyms,
 specifying the objectID of the synonym record you want to delete.
 Forward the deletion to slave indices by setting the forwardToSlaves parameter to true.
 
+```python
 # Delete and forward to slaves
 index.delete_synonym('a-unique-identifier', True)
+```
 
 ### Clear all synonyms - `clear_synonyms`
 
@@ -1745,15 +1751,19 @@ at all.
 To atomically replace all synonyms of an index,
 use the batch method with the replaceExistingSynonyms parameter set to true.
 
+```python
 # Clear synonyms and forward to slaves
 index.clear_synonyms(True)
+```
 
 ### Get synonym - `get_synonym`
 
 Search for synonym records by their objectID or by the text they contain.
 Both methods are covered here.
 
+```python
 synonym = index.get_synonym('a-unique-identifier')
+```
 
 ### Search synonyms - `search_synonyms`
 
@@ -1765,8 +1775,10 @@ Accepted search parameters:
 - page: the page to fetch when browsing through several pages of results. This value is zero-based.
 hitsPerPage: the number of synonyms to return for each call. The default value is 100.
 
+```python
 # Searching for "street" in synonyms and one-way synonyms; fetch the second page with 10 hits per page
 results = index.search_synonyms('street', ['synonym', 'oneWaySynonym'], 1, 10)
+```
 
 
 
