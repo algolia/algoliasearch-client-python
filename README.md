@@ -38,62 +38,62 @@ Our Python client lets you easily use the [Algolia Search API](https://www.algol
 
 Getting started
 
-1. [Install and init](#install-and-init---init_index)
+1. [Install and init](##install-and-init---init_index)
 
 Search
 
-1. [Search in an index](#search-in-an-index---search)
-1. [Find by IDs](#find-by-ids---get_objects)
+1. [Search in an index](##search-in-an-index---search)
+1. [Find by IDs](##find-by-ids---get_objects)
 
 Indexing
 
-1. [Add objects](#add-objects---add_objects)
-1. [Update objects](#update-objects---save_objects)
-1. [Partial update](#partial-update---partial_update_objects)
-1. [Delete objects](#delete-objects---delete_objects)
+1. [Add objects](##add-objects---add_objects)
+1. [Update objects](##update-objects---save_objects)
+1. [Partial update](##partial-update---partial_update_objects)
+1. [Delete objects](##delete-objects---delete_objects)
 
 Settings
 
-1. [Get settings](#get-settings---get_settings)
-1. [Set settings](#set-settings)
+1. [Get settings](##get-settings---get_settings)
+1. [Set settings](##set-settings)
 
 Manage Indices
 
-1. [List indices](#list-indices---list_indexes)
-1. [Delete index](#delete-index---delete_index)
-1. [Clear index](#clear-index---clear_index)
-1. [Copy index](#copy-index---copy_index)
-1. [Move index](#move-index---move_index)
+1. [List indices](##list-indices---list_indexes)
+1. [Delete index](##delete-index---delete_index)
+1. [Clear index](##clear-index---clear_index)
+1. [Copy index](##copy-index---copy_index)
+1. [Move index](##move-index---move_index)
 
 Api Keys
 
-1. [Generate key](#generate-key---generate_secured_api_key)
+1. [Generate key](##generate-key---generate_secured_api_key)
 
 
 Synonyms
 
-1. [Save synonym](#save-synonym---save_synonym)
-1. [Batch synonyms](#batch-synonyms---batch_synonyms)
+1. [Save synonym](##save-synonym---save_synonym)
+1. [Batch synonyms](##batch-synonyms---batch_synonyms)
 1. [Editing Synonyms](#editing-synonyms)
-1. [Delete Synonyms](#delete-synonyms---delete_synonyms)
-1. [Clear all synonyms](#clear-all-synonyms---clear_synonyms)
-1. [Get synonym](#get-synonym---get_synonym)
-1. [Search synonyms](#search-synonyms---search_synonyms)
+1. [Delete Synonyms](##delete-synonyms---delete_synonyms)
+1. [Clear all synonyms](##clear-all-synonyms---clear_synonyms)
+1. [Get synonym](##get-synonym---get_synonym)
+1. [Search synonyms](##search-synonyms---search_synonyms)
 
 
 Advanced
 
-1. [Custom batch](#custom-batch---batch)
-1. [Wait for operations](#wait-for-operations---wait_task)
-1. [Multiple queries](#multiple-queries---multiple_queries)
-1. [Delete by query](#delete-by-query---delete_by_query)
-1. [Backup / Export an index](#backup--export-an-index---browse)
-1. [List api keys](#list-api-keys---list_api_keys)
-1. [Add user key](#add-user-key---add_user_key)
-1. [Update user key](#update-user-key---update_user_key)
-1. [Delete user key](#delete-user-key---delete_user_key)
-1. [Get key permissions](#get-key-permissions---get_user_key_acl)
-1. [Get Logs](#get-logs---get_logs)
+1. [Custom batch](##custom-batch---batch)
+1. [Wait for operations](##wait-for-operations---wait_task)
+1. [Multiple queries](##multiple-queries---multiple_queries)
+1. [Delete by query](##delete-by-query---delete_by_query)
+1. [Backup / Export an index](##backup--export-an-index---browse)
+1. [List api keys](##list-api-keys---list_api_keys)
+1. [Add user key](##add-user-key---add_user_key)
+1. [Update user key](##update-user-key---update_user_key)
+1. [Delete user key](##delete-user-key---delete_user_key)
+1. [Get key permissions](##get-key-permissions---get_user_key_acl)
+1. [Get Logs](##get-logs---get_logs)
 
 
 
@@ -294,58 +294,58 @@ Here is the list of parameters you can use with the search method (`search` [sco
 Parameters that can also be used in a setSettings also have the `indexing` [scope](#scope)
 
 **Search**
-- [query](query) `search`
+- [query](#query) `search`
 
 **Attributes**
-- [attributesToRetrieve](attributestoretrieve) `settings`, `search`
+- [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
 
 **Filtering / Faceting**
-- [filters](filters) `search`
-- [facets](facets) `search`
-- [maxValuesPerFacet](maxvaluesperfacet) `settings`, `search`
+- [filters](#filters) `search`
+- [facets](#facets) `search`
+- [maxValuesPerFacet](#maxvaluesperfacet) `settings`, `search`
 
 **Highlighting / Snippeting**
-- [attributesToHighlight](attributestohighlight) `settings`, `search`
-- [attributesToSnippet](attributestosnippet) `settings`, `search`
-- [highlightPreTag](highlightpretag) `settings`, `search`
-- [highlightPostTag](highlightposttag) `settings`, `search`
-- [snippetEllipsisText](snippetellipsistext) `settings`, `search`
+- [attributesToHighlight](#attributestohighlight) `settings`, `search`
+- [attributesToSnippet](#attributestosnippet) `settings`, `search`
+- [highlightPreTag](#highlightpretag) `settings`, `search`
+- [highlightPostTag](#highlightposttag) `settings`, `search`
+- [snippetEllipsisText](#snippetellipsistext) `settings`, `search`
 
 **Pagination**
-- [page](page) `search`
-- [hitsPerPage](hitsperpage) `settings`, `search`
+- [page](#page) `search`
+- [hitsPerPage](#hitsperpage) `settings`, `search`
 
 **Typos**
-- [minWordSizefor1Typo](minwordsizefor1typo) `settings`, `search`
-- [minWordSizefor2Typos](minwordsizefor2typos) `settings`, `search`
-- [typoTolerance](typotolerance) `settings`, `search`
-- [allowTyposOnNumericTokens](allowtyposonnumerictokens) `settings`, `search`
-- [ignorePlurals](ignoreplurals) `settings`, `search`
-- [disableTypoToleranceOnAttributes](disabletypotoleranceonattributes) `settings`, `search`
+- [minWordSizefor1Typo](#minwordsizefor1typo) `settings`, `search`
+- [minWordSizefor2Typos](#minwordsizefor2typos) `settings`, `search`
+- [typoTolerance](#typotolerance) `settings`, `search`
+- [allowTyposOnNumericTokens](#allowtyposonnumerictokens) `settings`, `search`
+- [ignorePlurals](#ignoreplurals) `settings`, `search`
+- [disableTypoToleranceOnAttributes](#disabletypotoleranceonattributes) `settings`, `search`
 
 **Geo-Search**
-- [aroundLatLng](aroundlatlng) `search`
-- [aroundLatLngViaIP](aroundlatlngviaip) `search`
-- [insideBoundingBox](insideboundingbox) `search`
-- [insidePolygon](insidepolygon) `search`
+- [aroundLatLng](#aroundlatlng) `search`
+- [aroundLatLngViaIP](#aroundlatlngviaip) `search`
+- [insideBoundingBox](#insideboundingbox) `search`
+- [insidePolygon](#insidepolygon) `search`
 
 
 **Query Strategy**
-- [queryType](querytype) `settings`, `search`
-- [removeWordsIfNoResults](removewordsifnoresults) `settings`, `search`
-- [advancedSyntax](advancedsyntax) `settings`, `search`
-- [optionalWords](optionalwords) `settings`, `search`
-- [removeStopWords](removestopwords) `settings`, `search`
-- [exactOnSingleWordQuery](exactonsinglewordquery) `settings`, `search`
-- [alternativesAsExact](alternativesasexact) `settings`, `search`
+- [queryType](#querytype) `settings`, `search`
+- [removeWordsIfNoResults](#removewordsifnoresults) `settings`, `search`
+- [advancedSyntax](#advancedsyntax) `settings`, `search`
+- [optionalWords](#optionalwords) `settings`, `search`
+- [removeStopWords](#removestopwords) `settings`, `search`
+- [exactOnSingleWordQuery](#exactonsinglewordquery) `settings`, `search`
+- [alternativesAsExact](#alternativesasexact) `settings`, `search`
 
 **Advanced**
-- [distinct](distinct) `settings`, `search`
-- [rankingInfo](rankinginfo) `search`
-- [numericFilters (deprecated)](numericfilters-deprecated) `search`
-- [tagFilters (deprecated)](tagfilters-deprecated) `search`
-- [facetFilters (deprecated)](facetfilters-deprecated) `search`
-- [analytics](analytics) `settings`, `search`
+- [distinct](#distinct) `settings`, `search`
+- [rankingInfo](#rankinginfo) `search`
+- [numericFilters (deprecated)](#numericfilters-deprecated) `search`
+- [tagFilters (deprecated)](#tagfilters-deprecated) `search`
+- [facetFilters (deprecated)](#facetfilters-deprecated) `search`
+- [analytics](#analytics) `settings`, `search`
 
 <!--/PARAMETERS_LINK-->
 
@@ -556,56 +556,56 @@ Here is the list of parameters you can use with the set settings method (`indexi
 Parameters that can be override at search time also have the `indexing` [scope](#scope)
 
 **Attributes**
-- [attributesToIndex](attributestoindex) `settings`
-- [attributesForFaceting](attributesforfaceting) `settings`
-- [attributesToRetrieve](attributestoretrieve) `settings`, `search`
-- [unretrievableAttributes](unretrievableattributes) `settings`
+- [attributesToIndex](#attributestoindex) `settings`
+- [attributesForFaceting](#attributesforfaceting) `settings`
+- [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
+- [unretrievableAttributes](#unretrievableattributes) `settings`
 
 **Ranking**
-- [ranking](ranking) `settings`
-- [customRanking](customranking) `settings`
-- [slaves](slaves) `settings`
+- [ranking](#ranking) `settings`
+- [customRanking](#customranking) `settings`
+- [slaves](#slaves) `settings`
 
 **Filtering / Faceting**
-- [maxValuesPerFacet](maxvaluesperfacet) `settings`, `search`
+- [maxValuesPerFacet](#maxvaluesperfacet) `settings`, `search`
 
 **Highlighting / Snippeting**
-- [attributesToHighlight](attributestohighlight) `settings`, `search`
-- [attributesToSnippet](attributestosnippet) `settings`, `search`
-- [highlightPreTag](highlightpretag) `settings`, `search`
-- [highlightPostTag](highlightposttag) `settings`, `search`
-- [snippetEllipsisText](snippetellipsistext) `settings`, `search`
+- [attributesToHighlight](#attributestohighlight) `settings`, `search`
+- [attributesToSnippet](#attributestosnippet) `settings`, `search`
+- [highlightPreTag](#highlightpretag) `settings`, `search`
+- [highlightPostTag](#highlightposttag) `settings`, `search`
+- [snippetEllipsisText](#snippetellipsistext) `settings`, `search`
 
 **Pagination**
-- [hitsPerPage](hitsperpage) `settings`, `search`
+- [hitsPerPage](#hitsperpage) `settings`, `search`
 
 **Typos**
-- [minWordSizefor1Typo](minwordsizefor1typo) `settings`, `search`
-- [minWordSizefor2Typos](minwordsizefor2typos) `settings`, `search`
-- [typoTolerance](typotolerance) `settings`, `search`
-- [allowTyposOnNumericTokens](allowtyposonnumerictokens) `settings`, `search`
-- [ignorePlurals](ignoreplurals) `settings`, `search`
-- [disableTypoToleranceOnAttributes](disabletypotoleranceonattributes) `settings`, `search`
-- [separatorsToIndex](separatorstoindex) `settings`
+- [minWordSizefor1Typo](#minwordsizefor1typo) `settings`, `search`
+- [minWordSizefor2Typos](#minwordsizefor2typos) `settings`, `search`
+- [typoTolerance](#typotolerance) `settings`, `search`
+- [allowTyposOnNumericTokens](#allowtyposonnumerictokens) `settings`, `search`
+- [ignorePlurals](#ignoreplurals) `settings`, `search`
+- [disableTypoToleranceOnAttributes](#disabletypotoleranceonattributes) `settings`, `search`
+- [separatorsToIndex](#separatorstoindex) `settings`
 
 **Query Strategy**
-- [queryType](querytype) `settings`, `search`
-- [removeWordsIfNoResults](removewordsifnoresults) `settings`, `search`
-- [advancedSyntax](advancedsyntax) `settings`, `search`
-- [optionalWords](optionalwords) `settings`, `search`
-- [removeStopWords](removestopwords) `settings`, `search`
-- [disablePrefixOnAttributes](disableprefixonattributes) `settings`
-- [disableExactOnAttributes](disableexactonattributes) `settings`
-- [exactOnSingleWordQuery](exactonsinglewordquery) `settings`, `search`
-- [alternativesAsExact](alternativesasexact) `settings`, `search`
+- [queryType](#querytype) `settings`, `search`
+- [removeWordsIfNoResults](#removewordsifnoresults) `settings`, `search`
+- [advancedSyntax](#advancedsyntax) `settings`, `search`
+- [optionalWords](#optionalwords) `settings`, `search`
+- [removeStopWords](#removestopwords) `settings`, `search`
+- [disablePrefixOnAttributes](#disableprefixonattributes) `settings`
+- [disableExactOnAttributes](#disableexactonattributes) `settings`
+- [exactOnSingleWordQuery](#exactonsinglewordquery) `settings`, `search`
+- [alternativesAsExact](#alternativesasexact) `settings`, `search`
 
 **Advanced**
-- [attributeForDistinct](attributefordistinct) `settings`
-- [distinct](distinct) `settings`, `search`
-- [numericAttributesToIndex](numericattributestoindex) `settings`
-- [allowCompressionOfIntegerArray](allowcompressionofintegerarray) `settings`
-- [altCorrections](altcorrections) `settings`
-- [placeholders](placeholders) `settings`
+- [attributeForDistinct](#attributefordistinct) `settings`
+- [distinct](#distinct) `settings`, `search`
+- [numericAttributesToIndex](#numericattributestoindex) `settings`
+- [allowCompressionOfIntegerArray](#allowcompressionofintegerarray) `settings`
+- [altCorrections](#altcorrections) `settings`
+- [placeholders](#placeholders) `settings`
 
 <!--/PARAMETERS_LINK-->
 
@@ -628,76 +628,76 @@ They are three scopes:
 #### Parameters List
 
 **Search**
-- [query](query) `search`
+- [query](#query) `search`
 
 **Attributes**
-- [attributesForFaceting](attributesforfaceting) `settings`
-- [attributesToIndex](attributestoindex) `settings`
-- [attributesToRetrieve](attributestoretrieve) `settings`, `search`
-- [unretrievableAttributes](unretrievableattributes) `settings`
+- [attributesForFaceting](#attributesforfaceting) `settings`
+- [attributesToIndex](#attributestoindex) `settings`
+- [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
+- [unretrievableAttributes](#unretrievableattributes) `settings`
 
 
 **Ranking**
-- [ranking](ranking) `settings`
-- [customRanking](customranking) `settings`
-- [slaves](slaves) `settings`
+- [ranking](#ranking) `settings`
+- [customRanking](#customranking) `settings`
+- [slaves](#slaves) `settings`
 
 **Filtering / Faceting**
-- [filters](filters) `search`
-- [facets](facets) `search`
-- [maxValuesPerFacet](maxvaluesperfacet) `settings`, `search`
+- [filters](#filters) `search`
+- [facets](#facets) `search`
+- [maxValuesPerFacet](#maxvaluesperfacet) `settings`, `search`
 
 **Highlighting / Snippeting**
-- [attributesToHighlight](attributestohighlight) `settings`, `search`
-- [attributesToSnippet](attributestosnippet) `settings`, `search`
-- [highlightPreTag](highlightpretag) `settings`, `search`
-- [highlightPostTag](highlightposttag) `settings`, `search`
-- [snippetEllipsisText](snippetellipsistext) `settings`, `search`
+- [attributesToHighlight](#attributestohighlight) `settings`, `search`
+- [attributesToSnippet](#attributestosnippet) `settings`, `search`
+- [highlightPreTag](#highlightpretag) `settings`, `search`
+- [highlightPostTag](#highlightposttag) `settings`, `search`
+- [snippetEllipsisText](#snippetellipsistext) `settings`, `search`
 
 **Pagination**
-- [page](page) `search`
-- [hitsPerPage](hitsperpage) `settings`, `search`
+- [page](#page) `search`
+- [hitsPerPage](#hitsperpage) `settings`, `search`
 
 **Typos**
-- [minWordSizefor1Typo](minwordsizefor1typo) `settings`, `search`
-- [minWordSizefor2Typos](minwordsizefor2typos) `settings`, `search`
-- [typoTolerance](typotolerance) `settings`, `search`
-- [allowTyposOnNumericTokens](allowtyposonnumerictokens) `settings`, `search`
-- [ignorePlurals](ignoreplurals) `settings`, `search`
-- [disableTypoToleranceOnAttributes](disabletypotoleranceonattributes) `settings`, `search`
-- [separatorsToIndex](separatorstoindex) `settings`
+- [minWordSizefor1Typo](#minwordsizefor1typo) `settings`, `search`
+- [minWordSizefor2Typos](#minwordsizefor2typos) `settings`, `search`
+- [typoTolerance](#typotolerance) `settings`, `search`
+- [allowTyposOnNumericTokens](#allowtyposonnumerictokens) `settings`, `search`
+- [ignorePlurals](#ignoreplurals) `settings`, `search`
+- [disableTypoToleranceOnAttributes](#disabletypotoleranceonattributes) `settings`, `search`
+- [separatorsToIndex](#separatorstoindex) `settings`
 
 **Geo-Search**
 
-- [aroundLatLng](aroundlatlng) `search`
-- [aroundLatLngViaIP](aroundlatlngviaip) `search`
-- [insideBoundingBox](insideboundingbox) `search`
-- [insidePolygon](insidepolygon) `search`
+- [aroundLatLng](#aroundlatlng) `search`
+- [aroundLatLngViaIP](#aroundlatlngviaip) `search`
+- [insideBoundingBox](#insideboundingbox) `search`
+- [insidePolygon](#insidepolygon) `search`
 
 
 **Query Strategy**
-- [queryType](querytype) `settings`, `search`
-- [removeWordsIfNoResults](removewordsifnoresults) `settings`, `search`
-- [advancedSyntax](advancedsyntax) `settings`, `search`
-- [optionalWords](optionalwords) `settings`, `search`
-- [removeStopWords](removestopwords) `settings`, `search`
-- [disablePrefixOnAttributes](disableprefixonattributes) `settings`
-- [disableExactOnAttributes](disableexactonattributes) `settings`
-- [exactOnSingleWordQuery](exactonsinglewordquery) `settings`, `search`
-- [alternativesAsExact](alternativesasexact) `settings`, `search`
+- [queryType](#querytype) `settings`, `search`
+- [removeWordsIfNoResults](#removewordsifnoresults) `settings`, `search`
+- [advancedSyntax](#advancedsyntax) `settings`, `search`
+- [optionalWords](#optionalwords) `settings`, `search`
+- [removeStopWords](#removestopwords) `settings`, `search`
+- [disablePrefixOnAttributes](#disableprefixonattributes) `settings`
+- [disableExactOnAttributes](#disableexactonattributes) `settings`
+- [exactOnSingleWordQuery](#exactonsinglewordquery) `settings`, `search`
+- [alternativesAsExact](#alternativesasexact) `settings`, `search`
 
 **Advanced**
-- [attributeForDistinct](attributefordistinct) `settings`
-- [distinct](distinct) `settings`, `search`
-- [rankingInfo](rankinginfo) `search`
-- [numericAttributesToIndex](numericattributestoindex) `settings`
-- [allowCompressionOfIntegerArray](allowcompressionofintegerarray) `settings`
-- [numericFilters (deprecated)](numericfilters-deprecated) `search`
-- [tagFilters (deprecated)](tagfilters-deprecated) `search`
-- [facetFilters (deprecated)](facetfilters-deprecated) `search`
-- [analytics](analytics) `settings`, `search`
-- [altCorrections](altcorrections) `settings`
-- [placeholders](placeholders) `settings`
+- [attributeForDistinct](#attributefordistinct) `settings`
+- [distinct](#distinct) `settings`, `search`
+- [rankingInfo](#rankinginfo) `search`
+- [numericAttributesToIndex](#numericattributestoindex) `settings`
+- [allowCompressionOfIntegerArray](#allowcompressionofintegerarray) `settings`
+- [numericFilters (deprecated)](#numericfilters-deprecated) `search`
+- [tagFilters (deprecated)](#tagfilters-deprecated) `search`
+- [facetFilters (deprecated)](#facetfilters-deprecated) `search`
+- [analytics](#analytics) `settings`, `search`
+- [altCorrections](#altcorrections) `settings`
+- [placeholders](#placeholders) `settings`
 
 ### Search
 
@@ -1209,7 +1209,7 @@ if you have several geo-locations in your record).
 
 - scope: `settings`, `search`
 - type: `enum`
-- default: `<%= puts({'C#' => 'PREFIX_LAST', 'Java' => 'PREFIX_ALL', 'Android' => 'PREFIX_ALL'}, 'prefixLast') %>`
+- default: `'prefixLast'`
 
 
 Selects how the query words are interpreted. It can be one of the following values:
@@ -1224,7 +1224,7 @@ No query word is interpreted as a prefix. This option is not recommended.
 
 - scope: `settings`, `search`
 - type: `string`
-- default: `<%= puts({'C#' => 'NONE', 'Java' => 'REMOVE_NONE', 'Android' => 'REMOVE_NONE'}, 'none') %>`
+- default: `'none'`
 
 
 This option is used to select a strategy in order to avoid having an empty result page.
