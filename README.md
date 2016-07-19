@@ -38,62 +38,62 @@ Our Python client lets you easily use the [Algolia Search API](https://www.algol
 
 Getting started
 
-1. [Install and init](##install-and-init---init_index)
+1. [Install and init](#install-and-init---init_index)
 
 Search
 
-1. [Search in an index](##search-in-an-index---search)
-1. [Find by IDs](##find-by-ids---get_objects)
+1. [Search in an index](#search-in-an-index---search)
+1. [Find by IDs](#find-by-ids---get_objects)
 
 Indexing
 
-1. [Add objects](##add-objects---add_objects)
-1. [Update objects](##update-objects---save_objects)
-1. [Partial update](##partial-update---partial_update_objects)
-1. [Delete objects](##delete-objects---delete_objects)
+1. [Add objects](#add-objects---add_objects)
+1. [Update objects](#update-objects---save_objects)
+1. [Partial update](#partial-update---partial_update_objects)
+1. [Delete objects](#delete-objects---delete_objects)
 
 Settings
 
-1. [Get settings](##get-settings---get_settings)
-1. [Set settings](##set-settings)
+1. [Get settings](#get-settings---get_settings)
+1. [Set settings](#set-settings)
 
 Manage Indices
 
-1. [List indices](##list-indices---list_indexes)
-1. [Delete index](##delete-index---delete_index)
-1. [Clear index](##clear-index---clear_index)
-1. [Copy index](##copy-index---copy_index)
-1. [Move index](##move-index---move_index)
+1. [List indices](#list-indices---list_indexes)
+1. [Delete index](#delete-index---delete_index)
+1. [Clear index](#clear-index---clear_index)
+1. [Copy index](#copy-index---copy_index)
+1. [Move index](#move-index---move_index)
 
 Api Keys
 
-1. [Generate key](##generate-key---generate_secured_api_key)
+1. [Generate key](#generate-key---generate_secured_api_key)
 
 
 Synonyms
 
-1. [Save synonym](##save-synonym---save_synonym)
-1. [Batch synonyms](##batch-synonyms---batch_synonyms)
+1. [Save synonym](#save-synonym---save_synonym)
+1. [Batch synonyms](#batch-synonyms---batch_synonyms)
 1. [Editing Synonyms](#editing-synonyms)
-1. [Delete Synonyms](##delete-synonyms---delete_synonyms)
-1. [Clear all synonyms](##clear-all-synonyms---clear_synonyms)
-1. [Get synonym](##get-synonym---get_synonym)
-1. [Search synonyms](##search-synonyms---search_synonyms)
+1. [Delete Synonyms](#delete-synonyms---delete_synonyms)
+1. [Clear all synonyms](#clear-all-synonyms---clear_synonyms)
+1. [Get synonym](#get-synonym---get_synonym)
+1. [Search synonyms](#search-synonyms---search_synonyms)
 
 
 Advanced
 
-1. [Custom batch](##custom-batch---batch)
-1. [Wait for operations](##wait-for-operations---wait_task)
-1. [Multiple queries](##multiple-queries---multiple_queries)
-1. [Delete by query](##delete-by-query---delete_by_query)
-1. [Backup / Export an index](##backup--export-an-index---browse)
-1. [List api keys](##list-api-keys---list_api_keys)
-1. [Add user key](##add-user-key---add_user_key)
-1. [Update user key](##update-user-key---update_user_key)
-1. [Delete user key](##delete-user-key---delete_user_key)
-1. [Get key permissions](##get-key-permissions---get_user_key_acl)
-1. [Get Logs](##get-logs---get_logs)
+1. [Custom batch](#custom-batch---batch)
+1. [Wait for operations](#wait-for-operations---wait_task)
+1. [Multiple queries](#multiple-queries---multiple_queries)
+1. [Delete by query](#delete-by-query---delete_by_query)
+1. [Backup / Export an index](#backup--export-an-index---browse)
+1. [List api keys](#list-api-keys---list_api_keys)
+1. [Add user key](#add-user-key---add_user_key)
+1. [Update user key](#update-user-key---update_user_key)
+1. [Delete user key](#delete-user-key---delete_user_key)
+1. [Get key permissions](#get-key-permissions---get_user_key_acl)
+1. [Get Logs](#get-logs---get_logs)
 
 
 
