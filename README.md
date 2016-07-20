@@ -255,7 +255,7 @@ The search query allows only to retrieve 1000 hits, if you need to retrieve more
 ```python
 index = client.init_index("contacts")
 res = index.search("query string")
-res = index.search("query string", { "attributesToRetrieve": "fistname,lastname", "hitsPerPage": 20})
+res = index.search("query string", { "attributesToRetrieve": "firstname,lastname", "hitsPerPage": 20})
 ```
 
 The server response will look like:
