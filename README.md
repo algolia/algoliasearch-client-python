@@ -255,7 +255,7 @@ The search query allows only to retrieve 1000 hits, if you need to retrieve more
 ```python
 index = client.init_index("contacts")
 res = index.search("query string")
-res = index.search("query string", { "attributesToRetrieve": "fistname,lastname", "hitsPerPage": 20})
+res = index.search("query string", { "attributesToRetrieve": "firstname,lastname", "hitsPerPage": 20})
 ```
 
 The server response will look like:
@@ -353,7 +353,7 @@ Parameters that can also be used in a setSettings also have the `indexing` [scop
 - [numericFilters (deprecated)](#numericfilters-deprecated) `search`
 - [tagFilters (deprecated)](#tagfilters-deprecated) `search`
 - [facetFilters (deprecated)](#facetfilters-deprecated) `search`
-- [analytics](#analytics) `settings`, `search`
+- [analytics](#analytics) `search`
 
 <!--/PARAMETERS_LINK-->
 
@@ -380,6 +380,8 @@ res = index.get_objects(["myID1", "myID2"])
 
 
 ## Indexing
+
+
 
 ### Add objects - `add_objects`
 
@@ -529,6 +531,8 @@ the biggest `taskID`.
 
 ## Settings
 
+
+
 ### Get settings - `get_settings`
 
 You can retrieve settings:
@@ -603,7 +607,7 @@ Parameters that can be override at search time also have the `indexing` [scope](
 - [optionalWords](#optionalwords) `settings`, `search`
 - [removeStopWords](#removestopwords) `settings`, `search`
 - [disablePrefixOnAttributes](#disableprefixonattributes) `settings`
-- [disableExactOnAttributes](#disableexactonattributes) `settings`
+- [disableExactOnAttributes](#disableexactonattributes) `settings`, `search`
 - [exactOnSingleWordQuery](#exactonsinglewordquery) `settings`, `search`
 - [alternativesAsExact](#alternativesasexact) `settings`, `search`
 
@@ -661,6 +665,7 @@ They are three scopes:
 - [highlightPreTag](#highlightpretag) `settings`, `search`
 - [highlightPostTag](#highlightposttag) `settings`, `search`
 - [snippetEllipsisText](#snippetellipsistext) `settings`, `search`
+- [restrictHighlightAndSnippetArrays](#restricthighlightandsnippetarrays) `settings`, `search`
 
 **Pagination**
 - [page](#page) `search`
@@ -690,7 +695,7 @@ They are three scopes:
 - [optionalWords](#optionalwords) `settings`, `search`
 - [removeStopWords](#removestopwords) `settings`, `search`
 - [disablePrefixOnAttributes](#disableprefixonattributes) `settings`
-- [disableExactOnAttributes](#disableexactonattributes) `settings`
+- [disableExactOnAttributes](#disableexactonattributes) `settings`, `search`
 - [exactOnSingleWordQuery](#exactonsinglewordquery) `settings`, `search`
 - [alternativesAsExact](#alternativesasexact) `settings`, `search`
 
@@ -703,7 +708,7 @@ They are three scopes:
 - [numericFilters (deprecated)](#numericfilters-deprecated) `search`
 - [tagFilters (deprecated)](#tagfilters-deprecated) `search`
 - [facetFilters (deprecated)](#facetfilters-deprecated) `search`
-- [analytics](#analytics) `settings`, `search`
+- [analytics](#analytics) `search`
 - [altCorrections](#altcorrections) `settings`
 - [placeholders](#placeholders) `settings`
 
@@ -911,20 +916,32 @@ The list of keywords is:
 - default: `""`
 
 
-List of object attributes that you want to use for faceting.
+You can use [facets](#facets) to retrieve only a part of your attributes declared in
+**[attributesForFaceting](#attributesforfaceting)** attributes.
+It will not filter your results, if you want to filter results you should use [filters](#filters).
 
 For each of the declared attributes, you'll be able to retrieve a list of the most relevant facet values,
 and their associated count for the current query.
 
-Attributes are separated by a comma.
+** Example **
 
-For example, `"category,author"`.
+If you have defined in your **[attributesForFaceting](#attributesforfaceting)**:
+
+['category', 'author', 'nb_views', 'nb_downloads']
+
+But for the current search want to retrieve only facet values for `category` and `author`.
+
+You can specify your attributes coma separated.
+
+For this example:  `"category,author"`.
 
 You can also use JSON string array encoding.
 
-For example, `["category","author"]`.
+For this example: `["category","author"]`.
 
-Only the attributes that have been added in **attributesForFaceting** index setting can be used in this parameter.
+**Warnings**
+
+- When using [facets](#facets) in a search query, only attributes that have been added in **attributesForFaceting** index setting can be used in this parameter.
 You can also use `*` to perform faceting on all attributes specified in `attributesForFaceting`.
 If the number of results is important, the count can be approximate,
 the attribute `exhaustiveFacetsCount` in the response is true when the count is exact.
@@ -1005,6 +1022,15 @@ Specify the string that is inserted after the highlighted parts in the query res
 
 String used as an ellipsis indicator when a snippet is truncated.
 Defaults to an empty string for all accounts created before 10/2/2016, and to … (UTF-8 U+2026) for accounts created after that date.
+
+#### restrictHighlightAndSnippetArrays
+
+- scope: `settings`, `search`
+- type: `boolean`
+- default: `false`
+
+
+If set to true, restrict arrays in highlights and snippets to items that matched the query at least partially else return all array items in highlights and snippets.
 
 ### Pagination
 
@@ -1274,20 +1300,20 @@ A string that contains the comma separated list of words that should be consider
 #### removeStopWords
 
 - scope: `settings`, `search`
-- type: `boolean`
+- type: `boolean`, `array of strings`
 - default: `false`
 
 
-Remove stop words from the query **before** executing it. Defaults to `false`.
-Use a boolean to enable/disable all 41 supported languages and a comma separated list
-of iso codes of the languages you want to use consider to enable the stopwords removal
-on a subset of them (select the one you have in your records).
+Remove stop words from the query **before** executing it. It can be:
 
-In most use-cases, **you shouldn't need to enable this option**.
+- a **boolean**: enable or disable stop words for all 41 supported languages; or
+- a **list of language ISO codes** (as a comma-separated string) for which stop words should be enabled.
 
-List of 41 supported languages with their associated iso code: Arabic=ar, Armenian=hy, Basque=eu, Bengali=bn, Brazilian=pt-br, Bulgarian=bg, Catalan=ca, Chinese=zh, Czech=cs, Danish=da, Dutch=nl, English=en, Finnish=fi, French=fr, Galician=gl, German=de, Greek=el, Hindi=hi, Hungarian=hu, Indonesian=id, Irish=ga, Italian=it, Japanese=ja, Korean=ko, Kurdish=ku, Latvian=lv, Lithuanian=lt, Marathi=mr, Norwegian=no, Persian (Farsi)=fa, Polish=pl, Portugese=pt, Romanian=ro, Russian=ru, Slovak=sk, Spanish=es, Swedish=sv, Thai=th, Turkish=tr, Ukranian=uk, Urdu=ur
+In most use-cases, **we don’t recommend enabling this option**.
 
-Stop words removal is applied on query words that are not interpreted as a prefix. The behavior depends of the queryType parameter:
+List of 41 supported languages with their associated iso code: Arabic=`ar`, Armenian=`hy`, Basque=`eu`, Bengali=`bn`, Brazilian=`pt-br`, Bulgarian=`bg`, Catalan=`ca`, Chinese=`zh`, Czech=`cs`, Danish=`da`, Dutch=`nl`, English=`en`, Finnish=`fi`, French=`fr`, Galician=`gl`, German=`de`, Greek=`el`, Hindi=`hi`, Hungarian=`hu`, Indonesian=`id`, Irish=`ga`, Italian=`it`, Japanese=`ja`, Korean=`ko`, Kurdish=`ku`, Latvian=`lv`, Lithuanian=`lt`, Marathi=`mr`, Norwegian=`no`, Persian (Farsi)=`fa`, Polish=`pl`, Portugese=`pt`, Romanian=`ro`, Russian=`ru`, Slovak=`sk`, Spanish=`es`, Swedish=`sv`, Thai=`th`, Turkish=`tr`, Ukranian=`uk`, Urdu=`ur`.
+
+Stop words removal is applied on query words that are not interpreted as a prefix. The behavior depends of the `queryType` parameter:
 
 * `queryType=prefixLast` means the last query word is a prefix and it won’t be considered for stop words removal
 * `queryType=prefixNone` means no query word are prefix, stop words removal will be applied on all query words
@@ -1317,7 +1343,7 @@ This setting is useful on attributes that contain string that should not be matc
 
 #### disableExactOnAttributes
 
-- scope: `settings`
+- scope: `settings`, `search`
 - type: `array of strings`
 - default: `[]`
 
@@ -1437,6 +1463,8 @@ When enabled, the integer array is reordered to reach a better compression ratio
 - default: `[]`
 
 
+*This parameter is deprecated. Please use [filters](#filters) instead.*
+
 A string that contains the comma separated list of numeric filters you want to apply.
 The filter syntax is `attributeName` followed by `operand` followed by `value`.
 Supported operands are `<`, `<=`, `=`, `>` and `>=`.
@@ -1460,6 +1488,8 @@ You can also use a string array encoding (for example `numericFilters: ["price>1
 - type: `string`
 - default: `""`
 
+
+*This parameter is deprecated. Please use [filters](#filters) instead.*
 
 Filter the query by a set of tags.
 
@@ -1487,6 +1517,8 @@ For example `{"_tags":["tag1","tag2"]}`.
 - default: `""`
 
 
+*This parameter is deprecated. Please use [filters](#filters) instead.*
+
 Filter the query with a list of facets. Facets are separated by commas and is encoded as `attributeName:value`.
 To OR facets, you must add parentheses.
 
@@ -1498,9 +1530,9 @@ For example, `[["category:Book","category:Movie"],"author:John%20Doe"]`.
 
 #### analytics
 
-- scope: `settings`, `search`
-- type: `string`
-- default: `['ignorePlurals', 'singleWordSynonym']`
+- scope: `search`
+- type: `boolean`
+- default: `true`
 
 
 If set to false, this query will not be taken into account in the analytics feature.
@@ -1547,6 +1579,8 @@ For example:
 
 
 ## Manage Indices
+
+
 
 ### Create an index
 
