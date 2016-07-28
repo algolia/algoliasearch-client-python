@@ -148,6 +148,7 @@ To initialize the client you need your ApplicationID and API-Key. You can find a
 from algoliasearch import algoliasearch
 
 client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
+index = client.init_index("contact")
 ```
 
 **Note**: If you use this API Client with Google AppEngine (Thanks [@apassant](https://github.com/apassant)), it will use `urlfetch` instead of using the `request` module. Please be aware of [urlfetch's limits](https://cloud.google.com/appengine/docs/python/urlfetch/), and note that SSL certificates will not be verified for calls to domains other than algolia.net due to the lack of SNI support in `urlfetch`. To run unit tests on the AppEngine stub, please define an `APPENGINE_RUNTIME` enviroment variable.
