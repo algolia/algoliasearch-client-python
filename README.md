@@ -566,7 +566,7 @@ index.set_settings({"customRanking": ["desc(followers)"]}, True)
 Here is the list of parameters you can use with the set settings method (`indexing` [scope](#scope))
 
 
-Parameters that can be override at search time also have the `search` [scope](#scope)
+Parameters that can be overridden at search time also have the `search` [scope](#scope)
 
 **Attributes**
 - [attributesToIndex](#attributestoindex) `settings`
