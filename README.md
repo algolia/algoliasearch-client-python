@@ -1749,22 +1749,22 @@ print client.move_index("MyNewIndex", "MyIndex")
 
 **Note**:
 
-The `move_index` method will overwrite the destination index, and delete the temporary index.
+The move_index method will overwrite the destination index, and delete the temporary index.
 
 **Warning**
 
-The `move_index` operation will override all settings of the destination,
+The move_index` operation will override all settings of the destination,
 There is one exception for the [slaves](#slaves) parameter which is not impacted.
 
 For example, if you want to fully update your index `MyIndex` every night, we recommend the following process:
  1. Get settings and synonyms from the old index using [Get settings](#get-settings---get_settings)
-  and `[Get synonym](#get-synonym---get_synonym)`.
+  and [Get synonym](#get-synonym---get_synonym).
  1. Apply settings and synonyms to the temporary index `MyTmpIndex`, (this will create the `MyTmpIndex` index)
-  using `[Set settings](#set-settings)` and `[Batch synonyms](#batch-synonyms---batch_synonyms)`
+  using [Set settings](#set-settings) and [Batch synonyms](#batch-synonyms---batch_synonyms)
   (make sure to remove the [slaves](#slaves) parameter from the settings if it exists).
  1. Import your records into a new index using [Add objects](#add-objects---add_objects).
  1. Atomically replace the index `MyIndex` with the content and settings of the index `MyTmpIndex`
- using the `[Move index](#move-index---move_index)` method.
+ using the [Move index](#move-index---move_index) method.
  This will automatically override the old index without any downtime on the search.
  1. You'll end up with only one index called `MyIndex`, that contains the records and settings pushed to `MyTmpIndex`
  and the slave-indices that were initially attached to `MyIndex` will be in sync with the new data.
