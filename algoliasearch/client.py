@@ -80,7 +80,7 @@ class Client(object):
             'X-Algolia-Application-Id': app_id,
             'Content-Type': 'gzip',
             'Accept-Encoding': 'gzip',
-            'User-Agent': 'Algolia Search for Python %s' % VERSION
+            'User-Agent': 'Algolia for Python (%s)' % VERSION
         }
 
         self._app_id = app_id
