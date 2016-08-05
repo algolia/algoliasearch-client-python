@@ -1,5 +1,8 @@
 CHANGELOG
 
+master
+    * Fix potential parsing error in case of httpCode == 4XX
+
 2016-07-05 1.9.1
     * Fix the `strategy` parameter of `mutliple_queries`
     * Add the `forwardToSlaves` parameter of `set_settings`

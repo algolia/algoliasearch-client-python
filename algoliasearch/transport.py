@@ -81,7 +81,10 @@ class Transport():
 
         if res.status_code // 100 == 4:
             message = 'HTTP Code: %d' % (res.status_code)
-            j = res.json()
+            try:
+              j = res.json()
+            except:
+              j = { 'message': res.text}
             if j is not None and 'message' in j:
                 message = j['message']
             raise AlgoliaException(message)
