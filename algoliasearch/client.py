@@ -42,6 +42,9 @@ from .helpers import safe
 from .helpers import urlify
 
 
+MAX_API_KEY_LENGTH = 500
+
+
 class Client(object):
     """
     Entry point in the Python Client API.
@@ -75,13 +78,16 @@ class Client(object):
             self._transport.read_hosts = hosts
             self._transport.write_hosts = hosts
 
-        self._transport.headers = {
-            'X-Algolia-API-Key': api_key,
+        transport_headers = {
             'X-Algolia-Application-Id': app_id,
             'Content-Type': 'gzip',
             'Accept-Encoding': 'gzip',
             'User-Agent': 'Algolia for Python (%s)' % VERSION
         }
+        if len(api_key) <= MAX_API_KEY_LENGTH:
+            transport_headers['X-Algolia-API-Key'] = api_key
+
+        self._transport.headers.update(transport_headers)
 
         self._app_id = app_id
         self._api_key = api_key
@@ -489,4 +495,8 @@ class Client(object):
         return str(base64.b64encode(("%s%s" % (securedKey, queryParameters)).encode('utf-8')).decode('utf-8'))
 
     def _req(self, is_search, path, meth, params=None, data=None):
+        if len(self.api_key) > MAX_API_KEY_LENGTH:
+            if data is None:
+                data = {}
+            data['apiKey'] = self.api_key
         return self._transport.req(is_search, path, meth, params, data)
