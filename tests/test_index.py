@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+import os
 import time
 from random import randint
 from decimal import Decimal
@@ -12,6 +13,7 @@ try:
 except ImportError:
     import unittest
 
+from algoliasearch.client import MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
 from .helpers import safe_index_name
@@ -276,6 +278,33 @@ class IndexWithReadOnlyDataTest(IndexTest):
         self.assertGreaterEqual(res['nbHits'], 1)
         res_ids = [elt['objectID'] for elt in res['hits']]
         self.assertIn(self.objectIDs[2], res_ids)
+
+    def test_search_with_short_secured_api_key(self):
+        old_key = self.client.api_key
+
+        secured_api_key = self.client.generate_secured_api_key(
+            os.environ['ALGOLIA_API_KEY_SEARCH'],
+            dict(filters=''),
+        )
+        assert len(secured_api_key) < MAX_API_KEY_LENGTH
+        self.client.api_key = secured_api_key
+        res = self.index.search('')
+        self.assertEqual(res['nbHits'], 5)
+        self.client.api_key = old_key
+
+    def test_search_with_long_secured_api_key(self):
+        old_key = self.client.api_key
+
+        tags = set('x{}'.format(100000 + i) for i in range(1000))
+        secured_api_key = self.client.generate_secured_api_key(
+            os.environ['ALGOLIA_API_KEY_SEARCH'],
+            dict(filters=' OR '.join(tags)),
+        )
+        assert len(secured_api_key) > MAX_API_KEY_LENGTH
+        self.client.api_key = secured_api_key
+        res = self.index.search('')
+        self.assertEqual(res['nbHits'], 0)
+        self.client.api_key = old_key
 
 
 class IndexWithModifiableDataTest(IndexTest):
