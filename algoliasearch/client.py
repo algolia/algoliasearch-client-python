@@ -119,7 +119,10 @@ class Client(object):
     @api_key.setter
     def api_key(self, value):
         self._api_key = value
-        if len(value) <= MAX_API_KEY_LENGTH:
+        if len(value) > MAX_API_KEY_LENGTH:
+            # If it was previously set, remove the header
+            self.headers.pop('X-Algolia-API-Key', None)
+        else:
             self.set_extra_headers(**{'X-Algolia-API-Key': value})
 
     @deprecated
