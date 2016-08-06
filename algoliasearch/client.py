@@ -78,19 +78,15 @@ class Client(object):
             self._transport.read_hosts = hosts
             self._transport.write_hosts = hosts
 
-        transport_headers = {
+        self._transport.headers = {
             'X-Algolia-Application-Id': app_id,
             'Content-Type': 'gzip',
             'Accept-Encoding': 'gzip',
             'User-Agent': 'Algolia for Python (%s)' % VERSION
         }
-        if len(api_key) <= MAX_API_KEY_LENGTH:
-            transport_headers['X-Algolia-API-Key'] = api_key
-
-        self._transport.headers.update(transport_headers)
 
         self._app_id = app_id
-        self._api_key = api_key
+        self.api_key = api_key
 
         # Fix for AppEngine bug when using urlfetch_stub
         if 'google.appengine.api.apiproxy_stub_map' in sys.modules.keys():
@@ -123,7 +119,8 @@ class Client(object):
     @api_key.setter
     def api_key(self, value):
         self._api_key = value
-        self.set_extra_headers(**{'X-Algolia-API-Key': value})
+        if len(value) <= MAX_API_KEY_LENGTH:
+            self.set_extra_headers(**{'X-Algolia-API-Key': value})
 
     @deprecated
     def enableRateLimitForward(self, admin_api_key, end_user_ip,
