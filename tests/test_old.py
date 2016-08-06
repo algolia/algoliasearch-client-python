@@ -59,11 +59,11 @@ class ClientTest(unittest.TestCase):
             pass
 
     def test_retry(self):
-      try:
-          client = algoliasearch.Client(os.environ['ALGOLIA_APPLICATION_ID'], os.environ['ALGOLIA_API_KEY'], ["fakeapp-1.algolianet.com", "fakeapp-2.algolianet.com", os.environ['ALGOLIA_APPLICATION_ID'] + ".algolianet.com"])
-          client.listIndexes
-      except algoliasearch.AlgoliaException as e:
-          self.assertTrue(false)
+        try:
+            client = algoliasearch.Client(os.environ['ALGOLIA_APPLICATION_ID'], os.environ['ALGOLIA_API_KEY'], ["fakeapp-1.algolianet.com", "fakeapp-2.algolianet.com", os.environ['ALGOLIA_APPLICATION_ID'] + ".algolianet.com"])
+            client.listIndexes
+        except algoliasearch.AlgoliaException as e:
+            self.assertTrue(false)
 
     def test_network(self):
         batch = []
