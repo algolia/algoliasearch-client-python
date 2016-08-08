@@ -295,7 +295,7 @@ class IndexWithReadOnlyDataTest(IndexTest):
     def test_search_with_long_secured_api_key(self):
         old_key = self.client.api_key
 
-        tags = set('x{}'.format(100000 + i) for i in range(1000))
+        tags = set('x{0}'.format(100000 + i) for i in range(1000))
         secured_api_key = self.client.generate_secured_api_key(
             os.environ['ALGOLIA_API_KEY_SEARCH'],
             dict(filters=' OR '.join(tags)),
