@@ -24,4 +24,6 @@ pip-log.txt
 .coverage
 .tox
 
+# IDE/OS Files
+.idea
 .DS_Store

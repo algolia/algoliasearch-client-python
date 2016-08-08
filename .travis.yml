@@ -24,3 +24,4 @@ env:
   global:
   - secure: S/H779PQk4yKOmP3HbcsrdJjls5cDQDekYhvW0nvlsSkw7L+nqEhV92Lk+JMIPOYeug66NmBSqCIhLC6NHp6TK3Z6y7wNO1JeVdtl+X7b7acRNAkMz9GqkZgLP05LyB1kGUpKfzEejxvKcKQ4iAkEVVu4N5IXcO92Y/IIMuKOe4=
   - secure: Xtw10xjgdPiWrG6BZ+2B1UlkCBEtpVoHwttXj1nmroWqpIGOLDiAHVxgORe+mt4lIvDe2+cWJRRIeuY8f1xkbkR/FjNMf7iGbNJiARvcUe3ivX29cwOCyghN7IliyikHLwhntQcx2UFBDlMyYH5DqZYVzo22IyUFmPBMS58WqO4=
+  - secure: SLDv4lN/C6xVfd99YgNGl2vdYy95YNMd/Uqk0HjiO7TwavXPAsx7cegH6I+Q/j7XyLxFQFq4OAEWeVlnO8cebtSmu5cB1tcesf//r2lNQjrz4F7cI0bqmqbf4YzlyzPIAjSxWzELJD9l9jFbNdFMd1U8UzLt+obsLyp6AbLyqYs=
