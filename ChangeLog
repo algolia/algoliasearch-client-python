@@ -1,6 +1,7 @@
 CHANGELOG
 
-master
+2016-08-08 1.9.2
+    * Fix error on large API keys by including them in the JSON body instead of as a header
     * Fix potential parsing error in case of httpCode == 4XX
 
 2016-07-05 1.9.1
