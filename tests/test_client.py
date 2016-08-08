@@ -11,7 +11,7 @@ try:
 except ImportError:
     import unittest
 
-from algoliasearch.client import Client
+from algoliasearch.client import Client, MAX_API_KEY_LENGTH
 
 from .helpers import safe_index_name
 from .helpers import get_api_client
@@ -87,6 +87,20 @@ class ClientNoDataOperationsTest(ClientTest):
         client.api_key = 'your_api_key'
         self.assertEqual(client._api_key, 'your_api_key')
         self.assertEqual(client.headers['X-Algolia-API-Key'], 'your_api_key')
+
+    def test_change_api_key_too_long(self):
+        client = get_api_client()
+        api_key = 'a' * (MAX_API_KEY_LENGTH + 1)
+        client.api_key = api_key
+        self.assertEqual(client._api_key, api_key)
+        self.assertFalse('X-Algolia-API-Key' in client.headers)
+
+    def test_change_api_key_max_length(self):
+        client = get_api_client()
+        api_key = 'a' * MAX_API_KEY_LENGTH
+        client.api_key = api_key
+        self.assertEqual(client._api_key, api_key)
+        self.assertEqual(client.headers['X-Algolia-API-Key'], api_key)
 
     def test_subclassing_client(self):
         class SubClient(Client):

@@ -42,6 +42,9 @@ from .helpers import safe
 from .helpers import urlify
 
 
+MAX_API_KEY_LENGTH = 500
+
+
 class Client(object):
     """
     Entry point in the Python Client API.
@@ -76,7 +79,6 @@ class Client(object):
             self._transport.write_hosts = hosts
 
         self._transport.headers = {
-            'X-Algolia-API-Key': api_key,
             'X-Algolia-Application-Id': app_id,
             'Content-Type': 'gzip',
             'Accept-Encoding': 'gzip',
@@ -84,7 +86,7 @@ class Client(object):
         }
 
         self._app_id = app_id
-        self._api_key = api_key
+        self.api_key = api_key
 
         # Fix for AppEngine bug when using urlfetch_stub
         if 'google.appengine.api.apiproxy_stub_map' in sys.modules.keys():
@@ -117,7 +119,11 @@ class Client(object):
     @api_key.setter
     def api_key(self, value):
         self._api_key = value
-        self.set_extra_headers(**{'X-Algolia-API-Key': value})
+        if len(value) > MAX_API_KEY_LENGTH:
+            # If it was previously set, remove the header
+            self.headers.pop('X-Algolia-API-Key', None)
+        else:
+            self.set_extra_headers(**{'X-Algolia-API-Key': value})
 
     @deprecated
     def enableRateLimitForward(self, admin_api_key, end_user_ip,
@@ -489,4 +495,8 @@ class Client(object):
         return str(base64.b64encode(("%s%s" % (securedKey, queryParameters)).encode('utf-8')).decode('utf-8'))
 
     def _req(self, is_search, path, meth, params=None, data=None):
+        if len(self.api_key) > MAX_API_KEY_LENGTH:
+            if data is None:
+                data = {}
+            data['apiKey'] = self.api_key
         return self._transport.req(is_search, path, meth, params, data)
