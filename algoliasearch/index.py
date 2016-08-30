@@ -82,7 +82,6 @@ class Index(object):
         self.index_name = index_name
         self._request_path = '/1/indexes/%s' % safe(self.index_name)
 
-
     @deprecated
     def addObject(self, content, object_id=None):
         return self.add_object(content, object_id)
@@ -141,19 +140,20 @@ class Index(object):
     def getObjects(self, object_ids):
         return self.get_objects(object_ids)
 
-    def get_objects(self, object_ids):
+    def get_objects(self, object_ids, attributes_to_retrieve=None):
         """
         Get several objects from this index.
 
         @param object_ids the array of unique identifier of objects to retrieve
+        @param attributes_to_retrieve (optional) if set, contains the list
+            of attributes to retrieve as a string separated by a comma
         """
-
         requests = []
         for object_id in object_ids:
-            requests.append({
-                'indexName': self.index_name,
-                'objectID': object_id
-            })
+            request = {'indexName': self.index_name, 'objectID': object_id}
+            if attributes_to_retrieve is not None:
+                request['attributesToRetrieve'] = ",".join(attributes_to_retrieve)
+            requests.append(request)
         data = {'requests': requests}
         path = '/1/indexes/*/objects'  # Use client._req()
         return self.client._req(True, path, 'POST', data=data)
@@ -487,7 +487,7 @@ class Index(object):
         for i in range(1, len(answers['results'])):
             for facet in answers['results'][i]['facets']:
                 aggregated_answer['disjunctiveFacets'][facet] = (
-                        answers['results'][i]['facets'][facet])
+                    answers['results'][i]['facets'][facet])
 
                 if facet not in disjunctive_refinements:
                     continue
