@@ -16,9 +16,9 @@ except ImportError:
 from algoliasearch.client import MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
-from .helpers import safe_index_name
-from .helpers import get_api_client
-from .helpers import FakeData
+from tests.helpers import safe_index_name
+from tests.helpers import get_api_client
+from tests.helpers import FakeData
 
 
 class IndexTest(unittest.TestCase):
