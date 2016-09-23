@@ -162,26 +162,32 @@ class Index(object):
     def partialUpdateObject(self, partial_object):
         return self.partial_update_object(partial_object)
 
-    def partial_update_object(self, partial_object):
+    def partial_update_object(self, partial_object, no_create=False):
         """
         Update partially an object (only update attributes passed in argument).
 
         @param partial_object contains the object attributes to override, the
             object must contains an objectID attribute
+        @param no_create specifies whether or not a missing object must be
+            created
         """
         path = '/%s/partial' % safe(partial_object['objectID'])
+        if no_create:
+            path += '?createIfNotExists=false'
         return self._req(False, path, 'POST', data=partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
         return self.partial_update_objects(objects)
 
-    def partial_update_objects(self, objects):
+    def partial_update_objects(self, objects, no_create=False):
         """
         Partially Override the content of several objects.
 
         @param objects contains an array of objects to update (each object
             must contains a objectID attribute)
+        @param no_create specifies whether or not a missing object must be
+            created
         """
         requests = []
         for obj in objects:
@@ -190,7 +196,7 @@ class Index(object):
                 'objectID': obj['objectID'],
                 'body': obj
             })
-        return self.batch(requests)
+        return self.batch(requests, no_create=no_create)
 
     @deprecated
     def saveObject(self, obj):
@@ -876,10 +882,14 @@ class Index(object):
         path = '/keys/%s' % key
         return self._req(False, path, 'PUT', data=obj)
 
-    def batch(self, requests):
+    def batch(self, requests, no_create=False):
         """Send a batch requests."""
         if isinstance(requests, (list, tuple)):
             requests = {'requests': requests}
+
+        path = '/batch'
+        if no_create:
+            path += '?createIfNotExists=false'
 
         return self._req(False, '/batch', 'POST', data=requests)
 
