@@ -640,6 +640,17 @@ class Index(object):
                 return res
             time.sleep(time_before_retry / 1000.0)
 
+    def is_task_published(self, task_id):
+        '''
+        Return True if the task on the server has been published
+
+        @param task_id the id of the task returned by server
+        '''
+
+        path = '/task/{0}'.format(task_id)
+        res = self._req(True, path, 'GET')
+        return res['status'] == 'published'
+
     @deprecated
     def getSettings(self):
         return self.get_settings()
