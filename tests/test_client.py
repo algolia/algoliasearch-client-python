@@ -62,16 +62,16 @@ class ClientNoDataOperationsTest(ClientTest):
         self.assertEqual(self.client.headers['X-Forwarded-For'], '192.168.0.1')
 
     def test_set_extra_headers(self):
-        self.client.set_extra_headers(Private=True)
+        self.client.set_extra_headers(Private="on")
         self.assertIn('Private', self.client.headers)
-        self.assertEqual(self.client.headers['Private'], True)
+        self.assertEqual(self.client.headers['Private'], "on")
 
         self.client.set_extra_headers(**{
-            'X-User': 223254,
+            'X-User': '223254',
             'X-Privacy-Settings': 'NSA-Free'
         })
         self.assertIn('X-User', self.client.headers)
-        self.assertEqual(self.client.headers['X-User'], 223254)
+        self.assertEqual(self.client.headers['X-User'], '223254')
         self.assertIn('X-Privacy-Settings', self.client.headers)
         self.assertEqual(self.client.headers['X-Privacy-Settings'], 'NSA-Free')
 
