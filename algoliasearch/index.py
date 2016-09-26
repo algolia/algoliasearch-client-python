@@ -82,7 +82,6 @@ class Index(object):
         self.index_name = index_name
         self._request_path = '/1/indexes/%s' % safe(self.index_name)
 
-
     @deprecated
     def addObject(self, content, object_id=None):
         return self.add_object(content, object_id)
@@ -141,19 +140,20 @@ class Index(object):
     def getObjects(self, object_ids):
         return self.get_objects(object_ids)
 
-    def get_objects(self, object_ids):
+    def get_objects(self, object_ids, attributes_to_retrieve=None):
         """
         Get several objects from this index.
 
         @param object_ids the array of unique identifier of objects to retrieve
+        @param attributes_to_retrieve (optional) if set, contains the list
+            of attributes to retrieve as a string separated by a comma
         """
-
         requests = []
         for object_id in object_ids:
-            requests.append({
-                'indexName': self.index_name,
-                'objectID': object_id
-            })
+            request = {'indexName': self.index_name, 'objectID': object_id}
+            if attributes_to_retrieve is not None:
+                request['attributesToRetrieve'] = ",".join(attributes_to_retrieve)
+            requests.append(request)
         data = {'requests': requests}
         path = '/1/indexes/*/objects'  # Use client._req()
         return self.client._req(True, path, 'POST', data=data)
@@ -162,26 +162,32 @@ class Index(object):
     def partialUpdateObject(self, partial_object):
         return self.partial_update_object(partial_object)
 
-    def partial_update_object(self, partial_object):
+    def partial_update_object(self, partial_object, no_create=False):
         """
         Update partially an object (only update attributes passed in argument).
 
         @param partial_object contains the object attributes to override, the
             object must contains an objectID attribute
+        @param no_create specifies whether or not a missing object must be
+            created
         """
         path = '/%s/partial' % safe(partial_object['objectID'])
+        if no_create:
+            path += '?createIfNotExists=false'
         return self._req(False, path, 'POST', data=partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
         return self.partial_update_objects(objects)
 
-    def partial_update_objects(self, objects):
+    def partial_update_objects(self, objects, no_create=False):
         """
         Partially Override the content of several objects.
 
         @param objects contains an array of objects to update (each object
             must contains a objectID attribute)
+        @param no_create specifies whether or not a missing object must be
+            created
         """
         requests = []
         for obj in objects:
@@ -190,7 +196,7 @@ class Index(object):
                 'objectID': obj['objectID'],
                 'body': obj
             })
-        return self.batch(requests)
+        return self.batch(requests, no_create=no_create)
 
     @deprecated
     def saveObject(self, obj):
@@ -487,7 +493,7 @@ class Index(object):
         for i in range(1, len(answers['results'])):
             for facet in answers['results'][i]['facets']:
                 aggregated_answer['disjunctiveFacets'][facet] = (
-                        answers['results'][i]['facets'][facet])
+                    answers['results'][i]['facets'][facet])
 
                 if facet not in disjunctive_refinements:
                     continue
@@ -876,10 +882,14 @@ class Index(object):
         path = '/keys/%s' % key
         return self._req(False, path, 'PUT', data=obj)
 
-    def batch(self, requests):
+    def batch(self, requests, no_create=False):
         """Send a batch requests."""
         if isinstance(requests, (list, tuple)):
             requests = {'requests': requests}
+
+        path = '/batch'
+        if no_create:
+            path += '?createIfNotExists=false'
 
         return self._req(False, '/batch', 'POST', data=requests)
 

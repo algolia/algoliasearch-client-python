@@ -16,9 +16,9 @@ except ImportError:
 from algoliasearch.client import MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
-from .helpers import safe_index_name
-from .helpers import get_api_client
-from .helpers import FakeData
+from tests.helpers import safe_index_name
+from tests.helpers import get_api_client
+from tests.helpers import FakeData
 
 
 class IndexTest(unittest.TestCase):
@@ -211,6 +211,15 @@ class IndexWithReadOnlyDataTest(IndexTest):
         self.assertDictContainsSubset(self.objs[3], res['results'][0])
         self.assertDictContainsSubset(self.objs[0], res['results'][1])
         self.assertDictContainsSubset(self.objs[2], res['results'][2])
+
+    def test_get_objects_with_attributes_to_retrieve(self):
+        res = self.index.get_objects(self.objectIDs[1:3], attributes_to_retrieve=['name', 'email'])
+        for obj, obj_res in zip(self.objs[1:3], res['results']):
+            self.assertEqual(obj['name'], obj_res['name'])
+            self.assertEqual(obj['email'], obj_res['email'])
+            self.assertNotIn('phone', obj_res)
+            self.assertNotIn('city', obj_res)
+            self.assertNotIn('country', obj_res)
 
     def test_browse(self):
         res = self.index.browse(page=0, hits_per_page=2)
