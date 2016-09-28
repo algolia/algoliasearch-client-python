@@ -2128,7 +2128,7 @@ You can restrict the key to a list of index names allowed for the secured API ke
 
 ```python
 # generate a public API key that is restricted to 'index1' and 'index2':
-public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'restrictIndices': valid_until})
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'restrictIndices': 'index1,index2'})
 ```
 
 #### Rate Limiting
@@ -2153,6 +2153,15 @@ even if he shares his `IP` with another user.
 # generate a public API key for user 42. Here, records are tagged with:
 #  - 'user_XXXX' if they are visible by user XXXX
 public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'filters': '_tags:user_42', 'userToken': 'user_42'})
+```
+
+#### Network restriction
+
+For more protection against API key leaking and reuse you can restrict the key to be valid only from specific IPv4 networks
+
+```python
+# generate a public API key that is restricted to '192.168.1.0/24':
+public_key = client.generate_secured_api_key('YourSearchOnlyApiKey', {'restrictSources': '192.168.1.0/24'})
 ```
 
 
