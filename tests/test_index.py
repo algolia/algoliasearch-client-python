@@ -135,6 +135,61 @@ class IndexWithoutDataTest(IndexTest):
         task = self.index.search_synonyms('', hits_per_page=5)
         self.assertEqual(0, int(task['nbHits']))
 
+    def test_facet_search(self):
+        settings = {'attributesForFacetting': ['searchable(series)', 'kind']}
+        objects = [
+             {
+                 'objectID': '1',
+                 'name': 'Snoopy',
+                 'kind': [ 'dog', 'animal' ],
+                 'born': 1950,
+                 'series': 'Peanuts'
+             },
+             {
+                 'objectID': '2',
+                 'name': 'Woodstock',
+                 'kind': ['bird', 'animal' ],
+                 'born': 1960,
+                 'series': 'Peanuts'
+             },
+             {
+                 'objectID': '3',
+                 'name': 'Charlie Brown',
+                 'kind': [ 'human' ],
+                 'born': 1950,
+                 'series': 'Peanuts'
+             },
+            {
+                'objectID': '4',
+                'name': 'Hobbes',
+                'kind': ['tiger', 'animal', 'teddy' ],
+                'born': 1985,
+                'series': 'Calvin & Hobbes'
+            },
+            {
+                'objectID': '5',
+                'name': 'Calvin',
+                'kind': [ 'human' ],
+                'born': 1985,
+                'series': 'Calvin & Hobbes'
+             }
+         ]
+
+        self.index.set_settings(settings)
+        task = self.index.add_objects(objects)
+        self.index.wait_task(task['taskID'])
+
+        # Straightforward search.
+        facetHits = self.index.search_facet('series', 'Hobb')['facetHits']
+        self.assertEqual(len(facetHits), 1)
+        self.assertEqual(facetHits[0]['value'], 'Calvin & Hobbes')
+        self.assertEqual(facetHits[0]['count'], 2)
+
+        # Using an addition query to restrict search.
+        query = {'facetFilters': 'kind:animal', 'numericFilters': 'born >= 1955'}
+        facetHits = self.index.search_facet('series', 'Peanutz', query)['facetHits']
+        self.assertEqual(facetHits[0]['value'], 'Peanuts')
+        self.assertEqual(facetHits[0]['count'], 1)
 
 class IndexWithReadOnlyDataTest(IndexTest):
     """Tests that use one index with initial data (read only)."""
