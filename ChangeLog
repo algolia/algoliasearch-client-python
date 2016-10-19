@@ -1,5 +1,10 @@
 CHANGELOG
 
+2016-10-19 1.10.0
+    * Add `attribute_to_retrieve` to `get_objects`
+    * Add `no_create` with `partial_update_object`
+    * Implement the search in facet API end point
+
 2016-08-08 1.9.2
     * Fix error on large API keys by including them in the JSON body instead of as a header
     * Fix potential parsing error in case of httpCode == 4XX
