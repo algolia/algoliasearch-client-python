@@ -5,7 +5,7 @@ http://www.algolia.com/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights lw1
+in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
@@ -24,15 +24,12 @@ THE SOFTWARE.
 
 import time
 
+from .helpers import AlgoliaException, deprecated, safe, urlify
+
 try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-
-from .helpers import AlgoliaException
-from .helpers import deprecated
-from .helpers import urlify
-from .helpers import safe
 
 
 class IndexIterator:
@@ -92,8 +89,9 @@ class Index(object):
 
         @param content contains the object to add inside the index.
             The object is represented by an associative array
-        @param object_id (optional) an object_id you want to attribute to this object
-            (if the attribute already exist the old object will be overwrite)
+        @param object_id (optional) an object_id you want to attribute to this
+            object (if the attribute already exist the old object will be
+            overwritten)
         """
         if object_id is not None:
             path = '/%s' % safe(object_id)
@@ -920,7 +918,7 @@ class Index(object):
             query = {}
         query['facetQuery'] = facet_query
         path = '/facets/%s/query' % safe(facet_name)
-        return self._req(True, path, 'POST', data={'params' : urlencode(urlify(query))})
+        return self._req(True, path, 'POST', data={'params': urlencode(urlify(query))})
 
 
     def search_facet(self, facet_name, facet_query, query=None):

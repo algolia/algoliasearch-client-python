@@ -22,24 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import hmac
-import hashlib
 import base64
+import hashlib
+import hmac
 import random
 import sys
+
+from .helpers import deprecated, safe, urlify
+from .index import Index
+from .transport import Transport
+from .version import VERSION
 
 try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-
-from .version import VERSION
-from .index import Index
-
-from .transport import Transport
-from .helpers import deprecated
-from .helpers import safe
-from .helpers import urlify
 
 
 MAX_API_KEY_LENGTH = 500
@@ -58,7 +55,8 @@ class Client(object):
 
         @param app_id the application ID you have in your admin interface
         @param api_key a valid API key for the service
-        @param hosts_array the list of hosts that you have received for the service
+        @param hosts_array the list of hosts that you have received for the
+            service
         """
         self._transport = Transport() if _transport is None else _transport
 
@@ -134,9 +132,11 @@ class Client(object):
         """
         Allow to use IP rate limit when you have a proxy between end-user and
         Algolia. This option will set the X-Forwarded-For HTTP header with the
-        client IP and the X-Forwarded-API-Key with the API Key having rate limits.
+        client IP and the X-Forwarded-API-Key with the API Key having rate
+        limits.
 
-        @param end_user_ip the end user IP (you can use both IPV4 or IPV6 syntax)
+        @param end_user_ip the end user IP (you can use both IPV4 or IPV6
+            syntax)
         @param rate_limit_api_key the API key on which you have a rate limit
         """
         self.headers.update({
@@ -147,9 +147,11 @@ class Client(object):
     def set_end_user_ip(self, end_user_ip):
         """
         Allow to forward an end user IP to the backend for geoip geoloc.
-        This option will set the X-Forwarded-For HTTP header with the client IP.
+        This option will set the X-Forwarded-For HTTP header with the client
+        IP.
 
-        @param end_user_ip the end user IP (you can use both IPV4 or IPV6 syntax)
+        @param end_user_ip the end user IP (you can use both IPV4 or IPV6
+            syntax)
         """
         self.headers['X-Forwarded-For'] = end_user_ip
 
@@ -478,16 +480,16 @@ class Client(object):
         @param queryParameters the dict of query parameters applied to the query (used as security)
         @param user_token an optional token identifying the current user
         """
-        if isinstance(queryParameters, (list, tuple)): #List of tags
+        if isinstance(queryParameters, (list, tuple)):  # List of tags
             queryParameters = ','.join(
-                    map(lambda t: ''.join(['(', ','.join(t), ')']) if
-                        isinstance(t, (list, tuple)) else t, queryParameters))
+                map(lambda t: ''.join(['(', ','.join(t), ')']) if
+                    isinstance(t, (list, tuple)) else t, queryParameters))
             queryParameters = {'tagFilters': queryParameters}
-        elif not isinstance(queryParameters, dict) and not '=' in queryParameters: #TagFilter
+        elif not isinstance(queryParameters, dict) and '=' not in queryParameters:  # TagFilter
             queryParameters = {'tagFilters': queryParameters}
 
-        if isinstance(queryParameters, dict): #New API Key generator
-            if user_token != None and user_token != '':
+        if isinstance(queryParameters, dict):  # New API Key generator
+            if user_token is not None and user_token != '':
                 queryParameters['userToken'] = user_token
             queryParameters = urlencode(urlify(queryParameters))
 
