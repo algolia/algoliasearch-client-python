@@ -370,7 +370,9 @@ The server response will look like:
 
 - `message` (string, optional): Used to return warnings about the query.
 
+
 - `aroundLatLng` (string, optional): *Note: Only returned when [aroundLatLngViaIP](#aroundlatlngviaip) is set.* The computed geo location. **Warning: for legacy reasons, this parameter is a string and not an object.** Format: `${lat},${lng}`, where the latitude and longitude are expressed as decimal floating point numbers.
+
 
 - `automaticRadius` (integer, optional): *Note: Only returned for geo queries without an explicitly specified radius (see `aroundRadius`).* The automatically computed radius. **Warning: for legacy reasons, this parameter is a string and not an integer.**
 
@@ -2075,7 +2077,7 @@ We have several methods to manage them:
 When you need to restrict the scope of the *Search Key*, we recommend to use *Secured API Key*.
 You can generate a *Secured API Key* from the *Search Only API Key* or any search *User API Key*
 
-There is a few things to know about about *Secured API Keys*
+There is a few things to know about *Secured API Keys*
 - They always need to be generated **on your backend** using one of our API Client 
 - You can generate them on the fly (without any call to the API)
 - They will not appear on the dashboard as they are generated without any call to the API
@@ -2727,3 +2729,4 @@ The REST API lets your interact directly with Algolia platforms from anything th
 If you are seeing an error for `Unreachable hosts` when pushing data to Algolia, this is caused by `PyOpenSSL` and older versions of Python. You can see [more information here](https://github.com/algolia/algoliasearch-client-python/issues/30).
 
 To fix, either upgrade your Python version or [your urllib3](https://github.com/algolia/algoliasearch-client-python/issues/30#issuecomment-151933567).
+
