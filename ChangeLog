@@ -1,5 +1,8 @@
 CHANGELOG
 
+2016-11-29 1.10.1
+    * Add `search_for_facet_value` to supplant `search_facet`
+
 2016-10-19 1.10.0
     * Add `attribute_to_retrieve` to `get_objects`
     * Add `no_create` with `partial_update_object`
