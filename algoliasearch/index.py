@@ -904,7 +904,7 @@ class Index(object):
 
         return self._req(False, '/batch', 'POST', data=requests)
 
-    def search_facet(self, facet_name, facet_query, query=None):
+    def search_for_facet_values(self, facet_name, facet_query, query=None):
         """
         Perform a search within a given facet's values
         @param facet_name name of the facet to search. It must have been
@@ -921,6 +921,11 @@ class Index(object):
         query['facetQuery'] = facet_query
         path = '/facets/%s/query' % safe(facet_name)
         return self._req(True, path, 'POST', data={'params' : urlencode(urlify(query))})
+
+
+    def search_facet(self, facet_name, facet_query, query=None):
+        return self.search_for_facet_values(facet_name, facet_query, query)
+
 
     def _req(self, is_search, path, meth, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
