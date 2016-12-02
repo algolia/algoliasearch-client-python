@@ -88,6 +88,14 @@ def urlify(e):
         return encode(e)
 
 
+def rotate(l, n=1):
+    """
+    Return the list rotated n times.
+        rotate([1, 2, 3], 2) => [3, 1, 2]
+    """
+    return l[n:] + l[:n]
+
+
 class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, decimal.Decimal):

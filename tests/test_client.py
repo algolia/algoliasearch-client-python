@@ -135,6 +135,20 @@ class ClientNoDataOperationsTest(ClientTest):
             pass
         self.assertLess(time.time(), now + 6)
 
+    def test_dns_timeout_hard(self):
+        app_id = os.environ['ALGOLIA_APPLICATION_ID']
+
+        hosts = ['algolia.biz', '%s-dsn.algolia.net' % app_id]
+        client = Client(app_id, os.environ['ALGOLIA_API_KEY'], hosts)
+
+        now = time.time()
+        for i in range(10):
+            indices = client.list_indexes()
+
+        self.assertLess(time.time(), now + 10)
+
+
+
 
 class ClientWithDataTest(ClientTest):
     """Tests that use two index with initial data."""
