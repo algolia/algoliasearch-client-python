@@ -1,9 +1,13 @@
-import os
+import copy
 import json
+import os
+import time
 
 from requests import Session
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util import Retry
 
-from .helpers import urlify, CustomJSONEncoder, AlgoliaException
+from .helpers import AlgoliaException, CustomJSONEncoder, rotate, urlify
 
 try:
     from urllib import urlencode
@@ -12,6 +16,7 @@ except ImportError:
 
 APPENGINE = 'APPENGINE_RUNTIME' in os.environ
 SSL_CERTIFICATE_DOMAIN = 'algolia.net'
+DNS_TIMER_DELAY = 5 * 60 # 5 minutes
 
 if APPENGINE:
     from google.appengine.api import urlfetch
@@ -23,17 +28,45 @@ if APPENGINE:
     }
 
 
-class Transport():
+# urllib ultimately uses `/etc/resolv.conf` on linux to get its DNS resolution
+# timeout, this is the settings allowing to change it.
+if 'RES_OPTIONS' not in os.environ:
+    os.environ['RES_OPTIONS'] = 'timeout:2 attempts:1'
+
+
+class Transport(object):
     def __init__(self):
         self.headers = {}
         self.read_hosts = []
         self.write_hosts = []
         self.timeout = (2, 30)
         self.search_timeout = (2, 5)
+        self.dns_timer = time.time()
 
         self.session = Session()
+        # Ask urllib not to make retries on its own.
+        self.session.mount('https://', HTTPAdapter(max_retries=Retry(connect=0)))
+
         self.session.verify = os.path.join(os.path.dirname(__file__),
                                            'resources/ca-bundle.crt')
+
+    @property
+    def read_hosts(self):
+        return self._read_hosts
+
+    @read_hosts.setter
+    def read_hosts(self, value):
+        self._read_hosts = value
+        self._original_read_hosts = value
+
+    @property
+    def write_hosts(self):
+        return self._write_hosts
+
+    @write_hosts.setter
+    def write_hosts(self, value):
+        self._write_hosts = value
+        self._original_write_hosts = value
 
     def _app_req(self, host, path, meth, timeout, params, data):
         """
@@ -91,6 +124,25 @@ class Transport():
 
         res.raise_for_status()
 
+    def _rotate_hosts(self, is_search):
+        if is_search:
+            self._read_hosts = rotate(self._read_hosts)
+        else:
+            self._write_hosts = rotate(self._write_hosts)
+
+    def _get_hosts(self, is_search):
+        secs_since_rotate = time.time() - self.dns_timer
+        if is_search:
+            if secs_since_rotate < DNS_TIMER_DELAY:
+                return self.read_hosts
+            else:
+                return self._original_read_hosts
+        else:
+            if secs_since_rotate < DNS_TIMER_DELAY:
+                return self.write_hosts
+            else:
+                return self._original_write_hosts
+
     def req(self, is_search, path, meth, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
         if params is not None:
@@ -99,12 +151,8 @@ class Transport():
         if data is not None:
             data = json.dumps(data, cls=CustomJSONEncoder)
 
-        if is_search:
-            hosts = self.read_hosts
-            timeout = self.search_timeout
-        else:
-            hosts = self.write_hosts
-            timeout = self.timeout
+        hosts = self._get_hosts(is_search)
+        timeout = self.search_timeout if is_search else self.timeout
 
         exceptions = {}
         for i, host in enumerate(hosts):
@@ -120,6 +168,8 @@ class Transport():
             except AlgoliaException as e:
                 raise e
             except Exception as e:
+                self._rotate_hosts(is_search)
+                self.dns_timer = time.time()
                 exceptions[host] = "%s: %s" % (e.__class__.__name__, str(e))
 
         raise AlgoliaException('Unreachable hosts: %s' % exceptions)
