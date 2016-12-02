@@ -12,6 +12,7 @@ except ImportError:
     import unittest
 
 from algoliasearch.client import Client, MAX_API_KEY_LENGTH
+from algoliasearch.helpers import AlgoliaException
 
 from .helpers import safe_index_name
 from .helpers import get_api_client
@@ -123,20 +124,16 @@ class ClientNoDataOperationsTest(ClientTest):
     def test_dns_timeout(self):
         app_id = os.environ['ALGOLIA_APPLICATION_ID']
 
-        hosts = [
-            '%s-dsn.algolia.biz' % app_id,
-            '%s-dsn.algolia.net' % app_id,
-            '%s-1.algolianet.com' % app_id,
-            '%s-2.algolianet.com' % app_id,
-            '%s-3.algolianet.com' % app_id,
-        ]
-
+        hosts = ['algolia.biz']
         client = Client(app_id, os.environ['ALGOLIA_API_KEY'], hosts)
         client.set_timeout(5, 2)
 
         now = time.time()
-        indices = client.list_indexes()
-        self.assertLess(now + 5, time.time())
+        try:
+            indices = client.list_indexes()
+        except AlgoliaException:
+            pass
+        self.assertLess(time.time(), now + 6)
 
 
 class ClientWithDataTest(ClientTest):
