@@ -145,7 +145,7 @@ class ClientNoDataOperationsTest(ClientTest):
         for i in range(10):
             indices = client.list_indexes()
 
-        self.assertLess(time.time(), now + 10)
+        self.assertLess(time.time(), now + 6)
 
 
 
