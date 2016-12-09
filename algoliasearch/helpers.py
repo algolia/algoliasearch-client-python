@@ -22,12 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import calendar
+import datetime
+import decimal
+import json
 import sys
 import warnings
-import json
-import decimal
-import time
-import datetime
 
 try:
     from urllib import quote
@@ -102,7 +102,7 @@ class CustomJSONEncoder(json.JSONEncoder):
             return float(obj)
         elif isinstance(obj, datetime.datetime):
             try:
-                return int(time.mktime(obj.timetuple()))
+                return int(calendar.timegm(obj.utctimetuple()))
             except:
                 return 0
 
