@@ -72,7 +72,7 @@ class Transport(object):
         """
         Perform an HTTPS request with AppEngine's urlfetch. SSL certificate
         will not validate when the request is on a domain which is not a
-        aloglia.net subdomain, a SNI is not available by default on GAE. Hence,
+        algolia.net subdomain, a SNI is not available by default on GAE. Hence,
         we do set validate_certificate to False when calling those domains.
         """
         meth = APPENGINE_METHODS.get(meth)
