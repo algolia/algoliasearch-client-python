@@ -5,16 +5,13 @@ before_script:
 - unzip -q google_appengine_1.9.27.zip
 install:
 - pip install --upgrade pip
-- if [[ $TOXENV == 'py32' ]]; then pip install -I 'virtualenv<14.0'; fi
 - pip install tox
 script:
 - tox
 python: 3.5
 env:
   matrix:
-  - TOXENV=py26
   - TOXENV=py27
-  - TOXENV=py32
   - TOXENV=py33
   - TOXENV=py34
   - TOXENV=py35

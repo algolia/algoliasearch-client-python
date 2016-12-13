@@ -2,21 +2,15 @@
 
 from __future__ import unicode_literals
 
-from random import randint
-import time
 import os
+import time
+import unittest
+from random import randint
 
-try:
-    import unittest2 as unittest  # py26
-except ImportError:
-    import unittest
-
-from algoliasearch.client import Client, MAX_API_KEY_LENGTH
+from algoliasearch.client import MAX_API_KEY_LENGTH, Client
 from algoliasearch.helpers import AlgoliaException
 
-from .helpers import safe_index_name
-from .helpers import get_api_client
-from .helpers import FakeData
+from .helpers import FakeData, get_api_client, safe_index_name
 
 
 class ClientTest(unittest.TestCase):

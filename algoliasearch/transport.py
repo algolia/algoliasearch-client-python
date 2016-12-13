@@ -115,9 +115,9 @@ class Transport(object):
         if res.status_code // 100 == 4:
             message = 'HTTP Code: %d' % (res.status_code)
             try:
-              j = res.json()
+                j = res.json()
             except:
-              j = { 'message': res.text}
+                j = {'message': res.text}
             if j is not None and 'message' in j:
                 message = j['message']
             raise AlgoliaException(message)

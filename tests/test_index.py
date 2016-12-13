@@ -4,21 +4,14 @@ from __future__ import unicode_literals
 
 import os
 import time
-from random import randint
-from decimal import Decimal
+import unittest
 from datetime import datetime
-
-try:
-    import unittest2 as unittest  # py26
-except ImportError:
-    import unittest
+from decimal import Decimal
+from random import randint
 
 from algoliasearch.client import MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
-
-from tests.helpers import safe_index_name
-from tests.helpers import get_api_client
-from tests.helpers import FakeData
+from tests.helpers import FakeData, get_api_client, safe_index_name
 
 
 class IndexTest(unittest.TestCase):

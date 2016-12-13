@@ -22,16 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+from .client import Client
+from .index import Index
+from .version import VERSION
+from .helpers import AlgoliaException
+
+# Everything underneath is kept for retro-compatibility.
 from . import client
 from . import index
 from . import helpers
 from . import version
 
 
-# Compatibility with old import
 class algoliasearch(object):
     VERSION = version.VERSION
 
-    Client = client.Client
-    Index = index.Index
-    AlgoliaException = helpers.AlgoliaException
+    Client = Client
+    Index = Index
+    AlgoliaException = AlgoliaException
