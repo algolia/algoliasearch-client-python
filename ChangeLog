@@ -1,5 +1,8 @@
 CHANGELOG
 
+2017-01-02 1.11.1
+    * Add `forward_to_replicas` on top of `forward_to_slaves`
+
 2016-12-02 1.11.0
     * Configure DNS resolvinf timeout
     * Implement new retry logic

@@ -540,7 +540,8 @@ class Index(object):
         """
         return IndexIterator(self, params=params)
 
-    def save_synonym(self, content, object_id, forward_to_slaves=False):
+    def save_synonym(self, content, object_id, forward_to_slaves=False,
+                     forward_to_replicas=False):
         """
         Add a synonym in this index.
 
@@ -551,12 +552,15 @@ class Index(object):
         @param forward_to_slaves (optional) should the changes be forwarded to
             slave indexes
         """
+        forward_to_slaves |= forward_to_replicas
+
         path = '/synonyms/%s' % safe(object_id)
         params = {'forwardToSlaves': forward_to_slaves}
         return self._req(False, path, 'PUT', params, content)
 
     def batch_synonyms(self, synonyms, forward_to_slaves=False,
-                       replace_existing_synonyms=False):
+                       replace_existing_synonyms=False,
+                       forward_to_replicas=False):
         """
         Add several synonyms in this index.
 
@@ -566,6 +570,8 @@ class Index(object):
         @param replace_existing_synonyms (optional) should the index be cleared
             of existing synonyms
         """
+        forward_to_slaves |= forward_to_replicas
+
         params = {
             'forwardToSlaves': forward_to_slaves,
             'replaceExistingSynonyms': replace_existing_synonyms
@@ -582,7 +588,8 @@ class Index(object):
         path = '/synonyms/%s' % safe(object_id)
         return self._req(True, path, 'GET')
 
-    def delete_synonym(self, object_id, forward_to_slaves=False):
+    def delete_synonym(self, object_id, forward_to_slaves=False,
+                       forward_to_replicas=False):
         """
         Delete a synonym from the index.
 
@@ -590,17 +597,22 @@ class Index(object):
         @param forward_to_slaves (optional) should the changes be forwarded to
             slave indexes
         """
+        forward_to_slaves |= forward_to_replicas
+
         path = '/synonyms/%s' % safe(object_id)
         params = {'forwardToSlaves': forward_to_slaves}
         return self._req(False, path, 'DELETE', params)
 
-    def clear_synonyms(self, forward_to_slaves=False):
+    def clear_synonyms(self, forward_to_slaves=False,
+                       forward_to_replicas=False):
         """
         Delete all synonyms from the index.
 
         @param forward_to_slaves (optional) should the changes be forwarded to
             slave indexes
         """
+        forward_to_slaves |= forward_to_replicas
+
         path = '/synonyms/clear'
         params = {'forwardToSlaves': forward_to_slaves}
         return self._req(False, path, 'POST', params)
@@ -681,7 +693,8 @@ class Index(object):
     def setSettings(self, settings):
         return self.set_settings(settings)
 
-    def set_settings(self, settings, forward_to_slaves=True):
+    def set_settings(self, settings, forward_to_slaves=True,
+                     forward_to_replicas=True):
         """
         Set settings for this index.
 
@@ -765,6 +778,8 @@ class Index(object):
             - optionalWords: (array of strings) Specify a list of words that
             should be considered as optional when found in the query.
         """
+        forward_to_slaves &= forward_to_replicas
+
         params = {'forwardToSlaves': forward_to_slaves}
         return self._req(False, '/settings', 'PUT', params, settings)
 
