@@ -549,13 +549,15 @@ class Index(object):
             The object is represented by an associative array
         @param object_id unique identifier for the new synonym.
             If the identifier already exists, the old synonym is replaced
-        @param forward_to_slaves (optional) should the changes be forwarded to
-            slave indexes
+        @param forward_to_replicas (optional) should the changes be forwarded to
+            replica indexes
+        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+            backward compatibility.
         """
         forward_to_slaves |= forward_to_replicas
 
         path = '/synonyms/%s' % safe(object_id)
-        params = {'forwardToSlaves': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_slaves}
         return self._req(False, path, 'PUT', params, content)
 
     def batch_synonyms(self, synonyms, forward_to_slaves=False,
@@ -565,15 +567,17 @@ class Index(object):
         Add several synonyms in this index.
 
         @param synonyms array of synonyms to add
-        @param forward_to_slaves (optional) should the changes be forwarded to
-            slave indexes
+        @param forward_to_replicas (optional) should the changes be forwarded to
+            replica indexes
+        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+            backward compatibility.
         @param replace_existing_synonyms (optional) should the index be cleared
             of existing synonyms
         """
         forward_to_slaves |= forward_to_replicas
 
         params = {
-            'forwardToSlaves': forward_to_slaves,
+            'forwardToReplicas': forward_to_slaves,
             'replaceExistingSynonyms': replace_existing_synonyms
         }
 
@@ -594,13 +598,15 @@ class Index(object):
         Delete a synonym from the index.
 
         @param object_id the unique identifier of the synonyms set to delete
-        @param forward_to_slaves (optional) should the changes be forwarded to
-            slave indexes
+        @param forward_to_replicas (optional) should the changes be forwarded to
+            replica indexes
+        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+            backward compatibility.
         """
         forward_to_slaves |= forward_to_replicas
 
         path = '/synonyms/%s' % safe(object_id)
-        params = {'forwardToSlaves': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_slaves}
         return self._req(False, path, 'DELETE', params)
 
     def clear_synonyms(self, forward_to_slaves=False,
@@ -608,13 +614,15 @@ class Index(object):
         """
         Delete all synonyms from the index.
 
-        @param forward_to_slaves (optional) should the changes be forwarded to
-            slave indexes
+        @param forward_to_replicas (optional) should the changes be forwarded to
+            replica indexes
+        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+            backward compatibility.
         """
         forward_to_slaves |= forward_to_replicas
 
         path = '/synonyms/clear'
-        params = {'forwardToSlaves': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_slaves}
         return self._req(False, path, 'POST', params)
 
     def search_synonyms(self, query, types=[], page=0, hits_per_page=100):
@@ -698,7 +706,10 @@ class Index(object):
         """
         Set settings for this index.
 
-        @param forward_to_slaves Forward the changes to slaves (default = True)
+        @param forward_to_replicas (optional) should the changes be forwarded to
+            replica indexes
+        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+            backward compatibility.
         @param settigns the settings object that can contains :
             - minWordSizefor1Typo: (integer) the minimum number of characters
             to accept one typo (default = 3).
@@ -780,7 +791,7 @@ class Index(object):
         """
         forward_to_slaves &= forward_to_replicas
 
-        params = {'forwardToSlaves': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_slaves}
         return self._req(False, '/settings', 'PUT', params, settings)
 
     @deprecated
