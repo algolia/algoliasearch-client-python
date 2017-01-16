@@ -18,6 +18,7 @@ env:
   - TOXENV=py33
   - TOXENV=py34
   - TOXENV=py35
+  - TOXENV=py36
   - TOXENV=coveralls-py2
   - TOXENV=coveralls-py3
   - TOXENV=py27 APPENGINE_RUNTIME=python27
