@@ -554,10 +554,10 @@ class Index(object):
         @param forward_to_slaves (optional) same as forward_to_replicas, used for
             backward compatibility.
         """
-        forward_to_slaves |= forward_to_replicas
+        forward_to_replicas |= forward_to_slaves
 
         path = '/synonyms/%s' % safe(object_id)
-        params = {'forwardToReplicas': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, path, 'PUT', params, content)
 
     def batch_synonyms(self, synonyms, forward_to_slaves=False,
@@ -574,10 +574,10 @@ class Index(object):
         @param replace_existing_synonyms (optional) should the index be cleared
             of existing synonyms
         """
-        forward_to_slaves |= forward_to_replicas
+        forward_to_replicas |= forward_to_slaves
 
         params = {
-            'forwardToReplicas': forward_to_slaves,
+            'forwardToReplicas': forward_to_replicas,
             'replaceExistingSynonyms': replace_existing_synonyms
         }
 
@@ -603,10 +603,10 @@ class Index(object):
         @param forward_to_slaves (optional) same as forward_to_replicas, used for
             backward compatibility.
         """
-        forward_to_slaves |= forward_to_replicas
+        forward_to_replicas |= forward_to_slaves
 
         path = '/synonyms/%s' % safe(object_id)
-        params = {'forwardToReplicas': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, path, 'DELETE', params)
 
     def clear_synonyms(self, forward_to_slaves=False,
@@ -619,10 +619,10 @@ class Index(object):
         @param forward_to_slaves (optional) same as forward_to_replicas, used for
             backward compatibility.
         """
-        forward_to_slaves |= forward_to_replicas
+        forward_to_replicas |= forward_to_slaves
 
         path = '/synonyms/clear'
-        params = {'forwardToReplicas': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, path, 'POST', params)
 
     def search_synonyms(self, query, types=[], page=0, hits_per_page=100):
@@ -789,9 +789,9 @@ class Index(object):
             - optionalWords: (array of strings) Specify a list of words that
             should be considered as optional when found in the query.
         """
-        forward_to_slaves &= forward_to_replicas
+        forward_to_replicas &= forward_to_slaves
 
-        params = {'forwardToReplicas': forward_to_slaves}
+        params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, '/settings', 'PUT', params, settings)
 
     @deprecated
