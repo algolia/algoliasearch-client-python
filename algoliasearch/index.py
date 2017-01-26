@@ -90,9 +90,9 @@ class Index(object):
         """
         Add an object in this index.
 
-        @param content contains the object to add inside the index.
+        @param content: contains the object to add inside the index.
             The object is represented by an associative array
-        @param object_id (optional) an object_id you want to attribute to this object
+        @param object_id: (optional) an object_id you want to attribute to this object
             (if the attribute already exist the old object will be overwrite)
         """
         if object_id is not None:
@@ -109,7 +109,7 @@ class Index(object):
         """
         Add several objects.
 
-        @param objects contains an array of objects to add
+        @param objects: contains an array of objects to add
         """
         requests = [{'action': 'addObject', 'body': obj} for obj in objects]
         return self.batch(requests)
@@ -122,8 +122,8 @@ class Index(object):
         """
         Get an object from this index.
 
-        @param object_id the unique identifier of the object to retrieve
-        @param attributes_to_retrieve (optional) if set, contains the list
+        @param object_id: the unique identifier of the object to retrieve
+        @param attributes_to_retrieve: (optional) if set, contains the list
             of attributes to retrieve as a string separated by a comma
         """
         path = '/%s' % safe(object_id)
@@ -144,8 +144,8 @@ class Index(object):
         """
         Get several objects from this index.
 
-        @param object_ids the array of unique identifier of objects to retrieve
-        @param attributes_to_retrieve (optional) if set, contains the list
+        @param object_ids: the array of unique identifier of objects to retrieve
+        @param attributes_to_retrieve: (optional) if set, contains the list
             of attributes to retrieve as a string separated by a comma
         """
         requests = []
@@ -166,9 +166,9 @@ class Index(object):
         """
         Update partially an object (only update attributes passed in argument).
 
-        @param partial_object contains the object attributes to override, the
+        @param partial_object: contains the object attributes to override, the
             object must contains an objectID attribute
-        @param no_create specifies whether or not a missing object must be
+        @param no_create: specifies whether or not a missing object must be
             created
         """
         path = '/%s/partial' % safe(partial_object['objectID'])
@@ -184,9 +184,9 @@ class Index(object):
         """
         Partially Override the content of several objects.
 
-        @param objects contains an array of objects to update (each object
+        @param objects: contains an array of objects to update (each object
             must contains a objectID attribute)
-        @param no_create specifies whether or not a missing object must be
+        @param no_create: specifies whether or not a missing object must be
             created
         """
         requests = []
@@ -206,7 +206,7 @@ class Index(object):
         """
         Override the content of object.
 
-        @param object contains the object to save, the object must contains
+        @param object: contains the object to save, the object must contains
             an objectID attribute
         """
         path = '/%s' % safe(obj['objectID'])
@@ -220,7 +220,7 @@ class Index(object):
         """
         Override the content of several objects.
 
-        @param objects contains an array of objects to update (each object
+        @param objects: contains an array of objects to update (each object
             must contains a objectID attribute)
         """
         requests = []
@@ -240,8 +240,8 @@ class Index(object):
         """
         Delete all objects matching a query.
 
-        @param query the query string
-        @param params the optional query parameters
+        @param query: the query string
+        @param params: the optional query parameters
         """
         if params is None:
             params = {}
@@ -264,7 +264,7 @@ class Index(object):
         """
         Delete an object from the index.
 
-        @param object_id the unique identifier of object to delete
+        @param object_id: the unique identifier of object to delete
         """
         path = '/%s' % safe(object_id)
         return self._req(False, path, 'DELETE')
@@ -277,7 +277,7 @@ class Index(object):
         """
         Delete several objects.
 
-        @param objects contains an array of object_id to delete
+        @param objects: contains an array of object_id to delete
         """
         requests = []
         for obj in objects:
@@ -291,8 +291,8 @@ class Index(object):
         """
         Search inside the index.
 
-        @param query the full text query
-        @param args (optional) if set, contains an associative array with
+        @param query: the full text query
+        @param args: (optional) if set, contains an associative array with
             query parameters:
                 - page: (integer) Pagination parameter used to select the
                 page to retrieve. Page is zero-based and defaults to 0. Thus,
@@ -416,10 +416,10 @@ class Index(object):
         Perform a search with disjunctive facets generating as many queries as
         number of disjunctive facets.
 
-        @param query the query
-        @param disjunctive_facets the array of disjunctive facets
-        @param params a hash representing the regular query parameters
-        @param refinements a hash ('string' -> ['array', 'of', 'refined', 'values'])
+        @param query: the query
+        @param disjunctive_facets: the array of disjunctive facets
+        @param params: a hash representing the regular query parameters
+        @param refinements: a hash ('string' -> ['array', 'of', 'refined', 'values'])
             representing the current refinements. Ex:
             { 'my_facet1' => ['my_value1', ['my_value2'], 'my_disjunctive_facet1' => ['my_value1', 'my_value2'] }
         """
@@ -509,7 +509,7 @@ class Index(object):
         """
          Browse all index content.
 
-         @param page Pagination parameter used to select the page to retrieve.
+         @param page: Pagination parameter used to select the page to retrieve.
             Page is zero-based and defaults to 0. Thus, to retrieve the 10th
             page you need to set page=9
          @param hits_per_page: Pagination parameter used to select the number
@@ -522,8 +522,8 @@ class Index(object):
         """
          Browse all index content.
 
-         @param params contains the list of query parameter in a dictionary
-         @param cursor the position to start the browse
+         @param params: contains the list of query parameter in a dictionary
+         @param cursor: the position to start the browse
         """
         if params is None:
             params = {}
@@ -535,7 +535,7 @@ class Index(object):
         """
          Browse all index content.
 
-         @param params contains the list of query parameter in a dictionary
+         @param params: contains the list of query parameter in a dictionary
          @return an iterator on the index content
         """
         return IndexIterator(self, params=params)
@@ -545,13 +545,13 @@ class Index(object):
         """
         Add a synonym in this index.
 
-        @param content contains the synonyms set to add to the index.
+        @param content: contains the synonyms set to add to the index.
             The object is represented by an associative array
-        @param object_id unique identifier for the new synonym.
+        @param object_id: unique identifier for the new synonym.
             If the identifier already exists, the old synonym is replaced
-        @param forward_to_replicas (optional) should the changes be forwarded to
+        @param forward_to_replicas: (optional) should the changes be forwarded to
             replica indexes
-        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+        @param forward_to_slaves: (optional) same as forward_to_replicas, used for
             backward compatibility.
         """
         forward_to_replicas |= forward_to_slaves
@@ -566,12 +566,12 @@ class Index(object):
         """
         Add several synonyms in this index.
 
-        @param synonyms array of synonyms to add
-        @param forward_to_replicas (optional) should the changes be forwarded to
+        @param synonyms: array of synonyms to add
+        @param forward_to_replicas: (optional) should the changes be forwarded to
             replica indexes
-        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+        @param forward_to_slaves: (optional) same as forward_to_replicas, used for
             backward compatibility.
-        @param replace_existing_synonyms (optional) should the index be cleared
+        @param replace_existing_synonyms: (optional) should the index be cleared
             of existing synonyms
         """
         forward_to_replicas |= forward_to_slaves
@@ -587,7 +587,7 @@ class Index(object):
         """
         Get a synonym from this index.
 
-        @param object_id unique identifier of the synonym to retrieve
+        @param object_id: unique identifier of the synonym to retrieve
         """
         path = '/synonyms/%s' % safe(object_id)
         return self._req(True, path, 'GET')
@@ -597,10 +597,10 @@ class Index(object):
         """
         Delete a synonym from the index.
 
-        @param object_id the unique identifier of the synonyms set to delete
-        @param forward_to_replicas (optional) should the changes be forwarded to
+        @param object_id: the unique identifier of the synonyms set to delete
+        @param forward_to_replicas: (optional) should the changes be forwarded to
             replica indexes
-        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+        @param forward_to_slaves: (optional) same as forward_to_replicas, used for
             backward compatibility.
         """
         forward_to_replicas |= forward_to_slaves
@@ -614,9 +614,9 @@ class Index(object):
         """
         Delete all synonyms from the index.
 
-        @param forward_to_replicas (optional) should the changes be forwarded to
+        @param forward_to_replicas: (optional) should the changes be forwarded to
             replica indexes
-        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+        @param forward_to_slaves: (optional) same as forward_to_replicas, used for
             backward compatibility.
         """
         forward_to_replicas |= forward_to_slaves
@@ -629,10 +629,10 @@ class Index(object):
         """
         Search for synonyms from this index.
 
-        @param query the full text query
-        @param types (optional) the types of the synonyms to search for.
-        @param page (optional integer) the page to fetch
-        @param hits_per_page (optional integer) the number of hits per page
+        @param query: the full text query
+        @param types: (optional) the types of the synonyms to search for.
+        @param page: (optional integer) the page to fetch
+        @param hits_per_page: (optional integer) the number of hits per page
         """
         if isinstance(types, str):
             types = [] if len(types) == 0 else [types]
@@ -656,8 +656,8 @@ class Index(object):
         All server task are asynchronous and you can check with this method
         that the task is published.
 
-        @param task_id the id of the task returned by server
-        @param time_before_retry the time in milliseconds before retry (default = 100ms)
+        @param task_id: the id of the task returned by server
+        @param time_before_retry: the time in milliseconds before retry (default = 100ms)
         """
         path = '/task/%d' % task_id
         while True:
@@ -670,7 +670,7 @@ class Index(object):
         '''
         Return True if the task on the server has been published
 
-        @param task_id the id of the task returned by server
+        @param task_id: the id of the task returned by server
         '''
 
         path = '/task/{0}'.format(task_id)
@@ -706,11 +706,11 @@ class Index(object):
         """
         Set settings for this index.
 
-        @param forward_to_replicas (optional) should the changes be forwarded to
+        @param forward_to_replicas: (optional) should the changes be forwarded to
             replica indexes
-        @param forward_to_slaves (optional) same as forward_to_replicas, used for
+        @param forward_to_slaves: (optional) same as forward_to_replicas, used for
             backward compatibility.
-        @param settigns the settings object that can contains :
+        @param settigns: the settings object that can contains :
             - minWordSizefor1Typo: (integer) the minimum number of characters
             to accept one typo (default = 3).
             - minWordSizefor2Typos: (integer) the minimum number of characters
@@ -834,7 +834,7 @@ class Index(object):
         Create a new user key associated to this index (can only access to
         this index).
 
-        @param obj can be two different parameters:
+        @param obj: can be two different parameters:
             The list of parameters for this key. Defined by a dictionary that
             can contains the following values:
                 - acl: array of string
@@ -853,12 +853,12 @@ class Index(object):
                 - deleteIndex : allows to delete index content (https only)
                 - settings : allows to get index settings (https only)
                 - editSettings : allows to change index settings (https only)
-        @param validity the number of seconds after which the key will be
+        @param validity: the number of seconds after which the key will be
             automatically removed (0 means no time limit for this key)
-        @param max_queries_per_ip_per_hour Specify the maximum number of API
+        @param max_queries_per_ip_per_hour: Specify the maximum number of API
             calls allowed from an IP address per hour.  Defaults to 0 (no
             rate limit)
-        @param max_hits_per_query Specify the maximum number of hits this
+        @param max_hits_per_query: Specify the maximum number of hits this
             API key can retrieve in one call. Defaults to 0 (unlimited)
         """
         if not isinstance(obj, dict):
@@ -878,7 +878,7 @@ class Index(object):
         """
         Update a user key associated to this index (can only access to this index).
 
-        @param obj can be two different parameters:
+        @param obj: can be two different parameters:
             The list of parameters for this key. Defined by a dictionary that
             can contains the following values:
                 - acl: array of string
@@ -897,12 +897,12 @@ class Index(object):
                 - deleteIndex : allows to delete index content (https only)
                 - settings : allows to get index settings (https only)
                 - editSettings : allows to change index settings (https only)
-        @param validity the number of seconds after which the key will be
+        @param validity: the number of seconds after which the key will be
             automatically removed (0 means no time limit for this key)
-        @param max_queries_per_ip_per_hour Specify the maximum number of API
+        @param max_queries_per_ip_per_hour: Specify the maximum number of API
             calls allowed from an IP address per hour.  Defaults to 0 (no rate
             limit).
-        @param max_hits_per_query Specify the maximum number of hits this API
+        @param max_hits_per_query: Specify the maximum number of hits this API
             key can retrieve in one call. Defaults to 0 (unlimited)
         """
         if not isinstance(obj, dict):
@@ -933,11 +933,11 @@ class Index(object):
     def search_for_facet_values(self, facet_name, facet_query, query=None):
         """
         Perform a search within a given facet's values
-        @param facet_name name of the facet to search. It must have been
+        @param facet_name: name of the facet to search. It must have been
             declared in the index's `attributesForFacetting` setting with the
             `searchable()` modifier.
-        @param facet_query text to search for in the facet's values.
-        @param query an optional query to take extra search parameters into
+        @param facet_query: text to search for in the facet's values.
+        @param query: an optional query to take extra search parameters into
             account. The parameters apply to index objects like in a regular
             search query. Only facet values contained in the matched objects
             will be returned.

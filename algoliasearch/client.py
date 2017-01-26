@@ -56,9 +56,9 @@ class Client(object):
         """
         Algolia Search Client initialization
 
-        @param app_id the application ID you have in your admin interface
-        @param api_key a valid API key for the service
-        @param hosts_array the list of hosts that you have received for the service
+        @param app_id: the application ID you have in your admin interface
+        @param api_key: a valid API key for the service
+        @param hosts_array: the list of hosts that you have received for the service
         """
         self._transport = Transport() if _transport is None else _transport
 
@@ -136,8 +136,8 @@ class Client(object):
         Algolia. This option will set the X-Forwarded-For HTTP header with the
         client IP and the X-Forwarded-API-Key with the API Key having rate limits.
 
-        @param end_user_ip the end user IP (you can use both IPV4 or IPV6 syntax)
-        @param rate_limit_api_key the API key on which you have a rate limit
+        @param end_user_ip: the end user IP (you can use both IPV4 or IPV6 syntax)
+        @param rate_limit_api_key: the API key on which you have a rate limit
         """
         self.headers.update({
             'X-Forwarded-For': end_user_ip,
@@ -149,7 +149,7 @@ class Client(object):
         Allow to forward an end user IP to the backend for geoip geoloc.
         This option will set the X-Forwarded-For HTTP header with the client IP.
 
-        @param end_user_ip the end user IP (you can use both IPV4 or IPV6 syntax)
+        @param end_user_ip: the end user IP (you can use both IPV4 or IPV6 syntax)
         """
         self.headers['X-Forwarded-For'] = end_user_ip
 
@@ -260,7 +260,7 @@ class Client(object):
         Delete an index.
         Return an object of the form: {'deleted_at': '2013-01-18T15:33:13.556Z'}
 
-        @param index_name the name of index to delete
+        @param index_name: the name of index to delete
         """
         path = '/1/indexes/%s' % safe(index_name)
         return self._req(False, path, 'DELETE')
@@ -273,8 +273,8 @@ class Client(object):
         """
         Move an existing index.
 
-        @param src_index_name the name of index to copy.
-        @param dst_index_name the new index name that will contains a copy
+        @param src_index_name: the name of index to copy.
+        @param dst_index_name: the new index name that will contains a copy
             of src_index_name (destination will be overriten if it already exist).
         """
         path = '/1/indexes/%s/operation' % safe(src_index_name)
@@ -289,8 +289,8 @@ class Client(object):
         """
         Copy an existing index.
 
-        @param src_index_name the name of index to copy.
-        @param dst_index_name the new index name that will contains a copy of
+        @param src_index_name: the name of index to copy.
+        @param dst_index_name: the new index name that will contains a copy of
             src_index_name (destination will be overriten if it already exist).
         """
         path = '/1/indexes/%s/operation' % safe(src_index_name)
@@ -305,9 +305,9 @@ class Client(object):
         """
         Return last logs entries.
 
-        @param offset Specify the first entry to retrieve (0-based,
+        @param offset: Specify the first entry to retrieve (0-based,
             0 is the most recent log entry).
-        @param length Specify the maximum number of entries to retrieve
+        @param length: Specify the maximum number of entries to retrieve
             starting at offset. Maximum allowed value: 1000.
         """
         params = {'offset': offset, 'length': length, 'type': type}
@@ -322,7 +322,7 @@ class Client(object):
         Get the index object initialized (no server call needed for
         initialization).
 
-        @param index_name the name of index
+        @param index_name: the name of index
         """
         return Index(self, index_name)
 
@@ -369,7 +369,7 @@ class Client(object):
         """
         Create a new user key.
 
-        @param obj can be two different parameters:
+        @param obj: can be two different parameters:
             The list of parameters for this key. Defined by a NSDictionary that
             can contains the following values:
                 - acl: array of string
@@ -388,13 +388,13 @@ class Client(object):
                 - deleteIndex : allows to delete index content (https only)
                 - settings : allows to get index settings (https only)
                 - editSettings : allows to change index settings (https only)
-        @param validity the number of seconds after which the key will be
+        @param validity: the number of seconds after which the key will be
             automatically removed (0 means no time limit for this key)
-        @param max_queries_per_ip_per_hour Specify the maximum number of API
+        @param max_queries_per_ip_per_hour: Specify the maximum number of API
             calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
-        @param max_hits_per_query Specify the maximum number of hits this API
+        @param max_hits_per_query: Specify the maximum number of hits this API
             key can retrieve in one call. Defaults to 0 (unlimited)
-        @param indexes the optional list of targeted indexes
+        @param indexes: the optional list of targeted indexes
         """
         if not isinstance(obj, dict):
             obj = {'acl': obj}
@@ -418,7 +418,7 @@ class Client(object):
         """
         Update a user key.
 
-        @param obj can be two different parameters:
+        @param obj: can be two different parameters:
             The list of parameters for this key. Defined by a NSDictionary that
             can contains the following values:
                 - acl: array of string
@@ -437,13 +437,13 @@ class Client(object):
                 - deleteIndex : allows to delete index content (https only)
                 - settings : allows to get index settings (https only)
                 - editSettings : allows to change index settings (https only)
-        @param validity the number of seconds after which the key will be
+        @param validity: the number of seconds after which the key will be
             automatically removed (0 means no time limit for this key)
-        @param max_queries_per_ip_per_hour Specify the maximum number of API
+        @param max_queries_per_ip_per_hour: Specify the maximum number of API
             calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
-        @param max_hits_per_query Specify the maximum number of hits this API
+        @param max_hits_per_query: Specify the maximum number of hits this API
             key can retrieve in one call. Defaults to 0 (unlimited)
-        @param indexes the optional list of targeted indexes
+        @param indexes: the optional list of targeted indexes
         """
         if not isinstance(obj, dict):
             obj = {'acl': obj}
@@ -474,9 +474,9 @@ class Client(object):
         Generate a secured and public API Key from a dict of query parameters and an
         optional user token identifying the current user.
 
-        @param private_api_key your private API Key
-        @param queryParameters the dict of query parameters applied to the query (used as security)
-        @param user_token an optional token identifying the current user
+        @param private_api_key: your private API Key
+        @param queryParameters: the dict of query parameters applied to the query (used as security)
+        @param user_token: an optional token identifying the current user
         """
         if isinstance(queryParameters, (list, tuple)): #List of tags
             queryParameters = ','.join(
