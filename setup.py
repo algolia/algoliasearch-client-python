@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import io
 import os
 import sys
 
@@ -17,7 +18,7 @@ try:
     import pypandoc
     README = pypandoc.convert(path_readme, 'rst')
 except (IOError, ImportError):
-    with open(path_readme) as readme:
+    with io.open(path_readme, encoding='utf-8') as readme:
         README = readme.read()
 
 VERSION = None
