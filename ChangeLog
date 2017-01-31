@@ -1,5 +1,8 @@
 CHANGELOG
 
+2017-01-31 1.11.2
+    * Decode the README with utf-8 encoding in setup.py
+
 2017-01-02 1.11.1
     * Add `forward_to_replicas` on top of `forward_to_slaves`
 
