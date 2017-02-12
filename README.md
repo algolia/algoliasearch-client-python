@@ -2818,6 +2818,8 @@ The REST API lets your interact directly with Algolia platforms from anything th
 
 
 # Troubleshooting
+**Test on RapidAPI** - You can explore the Algolia API on [RapidAPI](https://rapidapi.com/package/Algolia/functions?utm_source=AlgoliaGitHub&utm_medium=button).
+
 
 
 
