@@ -15,7 +15,7 @@ be found [here](https://github.com/algolia/algoliasearch-client-python-async).
 
 ## API Documentation
 
-You can find the full reference on the [Algolia's website](https://www.algolia.com/doc/api-client/python/).
+You can find the full reference on [Algolia's website](https://www.algolia.com/doc/api-client/python/).
 
 
 ## Table of Contents
