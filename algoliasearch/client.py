@@ -444,7 +444,7 @@ class Client(object):
                         max_hits_per_query=None,
                         indexes=None):
         """Use `update_api_key`"""
-        return update_api_key(
+        return self.update_api_key(
             key, obj, validity, max_queries_per_ip_per_hour,
             max_hits_per_query, indexes
         )

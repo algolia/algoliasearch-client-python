@@ -818,7 +818,7 @@ class Index(object):
         """Use `get_api_key_acl`"""
         return self.get_api_key_acl(key)
 
-    def get_api_key_acl():
+    def get_api_key_acl(self, key):
         """Get ACL of a api key associated to this index."""
         path = '/keys/%s' % key
         return self._req(True, path, 'GET')
@@ -901,7 +901,7 @@ class Index(object):
                         max_queries_per_ip_per_hour=None,
                         max_hits_per_query=None):
         """Use `update_api_key`"""
-        return self.update_user_key(
+        return self.update_api_key(
             key, obj, validity, max_queries_per_ip_per_hour,
             max_hits_per_query
         )
