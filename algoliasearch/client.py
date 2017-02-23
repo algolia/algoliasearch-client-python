@@ -330,16 +330,26 @@ class Client(object):
     def listUserKeys(self):
         return self.list_user_keys()
 
+    @deprecated
     def list_user_keys(self):
-        """List all existing user keys with their associated ACLs."""
+        """Use `list_api_keys`"""
+        return self.list_api_keys()
+
+    def list_api_keys(self):
+        """List all existing api keys with their associated ACLs."""
         return self._req(True, '/1/keys', 'GET')
 
     @deprecated
     def getUserKeyACL(self, key):
         return self.get_user_key_acl(key)
 
+    @deprecated
     def get_user_key_acl(self, key):
-        """'Get ACL of a user key."""
+        """Use `get_api_key_acl`"""
+        return self.get_api_key_acl(key)
+
+    def get_api_key_acl(self, key):
+        """'Get ACL of an api key."""
         path = '/1/keys/%s' % key
         return self._req(True, path, 'GET')
 
@@ -347,8 +357,13 @@ class Client(object):
     def deleteUserKey(self, key):
         return self.delete_user_key(key)
 
+    @deprecated
     def delete_user_key(self, key):
-        """Delete an existing user key."""
+        """Use `delete_api_key`"""
+        return self.delete_api_key(key)
+
+    def delete_api_key(self, key):
+        """Delete an existing api key."""
         path = '/1/keys/%s' % key
         return self._req(False, path, 'DELETE')
 
@@ -361,13 +376,25 @@ class Client(object):
         return self.add_user_key(obj, validity, max_queries_per_ip_per_hour,
                                  max_hits_per_query, indexes)
 
+    @deprecated
     def add_user_key(self, obj,
                      validity=0,
                      max_queries_per_ip_per_hour=0,
                      max_hits_per_query=0,
                      indexes=None):
+        """Use `add_api_key`"""
+        return self.add_api_key(
+            obj, validity, max_queries_per_ip_per_hour, max_hits_per_query,
+            indexes
+        )
+
+    def add_api_key(self, obj,
+                    validity=0,
+                    max_queries_per_ip_per_hour=0,
+                    max_hits_per_query=0,
+                    indexes=None):
         """
-        Create a new user key.
+        Create a new api key.
 
         @param obj can be two different parameters:
             The list of parameters for this key. Defined by a NSDictionary that
@@ -410,13 +437,26 @@ class Client(object):
 
         return self._req(False, '/1/keys', 'POST', data=obj)
 
+    @deprecated
     def update_user_key(self, key, obj,
                         validity=None,
                         max_queries_per_ip_per_hour=None,
                         max_hits_per_query=None,
                         indexes=None):
+        """Use `update_api_key`"""
+        return self.update_api_key(
+            key, obj, validity, max_queries_per_ip_per_hour,
+            max_hits_per_query, indexes
+        )
+
+
+    def update_api_key(self, key, obj,
+                        validity=None,
+                        max_queries_per_ip_per_hour=None,
+                        max_hits_per_query=None,
+                        indexes=None):
         """
-        Update a user key.
+        Update a api key.
 
         @param obj can be two different parameters:
             The list of parameters for this key. Defined by a NSDictionary that
