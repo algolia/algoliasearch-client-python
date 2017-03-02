@@ -47,9 +47,6 @@ class Transport(object):
         # Ask urllib not to make retries on its own.
         self.session.mount('https://', HTTPAdapter(max_retries=Retry(connect=0)))
 
-        self.session.verify = os.path.join(os.path.dirname(__file__),
-                                           'resources/ca-bundle.crt')
-
     @property
     def read_hosts(self):
         return self._read_hosts

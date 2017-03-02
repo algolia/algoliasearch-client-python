@@ -35,7 +35,6 @@ setup(
     version=VERSION,
     license='MIT License',
     packages=['algoliasearch'],
-    packages_data={'algoliasearch': ['resources/*.crt']},
     include_package_data=True,
     zip_safe=False,  # Because of the certificate
     install_requires=['requests[security] >= 2.9.1'],

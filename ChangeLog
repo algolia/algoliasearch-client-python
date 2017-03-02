@@ -1,5 +1,8 @@
 CHANGELOG
 
+2017-01-31 1.12.0
+    * Do not ship the certificates anymore
+
 2017-01-31 1.11.2
     * Decode the README with utf-8 encoding in setup.py
 
