@@ -1,3 +1,6 @@
+branches:
+  only:
+    - master
 language: python
 sudo: false
 before_script:
