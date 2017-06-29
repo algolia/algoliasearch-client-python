@@ -986,6 +986,76 @@ class Index(object):
     def search_facet(self, facet_name, facet_query, query=None):
         return self.search_for_facet_values(facet_name, facet_query, query)
 
+    def save_rule(self, rule, forward_to_replicas=False):
+        """
+        Save a new rule in the index.
+        @param rule the body of the rule to upload as a python dictionary.
+               the dictionary must contain an objectID key.
+        @param forward_to_replicas should the rule also be applied to the replicas
+               of this index? Default is False.
+        """
+        if 'objectID' not in rule:
+            raise AlgoliaException('missing objectID in rule body')
+        params = {'forwardToReplicas': forward_to_replicas}
+        return self._req(False, '/rules/%s' % str(rule['objectID']), 'PUT', params, rule)
+
+    def batch_rules(self, rules, forward_to_replicas=False, clear_existing_rules=False):
+        """
+        Save a batch of new rules
+        @param rules batch of rules to be added to the index. Each rule object must contain
+               its own objectID.
+        @param forward_to_replicas should the rules also be applied to the replicas
+               of this index? Default is False.
+        @param clear_existing_rules should all the existing rules in the index be cleared
+               before saving this batch? Default is False.
+        """
+        params = {'forwardToReplicas': forward_to_replicas, 'clearExistingRules': clear_existing_rules}
+        return self._req(False, '/rules/batch', 'PUT', params, data)
+
+    def read_rule(self, objectID):
+        """
+        Retrieve a rule from the index with the specified objectID.
+        @param objectID The objectID of the rule to retrieve
+        """
+        return self._req(False, '/rules/%s' % str(objectID), 'GET')
+
+    def delete_rule(self, objectID, forward_to_replicas=False):
+        """
+        Delete the rule with identified by the given objectID.
+        @param objectID the objectID of the rule to delete
+        @param forward_to_replicas should the rule also be
+               deleted from the replicas of the index?
+               Default is False.
+        """
+        params =- {'forwardToReplicas': forward_to_replicas}
+        return self._req(False, '/rules/%s' % str(objectID), 'DELETE', params)
+
+    def clear_rule(self, forward_to_replicas=False):
+        """
+        Clear all the rules of an index.
+        @param forward_to_replicas Should the rules in the replicas also be cleared?
+               Default is False.
+        """
+        params = {'forwardToReplicas': forward_to_replicas}
+        return self._req(False, '/rules/clear', 'POST', params)
+
+    def search_rules(self, query=None, anchoring=None, context=None, page=0, hitsPerPage=20):
+        """
+        Search for a rule inside the index.
+        @param query Full text search query
+        @param anchoring Research the search to rules with a specific anchoring type
+        @param context Restrict the search to rules with a specific context
+        @param page Requested page (0 based). Default 0.
+        @param hitsPerPage Maximum number of hits per page. Default 20.
+        """
+        params = {
+            'query': query if query else '',
+            'anchoring': anchoring if anchoring else '',
+            'context': context if context else '',
+            'page': page,
+            'hitsPerPage': hitsPerPage
+        }
+        return self._req(False, '/rules/search', 'POST', params)
 
     def _req(self, is_search, path, meth, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
