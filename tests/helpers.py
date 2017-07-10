@@ -36,6 +36,19 @@ class FakeData(object):
                 self._generated_id.append(new_id)
                 return str(new_id)
 
+def get_rule_stub(objectID='my-rule'):
+    return {
+        'objectID': objectID,
+        'condition': {
+            'pattern': 'some text',
+            'anchoring': 'is'
+        },
+        'consequence': {
+            'params': {
+                'query': 'other text'
+            }
+        }
+    }
 
 def get_api_client():
     if 'APPENGINE_RUNTIME' in os.environ:

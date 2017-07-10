@@ -16,9 +16,7 @@ except ImportError:
 from algoliasearch.client import MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
-from tests.helpers import safe_index_name
-from tests.helpers import get_api_client
-from tests.helpers import FakeData
+from tests.helpers import safe_index_name, get_api_client, FakeData, get_rule_stub
 
 
 class IndexTest(unittest.TestCase):
@@ -190,6 +188,71 @@ class IndexWithoutDataTest(IndexTest):
         facetHits = self.index.search_facet('series', 'Peanutz', query)['facetHits']
         self.assertEqual(facetHits[0]['value'], 'Peanuts')
         self.assertEqual(facetHits[0]['count'], 1)
+
+    def test_save_and_get_rule(self):
+        rule = get_rule_stub()
+        res = self.index.save_rule(rule)
+        self.index.wait_task(res['taskID'])
+        self.assertEqual(rule, self.index.read_rule('my-rule'))
+
+    @unittest.expectedFailure
+    def test_delete_rule(self):
+        rule = get_rule_stub()
+        res = self.index.save_rule(rule)
+        self.index.wait_task(res['taskID'])
+
+        res = self.index.delete_rule('my-rule')
+        self.index.wait_task(res['taskID'])
+
+        self.index.read_rule('my-rule')
+
+    def test_search_rules(self):
+        rule = get_rule_stub()
+        rule2 = get_rule_stub('my-second-rule')
+
+        self.index.save_rule(rule);
+        res = self.index.save_rule(rule2);
+        self.index.wait_task(res['taskID'])
+
+        rules = self.index.search_rules()
+        self.assertEqual(2, rules['nbHits'])
+
+    def test_batch_and_clear_rules(self):
+        rule = get_rule_stub()
+        rule2 = get_rule_stub('my-second-rule')
+
+        res = self.index.batch_rules([rule, rule2])
+        self.index.wait_task(res['taskID'])
+
+        self.assertEqual(self.index.read_rule('my-rule'), rule)
+        self.assertEqual(self.index.read_rule('my-second-rule'), rule2)
+
+        res = self.index.clear_rules()
+        self.index.wait_task(res['taskID'])
+
+        rules = self.index.search_rules()
+        self.assertEqual(rules['nbHits'], 0)
+
+
+    def test_batch_and_clear_existing(self):
+        rule = get_rule_stub()
+        rule2 = get_rule_stub('my-second-rule')
+        rule3 = get_rule_stub('my-third-rule')
+        rule4 = get_rule_stub('my-fourth-rule')
+
+        res = self.index.batch_rules([rule, rule2, rule3, rule4])
+        self.index.wait_task(res['taskID'])
+
+        res = self.index.batch_rules([rule3, rule4], False, True)
+        self.index.wait_task(res['taskID'])
+
+        rules = self.index.search_rules()
+        self.assertEqual(rules['nbHits'], 2)
+        del rules['hits'][0]['_highlightResult']
+        del rules['hits'][1]['_highlightResult']
+
+        self.assertEqual(rules['hits'], [rule3, rule4]) # alphabetical ordering of objectID
+
 
 class IndexWithReadOnlyDataTest(IndexTest):
     """Tests that use one index with initial data (read only)."""

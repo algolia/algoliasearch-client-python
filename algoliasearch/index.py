@@ -1010,7 +1010,7 @@ class Index(object):
                before saving this batch? Default is False.
         """
         params = {'forwardToReplicas': forward_to_replicas, 'clearExistingRules': clear_existing_rules}
-        return self._req(False, '/rules/batch', 'PUT', params, data)
+        return self._req(False, '/rules/batch', 'POST', params, data=rules)
 
     def read_rule(self, objectID):
         """
@@ -1027,10 +1027,10 @@ class Index(object):
                deleted from the replicas of the index?
                Default is False.
         """
-        params =- {'forwardToReplicas': forward_to_replicas}
+        params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, '/rules/%s' % str(objectID), 'DELETE', params)
 
-    def clear_rule(self, forward_to_replicas=False):
+    def clear_rules(self, forward_to_replicas=False):
         """
         Clear all the rules of an index.
         @param forward_to_replicas Should the rules in the replicas also be cleared?
@@ -1041,7 +1041,7 @@ class Index(object):
 
     def search_rules(self, query=None, anchoring=None, context=None, page=0, hitsPerPage=20):
         """
-        Search for a rule inside the index.
+        Search for rules inside the index.
         @param query Full text search query
         @param anchoring Research the search to rules with a specific anchoring type
         @param context Restrict the search to rules with a specific context
