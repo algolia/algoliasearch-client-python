@@ -1039,7 +1039,7 @@ class Index(object):
         params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, '/rules/clear', 'POST', params)
 
-    def search_rules(self, query=None, anchoring=None, context=None, page=0, hitsPerPage=20):
+    def search_rules(self, query=None, anchoring=None, context=None, page=None, hitsPerPage=None):
         """
         Search for rules inside the index.
         @param query Full text search query
@@ -1052,9 +1052,14 @@ class Index(object):
             'query': query if query else '',
             'anchoring': anchoring if anchoring else '',
             'context': context if context else '',
-            'page': page,
-            'hitsPerPage': hitsPerPage
         }
+
+        if page is not None:
+            params['page'] = page
+
+        if hitsPerPage is not None:
+            params['hitsPerPage'] = hitsPerPage
+
         return self._req(False, '/rules/search', 'POST', params)
 
     def _req(self, is_search, path, meth, params=None, data=None):
