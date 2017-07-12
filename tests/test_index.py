@@ -210,7 +210,8 @@ class IndexWithoutDataTest(IndexTest):
         rule = get_rule_stub()
         rule2 = get_rule_stub('my-second-rule')
 
-        self.index.save_rule(rule);
+        res = self.index.save_rule(rule);
+        self.index.wait_task(res['taskID'])
         res = self.index.save_rule(rule2);
         self.index.wait_task(res['taskID'])
 
