@@ -534,6 +534,13 @@ class Client(object):
         securedKey = hmac.new(private_api_key.encode('utf-8'), queryParameters.encode('utf-8'), hashlib.sha256).hexdigest()
         return str(base64.b64encode(("%s%s" % (securedKey, queryParameters)).encode('utf-8')).decode('utf-8'))
 
+    def is_alive(self):
+        """
+        Test if the server is alive.
+        This performs a simple application-level ping. If up and running, the server answers with a basic message.
+        """
+        return self._req(True, '/1/isalive', 'GET')
+
     def _req(self, is_search, path, meth, params=None, data=None):
         if len(self.api_key) > MAX_API_KEY_LENGTH:
             if data is None:
