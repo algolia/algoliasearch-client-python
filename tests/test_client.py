@@ -147,6 +147,10 @@ class ClientNoDataOperationsTest(ClientTest):
 
         self.assertLess(time.time(), now + 6)
 
+    def test_is_alive(self):
+        res = self.client.is_alive()
+        self.assertIn('message', res)
+
 
 
 
