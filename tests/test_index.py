@@ -42,7 +42,6 @@ class IndexWithoutDataTest(IndexTest):
 
     def tearDown(self):
         self.index.clear_index()
-        self.index.clear_rules()
 
     def test_add_object(self):
         obj = self.factory.fake_contact()
