@@ -190,6 +190,8 @@ class IndexWithoutDataTest(IndexTest):
         self.assertEqual(facetHits[0]['count'], 1)
 
     def test_save_and_get_rule(self):
+        self.index.clear_rules()
+
         rule = get_rule_stub()
         res = self.index.save_rule(rule)
         self.index.wait_task(res['taskID'])
@@ -197,6 +199,8 @@ class IndexWithoutDataTest(IndexTest):
 
     @unittest.expectedFailure
     def test_delete_rule(self):
+        self.index.clear_rules()
+
         rule = get_rule_stub()
         res = self.index.save_rule(rule)
         self.index.wait_task(res['taskID'])
@@ -207,6 +211,8 @@ class IndexWithoutDataTest(IndexTest):
         self.index.read_rule('my-rule')
 
     def test_search_rules(self):
+        self.index.clear_rules()
+
         rule = get_rule_stub()
         rule2 = get_rule_stub('my-second-rule')
 
@@ -219,6 +225,8 @@ class IndexWithoutDataTest(IndexTest):
         self.assertEqual(2, rules['nbHits'])
 
     def test_batch_and_clear_rules(self):
+        self.index.clear_rules()
+
         rule = get_rule_stub()
         rule2 = get_rule_stub('my-second-rule')
 
@@ -236,6 +244,8 @@ class IndexWithoutDataTest(IndexTest):
 
 
     def test_batch_and_clear_existing(self):
+        self.index.clear_rules()
+
         rule = get_rule_stub()
         rule2 = get_rule_stub('my-second-rule')
         rule3 = get_rule_stub('my-third-rule')
