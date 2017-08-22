@@ -69,7 +69,7 @@ client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
 
 ### Push data
 
-Without any prior configuration, you can start indexing [500 contacts](https://github.com/algolia/algoliasearch-client-csharp/blob/master/contacts.json) in the ```contacts``` index using the following code:
+Without any prior configuration, you can start indexing [500 contacts](https://github.com/algolia/algoliasearch-client-python/blob/master/contacts.json) in the ```contacts``` index using the following code:
 ```python
 index = client.init_index("contact")
 batch = json.load(open('contacts.json'))
