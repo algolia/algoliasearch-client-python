@@ -82,6 +82,9 @@ class Index(object):
         self.index_name = index_name
         self._request_path = '/1/indexes/%s' % safe(self.index_name)
 
+    def __repr__(self):
+        return u'<Index: %r>' % self.index_name
+
     @deprecated
     def addObject(self, content, object_id=None):
         return self.add_object(content, object_id)
