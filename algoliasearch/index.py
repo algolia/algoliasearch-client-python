@@ -1048,19 +1048,19 @@ class Index(object):
         @param page Requested page (0 based). Default 0.
         @param hitsPerPage Maximum number of hits per page. Default 20.
         """
-        params = {
-            'query': query if query else '',
-            'anchoring': anchoring if anchoring else '',
-            'context': context if context else '',
-        }
-
+        params = {}
+        if query is not None:
+            params['query'] = query
+        if anchoring is not None:
+            params['anchoring'] = anchoring
+        if context is not None:
+            params['context'] = context
         if page is not None:
             params['page'] = page
-
         if hitsPerPage is not None:
             params['hitsPerPage'] = hitsPerPage
 
-        return self._req(False, '/rules/search', 'POST', params)
+        return self._req(False, '/rules/search', 'POST', data=params)
 
     def _req(self, is_search, path, meth, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
