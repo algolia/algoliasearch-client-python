@@ -488,6 +488,7 @@ class Index(object):
 
             params['facetFilters'] = filters
             params['facets'] = disjunctive_facet
+            params['analytics'] = False
             queries.append(dict(params))
 
         answers = self.client.multiple_queries(queries, request_options=request_options)
