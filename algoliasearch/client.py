@@ -47,7 +47,8 @@ MAX_API_KEY_LENGTH = 500
 
 class RequestOptions:
     HEADERS = {
-        'forwardedFor': 'X-Forwarded-For'
+        'forwardedFor': 'X-Forwarded-For',
+        'algoliaUserID': 'X-Algolia-User-ID'
     }
 
     def __init__(self, options):
