@@ -1083,7 +1083,7 @@ class Index(object):
         Retrieve a rule from the index with the specified objectID.
         @param objectID The objectID of the rule to retrieve
         """
-        return self._req(False, '/rules/%s' % str(objectID), 'GET')
+        return self._req(True, '/rules/%s' % str(objectID), 'GET')
 
     def delete_rule(self, objectID, forward_to_replicas=False):
         """
