@@ -65,7 +65,7 @@ class Transport(object):
         self._write_hosts = value
         self._original_write_hosts = value
 
-    def _app_req(self, host, path, meth, timeout, params, data):
+    def _app_req(self, host, path, meth, timeout, params, data, headers):
         """
         Perform an HTTPS request with AppEngine's urlfetch. SSL certificate
         will not validate when the request is on a domain which is not a
@@ -81,7 +81,7 @@ class Transport(object):
             url = '%s?%s' % (url, urlencode(params))
 
         res = urlfetch.fetch(
-            url=url, method=meth, payload=data, headers=self.headers,
+            url=url, method=meth, payload=data, headers=headers,
             deadline=timeout,
             validate_certificate=host.endswith(SSL_CERTIFICATE_DOMAIN))
 
@@ -97,12 +97,12 @@ class Transport(object):
             message = '% Server Error: %s' % (res.status_code, res.content)
             raise Exception(message, response=res)
 
-    def _session_req(self, host, path, meth, timeout, params, data):
+    def _session_req(self, host, path, meth, timeout, params, data, headers):
         """Perform an HTTPS request with request's Session."""
         url = 'https://%s%s' % (host, path)
         res = self.session.request(
             meth, url, params=params, data=data, timeout=timeout,
-            headers=self.headers)
+            headers=headers)
 
         if res.status_code // 100 == 2:
             j = res.json()
@@ -140,8 +140,24 @@ class Transport(object):
             else:
                 return self._original_write_hosts
 
-    def req(self, is_search, path, meth, params=None, data=None):
+    def req(self, is_search, path, meth, params, data, request_options):
         """Perform an HTTPS request with retry logic."""
+
+        # Merge params and request_options params.
+        if params is None:
+            params = request_options.parameters
+        elif request_options.parameters is not None:
+            old_params = params
+            params = params.copy()
+            params.update(old_params)
+
+        # Merge headers and request_options headers.
+        if self.headers is None:
+            headers = request_options.headers
+        elif request_options.headers is not None:
+            headers = self.headers.copy()
+            headers.update(request_options.headers)
+
         if params is not None:
             params = urlify(params)
 
@@ -161,7 +177,7 @@ class Transport(object):
 
             try:
                 r = self._app_req if APPENGINE else self._session_req
-                return r(host, path, meth, timeout, params, data)
+                return r(host, path, meth, timeout, params, data, headers)
             except AlgoliaException as e:
                 raise e
             except Exception as e:
