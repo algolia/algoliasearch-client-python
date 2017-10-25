@@ -1126,7 +1126,7 @@ class Index(object):
         if hitsPerPage is not None:
             params['hitsPerPage'] = hitsPerPage
 
-        return self._req(False, '/rules/search', 'POST', data=params)
+        return self._req(True, '/rules/search', 'POST', data=params)
 
     def _req(self, is_search, path, meth, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
