@@ -45,6 +45,22 @@ from .helpers import urlify
 MAX_API_KEY_LENGTH = 500
 
 
+class RequestOptions:
+    HEADERS = {
+        'forwardedFor': 'X-Forwarded-For'
+    }
+
+    def __init__(self, options):
+        self.headers = {}
+        self.parameters = {}
+
+        for k, v in options.items():
+            if k in self.HEADERS:
+                self.headers[self.HEADERS[k]] = v
+            else:
+                self.parameters[k] = v
+
+
 class Client(object):
     """
     Entry point in the Python Client API.

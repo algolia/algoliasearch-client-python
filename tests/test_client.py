@@ -11,12 +11,12 @@ try:
 except ImportError:
     import unittest
 
-from algoliasearch.client import Client, MAX_API_KEY_LENGTH
+from algoliasearch.client import Client, MAX_API_KEY_LENGTH, RequestOptions
 from algoliasearch.helpers import AlgoliaException
 
 from .helpers import safe_index_name
 from .helpers import get_api_client
-from .helpers import FakeData
+from .helpers import FakeData, FakeSession
 
 
 class ClientTest(unittest.TestCase):
@@ -43,6 +43,19 @@ class ClientTest(unittest.TestCase):
 
 class ClientNoDataOperationsTest(ClientTest):
     """Tests that use two index and don't make any data operations."""
+
+    def test_request_options(self):
+        options = {'forwardedFor': 'blabla', 'hitsPerPage': 40}
+
+        expected_headers = self.client._transport.headers.copy()
+        expected_headers.update({'X-Forwarded-For': 'blabla'})
+
+        fake_session = FakeSession(self, expected_headers , {'hitsPerPage': 40})
+
+        old_session = self.client._transport.session
+        self.client._transport.session = fake_session
+        self.client.is_alive(RequestOptions(options))
+        self.client._transport.session = old_session
 
     def test_rate_limit_forward(self):
         hearders_rate_limit = {

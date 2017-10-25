@@ -35,25 +35,17 @@ from .helpers import urlify
 from .helpers import safe
 
 
-class RequestOptions:
-    def __init__(self, options):
-        self.headers = {}
-        self.parameters = {}
-
-        if 'forwaredFor' in options:
-            self.headers['X-Forwarded-For'] = options['forwaredFor']
-
-
 class IndexIterator:
     """Iterator on index."""
 
-    def __init__(self, index, params=None, cursor=None):
+    def __init__(self, index, params=None, cursor=None, request_options=None):
         if params is None:
             params = {}
 
         self.index = index
         self.params = params
         self.cursor = cursor
+        self.request_options = request_options
 
     def __iter__(self):
         self._load_next_page()
@@ -74,7 +66,7 @@ class IndexIterator:
                 raise StopIteration
 
     def _load_next_page(self):
-        self.answer = self.index.browse_from(self.params, self.cursor)
+        self.answer = self.index.browse_from(self.params, self.cursor, self.request_options)
         self.pos = 0
         self.cursor = self.answer.get('cursor', None)
 
@@ -271,7 +263,7 @@ class Index(object):
                 'objectID': obj['objectID'],
                 'body': obj
             })
-        return self.batch(requests, request_options, no_create=no_create)
+        return self.batch(requests, no_create=no_create, request_options=request_options)
 
     @deprecated
     def saveObject(self, obj):
@@ -591,7 +583,7 @@ class Index(object):
             of hits per page. Defaults to 1000.
         """
         params = {'page': page, 'hitsPerPage': hits_per_page}
-        return self._req(True, '/browse', 'GET', params)
+        return self._req(True, '/browse', 'GET', None, params)
 
     def browse_from(self, params=None, cursor=None, request_options=None):
         """
@@ -683,7 +675,7 @@ class Index(object):
 
         path = '/synonyms/%s' % safe(object_id)
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, path, 'DELETE', params)
+        return self._req(False, path, 'DELETE', request_options, params)
 
     def clear_synonyms(self, forward_to_slaves=False,
                        forward_to_replicas=False, request_options=None):
@@ -1141,4 +1133,4 @@ class Index(object):
     def _req(self, is_search, path, meth, request_options, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
         path = '%s%s' % (self._request_path, path)
-        return self.client._req(is_search, path, meth, params, data, request_options)
+        return self.client._req(is_search, path, meth, request_options, params, data)
