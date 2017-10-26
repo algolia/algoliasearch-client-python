@@ -522,6 +522,122 @@ class Client(object):
         path = '/1/keys/%s' % key
         return self._req(False, path, 'PUT', request_options, data=obj)
 
+
+    def assign_user_id(self, user_id, cluster, request_options=None):
+        """
+        Assign a userID to a cluster
+        Return an object of the form:
+           {'updatedAt': 'XXXX'}
+        """
+        if request_options is None:
+            request_options = RequestOptions({})
+        request_options.headers['X-Algolia-User-ID'] = user_id
+        body = {'cluster': cluster}
+
+        return self._req(False, '/1/clusters/mapping', 'POST', request_options, data=body)
+
+    def remove_user_id(self, user_id, request_options=None):
+        """
+        Remove a userID from the mapping
+        Return an object of the form:
+           {'deleteAt': 'XXXX'}
+        """
+        if request_options is None:
+            request_options = RequestOptions({})
+        request_options.headers['X-Algolia-User-ID'] = user_id
+
+        return self._req(False, '/1/clusters/mapping', 'DELETE', request_options)
+
+    def list_clusters(self, request_options=None):
+        """
+        List available cluster in the mapping
+        Return an object of the form:
+            {'clusters': [{
+                "clusterName": "XXXX",
+                "nbRecords": 0,
+                "nbUserIDs": 0,
+                "dataSize": 0
+            }]}
+        """
+
+        return self._req(True, '/1/clusters', 'GET', request_options)
+
+    def get_user_id(self, user_id, request_options=None):
+        """
+        Get one userID in the mapping
+        Return an object in the form:
+        {
+           "userID": "XXXX",
+           "clusterName": "XXXX",
+           "nbRecords": 0,
+           "dataSize": 0
+        }
+        """
+        return self._req(True, '/1/clusters/mapping/%s' % safe(user_id), 'GET', request_options)
+
+    def list_user_ids(self, page = 0, hits_per_page = 20, request_options=None):
+        """
+        List userIDs in the mapping
+        Return an object in the form:
+        {
+            "userIDs": [{
+                "userID": "userName",
+                "clusterName": "name",
+                "nbRecords": 0,
+                "dataSize": 0
+            }],
+            "page": 0,
+            "hitsPerPage": 20
+        }
+        """
+        return self._req(True, '/1/clusters/mapping/', 'GET', request_options)
+
+    def get_top_user_id(self, request_options=None):
+        """
+        Get top userID in the mapping
+        Return an object in the form:
+        {
+            "topUsers": {
+                "XXXX": [{
+                    "userID": "userName",
+                    "nbRecords": 0,
+                    "dataSize": 0
+                }]
+            },
+            "page": 0,
+            "hitsPerPage": 20
+        }
+        """
+        return self._req(True, '/1/clusters/mapping/top', 'GET', request_options)
+
+    def search_user_ids(self, query, cluster=None, page=None, hits_per_page=None, request_options=None):
+        """
+        Search userIDs in the mapping
+        Return an object in the form:
+        {
+            "hits": [{
+                    "userID": "userName",
+                    "clusterName": "name",
+                    "nbRecords": 0,
+                    "dataSize": 0
+            }],
+            "nbHits":0,
+            "page": 0,
+            "hitsPerPage": 20
+        }
+        """
+        body={}
+        if query is not None:
+            body["query"] = query
+        if cluster is not None:
+            body["cluster"] = cluster
+        if page is not  None:
+            body["page"] = page
+        if hits_per_page is not None:
+            body["hitsPerPage"] = hits_per_page
+
+        return self._req(True, '/1/clusters/mapping/search', 'POST', request_options, data=body)
+
     @deprecated
     def generateSecuredApiKey(self, private_api_key, tag_filters,
                               user_token=''):
