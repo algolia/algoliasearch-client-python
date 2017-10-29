@@ -1,5 +1,9 @@
 CHANGELOG
 
+2017-10-29 1.14.0
+    * Add per-request parameters
+    * Add multi-cluster support
+
 2017-01-31 1.13.0
     * Add rules endpoints
 
