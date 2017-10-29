@@ -35,3 +35,4 @@ class algoliasearch(object):
     Client = client.Client
     Index = index.Index
     AlgoliaException = helpers.AlgoliaException
+    RequestOptions = client.RequestOptions

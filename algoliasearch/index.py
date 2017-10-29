@@ -38,13 +38,14 @@ from .helpers import safe
 class IndexIterator:
     """Iterator on index."""
 
-    def __init__(self, index, params=None, cursor=None):
+    def __init__(self, index, params=None, cursor=None, request_options=None):
         if params is None:
             params = {}
 
         self.index = index
         self.params = params
         self.cursor = cursor
+        self.request_options = request_options
 
     def __iter__(self):
         self._load_next_page()
@@ -65,7 +66,7 @@ class IndexIterator:
                 raise StopIteration
 
     def _load_next_page(self):
-        self.answer = self.index.browse_from(self.params, self.cursor)
+        self.answer = self.index.browse_from(self.params, self.cursor, self.request_options)
         self.pos = 0
         self.cursor = self.answer.get('cursor', None)
 
@@ -152,7 +153,7 @@ class Index(object):
     def addObject(self, content, object_id=None):
         return self.add_object(content, object_id)
 
-    def add_object(self, content, object_id=None):
+    def add_object(self, content, object_id=None, request_options=None):
         """
         Add an object in this index.
 
@@ -163,28 +164,28 @@ class Index(object):
         """
         if object_id is not None:
             path = '/%s' % safe(object_id)
-            return self._req(False, path, 'PUT', data=content)
+            return self._req(False, path, 'PUT', request_options, data=content)
         else:
-            return self._req(False, '', 'POST', data=content)
+            return self._req(False, '', 'POST', request_options, data=content)
 
     @deprecated
     def addObjects(self, objects):
         return self.add_objects(objects)
 
-    def add_objects(self, objects):
+    def add_objects(self, objects, request_options=None):
         """
         Add several objects.
 
         @param objects contains an array of objects to add
         """
         requests = [{'action': 'addObject', 'body': obj} for obj in objects]
-        return self.batch(requests)
+        return self.batch(requests, request_options=request_options)
 
     @deprecated
     def getObject(self, object_id, attributes_to_retrieve=None):
         return self.get_object(object_id, attributes_to_retrieve)
 
-    def get_object(self, object_id, attributes_to_retrieve=None):
+    def get_object(self, object_id, attributes_to_retrieve=None, request_options=None):
         """
         Get an object from this index.
 
@@ -198,15 +199,15 @@ class Index(object):
                 attributes_to_retrieve = ','.join(attributes_to_retrieve)
 
             params = {'attributes': attributes_to_retrieve}
-            return self._req(True, path, 'GET', params)
+            return self._req(True, path, 'GET', request_options, params)
         else:
-            return self._req(True, path, 'GET')
+            return self._req(True, path, 'GET', request_options)
 
     @deprecated
     def getObjects(self, object_ids):
         return self.get_objects(object_ids)
 
-    def get_objects(self, object_ids, attributes_to_retrieve=None):
+    def get_objects(self, object_ids, attributes_to_retrieve=None, request_options=None):
         """
         Get several objects from this index.
 
@@ -222,13 +223,13 @@ class Index(object):
             requests.append(request)
         data = {'requests': requests}
         path = '/1/indexes/*/objects'  # Use client._req()
-        return self.client._req(True, path, 'POST', data=data)
+        return self.client._req(True, path, 'POST', request_options, data=data)
 
     @deprecated
     def partialUpdateObject(self, partial_object):
         return self.partial_update_object(partial_object)
 
-    def partial_update_object(self, partial_object, no_create=False):
+    def partial_update_object(self, partial_object, no_create=False, request_options=None):
         """
         Update partially an object (only update attributes passed in argument).
 
@@ -240,13 +241,13 @@ class Index(object):
         path = '/%s/partial' % safe(partial_object['objectID'])
         if no_create:
             path += '?createIfNotExists=false'
-        return self._req(False, path, 'POST', data=partial_object)
+        return self._req(False, path, 'POST', request_options, data=partial_object)
 
     @deprecated
     def partialUpdateObjects(self, objects):
         return self.partial_update_objects(objects)
 
-    def partial_update_objects(self, objects, no_create=False):
+    def partial_update_objects(self, objects, no_create=False, request_options=None):
         """
         Partially Override the content of several objects.
 
@@ -262,13 +263,13 @@ class Index(object):
                 'objectID': obj['objectID'],
                 'body': obj
             })
-        return self.batch(requests, no_create=no_create)
+        return self.batch(requests, no_create=no_create, request_options=request_options)
 
     @deprecated
     def saveObject(self, obj):
         return self.save_object(obj)
 
-    def save_object(self, obj):
+    def save_object(self, obj, request_options=None):
         """
         Override the content of object.
 
@@ -276,13 +277,13 @@ class Index(object):
             an objectID attribute
         """
         path = '/%s' % safe(obj['objectID'])
-        return self._req(False, path, 'PUT', data=obj)
+        return self._req(False, path, 'PUT', request_options, data=obj)
 
     @deprecated
     def saveObjects(self, objects):
         return self.save_objects(objects)
 
-    def save_objects(self, objects):
+    def save_objects(self, objects, request_options=None):
         """
         Override the content of several objects.
 
@@ -296,13 +297,13 @@ class Index(object):
                 'objectID': obj['objectID'],
                 'body': obj
             })
-        return self.batch(requests)
+        return self.batch(requests, request_options=request_options)
 
     @deprecated
     def deleteByQuery(self, query, params=None):
         return self.delete_by_query(query, params)
 
-    def delete_by_query(self, query, params=None):
+    def delete_by_query(self, query, params=None, request_options=None):
         """
         Delete all objects matching a query.
 
@@ -320,26 +321,26 @@ class Index(object):
         params['distinct'] = False
 
         ids = (o['objectID'] for o in self.browse_all(params))
-        return self.delete_objects(ids)
+        return self.delete_objects(ids, request_options=request_options)
 
     @deprecated
     def deleteObject(self, object_id):
         return self.delete_object(object_id)
 
-    def delete_object(self, object_id):
+    def delete_object(self, object_id, request_options=None):
         """
         Delete an object from the index.
 
         @param object_id the unique identifier of object to delete
         """
         path = '/%s' % safe(object_id)
-        return self._req(False, path, 'DELETE')
+        return self._req(False, path, 'DELETE', request_options)
 
     @deprecated
     def deleteObjects(self, objects):
         return self.delete_objects(objects)
 
-    def delete_objects(self, objects):
+    def delete_objects(self, objects, request_options=None):
         """
         Delete several objects.
 
@@ -351,9 +352,9 @@ class Index(object):
                 'action': 'deleteObject',
                 'body': {'objectID': obj}
             })
-        return self.batch(requests)
+        return self.batch(requests, request_options=request_options)
 
-    def search(self, query, args=None):
+    def search(self, query, args=None, request_options=None):
         """
         Search inside the index.
 
@@ -468,7 +469,7 @@ class Index(object):
 
         args['query'] = query
         params = {'params': urlencode(urlify(args))}
-        return self._req(True, '/query', 'POST', data=params)
+        return self._req(True, '/query', 'POST', request_options, data=params)
 
     @deprecated
     def searchDisjunctiveFaceting(self, query, disjunctive_facets,
@@ -477,7 +478,7 @@ class Index(object):
                                                 params, refinements)
 
     def search_disjunctive_faceting(self, query, disjunctive_facets,
-                                    params=None, refinements=None):
+                                    params=None, refinements=None, request_options=None):
         """
         Perform a search with disjunctive facets generating as many queries as
         number of disjunctive facets.
@@ -552,7 +553,7 @@ class Index(object):
             params['facets'] = disjunctive_facet
             queries.append(dict(params))
 
-        answers = self.client.multiple_queries(queries)
+        answers = self.client.multiple_queries(queries, request_options=request_options)
 
         aggregated_answer = answers['results'][0]
         aggregated_answer['disjunctiveFacets'] = {}
@@ -582,9 +583,9 @@ class Index(object):
             of hits per page. Defaults to 1000.
         """
         params = {'page': page, 'hitsPerPage': hits_per_page}
-        return self._req(True, '/browse', 'GET', params)
+        return self._req(True, '/browse', 'GET', None, params)
 
-    def browse_from(self, params=None, cursor=None):
+    def browse_from(self, params=None, cursor=None, request_options=None):
         """
          Browse all index content.
 
@@ -595,19 +596,19 @@ class Index(object):
             params = {}
         if cursor:
             params = {'cursor': cursor}
-        return self._req(True, '/browse', 'GET', params)
+        return self._req(True, '/browse', 'GET', request_options, params)
 
-    def browse_all(self, params=None):
+    def browse_all(self, params=None, request_options=None):
         """
          Browse all index content.
 
          @param params contains the list of query parameter in a dictionary
          @return an iterator on the index content
         """
-        return IndexIterator(self, params=params)
+        return IndexIterator(self, params=params, request_options=request_options)
 
     def save_synonym(self, content, object_id, forward_to_slaves=False,
-                     forward_to_replicas=False):
+                     forward_to_replicas=False, request_options=None):
         """
         Add a synonym in this index.
 
@@ -624,11 +625,12 @@ class Index(object):
 
         path = '/synonyms/%s' % safe(object_id)
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, path, 'PUT', params, content)
+        return self._req(False, path, 'PUT', request_options, params, content)
 
     def batch_synonyms(self, synonyms, forward_to_slaves=False,
                        replace_existing_synonyms=False,
-                       forward_to_replicas=False):
+                       forward_to_replicas=False,
+                       request_options=None):
         """
         Add several synonyms in this index.
 
@@ -647,19 +649,19 @@ class Index(object):
             'replaceExistingSynonyms': replace_existing_synonyms
         }
 
-        return self._req(False, '/synonyms/batch', 'POST', params, synonyms)
+        return self._req(False, '/synonyms/batch', 'POST', request_options, params, synonyms)
 
-    def get_synonym(self, object_id):
+    def get_synonym(self, object_id, request_options=None):
         """
         Get a synonym from this index.
 
         @param object_id unique identifier of the synonym to retrieve
         """
         path = '/synonyms/%s' % safe(object_id)
-        return self._req(True, path, 'GET')
+        return self._req(True, path, 'GET', request_options)
 
     def delete_synonym(self, object_id, forward_to_slaves=False,
-                       forward_to_replicas=False):
+                       forward_to_replicas=False, request_options=None):
         """
         Delete a synonym from the index.
 
@@ -673,10 +675,10 @@ class Index(object):
 
         path = '/synonyms/%s' % safe(object_id)
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, path, 'DELETE', params)
+        return self._req(False, path, 'DELETE', request_options, params)
 
     def clear_synonyms(self, forward_to_slaves=False,
-                       forward_to_replicas=False):
+                       forward_to_replicas=False, request_options=None):
         """
         Delete all synonyms from the index.
 
@@ -689,9 +691,9 @@ class Index(object):
 
         path = '/synonyms/clear'
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, path, 'POST', params)
+        return self._req(False, path, 'POST', request_options, params)
 
-    def search_synonyms(self, query, types=[], page=0, hits_per_page=100):
+    def search_synonyms(self, query, types=[], page=0, hits_per_page=100, request_options=None):
         """
         Search for synonyms from this index.
 
@@ -710,13 +712,13 @@ class Index(object):
             'hitsPerPage': hits_per_page
         }
 
-        return self._req(True, '/synonyms/search', 'POST', data=data)
+        return self._req(True, '/synonyms/search', 'POST', request_options, data=data)
 
     @deprecated
     def waitTask(self, task_id, time_before_retry=100):
         return self.wait_task(task_id, time_before_retry)
 
-    def wait_task(self, task_id, time_before_retry=100):
+    def wait_task(self, task_id, time_before_retry=100, request_options=None):
         """
         Wait the publication of a task on the server.
         All server task are asynchronous and you can check with this method
@@ -727,12 +729,12 @@ class Index(object):
         """
         path = '/task/%d' % task_id
         while True:
-            res = self._req(True, path, 'GET')
+            res = self._req(True, path, 'GET', request_options)
             if res['status'] == 'published':
                 return res
             time.sleep(time_before_retry / 1000.0)
 
-    def is_task_published(self, task_id):
+    def is_task_published(self, task_id, request_options=None):
         '''
         Return True if the task on the server has been published
 
@@ -740,35 +742,35 @@ class Index(object):
         '''
 
         path = '/task/{0}'.format(task_id)
-        res = self._req(True, path, 'GET')
+        res = self._req(True, path, 'GET', request_options)
         return res['status'] == 'published'
 
     @deprecated
     def getSettings(self):
         return self.get_settings()
 
-    def get_settings(self):
+    def get_settings(self, request_options=None):
         """Get settings of this index."""
         params = {'getVersion': 2}
-        return self._req(True, '/settings', 'GET', params)
+        return self._req(True, '/settings', 'GET', request_options, params)
 
     @deprecated
     def clearIndex(self):
         return self.clear_index()
 
-    def clear_index(self):
+    def clear_index(self, request_options=None):
         """
         This function deletes the index content. Settings and index specific
         API keys are kept untouched.
         """
-        return self._req(False, '/clear', 'POST')
+        return self._req(False, '/clear', 'POST', request_options)
 
     @deprecated
     def setSettings(self, settings):
         return self.set_settings(settings)
 
     def set_settings(self, settings, forward_to_slaves=True,
-                     forward_to_replicas=True):
+                     forward_to_replicas=True, request_options=None):
         """
         Set settings for this index.
 
@@ -858,7 +860,7 @@ class Index(object):
         forward_to_replicas &= forward_to_slaves
 
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, '/settings', 'PUT', params, settings)
+        return self._req(False, '/settings', 'PUT', request_options, params, settings)
 
     @deprecated
     def listUserKeys(self):
@@ -869,11 +871,11 @@ class Index(object):
         """Use `list_api_keys`"""
         return self.list_api_keys()
 
-    def list_api_keys(self):
+    def list_api_keys(self, request_options=None):
         """
         List all existing api keys of this index with their associated ACLs.
         """
-        return self._req(True, '/keys', 'GET')
+        return self._req(True, '/keys', 'GET', request_options)
 
     @deprecated
     def getUserKeyACL(self, key):
@@ -884,10 +886,10 @@ class Index(object):
         """Use `get_api_key_acl`"""
         return self.get_api_key_acl(key)
 
-    def get_api_key_acl(self, key):
+    def get_api_key_acl(self, key, request_options=None):
         """Get ACL of a api key associated to this index."""
         path = '/keys/%s' % key
-        return self._req(True, path, 'GET')
+        return self._req(True, path, 'GET', request_options)
 
     @deprecated
     def deleteUserKey(self, key):
@@ -898,10 +900,10 @@ class Index(object):
         """Use `delete_api_key`"""
         return self.delete_api_key(key)
 
-    def delete_api_key(self, key):
+    def delete_api_key(self, key, request_options=None):
         """Delete an existing api key associated to this index."""
         path = '/keys/%s' % key
-        return self._req(False, path, 'DELETE')
+        return self._req(False, path, 'DELETE', request_options)
 
     @deprecated
     def addUserKey(self, obj, validity=0, max_queries_per_ip_per_hour=0,
@@ -919,7 +921,7 @@ class Index(object):
         )
 
     def add_api_key(self, obj, validity=0, max_queries_per_ip_per_hour=0,
-                    max_hits_per_query=0):
+                    max_hits_per_query=0, request_options=None):
         """
         Create a new api key associated to this index (can only access to
         this index).
@@ -960,7 +962,7 @@ class Index(object):
             'maxHitsPerQuery': max_hits_per_query
         })
 
-        return self._req(False, '/keys', 'POST', data=obj)
+        return self._req(False, '/keys', 'POST', request_options, data=obj)
 
     @deprecated
     def update_user_key(self, key, obj, validity=None,
@@ -974,7 +976,7 @@ class Index(object):
 
     def update_api_key(self, key, obj, validity=None,
                         max_queries_per_ip_per_hour=None,
-                        max_hits_per_query=None):
+                        max_hits_per_query=None, request_options=None):
         """
         Update a api key associated to this index (can only access to this index).
 
@@ -1017,9 +1019,9 @@ class Index(object):
             obj['maxHitsPerQuery'] = max_hits_per_query
 
         path = '/keys/%s' % key
-        return self._req(False, path, 'PUT', data=obj)
+        return self._req(False, path, 'PUT', request_options, data=obj)
 
-    def batch(self, requests, no_create=False):
+    def batch(self, requests, no_create=False, request_options=None):
         """Send a batch requests."""
         if isinstance(requests, (list, tuple)):
             requests = {'requests': requests}
@@ -1028,9 +1030,9 @@ class Index(object):
         if no_create:
             path += '?createIfNotExists=false'
 
-        return self._req(False, '/batch', 'POST', data=requests)
+        return self._req(False, '/batch', 'POST', request_options, data=requests)
 
-    def search_for_facet_values(self, facet_name, facet_query, query=None):
+    def search_for_facet_values(self, facet_name, facet_query, query=None, request_options=None):
         """
         Perform a search within a given facet's values
         @param facet_name name of the facet to search. It must have been
@@ -1046,13 +1048,13 @@ class Index(object):
             query = {}
         query['facetQuery'] = facet_query
         path = '/facets/%s/query' % safe(facet_name)
-        return self._req(True, path, 'POST', data={'params' : urlencode(urlify(query))})
+        return self._req(True, path, 'POST', request_options, data={'params' : urlencode(urlify(query))})
 
 
-    def search_facet(self, facet_name, facet_query, query=None):
+    def search_facet(self, facet_name, facet_query, query=None, request_options=None):
         return self.search_for_facet_values(facet_name, facet_query, query)
 
-    def save_rule(self, rule, forward_to_replicas=False):
+    def save_rule(self, rule, forward_to_replicas=False, request_options=None):
         """
         Save a new rule in the index.
         @param rule the body of the rule to upload as a python dictionary.
@@ -1063,9 +1065,9 @@ class Index(object):
         if 'objectID' not in rule:
             raise AlgoliaException('missing objectID in rule body')
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, '/rules/%s' % str(rule['objectID']), 'PUT', params, rule)
+        return self._req(False, '/rules/%s' % str(rule['objectID']), 'PUT', request_options, params, rule)
 
-    def batch_rules(self, rules, forward_to_replicas=False, clear_existing_rules=False):
+    def batch_rules(self, rules, forward_to_replicas=False, clear_existing_rules=False, request_options=None):
         """
         Save a batch of new rules
         @param rules batch of rules to be added to the index. Each rule object must contain
@@ -1076,16 +1078,16 @@ class Index(object):
                before saving this batch? Default is False.
         """
         params = {'forwardToReplicas': forward_to_replicas, 'clearExistingRules': clear_existing_rules}
-        return self._req(False, '/rules/batch', 'POST', params, data=rules)
+        return self._req(False, '/rules/batch', 'POST', request_options, params, data=rules)
 
-    def read_rule(self, objectID):
+    def read_rule(self, objectID, request_options=None):
         """
         Retrieve a rule from the index with the specified objectID.
         @param objectID The objectID of the rule to retrieve
         """
-        return self._req(True, '/rules/%s' % str(objectID), 'GET')
+        return self._req(True, '/rules/%s' % str(objectID), 'GET', request_options)
 
-    def delete_rule(self, objectID, forward_to_replicas=False):
+    def delete_rule(self, objectID, forward_to_replicas=False, request_options=None):
         """
         Delete the rule with identified by the given objectID.
         @param objectID the objectID of the rule to delete
@@ -1094,18 +1096,18 @@ class Index(object):
                Default is False.
         """
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, '/rules/%s' % str(objectID), 'DELETE', params)
+        return self._req(False, '/rules/%s' % str(objectID), 'DELETE', request_options, params)
 
-    def clear_rules(self, forward_to_replicas=False):
+    def clear_rules(self, forward_to_replicas=False, request_options=None):
         """
         Clear all the rules of an index.
         @param forward_to_replicas Should the rules in the replicas also be cleared?
                Default is False.
         """
         params = {'forwardToReplicas': forward_to_replicas}
-        return self._req(False, '/rules/clear', 'POST', params)
+        return self._req(False, '/rules/clear', 'POST', request_options, params)
 
-    def search_rules(self, query=None, anchoring=None, context=None, page=None, hitsPerPage=None):
+    def search_rules(self, query=None, anchoring=None, context=None, page=None, hitsPerPage=None, request_options=None):
         """
         Search for rules inside the index.
         @param query Full text search query
@@ -1126,9 +1128,9 @@ class Index(object):
         if hitsPerPage is not None:
             params['hitsPerPage'] = hitsPerPage
 
-        return self._req(True, '/rules/search', 'POST', data=params)
+        return self._req(True, '/rules/search', 'POST', request_options, data=params)
 
-    def _req(self, is_search, path, meth, params=None, data=None):
+    def _req(self, is_search, path, meth, request_options, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
         path = '%s%s' % (self._request_path, path)
-        return self.client._req(is_search, path, meth, params, data)
+        return self.client._req(is_search, path, meth, request_options, params, data)

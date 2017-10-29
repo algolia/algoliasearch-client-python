@@ -45,6 +45,23 @@ from .helpers import urlify
 MAX_API_KEY_LENGTH = 500
 
 
+class RequestOptions:
+    HEADERS = {
+        'forwardedFor': 'X-Forwarded-For',
+        'algoliaUserID': 'X-Algolia-User-ID'
+    }
+
+    def __init__(self, options):
+        self.headers = {}
+        self.parameters = {}
+
+        for k, v in options.items():
+            if k in self.HEADERS:
+                self.headers[self.HEADERS[k]] = v
+            else:
+                self.parameters[k] = v
+
+
 class Client(object):
     """
     Entry point in the Python Client API.
@@ -214,7 +231,8 @@ class Client(object):
 
     def multiple_queries(self, queries,
                          index_name_key='indexName',
-                         strategy='none'):
+                         strategy='none',
+                         request_options=None):
         """This method allows to query multiple indexes with one API call."""
         path = '/1/indexes/*/queries'
 
@@ -228,34 +246,34 @@ class Client(object):
             })
 
         data = {'requests': requests, 'strategy': strategy}
-        return self._req(True, path, 'POST', data=data)
+        return self._req(True, path, 'POST', request_options, data=data)
 
-    def batch(self, requests):
+    def batch(self, requests, request_options=None):
         """Send a batch request targeting multiple indices."""
         if isinstance(requests, (list, tuple)):
             requests = {'requests': requests}
 
         path = '/1/indexes/*/batch'
-        return self._req(False, path, 'POST', data=requests)
+        return self._req(False, path, 'POST', request_options, data=requests)
 
     @deprecated
     def listIndexes(self):
         return self.list_indexes()
 
-    def list_indexes(self):
+    def list_indexes(self, request_options=None):
         """
         List all existing indexes.
         Return an object of the form:
            {'items': [{ 'name': 'contacts', 'created_at': '2013-01-18T15:33:13.556Z'},
                       {'name': 'notes', 'created_at': '2013-01-18T15:33:13.556Z'}]}
         """
-        return self._req(True, '/1/indexes', 'GET')
+        return self._req(True, '/1/indexes', 'GET', request_options)
 
     @deprecated
     def deleteIndex(self, index_name):
         return self.delete_index(index_name)
 
-    def delete_index(self, index_name):
+    def delete_index(self, index_name, request_options=None):
         """
         Delete an index.
         Return an object of the form: {'deleted_at': '2013-01-18T15:33:13.556Z'}
@@ -263,13 +281,13 @@ class Client(object):
         @param index_name the name of index to delete
         """
         path = '/1/indexes/%s' % safe(index_name)
-        return self._req(False, path, 'DELETE')
+        return self._req(False, path, 'DELETE', request_options)
 
     @deprecated
     def moveIndex(self, src_index_name, dst_index_name):
         return self.move_index(src_index_name, dst_index_name)
 
-    def move_index(self, src_index_name, dst_index_name):
+    def move_index(self, src_index_name, dst_index_name, request_options=None):
         """
         Move an existing index.
 
@@ -279,13 +297,13 @@ class Client(object):
         """
         path = '/1/indexes/%s/operation' % safe(src_index_name)
         request = {'operation': 'move', 'destination': dst_index_name}
-        return self._req(False, path, 'POST', data=request)
+        return self._req(False, path, 'POST', request_options, data=request)
 
     @deprecated
     def copyIndex(self, src_index_name, dst_index_name):
         return self.copy_index(src_index_name, dst_index_name)
 
-    def copy_index(self, src_index_name, dst_index_name):
+    def copy_index(self, src_index_name, dst_index_name, request_options=None):
         """
         Copy an existing index.
 
@@ -295,13 +313,13 @@ class Client(object):
         """
         path = '/1/indexes/%s/operation' % safe(src_index_name)
         request = {'operation': 'copy', 'destination': dst_index_name}
-        return self._req(False, path, 'POST', data=request)
+        return self._req(False, path, 'POST', request_options, data=request)
 
     @deprecated
     def getLogs(self, offset=0, length=10, type='all'):
         return self.get_logs(offset, length, type)
 
-    def get_logs(self, offset=0, length=10, type='all'):
+    def get_logs(self, offset=0, length=10, type='all', request_options=None):
         """
         Return last logs entries.
 
@@ -311,7 +329,7 @@ class Client(object):
             starting at offset. Maximum allowed value: 1000.
         """
         params = {'offset': offset, 'length': length, 'type': type}
-        return self._req(False, '/1/logs', 'GET', params)
+        return self._req(False, '/1/logs', 'GET', request_options, params)
 
     @deprecated
     def initIndex(self, index_name):
@@ -335,9 +353,9 @@ class Client(object):
         """Use `list_api_keys`"""
         return self.list_api_keys()
 
-    def list_api_keys(self):
+    def list_api_keys(self, request_options=None):
         """List all existing api keys with their associated ACLs."""
-        return self._req(True, '/1/keys', 'GET')
+        return self._req(True, '/1/keys', 'GET', request_options)
 
     @deprecated
     def getUserKeyACL(self, key):
@@ -348,10 +366,10 @@ class Client(object):
         """Use `get_api_key_acl`"""
         return self.get_api_key_acl(key)
 
-    def get_api_key_acl(self, key):
+    def get_api_key_acl(self, key, request_options=None):
         """'Get ACL of an api key."""
         path = '/1/keys/%s' % key
-        return self._req(True, path, 'GET')
+        return self._req(True, path, 'GET', request_options)
 
     @deprecated
     def deleteUserKey(self, key):
@@ -362,10 +380,10 @@ class Client(object):
         """Use `delete_api_key`"""
         return self.delete_api_key(key)
 
-    def delete_api_key(self, key):
+    def delete_api_key(self, key, request_options=None):
         """Delete an existing api key."""
         path = '/1/keys/%s' % key
-        return self._req(False, path, 'DELETE')
+        return self._req(False, path, 'DELETE', request_options)
 
     @deprecated
     def addUserKey(self, obj,
@@ -392,7 +410,8 @@ class Client(object):
                     validity=0,
                     max_queries_per_ip_per_hour=0,
                     max_hits_per_query=0,
-                    indexes=None):
+                    indexes=None,
+                    request_options=None):
         """
         Create a new api key.
 
@@ -435,7 +454,7 @@ class Client(object):
         if indexes:
             obj['indexes'] = indexes
 
-        return self._req(False, '/1/keys', 'POST', data=obj)
+        return self._req(False, '/1/keys', 'POST', request_options, data=obj)
 
     @deprecated
     def update_user_key(self, key, obj,
@@ -454,7 +473,8 @@ class Client(object):
                         validity=None,
                         max_queries_per_ip_per_hour=None,
                         max_hits_per_query=None,
-                        indexes=None):
+                        indexes=None,
+                        request_options=None):
         """
         Update a api key.
 
@@ -500,7 +520,7 @@ class Client(object):
             obj['indexes'] = indexes
 
         path = '/1/keys/%s' % key
-        return self._req(False, path, 'PUT', data=obj)
+        return self._req(False, path, 'PUT', request_options, data=obj)
 
     @deprecated
     def generateSecuredApiKey(self, private_api_key, tag_filters,
@@ -534,16 +554,16 @@ class Client(object):
         securedKey = hmac.new(private_api_key.encode('utf-8'), queryParameters.encode('utf-8'), hashlib.sha256).hexdigest()
         return str(base64.b64encode(("%s%s" % (securedKey, queryParameters)).encode('utf-8')).decode('utf-8'))
 
-    def is_alive(self):
+    def is_alive(self, request_options=None):
         """
         Test if the server is alive.
         This performs a simple application-level ping. If up and running, the server answers with a basic message.
         """
-        return self._req(True, '/1/isalive', 'GET')
+        return self._req(True, '/1/isalive', 'GET', request_options)
 
-    def _req(self, is_search, path, meth, params=None, data=None):
+    def _req(self, is_search, path, meth, request_options, params=None, data=None):
         if len(self.api_key) > MAX_API_KEY_LENGTH:
             if data is None:
                 data = {}
             data['apiKey'] = self.api_key
-        return self._transport.req(is_search, path, meth, params, data)
+        return self._transport.req(is_search, path, meth, params, data, request_options)

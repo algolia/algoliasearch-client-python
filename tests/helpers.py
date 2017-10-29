@@ -9,6 +9,8 @@ from random import randint
 from faker import Factory
 from algoliasearch.client import Client
 
+from collections import namedtuple
+
 
 class FakeData(object):
     def __init__(self):
@@ -87,3 +89,17 @@ def wait_missing_key(index, key):
         except:
             # Not found.
             return
+
+FakeResp = namedtuple('FakeResp', ['status_code', 'json'])
+
+class FakeSession(object):
+    def __init__(self, test_class, exp_headers, exp_params):
+        self.test_class = test_class
+        self.headers = exp_headers
+        self.params = exp_params
+
+    def request(self, path, meth, timeout, params, data, headers):
+        self.test_class.assertDictEqual(headers, self.headers)
+        self.test_class.assertDictEqual(params, self.params)
+
+        return FakeResp(status_code=200, json=lambda: '{}')
