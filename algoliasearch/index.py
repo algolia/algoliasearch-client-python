@@ -1130,7 +1130,7 @@ class Index(object):
 
         return self._req(True, '/rules/search', 'POST', request_options, data=params)
 
-    def _req(self, is_search, path, meth, request_options, params=None, data=None):
+    def _req(self, is_search, path, meth, request_options=None, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
         path = '%s%s' % (self._request_path, path)
         return self.client._req(is_search, path, meth, request_options, params, data)
