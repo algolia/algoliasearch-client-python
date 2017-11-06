@@ -1,5 +1,8 @@
 CHANGELOG
 
+2017-11-06 1.14.1
+    * Fix request_options not always optional
+
 2017-10-29 1.14.0
     * Add per-request parameters
     * Add multi-cluster support
