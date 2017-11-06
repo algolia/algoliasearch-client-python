@@ -677,7 +677,7 @@ class Client(object):
         """
         return self._req(True, '/1/isalive', 'GET', request_options)
 
-    def _req(self, is_search, path, meth, request_options, params=None, data=None):
+    def _req(self, is_search, path, meth, request_options=None, params=None, data=None):
         if len(self.api_key) > MAX_API_KEY_LENGTH:
             if data is None:
                 data = {}

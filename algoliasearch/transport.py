@@ -140,7 +140,7 @@ class Transport(object):
             else:
                 return self._original_write_hosts
 
-    def req(self, is_search, path, meth, params, data, request_options):
+    def req(self, is_search, path, meth, params, data, request_options=None):
         """Perform an HTTPS request with retry logic."""
 
         # Merge params and request_options params.
