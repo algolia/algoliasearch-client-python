@@ -1,515 +1,507 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
-import os
 import calendar
-from random import randint
-from decimal import Decimal
+import os
+import re
 from datetime import datetime
-
-try:
-    import unittest2 as unittest  # py26
-except ImportError:
-    import unittest
+from decimal import Decimal
 
 from algoliasearch.client import MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
-from tests.helpers import safe_index_name, get_api_client, FakeData, get_rule_stub
-
-
-class IndexTest(unittest.TestCase):
-    """Abstract class for all index tests."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.client = get_api_client()
-        cls.index_name = safe_index_name('àlgol?à-python{0}'.format(
-                                         randint(1, 1000)))
-        cls.index = cls.client.init_index(cls.index_name)
-        cls.client.delete_index(cls.index_name)
-
-        cls.factory = FakeData()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.client.delete_index(cls.index_name)
-
-
-class IndexWithoutDataTest(IndexTest):
-    """Tests that use one index without initial data."""
-
-    def tearDown(self):
-        self.index.clear_index()
-
-    def test_add_object(self):
-        obj = self.factory.fake_contact()
-        task = self.index.add_object(obj)
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_object(task['objectID'])
-        self.assertDictContainsSubset(obj, res)
-
-    def test_add_object_with_objectID(self):
-        obj = self.factory.fake_contact()
-        obj['objectID'] = '101'
-        task = self.index.add_object(obj, obj['objectID'])
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_object(obj['objectID'])
-        self.assertDictEqual(obj, res)
-
-    def test_add_objects(self):
-        objs = self.factory.fake_contact(5)
-        task = self.index.add_objects(objs)
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_objects(task['objectIDs'])
-        self.assertEqual(len(res['results']), 5)
-
-        for obj, obj_res in zip(objs, res['results']):
-            self.assertDictContainsSubset(obj, obj_res)
-
-    def test_save_object(self):
-        obj = self.factory.fake_contact()
-        obj['objectID'] = 4242
-        task = self.index.save_object(obj)
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_object(obj['objectID'])
-        obj['objectID'] = '4242'  # The backends always returns str(objectID)
-        self.assertDictEqual(obj, res)
-
-    def test_save_objects(self):
-        objs = self.factory.fake_contact(5)
-        objectIDs = []
-        for obj in objs:
-            new_id = self.factory.generate_id()
-            objectIDs.append(new_id)
-            obj['objectID'] = new_id
-        task = self.index.save_objects(objs)
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_objects(objectIDs)
-        for obj, obj_res in zip(objs, res['results']):
-            self.assertDictEqual(obj, obj_res)
-
-    def test_encode_decimal(self):
-        value = Decimal('3.14')
-        task = self.index.add_object({'pi': value})
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_object(task['objectID'])
-        self.assertEqual(res['pi'], float(value))
-
-    def test_encode_datetime(self):
-        value = datetime.now()
-        task = self.index.add_object({'now': value})
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_object(task['objectID'])
-        self.assertEqual(res['now'], calendar.timegm(value.utctimetuple()))
-
-    def test_synonyms(self):
-        task = self.index.add_object({'name': '589 Howard St., San Francisco'})
-        task = self.index.batch_synonyms([
-            {'objectID': 'city', 'type': 'synonym',
-             'synonyms': ['San Francisco', 'SF']},
-            {'objectID': 'street', 'type': 'altCorrection1',
-             'word': 'Street', 'corrections': ['St']}
-        ])
-        self.index.wait_task(task['taskID'])
-        task = self.index.get_synonym("city")
-        self.assertEqual('city', task['objectID'])
-        task = self.index.search('Howard Street SF')
-        self.assertEqual(1, int(task['nbHits']))
-        task = self.index.delete_synonym('street')
-        self.index.wait_task(task['taskID'])
-        task = self.index.search_synonyms('', ['synonym'], 0, 5)
-        self.assertEqual(1, int(task['nbHits']))
-        task = self.index.clear_synonyms()
-        self.index.wait_task(task['taskID'])
-        task = self.index.search_synonyms('', hits_per_page=5)
-        self.assertEqual(0, int(task['nbHits']))
-
-    def test_facet_search(self):
-        settings = {'attributesForFacetting': ['searchable(series)', 'kind']}
-        objects = [
-             {
-                 'objectID': '1',
-                 'name': 'Snoopy',
-                 'kind': [ 'dog', 'animal' ],
-                 'born': 1950,
-                 'series': 'Peanuts'
-             },
-             {
-                 'objectID': '2',
-                 'name': 'Woodstock',
-                 'kind': ['bird', 'animal' ],
-                 'born': 1960,
-                 'series': 'Peanuts'
-             },
-             {
-                 'objectID': '3',
-                 'name': 'Charlie Brown',
-                 'kind': [ 'human' ],
-                 'born': 1950,
-                 'series': 'Peanuts'
-             },
-            {
-                'objectID': '4',
-                'name': 'Hobbes',
-                'kind': ['tiger', 'animal', 'teddy' ],
-                'born': 1985,
-                'series': 'Calvin & Hobbes'
-            },
-            {
-                'objectID': '5',
-                'name': 'Calvin',
-                'kind': [ 'human' ],
-                'born': 1985,
-                'series': 'Calvin & Hobbes'
-             }
-         ]
-
-        self.index.set_settings(settings)
-        task = self.index.add_objects(objects)
-        self.index.wait_task(task['taskID'])
-
-        # Straightforward search.
-        facetHits = self.index.search_facet('series', 'Hobb')['facetHits']
-        self.assertEqual(len(facetHits), 1)
-        self.assertEqual(facetHits[0]['value'], 'Calvin & Hobbes')
-        self.assertEqual(facetHits[0]['count'], 2)
-
-        # Using an addition query to restrict search.
-        query = {'facetFilters': 'kind:animal', 'numericFilters': 'born >= 1955'}
-        facetHits = self.index.search_facet('series', 'Peanutz', query)['facetHits']
-        self.assertEqual(facetHits[0]['value'], 'Peanuts')
-        self.assertEqual(facetHits[0]['count'], 1)
-
-    def test_save_and_get_rule(self):
-        rule = get_rule_stub()
-        res = self.index.save_rule(rule)
-        self.index.wait_task(res['taskID'])
-        self.assertEqual(rule, self.index.read_rule('my-rule'))
-
-    @unittest.expectedFailure
-    def test_delete_rule(self):
-        rule = get_rule_stub()
-        res = self.index.save_rule(rule)
-        self.index.wait_task(res['taskID'])
-
-        res = self.index.delete_rule('my-rule')
-        self.index.wait_task(res['taskID'])
-
-        self.index.read_rule('my-rule')
-
-    def test_search_rules(self):
-        rule = get_rule_stub()
-        rule2 = get_rule_stub('my-second-rule')
-
-        res = self.index.save_rule(rule);
-        self.index.wait_task(res['taskID'])
-        res = self.index.save_rule(rule2);
-        self.index.wait_task(res['taskID'])
-
-        rules = self.index.search_rules()
-        self.assertEqual(2, rules['nbHits'])
-
-    def test_batch_and_clear_rules(self):
-        rule = get_rule_stub()
-        rule2 = get_rule_stub('my-second-rule')
-
-        res = self.index.batch_rules([rule, rule2])
-        self.index.wait_task(res['taskID'])
-
-        self.assertEqual(self.index.read_rule('my-rule'), rule)
-        self.assertEqual(self.index.read_rule('my-second-rule'), rule2)
-
-        res = self.index.clear_rules()
-        self.index.wait_task(res['taskID'])
-
-        rules = self.index.search_rules()
-        self.assertEqual(rules['nbHits'], 0)
-
-
-    def test_batch_and_clear_existing(self):
-        rule = get_rule_stub()
-        rule2 = get_rule_stub('my-second-rule')
-        rule3 = get_rule_stub('my-third-rule')
-        rule4 = get_rule_stub('my-fourth-rule')
-
-        res = self.index.batch_rules([rule, rule2, rule3, rule4])
-        self.index.wait_task(res['taskID'])
-
-        res = self.index.batch_rules([rule3, rule4], False, True)
-        self.index.wait_task(res['taskID'])
-
-        rules = self.index.search_rules()
-        self.assertEqual(rules['nbHits'], 2)
-        del rules['hits'][0]['_highlightResult']
-        del rules['hits'][1]['_highlightResult']
-
-        self.assertEqual(rules['hits'], [rule3, rule4]) # alphabetical ordering of objectID
-
-
-class IndexWithReadOnlyDataTest(IndexTest):
-    """Tests that use one index with initial data (read only)."""
-
-    @classmethod
-    def setUpClass(cls):
-        super(IndexWithReadOnlyDataTest, cls).setUpClass()
-
-        cls.objs = cls.factory.fake_contact(5)
-        task = cls.index.add_objects(cls.objs)
-        cls.index.wait_task(task['taskID'])
-        cls.objectIDs = task['objectIDs']
-
-    def test_settings(self):
-        task = self.index.set_settings({
-            'attributesToHighlight': ['name'],
-            'minProximity': 2
-        })
-        self.index.wait_task(task['taskID'])
-
-        res = self.index.get_settings()
-        self.assertListEqual(res['attributesToHighlight'], ['name'])
-
-        # reset settings
-        task = self.index.set_settings({
-            'attributesToHighlight': None,
-            'minProximity': 1
-        })
-
-    def test_get_object(self):
-        res = self.index.get_object(self.objectIDs[3])
-        self.assertDictContainsSubset(self.objs[3], res)
-
-        res = self.index.get_object(self.objectIDs[0])
-        self.assertDictContainsSubset(self.objs[0], res)
-
-        res = self.index.get_object(self.objectIDs[4])
-        self.assertDictContainsSubset(self.objs[4], res)
-
-    def test_get_object_with_attributes_to_retrieve(self):
-        res = self.index.get_object(self.objectIDs[3],
-                                    attributes_to_retrieve=['name', 'email'])
-        self.assertEqual(self.objs[3]['name'], res['name'])
-        self.assertEqual(self.objs[3]['email'], res['email'])
-        self.assertNotIn('phone', res)
-        self.assertNotIn('city', res)
-        self.assertNotIn('country', res)
-
-        res = self.index.get_object(self.objectIDs[0],
-                                    attributes_to_retrieve='city')
-        self.assertNotIn('name', res)
-        self.assertNotIn('email', res)
-        self.assertNotIn('phone', res)
-        self.assertEqual(self.objs[0]['city'], res['city'])
-        self.assertNotIn('country', res)
-
-        res = self.index.get_object(self.objectIDs[0],
-                                    attributes_to_retrieve='objectID')
-        self.assertNotIn('name', res)
-        self.assertNotIn('email', res)
-        self.assertNotIn('phone', res)
-        self.assertNotIn('city', res)
-        self.assertNotIn('country', res)
-
-    def test_get_objects(self):
-        res = self.index.get_objects(self.objectIDs[1:3])
-        for obj, obj_res in zip(self.objs[1:3], res['results']):
-            self.assertDictContainsSubset(obj, obj_res)
-
-        res = self.index.get_objects([self.objectIDs[3],
-                                      self.objectIDs[0],
-                                      self.objectIDs[2]])
-        self.assertEqual(len(res['results']), 3)
-        self.assertDictContainsSubset(self.objs[3], res['results'][0])
-        self.assertDictContainsSubset(self.objs[0], res['results'][1])
-        self.assertDictContainsSubset(self.objs[2], res['results'][2])
-
-    def test_get_objects_with_attributes_to_retrieve(self):
-        res = self.index.get_objects(self.objectIDs[1:3], attributes_to_retrieve=['name', 'email'])
-        for obj, obj_res in zip(self.objs[1:3], res['results']):
-            self.assertEqual(obj['name'], obj_res['name'])
-            self.assertEqual(obj['email'], obj_res['email'])
-            self.assertNotIn('phone', obj_res)
-            self.assertNotIn('city', obj_res)
-            self.assertNotIn('country', obj_res)
-
-    def test_browse(self):
-        res = self.index.browse(page=0, hits_per_page=2)
-        self.assertEqual(res['page'], 0)
-        self.assertEqual(res['nbHits'], 5)
-        self.assertEqual(res['hitsPerPage'], 2)
-
-        for i in range(5):
-            res = self.index.browse(page=i, hits_per_page=1)
-            self.assertIn(res['hits'][0]['objectID'], self.objectIDs)
-
-    def browse_all(self):
-        params = {
-            'hitsPerPage': 2,
-            'attributesToRetrieve': ['objectID']
-        }
-
-        res_ids = []
-        it = self.index.browse_all(params)
-        for record in it:
-            self.assertEqual(len(record.keys()), 1)
-            self.assertIn('objectID', record)
-            res_ids.append(record['objectID'])
-
-        self.assertEqual(it.answer['nbPages'], 3)
-        self.assertEqual(len(res_ids), 5)
-        self.assertSetEqual(set(self.objectIDs), set(res_ids))
-
-    def test_search(self):
-        res = self.index.search('')
-        self.assertEqual(res['nbHits'], 5)
-
-        res = self.index.search('', {'hitsPerPage': 2})
-        self.assertEqual(res['nbHits'], 5)
-        self.assertEqual(res['hitsPerPage'], 2)
-
-        res = self.index.search('', {
-            'attributesToRetrieve': ['name', 'email']
-        })
-        res_keys = res['hits'][0].keys()
-        self.assertIn('name', res_keys)
-        self.assertIn('email', res_keys)
-        self.assertNotIn('phone', res_keys)
-        self.assertNotIn('city', res_keys)
-        self.assertNotIn('country', res_keys)
-
-        res = self.index.search('', {
-            'attributesToRetrieve': 'name,email'
-        })
-        res_keys = res['hits'][0].keys()
-        self.assertIn('name', res_keys)
-        self.assertIn('email', res_keys)
-        self.assertNotIn('phone', res_keys)
-        self.assertNotIn('city', res_keys)
-        self.assertNotIn('country', res_keys)
-
-        res = self.index.search('', {'analytics': False})
-        self.assertEqual(res['nbHits'], 5)
-        try:
-            self.assertRegexpMatches(res['params'], r'analytics=false')
-        except AttributeError:
-            self.assertRegex(res['params'], r'analytics=false')
-
-        res = self.index.search(self.objs[2]['name'][0])
-        self.assertGreaterEqual(res['nbHits'], 1)
-        res_ids = [elt['objectID'] for elt in res['hits']]
-        self.assertIn(self.objectIDs[2], res_ids)
-
-    def test_search_with_short_secured_api_key(self):
-        old_key = self.client.api_key
-
-        secured_api_key = self.client.generate_secured_api_key(
+from helpers import Factory, rule_stub
+
+
+def test_add_object(index):
+    factory = Factory()
+    obj = factory.contacts()
+    task = index.add_object(obj)
+    index.wait_task(task['taskID'])
+
+    res = index.get_object(task['objectID'])
+    del res['objectID']
+    assert res == obj
+
+
+def test_add_object_with_objectID(index):
+    factory = Factory()
+    obj = factory.with_objectids('101')
+    task = index.add_object(obj, obj['objectID'])
+    index.wait_task(task['taskID'])
+
+    res = index.get_object(obj['objectID'])
+    assert res == obj
+
+
+def test_add_objects(index):
+    factory = Factory()
+    objs = factory.contacts(5)
+    task = index.add_objects(objs)
+    index.wait_task(task['taskID'])
+
+    res = index.get_objects(task['objectIDs'])
+    assert len(res['results']) == 5
+
+    for obj, obj_res in zip(objs, res['results']):
+        del obj_res['objectID']
+        assert obj == obj_res
+
+
+def test_save_object(index):
+    factory = Factory()
+    obj = factory.with_objectids(4242)
+    task = index.save_object(obj)
+    index.wait_task(task['taskID'])
+
+    res = index.get_object(obj['objectID'])
+    obj['objectID'] = '4242'  # The backends always returns str(objectID)
+    assert obj == res
+
+
+def test_save_objects(index):
+    factory = Factory()
+    ids = factory.objectids(5)
+    objs = factory.with_objectids(ids)
+    task = index.save_objects(objs)
+    index.wait_task(task['taskID'])
+
+    res = index.get_objects(ids)
+    for obj, obj_res in zip(objs, res['results']):
+        assert obj == obj_res
+
+
+def test_encode_decimal(index):
+    value = Decimal('3.14')
+    task = index.add_object({'pi': value})
+    index.wait_task(task['taskID'])
+
+    res = index.get_object(task['objectID'])
+    assert res['pi'] == float(value)
+
+
+def test_encode_datetime(index):
+    value = datetime.now()
+    task = index.add_object({'now': value})
+    index.wait_task(task['taskID'])
+
+    res = index.get_object(task['objectID'])
+    assert res['now'] == calendar.timegm(value.utctimetuple())
+
+
+def test_synonyms(index):
+    index.add_object({'name': '589 Howard St., San Francisco'})
+    task = index.batch_synonyms([
+        {'objectID': 'city', 'type': 'synonym',
+         'synonyms': ['San Francisco', 'SF']},
+        {'objectID': 'street', 'type': 'altCorrection1',
+         'word': 'Street', 'corrections': ['St']}
+    ])
+
+    index.wait_task(task['taskID'])
+    task = index.get_synonym("city")
+    assert task['objectID'] == 'city'
+
+    task = index.search('Howard Street SF')
+    assert int(task['nbHits'] == 1)
+
+    task = index.delete_synonym('street')
+    index.wait_task(task['taskID'])
+    task = index.search_synonyms('', ['synonym'], 0, 5)
+    assert int(task['nbHits']) == 1
+
+    task = index.clear_synonyms()
+    index.wait_task(task['taskID'])
+    task = index.search_synonyms('', hits_per_page=5)
+    assert int(task['nbHits']) == 0
+
+
+# def tests_synonym_iterator(index):
+#     synonyms = [
+#         {'objectID': 'city', 'type': 'synonym',
+#          'synonyms': ['San Francisco', 'SF']},
+#         {'objectID': 'street', 'type': 'altCorrection1',
+#          'word': 'Street', 'corrections': ['St']}
+#     ]
+#     task = index.batch_synonyms(synonyms)
+#     index.wait_task(task['taskID'])
+#     it = SynonymIterator(index)
+#     for got, expected in zip(it, synonyms):
+#         self.assertEqual(got, expected)
+
+
+def test_facet_search(index):
+    settings = {'attributesForFacetting': ['searchable(series)', 'kind']}
+    objects = [{
+        'objectID': '1',
+        'name': 'Snoopy',
+        'kind': ['dog', 'animal'],
+        'born': 1950,
+        'series': 'Peanuts'
+    }, {
+        'objectID': '2',
+        'name': 'Woodstock',
+        'kind': ['bird', 'animal'],
+        'born': 1960,
+        'series': 'Peanuts'
+    }, {
+        'objectID': '3',
+        'name': 'Charlie Brown',
+        'kind': ['human'],
+        'born': 1950,
+        'series': 'Peanuts'
+    }, {
+        'objectID': '4',
+        'name': 'Hobbes',
+        'kind': ['tiger', 'animal', 'teddy'],
+        'born': 1985,
+        'series': 'Calvin & Hobbes'
+    }, {
+        'objectID': '5',
+        'name': 'Calvin',
+        'kind': ['human'],
+        'born': 1985,
+        'series': 'Calvin & Hobbes'
+    }]
+
+    index.set_settings(settings)
+    task = index.add_objects(objects)
+    index.wait_task(task['taskID'])
+
+    # Straightforward search.
+    facet_hits = index.search_facet('series', 'Hobb')['facetHits']
+    assert len(facet_hits) == 1
+    assert facet_hits[0]['value'] == 'Calvin & Hobbes'
+    assert facet_hits[0]['count'] == 2
+
+    # Using an addition query to restrict search.
+    query = {'facetFilters': 'kind:animal', 'numericFilters': 'born >= 1955'}
+    facet_hits = index.search_facet('series', 'Peanutz', query)['facetHits']
+    assert facet_hits[0]['value'] == 'Peanuts'
+    assert facet_hits[0]['count'] == 1
+
+
+def test_save_and_get_rule(index):
+    rule = rule_stub()
+    res = index.save_rule(rule)
+    index.wait_task(res['taskID'])
+    assert index.read_rule('my-rule') == rule
+
+
+def test_delete_rule(index):
+    rule = rule_stub()
+    res = index.save_rule(rule)
+    index.wait_task(res['taskID'])
+
+    res = index.delete_rule('my-rule')
+    index.wait_task(res['taskID'])
+
+    try:
+        index.read_rule('my-rule')
+    except AlgoliaException:
+        return
+
+    # We should not be able to access a deleted objectID.
+    assert False
+
+
+def test_search_rules(index):
+    rule = rule_stub()
+    rule2 = rule_stub('my-second-rule')
+
+    res = index.save_rule(rule)
+    index.wait_task(res['taskID'])
+
+    res = index.save_rule(rule2)
+    index.wait_task(res['taskID'])
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 2
+
+
+def test_batch_and_clear_rules(index):
+    rule = rule_stub()
+    rule2 = rule_stub('my-second-rule')
+
+    res = index.batch_rules([rule, rule2])
+    index.wait_task(res['taskID'])
+
+    assert index.read_rule('my-rule') == rule
+    assert index.read_rule('my-second-rule') == rule2
+
+    res = index.clear_rules()
+    index.wait_task(res['taskID'])
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 0
+
+
+def test_batch_and_clear_existing(index):
+    rule = rule_stub()
+    rule2 = rule_stub('my-second-rule')
+    rule3 = rule_stub('my-third-rule')
+    rule4 = rule_stub('my-fourth-rule')
+
+    res = index.batch_rules([rule, rule2, rule3, rule4])
+    index.wait_task(res['taskID'])
+
+    res = index.batch_rules([rule3, rule4], False, True)
+    index.wait_task(res['taskID'])
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 2
+
+    del rules['hits'][0]['_highlightResult']
+    del rules['hits'][1]['_highlightResult']
+
+    assert rules['hits'] == [rule3, rule4]  # alphabetical ordering of objectID
+
+def test_settings(ro_index):
+    task = ro_index.set_settings({
+        'attributesToHighlight': ['name']
+    })
+    ro_index.wait_task(task['taskID'])
+
+    res = ro_index.get_settings()
+    assert res['attributesToHighlight'] == ['name']
+
+
+def test_get_object(ro_index):
+    res = ro_index.get_object(ro_index.ids[3])
+    del res['objectID']
+    assert ro_index.data[3] == res
+
+    res = ro_index.get_object(ro_index.ids[0])
+    del res['objectID']
+    assert ro_index.data[0] == res
+
+    res = ro_index.get_object(ro_index.ids[4])
+    del res['objectID']
+    assert ro_index.data[4] == res
+
+
+def test_get_object_with_attributes_to_retrieve(ro_index):
+    res = ro_index.get_object(ro_index.ids[3], attributes_to_retrieve=['name', 'email'])
+    assert ro_index.data[3]['name'] == res['name']
+    assert ro_index.data[3]['email'] == res['email']
+    assert 'phone' not in res
+    assert 'city' not in res
+    assert 'country'not in res
+
+    res = ro_index.get_object(ro_index.ids[0], attributes_to_retrieve='city')
+    assert 'name' not in res
+    assert 'email' not in res
+    assert 'phone' not in res
+    assert ro_index.data[0]['city'] == res['city']
+    assert 'country' not in res
+
+    res = ro_index.get_object(ro_index.ids[0], attributes_to_retrieve='objectID')
+    assert 'name' not in res
+    assert 'email' not in res
+    assert 'phone' not in res
+    assert 'city' not in res
+    assert 'country' not in res
+
+
+def test_get_objects(ro_index):
+    res = ro_index.get_objects(ro_index.ids[1:3])
+    for obj, obj_res in zip(ro_index.data[1:3], res['results']):
+        del obj_res['objectID']
+        assert obj == obj_res
+
+    res = ro_index.get_objects([ro_index.ids[3], ro_index.ids[0], ro_index.ids[2]])
+    assert len(res['results']) == 3
+
+    for result in res['results']:
+        del result['objectID']
+
+    assert ro_index.data[3] == res['results'][0]
+    assert ro_index.data[0] == res['results'][1]
+    assert ro_index.data[2] == res['results'][2]
+
+
+def test_get_objects_with_attributes_to_retrieve(ro_index):
+    res = ro_index.get_objects(ro_index.ids[1:3], attributes_to_retrieve=['name', 'email'])
+    for obj, obj_res in zip(ro_index.data[1:3], res['results']):
+        assert obj['name'] == obj_res['name']
+        assert obj['email'] == obj_res['email']
+        assert 'phone' not in obj_res
+        assert 'city' not in obj_res
+        assert 'country' not in obj_res
+
+
+def test_browse(ro_index):
+    res = ro_index.browse(page=0, hits_per_page=2)
+    assert res['page'] == 0
+    assert res['nbHits'] == 5
+    assert res['hitsPerPage'] == 2
+
+    for i in range(5):
+        res = ro_index.browse(page=i, hits_per_page=1)
+        assert res['hits'][0]['objectID'] in ro_index.ids
+
+
+def test_browse_all(ro_index):
+    params = {
+        'hitsPerPage': 2,
+        'attributesToRetrieve': ['objectID']
+    }
+
+    res_ids = []
+    it = ro_index.browse_all(params)
+    for record in it:
+        assert len(record.keys()) == 1
+        assert 'objectID' in record
+        res_ids.append(record['objectID'])
+
+    assert it.answer['nbPages'] == 3
+    assert len(res_ids) == 5
+    assert set(ro_index.ids) == set(res_ids)
+
+
+def test_search(ro_index):
+    res = ro_index.search('')
+    assert res['nbHits'] == 5
+
+    res = ro_index.search('', {'hitsPerPage': 2})
+    assert res['nbHits'] == 5
+    assert res['hitsPerPage'] == 2
+
+    res = ro_index.search('', {
+        'attributesToRetrieve': ['name', 'email']
+    })
+
+    res_keys = res['hits'][0].keys()
+    assert 'name' in res_keys
+    assert 'email' in res_keys
+    assert 'phone' not in res_keys
+    assert 'city' not in res_keys
+    assert 'country' not in res_keys
+
+    res = ro_index.search('', {
+        'attributesToRetrieve': 'name,email'
+    })
+
+    res_keys = res['hits'][0].keys()
+    assert 'name' in res_keys
+    assert 'email' in res_keys
+    assert 'phone' not in res_keys
+    assert 'city' not in res_keys
+    assert 'country' not in res_keys
+
+    res = ro_index.search('', {'analytics': False})
+    assert res['nbHits'] == 5
+    assert re.search(r'analytics=false', res['params'])
+
+    res = ro_index.search(ro_index.data[2]['name'][0])
+    assert res['nbHits'] >= 1
+    res_ids = [elt['objectID'] for elt in res['hits']]
+    assert ro_index.ids[2] in res_ids
+
+
+def test_search_with_short_secured_api_key(ro_index):
+    old_key = ro_index.client.api_key
+
+    try:
+        secured_api_key = ro_index.client.generate_secured_api_key(
             os.environ['ALGOLIA_API_KEY_SEARCH'],
             dict(filters=''),
         )
-        assert len(secured_api_key) < MAX_API_KEY_LENGTH
-        self.client.api_key = secured_api_key
-        res = self.index.search('')
-        self.assertEqual(res['nbHits'], 5)
-        self.client.api_key = old_key
+    except:
+        raise RuntimeError("ALGOLIA_API_KEY_SEARCH must be set")
 
-    def test_search_with_long_secured_api_key(self):
-        old_key = self.client.api_key
+    assert len(secured_api_key) < MAX_API_KEY_LENGTH
 
-        tags = set('x{0}'.format(100000 + i) for i in range(1000))
-        secured_api_key = self.client.generate_secured_api_key(
+    ro_index.client.api_key = secured_api_key
+    res = ro_index.search('')
+    assert res['nbHits'] == 5
+    ro_index.client.api_key = old_key
+
+
+def test_search_with_long_secured_api_key(ro_index):
+    old_key = ro_index.client.api_key
+
+    tags = set('x{0}'.format(100000 + i) for i in range(1000))
+    try:
+        secured_api_key = ro_index.client.generate_secured_api_key(
             os.environ['ALGOLIA_API_KEY_SEARCH'],
             dict(filters=' OR '.join(tags)),
         )
-        assert len(secured_api_key) > MAX_API_KEY_LENGTH
-        self.client.api_key = secured_api_key
-        res = self.index.search('')
-        self.assertEqual(res['nbHits'], 0)
-        self.client.api_key = old_key
+    except:
+        raise RuntimeError("ALGOLIA_API_KEY_SEARCH must be set")
+
+    assert len(secured_api_key) > MAX_API_KEY_LENGTH
+    ro_index.client.api_key = secured_api_key
+    res = ro_index.search('')
+    assert res['nbHits'] == 0
+    ro_index.client.api_key = old_key
 
 
-class IndexWithModifiableDataTest(IndexTest):
-    """Tests that use one index with initial data and modify it."""
+def test_delete_object(rw_index):
+    task = rw_index.delete_object(rw_index.ids[2])
+    rw_index.wait_task(task['taskID'])
 
-    def setUp(self):
-        self.objs = self.factory.fake_contact(5)
-        task = self.index.add_objects(self.objs)
-        self.index.wait_task(task['taskID'])
-        self.objectIDs = task['objectIDs']
+    params = {'attributesToRetrieve': ['objectID']}
+    res_ids = [obj['objectID'] for obj in rw_index.browse_all(params)]
+    assert len(res_ids) == 4
+    assert rw_index.ids[2] not in res_ids
+    for elt in res_ids:
+        assert elt in rw_index.ids
 
-    def tearDown(self):
-        self.index.clear_index()
+def test_delete_objects(rw_index):
+    task = rw_index.delete_objects(rw_index.ids[0:3])
+    rw_index.wait_task(task['taskID'])
 
-    def test_delete_object(self):
-        task = self.index.delete_object(self.objectIDs[2])
-        self.index.wait_task(task['taskID'])
+    params = {'attributesToRetrieve': ['objectID']}
+    res_ids = [obj['objectID'] for obj in rw_index.browse_all(params)]
+    assert len(res_ids) == 2
+    for _ in range(3):
+        assert rw_index.ids[0] not in res_ids
+    for elt in res_ids:
+        assert elt in rw_index.ids
 
-        params = {'attributesToRetrieve': ['objectID']}
-        res_ids = [obj['objectID'] for obj in self.index.browse_all(params)]
-        self.assertEqual(len(res_ids), 4)
-        self.assertNotIn(self.objectIDs[2], res_ids)
-        for elt in res_ids:
-            self.assertIn(elt, self.objectIDs)
+def test_delete_by_query(rw_index):
+    task = rw_index.delete_by_query(rw_index.data[2]['name'][0])
+    rw_index.wait_task(task['taskID'])
 
-    def test_delete_objects(self):
-        task = self.index.delete_objects(self.objectIDs[0:3])
-        self.index.wait_task(task['taskID'])
+    res = rw_index.search('', {'hitsPerPage': 0})
+    assert res['nbHits'] < 5
 
-        params = {'attributesToRetrieve': ['objectID']}
-        res_ids = [obj['objectID'] for obj in self.index.browse_all(params)]
-        self.assertEqual(len(res_ids), 2)
-        for i in range(3):
-            self.assertNotIn(self.objectIDs[0], res_ids)
-        for elt in res_ids:
-            self.assertIn(elt, self.objectIDs)
+def test_batch(rw_index):
+    factory = Factory()
+    requests = [
+        {
+            'action': 'addObject',
+            'body': factory.contacts()
+        }, {
+            'action': 'addObject',
+            'body': factory.contacts()
+        }
+    ]
 
-    def test_delete_by_query(self):
-        task = self.index.delete_by_query(self.objs[2]['name'][0])
-        self.index.wait_task(task['taskID'])
+    task = rw_index.batch({'requests': requests})
+    rw_index.wait_task(task['taskID'])
+    res = rw_index.search('', {'hitsPerPage': 0})
+    assert res['nbHits'] == 7
 
-        res = self.index.search('', {'hitsPerPage': 0})
-        self.assertTrue(res['nbHits'] < 5)
+    body_update = dict(rw_index.data[2])
+    body_update['name'] = 'Joseph Dia'
+    requests = [
+        {
+            'action': 'updateObject',
+            'body': body_update,
+            'objectID': rw_index.ids[2]
+        }, {
+            'action': 'deleteObject',
+            'objectID': rw_index.ids[0]
+        }
+    ]
 
-    def test_batch(self):
-        requests = [
-            {
-                'action': 'addObject',
-                'body': self.factory.fake_contact()
-            }, {
-                'action': 'addObject',
-                'body': self.factory.fake_contact()
-            }
-        ]
+    task = rw_index.batch(requests)
+    rw_index.wait_task(task['taskID'])
+    res = rw_index.get_object(rw_index.ids[2])
+    del res['objectID']
+    assert body_update == res
 
-        task = self.index.batch({'requests': requests})
-        self.index.wait_task(task['taskID'])
-        res = self.index.search('', {'hitsPerPage': 0})
-        self.assertEqual(res['nbHits'], 7)
-
-        body_update = dict(self.objs[2])
-        body_update['name'] = 'Jòseph Diã'
-        requests = [
-            {
-                'action': 'updateObject',
-                'body': body_update,
-                'objectID': self.objectIDs[2]
-            }, {
-                'action': 'deleteObject',
-                'objectID': self.objectIDs[0]
-            }
-        ]
-
-        task = self.index.batch(requests)
-        self.index.wait_task(task['taskID'])
-        res = self.index.get_object(self.objectIDs[2])
-        self.assertDictContainsSubset(body_update, res)
-
-        with self.assertRaisesRegexp(AlgoliaException, 'does not exist'):
-            self.index.get_object(self.objectIDs[0])
+    try:
+        rw_index.get_object(rw_index.ids[0])
+        assert False
+    except AlgoliaException as e:
+        assert 'does not exist' in str(e)

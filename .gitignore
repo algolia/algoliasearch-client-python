@@ -27,3 +27,7 @@ pip-log.txt
 # IDE/OS Files
 .idea
 .DS_Store
+.vscode
+pytest.ini
+tags
+.cache
