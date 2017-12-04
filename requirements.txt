@@ -2,7 +2,6 @@ tox
 wheel
 pypandoc
 
-# Dev
 requests[security]>=2.9.1
-nose2
 faker
+pytest
