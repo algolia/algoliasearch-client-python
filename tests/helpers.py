@@ -6,6 +6,21 @@ from algoliasearch import algoliasearch
 from faker import Faker
 
 
+def check_credentials():
+    credentials = [
+        'ALGOLIA_APPLICATION_ID',
+        'ALGOLIA_API_KEY',
+        'ALGOLIA_API_KEY_SEARCH',
+        'ALGOLIA_APPLICATION_ID_MCM',
+        'ALGOLIA_API_KEY_MCM'
+    ]
+
+    for credential in credentials:
+        if credential not in os.environ:
+            print('environement variable {} not defined')
+            assert False
+
+
 def index_name():
     name = 'algolia-python{}'.format(randint(1, 100000))
 
@@ -64,6 +79,7 @@ def create_client(
             'urlfetch', urlfetch_stub.URLFetchServiceStub()
         )
 
+    check_credentials()
     try:
         return algoliasearch.Client(
             os.environ[app_id_env],

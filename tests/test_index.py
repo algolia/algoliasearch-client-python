@@ -388,7 +388,7 @@ def test_search(ro_index):
 
     res = ro_index.search('', {'analytics': False})
     assert res['nbHits'] == 5
-    assert re.match(r'analytics=false', res['params'])
+    assert re.search(r'analytics=false', res['params'])
 
     res = ro_index.search(ro_index.data[2]['name'][0])
     assert res['nbHits'] >= 1

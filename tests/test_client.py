@@ -4,7 +4,7 @@ import time
 from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH, Client
 from algoliasearch.helpers import AlgoliaException
 from fake_session import FakeSession
-from helpers import Factory
+from helpers import Factory, check_credentials
 
 
 def test_request_options(client):
@@ -105,6 +105,7 @@ def test_subclassing_client():
 
 
 def test_dns_timeout():
+    check_credentials()
     app_id = os.environ['ALGOLIA_APPLICATION_ID']
 
     hosts = ['algolia.biz']
@@ -124,6 +125,7 @@ def test_dns_timeout():
 
 
 def test_dns_timeout_hard():
+    check_credentials()
     app_id = os.environ['ALGOLIA_APPLICATION_ID']
 
     hosts = ['algolia.biz', '%s-dsn.algolia.net' % app_id]
