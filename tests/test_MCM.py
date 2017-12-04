@@ -11,7 +11,7 @@ def uniq_user_id():
     if 'TRAVIS' not in os.environ:
         return name
     job = os.environ['TRAVIS_JOB_NUMBER']
-    return '{}-travis={}'.format(name, job)
+    return '{}-travis-{}'.format(name, job)
 
 
 def test_1_list_clusters(mcm_client):
