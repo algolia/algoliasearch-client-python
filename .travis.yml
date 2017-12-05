@@ -1,25 +1,25 @@
 branches:
   only:
     - master
-language: python
+
 sudo: false
+
 before_script:
-- wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.27.zip
-- unzip -q google_appengine_1.9.27.zip
+  - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.27.zip
+  - unzip -q google_appengine_1.9.27.zip
+
 install:
-- pip install --upgrade pip
-- if [[ $TOXENV == 'py32' ]]; then pip install -I 'virtualenv<14.0'; fi
-- pip install tox
+  - pip install --upgrade pip
+  - if [[ $TOXENV == 'py32' ]]; then pip install -I 'virtualenv<14.0'; fi
+  - pip install tox-travis
+
 script:
-- tox
-python: 3.5
-env:
-  matrix:
-  - TOXENV=py27
-  - TOXENV=py33
-  - TOXENV=py34
-  - TOXENV=py35
-  - TOXENV=py36
-  - TOXENV=coveralls-py2
-  - TOXENV=coveralls-py3
-  - TOXENV=py27 APPENGINE_RUNTIME=python27
+  - tox
+
+language: python
+
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
