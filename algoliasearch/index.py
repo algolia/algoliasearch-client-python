@@ -651,9 +651,12 @@ class Index(object):
 
         return self._req(True, '/synonyms/search', 'POST', request_options, data=data)
 
-    def iter_synonyms(self, hits_per_page=1000):
+    def iter_synonyms(self, hits_per_page=1000, request_options=None):
         page = 0
-        response = self.search_synonyms('', page=page, hits_per_page=hits_per_page)
+        response = self.search_synonyms(
+            '', page=page,
+            hits_per_page=hits_per_page, request_options=request_options
+        )
 
         while response['hits']:
             for hit in response['hits']:
@@ -663,7 +666,10 @@ class Index(object):
                 yield hit
 
             page += 1
-            response = self.search_synonyms('', page=page, hits_per_page=hits_per_page)
+            response = self.search_synonyms(
+                '', page=page,
+                hits_per_page=hits_per_page, request_options=request_options
+            )
 
     def iter_rules(self, hits_per_page=1000, request_options=None):
         page = 0
