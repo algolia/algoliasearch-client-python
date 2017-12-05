@@ -303,16 +303,22 @@ class Client(object):
     def copyIndex(self, src_index_name, dst_index_name):
         return self.copy_index(src_index_name, dst_index_name)
 
-    def copy_index(self, src_index_name, dst_index_name, request_options=None):
+    def copy_index(self, src_index_name, dst_index_name, request_options=None, scope=None):
         """
         Copy an existing index.
 
         @param src_index_name the name of index to copy.
         @param dst_index_name the new index name that will contains a copy of
             src_index_name (destination will be overriten if it already exist).
+        @param scope the scope of the copy, as a list. Possible items are:
+            settings, rules, synonyms.
         """
         path = '/1/indexes/%s/operation' % safe(src_index_name)
         request = {'operation': 'copy', 'destination': dst_index_name}
+
+        if scope is not None:
+            request['scope'] = scope
+
         return self._req(False, path, 'POST', request_options, data=request)
 
     @deprecated

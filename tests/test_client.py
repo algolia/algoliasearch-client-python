@@ -181,6 +181,29 @@ def test_copy(double_indexes):
     assert res[0]['hits'] == res[1]['hits']
 
 
+def test_scoped_copy(double_indexes):
+    index1 = double_indexes[0]
+    index2 = double_indexes[1]
+
+    task = index1.set_settings({'searchableAttributes': ['name']})
+    index1.wait_task(task['taskID'])
+
+    task = index1.client.copy_index(
+        index1.index_name, index2.index_name, scope=['settings']
+    )
+    index1.wait_task(task['taskID'])
+
+    # Check that the settings are the same.
+    settings1 = index1.get_settings()
+    settings2 = index2.get_settings()
+    assert settings1 == settings2
+
+    # Check that the objects are still different
+    res1 = index1.search('')
+    res2 = index2.search('')
+    assert res1 != res2
+
+
 def test_move(double_indexes):
     index1 = double_indexes[0]
     index2 = double_indexes[1]
