@@ -1,4 +1,4 @@
-from helpers import wait_key, wait_missing_key
+from .helpers import wait_key, wait_missing_key
 
 
 def test_list_user_keys(client):

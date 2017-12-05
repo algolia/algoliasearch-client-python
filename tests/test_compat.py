@@ -1,4 +1,4 @@
-from helpers import wait_key, wait_missing_key
+from .helpers import wait_key, wait_missing_key
 
 def test_addObject(index):
     task = index.addObject({'name': 'Paris'}, 'a')
