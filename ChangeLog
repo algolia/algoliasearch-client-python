@@ -1,5 +1,11 @@
 CHANGELOG
 
+2017-12-5 1.15.0
+    * Implement iter_synonyms to browse synonyms
+    * Implement iter_rules to browse rules
+    * Implement an optional parameter for copy_index that allows
+      a partial copy of an index
+
 2017-11-06 1.14.1
     * Fix request_options not always optional
 
