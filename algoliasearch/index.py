@@ -240,6 +240,7 @@ class Index(object):
     def deleteByQuery(self, query, params=None):
         return self.delete_by_query(query, params)
 
+    @deprecated
     def delete_by_query(self, query, params=None, request_options=None):
         """
         Delete all objects matching a query.
@@ -259,6 +260,19 @@ class Index(object):
 
         ids = (o['objectID'] for o in self.browse_all(params))
         return self.delete_objects(ids, request_options=request_options)
+
+    def delete_by(self, params, request_options=None):
+        """
+        Delete all objects matching an empty query performed with the given
+        parameters
+
+        @param params parameter to restrict the search.
+        """
+        params = {'params': urlencode(urlify(params))}
+        return self._req(
+            False, '/deleteByQuery', 'POST', data=params,
+            request_options=request_options
+        )
 
     @deprecated
     def deleteObject(self, object_id):

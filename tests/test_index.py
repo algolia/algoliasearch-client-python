@@ -487,6 +487,28 @@ def test_delete_by_query(rw_index):
     res = rw_index.search('', {'hitsPerPage': 0})
     assert res['nbHits'] < 5
 
+
+def test_delete_by(index):
+    obj1 = {'objectID': 'A', 'color': 'red'}
+    obj2 = {'objectID': 'B', 'color': 'blue'}
+    index.save_objects([obj1, obj2])
+    task = index.set_settings({
+        'attributesForFaceting': ['color']
+    })
+    index.wait_task(task['taskID'])
+
+    task = index.delete_by({'filters': 'color:red'})
+    print(task)
+    index.wait_task(task['taskID'])
+
+    res = index.search('')
+    assert len(res['hits']) == 1
+    del res['hits'][0]['_highlightResult']
+
+    assert obj1 not in res['hits']
+    assert obj2 in res['hits']
+
+
 def test_batch(rw_index):
     factory = Factory()
     requests = [
