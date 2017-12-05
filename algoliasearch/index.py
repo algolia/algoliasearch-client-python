@@ -688,7 +688,6 @@ class Index(object):
         response = self.search_synonyms('', page=page, hits_per_page=hits_per_page)
 
         while response['hits']:
-            print(response['hits'])
             for hit in response['hits']:
                 if '_highlightResult' in hit:
                     del hit['_highlightResult']
