@@ -70,37 +70,6 @@ class IndexIterator:
         self.pos = 0
         self.cursor = self.answer.get('cursor', None)
 
-class SynonymIterator:
-    """Iterator on the synonyms of an index"""
-
-    def __init__(self, index, hits_per_page=1000):
-        self.index = index
-        self.hits_per_page = hits_per_page
-        self.page = 0
-
-    def __iter__(self):
-        self._load_next_page()
-        return self
-
-    def __next__(self):
-        return self.next()
-
-    def next(self):
-        if self.pos >= len(self.response['hits']):
-            self._load_next_page()
-        if self.pos < len(self.response['hits']):
-            result = self.response['hits'][self.pos]
-            self.pos += 1
-            # Remove highlighting.
-            if '_highlightResult' in result: del result['_highlightResult']
-            return result
-        else:
-            raise StopIteration
-
-    def _load_next_page(self):
-        self.response = self.index.search_synonyms('', page=self.page, hits_per_page=self.hits_per_page)
-        self.page += 1
-        self.pos = 0
 
 class RuleIterator:
     """Iterator on the rules of an index"""
@@ -713,6 +682,20 @@ class Index(object):
         }
 
         return self._req(True, '/synonyms/search', 'POST', request_options, data=data)
+
+    def iter_synonyms(self, hits_per_page=1000):
+        page = 0
+        response = self.search_synonyms('', page=page, hits_per_page=hits_per_page)
+
+        while response['hits']:
+            for hit in response['hits']:
+                if '_highlightResult' in hit:
+                    del hit['_highlightResult']
+
+                yield hit
+
+            page += 1
+            response = self.search_synonyms('', page=page, hits_per_page=hits_per_page)
 
     @deprecated
     def waitTask(self, task_id, time_before_retry=100):

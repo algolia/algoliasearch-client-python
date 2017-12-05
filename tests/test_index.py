@@ -7,7 +7,7 @@ from decimal import Decimal
 from algoliasearch.client import MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
-from helpers import Factory, rule_stub
+from .helpers import Factory, rule_stub
 
 
 def test_add_object(index):
@@ -113,18 +113,25 @@ def test_synonyms(index):
     assert int(task['nbHits']) == 0
 
 
-# def tests_synonym_iterator(index):
-#     synonyms = [
-#         {'objectID': 'city', 'type': 'synonym',
-#          'synonyms': ['San Francisco', 'SF']},
-#         {'objectID': 'street', 'type': 'altCorrection1',
-#          'word': 'Street', 'corrections': ['St']}
-#     ]
-#     task = index.batch_synonyms(synonyms)
-#     index.wait_task(task['taskID'])
-#     it = SynonymIterator(index)
-#     for got, expected in zip(it, synonyms):
-#         self.assertEqual(got, expected)
+def test_iter_synonyms(index):
+    synonyms = [{
+        'objectID': 'city',
+        'type': 'synonym',
+        'synonyms': ['San Francisco', 'SF']
+    }, {
+        'objectID': 'street',
+        'type': 'altCorrection1',
+        'word': 'Street', 'corrections': ['St']
+    }]
+
+    task = index.batch_synonyms(synonyms)
+    index.wait_task(task['taskID'])
+
+    res = list(index.iter_synonyms(hits_per_page=1))
+    assert len(res) == 2
+
+    for synonym in synonyms:
+        assert synonym in res
 
 
 def test_facet_search(index):

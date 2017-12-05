@@ -1,7 +1,7 @@
 import pytest
 
-from helpers import Factory
-from helpers import create_client, create_index, IndexWithData
+from .helpers import Factory
+from .helpers import create_client, create_index, IndexWithData
 
 
 @pytest.fixture

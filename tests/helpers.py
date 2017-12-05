@@ -17,7 +17,7 @@ def check_credentials():
 
     for credential in credentials:
         if credential not in os.environ:
-            print('environement variable {} not defined')
+            print('environement variable {} not defined'.format(credential))
             assert False
 
 

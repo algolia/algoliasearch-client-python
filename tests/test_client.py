@@ -3,8 +3,8 @@ import time
 
 from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH, Client
 from algoliasearch.helpers import AlgoliaException
-from fake_session import FakeSession
-from helpers import Factory, check_credentials
+from .fake_session import FakeSession
+from .helpers import Factory, check_credentials
 
 
 def test_request_options(client):
