@@ -134,6 +134,22 @@ def test_iter_synonyms(index):
         assert synonym in res
 
 
+def test_iter_rules(index):
+    rules = [
+        rule_stub('rule1'),
+        rule_stub('rule2')
+    ]
+
+    task = index.batch_rules(rules)
+    index.wait_task(task['taskID'])
+
+    res = list(index.iter_rules(hits_per_page=1))
+    assert len(res) == 2
+
+    for rule in rules:
+        assert rule in res
+
+
 def test_facet_search(index):
     settings = {'attributesForFacetting': ['searchable(series)', 'kind']}
     objects = [{

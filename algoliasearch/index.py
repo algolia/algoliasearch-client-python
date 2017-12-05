@@ -71,38 +71,6 @@ class IndexIterator:
         self.cursor = self.answer.get('cursor', None)
 
 
-class RuleIterator:
-    """Iterator on the rules of an index"""
-
-    def __init__(self, index, hits_per_page=1000):
-        self.index = index
-        self.hits_per_page = hits_per_page
-        self.page = 0
-
-    def __iter__(self):
-        self._load_next_page()
-        return self
-
-    def __next__(self):
-        return self.next()
-
-    def next(self):
-        if self.pos >= len(self.response['hits']):
-            self._load_next_page()
-        if self.pos < len(self.response['hits']):
-            result = self.response['hits'][self.pos]
-            self.pos += 1
-            # Remove highlighting.
-            if '_highlightResult' in result: del result['_highlightResult']
-            return result
-        else:
-            raise StopIteration
-
-    def _load_next_page(self):
-        self.response = self.index.search_rules('', page=self.page, hitsPerPage=self.hits_per_page)
-        self.page += 1
-        self.pos = 0
-
 class Index(object):
     """
     Contains all the functions related to one index.
@@ -683,9 +651,12 @@ class Index(object):
 
         return self._req(True, '/synonyms/search', 'POST', request_options, data=data)
 
-    def iter_synonyms(self, hits_per_page=1000):
+    def iter_synonyms(self, hits_per_page=1000, request_options=None):
         page = 0
-        response = self.search_synonyms('', page=page, hits_per_page=hits_per_page)
+        response = self.search_synonyms(
+            '', page=page,
+            hits_per_page=hits_per_page, request_options=request_options
+        )
 
         while response['hits']:
             for hit in response['hits']:
@@ -695,7 +666,30 @@ class Index(object):
                 yield hit
 
             page += 1
-            response = self.search_synonyms('', page=page, hits_per_page=hits_per_page)
+            response = self.search_synonyms(
+                '', page=page,
+                hits_per_page=hits_per_page, request_options=request_options
+            )
+
+    def iter_rules(self, hits_per_page=1000, request_options=None):
+        page = 0
+        response = self.search_rules(
+            '', page=page, 
+            hitsPerPage=hits_per_page, request_options=request_options
+        )
+
+        while response['hits']:
+            for hit in response['hits']:
+                if '_highlightResult' in hit:
+                    del hit['_highlightResult']
+
+                yield hit
+
+            page += 1
+            response = self.search_rules(
+                '', page=page, 
+                hitsPerPage=hits_per_page, request_options=request_options
+            )
 
     @deprecated
     def waitTask(self, task_id, time_before_retry=100):
