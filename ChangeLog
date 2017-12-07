@@ -1,5 +1,9 @@
 CHANGELOG
 
+2017-12-5 1.15.1
+    * Implement delete_by, an atomic delete_by_query
+    * Deprecate delete_by_query
+
 2017-12-5 1.15.0
     * Implement iter_synonyms to browse synonyms
     * Implement iter_rules to browse rules
