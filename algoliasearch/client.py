@@ -596,7 +596,13 @@ class Client(object):
             "hitsPerPage": 20
         }
         """
-        return self._req(True, '/1/clusters/mapping/', 'GET', request_options)
+        body={}
+        if page is not  None:
+            body["page"] = page
+        if hits_per_page is not None:
+            body["hitsPerPage"] = hits_per_page
+
+        return self._req(True, '/1/clusters/mapping/', 'GET', request_options, data=body)
 
     def get_top_user_id(self, request_options=None):
         """
