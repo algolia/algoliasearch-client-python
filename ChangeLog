@@ -1,5 +1,8 @@
 CHANGELOG
 
+2017-12-18 1.15.2
+    * Add 'page' and 'hitsPerPage' to list_user_ids
+
 2017-12-5 1.15.1
     * Implement delete_by, an atomic delete_by_query
     * Deprecate delete_by_query
