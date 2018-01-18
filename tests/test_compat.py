@@ -1,4 +1,6 @@
-from .helpers import wait_key, wait_missing_key
+from .helpers import wait_key, wait_missing_key, is_community
+import pytest
+
 
 def test_addObject(index):
     task = index.addObject({'name': 'Paris'}, 'a')
@@ -131,6 +133,8 @@ def test_deleteByQuery(rw_index):
     assert res['nbHits'] < 5
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_user_key(rw_index):
     new_key = rw_index.addUserKey(['search'])
     wait_key(rw_index, new_key['key'])

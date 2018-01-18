@@ -6,7 +6,7 @@ from .helpers import create_client, create_index, IndexWithData
 
 @pytest.fixture
 def mcm_client():
-    return create_client('ALGOLIA_APPLICATION_ID_MCM', 'ALGOLIA_API_KEY_MCM')
+    return create_client('ALGOLIA_APP_ID_MCM', 'ALGOLIA_API_KEY_MCM')
 
 
 @pytest.fixture

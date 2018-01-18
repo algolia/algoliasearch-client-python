@@ -436,11 +436,11 @@ def test_search_with_short_secured_api_key(ro_index):
 
     try:
         secured_api_key = ro_index.client.generate_secured_api_key(
-            os.environ['ALGOLIA_API_KEY_SEARCH'],
+            os.environ['ALGOLIA_SEARCH_API_KEY'],
             dict(filters=''),
         )
     except:
-        raise RuntimeError("ALGOLIA_API_KEY_SEARCH must be set")
+        raise RuntimeError("ALGOLIA_SEARCH_API_KEY must be set")
 
     assert len(secured_api_key) < MAX_API_KEY_LENGTH
 
@@ -456,11 +456,11 @@ def test_search_with_long_secured_api_key(ro_index):
     tags = set('x{0}'.format(100000 + i) for i in range(1000))
     try:
         secured_api_key = ro_index.client.generate_secured_api_key(
-            os.environ['ALGOLIA_API_KEY_SEARCH'],
+            os.environ['ALGOLIA_SEARCH_API_KEY'],
             dict(filters=' OR '.join(tags)),
         )
     except:
-        raise RuntimeError("ALGOLIA_API_KEY_SEARCH must be set")
+        raise RuntimeError("ALGOLIA_SEARCH_API_KEY must be set")
 
     assert len(secured_api_key) > MAX_API_KEY_LENGTH
     ro_index.client.api_key = secured_api_key
