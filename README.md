@@ -1,7 +1,11 @@
 # Algolia Search API Client for Python
 
-[Algolia Search](https://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
-The **Algolia Search API Client for Python** lets you easily use the [Algolia Search REST API](https://www.algolia.com/doc/rest-api/search) from your Python code.
+[Algolia Search](https://www.algolia.com) is a hosted full-text, numerical,
+and faceted search engine capable of delivering realtime results from the first keystroke.
+
+The **Algolia Search API Client for Python** lets
+you easily use the [Algolia Search REST API](https://www.algolia.com/doc/rest-api/search) from
+your Python code.
 
 [![Build Status](https://travis-ci.org/algolia/algoliasearch-client-python.svg?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-python) [![PyPI version](https://badge.fury.io/py/algoliasearch.svg?branch=master)](http://badge.fury.io/py/algoliasearch) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-python/badge.svg?branch=master)](https://coveralls.io/r/algolia/algoliasearch-client-python)
 
@@ -27,7 +31,6 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
 1. **[Quick Start](#quick-start)**
 
-    * [Initialize the client](#initialize-the-client)
 
 1. **[Push data](#push-data)**
 
@@ -40,15 +43,11 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
 1. **[Search UI](#search-ui)**
 
-    * [index.html](#indexhtml)
 
 1. **[List of available methods](#list-of-available-methods)**
 
 
-
-
 # Getting Started
-
 
 
 
@@ -203,93 +202,114 @@ search.start();
 
 
 
+
+
 ### Search
 
-  - [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=python)
-  - [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=python)
-  - [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=python)
-  - [Browse an index](https://algolia.com/doc/api-reference/api-methods/browse/?language=python)
+- [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=python)
+- [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=python)
+- [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=python)
+- [Browse an index](https://algolia.com/doc/api-reference/api-methods/browse/?language=python)
+
+
 
 
 
 ### Indexing
 
-  - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=python)
-  - [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=python)
-  - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=python)
-  - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=python)
-  - [Delete by query](https://algolia.com/doc/api-reference/api-methods/delete-by-query/?language=python)
-  - [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=python)
-  - [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=python)
-  - [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=python)
+- [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=python)
+- [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=python)
+- [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=python)
+- [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=python)
+- [Delete by query](https://algolia.com/doc/api-reference/api-methods/delete-by-query/?language=python)
+- [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=python)
+- [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=python)
+- [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=python)
+
+
 
 
 
 ### Settings
 
-  - [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=python)
-  - [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=python)
+- [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=python)
+- [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=python)
+
+
 
 
 
 ### Manage indices
 
-  - [List indexes](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=python)
-  - [Delete index](https://algolia.com/doc/api-reference/api-methods/delete-index/?language=python)
-  - [Copy index](https://algolia.com/doc/api-reference/api-methods/copy-index/?language=python)
-  - [Move index](https://algolia.com/doc/api-reference/api-methods/move-index/?language=python)
-  - [Clear index](https://algolia.com/doc/api-reference/api-methods/clear-index/?language=python)
+- [List indexes](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=python)
+- [Delete index](https://algolia.com/doc/api-reference/api-methods/delete-index/?language=python)
+- [Copy index](https://algolia.com/doc/api-reference/api-methods/copy-index/?language=python)
+- [Move index](https://algolia.com/doc/api-reference/api-methods/move-index/?language=python)
+- [Clear index](https://algolia.com/doc/api-reference/api-methods/clear-index/?language=python)
+
+
 
 
 
 ### API Keys
 
-  - [Create secured API Key](https://algolia.com/doc/api-reference/api-methods/generate-secured-api-key/?language=python)
-  - [Add API Key](https://algolia.com/doc/api-reference/api-methods/add-api-key/?language=python)
-  - [Update API Key](https://algolia.com/doc/api-reference/api-methods/update-api-key/?language=python)
-  - [Delete API Key](https://algolia.com/doc/api-reference/api-methods/delete-api-key/?language=python)
-  - [Get API Key permissions](https://algolia.com/doc/api-reference/api-methods/get-api-key/?language=python)
-  - [List API Keys](https://algolia.com/doc/api-reference/api-methods/list-api-keys/?language=python)
+- [Create secured API Key](https://algolia.com/doc/api-reference/api-methods/generate-secured-api-key/?language=python)
+- [Add API Key](https://algolia.com/doc/api-reference/api-methods/add-api-key/?language=python)
+- [Update API Key](https://algolia.com/doc/api-reference/api-methods/update-api-key/?language=python)
+- [Delete API Key](https://algolia.com/doc/api-reference/api-methods/delete-api-key/?language=python)
+- [Get API Key permissions](https://algolia.com/doc/api-reference/api-methods/get-api-key/?language=python)
+- [List API Keys](https://algolia.com/doc/api-reference/api-methods/list-api-keys/?language=python)
+
+
 
 
 
 ### Synonyms
 
-  - [Save synonym](https://algolia.com/doc/api-reference/api-methods/save-synonym/?language=python)
-  - [Batch synonyms](https://algolia.com/doc/api-reference/api-methods/batch-synonyms/?language=python)
-  - [Delete synonym](https://algolia.com/doc/api-reference/api-methods/delete-synonym/?language=python)
-  - [Clear all synonyms](https://algolia.com/doc/api-reference/api-methods/clear-synonyms/?language=python)
-  - [Get synonym](https://algolia.com/doc/api-reference/api-methods/get-synonym/?language=python)
-  - [Search synonyms](https://algolia.com/doc/api-reference/api-methods/search-synonyms/?language=python)
+- [Save synonym](https://algolia.com/doc/api-reference/api-methods/save-synonym/?language=python)
+- [Batch synonyms](https://algolia.com/doc/api-reference/api-methods/batch-synonyms/?language=python)
+- [Delete synonym](https://algolia.com/doc/api-reference/api-methods/delete-synonym/?language=python)
+- [Clear all synonyms](https://algolia.com/doc/api-reference/api-methods/clear-synonyms/?language=python)
+- [Get synonym](https://algolia.com/doc/api-reference/api-methods/get-synonym/?language=python)
+- [Search synonyms](https://algolia.com/doc/api-reference/api-methods/search-synonyms/?language=python)
+- [Export Synonyms](https://algolia.com/doc/api-reference/api-methods/export-synonyms/?language=python)
+
+
 
 
 
 ### Query rules
 
-  - [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=python)
-  - [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=python)
-  - [Read a rule](https://algolia.com/doc/api-reference/api-methods/rules-read/?language=python)
-  - [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=python)
-  - [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=python)
-  - [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=python)
+- [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=python)
+- [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=python)
+- [Read a rule](https://algolia.com/doc/api-reference/api-methods/rules-read/?language=python)
+- [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=python)
+- [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=python)
+- [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=python)
+- [Export rules](https://algolia.com/doc/api-reference/api-methods/rules-export/?language=python)
+
+
 
 
 
 ### MultiClusters
 
-  - [Assign or Move userID](https://algolia.com/doc/api-reference/api-methods/assign-user-id/?language=python)
-  - [Get top userID](https://algolia.com/doc/api-reference/api-methods/get-top-user-id/?language=python)
-  - [Get userID](https://algolia.com/doc/api-reference/api-methods/get-user-id/?language=python)
-  - [List clusters](https://algolia.com/doc/api-reference/api-methods/list-clusters/?language=python)
-  - [List userID](https://algolia.com/doc/api-reference/api-methods/list-user-id/?language=python)
-  - [Remove userID](https://algolia.com/doc/api-reference/api-methods/remove-user-id/?language=python)
-  - [Search userID](https://algolia.com/doc/api-reference/api-methods/search-user-id/?language=python)
+- [Assign or Move userID](https://algolia.com/doc/api-reference/api-methods/assign-user-id/?language=python)
+- [Get top userID](https://algolia.com/doc/api-reference/api-methods/get-top-user-id/?language=python)
+- [Get userID](https://algolia.com/doc/api-reference/api-methods/get-user-id/?language=python)
+- [List clusters](https://algolia.com/doc/api-reference/api-methods/list-clusters/?language=python)
+- [List userID](https://algolia.com/doc/api-reference/api-methods/list-user-id/?language=python)
+- [Remove userID](https://algolia.com/doc/api-reference/api-methods/remove-user-id/?language=python)
+- [Search userID](https://algolia.com/doc/api-reference/api-methods/search-user-id/?language=python)
+
+
 
 
 
 ### Advanced
 
-  - [Get latest logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=python)
+- [Get latest logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=python)
+
 
 
 
@@ -298,5 +318,4 @@ search.start();
 
 - **Need help**? Ask a question to the [Algolia Community](https://discourse.algolia.com/) or on [Stack Overflow](http://stackoverflow.com/questions/tagged/algolia).
 - **Found a bug?** You can open a [GitHub issue](https://github.com/algolia/algoliasearch-client-python/issues).
-
 
