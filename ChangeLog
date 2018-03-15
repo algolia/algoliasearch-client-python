@@ -1,5 +1,8 @@
 CHANGELOG
 
+2017-01-22 1.15.3
+    * Remove the `[security]` flair of `requests`
+
 2017-12-18 1.15.2
     * Add 'page' and 'hitsPerPage' to list_user_ids
 
