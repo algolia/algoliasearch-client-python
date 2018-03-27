@@ -149,14 +149,17 @@ class Index(object):
         Get several objects from this index.
 
         @param object_ids the array of unique identifier of objects to retrieve
-        @param attributes_to_retrieve (optional) if set, contains the list
-            of attributes to retrieve as a string separated by a comma
+        @param attributes_to_retrieve (optional) list of attributes to retrieve
         """
         requests = []
         for object_id in object_ids:
             request = {'indexName': self.index_name, 'objectID': object_id}
-            if attributes_to_retrieve is not None:
+
+            if isinstance(attributes_to_retrieve, list):
                 request['attributesToRetrieve'] = ",".join(attributes_to_retrieve)
+            elif attributes_to_retrieve is not None:
+                raise AlgoliaException('attributes_to_retrieve must be a list of attributes')
+
             requests.append(request)
         data = {'requests': requests}
         path = '/1/indexes/*/objects'  # Use client._req()
