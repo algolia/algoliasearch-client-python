@@ -27,6 +27,7 @@ import hashlib
 import base64
 import random
 import sys
+from platform import python_version
 
 try:
     from urllib import urlencode
@@ -65,7 +66,7 @@ class RequestOptions:
 class Client(object):
     """
     Entry point in the Python Client API.
-    You should instanciate a Client object with your ApplicationID, ApiKey to
+    You should instantiate a Client object with your ApplicationID, ApiKey to
     start using Algolia Search API.
     """
 
@@ -99,7 +100,7 @@ class Client(object):
             'X-Algolia-Application-Id': app_id,
             'Content-Type': 'gzip',
             'Accept-Encoding': 'gzip',
-            'User-Agent': 'Algolia for Python (%s)' % VERSION
+            'User-Agent': 'Algolia for Python (%s); Python (%s)' % (VERSION, python_version()),
         }
 
         self._app_id = app_id
