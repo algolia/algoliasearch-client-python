@@ -909,45 +909,16 @@ class Index(object):
     @deprecated
     def add_user_key(self, obj, validity=0, max_queries_per_ip_per_hour=0,
                      max_hits_per_query=0):
-        """Use `add_api_key`"""
+        """Use `add_api_key` on the client instead"""
         return self.add_api_key(
             obj, validity, max_queries_per_ip_per_hour,
             max_hits_per_query
         )
 
+    @deprecated
     def add_api_key(self, obj, validity=0, max_queries_per_ip_per_hour=0,
                     max_hits_per_query=0, request_options=None):
-        """
-        Create a new api key associated to this index (can only access to
-        this index).
-
-        @param obj can be two different parameters:
-            The list of parameters for this key. Defined by a dictionary that
-            can contains the following values:
-                - acl: array of string
-                - indices: array of string
-                - validity: int
-                - referers: array of string
-                - description: string
-                - maxHitsPerQuery: integer
-                - queryParameters: string
-                - maxQueriesPerIPPerHour: integer
-            Or the list of ACL for this key. Defined by an array of string that
-            can contains the following values:
-                - search: allow to search (https and http)
-                - addObject: allows to add/update an object in the index (https only)
-                - deleteObject : allows to delete an existing object (https only)
-                - deleteIndex : allows to delete index content (https only)
-                - settings : allows to get index settings (https only)
-                - editSettings : allows to change index settings (https only)
-        @param validity the number of seconds after which the key will be
-            automatically removed (0 means no time limit for this key)
-        @param max_queries_per_ip_per_hour Specify the maximum number of API
-            calls allowed from an IP address per hour.  Defaults to 0 (no
-            rate limit)
-        @param max_hits_per_query Specify the maximum number of hits this
-            API key can retrieve in one call. Defaults to 0 (unlimited)
-        """
+        """Use `add_api_key` on the client instead"""
         if not isinstance(obj, dict):
             obj = {'acl': obj}
 
