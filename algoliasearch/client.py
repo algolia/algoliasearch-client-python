@@ -372,9 +372,14 @@ class Client(object):
         """Use `get_api_key_acl`"""
         return self.get_api_key_acl(key)
 
+    @deprecated
     def get_api_key_acl(self, key, request_options=None):
+        """Use `get_api_key`"""
+        return self.get_api_key(key, request_options)
+
+    def get_api_key(self, api_key, request_options=None):
         """'Get ACL of an api key."""
-        path = '/1/keys/%s' % key
+        path = '/1/keys/%s' % api_key
         return self._req(True, path, 'GET', request_options)
 
     @deprecated
