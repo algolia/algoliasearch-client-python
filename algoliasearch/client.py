@@ -364,18 +364,18 @@ class Client(object):
         return self._req(True, '/1/keys', 'GET', request_options)
 
     @deprecated
-    def getUserKeyACL(self, key):
-        return self.get_user_key_acl(key)
+    def getUserKeyACL(self, api_key):
+        return self.get_user_key_acl(api_key)
 
     @deprecated
-    def get_user_key_acl(self, key):
+    def get_user_key_acl(self, api_key):
         """Use `get_api_key_acl`"""
-        return self.get_api_key_acl(key)
+        return self.get_api_key_acl(api_key)
 
     @deprecated
-    def get_api_key_acl(self, key, request_options=None):
+    def get_api_key_acl(self, api_key, request_options=None):
         """Use `get_api_key`"""
-        return self.get_api_key(key, request_options)
+        return self.get_api_key(api_key, request_options)
 
     def get_api_key(self, api_key, request_options=None):
         """'Get ACL of an api key."""
@@ -383,17 +383,17 @@ class Client(object):
         return self._req(True, path, 'GET', request_options)
 
     @deprecated
-    def deleteUserKey(self, key):
-        return self.delete_user_key(key)
+    def deleteUserKey(self, api_key):
+        return self.delete_user_key(api_key)
 
     @deprecated
-    def delete_user_key(self, key):
+    def delete_user_key(self, api_key):
         """Use `delete_api_key`"""
-        return self.delete_api_key(key)
+        return self.delete_api_key(api_key)
 
-    def delete_api_key(self, key, request_options=None):
+    def delete_api_key(self, api_key, request_options=None):
         """Delete an existing api key."""
-        path = '/1/keys/%s' % key
+        path = '/1/keys/%s' % api_key
         return self._req(False, path, 'DELETE', request_options)
 
     @deprecated
@@ -470,19 +470,19 @@ class Client(object):
         return self._req(False, '/1/keys', 'POST', request_options, data=obj)
 
     @deprecated
-    def update_user_key(self, key, obj,
+    def update_user_key(self, api_key, obj,
                         validity=None,
                         max_queries_per_ip_per_hour=None,
                         max_hits_per_query=None,
                         indexes=None):
         """Use `update_api_key`"""
         return self.update_api_key(
-            key, obj, validity, max_queries_per_ip_per_hour,
+            api_key, obj, validity, max_queries_per_ip_per_hour,
             max_hits_per_query, indexes
         )
 
 
-    def update_api_key(self, key, obj,
+    def update_api_key(self, api_key, obj,
                         validity=None,
                         max_queries_per_ip_per_hour=None,
                         max_hits_per_query=None,
@@ -532,7 +532,7 @@ class Client(object):
         if indexes:
             obj['indexes'] = indexes
 
-        path = '/1/keys/%s' % key
+        path = '/1/keys/%s' % api_key
         return self._req(False, path, 'PUT', request_options, data=obj)
 
 
