@@ -1059,6 +1059,8 @@ class Index(object):
         """
         if 'objectID' not in rule:
             raise AlgoliaException('missing objectID in rule body')
+        if rule['objectID'] == '':
+            raise AlgoliaException('objectID in rule body cannot be empty')
         params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, '/rules/%s' % str(rule['objectID']), 'PUT', request_options, params, rule)
 
