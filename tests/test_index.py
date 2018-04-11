@@ -208,6 +208,18 @@ def test_save_and_get_rule(index):
     assert index.read_rule('my-rule') == rule
 
 
+def test_empty_objectID_for_rule_should_raise_exception(index):
+    rule = rule_stub()
+    rule['objectID'] = ''
+
+    try:
+        index.save_rule(rule)
+    except AlgoliaException:
+        return
+
+    # We should not be able to save a rule with an empty objectID.
+    assert False
+
 def test_delete_rule(index):
     rule = rule_stub()
     res = index.save_rule(rule)
