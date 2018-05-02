@@ -22,9 +22,6 @@ be found [here](https://github.com/algolia/algoliasearch-client-python-async).
 You can find the full reference on [Algolia's website](https://www.algolia.com/doc/api-client/python/).
 
 
-## Table of Contents
-
-
 
 1. **[Install](#install)**
 
@@ -202,8 +199,6 @@ search.start();
 
 
 
-
-
 ### Search
 
 - [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=python)
@@ -214,18 +209,15 @@ search.start();
 
 
 
-
 ### Indexing
 
 - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=python)
 - [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=python)
 - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=python)
 - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=python)
-- [Delete by query](https://algolia.com/doc/api-reference/api-methods/delete-by-query/?language=python)
+- [Delete by](https://algolia.com/doc/api-reference/api-methods/delete-by/?language=python)
 - [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=python)
 - [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=python)
-- [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=python)
-
 
 
 
@@ -234,7 +226,6 @@ search.start();
 
 - [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=python)
 - [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=python)
-
 
 
 
@@ -250,7 +241,6 @@ search.start();
 
 
 
-
 ### API Keys
 
 - [Create secured API Key](https://algolia.com/doc/api-reference/api-methods/generate-secured-api-key/?language=python)
@@ -259,7 +249,6 @@ search.start();
 - [Delete API Key](https://algolia.com/doc/api-reference/api-methods/delete-api-key/?language=python)
 - [Get API Key permissions](https://algolia.com/doc/api-reference/api-methods/get-api-key/?language=python)
 - [List API Keys](https://algolia.com/doc/api-reference/api-methods/list-api-keys/?language=python)
-
 
 
 
@@ -277,17 +266,15 @@ search.start();
 
 
 
-
 ### Query rules
 
 - [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=python)
 - [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=python)
-- [Read a rule](https://algolia.com/doc/api-reference/api-methods/rules-read/?language=python)
+- [Get a rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=python)
 - [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=python)
 - [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=python)
 - [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=python)
 - [Export rules](https://algolia.com/doc/api-reference/api-methods/rules-export/?language=python)
-
 
 
 
@@ -298,17 +285,19 @@ search.start();
 - [Get top userID](https://algolia.com/doc/api-reference/api-methods/get-top-user-id/?language=python)
 - [Get userID](https://algolia.com/doc/api-reference/api-methods/get-user-id/?language=python)
 - [List clusters](https://algolia.com/doc/api-reference/api-methods/list-clusters/?language=python)
-- [List userID](https://algolia.com/doc/api-reference/api-methods/list-user-id/?language=python)
+- [List userIDs](https://algolia.com/doc/api-reference/api-methods/list-user-id/?language=python)
 - [Remove userID](https://algolia.com/doc/api-reference/api-methods/remove-user-id/?language=python)
 - [Search userID](https://algolia.com/doc/api-reference/api-methods/search-user-id/?language=python)
 
 
 
 
-
 ### Advanced
 
-- [Get latest logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=python)
+- [Get logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=python)
+- [Configuring timeouts](https://algolia.com/doc/api-reference/api-methods/configuring-timeouts/?language=python)
+- [Set extra header](https://algolia.com/doc/api-reference/api-methods/set-extra-header/?language=python)
+- [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=python)
 
 
 
