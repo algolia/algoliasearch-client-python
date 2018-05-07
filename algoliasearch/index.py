@@ -859,95 +859,71 @@ class Index(object):
 
     @deprecated
     def listUserKeys(self):
+        """Use `list_api_keys` on the client instead."""
         return self.list_user_keys()
 
     @deprecated
     def list_user_keys(self):
-        """Use `list_api_keys`"""
+        """Use `list_api_keys` on the client instead."""
         return self.list_api_keys()
 
+    @deprecated
     def list_api_keys(self, request_options=None):
-        """
-        List all existing api keys of this index with their associated ACLs.
-        """
+        """Use `list_api_keys` on the client instead."""
         return self._req(True, '/keys', 'GET', request_options)
 
     @deprecated
     def getUserKeyACL(self, key):
+        """Use `get_api_key` on the client instead."""
         return self.get_user_key_acl(key)
 
     @deprecated
     def get_user_key_acl(self, key):
-        """Use `get_api_key_acl`"""
+        """Use `get_api_key` on the client instead."""
         return self.get_api_key_acl(key)
 
+    @deprecated
     def get_api_key_acl(self, key, request_options=None):
-        """Get ACL of a api key associated to this index."""
+        """Use `get_api_key` on the client instead."""
         path = '/keys/%s' % key
         return self._req(True, path, 'GET', request_options)
 
     @deprecated
     def deleteUserKey(self, key):
+        """Use `delete_api_key` on the client instead."""
         return self.delete_user_key(key)
 
     @deprecated
     def delete_user_key(self, key):
-        """Use `delete_api_key`"""
+        """Use `delete_api_key` on the client instead."""
         return self.delete_api_key(key)
 
+    @deprecated
     def delete_api_key(self, key, request_options=None):
-        """Delete an existing api key associated to this index."""
+        """Use `delete_api_key` on the client instead."""
         path = '/keys/%s' % key
         return self._req(False, path, 'DELETE', request_options)
 
     @deprecated
     def addUserKey(self, obj, validity=0, max_queries_per_ip_per_hour=0,
                    max_hits_per_query=0):
+        """Use `add_api_key` on the client instead."""
         return self.add_user_key(obj, validity, max_queries_per_ip_per_hour,
                                  max_hits_per_query)
 
     @deprecated
     def add_user_key(self, obj, validity=0, max_queries_per_ip_per_hour=0,
                      max_hits_per_query=0):
-        """Use `add_api_key`"""
+        """Use `add_api_key` on the client instead."""
         return self.add_api_key(
             obj, validity, max_queries_per_ip_per_hour,
             max_hits_per_query
         )
 
+    @deprecated
     def add_api_key(self, obj, validity=0, max_queries_per_ip_per_hour=0,
                     max_hits_per_query=0, request_options=None):
-        """
-        Create a new api key associated to this index (can only access to
-        this index).
-
-        @param obj can be two different parameters:
-            The list of parameters for this key. Defined by a dictionary that
-            can contains the following values:
-                - acl: array of string
-                - indices: array of string
-                - validity: int
-                - referers: array of string
-                - description: string
-                - maxHitsPerQuery: integer
-                - queryParameters: string
-                - maxQueriesPerIPPerHour: integer
-            Or the list of ACL for this key. Defined by an array of string that
-            can contains the following values:
-                - search: allow to search (https and http)
-                - addObject: allows to add/update an object in the index (https only)
-                - deleteObject : allows to delete an existing object (https only)
-                - deleteIndex : allows to delete index content (https only)
-                - settings : allows to get index settings (https only)
-                - editSettings : allows to change index settings (https only)
-        @param validity the number of seconds after which the key will be
-            automatically removed (0 means no time limit for this key)
-        @param max_queries_per_ip_per_hour Specify the maximum number of API
-            calls allowed from an IP address per hour.  Defaults to 0 (no
-            rate limit)
-        @param max_hits_per_query Specify the maximum number of hits this
-            API key can retrieve in one call. Defaults to 0 (unlimited)
-        """
+        """Use `add_api_key` on the client instead."""
         if not isinstance(obj, dict):
             obj = {'acl': obj}
 
@@ -963,45 +939,17 @@ class Index(object):
     def update_user_key(self, key, obj, validity=None,
                         max_queries_per_ip_per_hour=None,
                         max_hits_per_query=None):
-        """Use `update_api_key`"""
+        """Use `update_api_key` on the client instead."""
         return self.update_api_key(
             key, obj, validity, max_queries_per_ip_per_hour,
             max_hits_per_query
         )
 
+    @deprecated
     def update_api_key(self, key, obj, validity=None,
                         max_queries_per_ip_per_hour=None,
                         max_hits_per_query=None, request_options=None):
-        """
-        Update a api key associated to this index (can only access to this index).
-
-        @param obj can be two different parameters:
-            The list of parameters for this key. Defined by a dictionary that
-            can contains the following values:
-                - acl: array of string
-                - indices: array of string
-                - validity: int
-                - referers: array of string
-                - description: string
-                - maxHitsPerQuery: integer
-                - queryParameters: string
-                - maxQueriesPerIPPerHour: integer
-            Or the list of ACL for this key. Defined by an array of string that
-            can contains the following values:
-                - search: allow to search (https and http)
-                - addObject: allows to add/update an object in the index (https only)
-                - deleteObject : allows to delete an existing object (https only)
-                - deleteIndex : allows to delete index content (https only)
-                - settings : allows to get index settings (https only)
-                - editSettings : allows to change index settings (https only)
-        @param validity the number of seconds after which the key will be
-            automatically removed (0 means no time limit for this key)
-        @param max_queries_per_ip_per_hour Specify the maximum number of API
-            calls allowed from an IP address per hour.  Defaults to 0 (no rate
-            limit).
-        @param max_hits_per_query Specify the maximum number of hits this API
-            key can retrieve in one call. Defaults to 0 (unlimited)
-        """
+        """Use `update_api_key` on the client instead."""
         if not isinstance(obj, dict):
             obj = {'acl': obj}
 
