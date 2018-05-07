@@ -391,6 +391,12 @@ def test_browse_all(ro_index):
     assert set(ro_index.ids) == set(res_ids)
 
 
+def test_browse_from(ro_index):
+    tmp = ro_index.browse(0, 4)
+    it = ro_index.browse_from(cursor=tmp['cursor'])
+    assert len(it['hits']) == 1
+
+
 def test_search(ro_index):
     res = ro_index.search('')
     assert res['nbHits'] == 5
