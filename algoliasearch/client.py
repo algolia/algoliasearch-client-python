@@ -238,7 +238,7 @@ class Client(object):
 
         requests = []
         for query in queries:
-            index_name = query.pop(index_name_key)
+            index_name = query[index_name_key]
 
             requests.append({
                 'indexName': index_name,
