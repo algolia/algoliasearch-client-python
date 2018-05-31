@@ -722,12 +722,7 @@ class Index(object):
         @param task_id the id of the task returned by server
         @param time_before_retry the time in milliseconds before retry (default = 100ms)
         """
-        path = '/task/%d' % task_id
-        while True:
-            res = self._req(True, path, 'GET', request_options)
-            if res['status'] == 'published':
-                return res
-            time.sleep(time_before_retry / 1000.0)
+        return self.client.wait_task(task_id, time_before_retry, request_options)
 
     def is_task_published(self, task_id, request_options=None):
         '''

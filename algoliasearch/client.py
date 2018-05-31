@@ -696,6 +696,22 @@ class Client(object):
         """
         return self._req(True, '/1/isalive', 'GET', request_options)
 
+    def wait_task(self, task_id, time_before_retry=100, request_options=None):
+        """
+        Wait the publication of a task on the server.
+        All server task are asynchronous and you can check with this method
+        that the task is published.
+
+        @param task_id the id of the task returned by server
+        @param time_before_retry the time in milliseconds before retry (default = 100ms)
+        """
+        path = '/task/%d' % task_id
+        while True:
+            res = self._req(True, path, 'GET', request_options)
+            if res['status'] == 'published':
+                return res
+            time.sleep(time_before_retry / 1000.0)
+
     def _req(self, is_search, path, meth, request_options=None, params=None, data=None):
         if len(self.api_key) > MAX_API_KEY_LENGTH:
             if data is None:
