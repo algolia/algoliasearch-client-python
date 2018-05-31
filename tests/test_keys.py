@@ -1,11 +1,17 @@
+from .helpers import is_community
+import pytest
 from .helpers import wait_key, wait_missing_key
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_list_user_keys(client):
     res = client.list_user_keys()
     assert 'keys' in res
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_add_user_keys(client):
     keys = []
 
@@ -28,6 +34,8 @@ def test_add_user_keys(client):
         client.delete_user_key(key)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_get_user_key(client):
     res = client.add_user_key(['search'])
     key = res['key']
@@ -40,6 +48,8 @@ def test_get_user_key(client):
     client.delete_user_key(key)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_update_user_keys(client):
     keys = []
 
@@ -81,6 +91,8 @@ def test_update_user_keys(client):
     for key in keys:
         client.delete_user_key(key)
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_delete_user_keys(client):
     res = client.add_user_key(['search'])
     key = res['key']
@@ -94,11 +106,15 @@ def test_delete_user_keys(client):
     assert key not in res_keys
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_index_list_user_keys(ro_index):
     res = ro_index.list_user_keys()
     assert 'keys' in res
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_index_add_user_keys(index):
     keys = []
 
@@ -121,6 +137,8 @@ def test_index_add_user_keys(index):
         index.delete_user_key(key)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_index_get_user_key(index):
     res = index.add_user_key(['search'])
     key = res['key']
@@ -133,6 +151,8 @@ def test_index_get_user_key(index):
     index.delete_user_key(key)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_index_update_user_keys(index):
     keys = []
 
@@ -175,6 +195,8 @@ def test_index_update_user_keys(index):
         index.delete_user_key(key)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='API keys methods cannot be tested by the community')
 def test_index_delete_user_keys(index):
     res = index.add_user_key(['search'])
     key = res['key']

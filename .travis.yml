@@ -1,12 +1,21 @@
+language: python
+
 branches:
   only:
     - master
 
 sudo: false
 
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
 before_script:
   - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.27.zip
   - unzip -q google_appengine_1.9.27.zip
+  - wget https://alg.li/algolia-keys && chmod +x algolia-keys
 
 install:
   - pip install --upgrade pip
@@ -14,12 +23,4 @@ install:
   - pip install tox-travis
 
 script:
-  - tox
-
-language: python
-
-python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.6"
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [[ ! "$TRAVIS_PULL_REQUEST_SLUG" =~ ^algolia\/ ]]; then eval $(./algolia-keys export) tox; else tox; fi

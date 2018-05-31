@@ -1,11 +1,15 @@
 from __future__ import unicode_literals
 import os
 import time
+import pytest
 from algoliasearch.helpers import PY2
+from .helpers import is_community
 
 STR_TYPE = unicode if PY2 else str
 
 
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def uniq_user_id():
     name = 'python-client'
     if 'TRAVIS' not in os.environ:
@@ -14,6 +18,8 @@ def uniq_user_id():
     return '{}-travis-{}'.format(name, job)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def test_1_list_clusters(mcm_client):
     answer = mcm_client.list_clusters()
 
@@ -26,6 +32,8 @@ def test_1_list_clusters(mcm_client):
     assert isinstance(answer['clusters'][0]['dataSize'], int)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def test_2_assign_user_id(mcm_client):
     name = mcm_client.list_clusters()['clusters'][0]['clusterName']
     answer = mcm_client.assign_user_id(uniq_user_id(), name)
@@ -36,6 +44,8 @@ def test_2_assign_user_id(mcm_client):
     time.sleep(2) # Sleep to let the cluster publish the change
 
 
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def test_3_list_user_ids(mcm_client):
     answer = mcm_client.list_user_ids()
 
@@ -48,6 +58,8 @@ def test_3_list_user_ids(mcm_client):
     assert isinstance(answer['userIDs'][0]['dataSize'], int)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def test_4_get_top_user_id(mcm_client):
     cluster_name = mcm_client.list_clusters()['clusters'][0]['clusterName']
     answer = mcm_client.get_top_user_id()
@@ -60,6 +72,9 @@ def test_4_get_top_user_id(mcm_client):
     assert isinstance(answer['topUsers'][cluster_name][0]['nbRecords'], int)
     assert isinstance(answer['topUsers'][cluster_name][0]['dataSize'], int)
 
+
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def test_5_get_user_id(mcm_client):
     answer = mcm_client.get_user_id(uniq_user_id())
 
@@ -69,6 +84,9 @@ def test_5_get_user_id(mcm_client):
     assert isinstance(answer['nbRecords'], int)
     assert isinstance(answer['dataSize'], int)
 
+
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def test_6_search_user_ids(mcm_client):
     clusterName = mcm_client.list_clusters()['clusters'][0]['clusterName']
     answer = mcm_client.search_user_ids(uniq_user_id(), clusterName, 0, 1000)
@@ -85,6 +103,9 @@ def test_6_search_user_ids(mcm_client):
     assert isinstance(answer['hits'][0]['nbRecords'], int)
     assert isinstance(answer['hits'][0]['dataSize'], int)
 
+
+@pytest.mark.skipif(is_community,
+                    reason='MCM methods cannot be tested by the community')
 def test_7_remove_user_id(mcm_client):
     answer = mcm_client.remove_user_id(uniq_user_id())
 

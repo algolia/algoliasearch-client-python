@@ -10,22 +10,25 @@ def check_credentials():
     credentials = [
         'ALGOLIA_APPLICATION_ID',
         'ALGOLIA_API_KEY',
-        'ALGOLIA_API_KEY_SEARCH',
-        'ALGOLIA_APPLICATION_ID_MCM',
+        'ALGOLIA_SEARCH_API_KEY',
+        'ALGOLIA_APP_ID_MCM',
         'ALGOLIA_API_KEY_MCM'
     ]
 
     for credential in credentials:
         if credential not in os.environ:
-            print('environement variable {} not defined'.format(credential))
+            print('environment variable {} not defined'.format(credential))
             assert False
+
+
+is_community = 'IS_COMMUNITY' in os.environ
 
 
 def index_name():
     name = 'algolia-python{}'.format(randint(1, 100000))
 
     if 'TRAVIS' in os.environ:
-        name = '{}_travis-{}'.format(name, os.environ['TRAVIS_JOB_NUMBER'])
+        name = 'TRAVIS_PYTHON_{}_id-{}'.format(name, os.environ['TRAVIS_JOB_NUMBER'])
 
     return name
 
