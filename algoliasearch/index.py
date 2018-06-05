@@ -551,7 +551,11 @@ class Index(object):
             params = {}
         if cursor:
             params = {'cursor': cursor}
-        return self._req(True, '/browse', 'GET', request_options, params)
+
+        if not params:
+            return self._req(True, '/browse', 'GET', request_options, params)
+        else:
+            return self._req(True, '/browse', 'POST', request_options, None, params)
 
     def browse_all(self, params=None, request_options=None):
         """
