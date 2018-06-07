@@ -5,7 +5,58 @@
 
 <Contributors, please add your changes below this line>
 
+### 1.16.0 - 2018-06-07
 
+🎉 Note to contributors:
+Everybody is now able to run the test on Travis, since we moved to temporary credentials.️ ⤵️
+https://blog.algolia.com/travis-encrypted-variables-external-contributions/
+
+* **Deprecation**: Keys should not be managed at the Index level but at the Client level
+
+    All methods `Index.(list|get|add|update)_api_keys()` are now
+    deprecated. If you already have keys on the Index, it would be best
+    to delete them and regenerate new keys with client, adding the `indexes`
+    restriction.
+
+    Example:
+    ```python
+    client.add_api_key({
+        'acl': 'search',
+        'indexes': 'my_index_name',
+    })
+    ```
+
+* Feat: Let you define all API keys capabilities in one map for `update_api_key` and `add_api_key`
+
+    Example:
+    ```python
+    client.add_api_key({
+        'acl': ['search'],
+        'validity': 300,
+        'maxQueriesPerIPPerHour': 100,
+        'maxHitsPerQuery': 20,
+        'indexes': ['dev_*'],
+        'referers': ['algolia.com/*'],
+        'queryParameters': 'typoTolerance=strict&ignorePlurals=false',
+        'description': 'Limited search only API key for algolia.com'
+    })
+    ```
+    instead of
+    ```python
+    client.add_api_key(['search'], 300, 100, 20, ['dev_*'])
+    ```
+
+* Fix: Adding a rule with an empty ID failed silently, it will now raise an exception
+
+* Fix: `Index.get_objects` requires an array for `attributes_to_retrieve`
+    strings could be passed before but it would fail silently every time
+    See [#299](https://github.com/algolia/algoliasearch-client-python/issues/299)
+
+* Fix: When browsing, ensure cursor is passed in the body
+    Cursor can become so long that the generated URL fails (error HTTP 414).
+
+* Chore: Add Python version to the UserAgent
+ 
 ### 1.15.3 - 2018-03-15
 
 * Remove the `[security]` flair of `requests`
