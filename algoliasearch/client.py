@@ -28,6 +28,7 @@ import base64
 import random
 import sys
 import time
+import copy
 from platform import python_version
 
 try:
@@ -37,6 +38,7 @@ except ImportError:
 
 from .version import VERSION
 from .index import Index
+from .analytics import Analytics
 
 from .transport import Transport
 from .helpers import deprecated
@@ -376,6 +378,9 @@ class Client(object):
         @param index_name the name of index
         """
         return Index(self, index_name)
+
+    def init_analytics(self):
+        return Analytics(self, copy.deepcopy(self._transport))
 
     @deprecated
     def listUserKeys(self):
