@@ -718,31 +718,10 @@ class Index(object):
         return self.wait_task(task_id, time_before_retry)
 
     def wait_task(self, task_id, time_before_retry=100, request_options=None):
-        """
-        Wait the publication of a task on the server.
-        All server task are asynchronous and you can check with this method
-        that the task is published.
-
-        @param task_id the id of the task returned by server
-        @param time_before_retry the time in milliseconds before retry (default = 100ms)
-        """
-        path = '/task/%d' % task_id
-        while True:
-            res = self._req(True, path, 'GET', request_options)
-            if res['status'] == 'published':
-                return res
-            time.sleep(time_before_retry / 1000.0)
+        return self.client.wait_task(self.index_name, task_id, time_before_retry, request_options)
 
     def is_task_published(self, task_id, request_options=None):
-        '''
-        Return True if the task on the server has been published
-
-        @param task_id the id of the task returned by server
-        '''
-
-        path = '/task/{0}'.format(task_id)
-        res = self._req(True, path, 'GET', request_options)
-        return res['status'] == 'published'
+        return self.client.wait_task(self.index_name, task_id, request_options)
 
     @deprecated
     def getSettings(self):
