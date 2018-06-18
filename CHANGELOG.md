@@ -5,6 +5,21 @@
 
 <Contributors, please add your changes below this line>
 
+* Introduce AB Testing feature - PR [#408](https://github.com/algolia/algoliasearch-client-php/pull/#408)
+    List/Create/Stop/Delete AB Tests programmatically
+    Introduce new Analytics object, wrapper around the
+    [Analytics API](https://www.algolia.com/doc/rest-api/analytics/) (more methods to come).
+
+* 2 methods about taskID initially available in the `Index` moved to the `Client`. 
+    You could get some taskID from the engine without necessarily have an instance of Index, 
+    instead of instantiating an index that you won't need, you can now call wait_task and get_task_status on the client.
+    The original methods on the index still work and are **not** deprecated.
+ 
+    ```python
+    client.wait_ask(index_name, taskID)
+    client.get_task_status(index_name, taskID)
+    ```
+
 ### 1.16.0 - 2018-06-07
 
 🎉 Note to contributors:

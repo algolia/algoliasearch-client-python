@@ -27,6 +27,8 @@ import hashlib
 import base64
 import random
 import sys
+import time
+import copy
 from platform import python_version
 
 try:
@@ -36,6 +38,7 @@ except ImportError:
 
 from .version import VERSION
 from .index import Index
+from .analytics import Analytics
 
 from .transport import Transport
 from .helpers import deprecated
@@ -257,6 +260,31 @@ class Client(object):
         path = '/1/indexes/*/batch'
         return self._req(False, path, 'POST', request_options, data=requests)
 
+    def wait_task(self, index_name, task_id, time_before_retry=100, request_options=None):
+        """
+        Wait the publication of a task on the server.
+        All server task are asynchronous and you can check with this method
+        that the task is published.
+
+        @param index_name the index name associated with the taskID
+        @param task_id the id of the task returned by server
+        @param time_before_retry the time in milliseconds before retry (default = 100ms)
+        @param request_options
+        """
+        while True:
+            task = self.get_task(index_name, task_id, request_options)
+            if task['status'] == 'published':
+                return task
+            time.sleep(time_before_retry / 1000.0)
+
+    def get_task(self, index_name, task_id, request_options=None):
+        path = '/1/indexes/%s/task/%d' % (safe(index_name), task_id)
+        return self._req(True, path, 'GET', request_options)
+
+    def is_task_published(self, index_name, task_id, request_options=None):
+        task = self.get_task(index_name, task_id, request_options)
+        return task['status'] == 'published'
+
     @deprecated
     def listIndexes(self):
         return self.list_indexes()
@@ -350,6 +378,9 @@ class Client(object):
         @param index_name the name of index
         """
         return Index(self, index_name)
+
+    def init_analytics(self):
+        return Analytics(self, copy.deepcopy(self._transport))
 
     @deprecated
     def listUserKeys(self):

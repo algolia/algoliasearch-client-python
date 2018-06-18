@@ -15,6 +15,11 @@ def client():
 
 
 @pytest.fixture
+def analytics():
+    return create_client().init_analytics()
+
+
+@pytest.fixture
 def index(client):
     idx = create_index(client)
     yield idx
