@@ -279,6 +279,17 @@ search.start();
 
 
 
+### A/B Test
+
+- [Add an A/B test](https://algolia.com/doc/api-reference/api-methods/add-ab-test/?language=python)
+- [Get an A/B test](https://algolia.com/doc/api-reference/api-methods/get-ab-test/?language=python)
+- [List A/B tests](https://algolia.com/doc/api-reference/api-methods/get-ab-tests/?language=python)
+- [Stop an A/B test](https://algolia.com/doc/api-reference/api-methods/stop-ab-test/?language=python)
+- [Delete an A/B test](https://algolia.com/doc/api-reference/api-methods/delete-ab-test/?language=python)
+
+
+
+
 ### MultiClusters
 
 - [Assign or Move userID](https://algolia.com/doc/api-reference/api-methods/assign-user-id/?language=python)
