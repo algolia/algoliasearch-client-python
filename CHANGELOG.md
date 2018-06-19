@@ -5,6 +5,9 @@
 
 <Contributors, please add your changes below this line>
 
+
+### 1.17.0 - 2018-06-19
+
 * Introduce AB Testing feature - PR [#408](https://github.com/algolia/algoliasearch-client-php/pull/#408)
     List/Create/Stop/Delete AB Tests programmatically
     Introduce new Analytics object, wrapper around the
