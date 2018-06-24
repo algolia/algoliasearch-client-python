@@ -201,10 +201,10 @@ search.start();
 
 ### Search
 
-- [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=python)
+- [Search index](https://algolia.com/doc/api-reference/api-methods/search/?language=python)
 - [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=python)
 - [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=python)
-- [Browse an index](https://algolia.com/doc/api-reference/api-methods/browse/?language=python)
+- [Browse index](https://algolia.com/doc/api-reference/api-methods/browse/?language=python)
 
 
 
@@ -268,12 +268,12 @@ search.start();
 
 ### Query rules
 
-- [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=python)
-- [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=python)
-- [Get a rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=python)
-- [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=python)
-- [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=python)
-- [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=python)
+- [Save rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=python)
+- [Batch rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=python)
+- [Get rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=python)
+- [Delete rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=python)
+- [Clear rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=python)
+- [Search rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=python)
 - [Export rules](https://algolia.com/doc/api-reference/api-methods/rules-export/?language=python)
 
 
@@ -281,11 +281,11 @@ search.start();
 
 ### A/B Test
 
-- [Add an A/B test](https://algolia.com/doc/api-reference/api-methods/add-ab-test/?language=python)
-- [Get an A/B test](https://algolia.com/doc/api-reference/api-methods/get-ab-test/?language=python)
+- [Add A/B test](https://algolia.com/doc/api-reference/api-methods/add-ab-test/?language=python)
+- [Get A/B test](https://algolia.com/doc/api-reference/api-methods/get-ab-test/?language=python)
 - [List A/B tests](https://algolia.com/doc/api-reference/api-methods/get-ab-tests/?language=python)
-- [Stop an A/B test](https://algolia.com/doc/api-reference/api-methods/stop-ab-test/?language=python)
-- [Delete an A/B test](https://algolia.com/doc/api-reference/api-methods/delete-ab-test/?language=python)
+- [Stop A/B test](https://algolia.com/doc/api-reference/api-methods/stop-ab-test/?language=python)
+- [Delete A/B test](https://algolia.com/doc/api-reference/api-methods/delete-ab-test/?language=python)
 
 
 
