@@ -283,7 +283,7 @@ search.start();
 
 - [Add A/B test](https://algolia.com/doc/api-reference/api-methods/add-ab-test/?language=python)
 - [Get A/B test](https://algolia.com/doc/api-reference/api-methods/get-ab-test/?language=python)
-- [List A/B tests](https://algolia.com/doc/api-reference/api-methods/get-ab-tests/?language=python)
+- [List A/B tests](https://algolia.com/doc/api-reference/api-methods/list-ab-tests/?language=python)
 - [Stop A/B test](https://algolia.com/doc/api-reference/api-methods/stop-ab-test/?language=python)
 - [Delete A/B test](https://algolia.com/doc/api-reference/api-methods/delete-ab-test/?language=python)
 
