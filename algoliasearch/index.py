@@ -287,6 +287,9 @@ class Index(object):
 
         @param object_id the unique identifier of object to delete
         """
+        if not object_id:
+            raise AlgoliaException('object_id cannot be empty')
+
         path = '/%s' % safe(object_id)
         return self._req(False, path, 'DELETE', request_options)
 
