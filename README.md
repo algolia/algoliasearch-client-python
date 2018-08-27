@@ -78,7 +78,7 @@ index = client.init_index('your_index_name')
 
 Without any prior configuration, you can start indexing [500 contacts](https://github.com/algolia/datasets/blob/master/contacts/contacts.json) in the ```contacts``` index using the following code:
 ```python
-index = client.init_index("contact")
+index = client.init_index("contacts")
 batch = json.load(open('contacts.json'))
 index.add_objects(batch)
 ```
