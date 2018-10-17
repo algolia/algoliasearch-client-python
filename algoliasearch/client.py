@@ -260,7 +260,7 @@ class Client(object):
         path = '/1/indexes/*/objects'
         return self._req(False, path, 'POST', request_options, data=requests)
 
-    def multiple_batch_objects(self, operations, request_options=None):
+    def multiple_batch(self, operations, request_options=None):
         """Send a batch of write operations targeting multiple indices."""
         return self.batch(operations, request_options)
 
