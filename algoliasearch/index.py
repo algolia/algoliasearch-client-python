@@ -311,6 +311,22 @@ class Index(object):
             })
         return self.batch(requests, request_options=request_options)
 
+    def move(self, new_index_name, request_options=None):
+        """
+        Move the index.
+
+        @param new_index_name the new name of the
+            index (destination will be overriten if it already exist).
+        """
+        request = {'operation': 'move', 'destination': new_index_name}
+
+        res = self._req(False, '/operation', 'POST', request_options, data=request)
+
+        self.index_name = new_index_name
+        self._request_path = '/1/indexes/%s' % safe(self.index_name)
+
+        return res
+
     def search(self, query, args=None, request_options=None):
         """
         Search inside the index.
@@ -699,7 +715,7 @@ class Index(object):
     def iter_rules(self, hits_per_page=1000, request_options=None):
         page = 0
         response = self.search_rules(
-            '', page=page, 
+            '', page=page,
             hitsPerPage=hits_per_page, request_options=request_options
         )
 
@@ -712,7 +728,7 @@ class Index(object):
 
             page += 1
             response = self.search_rules(
-                '', page=page, 
+                '', page=page,
                 hitsPerPage=hits_per_page, request_options=request_options
             )
 

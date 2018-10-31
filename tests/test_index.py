@@ -267,6 +267,27 @@ def test_batch_and_clear_rules(index):
     rules = index.search_rules()
     assert rules['nbHits'] == 0
 
+def test_move(index):
+    old_index_name = index.index_name
+    task = index.add_object({ "objectID": "Foo" })
+    index.wait_task(task['taskID'])
+
+    task = index.move('algolia-python-move')
+    index.wait_task(task['taskID'])
+
+    res = index.client.list_indexes()
+    res_names = [elt['name'] for elt in res['items']]
+
+    assert old_index_name not in res_names
+    assert index.index_name in res_names
+
+    res = index.get_object("Foo")
+    assert res['objectID'] == "Foo"
+
+    assert index.index_name == "algolia-python-move"
+    assert index._request_path == '/1/indexes/%s' % "algolia-python-move"
+
+    index.client.delete_index('algolia-python-move')  # Tear down
 
 def test_batch_and_clear_existing(index):
     rule = rule_stub()
