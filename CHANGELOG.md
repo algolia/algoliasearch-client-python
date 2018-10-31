@@ -5,8 +5,6 @@
 
 <Contributors, please add your changes below this line>
 
-### [Unreleased]
-
 * Adds move method on index - PR [#386](https://github.com/algolia/algoliasearch-client-python/pull/386)
     You can now move an index to a new destination directly on the index object. Usage:
         ```python
