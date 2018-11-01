@@ -316,6 +316,7 @@ class Client(object):
     def moveIndex(self, src_index_name, dst_index_name):
         return self.move_index(src_index_name, dst_index_name)
 
+    @deprecated
     def move_index(self, src_index_name, dst_index_name, request_options=None):
         """
         Move an existing index.
