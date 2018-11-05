@@ -311,7 +311,7 @@ class Index(object):
             })
         return self.batch(requests, request_options=request_options)
 
-    def move(self, new_index_name, request_options=None):
+    def move_to(self, new_index_name, request_options=None):
         """
         Move the index.
 

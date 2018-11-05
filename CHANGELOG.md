@@ -9,7 +9,7 @@
     You can now move an index to a new destination directly on the index object. Usage:
         ```python
         index = client.init_index('name');
-        index.move('new_name')
+        index.move_to('new_name')
         index.get_settings() # Get the settings of the `new_name` index
         ```
 

@@ -267,12 +267,12 @@ def test_batch_and_clear_rules(index):
     rules = index.search_rules()
     assert rules['nbHits'] == 0
 
-def test_move(index):
+def test_move_to(index):
     old_index_name = index.index_name
     task = index.add_object({ "objectID": "Foo" })
     index.wait_task(task['taskID'])
 
-    task = index.move('algolia-python-move')
+    task = index.move_to('algolia-python-move')
     index.wait_task(task['taskID'])
 
     res = index.client.list_indexes()
