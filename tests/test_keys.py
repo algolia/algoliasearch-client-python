@@ -5,103 +5,103 @@ from .helpers import wait_key, wait_missing_key
 
 @pytest.mark.skipif(is_community,
                     reason='API keys methods cannot be tested by the community')
-def test_list_user_keys(client):
-    res = client.list_user_keys()
+def test_list_api_keys(client):
+    res = client.list_api_keys()
     assert 'keys' in res
 
 
 @pytest.mark.skipif(is_community,
                     reason='API keys methods cannot be tested by the community')
-def test_add_user_keys(client):
+def test_add_api_keys(client):
     keys = []
 
-    res = client.add_user_key(['search'])
+    res = client.add_api_key(['search'])
     assert len(res['key']) > 1
     keys.append(res['key'])
 
-    res = client.add_user_key(['search'], max_queries_per_ip_per_hour=10)
+    res = client.add_api_key(['search'], max_queries_per_ip_per_hour=10)
     assert len(res['key']) > 1
     keys.append(res['key'])
 
-    res = client.add_user_key(['search'], max_hits_per_query=5)
+    res = client.add_api_key(['search'], max_hits_per_query=5)
     assert len(res['key']) > 1
     keys.append(res['key'])
 
-    res = client.add_user_key(['search'], validity=30)
+    res = client.add_api_key(['search'], validity=30)
     assert len(res['key']) > 1
 
     for key in keys:
-        client.delete_user_key(key)
+        client.delete_api_key(key)
 
 
 @pytest.mark.skipif(is_community,
                     reason='API keys methods cannot be tested by the community')
 def test_get_user_key(client):
-    res = client.add_user_key(['search'])
+    res = client.add_api_key(['search'])
     key = res['key']
     wait_key(client, key)
 
-    res = client.get_user_key_acl(key)
+    res = client.get_api_key(key)
     assert res['value'] == key
     assert set(res['acl']) == set(['search'])
 
-    client.delete_user_key(key)
+    client.delete_api_key(key)
 
 
 @pytest.mark.skipif(is_community,
                     reason='API keys methods cannot be tested by the community')
-def test_update_user_keys(client):
+def test_update_api_keys(client):
     keys = []
 
     for _ in range(3):
-        res = client.add_user_key(['search'])
+        res = client.add_api_key(['search'])
         keys.append(res['key'])
 
     for k in keys:
         wait_key(client, k)
 
-    res = client.update_user_key(
+    res = client.update_api_key(
         keys[0], ['addObject'], max_queries_per_ip_per_hour=5
     )
     assert res['key']
     wait_key(client, keys[0], lambda k: k['acl'] == ['addObject'])
-    res = client.get_user_key_acl(keys[0])
+    res = client.get_api_key(keys[0])
     assert set(res['acl']) == set(['addObject'])
     assert res['maxQueriesPerIPPerHour'] == 5
 
-    res = client.update_user_key(
+    res = client.update_api_key(
         keys[1], ['deleteObject'], max_hits_per_query=10
     )
     assert res['key']
 
     wait_key(client, keys[1], lambda k: k['acl'] == ['deleteObject'])
-    res = client.get_user_key_acl(keys[1])
+    res = client.get_api_key(keys[1])
     assert set(res['acl']) == set(['deleteObject'])
     assert res['maxHitsPerQuery'] == 10
 
-    res = client.update_user_key(keys[2], ['settings', 'search'], validity=60)
+    res = client.update_api_key(keys[2], ['settings', 'search'], validity=60)
     assert res['key']
 
     wait_key(client, keys[2], lambda k: set(k['acl']) == set(['settings', 'search']))
-    res = client.get_user_key_acl(keys[2])
+    res = client.get_api_key(keys[2])
     assert set(res['acl']) == set(['settings', 'search'])
     assert 'validity' in res
     assert res['validity'] > 0
 
     for key in keys:
-        client.delete_user_key(key)
+        client.delete_api_key(key)
 
 @pytest.mark.skipif(is_community,
                     reason='API keys methods cannot be tested by the community')
-def test_delete_user_keys(client):
-    res = client.add_user_key(['search'])
+def test_delete_api_keys(client):
+    res = client.add_api_key(['search'])
     key = res['key']
     wait_key(client, res['key'])
 
-    client.delete_user_key(key)
+    client.delete_api_key(key)
     wait_missing_key(client, res['key'])
 
-    res = client.list_user_keys()
+    res = client.list_api_keys()
     res_keys = [elt['value'] for elt in res['keys']]
     assert key not in res_keys
 

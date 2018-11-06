@@ -402,7 +402,7 @@ class Client(object):
     @deprecated
     def get_user_key_acl(self, api_key):
         """Use `get_api_key_acl`"""
-        return self.get_api_key_acl(api_key)
+        return self.get_api_key(api_key)
 
     @deprecated
     def get_api_key_acl(self, api_key, request_options=None):

@@ -138,7 +138,10 @@ def rule_stub(objid='my-rule'):
 def wait_key(index, key, block=None):
     for _ in range(60):
         try:
-            k = index.get_user_key_acl(key)
+            if isinstance(index, algoliasearch.Index):
+                k = index.get_api_key_acl(key)
+            else:
+                k = index.get_api_key(key)
             if block is None or block(k):
                 return
         except:
@@ -150,7 +153,10 @@ def wait_key(index, key, block=None):
 def wait_missing_key(index, key):
     for _ in range(60):
         try:
-            index.get_user_key_acl(key)
+            if isinstance(index, algoliasearch.Index):
+                index.get_api_key_acl(key)
+            else:
+                index.get_api_key(key)
             time.sleep(1)
         except:
             # Not found
