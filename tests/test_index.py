@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from decimal import Decimal
 
-from algoliasearch.client import MAX_API_KEY_LENGTH
+from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
 from .helpers import Factory, rule_stub
@@ -525,6 +525,53 @@ def test_delete_by(index):
 
     assert obj1 not in res['hits']
     assert obj2 in res['hits']
+
+
+def test_replace_all_objects(index):
+    obj1 = {'objectID': 'A', 'color': 'red'}
+    obj2 = {'objectID': 'B', 'color': 'blue'}
+    response = index.save_objects([obj1, obj2])
+    index.wait_task(response['taskID'])
+
+    obj3 = {'objectID': 'C', 'color': 'green'}
+    obj4 = {'objectID': 'D', 'color': 'yellow'}
+    responses = index.replace_all_objects([obj3, obj4])
+    for response in responses:
+        index.wait_task(response['taskID'])
+
+    res = index.search('')
+
+    del res['hits'][0]['_highlightResult']
+    del res['hits'][1]['_highlightResult']
+
+    assert len(res['hits']) == 2
+    assert obj1 not in res['hits']
+    assert obj2 not in res['hits']
+    assert obj3 in res['hits']
+    assert obj4 in res['hits']
+
+
+def test_replace_all_objects_with_safe(index):
+    obj1 = {'objectID': 'A', 'color': 'red'}
+    obj2 = {'objectID': 'B', 'color': 'blue'}
+    response = index.save_objects([obj1, obj2])
+    index.wait_task(response['taskID'])
+
+    obj3 = {'objectID': 'C', 'color': 'green'}
+    obj4 = {'objectID': 'D', 'color': 'yellow'}
+    request_options = RequestOptions({'safe': True})
+    index.replace_all_objects([obj3, obj4], request_options)
+
+    res = index.search('')
+
+    del res['hits'][0]['_highlightResult']
+    del res['hits'][1]['_highlightResult']
+
+    assert len(res['hits']) == 2
+    assert obj1 not in res['hits']
+    assert obj2 not in res['hits']
+    assert obj3 in res['hits']
+    assert obj4 in res['hits']
 
 
 def test_batch(rw_index):
