@@ -350,6 +350,39 @@ class Client(object):
 
         return self._req(False, path, 'POST', request_options, data=request)
 
+    def copy_settings(self, src_index_name, dst_index_name, request_options=None):
+        """
+        Copy an existing index's settings to other index.
+
+        @param src_index_name the name of index to copy.
+        @param dst_index_name the new index name that will contains a copy of
+            src_index_name's settings (destination's settings will be overriten if it already exist).
+        """
+
+        return self.copy_index(src_index_name, dst_index_name, request_options, scope=['settings'])
+
+    def copy_synonyms(self, src_index_name, dst_index_name, request_options=None):
+        """
+        Copy an existing index's synonyms to other index.
+
+        @param src_index_name the name of index to copy.
+        @param dst_index_name the new index name that will contains a copy of
+            src_index_name's synonyms (destination's synonyms will be overriten if it already exist).
+        """
+
+        return self.copy_index(src_index_name, dst_index_name, request_options, scope=['synonyms'])
+
+    def copy_rules(self, src_index_name, dst_index_name, request_options=None):
+        """
+        Copy an existing index's rules to other index.
+
+        @param src_index_name the name of index to copy.
+        @param dst_index_name the new index name that will contains a copy of
+            src_index_name's rules (destination's rules will be overriten if it already exist).
+        """
+
+        return self.copy_index(src_index_name, dst_index_name, request_options, scope=['rules'])
+
     @deprecated
     def getLogs(self, offset=0, length=10, type='all'):
         return self.get_logs(offset, length, type)

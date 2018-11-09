@@ -204,6 +204,84 @@ def test_scoped_copy(double_indexes):
     assert res1 != res2
 
 
+def test_copy_settings(double_indexes):
+    index1 = double_indexes[0]
+    index2 = double_indexes[1]
+
+    task = index1.set_settings({'searchableAttributes': ['name']})
+    index1.wait_task(task['taskID'])
+
+    task = index1.client.copy_settings(
+        index1.index_name, index2.index_name
+    )
+    index1.wait_task(task['taskID'])
+
+    # Check that the settings are the same.
+    settings1 = index1.get_settings()
+    settings2 = index2.get_settings()
+    assert settings1 == settings2
+
+    # Check that the objects are still different
+    res1 = index1.search('')
+    res2 = index2.search('')
+    assert res1 != res2
+
+
+def test_copy_synonyms(double_indexes):
+    index1 = double_indexes[0]
+    index2 = double_indexes[1]
+
+    task = index1.save_synonym({
+        'objectID': 'a-unique-identifier',
+        'type': 'synonym',
+        'synonyms': ['car', 'vehicle', 'auto']
+    }, 'a-unique-identifier')
+    index1.wait_task(task['taskID'])
+
+    task = index1.client.copy_synonyms(
+        index1.index_name, index2.index_name
+    )
+    index1.wait_task(task['taskID'])
+
+    # Check that the synonyms are equal
+    res1 = index1.search_synonyms('')
+    res2 = index2.search_synonyms('')
+    assert res1['nbHits'] == 1
+    assert res1 == res2
+
+
+def test_copy_rules(double_indexes):
+    index1 = double_indexes[0]
+    index2 = double_indexes[1]
+
+    rule = {
+        'objectID': 'a-rule-id',
+        'condition': {
+            'pattern': 'smartphone',
+            'anchoring': 'contains'
+        },
+        'consequence': {
+            'params': {
+                'filters': 'category = 1'
+            }
+        }
+    }
+
+    task = index1.save_rule(rule)
+    index1.wait_task(task['taskID'])
+
+    task = index1.client.copy_rules(
+        index1.index_name, index2.index_name
+    )
+    index1.wait_task(task['taskID'])
+
+    # Check that the synonyms are equal
+    res1 = index1.search_rules('')
+    res2 = index2.search_rules('')
+    assert res1['nbHits'] == 1
+    assert res1 == res2
+
+
 def test_move(double_indexes):
     index1 = double_indexes[0]
     index2 = double_indexes[1]
