@@ -12,6 +12,7 @@
         index.replace_all_objects(objects)
         ```
 
+* Adds `copy_settings`, `copy_synonyms` and `copy_rules` methods on client - PR [#389](https://github.com/algolia/algoliasearch-client-python/pull/389)
 
 ### 1.17.0 - 2018-06-19
 
