@@ -672,6 +672,24 @@ class Index(object):
 
         return self._req(False, '/synonyms/batch', 'POST', request_options, params, synonyms)
 
+    def replace_all_synonyms(self, synonyms, request_options=None):
+        """
+        Replace all synonyms in the index.
+        @param synonyms the synonyms to upload as a python dictionary.
+               the dictionary must contain an objectID key.
+        """
+        for synonym in synonyms:
+            if 'objectID' not in synonym:
+                raise AlgoliaException('missing objectID in synonym body')
+            if synonym['objectID'] == '':
+                raise AlgoliaException('objectID in synonym body cannot be empty')
+
+        params = {
+            'replaceExistingSynonyms': True
+        }
+
+        return self._req(False, '/synonyms/batch', 'POST', request_options, params, data=synonyms)
+
     def get_synonym(self, object_id, request_options=None):
         """
         Get a synonym from this index.
@@ -1056,6 +1074,24 @@ class Index(object):
             raise AlgoliaException('objectID in rule body cannot be empty')
         params = {'forwardToReplicas': forward_to_replicas}
         return self._req(False, '/rules/%s' % str(rule['objectID']), 'PUT', request_options, params, rule)
+
+    def replace_all_rules(self, rules, request_options=None):
+        """
+        Replace all rules in the index.
+        @param rules the rules to upload as a python dictionary.
+               the dictionary must contain an objectID key.
+        """
+        for rule in rules:
+            if 'objectID' not in rule:
+                raise AlgoliaException('missing objectID in rule body')
+            if rule['objectID'] == '':
+                raise AlgoliaException('objectID in rule body cannot be empty')
+
+        params = {
+            'clearExistingRules': True
+        }
+
+        return self._req(False, '/rules/batch', 'POST', request_options, params, data=rules)
 
     def batch_rules(self, rules, forward_to_replicas=False, clear_existing_rules=False, request_options=None):
         """

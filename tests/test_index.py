@@ -7,7 +7,7 @@ from decimal import Decimal
 from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
-from .helpers import Factory, rule_stub
+from .helpers import Factory, rule_stub, synonym_stub
 
 
 def test_add_object(index):
@@ -111,6 +111,60 @@ def test_synonyms(index):
     index.wait_task(task['taskID'])
     task = index.search_synonyms('', hits_per_page=5)
     assert int(task['nbHits']) == 0
+
+
+def test_replace_all_synonyms(index):
+    synonym = synonym_stub('one')
+    synonym2 = synonym_stub('two')
+
+    res = index.replace_all_synonyms([synonym, synonym2])
+    index.wait_task(res['taskID'])
+
+    rules = index.search_synonyms('')
+    assert rules['nbHits'] == 2
+    assert index.get_synonym('one') == synonym
+    assert index.get_synonym('two') == synonym2
+
+    synonym3 = synonym_stub('three')
+    synonym4 = synonym_stub('four')
+
+    res = index.replace_all_synonyms([synonym3, synonym4])
+    index.wait_task(res['taskID'])
+
+    rules = index.search_synonyms('')
+    assert rules['nbHits'] == 2
+    assert index.get_synonym('three') == synonym3
+    assert index.get_synonym('four') == synonym4
+
+
+def test_replace_all_synonyms_expects_object_id(index):
+    synonym = synonym_stub('one')
+
+    synonym.pop('objectID', None)
+
+    try:
+        index.replace_all_synonyms([synonym])
+    except AlgoliaException:
+        assert True
+        return
+
+    # We should not be able to save a rule with an empty objectID.
+    assert False
+
+
+def test_replace_all_synonyms_expects_not_empty_object_id(index):
+    synonym = synonym_stub('one')
+
+    synonym['objectID'] = ''
+
+    try:
+        index.replace_all_synonyms([synonym])
+    except AlgoliaException:
+        assert True
+        return
+
+    # We should not be able to save a rule with an empty objectID.
+    assert False
 
 
 def test_iter_synonyms(index):
@@ -266,6 +320,60 @@ def test_batch_and_clear_rules(index):
 
     rules = index.search_rules()
     assert rules['nbHits'] == 0
+
+
+def test_replace_all_rules(index):
+    rule = rule_stub('one')
+    rule2 = rule_stub('two')
+
+    res = index.replace_all_rules([rule, rule2])
+    index.wait_task(res['taskID'])
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 2
+    assert index.read_rule('one') == rule
+    assert index.read_rule('two') == rule2
+
+    rule3 = rule_stub('three')
+    rule4 = rule_stub('four')
+
+    res = index.replace_all_rules([rule3, rule4])
+    index.wait_task(res['taskID'])
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 2
+    assert index.read_rule('three') == rule3
+    assert index.read_rule('four') == rule4
+
+
+def test_replace_all_rules_expects_object_id(index):
+    rule = rule_stub('one')
+
+    rule.pop('objectID', None)
+
+    try:
+        index.replace_all_rules([rule])
+    except AlgoliaException:
+        assert True
+        return
+
+    # We should not be able to save a rule with an empty objectID.
+    assert False
+
+
+def test_replace_all_rules_expects_not_empty_object_id(index):
+    rule = rule_stub('one')
+
+    rule['objectID'] = ''
+
+    try:
+        index.replace_all_rules([rule])
+    except AlgoliaException:
+        assert True
+        return
+
+    # We should not be able to save a rule with an empty objectID.
+    assert False
 
 
 def test_batch_and_clear_existing(index):
