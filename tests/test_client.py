@@ -314,6 +314,70 @@ def test_delete_index(double_indexes):
     assert index1.index_name not in res_names
     assert index2.index_name in res_names
 
+def test_multiple_batch_multiple_indexes(double_indexes):
+    factory = Factory()
+    index1 = double_indexes[0]
+    index2 = double_indexes[1]
+
+    params = {'hitsPerPage': 0}
+    requests = [
+        {
+            'action': 'addObject',
+            'indexName': index1.index_name,
+            'body': factory.contacts()
+        }, {
+            'action': 'addObject',
+            'indexName': index2.index_name,
+            'body': factory.contacts()
+        }, {
+            'action': 'addObject',
+            'indexName': index1.index_name,
+            'body': factory.contacts()
+        }
+    ]
+
+    task = index1.client.batch({'requests': requests})
+
+    for index in double_indexes:
+        index.wait_task(task['taskID'][index.index_name])
+
+    res = index1.search('', params)
+    assert res['nbHits'] == 7
+    res = index2.search('', params)
+    assert res['nbHits'] == 6
+
+    requests = [
+        {
+            'action': 'deleteObject',
+            'indexName': index1.index_name,
+            'objectID': index1.ids[2]
+        }, {
+            'action': 'deleteObject',
+            'indexName': index2.index_name,
+            'objectID': index2.ids[1]
+        }, {
+            'action': 'deleteObject',
+            'indexName': index2.index_name,
+            'objectID': index2.ids[0]
+        }, {
+            'action': 'deleteObject',
+            'indexName': index1.index_name,
+            'objectID': index1.ids[3]
+        }, {
+            'action': 'deleteObject',
+            'indexName': index2.index_name,
+            'objectID': index2.ids[2]
+        }
+    ]
+
+    task = index1.client.batch(requests)
+    for index in double_indexes:
+        index.wait_task(task['taskID'][index.index_name])
+
+    res = index1.search('', params)
+    assert res['nbHits'] == 5
+    res = index2.search('', params)
+    assert res['nbHits'] == 3
 
 def test_batch_multiple_indexes(double_indexes):
     factory = Factory()
@@ -381,6 +445,21 @@ def test_batch_multiple_indexes(double_indexes):
     assert res['nbHits'] == 3
 
 def test_multiple_queries(double_indexes):
+    index1 = double_indexes[0]
+    index2 = double_indexes[1]
+
+    res = index1.client.multiple_queries([
+        {'indexName': index1.index_name, 'query': ''},
+        {'indexName': index2.index_name, 'query': ''}
+    ])
+
+    assert len(res['results']) == 2
+    for i, res in enumerate(res['results']):
+        res_ids = [elt['objectID'] for elt in res['hits']]
+        for elt in double_indexes[i].ids:
+            assert elt in res_ids
+
+def test_multiple_get_objects(double_indexes):
     index1 = double_indexes[0]
     index2 = double_indexes[1]
 

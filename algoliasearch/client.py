@@ -253,15 +253,25 @@ class Client(object):
         return self._req(True, path, 'POST', request_options, data=data)
 
     def multiple_get_objects(self, requests, request_options=None):
-        """Send a get objects targeting multiple indices."""
+        """
+        Send a get objects targeting multiple indices.
+
+        @param requests the list of requests
+        @param request_options
+        """
         if isinstance(requests, (list, tuple)):
             requests = {'requests': requests}
 
         path = '/1/indexes/*/objects'
-        return self._req(False, path, 'POST', request_options, data=requests)
+        return self._req(True, path, 'POST', request_options, data=requests)
 
     def multiple_batch(self, operations, request_options=None):
-        """Send a batch of write operations targeting multiple indices."""
+        """
+        Send a batch of write operations targeting multiple indices.
+
+        @param requests the list of requests
+        @param request_options
+        """
         return self.batch(operations, request_options)
 
     def batch(self, requests, request_options=None):
