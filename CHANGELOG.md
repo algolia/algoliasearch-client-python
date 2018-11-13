@@ -18,6 +18,8 @@
 
 * Adds `AccountClient.copy_index` methods on client - PR [#391](https://github.com/algolia/algoliasearch-client-python/pull/391)
 
+* Adds `multiple_batch`, `multiple_get_objects` methods on client - PR [#379](https://github.com/algolia/algoliasearch-client-python/pull/379)
+
 ### 1.17.0 - 2018-06-19
 
 * Introduce AB Testing feature - PR [#408](https://github.com/algolia/algoliasearch-client-php/pull/#408)
