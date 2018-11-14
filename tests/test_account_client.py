@@ -5,7 +5,7 @@ from algoliasearch.helpers import AlgoliaException
 from .helpers import rule_stub, synonym_stub
 
 
-def test_reindex_destination_must_not_exist(index, ro_index):
+def test_copy_index_destination_must_not_exist(index, ro_index):
     response = index.save_object({'objectID': 'Foo', 'name': 'Bar'})
     index.wait_task(response['taskID'])
 
@@ -13,10 +13,10 @@ def test_reindex_destination_must_not_exist(index, ro_index):
     ro_index.wait_task(response['taskID'])
 
     with pytest.raises(AlgoliaException):
-        AccountClient.reindex(index, ro_index)
+        AccountClient.copy_index(index, ro_index)
 
 
-def test_reindex_copy_the_index(index, ro_index):
+def test_copy_index_copy_the_index(index, ro_index):
     responses = [
         index.save_object({'objectID': 'Foo', 'name': 'Bar'}),
         index.batch_rules([rule_stub('foo')]),
@@ -30,7 +30,7 @@ def test_reindex_copy_the_index(index, ro_index):
     response = ro_index.client.delete_index(ro_index.index_name)  # Make sure target don't exist.
     ro_index.wait_task(response['taskID'])
 
-    responses = AccountClient.reindex(index, ro_index)
+    responses = AccountClient.copy_index(index, ro_index)
     for response in responses:
         ro_index.wait_task(response['taskID'])
 

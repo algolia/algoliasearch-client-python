@@ -31,18 +31,16 @@ class AccountClient:
     """
 
     @staticmethod
-    def reindex(source_index, destination_index, request_options=None):
+    def copy_index(source_index, destination_index, request_options=None):
         """
         Copies the source index into the destination index. It works
         even between different accounts.
         """
-        settings = {}
         try:
-            settings = destination_index.get_settings()
+            destination_index.get_settings()
         except AlgoliaException:
             pass
-
-        if settings:
+        else:
             raise AlgoliaException(
                 'Destination index already exists. Please delete it before copying index across applications.')
 
