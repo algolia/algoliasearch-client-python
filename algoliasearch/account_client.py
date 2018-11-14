@@ -23,7 +23,6 @@ THE SOFTWARE.
 """
 
 from .helpers import AlgoliaException
-import sys
 
 
 class AccountClient:
