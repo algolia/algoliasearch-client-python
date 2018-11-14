@@ -1178,7 +1178,11 @@ class Index(object):
             if safe:
                 tmp_index.wait_task(response['taskID'])
 
+        replicas = False
         if isinstance(settings, dict):
+            if settings['replicas'] is not None:
+                replicas = settings['replicas']
+                settings.pop('replicas', None)
             response = tmp_index.set_settings(settings)
             responses.append(response)
 
@@ -1216,6 +1220,12 @@ class Index(object):
 
         if safe:
             self.wait_task(response['taskID'])
+
+        if replicas:
+            response = self.set_settings({'replicas': replicas})
+            responses.append(response)
+            if safe:
+                self.wait_task(response['taskID'])
 
         return responses
 

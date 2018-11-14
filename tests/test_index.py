@@ -837,3 +837,26 @@ def test_reindex_with_safe(index):
     rules = index.search_rules()
     assert rules['nbHits'] == 1
     assert index.read_rule('reindex-rule-safe') == rule_stub('reindex-rule-safe')
+
+
+class StubToTestReplicas(IndexContent):
+
+    def __init__(self, index_name):
+        self.index_name = index_name
+
+    def get_objects(self):
+        return [{'objectID': 'B', 'method': 'reindex-object-safe'}]
+
+    def get_settings(self):
+        return {'replicas': [self.index_name + '-replica']}
+
+
+def test_reindex_replicas(index):
+    stub = StubToTestReplicas(index.index_name)
+    request_options = RequestOptions({'safe': True})
+    index.reindex(stub, request_options)
+
+    # Assert 'replicas' settings still exist.
+    settings = index.get_settings()
+    assert settings['replicas'] == [index.index_name + '-replica']
+
