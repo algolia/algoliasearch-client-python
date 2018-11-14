@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+from . import account_client
 from . import client
 from . import index
 from . import index_content
@@ -33,6 +34,7 @@ from . import version
 class algoliasearch(object):
     VERSION = version.VERSION
 
+    AccountClient = account_client.AccountClient
     Client = client.Client
     Index = index.Index
     IndexContent = index_content.IndexContent
