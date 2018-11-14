@@ -1142,6 +1142,83 @@ class Index(object):
 
         return self._req(True, '/rules/search', 'POST', request_options, data=params)
 
+    def reindex(self, index_content, request_options=None):
+        """
+        Reindex the current index using the provided index_content
+        """
+        safe = False
+        if request_options is not None and 'safe' in request_options.parameters:
+            safe = request_options.parameters['safe']
+            request_options.parameters.pop('safe', None)
+
+        letters = string.ascii_letters
+        random_string = ''.join(random.choice(letters) for i in range(10))
+        tmp_index_name = self.index_name + '_tmp_' + random_string
+
+        tmp_index = self.client.init_index(tmp_index_name)
+
+        scope = []
+        settings = index_content.get_settings()
+        if not isinstance(settings, dict):
+            scope.append('settings')
+
+        synonyms = index_content.get_synonyms()
+        if not isinstance(synonyms, list):
+            scope.append('synonyms')
+
+        rules = index_content.get_rules()
+        if not isinstance(rules, list):
+            scope.append('rules')
+
+        responses = []
+
+        if scope:
+            response = self.client.copy_index(self.index_name, tmp_index_name, scope=scope)
+            responses.append(response)
+            if safe:
+                tmp_index.wait_task(response['taskID'])
+
+        if isinstance(settings, dict):
+            response = tmp_index.set_settings(settings)
+            responses.append(response)
+
+        if isinstance(synonyms, list):
+            response = tmp_index.batch_synonyms(synonyms)
+            responses.append(response)
+
+        if isinstance(rules, list):
+            response = tmp_index.batch_rules(rules)
+            responses.append(response)
+
+        batch = []
+        batch_size = 1000
+        count = 0
+        for obj in index_content.get_objects():
+            batch.append(obj)
+            count += 1
+
+            if count == batch_size:
+                response = tmp_index.save_objects(batch)
+                responses.append(response)
+                batch = []
+                count = 0
+
+        if batch:
+            response = tmp_index.save_objects(batch)
+            responses.append(response)
+
+        if safe:
+            for response in responses:
+                tmp_index.wait_task(response['taskID'])
+
+        response = self.client.move_index(tmp_index_name, self.index_name)
+        responses.append(response)
+
+        if safe:
+            self.wait_task(response['taskID'])
+
+        return responses
+
     def _req(self, is_search, path, meth, request_options=None, params=None, data=None):
         """Perform an HTTPS request with retry logic."""
         path = '%s%s' % (self._request_path, path)

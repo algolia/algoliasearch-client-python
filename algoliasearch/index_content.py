@@ -5,7 +5,7 @@ http://www.algolia.com/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
+in the Software without restriction, including without limitation the rights lw1
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
@@ -22,19 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-from . import client
-from . import index
-from . import index_content
-from . import helpers
-from . import version
 
+class IndexContent:
+    """
+    Content of index.
+    """
 
-# Compatibility with old import
-class algoliasearch(object):
-    VERSION = version.VERSION
+    def get_objects(self):
+        """
+        Return index's objects.
+        """
+        return []
 
-    Client = client.Client
-    Index = index.Index
-    IndexContent = index_content.IndexContent
-    AlgoliaException = helpers.AlgoliaException
-    RequestOptions = client.RequestOptions
+    def get_settings(self):
+        """
+        Return index's settings.
+        """
+        return False
+
+    def get_synonyms(self):
+        """
+        Return index's synonyms.
+        """
+        return False
+
+    def get_rules(self):
+        """
+        Return index's rules.
+        """
+        return False

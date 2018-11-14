@@ -6,6 +6,7 @@ from decimal import Decimal
 
 from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
+from algoliasearch.index_content import IndexContent
 
 from .helpers import Factory, rule_stub, synonym_stub
 
@@ -663,3 +664,176 @@ def test_batch(rw_index):
         assert False
     except AlgoliaException as e:
         assert 'does not exist' in str(e)
+
+
+class ObjectsStub(IndexContent):
+    def get_objects(self):
+        return [{'objectID': 'B', 'method': 'Foo'}]
+
+
+def test_reindex_objects(index):
+    obj = {'objectID': 'A', 'method': 'Bar'}
+    res = index.save_object(obj)
+    index.wait_task(res['taskID'])
+
+    stub = ObjectsStub()
+    responses = index.reindex(stub)
+    for response in responses:
+        index.wait_task(response['taskID'])
+    res = index.search('')
+    assert len(res['hits']) == 1
+    del res['hits'][0]['_highlightResult']
+    assert stub.get_objects()[0] in res['hits']
+
+
+class WithListRulesStub(IndexContent):
+    def get_rules(self):
+        return [rule_stub('reindex-rule-foo')]
+
+
+def test_reindex_with_list_rules(index):
+    rule = rule_stub('reindex-rule-bar')
+    res = index.batch_rules([rule])
+    index.wait_task(res['taskID'])
+
+    stub = WithListRulesStub()
+    responses = index.reindex(stub)
+    for response in responses:
+        index.wait_task(response['taskID'])
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 1
+    assert index.read_rule('reindex-rule-foo') == rule_stub('reindex-rule-foo')
+
+
+class FalseRulesStub(IndexContent):
+    def get_rules(self):
+        return False
+
+
+def test_reindex_false_rules(index):
+    rule = rule_stub('reindex-rule-bar')
+    res = index.batch_rules([rule])
+    index.wait_task(res['taskID'])
+
+    stub = FalseRulesStub()
+    responses = index.reindex(stub)
+    for response in responses:
+        index.wait_task(response['taskID'])
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 1
+    assert index.read_rule('reindex-rule-bar') == rule
+
+
+class WithListSynonymsStub(IndexContent):
+    def get_synonyms(self):
+        return [synonym_stub('reindex-synonym-foo')]
+
+
+def test_reindex_with_list_synonyms(index):
+    synonym = synonym_stub('reindex-synonym-bar')
+    res = index.batch_synonyms([synonym])
+    index.wait_task(res['taskID'])
+
+    stub = WithListSynonymsStub()
+    responses = index.reindex(stub)
+    for response in responses:
+        index.wait_task(response['taskID'])
+
+    synonyms = index.search_synonyms('')
+    assert synonyms['nbHits'] == 1
+    assert index.get_synonym('reindex-synonym-foo') == synonym_stub('reindex-synonym-foo')
+
+
+class FalseSynonymsStub(IndexContent):
+    def get_synonyms(self):
+        return False
+
+
+def test_reindex_false_synonyms(index):
+    synonym = synonym_stub('reindex-synonym-bar')
+    res = index.batch_synonyms([synonym])
+    index.wait_task(res['taskID'])
+
+    stub = FalseSynonymsStub()
+    responses = index.reindex(stub)
+    for response in responses:
+        index.wait_task(response['taskID'])
+
+    synonyms = index.search_synonyms('')
+    assert synonyms['nbHits'] == 1
+    assert index.get_synonym('reindex-synonym-bar') == synonym
+
+
+class WithDictSettingsStub(IndexContent):
+    def get_settings(self):
+        return {'userData': 'reindex-settings-foo'}
+
+
+def test_reindex_with_dict_settings(index):
+    res = index.set_settings({'userData': 'reindex-settings-bar'})
+    index.wait_task(res['taskID'])
+
+    stub = WithDictSettingsStub()
+    responses = index.reindex(stub)
+    for response in responses:
+        index.wait_task(response['taskID'])
+
+    settings = index.get_settings()
+    assert settings['userData'] == 'reindex-settings-foo'
+
+
+class FalseSettingsStub(IndexContent):
+    def get_objects(self):
+        return [{'objectID': 'A', 'method': 'Foo'}]
+
+
+def test_reindex_false_synonyms(index):
+    res = index.set_settings({'userData': 'reindex-settings-bar'})
+    index.wait_task(res['taskID'])
+
+    stub = FalseSettingsStub()
+    responses = index.reindex(stub)
+    for response in responses:
+        index.wait_task(response['taskID'])
+
+    settings = index.get_settings()
+    assert settings['userData'] == 'reindex-settings-bar'
+
+
+class StubToTestSafe(IndexContent):
+
+    def get_objects(self):
+        return [{'objectID': 'B', 'method': 'reindex-object-safe'}]
+
+    def get_settings(self):
+        return {'userData': 'reindex-settings-safe'}
+
+    def get_rules(self):
+        return [rule_stub('reindex-rule-safe')]
+
+    def get_synonyms(self):
+        return [synonym_stub('reindex-synonym-safe')]
+
+
+def test_reindex_with_safe(index):
+    stub = StubToTestSafe()
+    request_options = RequestOptions({'safe': True})
+    index.reindex(stub, request_options)
+
+    res = index.search('')
+    assert len(res['hits']) == 1
+    del res['hits'][0]['_highlightResult']
+    assert stub.get_objects()[0] in res['hits']
+
+    settings = index.get_settings()
+    assert settings['userData'] == 'reindex-settings-safe'
+
+    synonyms = index.search_synonyms('')
+    assert synonyms['nbHits'] == 1
+    assert index.get_synonym('reindex-synonym-safe') == synonym_stub('reindex-synonym-safe')
+
+    rules = index.search_rules()
+    assert rules['nbHits'] == 1
+    assert index.read_rule('reindex-rule-safe') == rule_stub('reindex-rule-safe')
