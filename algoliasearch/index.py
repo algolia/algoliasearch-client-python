@@ -216,7 +216,6 @@ class Index(object):
         @param objects contains an array of objects to push (each object
             must contains a objectID attribute)
         """
-
         safe = False
         if request_options is not None and 'safe' in request_options.parameters:
             safe = request_options.parameters['safe']
@@ -228,20 +227,27 @@ class Index(object):
 
         tmp_index = self.client.init_index(tmp_index_name)
 
-        copy_response = self.client.copy_index(self.index_name, tmp_index_name, scope=['settings', 'synonyms', 'rules'])
+        responses = []
+
+        response = self.client.copy_index(self.index_name, tmp_index_name, request_options, scope=['settings', 'synonyms', 'rules'])
+        responses.append(response)
 
         if safe:
-            self.wait_task(copy_response['taskID'])
+            self.wait_task(response['taskID'])
 
-        batch_response = tmp_index.save_objects(objects, request_options)
+        response = tmp_index.save_objects(objects, request_options)
+        responses.append(response)
+
         if safe:
-            tmp_index.wait_task(batch_response['taskID'])
+            tmp_index.wait_task(response['taskID'])
 
-        move_response = self.client.move_index(tmp_index_name, self.index_name);
+        response = self.client.move_index(tmp_index_name, self.index_name, request_options);
+        responses.append(response)
+
         if safe:
-            self.wait_task(move_response['taskID'])
+            self.wait_task(response['taskID'])
 
-        return [copy_response, batch_response, move_response]
+        return responses
 
     @deprecated
     def saveObject(self, obj):
