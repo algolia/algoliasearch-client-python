@@ -235,11 +235,26 @@ class Index(object):
         if safe:
             self.wait_task(response['taskID'])
 
-        response = tmp_index.save_objects(objects, request_options)
-        responses.append(response)
+        batch = []
+        batch_size = 1000
+        count = 0
+        for obj in objects:
+            batch.append(obj)
+            count += 1
+
+            if count == batch_size:
+                response = tmp_index.save_objects(batch, request_options)
+                responses.append(response)
+                batch = []
+                count = 0
+
+        if batch:
+            response = tmp_index.save_objects(batch, request_options)
+            responses.append(response)
 
         if safe:
-            tmp_index.wait_task(response['taskID'])
+            for response in responses:
+                tmp_index.wait_task(response['taskID'])
 
         response = self.client.move_index(tmp_index_name, self.index_name, request_options);
         responses.append(response)
