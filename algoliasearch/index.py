@@ -675,7 +675,7 @@ class Index(object):
     def replace_all_synonyms(self, synonyms, request_options=None):
         """
         Replace all synonyms in the index.
-        @param synonyms the synonyms to upload as a python dictionary.
+        @param synonyms the synonyms to upload as a list of python dictionary.
                the dictionary must contain an objectID key.
         """
         for synonym in synonyms:
@@ -1078,7 +1078,7 @@ class Index(object):
     def replace_all_rules(self, rules, request_options=None):
         """
         Replace all rules in the index.
-        @param rules the rules to upload as a python dictionary.
+        @param rules the rules to upload as a list of python dictionary.
                the dictionary must contain an objectID key.
         """
         for rule in rules:
