@@ -10,6 +10,12 @@ def mcm_client():
 
 
 @pytest.fixture
+def mcm_index(mcm_client):
+    idx = create_index(mcm_client)
+    yield idx
+    mcm_client.delete_index(idx.index_name)  # Tear down
+
+@pytest.fixture
 def client():
     return create_client()
 

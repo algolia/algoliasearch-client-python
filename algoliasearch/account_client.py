@@ -33,9 +33,20 @@ class AccountClient:
     @staticmethod
     def copy_index(source_index, destination_index, request_options=None):
         """
-        Copies the source index into the destination index. It works
-        even between different accounts.
+        The method copy settings, synonyms, rules and objects from the source
+        index to the destination index. The replicas of the source index will
+        not be copied.
+
+        Throw an exception if the destination index already exists
+        Throw an exception if the indices are on the same application
+
+        @param source_index the source index
+        @param destination_index the destination index
+        @param request_options
         """
+        if source_index.client.app_id == destination_index.client.app_id:
+            raise AlgoliaException('The indexes are on the same application. Use client.copy_index instead.')
+
         try:
             destination_index.get_settings()
         except AlgoliaException:
@@ -46,19 +57,20 @@ class AccountClient:
 
         responses = []
 
-        # Transfer settings
+        # Copy settings
         settings = source_index.get_settings()
-        responses.append(destination_index.set_settings(settings))
+        settings
+        responses.append(destination_index.set_settings(settings, False, False, request_options))
 
-        # Transfer synonyms
+        # Copy synonyms
         synonyms = list(source_index.iter_synonyms())
-        responses.append(destination_index.batch_synonyms(synonyms))
+        responses.append(destination_index.batch_synonyms(synonyms, False, False, False, request_options))
 
-        # Transfer rules
+        # Copy rules
         rules = list(source_index.iter_rules())
-        responses.append(destination_index.batch_rules(rules))
+        responses.append(destination_index.batch_rules(rules, False, False, request_options))
 
-        # Transfer objects
+        # Copy objects
         responses = []
         batch = []
         batch_size = 1000
@@ -68,13 +80,13 @@ class AccountClient:
             count += 1
 
             if count == batch_size:
-                response = destination_index.save_objects(batch)
+                response = destination_index.save_objects(batch, request_options)
                 responses.append(response)
                 batch = []
                 count = 0
 
         if batch:
-            response = destination_index.save_objects(batch)
+            response = destination_index.save_objects(batch, request_options)
             responses.append(response)
 
         return responses
