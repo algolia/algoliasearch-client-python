@@ -3,7 +3,7 @@ import pytest
 from algoliasearch.account_client import AccountClient
 from algoliasearch.helpers import AlgoliaException
 from .helpers import rule_stub, synonym_stub
-
+from .helpers import is_community
 
 def test_copy_index_applications_must_be_different(index, ro_index):
     response = index.save_object({'objectID': 'Foo', 'name': 'Bar'})
@@ -15,6 +15,9 @@ def test_copy_index_applications_must_be_different(index, ro_index):
     with pytest.raises(AlgoliaException):
         AccountClient.copy_index(index, ro_index)
 
+
+@pytest.mark.skipif(is_community,
+                    reason='Cross application methods cannot be tested by the community')
 def test_copy_index_destination_must_not_exist(index, mcm_index):
     response = index.save_object({'objectID': 'Foo', 'name': 'Bar'})
     index.wait_task(response['taskID'])
@@ -26,6 +29,8 @@ def test_copy_index_destination_must_not_exist(index, mcm_index):
         AccountClient.copy_index(index, mcm_index)
 
 
+@pytest.mark.skipif(is_community,
+                    reason='Cross application methods cannot be tested by the community')
 def test_copy_index_copy_the_index(index, mcm_index):
     responses = [
         index.save_object({'objectID': 'Foo', 'name': 'Bar'}),
