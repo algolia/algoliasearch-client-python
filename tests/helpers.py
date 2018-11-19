@@ -120,14 +120,6 @@ class IndexWithData:
         return getattr(self._index, name)
 
 
-def synonym_stub(objid='my-synonym'):
-    return {
-        'objectID': objid,
-        'type': 'synonym',
-        'synonyms': ['San Francisco', 'SF']
-    }
-
-
 def rule_stub(objid='my-rule'):
     return {
         'objectID': objid,

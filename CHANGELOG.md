@@ -16,7 +16,7 @@
 
 * Adds `replace_all_rules` and `replace_all_synonyms` methods on client - PR [#390](https://github.com/algolia/algoliasearch-client-python/pull/390)
 
-* Adds `Index.reindex` and `AccountClient.copy_index` methods on client - PR [#391](https://github.com/algolia/algoliasearch-client-python/pull/391)
+* Adds `AccountClient.copy_index` methods on client - PR [#391](https://github.com/algolia/algoliasearch-client-python/pull/391)
 
 ### 1.17.0 - 2018-06-19
 
