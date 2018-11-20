@@ -10,6 +10,30 @@ def mcm_client():
 
 
 @pytest.fixture
+def client_1():
+    return create_client('ALGOLIA_APPLICATION_ID_1', 'ALGOLIA_ADMIN_KEY_1')
+
+
+@pytest.fixture
+def client_2():
+    return create_client('ALGOLIA_APPLICATION_ID_2', 'ALGOLIA_ADMIN_KEY_2')
+
+
+@pytest.fixture
+def index_1(client_1):
+    idx = create_index(client_1)
+    yield idx
+    client_1.delete_index(idx.index_name)  # Tear down
+
+
+@pytest.fixture
+def index_2(client_2):
+    idx = create_index(client_2)
+    yield idx
+    client_2.delete_index(idx.index_name)  # Tear down
+
+
+@pytest.fixture
 def mcm_index(mcm_client):
     idx = create_index(mcm_client)
     yield idx

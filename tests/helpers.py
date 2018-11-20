@@ -1,5 +1,6 @@
 import os
 import time
+import datetime
 from random import randint
 
 from algoliasearch import algoliasearch
@@ -12,7 +13,12 @@ def check_credentials():
         'ALGOLIA_API_KEY',
         'ALGOLIA_SEARCH_API_KEY',
         'ALGOLIA_APP_ID_MCM',
-        'ALGOLIA_API_KEY_MCM'
+        'ALGOLIA_API_KEY_MCM',
+        # CTS:
+        'ALGOLIA_APPLICATION_ID_1',
+        'ALGOLIA_ADMIN_KEY_1',
+        'ALGOLIA_APPLICATION_ID_2',
+        'ALGOLIA_ADMIN_KEY_2',
     ]
 
     for credential in credentials:
@@ -25,12 +31,14 @@ is_community = 'IS_COMMUNITY' in os.environ
 
 
 def index_name():
-    name = 'algolia-python{}'.format(randint(1, 100000))
+    date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
     if 'TRAVIS' in os.environ:
-        name = 'TRAVIS_PYTHON_{}_id-{}'.format(name, os.environ['TRAVIS_JOB_NUMBER'])
+        instance = os.environ['TRAVIS_BUILD_NUMBER']
+    else:
+        instance = 'unknown'
 
-    return name
+    return 'python_%s_%s' % (date,instance)
 
 
 class Factory:

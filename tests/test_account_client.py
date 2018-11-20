@@ -5,64 +5,46 @@ from algoliasearch.helpers import AlgoliaException
 from .helpers import rule_stub, synonym_stub
 from .helpers import is_community
 
-def test_copy_index_applications_must_be_different(index, ro_index):
-    response = index.save_object({'objectID': 'Foo', 'name': 'Bar'})
-    index.wait_task(response['taskID'])
+def test_copy_index_applications_must_be_different(client_1):
 
-    response = ro_index.save_object({'objectID': 'Foo', 'name': 'Bar'})
-    ro_index.wait_task(response['taskID'])
+    index_1 = client_1.init_index('copy_index')
+    index_2 = client_1.init_index('copy_index_2')
 
     with pytest.raises(AlgoliaException):
-        AccountClient.copy_index(index, ro_index)
+        AccountClient.copy_index(index_1, index_2)
 
-
-@pytest.mark.skipif(is_community,
-                    reason='Cross application methods cannot be tested by the community')
-def test_copy_index_destination_must_not_exist(index, mcm_index):
-    response = index.save_object({'objectID': 'Foo', 'name': 'Bar'})
-    index.wait_task(response['taskID'])
-
-    response = mcm_index.save_object({'objectID': 'Foo', 'name': 'Bar'})
-    mcm_index.wait_task(response['taskID'])
-
-    with pytest.raises(AlgoliaException):
-        AccountClient.copy_index(index, mcm_index)
-
-
-@pytest.mark.skipif(is_community,
-                    reason='Cross application methods cannot be tested by the community')
-def test_copy_index_copy_the_index(index, mcm_index):
+def test_copy_index_copy_the_index_and_destination_must_not_exist(index_1, index_2):
     responses = [
-        index.save_object({'objectID': 'Foo', 'name': 'Bar'}),
-        index.batch_rules([rule_stub('foo')]),
-        index.batch_synonyms([synonym_stub('foo')]),
-        index.set_settings({'userData': 'foo'})
+        index_1.save_object({'objectID': 'one'}),
+        index_1.batch_rules([rule_stub('one')]),
+        index_1.batch_synonyms([synonym_stub('one')]),
+        index_1.set_settings({'searchableAttributes': ['objectID']})
     ]
 
     for response in responses:
-        index.wait_task(response['taskID'])
+        index_1.wait_task(response['taskID'])
 
-    response = mcm_index.client.delete_index(mcm_index.index_name)  # Make sure target don't exist.
-    mcm_index.wait_task(response['taskID'])
-
-    responses = AccountClient.copy_index(index, mcm_index)
+    responses = AccountClient.copy_index(index_1, index_2)
     for response in responses:
-        mcm_index.wait_task(response['taskID'])
+        index_2.wait_task(response['taskID'])
 
     # Assert objects got copied
-    res = mcm_index.search('')
+    res = index_2.search('')
     assert len(res['hits']) == 1
-    del res['hits'][0]['_highlightResult']
-    assert res['hits'][0] == {'objectID': 'Foo', 'name': 'Bar'}
+    assert res['hits'][0] == {'objectID': 'one'}
 
     # Assert settings got copied
-    settings = mcm_index.get_settings()
-    assert settings['userData'] == 'foo'
+    settings = index_2.get_settings()
+    assert settings['searchableAttributes'] == ['objectID']
 
     # Assert synonyms got copied
-    rule = mcm_index.read_rule('foo')
-    assert rule == rule_stub('foo')
+    rule = index_2.read_rule('one')
+    assert rule == rule_stub('one')
 
     # Assert synonyms got copied
-    synonym = mcm_index.get_synonym('foo')
-    assert synonym == synonym_stub('foo')
+    synonym = index_2.get_synonym('one')
+    assert synonym == synonym_stub('one')
+
+    # Assert that copying again fails because index already exists
+    with pytest.raises(AlgoliaException):
+        AccountClient.copy_index(index_1, index_2)
