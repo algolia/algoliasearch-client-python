@@ -676,14 +676,7 @@ class Index(object):
         """
         Replace all synonyms in the index.
         @param synonyms the synonyms to upload as a list of python dictionary.
-               the dictionary must contain an objectID key.
         """
-        for synonym in synonyms:
-            if 'objectID' not in synonym:
-                raise AlgoliaException('missing objectID in synonym body')
-            if synonym['objectID'] == '':
-                raise AlgoliaException('objectID in synonym body cannot be empty')
-
         params = {
             'replaceExistingSynonyms': True
         }
@@ -1079,14 +1072,7 @@ class Index(object):
         """
         Replace all rules in the index.
         @param rules the rules to upload as a list of python dictionary.
-               the dictionary must contain an objectID key.
         """
-        for rule in rules:
-            if 'objectID' not in rule:
-                raise AlgoliaException('missing objectID in rule body')
-            if rule['objectID'] == '':
-                raise AlgoliaException('objectID in rule body cannot be empty')
-
         params = {
             'clearExistingRules': True
         }

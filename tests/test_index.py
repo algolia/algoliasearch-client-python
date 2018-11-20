@@ -137,36 +137,6 @@ def test_replace_all_synonyms(index):
     assert index.get_synonym('four') == synonym4
 
 
-def test_replace_all_synonyms_expects_object_id(index):
-    synonym = synonym_stub('one')
-
-    synonym.pop('objectID', None)
-
-    try:
-        index.replace_all_synonyms([synonym])
-    except AlgoliaException:
-        assert True
-        return
-
-    # We should not be able to save a rule with an empty objectID.
-    assert False
-
-
-def test_replace_all_synonyms_expects_not_empty_object_id(index):
-    synonym = synonym_stub('one')
-
-    synonym['objectID'] = ''
-
-    try:
-        index.replace_all_synonyms([synonym])
-    except AlgoliaException:
-        assert True
-        return
-
-    # We should not be able to save a rule with an empty objectID.
-    assert False
-
-
 def test_iter_synonyms(index):
     synonyms = [{
         'objectID': 'city',
@@ -344,36 +314,6 @@ def test_replace_all_rules(index):
     assert rules['nbHits'] == 2
     assert index.read_rule('three') == rule3
     assert index.read_rule('four') == rule4
-
-
-def test_replace_all_rules_expects_object_id(index):
-    rule = rule_stub('one')
-
-    rule.pop('objectID', None)
-
-    try:
-        index.replace_all_rules([rule])
-    except AlgoliaException:
-        assert True
-        return
-
-    # We should not be able to save a rule with an empty objectID.
-    assert False
-
-
-def test_replace_all_rules_expects_not_empty_object_id(index):
-    rule = rule_stub('one')
-
-    rule['objectID'] = ''
-
-    try:
-        index.replace_all_rules([rule])
-    except AlgoliaException:
-        assert True
-        return
-
-    # We should not be able to save a rule with an empty objectID.
-    assert False
 
 
 def test_batch_and_clear_existing(index):
