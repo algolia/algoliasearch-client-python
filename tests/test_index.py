@@ -7,7 +7,7 @@ from decimal import Decimal
 from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH
 from algoliasearch.helpers import AlgoliaException
 
-from .helpers import Factory, rule_stub
+from .helpers import Factory, rule_stub, synonym_stub
 
 
 def test_add_object(index):

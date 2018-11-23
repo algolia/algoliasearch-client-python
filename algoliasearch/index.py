@@ -23,6 +23,8 @@ THE SOFTWARE.
 """
 
 import time
+import random
+import string
 
 try:
     from urllib import urlencode
