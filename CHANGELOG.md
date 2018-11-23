@@ -5,6 +5,13 @@
 
 <Contributors, please add your changes below this line>
 
+* Adds `replace_all_objects` method on index - PR [#388](https://github.com/algolia/algoliasearch-client-python/pull/388)
+    Push a new set of objects and remove all previous objects. Usage:
+        ```python
+        index = client.init_index('name');
+        index.replace_all_objects(objects)
+        ```
+
 
 ### 1.17.0 - 2018-06-19
 
@@ -13,11 +20,11 @@
     Introduce new Analytics object, wrapper around the
     [Analytics API](https://www.algolia.com/doc/rest-api/analytics/) (more methods to come).
 
-* 2 methods about taskID initially available in the `Index` moved to the `Client`. 
-    You could get some taskID from the engine without necessarily have an instance of Index, 
+* 2 methods about taskID initially available in the `Index` moved to the `Client`.
+    You could get some taskID from the engine without necessarily have an instance of Index,
     instead of instantiating an index that you won't need, you can now call wait_task and get_task_status on the client.
     The original methods on the index still work and are **not** deprecated.
- 
+
     ```python
     client.wait_ask(index_name, taskID)
     client.get_task_status(index_name, taskID)
@@ -74,7 +81,7 @@ https://blog.algolia.com/travis-encrypted-variables-external-contributions/
     Cursor can become so long that the generated URL fails (error HTTP 414).
 
 * Chore: Add Python version to the UserAgent
- 
+
 ### 1.15.3 - 2018-03-15
 
 * Remove the `[security]` flair of `requests`

@@ -23,6 +23,8 @@ THE SOFTWARE.
 """
 
 import time
+import random
+import string
 
 try:
     from urllib import urlencode
@@ -204,6 +206,63 @@ class Index(object):
                 'body': obj
             })
         return self.batch(requests, no_create=no_create, request_options=request_options)
+
+    def replace_all_objects(self, objects, request_options=None):
+        """
+        Push a new set of objects and remove all previous objects.
+        Settings, synonyms and query rules are untouched.
+        Replace all records in an index without any downtime.
+
+        @param objects contains an array of objects to push (each object
+            must contains a objectID attribute)
+        """
+        safe = False
+        if request_options is not None and 'safe' in request_options.parameters:
+            safe = request_options.parameters['safe']
+            request_options.parameters.pop('safe', None)
+
+        letters = string.ascii_letters
+        random_string = ''.join(random.choice(letters) for i in range(10))
+        tmp_index_name = self.index_name + '_tmp_' + random_string
+
+        tmp_index = self.client.init_index(tmp_index_name)
+
+        responses = []
+
+        response = self.client.copy_index(self.index_name, tmp_index_name, request_options, scope=['settings', 'synonyms', 'rules'])
+        responses.append(response)
+
+        if safe:
+            self.wait_task(response['taskID'])
+
+        batch = []
+        batch_size = 1000
+        count = 0
+        for obj in objects:
+            batch.append(obj)
+            count += 1
+
+            if count == batch_size:
+                response = tmp_index.save_objects(batch, request_options)
+                responses.append(response)
+                batch = []
+                count = 0
+
+        if batch:
+            response = tmp_index.save_objects(batch, request_options)
+            responses.append(response)
+
+        if safe:
+            for response in responses:
+                tmp_index.wait_task(response['taskID'])
+
+        response = self.client.move_index(tmp_index_name, self.index_name, request_options);
+        responses.append(response)
+
+        if safe:
+            self.wait_task(response['taskID'])
+
+        return responses
 
     @deprecated
     def saveObject(self, obj):
@@ -699,7 +758,7 @@ class Index(object):
     def iter_rules(self, hits_per_page=1000, request_options=None):
         page = 0
         response = self.search_rules(
-            '', page=page, 
+            '', page=page,
             hitsPerPage=hits_per_page, request_options=request_options
         )
 
@@ -712,7 +771,7 @@ class Index(object):
 
             page += 1
             response = self.search_rules(
-                '', page=page, 
+                '', page=page,
                 hitsPerPage=hits_per_page, request_options=request_options
             )
 
