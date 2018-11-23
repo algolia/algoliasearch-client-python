@@ -59,7 +59,6 @@ class AccountClient:
 
         # Copy settings
         settings = source_index.get_settings()
-        settings
         responses.append(destination_index.set_settings(settings, False, False, request_options))
 
         # Copy synonyms
