@@ -34,7 +34,7 @@ def index_name():
     date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
     if 'TRAVIS' in os.environ:
-        instance = os.environ['TRAVIS_BUILD_NUMBER']
+        instance = os.environ['TRAVIS_JOB_NUMBER']
     else:
         instance = 'unknown'
 
