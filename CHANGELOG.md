@@ -5,6 +5,8 @@
 
 <Contributors, please add your changes below this line>
 
+### 1.18.0 - 2018-11-23
+
 * Adds `replace_all_objects` method on index - PR [#388](https://github.com/algolia/algoliasearch-client-python/pull/388)
     Push a new set of objects and remove all previous objects. Usage:
         ```python
