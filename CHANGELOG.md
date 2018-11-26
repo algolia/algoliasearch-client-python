@@ -4,6 +4,8 @@
 
 <Contributors, please add your changes below this line>
 
+### 1.18.1 - 2018-11-26
+
 * Fixed issue while using replace_all_objects without valid `objectID` - PR [#393](https://github.com/algolia/algoliasearch-client-python/pull/393)
 
 ### 1.18.0 - 2018-11-23
