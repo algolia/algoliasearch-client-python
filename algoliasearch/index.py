@@ -243,13 +243,13 @@ class Index(object):
             count += 1
 
             if count == batch_size:
-                response = tmp_index.save_objects(batch, request_options)
+                response = tmp_index.add_objects(batch, request_options)
                 responses.append(response)
                 batch = []
                 count = 0
 
         if batch:
-            response = tmp_index.save_objects(batch, request_options)
+            response = tmp_index.add_objects(batch, request_options)
             responses.append(response)
 
         if safe:

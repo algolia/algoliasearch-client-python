@@ -581,7 +581,10 @@ def test_replace_all_objects(index):
     response = index.save_objects([obj1, obj2])
     index.wait_task(response['taskID'])
 
-    obj3 = {'objectID': 'C', 'color': 'green'}
+    # Without object id.
+    obj3 = {'color': 'green'}
+
+    # With object id
     obj4 = {'objectID': 'D', 'color': 'yellow'}
     responses = index.replace_all_objects([obj3, obj4])
     for response in responses:
@@ -595,7 +598,8 @@ def test_replace_all_objects(index):
     assert len(res['hits']) == 2
     assert obj1 not in res['hits']
     assert obj2 not in res['hits']
-    assert obj3 in res['hits']
+
+    assert res['hits'][1]['color'] == 'green'
     assert obj4 in res['hits']
 
 
@@ -605,8 +609,11 @@ def test_replace_all_objects_with_safe(index):
     response = index.save_objects([obj1, obj2])
     index.wait_task(response['taskID'])
 
-    obj3 = {'objectID': 'C', 'color': 'green'}
-    obj4 = {'objectID': 'D', 'color': 'yellow'}
+    # Without object id.
+    obj3 = {'color': 'black'}
+
+    # With object id
+    obj4 = {'objectID': 'D', 'color': 'white'}
     request_options = RequestOptions({'safe': True})
     index.replace_all_objects([obj3, obj4], request_options)
 
@@ -618,7 +625,7 @@ def test_replace_all_objects_with_safe(index):
     assert len(res['hits']) == 2
     assert obj1 not in res['hits']
     assert obj2 not in res['hits']
-    assert obj3 in res['hits']
+    assert res['hits'][1]['color'] == 'black'
     assert obj4 in res['hits']
 
 
