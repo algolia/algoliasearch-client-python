@@ -50,7 +50,7 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
 ## Install
 
-Install AlgoliaSearch using pip:
+Install the Python client using [pip](https://pypi.org/project/pip/):
 
 ```bash
 pip install --upgrade algoliasearch
@@ -72,7 +72,7 @@ client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
 index = client.init_index('your_index_name')
 ```
 
-**Note:** If you use this API Client with Google AppEngine (Thanks [@apassant](https://github.com/apassant)), it will use `urlfetch` instead of using the `request` module. Please be aware of [urlfetch's limits](https://cloud.google.com/appengine/docs/python/urlfetch/), and note that SSL certificates will not be verified for calls to domains other than algolia.net due to the lack of SNI support in `urlfetch`. To run unit tests on the AppEngine stub, please define an `APPENGINE_RUNTIME` enviroment variable.
+**Note:** If you use this API Client with Google AppEngine (thanks [@apassant](https://github.com/apassant)), it will use `urlfetch` instead of using the `request` module. Please be aware of [the limits of `urlfetch`](https://cloud.google.com/appengine/docs/python/urlfetch/), and note that SSL certificates aren't verified for calls to domains other than algolia.net due to the lack of SNI support in `urlfetch`. To run unit tests on the AppEngine stub, please define an `APPENGINE_RUNTIME` enviroment variable.
 
 ## Push data
 
@@ -106,13 +106,13 @@ index.set_settings({"searchableAttributes": ["lastname", "firstname", "company",
 You can now search for contacts using `firstname`, `lastname`, `company`, etc. (even with typos):
 
 ```python
-# search by firstname
+# Search for a first name
 print index.search("jimmie")
-# search a firstname with typo
+# Search for a first name with typo
 print index.search("jimie")
-# search for a company
+# Search for a company
 print index.search("california paint")
-# search for a firstname & company
+# Search for a first name and a company
 print index.search("jimmie paint")
 ```
 
@@ -199,11 +199,17 @@ search.start();
 
 
 
+### Personalization
+
+
+
+
+
 ### Search
 
 - [Search index](https://algolia.com/doc/api-reference/api-methods/search/?language=python)
 - [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=python)
-- [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=python)
+- [Search multiple indices](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=python)
 - [Browse index](https://algolia.com/doc/api-reference/api-methods/browse/?language=python)
 
 
@@ -212,10 +218,12 @@ search.start();
 ### Indexing
 
 - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=python)
-- [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=python)
+- [Save objects](https://algolia.com/doc/api-reference/api-methods/save-objects/?language=python)
 - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=python)
 - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=python)
+- [Replace all objects](https://algolia.com/doc/api-reference/api-methods/replace-all-objects/?language=python)
 - [Delete by](https://algolia.com/doc/api-reference/api-methods/delete-by/?language=python)
+- [Clear objects](https://algolia.com/doc/api-reference/api-methods/clear-objects/?language=python)
 - [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=python)
 - [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=python)
 
@@ -226,17 +234,17 @@ search.start();
 
 - [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=python)
 - [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=python)
+- [Copy settings](https://algolia.com/doc/api-reference/api-methods/copy-settings/?language=python)
 
 
 
 
 ### Manage indices
 
-- [List indexes](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=python)
+- [List indices](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=python)
 - [Delete index](https://algolia.com/doc/api-reference/api-methods/delete-index/?language=python)
 - [Copy index](https://algolia.com/doc/api-reference/api-methods/copy-index/?language=python)
 - [Move index](https://algolia.com/doc/api-reference/api-methods/move-index/?language=python)
-- [Clear index](https://algolia.com/doc/api-reference/api-methods/clear-index/?language=python)
 
 
 
@@ -261,6 +269,8 @@ search.start();
 - [Clear all synonyms](https://algolia.com/doc/api-reference/api-methods/clear-synonyms/?language=python)
 - [Get synonym](https://algolia.com/doc/api-reference/api-methods/get-synonym/?language=python)
 - [Search synonyms](https://algolia.com/doc/api-reference/api-methods/search-synonyms/?language=python)
+- [Replace all synonyms](https://algolia.com/doc/api-reference/api-methods/replace-all-synonyms/?language=python)
+- [Copy synonyms](https://algolia.com/doc/api-reference/api-methods/copy-synonyms/?language=python)
 - [Export Synonyms](https://algolia.com/doc/api-reference/api-methods/export-synonyms/?language=python)
 
 
@@ -268,13 +278,15 @@ search.start();
 
 ### Query rules
 
-- [Save rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=python)
-- [Batch rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=python)
-- [Get rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=python)
-- [Delete rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=python)
-- [Clear rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=python)
-- [Search rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=python)
-- [Export rules](https://algolia.com/doc/api-reference/api-methods/rules-export/?language=python)
+- [Save rule](https://algolia.com/doc/api-reference/api-methods/save-rule/?language=python)
+- [Batch rules](https://algolia.com/doc/api-reference/api-methods/batch-rules/?language=python)
+- [Get rule](https://algolia.com/doc/api-reference/api-methods/get-rule/?language=python)
+- [Delete rule](https://algolia.com/doc/api-reference/api-methods/delete-rule/?language=python)
+- [Clear rules](https://algolia.com/doc/api-reference/api-methods/clear-rules/?language=python)
+- [Search rules](https://algolia.com/doc/api-reference/api-methods/search-rules/?language=python)
+- [Replace all rules](https://algolia.com/doc/api-reference/api-methods/replace-all-rules/?language=python)
+- [Copy rules](https://algolia.com/doc/api-reference/api-methods/copy-rules/?language=python)
+- [Export rules](https://algolia.com/doc/api-reference/api-methods/export-rules/?language=python)
 
 
 
