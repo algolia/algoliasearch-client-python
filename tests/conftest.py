@@ -39,6 +39,12 @@ def mcm_index(mcm_client):
     yield idx
     mcm_client.delete_index(idx.index_name)  # Tear down
 
+
+@pytest.fixture
+def insights_client():
+    return create_client().init_insights_client()
+
+
 @pytest.fixture
 def client():
     return create_client()

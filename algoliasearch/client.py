@@ -39,7 +39,7 @@ except ImportError:
 from .version import VERSION
 from .index import Index
 from .analytics import Analytics
-
+from .insights_client import InsightsClient
 from .transport import Transport
 from .helpers import deprecated
 from .helpers import safe
@@ -436,6 +436,9 @@ class Client(object):
 
     def init_analytics(self):
         return Analytics(self, copy.deepcopy(self._transport))
+
+    def init_insights_client(self, region='us'):
+        return InsightsClient(copy.deepcopy(self._transport), region)
 
     @deprecated
     def listUserKeys(self):
