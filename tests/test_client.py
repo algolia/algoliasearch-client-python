@@ -1,11 +1,13 @@
 import os
 import time
 
+import pytest
+
 from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH, Client
 from algoliasearch.helpers import AlgoliaException
 from .fake_session import FakeSession
 from .helpers import Factory, check_credentials
-
+from .helpers import is_community
 
 def test_request_options(client):
     options = {'forwardedFor': 'blabla', 'hitsPerPage': 40}
@@ -473,3 +475,10 @@ def test_multiple_get_objects(double_indexes):
         res_ids = [elt['objectID'] for elt in res['hits']]
         for elt in double_indexes[i].ids:
             assert elt in res_ids
+
+
+@pytest.mark.skipif(is_community,
+                    reason='Strategy methods can not be tested by the community')
+def test_get_strategy(index_1):
+    response = index_1.client.get_strategy()
+    assert 'taskID' in response
