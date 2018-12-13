@@ -485,6 +485,6 @@ def test_multiple_get_objects(double_indexes):
 
 @pytest.mark.skipif(is_community,
                     reason='Strategy methods can not be tested by the community')
-def test_get_strategy(index_1):
-    response = index_1.client.get_strategy()
+def test_get_personalization_strategy(index_1):
+    response = index_1.client.get_personalization_strategy()
     assert 'taskID' in response
