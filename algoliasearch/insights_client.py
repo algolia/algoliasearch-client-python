@@ -14,10 +14,10 @@ class InsightsClient:
         return UserInsightsClient(self, user_token)
 
     def send_event(self, params, request_options=None):
-        self.send_events([params], request_options)
+        return self.send_events([params], request_options)
 
     def send_events(self, events, request_options=None):
-        self.post({'events': events}, request_options)
+        return self.post({'events': events}, request_options)
 
     def post(self, data, request_options=None):
         return self.__transport.req(False, self.__path, 'POST', {}, data, request_options)
