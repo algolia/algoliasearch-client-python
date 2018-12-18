@@ -1,10 +1,13 @@
 import os
 import time
 
+import pytest
+
 from algoliasearch.client import RequestOptions, MAX_API_KEY_LENGTH, Client
 from algoliasearch.helpers import AlgoliaException
 from .fake_session import FakeSession
 from .helpers import Factory, check_credentials
+from .helpers import is_community
 
 
 def test_request_options(client):
@@ -77,6 +80,7 @@ def test_change_api_key_too_long(client):
     client.api_key = api_key
     assert client._api_key == api_key
     assert 'X-Algolia-API-Key' not in client.headers
+
 
 def test_change_api_key_max_length(client):
     api_key = 'a' * MAX_API_KEY_LENGTH
@@ -314,6 +318,7 @@ def test_delete_index(double_indexes):
     assert index1.index_name not in res_names
     assert index2.index_name in res_names
 
+
 def test_multiple_batch_multiple_indexes(double_indexes):
     factory = Factory()
     index1 = double_indexes[0]
@@ -378,6 +383,7 @@ def test_multiple_batch_multiple_indexes(double_indexes):
     assert res['nbHits'] == 5
     res = index2.search('', params)
     assert res['nbHits'] == 3
+
 
 def test_batch_multiple_indexes(double_indexes):
     factory = Factory()
@@ -444,6 +450,7 @@ def test_batch_multiple_indexes(double_indexes):
     res = index2.search('', params)
     assert res['nbHits'] == 3
 
+
 def test_multiple_queries(double_indexes):
     index1 = double_indexes[0]
     index2 = double_indexes[1]
@@ -459,6 +466,7 @@ def test_multiple_queries(double_indexes):
         for elt in double_indexes[i].ids:
             assert elt in res_ids
 
+
 def test_multiple_get_objects(double_indexes):
     index1 = double_indexes[0]
     index2 = double_indexes[1]
@@ -473,3 +481,10 @@ def test_multiple_get_objects(double_indexes):
         res_ids = [elt['objectID'] for elt in res['hits']]
         for elt in double_indexes[i].ids:
             assert elt in res_ids
+
+
+@pytest.mark.skipif(is_community,
+                    reason='Strategy methods can not be tested by the community')
+def test_get_personalization_strategy(index_1):
+    response = index_1.client.get_personalization_strategy()
+    assert 'taskID' in response
