@@ -786,6 +786,12 @@ class Client(object):
         """
         return self._req(True, '/1/isalive', 'GET', request_options)
 
+    def set_personalization_strategy(self, strategy, request_options=None):
+        return self._req(False, '/1/recommendation/personalization/strategy', 'POST', request_options, data=strategy)
+
+    def get_personalization_strategy(self, request_options=None):
+        return self._req(True, '/1/recommendation/personalization/strategy', 'GET', request_options)
+
     def _req(self, is_search, path, meth, request_options=None, params=None, data=None):
         if len(self.api_key) > MAX_API_KEY_LENGTH:
             if data is None:

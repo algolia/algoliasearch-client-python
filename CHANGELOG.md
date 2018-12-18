@@ -6,6 +6,8 @@
 
 * Adds `insights_client` - PR [#394](https://github.com/algolia/algoliasearch-client-python/pull/394)
 
+* Adds `get` and `set` personalization strategy methods - PR [#395](https://github.com/algolia/algoliasearch-client-python/pull/395)
+
 ### 1.18.1 - 2018-11-26
 
 * Fixed issue while using replace_all_objects without valid `objectID` - PR [#393](https://github.com/algolia/algoliasearch-client-python/pull/393)
