@@ -66,7 +66,7 @@ class UserInsightsClient:
 
     def viewed_object_ids(self, event_name, index_name, object_ids, request_options=None):
         self.__insights_client.send_event({
-            'eventType': 'conversion',
+            'eventType': 'view',
             'eventName': event_name,
             'index': index_name,
             'userToken': self.__user_token,
@@ -75,7 +75,7 @@ class UserInsightsClient:
 
     def viewed_filters(self, event_name, index_name, filters, request_options=None):
         self.__insights_client.send_event({
-            'eventType': 'conversion',
+            'eventType': 'view',
             'eventName': event_name,
             'index': index_name,
             'userToken': self.__user_token,
