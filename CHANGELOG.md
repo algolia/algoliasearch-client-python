@@ -4,6 +4,8 @@
 
 <Contributors, please add your changes below this line>
 
+* Adds `insights_client` - PR [#394](https://github.com/algolia/algoliasearch-client-python/pull/394)
+
 * Adds `get` and `set` personalization strategy methods - PR [#395](https://github.com/algolia/algoliasearch-client-python/pull/395)
 
 ### 1.18.1 - 2018-11-26

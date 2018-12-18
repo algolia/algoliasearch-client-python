@@ -23,8 +23,11 @@ THE SOFTWARE.
 """
 
 from . import account_client
+from . import analytics
 from . import client
 from . import index
+from . import insights_client
+from . import user_insights_client
 from . import helpers
 from . import version
 
@@ -34,7 +37,10 @@ class algoliasearch(object):
     VERSION = version.VERSION
 
     AccountClient = account_client.AccountClient
+    Analytics = analytics.Analytics
     Client = client.Client
     Index = index.Index
+    InsightsClient = insights_client.InsightsClient
+    UserInsightsClient = insights_client.UserInsightsClient
     AlgoliaException = helpers.AlgoliaException
     RequestOptions = client.RequestOptions
