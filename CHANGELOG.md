@@ -4,6 +4,8 @@
 
 <Contributors, please add your changes below this line>
 
+* Fixed missing responses from insights related methods - PR [#396](https://github.com/algolia/algoliasearch-client-python/pull/396)
+
 ### 1.19.0 - 2018-12-18
 
 * Adds `insights_client` - PR [#394](https://github.com/algolia/algoliasearch-client-python/pull/394)
