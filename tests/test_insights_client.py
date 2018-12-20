@@ -14,7 +14,9 @@ def test_send_event(insights_client, index_1):
         'objectIDs': ['obj1', 'obj2']
     }
 
-    insights_client.send_event(event)
+    response = insights_client.send_event(event)
+    assert response['status'] == 200
+    assert response['message'] == 'OK'
 
 
 def test_send_events(insights_client, index_1):
@@ -26,4 +28,6 @@ def test_send_events(insights_client, index_1):
         'objectIDs': ['obj1', 'obj2']
     }
 
-    insights_client.send_events([event])
+    response = insights_client.send_events([event])
+    assert response['status'] == 200
+    assert response['message'] == 'OK'
