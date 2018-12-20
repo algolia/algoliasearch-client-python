@@ -4,6 +4,8 @@
 
 <Contributors, please add your changes below this line>
 
+### 1.19.1 - 2018-12-20
+
 * Fixed missing responses from insights related methods - PR [#396](https://github.com/algolia/algoliasearch-client-python/pull/396)
 
 ### 1.19.0 - 2018-12-18
