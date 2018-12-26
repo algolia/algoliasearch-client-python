@@ -1,0 +1,30 @@
+build/
+__pycache__
+*.py[cod]
+*~
+@*
+/build
+/env
+*.iml
+/out/
+.venv/
+.mypy_cache/
+.cache
+
+# Packages
+*.egg
+*.egg-info
+*.eggs
+
+# IDEs
+.idea
+*.swp
+.vscode
+
+# Operating Systems
+.DS_Store
+
+# Tests
+.pytest_cache/
+.coverage*
+.tox
