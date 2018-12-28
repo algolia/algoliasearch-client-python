@@ -7,22 +7,11 @@ from algoliasearch.http.requester import Requester
 def test_init():
     config = SearchConfig('foo', 'bar')
     transporter = Transporter(Requester, config)
-    client = SearchClient(transporter, config)
-
-    assert isinstance(client, SearchClient)
-
-
-def test_init_index():
-    config = SearchConfig('foo', 'bar')
-    transporter = Transporter(Requester, config)
-    client = SearchClient(transporter, config)
-
-    index = client.init_index('foo')
+    index = SearchIndex(transporter, config, 'foo')
 
     assert isinstance(index, SearchIndex)
 
-
 def test_app_id_getter():
-    client = SearchClient.create('foo', 'bar')
+    index = SearchClient.create('foo', 'bar').init_index('index')
 
-    assert client.app_id == 'foo'
+    assert index.app_id == 'foo'

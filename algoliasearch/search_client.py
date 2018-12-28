@@ -1,19 +1,24 @@
 from .search_index import SearchIndex
 from .config.search_config import SearchConfig
-
+from .http.transporter import Transporter
+from .http.requester import Requester
 
 class SearchClient:
     @property
     def app_id(self):
         return self.__config.app_id
 
-    def __init__(self, search_config: SearchConfig):
+    def __init__(self, transporter: Transporter, search_config: SearchConfig):
+        self.__transporter = transporter
         self.__config = search_config
 
     def init_index(self, name: str) -> SearchIndex:
-        return SearchIndex(name)
+        return SearchIndex(self.__transporter, self.__config, name)
 
     @staticmethod
     # @todo: Missing return hint here.
     def create(app_id: str, api_key: str):
-        return SearchClient(SearchConfig(app_id, api_key))
+        config = SearchConfig(app_id, api_key)
+        transporter = Transporter(Requester, config)
+
+        return SearchClient(transporter, config)
