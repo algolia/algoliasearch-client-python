@@ -2,7 +2,8 @@ from .http.transporter import Transporter
 from .config.search_config import SearchConfig
 from .http.verbs import Verbs
 
-class SearchIndex:
+
+class SearchIndex(object):
     @property
     def app_id(self):
         return self.__config.app_id
@@ -14,12 +15,13 @@ class SearchIndex:
 
     # Todo: Missing response object
     # Todo: Missing chunk
+    # #type
     def save_object(self, obj) -> int:
         return self.__batch({
-            'requests' : [
+            'requests': [
                 {
                     'action': 'addObject',
-                    'body' : obj
+                    'body': obj
                 }
             ]
         })
