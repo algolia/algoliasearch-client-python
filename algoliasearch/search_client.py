@@ -3,7 +3,8 @@ from .config.search_config import SearchConfig
 from .http.transporter import Transporter
 from .http.requester import Requester
 
-class SearchClient:
+
+class SearchClient(object):
     @property
     def app_id(self):
         return self.__config.app_id

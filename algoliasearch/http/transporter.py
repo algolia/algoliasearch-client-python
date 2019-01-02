@@ -1,6 +1,7 @@
 from algoliasearch.http.requester import Requester
 
-class Transporter:
+
+class Transporter(object):
     def __init__(self, requester: Requester, config):
         self.__requester = requester
         self.__config = config
@@ -13,7 +14,6 @@ class Transporter:
 
     # Todo retry strategy
     def __request(self, verb: str, hosts: dict, path: str, payload: dict, request_options):
-
         host = hosts[1]
         url = "%s/%s" % (host.url, path)
         self.__requester.request(verb, url, payload, request_options)

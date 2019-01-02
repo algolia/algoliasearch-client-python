@@ -1,4 +1,4 @@
-class Host:
+class Host(object):
     def __init__(self, url: str, priority: int = 0):
         self.url = url
         self.priority = priority

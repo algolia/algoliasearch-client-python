@@ -1,7 +1,8 @@
 from ..http.hosts import Hosts
 from ..http.host import Host
 
-class SearchConfig:
+
+class SearchConfig(object):
     def __init__(self, app_id: str, api_key: str) -> None:
         self.app_id = app_id
         self.api_key = api_key
