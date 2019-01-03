@@ -1,6 +1,6 @@
-from ..http.request_options import RequestOptions
-from ..config.config import Config
-from .requester import Requester
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.config.config import Config
+from algoliasearch.http.requester import Requester
 
 import sys
 
@@ -20,17 +20,21 @@ class Transporter(object):
     def write(self, verb, path, data, request_options):
         # type: (str, str, dict, RequestOptions) -> dict
 
-        return self.__request(verb, self.__config.hosts.write, path, data, request_options)
+        return self.__request(verb, self.__config.hosts.write, path, data,
+                              request_options)
 
     def read(self, verb, path, request_options):
         # type: (str, str, RequestOptions) -> dict
 
-        return self.__request(verb, self.__config.hosts.read, path, {}, request_options)
+        return self.__request(verb, self.__config.hosts.read, path, {},
+                              request_options)
 
     def __request(self, verb, hosts, path, data, request_options):
         # type: (str, list, str, dict, RequestOptions) -> dict
 
         host = hosts[1]
-        url = 'https://%s/%s%s' % (host.url, path, urlencode(request_options.query_parameters))
+        url = 'https://%s/%s%s' % (
+        host.url, path, urlencode(request_options.query_parameters))
 
-        return self.__requester.request(verb, url, request_options.headers, data)
+        return self.__requester.request(verb, url, request_options.headers,
+                                        data)

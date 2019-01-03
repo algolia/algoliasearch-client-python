@@ -3,15 +3,20 @@ import os
 
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
-from algoliasearch.config.search_config import SearchConfig
 from faker import Faker
 
-class Factory:
+
+class Factory(object):
     @staticmethod
-    def client(app_id: str, api_key: str) -> SearchClient:
+    def client(app_id, api_key):
+        # type: (str, str) -> SearchClient
+
         return SearchClient.create(app_id, api_key)
 
-    def index(client: SearchClient, name: str) -> SearchIndex:
+    @staticmethod
+    def index(client, name):
+        # type: (SearchClient, str) -> SearchIndex
+
         date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
         if 'TRAVIS' in os.environ:
@@ -21,7 +26,10 @@ class Factory:
 
         return client.init_index('python_%s_%s_%s' % (date, instance, name))
 
+    @staticmethod
     def obj():
+        # type: () -> dict
+
         fake = Faker()
         return {
             'objectID': fake.md5(),

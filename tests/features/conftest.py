@@ -27,10 +27,12 @@ if is_community:
 
     for credential in credentials:
         if credential not in os.environ:
-            pytest.fail('Environment variable {} not defined'.format(credential))
+            pytest.fail(
+                'Environment variable {} not defined'.format(credential))
             exit(1)
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
+
 
 @pytest.fixture
 def client_1():
@@ -38,9 +40,11 @@ def client_1():
     api_key = os.environ['ALGOLIA_ADMIN_KEY_1']
     return Factory.client(app_id, api_key)
 
+
 @pytest.fixture
 def client(client_1):
     return client_1;
+
 
 @pytest.fixture
 def index(client, request):
@@ -48,6 +52,7 @@ def index(client, request):
 
     yield index
     # index.delete()  # Tear down
+
 
 @pytest.fixture
 def obj():

@@ -1,8 +1,9 @@
-from .config.config import Config
-from .http.request_options import RequestOptions
-from .http.transporter import Transporter
-from .http.verbs import Verbs
 from typing import Optional
+
+from algoliasearch.config.config import Config
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verbs import Verbs
 
 
 class SearchIndex(object):

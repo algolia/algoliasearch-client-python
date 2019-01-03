@@ -1,4 +1,4 @@
-from .config import Config
+from algoliasearch.config.config import Config
 
 
 class SearchConfig(Config):

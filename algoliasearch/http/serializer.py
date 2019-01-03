@@ -21,7 +21,7 @@ class JSONEncoder(json.JSONEncoder):
         elif isinstance(obj, datetime.datetime):
             try:
                 return int(calendar.timegm(obj.utctimetuple()))
-            except:
+            except ValueError:
                 return 0
 
         try:

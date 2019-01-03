@@ -2,7 +2,10 @@
 # only included the relevant sets when running tox, and ensures
 # we are only ever declaring our dependencies in one place.
 
-requests>=2.21
+
+# Requeriments
+requests>=2.21,<3.0
+typing>=3.6,<4.0
 
 # Dev requirements
 -r requirements/requirements-testing.txt

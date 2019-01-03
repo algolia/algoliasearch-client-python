@@ -1,7 +1,7 @@
-from .search_index import SearchIndex
-from .config.search_config import SearchConfig
-from .http.transporter import Transporter
-from .http.requester import Requester
+from algoliasearch.search_index import SearchIndex
+from algoliasearch.config.search_config import SearchConfig
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.requester import Requester
 
 
 class SearchClient(object):

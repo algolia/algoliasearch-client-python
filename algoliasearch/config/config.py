@@ -1,5 +1,6 @@
-from ..http.hosts import Hosts
-from ..http.host import Host
+from algoliasearch.http.hosts import Hosts
+from algoliasearch.http.host import Host
+
 
 class Config(object):
     def __init__(self, app_id, api_key):

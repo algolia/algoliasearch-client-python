@@ -1,2 +1,2 @@
 # Pytest for running the static analysis checks.
-mypy_extensions==0.4.0
+mypy

@@ -1,9 +1,9 @@
-from ..config.config import Config
-from ..version import VERSION
-from .params import Params
-
 from platform import python_version
 from typing import Optional
+
+from algoliasearch.config.config import Config
+from algoliasearch.version import VERSION
+from algoliasearch.http.params import Params
 
 
 class RequestOptions(object):
@@ -22,7 +22,8 @@ class RequestOptions(object):
         headers = {
             'X-Algolia-Application-Id': config.app_id,
             'X-Algolia-API-Key': config.api_key,
-            'User-Agent': 'Algolia for Python (%s); Python (%s)' % (VERSION, python_version()),
+            'User-Agent': 'Algolia for Python (%s); Python (%s)' % (
+                VERSION, python_version()),
             'Content-Type': 'application/json',
         }
 
