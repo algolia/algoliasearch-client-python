@@ -9,5 +9,5 @@ typing>=3.6,<4.0
 
 # Dev requirements
 -r requirements/requirements-testing.txt
--r requirements/requirements-codingstyle.txt
--r requirements/requirements-staticanalysis.txt
+-r requirements/requirements-code-style-checker.txt
+-r requirements/requirements-static-type-checker.txt

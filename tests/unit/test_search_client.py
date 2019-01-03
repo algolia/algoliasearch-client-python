@@ -1,3 +1,5 @@
+import unittest
+
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.config.search_config import SearchConfig
@@ -5,25 +7,24 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.requester import Requester
 
 
-def test_init():
-    config = SearchConfig('foo', 'bar')
-    transporter = Transporter(Requester, config)
-    client = SearchClient(transporter, config)
+class TestSearchClient(unittest.TestCase):
+    def test_init(self):
+        config = SearchConfig('foo', 'bar')
+        transporter = Transporter(Requester, config)
+        client = SearchClient(transporter, config)
 
-    assert isinstance(client, SearchClient)
+        self.assertIsInstance(client, SearchClient)
 
+    def test_init_index(self):
+        config = SearchConfig('foo', 'bar')
+        transporter = Transporter(Requester, config)
+        client = SearchClient(transporter, config)
 
-def test_init_index():
-    config = SearchConfig('foo', 'bar')
-    transporter = Transporter(Requester, config)
-    client = SearchClient(transporter, config)
+        index = client.init_index('foo')
 
-    index = client.init_index('foo')
+        self.assertIsInstance(index, SearchIndex)
 
-    assert isinstance(index, SearchIndex)
+    def test_app_id_getter(self):
+        client = SearchClient.create('foo', 'bar')
 
-
-def test_app_id_getter():
-    client = SearchClient.create('foo', 'bar')
-
-    assert client.app_id == 'foo'
+        self.assertEqual(client.app_id, 'foo')
