@@ -7,6 +7,7 @@ __pycache__
 /env
 *.iml
 /out/
+venv/
 .venv/
 .mypy_cache/
 .cache

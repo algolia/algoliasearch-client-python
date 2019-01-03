@@ -1,5 +1,3 @@
-from enum import Enum
-
-class Verbs(Enum):
+class Verbs(object):
     GET = 'GET'
     POST = 'POST'

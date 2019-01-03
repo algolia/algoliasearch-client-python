@@ -1,9 +1,19 @@
-from requests import Request
+import requests
+import json
+from .serializer import Serializer
 
 
 class Requester(object):
-    def __init__(self, request: Request = None):
-        self.__request = Request() if request is None else request
+    def request(self, verb, url, headers, data):
 
-    def request(self, verb: str, url: str, payload: dict, request_options):
-        self.__request.request(verb, url, payload)
+        if data is not None:
+            data = Serializer.serialize(data)
+
+        req = requests.Request(method=verb, url=url, headers=headers, data=data)
+        r = req.prepare()
+
+        s = requests.Session()
+
+        response = s.send(r)
+
+        return None if response.content is None else json.loads(response.content)
