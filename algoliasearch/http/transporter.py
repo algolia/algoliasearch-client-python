@@ -34,7 +34,7 @@ class Transporter(object):
 
         host = hosts[1]
         url = 'https://%s/%s%s' % (
-        host.url, path, urlencode(request_options.query_parameters))
+            host.url, path, urlencode(request_options.query_parameters))
 
         return self.__requester.request(verb, url, request_options.headers,
                                         data)

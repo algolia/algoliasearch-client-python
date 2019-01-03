@@ -43,7 +43,7 @@ def client_1():
 
 @pytest.fixture
 def client(client_1):
-    return client_1;
+    return client_1
 
 
 @pytest.fixture

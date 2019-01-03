@@ -18,4 +18,4 @@ class Requester(object):
         response = s.send(r)
 
         return None if response.content is None else json.loads(
-            response.content)
+            response.content.decode('utf-8'))
