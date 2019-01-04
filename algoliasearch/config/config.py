@@ -1,8 +1,8 @@
-from abc import ABCMeta
+import abc
 
 
 class Config(object):
-    __metaclass__ = ABCMeta
+    __metaclass__ = abc.ABCMeta
 
     def __init__(self, app_id, api_key):
         # type: (str, str) -> None
@@ -12,3 +12,9 @@ class Config(object):
         self.read_timeout = 5
         self.write_timeout = 5
         self.connect_timeout = 5
+
+        self.hosts = self.build_hosts()
+
+    @abc.abstractmethod
+    def build_hosts(self):
+        return
