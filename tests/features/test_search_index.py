@@ -10,6 +10,11 @@ class TestSearchIndex(unittest.TestCase):
         self.index = Factory.index(self._testMethodName)
         self.obj = Factory.obj()
 
+    def test_tasks(self):
+        task_id = self.index.save_object(self.obj)['taskID']
+        task = self.index.get_task(task_id + 1000000)
+        self.assertDictContainsSubset({'status': 'notPublished'}, task)
+
     def test_indexing(self):
         obj_id = self.obj['objectID']
         self.index.save_object(self.obj)

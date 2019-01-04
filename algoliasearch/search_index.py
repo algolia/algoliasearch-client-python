@@ -1,3 +1,6 @@
+import math
+import time
+
 from typing import Optional
 
 from algoliasearch.config.config import Config
@@ -38,6 +41,31 @@ class SearchIndex(object):
             '1/indexes/%s/%s' % (self.__name, object_id),
             RequestOptions.create(self.__config, request_options)
         )
+
+    def get_task(self, task_id, request_options=None):
+        # type:(int, Optional[dict]) -> dict
+
+        return self.__transporter.read(
+            'GET',
+            '1/indexes/%s/task/%s' % (self.__name, task_id),
+            RequestOptions.create(self.__config, request_options)
+        )
+
+    def wait_task(self, task_id, request_options=None):
+        # type:(int, Optional[dict]) -> None
+
+        retries_count = 1
+
+        while True:
+            task = self.get_task(task_id, request_options)
+            print(task)
+            if task['status'] == 'published':
+                break
+
+            retries_count += 1
+            factor = math.ceil(retries_count / 10)
+            sleep_for = factor * self.__config.wait_task_time_before_retry
+            time.sleep(sleep_for / 1000000.0)
 
     def __batch(self, data, request_options):
         # type: (dict, RequestOptions) -> dict
