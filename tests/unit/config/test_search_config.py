@@ -1,11 +1,16 @@
+import unittest
+
 from algoliasearch.config.search_config import SearchConfig
+from algoliasearch.http.hosts_collection import HostsCollection
 
 
-def test_app_id():
-    config = SearchConfig('foo', 'bar')
-    assert config.app_id == 'foo'
+class TestSearchConfig(unittest.TestCase):
+    def setUp(self):
+        self.config = SearchConfig('foo', 'bar')
 
+    def test_hosts(self):
+        self.assertIsInstance(self.config.hosts, HostsCollection)
 
-def test_api_key():
-    config = SearchConfig('foo', 'bar')
-    assert config.api_key == 'bar'
+        # Assert that hosts here assigned.
+        self.assertNotEqual(len(self.config.hosts.write), 0)
+        self.assertNotEqual(len(self.config.hosts.read), 0)

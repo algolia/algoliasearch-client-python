@@ -1,10 +1,9 @@
+from algoliasearch.helpers import Interpreter
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.config.config import Config
 from algoliasearch.http.requester import Requester
 
-import sys
-
-if sys.version_info >= (3, 0):
+if Interpreter.python3():
     from urllib.parse import urlencode
 else:
     from urllib import urlencode

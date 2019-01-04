@@ -2,6 +2,7 @@ from platform import python_version
 from typing import Optional
 
 from algoliasearch.config.config import Config
+from algoliasearch.helpers import Interpreter
 from algoliasearch.version import VERSION
 from algoliasearch.http.params import Params
 
@@ -16,7 +17,7 @@ class RequestOptions(object):
         self.data = data
 
     @staticmethod
-    def create(config, options):
+    def create(config, options=None):
         # type: (Config, Optional[dict]) -> RequestOptions
 
         headers = {
@@ -35,7 +36,14 @@ class RequestOptions(object):
 
         request_options = RequestOptions(headers, {}, timeouts, {})
 
-        for option, value in options or []:
+        if options is None:
+            items = {}
+        elif Interpreter.python3():
+            items = options.items()
+        else:
+            items = options.iteritems()
+
+        for option, value in items:
             if option in Params.HEADERS:
                 request_options.headers[option] = value
             elif option in Params.QUERY_PARAMETERS:

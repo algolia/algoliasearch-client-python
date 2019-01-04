@@ -1,6 +1,6 @@
 from algoliasearch.config.config import Config
 from algoliasearch.http.host import Host
-from algoliasearch.http.hosts import Hosts
+from algoliasearch.http.hosts_collection import HostsCollection
 
 
 class SearchConfig(Config):
@@ -19,4 +19,4 @@ class SearchConfig(Config):
         read_hosts.append(Host('%s-dsn.algolia.net' % app_id, 10))
         write_hosts.append(Host('%s.algolia.net' % app_id, 10))
 
-        self.hosts = Hosts(read_hosts, write_hosts)
+        self.hosts = HostsCollection(read_hosts, write_hosts)

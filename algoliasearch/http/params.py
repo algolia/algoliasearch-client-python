@@ -2,10 +2,10 @@ class Params:
     HEADERS = [
         'Content-type',
         'User-Agent',
-        'createIfNotExists',
     ]
 
     QUERY_PARAMETERS = [
+        'createIfNotExists',
         'forwardToReplicas',
         'replaceExistingSynonyms',
         'clearExistingRules',
@@ -16,4 +16,8 @@ class Params:
         'readTimeout',
         'writeTimeout',
         'connectTimeout',
+    ]
+
+    LOGICAL = [
+        'createIfNotExists'
     ]

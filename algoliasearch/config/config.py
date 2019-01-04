@@ -1,4 +1,9 @@
+from abc import ABCMeta
+
+
 class Config(object):
+    __metaclass__ = ABCMeta
+
     def __init__(self, app_id, api_key):
         # type: (str, str) -> None
 

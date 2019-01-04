@@ -1,4 +1,4 @@
-class Hosts(object):
+class HostsCollection(object):
     def __init__(self, write, read):
         # type: (list, list) -> None
 

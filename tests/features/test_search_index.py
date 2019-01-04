@@ -6,7 +6,6 @@ from tests.features.helpers.factory import Factory
 
 
 class TestSearchIndex(unittest.TestCase):
-
     def setUp(self):
         self.index = Factory.index(self._testMethodName)
         self.obj = Factory.obj()
@@ -17,7 +16,8 @@ class TestSearchIndex(unittest.TestCase):
 
         time.sleep(5)
 
-        self.assertEqual(self.obj['name'], self.index.get_object(obj_id)['name'])
+        self.assertEqual(self.obj['name'],
+                         self.index.get_object(obj_id)['name'])
 
     def tearDown(self):
         # self.index.delete()
