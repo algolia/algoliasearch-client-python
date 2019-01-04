@@ -22,4 +22,4 @@ class Config(object):
 
     @abc.abstractmethod
     def build_hosts(self):
-        return
+        pass

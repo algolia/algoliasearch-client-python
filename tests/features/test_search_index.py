@@ -13,13 +13,11 @@ class TestSearchIndex(unittest.TestCase):
     def test_tasks(self):
         task_id = self.index.save_object(self.obj)['taskID']
         task = self.index.get_task(task_id + 1000000)
-        self.assertDictContainsSubset({'status': 'notPublished'}, task)
+        self.assertEqual(task['status'], 'notPublished')
 
     def test_indexing(self):
         obj_id = self.obj['objectID']
-        self.index.save_object(self.obj)
-
-        time.sleep(5)
+        self.index.save_object(self.obj).wait()
 
         self.assertEqual(self.obj['name'],
                          self.index.get_object(obj_id)['name'])

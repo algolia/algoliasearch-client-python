@@ -7,6 +7,7 @@ from algoliasearch.config.config import Config
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
+from algoliasearch.response.indexing_response import IndexingResponse
 
 
 class SearchIndex(object):
@@ -22,9 +23,9 @@ class SearchIndex(object):
         self.__name = name
 
     def save_object(self, obj, request_options=None):
-        # type: (dict, Optional[dict]) -> dict
+        # type: (dict, Optional[dict]) -> Response
 
-        return self.__batch({
+        response = self.__batch({
             'requests': [
                 {
                     'action': 'addObject',
@@ -32,6 +33,8 @@ class SearchIndex(object):
                 }
             ],
         }, RequestOptions.create(self.__config, request_options))
+
+        return IndexingResponse(self, response)
 
     def get_object(self, object_id, request_options=None):
         # type: (str, Optional[dict]) -> dict
@@ -58,7 +61,6 @@ class SearchIndex(object):
 
         while True:
             task = self.get_task(task_id, request_options)
-            print(task)
             if task['status'] == 'published':
                 break
 
