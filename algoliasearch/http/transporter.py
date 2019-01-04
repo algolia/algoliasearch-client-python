@@ -33,9 +33,10 @@ class Transporter(object):
     def __request(self, verb, hosts, path, data, request_options):
         # type: (str, list, str, dict, RequestOptions) -> dict
 
-        host = hosts[1]
-        url = 'https://%s/%s%s' % (
+        host = hosts[0]
+        url = 'https://%s/%s?%s' % (
             host.url, path, urlencode(request_options.query_parameters))
 
-        return self.__requester.request(verb, url, request_options.headers,
+        return self.__requester.request(verb.upper(), url,
+                                        request_options.headers,
                                         data)

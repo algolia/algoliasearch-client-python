@@ -1,2 +1,3 @@
 # Pytest for running the tests.
 faker>=1.0
+mock>=2.0

@@ -17,7 +17,3 @@ class Params:
         'writeTimeout',
         'connectTimeout',
     ]
-
-    LOGICAL = [
-        'createIfNotExists'
-    ]
