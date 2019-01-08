@@ -1,5 +1,5 @@
 from algoliasearch.search_index import SearchIndex
-from algoliasearch.config.search_config import SearchConfig
+from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.requester import Requester
 

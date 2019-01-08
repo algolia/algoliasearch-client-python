@@ -1,6 +1,6 @@
 import unittest
 
-from algoliasearch.config.search_config import SearchConfig
+from algoliasearch.configs import SearchConfig
 from algoliasearch.http.hosts_collection import HostsCollection
 
 
