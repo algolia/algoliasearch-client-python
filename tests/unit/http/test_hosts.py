@@ -1,3 +1,4 @@
+import time
 import unittest
 
 from algoliasearch.http.hosts import Host
@@ -21,5 +22,19 @@ class TestHost(unittest.TestCase):
     def test_up(self):
         self.assertEqual(self.host.up, True)
 
+    def test_last_use(self):
+        self.assertEqual(self.host.last_use, 0)
+
     def test_retry_count(self):
+        self.assertEqual(self.host.retry_count, 0)
+
+    def test_reset(self):
+        self.host.up = False
+        self.host.last_use = time.time()
+        self.host.retry_count = 3
+
+        self.host.reset()
+
+        self.assertEqual(self.host.up, True)
+        self.assertEqual(self.host.last_use, 0)
         self.assertEqual(self.host.retry_count, 0)

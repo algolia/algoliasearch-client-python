@@ -10,7 +10,7 @@ class TestSerializer(unittest.TestCase):
     def setUp(self):
         self.data = {
             'decimal': decimal.Decimal(0.20),
-            'datetime': datetime.date.today(),
+            'datetime': datetime.date.fromtimestamp(1546300800),
             'value': 'foo',
             'integer': 1
         }
@@ -18,7 +18,7 @@ class TestSerializer(unittest.TestCase):
     def test_result(self):
         expected = {
             "decimal": 0.2,
-            "datetime": "2019-01-04",
+            "datetime": "2019-01-01",
             "value": "foo",
             "integer": 1
         }

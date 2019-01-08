@@ -5,7 +5,7 @@ from typing import Any
 try:
     from algoliasearch.search_index import SearchIndex
 except ImportError:  # Already imported.
-    import sys
+    pass
 
 
 class Response(object):

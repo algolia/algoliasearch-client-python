@@ -25,3 +25,16 @@ class TestConfig(unittest.TestCase):
 
     def test_wait_task_time_before_retry(self):
         self.assertEqual(self.config.wait_task_time_before_retry, 100000)
+
+
+class TestSearchConfig(unittest.TestCase):
+    def setUp(self):
+        self.config = SearchConfig('foo', 'bar')
+
+    def test_hosts(self):
+        self.assertIsInstance(self.config.hosts['write'], HostsCollection)
+        self.assertIsInstance(self.config.hosts['read'], HostsCollection)
+
+        # Assert that hosts here assigned.
+        self.assertNotEqual(len(self.config.hosts['write']._hosts), 0)
+        self.assertNotEqual(len(self.config.hosts['read']._hosts), 0)

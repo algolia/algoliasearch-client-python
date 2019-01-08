@@ -30,7 +30,7 @@ class Config(object):
 class SearchConfig(Config):
 
     def build_hosts(self):
-        # type: () -> HostsCollection
+        # type: () -> dict
 
         read_hosts = write_hosts = [
             Host('%s-1.algolianet.com' % self.app_id),
@@ -41,4 +41,7 @@ class SearchConfig(Config):
         read_hosts.append(Host('%s-dsn.algolia.net' % self.app_id, 10))
         write_hosts.append(Host('%s.algolia.net' % self.app_id, 10))
 
-        return HostsCollection(read_hosts, write_hosts)
+        return {
+            'read': HostsCollection(read_hosts),
+            'write': HostsCollection(write_hosts)
+        }

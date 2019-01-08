@@ -1,23 +1,33 @@
 import requests
-import json
+
+from requests import Timeout
+from typing import Optional
 
 from algoliasearch.http.serializer import Serializer
+from algoliasearch.http.transporter import Response
 
 
 class Requester(object):
-    def request(self, verb, url, headers, data):
-        if data is not None:
-            data = Serializer.serialize(data)
+
+    def request(self, verb, url, headers, data, timeout):
+        # type: (str, str, dict, Optional[dict], int) -> Response
+
+        data_as_string = '' if data is None else Serializer.serialize(data)
 
         req = requests.Request(method=verb, url=url, headers=headers,
-                               data=data)
+                               data=data_as_string)
         r = req.prepare()
 
         s = requests.Session()
 
-        response = s.send(r)
+        try:
+            response = s.send(r, timeout=timeout)
+            s.close()
+        except Timeout as e:
+            return Response(error_message=e.message, timed_out=True)
 
-        s.close()
-
-        return None if response.content is None else json.loads(
-            response.content.decode('utf-8'))
+        return Response(
+            response.status_code,
+            response.json(),
+            response.reason
+        )
