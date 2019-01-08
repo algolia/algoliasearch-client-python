@@ -4,7 +4,6 @@ from typing import Optional
 from algoliasearch.configs import Config
 from algoliasearch.helpers import Items
 from algoliasearch.version import VERSION
-from algoliasearch.http.params import Params
 
 
 class RequestOptions(object):
@@ -47,3 +46,24 @@ class RequestOptions(object):
                 request_options.data[option] = value
 
         return request_options
+
+
+class Params:
+    HEADERS = [
+        'Content-type',
+        'User-Agent',
+    ]
+
+    QUERY_PARAMETERS = [
+        'createIfNotExists',
+        'forwardToReplicas',
+        'replaceExistingSynonyms',
+        'clearExistingRules',
+        'getVersion',
+    ]
+
+    TIMEOUTS = [
+        'readTimeout',
+        'writeTimeout',
+        'connectTimeout',
+    ]
