@@ -2,7 +2,7 @@ import unittest
 
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
-from algoliasearch.configs.search_config import SearchConfig
+from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.requester import Requester
 
