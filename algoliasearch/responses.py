@@ -15,6 +15,7 @@ class Response(object):
         # type: (SearchIndex, dict) -> None
 
         self._index = index
+        self.body = {} if response is None else response
 
     @abc.abstractmethod
     def wait(self):
