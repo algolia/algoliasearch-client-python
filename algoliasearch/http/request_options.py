@@ -1,7 +1,7 @@
 from platform import python_version
 from typing import Optional
 
-from algoliasearch.config.config import Config
+from algoliasearch.configs import Config
 from algoliasearch.helpers import Items
 from algoliasearch.version import VERSION
 from algoliasearch.http.params import Params

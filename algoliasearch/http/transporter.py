@@ -1,7 +1,7 @@
 import sys
 
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.config.config import Config
+from algoliasearch.configs import Config
 from algoliasearch.http.requester import Requester
 
 # Python 3

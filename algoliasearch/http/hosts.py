@@ -6,3 +6,11 @@ class Host(object):
         self.priority = priority
         self.retry_count = 0
         self.up = True
+
+
+class HostsCollection(object):
+    def __init__(self, write, read):
+        # type: (list, list) -> None
+
+        self.write = write
+        self.read = read

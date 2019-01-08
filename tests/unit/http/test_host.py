@@ -1,6 +1,6 @@
 import unittest
 
-from algoliasearch.http.host import Host
+from algoliasearch.http.hosts import Host
 
 
 class TestHost(unittest.TestCase):
