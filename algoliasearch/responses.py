@@ -2,8 +2,11 @@ import abc
 
 from typing import Any
 
+try:
+    from algoliasearch.search_index import SearchIndex
+except ImportError:  # Already imported.
+    import sys
 
-# @todo Resolve `from algoliasearch.search_index import SearchIndex`
 
 class Response(object):
     __metaclass__ = abc.ABCMeta
@@ -12,7 +15,6 @@ class Response(object):
         # type: (SearchIndex, dict) -> None
 
         self._index = index
-        self.body = {} if response is None else response
 
     @abc.abstractmethod
     def wait(self):
@@ -49,3 +51,11 @@ class Response(object):
         # type:() -> str
 
         return repr(self.body)
+
+
+class IndexingResponse(Response):
+
+    def wait(self):
+        # type: () -> None
+
+        self._index.wait_task(self.body['taskID'])

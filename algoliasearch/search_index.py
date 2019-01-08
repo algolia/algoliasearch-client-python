@@ -7,7 +7,7 @@ from algoliasearch.config.config import Config
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
-from algoliasearch.response.indexing_response import IndexingResponse
+from algoliasearch.responses import Response, IndexingResponse
 
 
 class SearchIndex(object):

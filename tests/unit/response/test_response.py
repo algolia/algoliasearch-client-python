@@ -1,6 +1,6 @@
 import unittest
 
-from algoliasearch.response.response import Response
+from algoliasearch.responses import Response
 
 
 class TestResponse(unittest.TestCase):
