@@ -1,7 +1,7 @@
 import unittest
 
 from algoliasearch.configs import SearchConfig
-from algoliasearch.http.hosts_collection import HostsCollection
+from algoliasearch.http.hosts import HostsCollection
 
 
 class TestSearchConfig(unittest.TestCase):
