@@ -1,7 +1,7 @@
 import unittest
 import mock as mock
 
-from algoliasearch.config.search_config import SearchConfig
+from algoliasearch.configs import SearchConfig
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
