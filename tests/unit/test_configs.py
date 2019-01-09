@@ -20,10 +20,10 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(self.config.read_timeout, 5)
 
     def test_write_timeout(self):
-        self.assertEqual(self.config.write_timeout, 5)
+        self.assertEqual(self.config.write_timeout, 30)
 
     def test_connect_timeout(self):
-        self.assertEqual(self.config.connect_timeout, 5)
+        self.assertEqual(self.config.connect_timeout, 2)
 
     def test_wait_task_time_before_retry(self):
         self.assertEqual(self.config.wait_task_time_before_retry, 100000)

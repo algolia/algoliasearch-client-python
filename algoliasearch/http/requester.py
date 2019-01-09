@@ -17,16 +17,16 @@ class Requester(object):
         req = requests.Request(method=verb, url=url, headers=headers,
                                data=data_as_string)
         r = req.prepare()  # type: ignore
-
         s = requests.Session()  # type: ignore
 
         requests_timeout = (connect_timeout, timeout)
 
         try:
             response = s.send(r, timeout=requests_timeout)  # type: ignore
-            s.close()
         except Timeout as e:
             return Response(error_message=str(e), timed_out=True)
+        finally:
+            s.close()
 
         return Response(
             response.status_code,

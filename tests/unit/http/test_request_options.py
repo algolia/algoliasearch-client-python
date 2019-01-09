@@ -55,7 +55,7 @@ class TestRequestOptions(unittest.TestCase):
 
         # Default Value
         default_timeout = self.request_options.timeouts['writeTimeout']
-        self.assertEqual(default_timeout, 5)
+        self.assertEqual(default_timeout, 30)
 
     def test_data(self):
         self.assertEqual(

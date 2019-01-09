@@ -1,11 +1,12 @@
-from typing import Optional
-
-
 class AlgoliaException(Exception):
-    def __init__(self, message, status_code):
-        # type: (str, Optional[int]) -> None
+    pass
 
-        self.message = message
+
+class RequestException(AlgoliaException):
+    def __init__(self, message, status_code):
+        # type: (str, int) -> None
+
+        super(AlgoliaException, self).__init__(message)
         self.status_code = status_code
 
 

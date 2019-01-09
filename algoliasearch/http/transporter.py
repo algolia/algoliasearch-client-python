@@ -3,8 +3,8 @@ import time
 
 from typing import Optional
 
-from algoliasearch.exceptions import AlgoliaException, \
-    AlgoliaUnreachableHostException
+from algoliasearch.exceptions import AlgoliaUnreachableHostException, \
+    RequestException
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
@@ -66,7 +66,7 @@ class Transporter(object):
             if decision == RetryOutcome.SUCCESS:
                 return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
-                raise AlgoliaException(response.error_message,
+                raise RequestException(response.error_message,
                                        response.status_code)
 
         raise AlgoliaUnreachableHostException('Unreachable hosts')
