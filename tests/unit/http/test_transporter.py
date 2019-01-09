@@ -160,11 +160,11 @@ class TestHostCollection(unittest.TestCase):
         hosts = list(map(lambda x: x, self.collection))
         self.assertEqual(len(hosts), 3)
 
-        self.a.last_use = 800  # 1000 - 800 = 200 (lower than TTL - 300)
+        self.a.last_use = 800.0  # 1000 - 800 = 200 (lower than TTL - 300)
         self.a.up = False
         hosts = list(map(lambda x: x, self.collection))
         self.assertEqual(len(hosts), 2)  # still down
 
-        self.a.last_use = 400  # 1000 - 400 = 600 (bigger than TTL - 300)
+        self.a.last_use = 400.0  # 1000 - 400 = 600 (bigger than TTL - 300)
         hosts = list(map(lambda x: x, self.collection))
         self.assertEqual(len(hosts), 3)  # got up
