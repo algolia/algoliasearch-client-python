@@ -97,11 +97,9 @@ class RetryStrategy(object):
             host.up = False
             return RetryOutcome.RETRY
         elif self.__is_success(status_code):
-            host.up = True
             return RetryOutcome.SUCCESS
-        else:
-            # @todo host.up = True ?
-            return RetryOutcome.FAIL
+
+        return RetryOutcome.FAIL
 
     def __is_success(self, status_code):
         return (status_code // 100) == 2
