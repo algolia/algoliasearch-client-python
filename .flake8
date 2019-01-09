@@ -1,2 +1,2 @@
 [flake8]
-ignore = F401
+ignore = F401, F841 local variable '_' is assigned to but never used

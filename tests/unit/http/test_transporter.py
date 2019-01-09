@@ -70,7 +70,7 @@ class TestTransporter(unittest.TestCase):
     def test_unreachable_hosts_exception(self):
         self.requester.request.return_value = Response(300, {'foo': 'bar'})
 
-        with self.assertRaises(AlgoliaUnreachableHostException) as context:
+        with self.assertRaises(AlgoliaUnreachableHostException) as _:
             self.transporter.read('get', 'endpoint/bar',
                                   self.request_options)
 
