@@ -1,4 +1,3 @@
-import json
 import sys
 import time
 
@@ -102,10 +101,15 @@ class RetryStrategy(object):
         return RetryOutcome.FAIL
 
     def __is_success(self, status_code):
-        return (status_code // 100) == 2
+        # type: (Optional[int]) -> bool
+
+        return status_code is not None and (status_code // 100) == 2
 
     def __is_retryable(self, status_code):
-        return (status_code // 100) != 2 and (status_code // 100) != 4
+        # type: (Optional[int]) -> bool
+
+        return status_code is not None and (status_code // 100) != 2 and (
+                    status_code // 100) != 4
 
 
 class RetryOutcome(object):

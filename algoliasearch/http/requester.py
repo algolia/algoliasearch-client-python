@@ -16,12 +16,12 @@ class Requester(object):
 
         req = requests.Request(method=verb, url=url, headers=headers,
                                data=data_as_string)
-        r = req.prepare()
+        r = req.prepare()  # type: ignore
 
-        s = requests.Session()
+        s = requests.Session()  # type: ignore
 
         try:
-            response = s.send(r, timeout=timeout)
+            response = s.send(r, timeout=timeout)  # type: ignore
             s.close()
         except Timeout as e:
             return Response(error_message=str(e), timed_out=True)

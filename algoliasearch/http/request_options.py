@@ -19,11 +19,13 @@ class RequestOptions(object):
     def create(config, options=None):
         # type: (Config, Optional[dict]) -> RequestOptions
 
+        version = str(python_version())  # type: ignore
+
         headers = {
             'X-Algolia-Application-Id': config.app_id,
             'X-Algolia-API-Key': config.api_key,
             'User-Agent': 'Algolia for Python (%s); Python (%s)' % (
-                VERSION, python_version()),
+                VERSION, version),
             'Content-Type': 'application/json',
         }
 
@@ -48,7 +50,7 @@ class RequestOptions(object):
         return request_options
 
 
-class Params:
+class Params(object):
     HEADERS = [
         'Content-type',
         'User-Agent',

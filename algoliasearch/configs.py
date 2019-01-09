@@ -24,6 +24,8 @@ class Config(object):
 
     @abc.abstractmethod
     def build_hosts(self):
+        # type: () -> dict
+
         pass
 
 

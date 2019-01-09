@@ -7,6 +7,8 @@ from algoliasearch.http.requester import Requester
 class SearchClient(object):
     @property
     def app_id(self):
+        # type: () -> str
+
         return self.__config.app_id
 
     def __init__(self, transporter, search_config):

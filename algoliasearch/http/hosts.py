@@ -17,6 +17,8 @@ class Host(object):
         self.up = True
 
     def reset(self):
+        # type: () -> None
+
         self.last_use = 0.0
         self.retry_count = 0
         self.up = True
