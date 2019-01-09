@@ -1,6 +1,8 @@
 import abc
+from platform import python_version
 
 from algoliasearch.http.hosts import Host, HostsCollection
+from algoliasearch.version import VERSION
 
 
 class Config(object):
@@ -15,11 +17,22 @@ class Config(object):
         # In seconds
         self.read_timeout = 5
         self.write_timeout = 5
+        self.connect_timeout = 5
 
         # In microseconds
         self.wait_task_time_before_retry = 100000
 
         self.hosts = self.build_hosts()
+
+        version = str(python_version())  # type: ignore
+
+        self.headers = {
+            'X-Algolia-Application-Id': app_id,
+            'X-Algolia-API-Key': api_key,
+            'User-Agent': 'Algolia for Python (%s); Python (%s)' % (
+                VERSION, version),
+            'Content-Type': 'application/json',
+        }
 
     @abc.abstractmethod
     def build_hosts(self):
@@ -29,6 +42,11 @@ class Config(object):
 
 
 class SearchConfig(Config):
+
+    def __init__(self, app_id, api_key):
+        super(SearchConfig, self).__init__(app_id, api_key)
+
+        self.batch_size = 1000
 
     def build_hosts(self):
         # type: () -> dict

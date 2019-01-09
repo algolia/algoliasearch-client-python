@@ -19,19 +19,12 @@ class RequestOptions(object):
     def create(config, options=None):
         # type: (Config, Optional[dict]) -> RequestOptions
 
-        version = str(python_version())  # type: ignore
-
-        headers = {
-            'X-Algolia-Application-Id': config.app_id,
-            'X-Algolia-API-Key': config.api_key,
-            'User-Agent': 'Algolia for Python (%s); Python (%s)' % (
-                VERSION, version),
-            'Content-Type': 'application/json',
-        }
+        headers = config.headers
 
         timeouts = {
             'readTimeout': config.read_timeout,
             'writeTimeout': config.write_timeout,
+            'connectTimeout': config.connect_timeout,
         }
 
         request_options = RequestOptions(headers, {}, timeouts, {})
