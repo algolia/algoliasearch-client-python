@@ -7,6 +7,7 @@ from algoliasearch.http.request_options import RequestOptions
 class TestRequestOptions(unittest.TestCase):
     def setUp(self):
         self.config = SearchConfig('foo', 'bar')
+        self.config.headers['Foo-Bar'] = 'foo-bar'
 
         self.request_options = RequestOptions.create(self.config, {
 
@@ -33,6 +34,10 @@ class TestRequestOptions(unittest.TestCase):
         # Default Value
         self.assertEqual(self.request_options.headers['Content-Type'],
                          'application/json')
+
+        # Custom header set on the config
+        self.assertEqual(self.request_options.headers['Foo-Bar'],
+                         'foo-bar')
 
     def test_query_parameters(self):
         create_if_not_exists = self.request_options.query_parameters[

@@ -57,7 +57,8 @@ class Transporter(object):
 
             response = self.__requester.request(verb.upper(), url,
                                                 request_options.headers,
-                                                data, timeout)
+                                                data, timeout,
+                                                self.__config.connect_timeout)
 
             decision = self.__retry_strategy.decide(host, response.status_code,
                                                     response.timed_out)
@@ -109,7 +110,7 @@ class RetryStrategy(object):
         # type: (Optional[int]) -> bool
 
         return status_code is not None and (status_code // 100) != 2 and (
-            status_code // 100) != 4
+                status_code // 100) != 4
 
 
 class RetryOutcome(object):

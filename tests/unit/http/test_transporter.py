@@ -44,7 +44,8 @@ class TestTransporter(unittest.TestCase):
             'https://' + host.url + '/endpoint/foo?createIfNotExists=True',
             self.request_options.headers,
             self.data,
-            5  # Default timeout
+            5,  # Default timeout
+            5  # Default connect timeout
         )
 
         self.assertEqual({'foo': 'bar'}, response)
@@ -61,7 +62,8 @@ class TestTransporter(unittest.TestCase):
             'https://' + host.url + '/endpoint/bar?createIfNotExists=True',
             self.request_options.headers,
             {},
-            109  # Customized timeout
+            109,  # Customized timeout
+            5  # Default connect timeout
         )
 
         self.assertEqual({'foo': 'bar'}, response)

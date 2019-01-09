@@ -9,8 +9,8 @@ from algoliasearch.http.transporter import Response
 
 class Requester(object):
 
-    def request(self, verb, url, headers, data, timeout):
-        # type: (str, str, dict, Optional[dict], int) -> Response
+    def request(self, verb, url, headers, data, timeout, connect_timeout):
+        # type: (str, str, dict, Optional[dict], int, int) -> Response
 
         data_as_string = '' if data is None else Serializer.serialize(data)
 
@@ -20,8 +20,10 @@ class Requester(object):
 
         s = requests.Session()  # type: ignore
 
+        requests_timeout = (connect_timeout, timeout)
+
         try:
-            response = s.send(r, timeout=timeout)  # type: ignore
+            response = s.send(r, timeout=requests_timeout)  # type: ignore
             s.close()
         except Timeout as e:
             return Response(error_message=str(e), timed_out=True)
