@@ -9,12 +9,12 @@ class Host(object):
 
         self.url = url
         self.priority = priority
-        self.last_use = 0
+        self.last_use = 0.0
         self.retry_count = 0
         self.up = True
 
     def reset(self):
-        self.last_use = 0
+        self.last_use = 0.0
         self.retry_count = 0
         self.up = True
 
@@ -26,10 +26,6 @@ class HostsCollection(object):
         self.index = 0
         self._hosts = hosts
 
-        self.reset()
-
-    def reset(self):
-        self.index = 0
         for host in self._hosts:
             host.reset()
 
@@ -38,12 +34,25 @@ class HostsCollection(object):
         self._hosts = sorted(self._hosts, key=lambda x: x.priority,
                              reverse=True)
 
+    def reset(self):
+        # type: () -> None
+
+        self.index = 0
+
     def __iter__(self):
+        # type: () -> HostsCollection
+
         return self
 
+    def next(self):  # Python 2
+        # type: () -> Host
+
+        return self.__next__()
+
     def __next__(self):
+        # type: () -> Host
+
         if self.index == len(self._hosts):
-            self.index = 0
             raise StopIteration
 
         host = self._hosts[self.index]

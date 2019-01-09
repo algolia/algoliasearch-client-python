@@ -1,5 +1,3 @@
-import time
-
 import unittest
 
 from tests.features.helpers.factory import Factory

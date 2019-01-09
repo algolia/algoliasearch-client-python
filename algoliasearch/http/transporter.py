@@ -49,6 +49,8 @@ class Transporter(object):
     def __request(self, verb, hosts, path, data, request_options, timeout):
         # type: (str, HostsCollection, str, dict, RequestOptions, int) -> dict
 
+        hosts.reset()
+
         for host in hosts:
 
             url = 'https://%s/%s?%s' % (
@@ -62,8 +64,7 @@ class Transporter(object):
                                                     response.timed_out)
 
             if decision == RetryOutcome.SUCCESS:
-                print('returning something')
-                return response.content
+                return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
                 raise AlgoliaException(response.error_message,
                                        response.status_code)
@@ -84,7 +85,7 @@ class Response(object):
 
 class RetryStrategy(object):
     def decide(self, host, status_code, timed_out):
-        # type: (Host, int, bool) -> str
+        # type: (Host, Optional[int], bool) -> str
 
         host.last_use = time.time()
 

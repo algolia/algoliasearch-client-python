@@ -78,7 +78,7 @@ class TestTransporter(unittest.TestCase):
 
         self.requester.request.return_value = Response(100, {'foo': 'bar'})
 
-        with self.assertRaises(AlgoliaUnreachableHostException) as context:
+        with self.assertRaises(AlgoliaUnreachableHostException) as _:
             self.transporter.read('get', 'endpoint/bar',
                                   self.request_options)
         self.assertEqual(self.requester.request.call_count, 10)  # 5 + 5
@@ -86,7 +86,7 @@ class TestTransporter(unittest.TestCase):
     def test_algolia_exception(self):
         self.requester.request.return_value = Response(401, {'foo': 'bar'})
 
-        with self.assertRaises(AlgoliaException) as context:
+        with self.assertRaises(AlgoliaException) as _:
             self.transporter.read('get', 'endpoint/bar',
                                   self.request_options)
         self.assertEqual(self.requester.request.call_count, 1)

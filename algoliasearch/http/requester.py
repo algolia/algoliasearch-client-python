@@ -24,7 +24,7 @@ class Requester(object):
             response = s.send(r, timeout=timeout)
             s.close()
         except Timeout as e:
-            return Response(error_message=e.message, timed_out=True)
+            return Response(error_message=str(e), timed_out=True)
 
         return Response(
             response.status_code,
