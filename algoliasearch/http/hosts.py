@@ -35,7 +35,8 @@ class HostsCollection(object):
 
         shuffle(self._hosts)
 
-        self._hosts = sorted(self._hosts, key=lambda x: x.priority, reverse=True) # inverse... # check php
+        self._hosts = sorted(self._hosts, key=lambda x: x.priority,
+                             reverse=True)
 
     def __iter__(self):
         return self
