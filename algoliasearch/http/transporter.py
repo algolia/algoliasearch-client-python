@@ -93,24 +93,23 @@ class RetryStrategy(object):
             host.retry_count += 1
 
             return RetryOutcome.RETRY
-        elif self.__is_retryable(status_code):
+        elif status_code is not None and self.__is_retryable(status_code):
             host.up = False
             return RetryOutcome.RETRY
-        elif self.__is_success(status_code):
+        elif status_code is not None and self.__is_success(status_code):
             return RetryOutcome.SUCCESS
 
         return RetryOutcome.FAIL
 
     def __is_success(self, status_code):
-        # type: (Optional[int]) -> bool
+        # type: (int) -> bool
 
-        return status_code is not None and (status_code // 100) == 2
+        return (status_code // 100) == 2
 
     def __is_retryable(self, status_code):
-        # type: (Optional[int]) -> bool
+        # type: (int) -> bool
 
-        return status_code is not None and (status_code // 100) != 2 and (
-                status_code // 100) != 4
+        return (status_code // 100) != 2 and (status_code // 100) != 4
 
 
 class RetryOutcome(object):
