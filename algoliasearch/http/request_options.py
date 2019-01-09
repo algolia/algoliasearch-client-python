@@ -32,7 +32,6 @@ class RequestOptions(object):
         timeouts = {
             'readTimeout': config.read_timeout,
             'writeTimeout': config.write_timeout,
-            'connectTimeout': config.connect_timeout,
         }
 
         request_options = RequestOptions(headers, {}, timeouts, {})

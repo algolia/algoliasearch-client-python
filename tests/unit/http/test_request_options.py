@@ -49,7 +49,7 @@ class TestRequestOptions(unittest.TestCase):
         self.assertEqual(read_timeout, 10)
 
         # Default Value
-        default_timeout = self.request_options.timeouts['connectTimeout']
+        default_timeout = self.request_options.timeouts['writeTimeout']
         self.assertEqual(default_timeout, 5)
 
     def test_data(self):

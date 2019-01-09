@@ -15,7 +15,6 @@ class Config(object):
         # In seconds
         self.read_timeout = 5
         self.write_timeout = 5
-        self.connect_timeout = 5
 
         # In microseconds
         self.wait_task_time_before_retry = 100000

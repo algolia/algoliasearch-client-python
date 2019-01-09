@@ -109,7 +109,7 @@ class RetryStrategy(object):
         # type: (Optional[int]) -> bool
 
         return status_code is not None and (status_code // 100) != 2 and (
-                    status_code // 100) != 4
+            status_code // 100) != 4
 
 
 class RetryOutcome(object):
