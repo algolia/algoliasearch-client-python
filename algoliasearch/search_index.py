@@ -1,9 +1,11 @@
 import math
 import time
 
-from typing import Optional
+from typing import Optional, List, Union
 
-from algoliasearch.configs import Config
+from algoliasearch.configs import SearchConfig
+from algoliasearch.exceptions import MissingObjectIdException
+from algoliasearch.helpers import assert_object_id, build_raw_response_batch
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
@@ -16,46 +18,65 @@ class SearchIndex(object):
         return self.__config.app_id
 
     def __init__(self, transporter, config, name):
-        # type: (Transporter, Config, str) -> None
+        # type: (Transporter, SearchConfig, str) -> None
 
         self.__transporter = transporter
         self.__config = config
         self.__name = name
 
     def save_object(self, obj, request_options=None):
-        # type: (dict, Optional[dict]) -> Response
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        response = self.__batch({
-            'requests': [
-                {
-                    'action': 'addObject',
-                    'body': obj
-                }
-            ],
-        }, RequestOptions.create(self.__config, request_options))
+        return self.save_objects([obj], request_options)
 
-        return IndexingResponse(self, response)
+    def save_objects(self, objects, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        generate_object_id = False
+
+        if isinstance(request_options, dict) \
+                and 'autoGenerateObjectIDIfNotExist' in request_options:
+            generate_object_id = request_options.pop(
+                'autoGenerateObjectIDIfNotExist'
+            )
+
+        if generate_object_id:
+            response = self.__chunk('addObject', objects, request_options,
+                                    False)
+        else:
+            try:
+                response = self.__chunk('updateObject', objects,
+                                        request_options)
+            except MissingObjectIdException as e:
+                message = str(e)
+                message += ". All objects must have an unique objectID (like a primary key) to be valid."  # noqa: E501
+                message += "Algolia is also able to generate objectIDs automatically but *it's not recommended*."  # noqa: E501
+                message += "To do it, use `save_objects(objects, {'autoGenerateObjectIDIfNotExist' => True})`."  # noqa: E501
+
+                raise MissingObjectIdException(message, e.obj)
+
+        return response
 
     def get_object(self, object_id, request_options=None):
-        # type: (str, Optional[dict]) -> dict
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self.__transporter.read(
             Verbs.GET,
             '1/indexes/%s/%s' % (self.__name, object_id),
-            RequestOptions.create(self.__config, request_options)
+            request_options
         )
 
     def get_task(self, task_id, request_options=None):
-        # type:(int, Optional[dict]) -> dict
+        # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self.__transporter.read(
             'GET',
             '1/indexes/%s/task/%s' % (self.__name, task_id),
-            RequestOptions.create(self.__config, request_options)
+            request_options
         )
 
     def wait_task(self, task_id, request_options=None):
-        # type:(int, Optional[dict]) -> None
+        # type: (int, Optional[Union[dict, RequestOptions]]) -> None
 
         retries_count = 1
 
@@ -69,8 +90,51 @@ class SearchIndex(object):
             sleep_for = factor * self.__config.wait_task_time_before_retry
             time.sleep(sleep_for / 1000000.0)
 
+    def delete(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> Response
+
+        raw_response = self.__transporter.write(
+            Verbs.DELETE,
+            '1/indexes/%s' % self.__name,
+            {},
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def batch(self, data, request_options):
+        raw_response = self.__batch(data, request_options)
+
+        return IndexingResponse(self, [raw_response])
+
+    def __chunk(self, action, objects, request_options,
+                validate_object_id=True):
+        # type: (str, list, Optional[Union[dict, RequestOptions]], bool) -> IndexingResponse # noqa: E501
+
+        raw_responses = []
+        batch = []
+        batch_size = self.__config.batch_size
+        for obj in objects:
+            batch.append(obj)
+
+            if len(batch) == batch_size:
+                if validate_object_id:
+                    assert_object_id(objects)
+
+                data = build_raw_response_batch(action, objects)
+                raw_responses.append(self.__batch(data, request_options))
+                batch = []
+
+        if len(batch):
+            if validate_object_id:
+                assert_object_id(objects)
+            data = build_raw_response_batch(action, objects)
+            raw_responses.append(self.__batch(data, request_options))
+
+        return IndexingResponse(self, raw_responses)
+
     def __batch(self, data, request_options):
-        # type: (dict, RequestOptions) -> dict
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self.__transporter.write(
             Verbs.POST,

@@ -27,9 +27,17 @@ class Factory(object):
         return client.init_index('python_%s_%s_%s' % (date, instance, name))
 
     @staticmethod
-    def obj():
+    def obj(data=None, object_id=True):
         fake = Faker()
-        return {
-            'objectID': fake.md5(),
-            'name': fake.name(),
-        }
+
+        data = {} if data is None else data
+
+        data['name'] = fake.name()
+
+        if isinstance(object_id, bool):
+            if object_id:
+                data['objectID'] = fake.md5()
+        elif isinstance(object_id, (str, int)):
+            data['objectID'] = object_id
+
+        return data

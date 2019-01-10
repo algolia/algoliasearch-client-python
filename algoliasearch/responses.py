@@ -1,6 +1,6 @@
 import abc
 
-from typing import Any
+from typing import List, Any
 
 try:
     from algoliasearch.search_index import SearchIndex
@@ -11,52 +11,56 @@ except ImportError:  # Already imported.
 class Response(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, index, response=None):
-        # type: (SearchIndex, dict) -> None
-
-        self._index = index
-        self.body = {} if response is None else response
-
     @abc.abstractmethod
     def wait(self):
         # type:() -> None
 
         pass
 
-    def __getitem__(self, key):
-        # type:(Any) -> Any
-
-        return self.body[key]
-
-    def __setitem__(self, key, value):
-        # type:(Any, Any) -> None
-
-        self.body[key] = value
-
-    def __delitem__(self, key):
-        # type:(Any) -> None
-
-        del self.body[key]
-
-    def __contains__(self, key):
-        # type:(Any) -> bool
-
-        return key in self.body
-
-    def __len__(self):
-        # type:() -> int
-
-        return len(self.body)
-
-    def __repr__(self):
-        # type:() -> str
-
-        return repr(self.body)
-
 
 class IndexingResponse(Response):
+
+    def __init__(self, index, raw_responses):
+        # type: (SearchIndex, List[dict]) -> None
+
+        self.__raw_responses = raw_responses
+        self.__index = index
+
+    def get_task_ids(self):
+        # type: () -> list
+
+        task_ids = []
+        for raw_response in self.__raw_responses:
+            task_ids.append(raw_response['taskID'])
+
+        return task_ids
 
     def wait(self):
         # type: () -> None
 
-        self._index.wait_task(self.body['taskID'])
+        for raw_response in self.__raw_responses:
+            self.__index.wait_task(raw_response['taskID'])
+
+    def __getitem__(self, key):
+        # type:(int) -> dict
+
+        return self.__raw_responses[key]
+
+    def __len__(self):
+        # type:() -> int
+
+        return len(self.__raw_responses)
+
+
+class MultipleResponse(Response):
+
+    def __init__(self, responses):
+        # type: (List[Response]) -> None
+
+        self.responses = responses
+
+    def wait(self):
+        # type: () -> None
+
+        for response in self.responses:
+            response.wait()

@@ -1,7 +1,7 @@
 import sys
 import time
 
-from typing import Optional
+from typing import Optional, Union
 
 from algoliasearch.exceptions import AlgoliaUnreachableHostException, \
     RequestException
@@ -30,7 +30,11 @@ class Transporter(object):
         self.__retry_strategy = RetryStrategy()
 
     def write(self, verb, path, data, request_options):
-        # type: (str, str, dict, RequestOptions) -> dict
+        # type: (str, str, dict, Optional[Union[dict, RequestOptions]]) -> dict
+
+        if request_options is None or isinstance(request_options, dict):
+            request_options = RequestOptions.create(self.__config,
+                                                    request_options)
 
         timeout = request_options.timeouts['writeTimeout']
 
@@ -38,7 +42,11 @@ class Transporter(object):
                               request_options, timeout)
 
     def read(self, verb, path, request_options):
-        # type: (str, str, RequestOptions) -> dict
+        # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict
+
+        if request_options is None or isinstance(request_options, dict):
+            request_options = RequestOptions.create(self.__config,
+                                                    request_options)
 
         timeout = request_options.timeouts['readTimeout']
 

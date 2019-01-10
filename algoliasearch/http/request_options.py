@@ -1,9 +1,7 @@
-from platform import python_version
 from typing import Optional
 
 from algoliasearch.configs import Config
-from algoliasearch.helpers import Items
-from algoliasearch.version import VERSION
+from algoliasearch.helpers import get_items
 
 
 class RequestOptions(object):
@@ -29,7 +27,7 @@ class RequestOptions(object):
 
         request_options = RequestOptions(headers, {}, timeouts, {})
 
-        for option, value in Items.get(options):
+        for option, value in get_items(options):
             if option in Params.HEADERS:
                 request_options.headers[option] = value
             elif option in Params.QUERY_PARAMETERS:

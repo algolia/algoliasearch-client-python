@@ -5,6 +5,14 @@ class AlgoliaException(Exception):
     pass
 
 
+class MissingObjectIdException(AlgoliaException):
+    def __init__(self, message, obj):
+        # type: (str, dict) -> None
+
+        super(AlgoliaException, self).__init__(message)
+        self.obj = obj
+
+
 class RequestException(AlgoliaException):
     def __init__(self, message, status_code):
         # type: (str, Optional[int]) -> None
