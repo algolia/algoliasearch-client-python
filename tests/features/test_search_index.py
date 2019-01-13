@@ -1,5 +1,7 @@
+import time
 import unittest
 
+from algoliasearch.helpers import get_items
 from algoliasearch.responses import MultipleResponse
 from tests.features.helpers.factory import Factory as F
 
@@ -37,19 +39,22 @@ class TestSearchIndex(unittest.TestCase):
         opts = {'autoGenerateObjectIDIfNotExist': True}
         responses.append(self.index.save_objects([obj5, obj6], opts))
 
+        # adding 1000 objects with object id
         objects = []
         for i in range(1000):
-            object_id = i + 1
+            object_id = i
             objects.append({
-                'objectID': object_id,
+                'objectID': str(object_id),
                 'name': object_id
             })
 
         self.index._SearchIndex__config.batch_size = 100
         responses.append(self.index.save_objects(objects))
 
+        # waiting for all responses
         MultipleResponse(responses).wait()
 
+        # Check 6 first records with get_object
         self.assertDictContainsSubset(obj1, self.index.get_object(
             self.get_object_id(responses[0])))
         self.assertDictContainsSubset(obj2, self.index.get_object(
@@ -63,6 +68,13 @@ class TestSearchIndex(unittest.TestCase):
             self.get_object_id(responses[3])))
         self.assertDictContainsSubset(obj6, self.index.get_object(
             self.get_object_id(responses[3], 1)))
+
+        # Check 1000 remaining records with get_objects
+        results = self.index.get_objects(range(1000))['results']
+        for obj in results:
+            self.assertDictEqual(obj, objects[int(obj['objectID'])])
+
+        self.assertEqual(len(results), len(objects))
 
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]

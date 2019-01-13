@@ -66,6 +66,28 @@ class SearchIndex(object):
             request_options
         )
 
+    def get_objects(self, object_ids, request_options=None):
+        # type: (list, Optional[Union[dict, RequestOptions]]) -> dict
+
+        requests = []
+        for object_id in object_ids:
+            request = {'indexName': self.__name, 'objectID': str(object_id)}
+            requests.append(request)
+
+        if request_options is None:
+            request_options = {}
+
+        if isinstance(request_options, RequestOptions):
+            request_options.data['requests'] = requests
+        else:
+            request_options['requests'] = requests
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/indexes/*/objects',
+            request_options
+        )
+
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 

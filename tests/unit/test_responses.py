@@ -2,7 +2,6 @@ import unittest
 
 from algoliasearch.responses import IndexingResponse
 from algoliasearch.search_client import SearchClient
-from algoliasearch.search_index import SearchIndex
 
 
 class TestIndexingResponse(unittest.TestCase):

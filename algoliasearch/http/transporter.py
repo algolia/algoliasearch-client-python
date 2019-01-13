@@ -58,6 +58,8 @@ class Transporter(object):
 
         hosts.reset()
 
+        data.update(request_options.data)
+
         for host in hosts:
 
             url = 'https://%s/%s?%s' % (

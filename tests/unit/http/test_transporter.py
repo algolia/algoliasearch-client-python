@@ -61,7 +61,7 @@ class TestTransporter(unittest.TestCase):
             'GET',  # Upper case letters
             'https://' + host.url + '/endpoint/bar?createIfNotExists=True',
             self.request_options.headers,
-            {},
+            {'bodyParam': 'bar'},
             109,  # Customized timeout
             2  # Default connect timeout
         )
