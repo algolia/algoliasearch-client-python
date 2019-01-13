@@ -41,8 +41,8 @@ class Transporter(object):
         return self.__request(verb, self.__config.hosts['write'], path, data,
                               request_options, timeout)
 
-    def read(self, verb, path, request_options):
-        # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict
+    def read(self, verb, path, data, request_options):
+        # type: (str, str, dict, Optional[Union[dict, RequestOptions]]) -> dict
 
         if request_options is None or isinstance(request_options, dict):
             request_options = RequestOptions.create(self.__config,
@@ -50,7 +50,7 @@ class Transporter(object):
 
         timeout = request_options.timeouts['readTimeout']
 
-        return self.__request(verb, self.__config.hosts['read'], path, {},
+        return self.__request(verb, self.__config.hosts['read'], path, data,
                               request_options, timeout)
 
     def __request(self, verb, hosts, path, data, request_options, timeout):

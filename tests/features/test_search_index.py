@@ -45,7 +45,7 @@ class TestSearchIndex(unittest.TestCase):
             object_id = i
             objects.append({
                 'objectID': str(object_id),
-                'name': object_id
+                'name': object_id,
             })
 
         self.index._SearchIndex__config.batch_size = 100
@@ -72,9 +72,22 @@ class TestSearchIndex(unittest.TestCase):
         # Check 1000 remaining records with get_objects
         results = self.index.get_objects(range(1000))['results']
         for obj in results:
-            self.assertDictEqual(obj, objects[int(obj['objectID'])])
+            self.assertIn(obj, objects)
 
         self.assertEqual(len(results), len(objects))
+
+        # Browse all records with browse_all
+        results = []
+        for obj in self.index.browse_objects():
+            results.append(obj)
+
+        for obj in objects:
+            self.assertIn(obj, results)
+
+        for obj in [obj1, obj3, obj4]:
+            self.assertIn(obj, results)
+
+        self.assertEqual(len(results), 1006)
 
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]

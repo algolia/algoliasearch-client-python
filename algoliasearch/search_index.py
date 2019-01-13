@@ -9,6 +9,7 @@ from algoliasearch.helpers import assert_object_id, build_raw_response_batch
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
+from algoliasearch.iterators import ObjectIterator
 from algoliasearch.responses import Response, IndexingResponse
 
 
@@ -63,6 +64,7 @@ class SearchIndex(object):
         return self.__transporter.read(
             Verbs.GET,
             '1/indexes/%s/%s' % (self.__name, object_id),
+            {},
             request_options
         )
 
@@ -74,19 +76,19 @@ class SearchIndex(object):
             request = {'indexName': self.__name, 'objectID': str(object_id)}
             requests.append(request)
 
-        if request_options is None:
-            request_options = {}
-
-        if isinstance(request_options, RequestOptions):
-            request_options.data['requests'] = requests
-        else:
-            request_options['requests'] = requests
-
         return self.__transporter.read(
             Verbs.POST,
             '1/indexes/*/objects',
+            {
+                'requests': requests
+            },
             request_options
         )
+
+    def browse_objects(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> IndexIterator
+
+        return ObjectIterator(self.__transporter, self.__name, request_options)
 
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
@@ -94,6 +96,7 @@ class SearchIndex(object):
         return self.__transporter.read(
             'GET',
             '1/indexes/%s/task/%s' % (self.__name, task_id),
+            {},
             request_options
         )
 

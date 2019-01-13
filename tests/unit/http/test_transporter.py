@@ -52,7 +52,7 @@ class TestTransporter(unittest.TestCase):
         self.assertEqual(self.requester.request.call_count, 1)
 
     def test_success_read(self):
-        response = self.transporter.read('get', 'endpoint/bar',
+        response = self.transporter.read('get', 'endpoint/bar', {},
                                          self.request_options)
 
         host = self.config.hosts['read']._hosts[0]  # type: Host
@@ -73,7 +73,7 @@ class TestTransporter(unittest.TestCase):
         self.requester.request.return_value = Response(300, {'foo': 'bar'})
 
         with self.assertRaises(AlgoliaUnreachableHostException) as _:
-            self.transporter.read('get', 'endpoint/bar',
+            self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
 
         self.assertEqual(self.requester.request.call_count, 5)
@@ -81,7 +81,7 @@ class TestTransporter(unittest.TestCase):
         self.requester.request.return_value = Response(100, {'foo': 'bar'})
 
         with self.assertRaises(AlgoliaUnreachableHostException) as _:
-            self.transporter.read('get', 'endpoint/bar',
+            self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
 
         # Remains 5, all hosts here down.
@@ -91,7 +91,7 @@ class TestTransporter(unittest.TestCase):
         self.requester.request.return_value = Response(401, {'foo': 'bar'})
 
         with self.assertRaises(AlgoliaException) as _:
-            self.transporter.read('get', 'endpoint/bar',
+            self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
         self.assertEqual(self.requester.request.call_count, 1)
 
