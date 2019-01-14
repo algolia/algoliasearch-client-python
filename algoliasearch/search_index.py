@@ -86,9 +86,29 @@ class SearchIndex(object):
         )
 
     def browse_objects(self, request_options=None):
-        # type: (Optional[Union[dict, RequestOptions]]) -> IndexIterator
+        # type: (Optional[Union[dict, RequestOptions]]) -> ObjectIterator
 
         return ObjectIterator(self.__transporter, self.__name, request_options)
+
+    def partial_update_objects(self, objects, request_options=None):
+        # type: (list, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        generate_object_id = False
+
+        if isinstance(request_options, dict) \
+                and 'createIfNotExists' in request_options:
+            generate_object_id = request_options.pop(
+                'createIfNotExists'
+            )
+
+        if generate_object_id:
+            response = self.__chunk('partialUpdateObject', objects,
+                                    request_options, False)
+        else:
+            response = self.__chunk('partialUpdateObjectNoCreate', objects,
+                                    request_options)
+
+        return response
 
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict

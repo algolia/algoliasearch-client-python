@@ -89,6 +89,19 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertEqual(len(results), 1006)
 
+        responses = []
+
+        # @todo Alter 1 record with partial_update_object
+
+        # Alter 2 records with partial_update_objects
+        obj3['foo'] = 30
+        obj4['bar'] = 40
+        responses.append(self.index.partial_update_objects([obj3, obj4]))
+
+        MultipleResponse(responses).wait()
+
+        self.assertEqual(self.index.get_object(obj3['objectID']), obj3)
+
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]
 
