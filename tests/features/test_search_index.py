@@ -1,7 +1,5 @@
-import time
 import unittest
 
-from algoliasearch.helpers import get_items
 from algoliasearch.responses import MultipleResponse
 from tests.features.helpers.factory import Factory as F
 
@@ -39,6 +37,13 @@ class TestSearchIndex(unittest.TestCase):
         opts = {'autoGenerateObjectIDIfNotExist': True}
         responses.append(self.index.save_objects([obj5, obj6], opts))
 
+        object1_id = self.get_object_id(responses[0])
+        object2_id = self.get_object_id(responses[1])
+        object3_id = self.get_object_id(responses[2])
+        object4_id = self.get_object_id(responses[2], 1)
+        object5_id = self.get_object_id(responses[3])
+        object6_id = self.get_object_id(responses[3], 1)
+
         # adding 1000 objects with object id
         objects = []
         for i in range(1000):
@@ -55,19 +60,18 @@ class TestSearchIndex(unittest.TestCase):
         MultipleResponse(responses).wait()
 
         # Check 6 first records with get_object
-        self.assertDictContainsSubset(obj1, self.index.get_object(
-            self.get_object_id(responses[0])))
-        self.assertDictContainsSubset(obj2, self.index.get_object(
-            self.get_object_id(responses[1])))
-        self.assertDictContainsSubset(obj3, self.index.get_object(
-            self.get_object_id(responses[2])))
-
-        self.assertDictContainsSubset(obj4, self.index.get_object(
-            self.get_object_id(responses[2], 1)))
-        self.assertDictContainsSubset(obj5, self.index.get_object(
-            self.get_object_id(responses[3])))
-        self.assertDictContainsSubset(obj6, self.index.get_object(
-            self.get_object_id(responses[3], 1)))
+        self.assertEqual(obj1['name'],
+                         self.index.get_object(object1_id)['name'])
+        self.assertEqual(obj2['name'],
+                         self.index.get_object(object2_id)['name'])
+        self.assertEqual(obj3['name'],
+                         self.index.get_object(object3_id)['name'])
+        self.assertEqual(obj4['name'],
+                         self.index.get_object(object4_id)['name'])
+        self.assertEqual(obj5['name'],
+                         self.index.get_object(object5_id)['name'])
+        self.assertEqual(obj6['name'],
+                         self.index.get_object(object6_id)['name'])
 
         # Check 1000 remaining records with get_objects
         results = self.index.get_objects(range(1000))['results']
@@ -94,13 +98,35 @@ class TestSearchIndex(unittest.TestCase):
         # @todo Alter 1 record with partial_update_object
 
         # Alter 2 records with partial_update_objects
-        obj3['foo'] = 30
-        obj4['bar'] = 40
+        obj3['bar'] = 40
+        obj4['foo'] = 30
         responses.append(self.index.partial_update_objects([obj3, obj4]))
 
         MultipleResponse(responses).wait()
 
-        self.assertEqual(self.index.get_object(obj3['objectID']), obj3)
+        self.assertEqual(self.index.get_object(object3_id), obj3)
+        self.assertEqual(self.index.get_object(object4_id), obj4)
+
+        responses = []
+
+        # Delete the 6 first records with delete_object
+        responses.append(self.index.delete_object(object1_id))
+        responses.append(self.index.delete_object(object2_id))
+        responses.append(self.index.delete_object(object3_id))
+        responses.append(self.index.delete_object(object4_id))
+        responses.append(self.index.delete_object(object5_id))
+        responses.append(self.index.delete_object(object6_id))
+
+        # Delete the 1000 remaining records with delete_objects
+        responses.append(self.index.delete_objects(range(1000)))
+
+        MultipleResponse(responses).wait()
+
+        objects = []
+        for obj in self.index.browse_objects():
+            objects.append(obj)
+
+        self.assertEqual(len(objects), 0)
 
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]

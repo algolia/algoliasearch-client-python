@@ -110,6 +110,19 @@ class SearchIndex(object):
 
         return response
 
+    def delete_object(self, object_id, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        return self.delete_objects([object_id], request_options)
+
+    def delete_objects(self, object_ids, request_options=None):
+        # type: (list, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        objects = list(
+            map(lambda object_id: {'objectID': object_id}, object_ids))
+
+        return self.__chunk('deleteObject', objects, request_options)
+
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 

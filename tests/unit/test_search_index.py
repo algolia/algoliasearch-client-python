@@ -3,7 +3,6 @@ import unittest
 import mock
 
 from algoliasearch.exceptions import MissingObjectIdException
-from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
