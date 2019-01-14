@@ -1,5 +1,6 @@
 import datetime
 import os
+import platform
 
 from algoliasearch.search_client import SearchClient
 from faker import Faker
@@ -24,7 +25,12 @@ class Factory(object):
 
         client = Factory.client()
 
-        return client.init_index('python_%s_%s_%s' % (date, instance, name))
+        python_version = platform.python_version()
+
+        index_name = 'python%s_%s_%s_%s' % (
+            python_version, date, instance, name)
+
+        return client.init_index(index_name)
 
     @staticmethod
     def obj(data=None, object_id=True):
