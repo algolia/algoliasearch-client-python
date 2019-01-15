@@ -164,6 +164,18 @@ class SearchIndex(object):
             request_options
         )
 
+    def search_for_facet_value(self, facet_name, facet_query, request_options=None):
+        # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/indexes/%s/facets/%s/query' % (self.__name, facet_name),
+            {
+                'facetQuery': facet_query
+            },
+            request_options
+        )
+
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 

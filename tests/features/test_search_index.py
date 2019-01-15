@@ -215,6 +215,15 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertEqual(result['nbHits'], 2)
 
+        result = self.index.search_for_facet_value('company', 'a')['facetHits']
+        values = list(
+            map(lambda facet: facet['value'], result))
+
+        self.assertIn('Algolia', values)
+        self.assertIn('Amazon', values)
+        self.assertIn('Apple', values)
+        self.assertIn('Arista Networks', values)
+
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]
 
