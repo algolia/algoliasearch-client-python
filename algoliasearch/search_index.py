@@ -147,6 +147,18 @@ class SearchIndex(object):
             request_options
         )
 
+    def search(self, query, request_options=None):
+        # type: (Optional[str], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/indexes/%s/query' % self.__name,
+            {
+                'query': query
+            },
+            request_options
+        )
+
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 

@@ -157,6 +157,61 @@ class TestSearchIndex(unittest.TestCase):
             ['name']
         )
 
+    def test_search(self):
+        responses = MultipleResponse()
+
+        responses.push(self.index.save_objects([
+            {"company": "Algolia", "name": "Julien Lemoine"},
+            {"company": "Algolia", "name": "Nicolas Dessaigne"},
+            {"company": "Amazon", "name": "Jeff Bezos"},
+            {"company": "Apple", "name": "Steve Jobs"},
+            {"company": "Apple", "name": "Steve Wozniak"},
+            {"company": "Arista Networks", "name": "Jayshree Ullal"},
+            {"company": "Google", "name": "Larry Page"},
+            {"company": "Google", "name": "Rob Pike"},
+            {"company": "Google", "name": "Serguey Brin"},
+            {"company": "Microsoft", "name": "Bill Gates"},
+            {"company": "SpaceX", "name": "Elon Musk"},
+            {"company": "Tesla", "name": "Elon Musk"},
+            {"company": "Yahoo", "name": "Marissa Mayer"}
+        ], {'autoGenerateObjectIDIfNotExist': True}))
+
+        responses.push(self.index.set_settings({
+            'attributesForFaceting': ["searchable(company)"]
+        }))
+
+        responses.wait()
+
+        # Perform a search query using search with the query `algolia` and no
+        # parameter and check that the number of returned hits is equal to 2
+        result = self.index.search('algolia')
+        self.assertEqual(result['nbHits'], 2)
+
+        # Perform a search using search with the query `elon` and the
+        # following parameter and check that the queryID field from
+        # the response is not empty
+        result = self.index.search('elon', {'clickAnalytics': True})
+        self.assertIn('queryID', result)
+
+        # Perform a faceted search using search with the query `elon` and the
+        # following parameters and check that the number of returned hits is
+        # equal to 1
+        result = self.index.search('elon', {
+            'facets': '*',
+            'facetFilters': 'company:tesla'
+        })
+        self.assertEqual(result['nbHits'], 1)
+
+        # Perform a filtered search using search with the query `elon` and the
+        # following parameters and check that the number of returned hits is
+        # equal to 2
+        result = self.index.search('elon', {
+            'facets': '*',
+            'filters': '(company:tesla OR company:spacex)'
+        })
+
+        self.assertEqual(result['nbHits'], 2)
+
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]
 

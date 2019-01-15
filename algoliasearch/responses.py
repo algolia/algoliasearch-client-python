@@ -54,13 +54,20 @@ class IndexingResponse(Response):
 
 class MultipleResponse(Response):
 
-    def __init__(self, responses):
+    def __init__(self, responses=None):
         # type: (List[Response]) -> None
 
-        self.responses = responses
+        self.responses = [] if responses is None else responses
+
+    def push(self, response):
+        # type: (Response) -> None
+
+        self.responses.append(response)
 
     def wait(self):
         # type: () -> None
 
         for response in self.responses:
             response.wait()
+
+            self.responses = []
