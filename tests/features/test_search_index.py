@@ -128,6 +128,27 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertEqual(len(objects), 0)
 
+    def test_settings(self):
+        self.index.save_object(F.obj()).wait()
+
+        self.index.set_settings({
+            'searchableAttributes': ['name']
+        }).wait()
+
+        self.assertEqual(
+            self.index.get_settings()['searchableAttributes'],
+            ['name']
+        )
+
+        self.index.set_settings({
+            'typoTolerance': 'min'
+        }).wait()
+
+        self.assertEqual(
+            self.index.get_settings()['typoTolerance'],
+            'min'
+        )
+
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]
 

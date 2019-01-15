@@ -92,3 +92,15 @@ class TestSearchIndex(unittest.TestCase):
             },
             None,
         )
+
+    def test_get_settings(self):
+        # Saving an object without object id
+
+        self.index.get_settings([{'foo': 'bar'}])
+
+        self.transporter.read.assert_called_once_with(
+            'GET',
+            '1/indexes/foo/settings',
+            {'getVersion': 2},  # asserts version 2 it's used.
+            [{'foo': 'bar'}]
+        )

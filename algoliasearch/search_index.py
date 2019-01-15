@@ -123,6 +123,30 @@ class SearchIndex(object):
 
         return self.__chunk('deleteObject', objects, request_options)
 
+    def set_settings(self, settings, request_options=None):
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        raw_response = self.__transporter.write(
+            Verbs.PUT,
+            '1/indexes/%s/settings' % self.__name,
+            settings,
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def get_settings(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        params = {'getVersion': 2}
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/indexes/%s/settings' % self.__name,
+            params,
+            request_options
+        )
+
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 
