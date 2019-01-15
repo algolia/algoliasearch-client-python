@@ -90,6 +90,11 @@ class SearchIndex(object):
 
         return ObjectIterator(self.__transporter, self.__name, request_options)
 
+    def partial_update_object(self, obj, request_options=None):
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        return self.partial_update_objects([obj], request_options)
+
     def partial_update_objects(self, objects, request_options=None):
         # type: (list, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 

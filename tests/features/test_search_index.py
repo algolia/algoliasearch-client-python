@@ -95,7 +95,9 @@ class TestSearchIndex(unittest.TestCase):
 
         responses = []
 
-        # @todo Alter 1 record with partial_update_object
+        # Alter 1 record with partial_update_object
+        obj1['name'] = 'This is an altered name'
+        responses.append(self.index.partial_update_object(obj1))
 
         # Alter 2 records with partial_update_objects
         obj3['bar'] = 40
@@ -104,6 +106,7 @@ class TestSearchIndex(unittest.TestCase):
 
         MultipleResponse(responses).wait()
 
+        self.assertEqual(self.index.get_object(object1_id), obj1)
         self.assertEqual(self.index.get_object(object3_id), obj3)
         self.assertEqual(self.index.get_object(object4_id), obj4)
 
