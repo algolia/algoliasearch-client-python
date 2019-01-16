@@ -368,8 +368,7 @@ class TestSearchIndex(unittest.TestCase):
                     "until": 1532698500
                 }
             ],
-            "description": "Automatic apply the faceting on `brand` if a brand value is found in the query"   # noqa: E501
-
+            "description": "Automatic apply the faceting on `brand` if a"
         }
 
         responses.push(self.index.save_rule(rule1))
@@ -427,6 +426,62 @@ class TestSearchIndex(unittest.TestCase):
         # Perform a rule search using search_rule with an empty query
         # and check that the number of returned nbHits is equal to 0
         self.assertEqual(self.index.search_rules('')['nbHits'], 0)
+
+    def test_batching(self):
+        responses = MultipleResponse()
+
+        responses.push(self.index.save_objects([
+            {"objectID": "one", "key": "value"},
+            {"objectID": "two", "key": "value"},
+            {"objectID": "three", "key": "value"},
+            {"objectID": "four", "key": "value"},
+            {"objectID": "five", "key": "value"},
+        ]))
+
+        responses.push(self.index.batch([
+            {
+                "action": "addObject",
+                "body": {"objectID": "zero", "key": "value"}
+            },
+            {
+                "action": "updateObject",
+                "body": {"objectID": "one", "k": "v"}
+            },
+            {
+                "action": "partialUpdateObject",
+                "body": {"objectID": "two", "k": "v"}
+            },
+            {
+                "action": "partialUpdateObject",
+                "body": {"objectID": "two_bis", "key": "value"}
+            },
+            {
+                "action": "partialUpdateObjectNoCreate",
+                "body": {"objectID": "three", "k": "v"}
+            },
+            {
+                "action": "deleteObject",
+                "body": {"objectID": "four"}
+            }
+        ]))
+
+        responses.wait()
+
+        objects = [
+            {"objectID": "zero", "key": "value"},
+            {"objectID": "one", "k": "v"},
+            {"objectID": "two", "key": "value", "k": "v"},
+            {"objectID": "two_bis", "key": "value"},
+            {"objectID": "three", "key": "value", "k": "v"},
+            {"objectID": "five", "key": "value"},
+        ]
+
+        results = []
+        for obj in self.index.browse_objects():
+            results.append(obj)
+
+        for obj in objects:
+            self.assertIn(obj, results)
 
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]

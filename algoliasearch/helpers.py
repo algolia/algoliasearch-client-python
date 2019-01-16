@@ -29,7 +29,7 @@ def assert_object_id(objects):
 
 
 def build_raw_response_batch(action, objects):
-    # type: (str, list) -> dict
+    # type: (str, list) -> List[dict]
 
     requests = []
     for obj in objects:
@@ -38,4 +38,4 @@ def build_raw_response_batch(action, objects):
             'body': obj
         })
 
-    return {'requests': requests}
+    return requests

@@ -363,7 +363,9 @@ class SearchIndex(object):
 
         return IndexingResponse(self, [raw_response])
 
-    def batch(self, data, request_options):
+    def batch(self, data, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
         raw_response = self.__batch(data, request_options)
 
         return IndexingResponse(self, [raw_response])
@@ -382,24 +384,26 @@ class SearchIndex(object):
                 if validate_object_id:
                     assert_object_id(objects)
 
-                data = build_raw_response_batch(action, objects)
-                raw_responses.append(self.__batch(data, request_options))
+                requests = build_raw_response_batch(action, objects)
+                raw_responses.append(self.__batch(requests, request_options))
                 batch = []
 
         if len(batch):
             if validate_object_id:
                 assert_object_id(objects)
-            data = build_raw_response_batch(action, objects)
-            raw_responses.append(self.__batch(data, request_options))
+            requests = build_raw_response_batch(action, objects)
+            raw_responses.append(self.__batch(requests, request_options))
 
         return IndexingResponse(self, raw_responses)
 
-    def __batch(self, data, request_options):
-        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
+    def __batch(self, requests, request_options):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self.__transporter.write(
             Verbs.POST,
             '1/indexes/%s/batch' % self.__name,
-            data,
+            {
+                'requests': requests
+            },
             request_options
         )
