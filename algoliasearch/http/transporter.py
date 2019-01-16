@@ -30,7 +30,7 @@ class Transporter(object):
         self.__retry_strategy = RetryStrategy()
 
     def write(self, verb, path, data, request_options):
-        # type: (str, str, Union[dict, list], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+        # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
             request_options = RequestOptions.create(self.__config,
@@ -42,7 +42,7 @@ class Transporter(object):
                               request_options, timeout)
 
     def read(self, verb, path, data, request_options):
-        # type: (str, str, Union[dict, list], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+        # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
             request_options = RequestOptions.create(self.__config,
@@ -54,7 +54,7 @@ class Transporter(object):
                               request_options, timeout)
 
     def __request(self, verb, hosts, path, data, request_options, timeout):
-        # type: (str, HostsCollection, str, Union[dict, list], RequestOptions, int) -> dict # noqa: E501
+        # type: (str, HostsCollection, str, Optional[Union[dict, list]], RequestOptions, int) -> dict # noqa: E501
 
         hosts.reset()
 

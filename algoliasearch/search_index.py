@@ -9,8 +9,9 @@ from algoliasearch.helpers import assert_object_id, build_raw_response_batch
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
-from algoliasearch.iterators import ObjectIterator, SynonymIterator
-from algoliasearch.responses import Response, IndexingResponse, NullResponse
+from algoliasearch.iterators import ObjectIterator, SynonymIterator, \
+    RuleIterator
+from algoliasearch.responses import Response, IndexingResponse
 
 
 class SearchIndex(object):
@@ -64,7 +65,7 @@ class SearchIndex(object):
         return self.__transporter.read(
             Verbs.GET,
             '1/indexes/%s/%s' % (self.__name, object_id),
-            {},
+            None,
             request_options
         )
 
@@ -205,7 +206,7 @@ class SearchIndex(object):
         return self.__transporter.read(
             Verbs.GET,
             '1/indexes/%s/synonyms/%s' % (self.__name, object_id),
-            {},
+            None,
             request_options
         )
 
@@ -233,7 +234,7 @@ class SearchIndex(object):
         raw_response = self.__transporter.write(
             Verbs.DELETE,
             '1/indexes/%s/synonyms/%s' % (self.__name, object_id),
-            {},
+            None,
             request_options
         )
 
@@ -245,7 +246,81 @@ class SearchIndex(object):
         raw_response = self.__transporter.write(
             Verbs.POST,
             '1/indexes/%s/synonyms/clear' % self.__name,
-            {},
+            None,
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def save_rule(self, rule, request_options=None):
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        return self.save_rules([rule], request_options)
+
+    def save_rules(self, rules, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        if not rules:
+            return IndexingResponse(self, [])
+
+        assert_object_id(rules)
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/rules/batch' % self.__name,
+            rules,
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def get_rule(self, object_id, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/indexes/%s/rules/%s' % (self.__name, object_id),
+            None,
+            request_options
+        )
+
+    def search_rules(self, query, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/indexes/%s/rules/search' % self.__name,
+            {
+                'query': str(query)
+            },
+            request_options
+        )
+
+    def browse_rules(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> RuleIterator
+
+        return RuleIterator(self.__transporter, self.__name,
+                            request_options)
+
+    def delete_rule(self, object_id, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        raw_response = self.__transporter.write(
+            Verbs.DELETE,
+            '1/indexes/%s/rules/%s' % (self.__name, object_id),
+            None,
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def clear_rules(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/rules/clear' % self.__name,
+            None,
             request_options
         )
 
@@ -257,7 +332,7 @@ class SearchIndex(object):
         return self.__transporter.read(
             'GET',
             '1/indexes/%s/task/%s' % (self.__name, task_id),
-            {},
+            None,
             request_options
         )
 
@@ -282,7 +357,7 @@ class SearchIndex(object):
         raw_response = self.__transporter.write(
             Verbs.DELETE,
             '1/indexes/%s' % self.__name,
-            {},
+            None,
             request_options
         )
 

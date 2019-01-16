@@ -10,6 +10,14 @@ from algoliasearch.http.verbs import Verbs
 class Iterator(object):
     __metaclass__ = abc.ABCMeta
 
+    def __init__(self, transporter, index_name, request_options=None):
+        # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
+
+        self._transporter = transporter
+        self._index_name = index_name
+        self._request_options = request_options
+        self._raw_response = {}  # type: dict
+
     def next(self):
         # type: () -> dict
 
@@ -27,52 +35,13 @@ class Iterator(object):
         pass
 
 
-class ObjectIterator(Iterator):
-
+class PaginatorIterator(Iterator):
     def __init__(self, transporter, index_name, request_options=None):
         # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
 
-        self.__transporter = transporter
-        self.__index_name = index_name
-        self.__request_options = request_options
-        self.__raw_response = None
-
-    def __next__(self):
-        # type: () -> dict
-
-        data = {}
-
-        if self.__raw_response:
-            if len(self.__raw_response['hits']):
-                return self.__raw_response['hits'].pop(0)
-
-            if 'cursor' not in self.__raw_response:
-                self.__raw_response = None
-                raise StopIteration
-            else:
-                data['cursor'] = self.__raw_response['cursor']
-
-        self.__raw_response = self.__transporter.read(
-            Verbs.POST,
-            '1/indexes/%s/browse' % self.__index_name,
-            data,
-            self.__request_options
-        )
-
-        return self.__next__()
-
-
-class SynonymIterator(Iterator):
-
-    def __init__(self, transporter, index_name, request_options=None):
-        # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
-
-        self.__transporter = transporter
-        self.__index_name = index_name
-        self.__request_options = request_options
-        self.__raw_response = None
-
-        self.__data = {
+        super(PaginatorIterator, self).__init__(transporter, index_name,
+                                                request_options)
+        self._data = {
             'hitsPerPage': 1000,
             'page': 0,
         }
@@ -80,29 +49,75 @@ class SynonymIterator(Iterator):
     def __next__(self):
         # type: () -> dict
 
-        if self.__raw_response:
-            if len(self.__raw_response['hits']):
-                hit = self.__raw_response['hits'].pop(0)
+        if self._raw_response:
+            if len(self._raw_response['hits']):
+                hit = self._raw_response['hits'].pop(0)
 
                 hit.pop('_highlightResult')
 
                 return hit
 
-            if self.__raw_response['nbHits'] < self.__data['hitsPerPage']:
-                self.__raw_response = None
-                self.__data = {
+            if self._raw_response['nbHits'] < self._data['hitsPerPage']:
+                self._raw_response = {}
+                self._data = {
                     'hitsPerPage': 1000,
                     'page': 0,
                 }
                 raise StopIteration
 
-        self.__raw_response = self.__transporter.read(
+        self._raw_response = self._transporter.read(
             Verbs.POST,
-            '1/indexes/%s/synonyms/search' % self.__index_name,
-            self.__data,
-            self.__request_options
+            self.get_endpoint(),
+            self._data,
+            self._request_options
         )
 
-        self.__data['page'] += 1
+        self._data['page'] += 1
 
         return self.__next__()
+
+    @abc.abstractmethod
+    def get_endpoint(self):
+        # type: () -> str
+        pass
+
+
+class ObjectIterator(Iterator):
+
+    def __next__(self):
+        # type: () -> dict
+
+        data = {}  # type: dict
+
+        if self._raw_response:
+            if len(self._raw_response['hits']):
+                return self._raw_response['hits'].pop(0)
+
+            if 'cursor' not in self._raw_response:
+                self._raw_response = {}
+                raise StopIteration
+            else:
+                data['cursor'] = self._raw_response['cursor']
+
+        self._raw_response = self._transporter.read(
+            Verbs.POST,
+            '1/indexes/%s/browse' % self._index_name,
+            data,
+            self._request_options
+        )
+
+        return self.__next__()
+
+
+class SynonymIterator(PaginatorIterator):
+
+    def get_endpoint(self):
+        # type: () -> str
+        return '1/indexes/%s/synonyms/search' % self._index_name
+
+
+class RuleIterator(PaginatorIterator):
+
+    def get_endpoint(self):
+        # type: () -> str
+        return '1/indexes/%s/rules/search' % self._index_name

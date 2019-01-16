@@ -330,6 +330,104 @@ class TestSearchIndex(unittest.TestCase):
         # and check that the number of returned synonyms is equal to 0
         self.assertEqual(self.index.search_synonyms('')['nbHits'], 0)
 
+    def test_rules(self):
+        responses = MultipleResponse()
+
+        responses.push(self.index.save_objects([
+            {"objectID": "iphone_7", "brand": "Apple", "model": "7"},
+            {"objectID": "iphone_8", "brand": "Apple", "model": "8"},
+            {"objectID": "iphone_x", "brand": "Apple", "model": "X"},
+            {"objectID": "one_plus_one", "brand": "OnePlus",
+             "model": "One"},
+            {"objectID": "one_plus_two", "brand": "OnePlus",
+             "model": "Two"},
+        ]))
+
+        responses.push(self.index.set_settings({
+            'attributesForFaceting': ['brand']
+        }))
+
+        rule1 = {
+            "objectID": "brand_automatic_faceting",
+            "enabled": False,
+            "condition": {"anchoring": "is", "pattern": "{facet:brand}"},
+            "consequence": {
+                "params": {
+                    "automaticFacetFilters": [
+                        {"facet": "brand", "disjunctive": True, "score": 42},
+                    ]
+                }
+            },
+            "validity": [
+                {
+                    "from": 1532439300,
+                    "until": 1532525700
+                },
+                {
+                    "from": 1532612100,
+                    "until": 1532698500
+                }
+            ],
+            "description": "Automatic apply the faceting on `brand` if a brand value is found in the query"   # noqa: E501
+
+        }
+
+        responses.push(self.index.save_rule(rule1))
+
+        rule2 = {
+            "objectID": "query_edits",
+            "condition": {"anchoring": "is", "pattern": "mobile phone"},
+            "consequence": {
+                "params": {
+                    "query": {
+                        "edits": [
+                            {"type": "remove", "delete": "mobile"},
+                            {"type": "replace", "delete": "phone",
+                             "insert": "iphone"},
+                        ]
+                    }
+                }
+            }
+        }
+
+        responses.push(self.index.save_rules([rule2]))
+
+        responses.wait()
+
+        self.assertEqual(self.index.get_rule(rule1['objectID']),
+                         rule1)
+        self.assertEqual(self.index.get_rule(rule2['objectID']),
+                         rule2)
+
+        self.assertEqual(self.index.search_rules('')['nbHits'], 2)
+
+        # Browse all records with browse_rules
+        results = []
+        for obj in self.index.browse_rules():
+            results.append(obj)
+
+        rules = [
+            rule1,
+            rule2,
+        ]
+
+        for rule in rules:
+            self.assertIn(rule, results)
+
+        self.index.delete_rule(rule1['objectID']).wait()
+
+        # Try to get the first rule with get_rule and check
+        # that the rule does not exist anymore
+        with self.assertRaises(RequestException) as _:
+            self.index.get_rule(rule1['objectID'])
+
+        # Clear all the rules using clear_rules
+        self.index.clear_rules().wait()
+
+        # Perform a rule search using search_rule with an empty query
+        # and check that the number of returned nbHits is equal to 0
+        self.assertEqual(self.index.search_rules('')['nbHits'], 0)
+
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]
 
