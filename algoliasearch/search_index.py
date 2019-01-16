@@ -9,8 +9,8 @@ from algoliasearch.helpers import assert_object_id, build_raw_response_batch
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
-from algoliasearch.iterators import ObjectIterator
-from algoliasearch.responses import Response, IndexingResponse
+from algoliasearch.iterators import ObjectIterator, SynonymIterator
+from algoliasearch.responses import Response, IndexingResponse, NullResponse
 
 
 class SearchIndex(object):
@@ -69,7 +69,7 @@ class SearchIndex(object):
         )
 
     def get_objects(self, object_ids, request_options=None):
-        # type: (list, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (List[int], Optional[Union[dict, RequestOptions]]) -> dict
 
         requests = []
         for object_id in object_ids:
@@ -96,7 +96,7 @@ class SearchIndex(object):
         return self.partial_update_objects([obj], request_options)
 
     def partial_update_objects(self, objects, request_options=None):
-        # type: (list, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         generate_object_id = False
 
@@ -121,7 +121,7 @@ class SearchIndex(object):
         return self.delete_objects([object_id], request_options)
 
     def delete_objects(self, object_ids, request_options=None):
-        # type: (list, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (List[str], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         objects = list(
             map(lambda object_id: {'objectID': object_id}, object_ids))
@@ -159,12 +159,13 @@ class SearchIndex(object):
             Verbs.POST,
             '1/indexes/%s/query' % self.__name,
             {
-                'query': query
+                'query': str(query)
             },
             request_options
         )
 
-    def search_for_facet_value(self, facet_name, facet_query, request_options=None):
+    def search_for_facet_value(self, facet_name, facet_query,
+                               request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         return self.__transporter.read(
@@ -175,6 +176,80 @@ class SearchIndex(object):
             },
             request_options
         )
+
+    def save_synonym(self, synonym, request_options=None):
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        return self.save_synonyms([synonym], request_options)
+
+    def save_synonyms(self, synonyms, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        if not synonyms:
+            return IndexingResponse(self, [])
+
+        assert_object_id(synonyms)
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/synonyms/batch' % self.__name,
+            synonyms,
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def get_synonym(self, object_id, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/indexes/%s/synonyms/%s' % (self.__name, object_id),
+            {},
+            request_options
+        )
+
+    def search_synonyms(self, query, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/indexes/%s/synonyms/search' % self.__name,
+            {
+                'query': str(query)
+            },
+            request_options
+        )
+
+    def browse_synonyms(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> SynonymIterator
+
+        return SynonymIterator(self.__transporter, self.__name,
+                               request_options)
+
+    def delete_synonym(self, object_id, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        raw_response = self.__transporter.write(
+            Verbs.DELETE,
+            '1/indexes/%s/synonyms/%s' % (self.__name, object_id),
+            {},
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def clear_synonyms(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/synonyms/clear' % self.__name,
+            {},
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
 
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
@@ -220,7 +295,7 @@ class SearchIndex(object):
 
     def __chunk(self, action, objects, request_options,
                 validate_object_id=True):
-        # type: (str, list, Optional[Union[dict, RequestOptions]], bool) -> IndexingResponse # noqa: E501
+        # type: (str, List[dict], Optional[Union[dict, RequestOptions]], bool) -> IndexingResponse # noqa: E501
 
         raw_responses = []
         batch = []

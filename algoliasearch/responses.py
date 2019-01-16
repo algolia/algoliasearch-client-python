@@ -26,15 +26,6 @@ class IndexingResponse(Response):
         self.__raw_responses = raw_responses
         self.__index = index
 
-    def get_task_ids(self):
-        # type: () -> list
-
-        task_ids = []
-        for raw_response in self.__raw_responses:
-            task_ids.append(raw_response['taskID'])
-
-        return task_ids
-
     def wait(self):
         # type: () -> None
 
@@ -71,3 +62,11 @@ class MultipleResponse(Response):
             response.wait()
 
             self.responses = []
+
+
+class NullResponse(Response):
+
+    def wait(self):
+        # type: () -> None
+
+        pass

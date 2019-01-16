@@ -7,6 +7,7 @@ from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.requester import Requester
+from tests.helpers.factory import Factory as F
 
 
 class TestSearchIndex(unittest.TestCase):
@@ -96,11 +97,19 @@ class TestSearchIndex(unittest.TestCase):
     def test_get_settings(self):
         # Saving an object without object id
 
-        self.index.get_settings([{'foo': 'bar'}])
+        self.index.get_settings({'foo': 'bar'})
 
         self.transporter.read.assert_called_once_with(
             'GET',
             '1/indexes/foo/settings',
             {'getVersion': 2},  # asserts version 2 it's used.
-            [{'foo': 'bar'}]
+            {'foo': 'bar'}
         )
+
+    def test_save_synonyms(self):
+        # Test null response
+        self.index.save_synonyms([]).wait()
+
+        # Test object id validation
+        with self.assertRaises(MissingObjectIdException) as _:
+            self.index.save_synonyms([F.synonym(object_id=False)])

@@ -47,3 +47,24 @@ class Factory(object):
             data['objectID'] = object_id
 
         return data
+
+    @staticmethod
+    def synonym(data=None, object_id=True):
+        fake = Faker()
+
+        data = {} if data is None else data
+
+        data['type'] = 'synonym'
+        if 'type' not in data:
+            data['type'] = 'synonym'
+
+        if 'synonyms' not in data:
+            data['synonyms'] = fake.words(nb=3)
+
+        if isinstance(object_id, bool):
+            if object_id:
+                data['objectID'] = fake.md5()
+        elif isinstance(object_id, (str, int)):
+            data['objectID'] = object_id
+
+        return data

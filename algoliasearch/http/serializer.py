@@ -3,11 +3,13 @@ import calendar
 import datetime
 import decimal
 
+from typing import Union
+
 
 class Serializer(object):
     @staticmethod
     def serialize(data):
-        # type: (dict) -> str
+        # type: (Union[dict, list]) -> str
 
         return json.dumps(data, cls=JSONEncoder)
 

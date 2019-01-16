@@ -1,7 +1,8 @@
 import unittest
 
+from algoliasearch.exceptions import RequestException
 from algoliasearch.responses import MultipleResponse
-from tests.features.helpers.factory import Factory as F
+from tests.helpers.factory import Factory as F
 
 
 class TestSearchIndex(unittest.TestCase):
@@ -80,7 +81,7 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertEqual(len(results), len(objects))
 
-        # Browse all records with browse_all
+        # Browse all records with browse_objects
         results = []
         for obj in self.index.browse_objects():
             results.append(obj)
@@ -223,6 +224,111 @@ class TestSearchIndex(unittest.TestCase):
         self.assertIn('Amazon', values)
         self.assertIn('Apple', values)
         self.assertIn('Arista Networks', values)
+
+    def test_synonyms(self):
+        responses = MultipleResponse()
+
+        responses.push(self.index.save_objects([
+            {"console": "Sony PlayStation <PLAYSTATIONVERSION>"},
+            {"console": "Nintendo Switch"},
+            {"console": "Nintendo Wii U"},
+            {"console": "Nintendo Game Boy Advance"},
+            {"console": "Microsoft Xbox"},
+            {"console": "Microsoft Xbox 360"},
+            {"console": "Microsoft Xbox One"}
+        ], {'autoGenerateObjectIDIfNotExist': True}))
+
+        responses.push(self.index.save_synonym(F.synonym({
+            'synonyms': [
+                "gba",
+                "gameboy advance",
+                "game boy advance"
+            ]
+        }, 'gba')))
+
+        synonym1 = {
+            'objectID': 'wii_to_wii_u',
+            'type': 'onewaysynonym',
+            'input': 'wii',
+            'synonyms': ['wii U']
+        }
+
+        synonym2 = {
+            'objectID': 'playstation_version_placeholder',
+            'type': 'placeholder',
+            'placeholder': '<PLAYSTATIONVERSION>',
+            'replacements': [
+                "1",
+                "One",
+                "2",
+                "3",
+                "4",
+                "4 Pro",
+            ]
+        }
+
+        synonym3 = {
+            'objectID': 'ps4',
+            'type': 'altcorrection1',
+            'word': 'ps4',
+            'corrections': ['playstation4']
+        }
+
+        synonym4 = {
+            'objectID': 'psone',
+            'type': 'altcorrection2',
+            'word': 'psone',
+            'corrections': ['playstationone']
+        }
+
+        responses.push(self.index.save_synonyms([
+            synonym1,
+            synonym2,
+            synonym3,
+            synonym4
+        ]))
+
+        responses.wait()
+
+        self.assertEqual(self.index.get_synonym(synonym1['objectID']),
+                         synonym1)
+        self.assertEqual(self.index.get_synonym(synonym2['objectID']),
+                         synonym2)
+        self.assertEqual(self.index.get_synonym(synonym3['objectID']),
+                         synonym3)
+        self.assertEqual(self.index.get_synonym(synonym4['objectID']),
+                         synonym4)
+
+        self.assertEqual(self.index.search_synonyms('')['nbHits'], 5)
+
+        # Browse all records with browse_objects
+        results = []
+        for obj in self.index.browse_synonyms():
+            results.append(obj)
+
+        synonyms = [
+            synonym1,
+            synonym2,
+            synonym3,
+            synonym4
+        ]
+
+        for synonym in synonyms:
+            self.assertIn(synonym, results)
+
+        self.index.delete_synonym('gba').wait()
+
+        # Try to get the synonym with getSynonym with objectID `gba and c
+        # heck that the synonym does not exist anymore
+        with self.assertRaises(RequestException) as _:
+            self.index.get_synonym('gba')
+
+        # Clear all the synonyms using clear_synonyms
+        self.index.clear_synonyms().wait()
+
+        # Perform a synonym search using searchSynonyms with an empty query
+        # and check that the number of returned synonyms is equal to 0
+        self.assertEqual(self.index.search_synonyms('')['nbHits'], 0)
 
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]

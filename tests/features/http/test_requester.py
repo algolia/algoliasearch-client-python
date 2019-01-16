@@ -1,7 +1,7 @@
 import unittest
 
 from algoliasearch.exceptions import AlgoliaUnreachableHostException
-from tests.features.helpers.factory import Factory
+from tests.helpers.factory import Factory
 
 
 class TestRequester(unittest.TestCase):

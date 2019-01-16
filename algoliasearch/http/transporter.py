@@ -30,7 +30,7 @@ class Transporter(object):
         self.__retry_strategy = RetryStrategy()
 
     def write(self, verb, path, data, request_options):
-        # type: (str, str, dict, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (str, str, Union[dict, list], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
             request_options = RequestOptions.create(self.__config,
@@ -42,7 +42,7 @@ class Transporter(object):
                               request_options, timeout)
 
     def read(self, verb, path, data, request_options):
-        # type: (str, str, dict, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (str, str, Union[dict, list], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
             request_options = RequestOptions.create(self.__config,
@@ -54,11 +54,12 @@ class Transporter(object):
                               request_options, timeout)
 
     def __request(self, verb, hosts, path, data, request_options, timeout):
-        # type: (str, HostsCollection, str, dict, RequestOptions, int) -> dict
+        # type: (str, HostsCollection, str, Union[dict, list], RequestOptions, int) -> dict # noqa: E501
 
         hosts.reset()
 
-        data.update(request_options.data)
+        if isinstance(data, dict):
+            data.update(request_options.data)
 
         for host in hosts:
 
@@ -76,8 +77,11 @@ class Transporter(object):
             if decision == RetryOutcome.SUCCESS:
                 return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
-                raise RequestException(response.error_message,
-                                       response.status_code)
+                content = response.error_message
+                if response.content and 'message' in response.content:
+                    content = response.content['message']
+
+                raise RequestException(content, response.status_code)
 
         raise AlgoliaUnreachableHostException('Unreachable hosts')
 
