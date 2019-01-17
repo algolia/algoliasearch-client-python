@@ -165,6 +165,30 @@ class SearchIndex(object):
 
         return self.__chunk('deleteObject', objects, request_options)
 
+    def delete_by(self, filters, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/deleteByQuery' % self.__name,
+            filters,
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def clear_objects(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/clear' % self.__name,
+            None,
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
     def set_settings(self, settings, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
@@ -425,10 +449,10 @@ class SearchIndex(object):
 
         return IndexingResponse(self, [raw_response])
 
-    def batch(self, data, request_options=None):
+    def batch(self, requests, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__batch(data, request_options)
+        raw_response = self.__raw_batch(requests, request_options)
 
         return IndexingResponse(self, [raw_response])
 
@@ -447,18 +471,18 @@ class SearchIndex(object):
                     assert_object_id(objects)
 
                 requests = build_raw_response_batch(action, objects)
-                raw_responses.append(self.__batch(requests, request_options))
+                raw_responses.append(self.__raw_batch(requests, request_options))
                 batch = []
 
         if len(batch):
             if validate_object_id:
                 assert_object_id(objects)
             requests = build_raw_response_batch(action, objects)
-            raw_responses.append(self.__batch(requests, request_options))
+            raw_responses.append(self.__raw_batch(requests, request_options))
 
         return IndexingResponse(self, raw_responses)
 
-    def __batch(self, requests, request_options):
+    def __raw_batch(self, requests, request_options):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self.__transporter.write(

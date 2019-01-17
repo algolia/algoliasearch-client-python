@@ -119,13 +119,13 @@ class TestSearchIndex(unittest.TestCase):
         # Delete the 6 first records with delete_object
         responses.append(self.index.delete_object(object1_id))
         responses.append(self.index.delete_object(object2_id))
-        responses.append(self.index.delete_object(object3_id))
-        responses.append(self.index.delete_object(object4_id))
-        responses.append(self.index.delete_object(object5_id))
-        responses.append(self.index.delete_object(object6_id))
+        responses.append(self.index.delete_objects([
+            object3_id, object4_id, object5_id, object6_id
+
+        ]))
 
         # Delete the 1000 remaining records with delete_objects
-        responses.append(self.index.delete_objects(range(1000)))
+        responses.append(self.index.clear_objects())
 
         MultipleResponse(responses).wait()
 
