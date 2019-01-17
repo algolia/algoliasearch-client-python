@@ -29,3 +29,4 @@ venv/
 .pytest_cache/
 .coverage*
 .tox
+htmlcov
