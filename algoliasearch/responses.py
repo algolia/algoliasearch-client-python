@@ -23,10 +23,10 @@ class IndexingResponse(Response):
     def __init__(self, index, raw_responses):
         # type: (SearchIndex, List[dict]) -> None
 
+        self.__index = index
+
         self.raw_responses = raw_responses
         self.__raw_waitable_responses = list(raw_responses)
-
-        self.__index = index
 
     def wait(self):
         # type: () -> None

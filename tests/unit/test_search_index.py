@@ -128,7 +128,8 @@ class TestSearchIndex(unittest.TestCase):
     def test_replace_all_objects(self):
         self.index._SearchIndex__create_temporary_name = mock.Mock(
             name="_SearchIndex__create_temporary_name")
-        self.index._SearchIndex__create_temporary_name.return_value = 'foo_tmp_bar'
+        tmp_index_name = 'foo_tmp_bar'
+        self.index._SearchIndex__create_temporary_name.return_value = tmp_index_name  # noqa: E501
 
         obj = F.obj()
         self.index.replace_all_objects([obj])
@@ -139,9 +140,7 @@ class TestSearchIndex(unittest.TestCase):
                        {'operation': 'copy', 'destination': 'foo_tmp_bar'},
                        {'scope': ['settings', 'synonyms', 'rules']}),
              mock.call('POST', '1/indexes/foo_tmp_bar/batch', {'requests': [
-                 {'action': 'updateObject',
-                  'body': obj}]},
-                       None),
+                 {'action': 'updateObject', 'body': obj}]}, None),
              mock.call('POST', '1/indexes/foo_tmp_bar/operation',
                        {'operation': 'move', 'destination': 'foo'}, None)]
         )

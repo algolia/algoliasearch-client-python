@@ -13,7 +13,7 @@ class TestSearchIndex(unittest.TestCase):
         self.index.delete()
 
     def test_tasks(self):
-        task_id = self.index.save_object(F.obj())[0]['taskID']
+        task_id = self.index.save_object(F.obj()).raw_responses[0]['taskID']
 
         task = self.index.get_task(task_id + 1000000)
         self.assertEqual(task['status'], 'notPublished')
@@ -553,4 +553,4 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(self.index.get_synonym('two')['objectID'], 'two')
 
     def get_object_id(self, indexing_response, index=0):
-        return indexing_response[0]['objectIDs'][index]
+        return indexing_response.raw_responses[0]['objectIDs'][index]
