@@ -113,17 +113,23 @@ class TestSearchIndex(unittest.TestCase):
 
         # Test object id validation
         with self.assertRaises(MissingObjectIdException) as _:
-            self.index.save_synonym(F.synonym(object_id=False))
             self.index.save_synonyms([F.synonym(object_id=False)])
-
-    def test_save_rules(self):
-        # Test null response
-        self.index.save_synonyms([]).wait()
 
         # Test object id validation
         with self.assertRaises(MissingObjectIdException) as _:
             self.index.save_synonym(F.synonym(object_id=False))
-            self.index.save_synonyms([F.synonym(object_id=False)])
+
+    def test_save_rules(self):
+        # Test null response
+        self.index.save_rules([]).wait()
+
+        # Test object id validation
+        with self.assertRaises(MissingObjectIdException) as _:
+            self.index.save_rule({'foo': 'bar'})
+
+        # Test object id validation
+        with self.assertRaises(MissingObjectIdException) as _:
+            self.index.save_rules([{'foo': 'bar'}])
 
     def test_replace_all_objects(self):
         self.index._SearchIndex__create_temporary_name = mock.Mock(
