@@ -41,7 +41,7 @@ class TestTransporter(unittest.TestCase):
 
         self.requester.request.assert_called_once_with(
             'POST',  # Upper case letters
-            'https://' + host.url + '/endpoint/foo?createIfNotExists=True',
+            'https://' + host.url + '/endpoint/foo?createIfNotExists=true',
             self.request_options.headers,
             self.data,
             30,  # Default timeout
@@ -59,7 +59,7 @@ class TestTransporter(unittest.TestCase):
 
         self.requester.request.assert_called_once_with(
             'GET',  # Upper case letters
-            'https://' + host.url + '/endpoint/bar?createIfNotExists=True',
+            'https://' + host.url + '/endpoint/bar?createIfNotExists=true',
             self.request_options.headers,
             {'bodyParam': 'bar'},
             109,  # Customized timeout

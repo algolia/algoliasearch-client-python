@@ -9,6 +9,9 @@ class TestSearchIndex(unittest.TestCase):
     def setUp(self):
         self.index = F.index(self._testMethodName)
 
+    def tearDown(self):
+        self.index.delete()
+
     def test_tasks(self):
         task_id = self.index.save_object(F.obj())[0]['taskID']
 
@@ -483,8 +486,71 @@ class TestSearchIndex(unittest.TestCase):
         for obj in objects:
             self.assertIn(obj, results)
 
+    def test_replacing(self):
+        responses = MultipleResponse()
+        responses.push(self.index.save_object({"objectID": "one"}))
+        responses.push(self.index.save_rule({
+            "objectID": "one",
+            "condition": {"anchoring": "is", "pattern": "pattern"},
+            "consequence": {
+                "params": {
+                    "query": {
+                        "edits": [
+                            {"type": "remove", "delete": "pattern"}
+                        ]
+                    }
+                }
+            }
+        }))
+
+        responses.push(self.index.save_synonym(
+            {"objectID": "one", "type": "synonym", "synonyms": ["one", "two"]}
+        ))
+
+        responses.wait()
+
+        responses.push(self.index.replace_all_objects([{"objectID": "two"}]))
+        responses.push(self.index.replace_all_rules([{
+            "objectID": "two",
+            "condition": {"anchoring": "is", "pattern": "pattern"},
+            "consequence": {
+                "params": {
+                    "query": {
+                        "edits": [
+                            {"type": "remove", "delete": "pattern"}
+                        ]
+                    }
+                }
+            }
+        }
+        ]))
+
+        responses.push(self.index.replace_all_synonyms([
+            {"objectID": "two", "type": "synonym", "synonyms": ["one", "two"]}
+        ]))
+
+        responses.wait()
+
+        # Check that record with objectID=`one` does not exist
+        with self.assertRaises(RequestException) as _:
+            self.index.get_object('one')
+
+        # Check that record with objectID=`two` does exist
+        self.assertEqual(self.index.get_object('two')['objectID'], 'two')
+
+        # Check that rule with objectID=`one` does not exist
+        with self.assertRaises(RequestException) as _:
+            self.index.get_rule('one')
+
+        # Check that rule with objectID=`two` does exist
+        self.assertEqual(self.index.get_rule('two')['objectID'], 'two')
+
+        # Check that synonym with objectID=`one` does not exist
+        with self.assertRaises(RequestException) as _:
+            self.index.get_synonym('one')
+
+        # Check that synonym with objectID="two" does exist using getSynonym
+        self.assertEqual(self.index.get_synonym('two')['objectID'], 'two')
+
     def get_object_id(self, indexing_response, index=0):
         return indexing_response[0]['objectIDs'][index]
-
-    def tearDown(self):
-        self.index.delete()

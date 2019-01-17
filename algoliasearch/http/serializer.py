@@ -2,11 +2,36 @@ import json
 import calendar
 import datetime
 import decimal
+import sys
 
 from typing import Union
 
+from algoliasearch.helpers import get_items
 
-class Serializer(object):
+# Python 3
+if sys.version_info >= (3, 0):
+    from urllib.parse import urlencode
+else:
+    from urllib import urlencode
+
+
+class QueryParametersSerializer(object):
+    @staticmethod
+    def serialize(query_parameters):
+        # type: (dict) -> str
+
+        for key, value in get_items(query_parameters):
+            if isinstance(value, (list, dict)):
+                value = json.dumps(value)
+            elif isinstance(value, bool):
+                value = 'true' if value else 'false'
+
+            query_parameters[key] = value
+
+        return urlencode(query_parameters)
+
+
+class DataSerializer(object):
     @staticmethod
     def serialize(data):
         # type: (Union[dict, list]) -> str

@@ -1,4 +1,7 @@
+import copy
 import math
+import random
+import string
 import time
 
 from typing import Optional, List, Union
@@ -11,7 +14,8 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
 from algoliasearch.iterators import ObjectIterator, SynonymIterator, \
     RuleIterator
-from algoliasearch.responses import Response, IndexingResponse
+from algoliasearch.responses import Response, IndexingResponse, \
+    MultipleResponse
 
 
 class SearchIndex(object):
@@ -58,6 +62,38 @@ class SearchIndex(object):
                 raise MissingObjectIdException(message, e.obj)
 
         return response
+
+    def replace_all_objects(self, objects, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> MultipleResponse # noqa: E501
+
+        safe = False
+        if isinstance(request_options, dict) \
+                and 'safe' in request_options:
+            safe = request_options.pop('safe')
+
+        tmp_index_name = self.__create_temporary_name()
+        responses = MultipleResponse()
+        responses.push(self.__copy_to(tmp_index_name, {
+            'scope': ['settings', 'synonyms', 'rules']
+        }))
+
+        if safe:
+            responses.wait()
+
+        tmp_index = copy.copy(self)
+        tmp_index.__name = tmp_index_name
+
+        responses.push(tmp_index.save_objects(objects, request_options))
+
+        if safe:
+            responses.wait()
+
+        responses.push(tmp_index.__move_to(self.__name))
+
+        if safe:
+            responses.wait()
+
+        return responses
 
     def get_object(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
@@ -200,6 +236,19 @@ class SearchIndex(object):
 
         return IndexingResponse(self, [raw_response])
 
+    def replace_all_synonyms(self, synoyms, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        if request_options is None:
+            request_options = RequestOptions.create(self.__config)
+        elif isinstance(request_options, dict):
+            request_options = RequestOptions.create(self.__config,
+                                                    request_options)
+
+        request_options['replaceExistingSynonyms'] = True
+
+        return self.save_synonyms(synoyms, request_options)
+
     def get_synonym(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
@@ -273,6 +322,19 @@ class SearchIndex(object):
         )
 
         return IndexingResponse(self, [raw_response])
+
+    def replace_all_rules(self, rules, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        if request_options is None:
+            request_options = RequestOptions.create(self.__config)
+        elif isinstance(request_options, dict):
+            request_options = RequestOptions.create(self.__config,
+                                                    request_options)
+
+        request_options.query_parameters['clearExistingRules'] = 1
+
+        return self.save_rules(rules, request_options)
 
     def get_rule(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
@@ -407,3 +469,42 @@ class SearchIndex(object):
             },
             request_options
         )
+
+    def __move_to(self, name, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse  # noqa: E501
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/operation' % self.__name,
+            {
+                'operation': 'move',
+                'destination': name
+            },
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def __copy_to(self, name, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse  # noqa: E501
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/operation' % self.__name,
+            {
+                'operation': 'copy',
+                'destination': name
+            },
+            request_options
+        )
+
+        return IndexingResponse(self, [raw_response])
+
+    def __create_temporary_name(self):
+        # type: () -> str
+
+        letters = string.ascii_letters
+        random_string = ''.join(random.choice(letters) for i in range(10))
+        tmp_index_name = self.__name + '_tmp_' + random_string
+
+        return tmp_index_name

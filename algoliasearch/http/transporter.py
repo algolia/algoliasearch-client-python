@@ -8,17 +8,12 @@ from algoliasearch.exceptions import AlgoliaUnreachableHostException, \
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
+from algoliasearch.http.serializer import QueryParametersSerializer
 
 try:
     from algoliasearch.http.requester import Requester
 except ImportError:  # Already imported.
     pass
-
-# Python 3
-if sys.version_info >= (3, 0):
-    from urllib.parse import urlencode
-else:
-    from urllib import urlencode
 
 
 class Transporter(object):
@@ -63,8 +58,11 @@ class Transporter(object):
 
         for host in hosts:
 
-            url = 'https://%s/%s?%s' % (
-                host.url, path, urlencode(request_options.query_parameters))
+            query_parameters = QueryParametersSerializer.serialize(
+                request_options.query_parameters
+            )
+
+            url = 'https://%s/%s?%s' % (host.url, path, query_parameters)
 
             response = self.__requester.request(verb.upper(), url,
                                                 request_options.headers,

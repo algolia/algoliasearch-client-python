@@ -3,10 +3,11 @@ import decimal
 import json
 import unittest
 
-from algoliasearch.http.serializer import Serializer
+from algoliasearch.http.serializer import DataSerializer, \
+    QueryParametersSerializer
 
 
-class TestSerializer(unittest.TestCase):
+class TestDataSerializer(unittest.TestCase):
     def setUp(self):
         self.data = {
             'decimal': decimal.Decimal(0.20),
@@ -23,6 +24,19 @@ class TestSerializer(unittest.TestCase):
             "integer": 1
         }
 
-        data = Serializer.serialize(self.data)
+        data = DataSerializer.serialize(self.data)
 
         self.assertEqual(data, json.dumps(expected))
+
+
+class TestQueryParametersSerializer(unittest.TestCase):
+    def setUp(self):
+        self.data = {
+            'boolean': True,
+        }
+
+    def test_result(self):
+        expected = 'boolean=true'
+
+        data = QueryParametersSerializer.serialize(self.data)
+        self.assertEqual(data, expected)

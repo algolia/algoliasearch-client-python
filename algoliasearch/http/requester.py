@@ -3,7 +3,7 @@ import requests
 from requests import Timeout
 from typing import Optional, Union
 
-from algoliasearch.http.serializer import Serializer
+from algoliasearch.http.serializer import DataSerializer
 from algoliasearch.http.transporter import Response
 
 
@@ -12,7 +12,7 @@ class Requester(object):
     def request(self, verb, url, headers, data, timeout, connect_timeout):
         # type: (str, str, dict, Optional[Union[dict, list]], int, int) -> Response  # noqa: E501
 
-        data_as_string = '' if data is None else Serializer.serialize(data)
+        data_as_string = '' if data is None else DataSerializer.serialize(data)
 
         req = requests.Request(method=verb, url=url, headers=headers,
                                data=data_as_string)

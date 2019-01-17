@@ -11,8 +11,8 @@ class TestIndexingResponse(unittest.TestCase):
         }
 
         index = SearchClient.create('foo', 'bar').init_index('foo')
-        response = FooResponse(index, response)
-        self.assertEqual(response['foo'], 'bar')
+        response = FooResponse(index, [response])
+        self.assertEqual(response.raw_responses[0]['foo'], 'bar')
 
 
 class FooResponse(IndexingResponse):

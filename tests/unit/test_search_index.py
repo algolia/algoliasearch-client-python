@@ -3,6 +3,7 @@ import unittest
 import mock
 
 from algoliasearch.exceptions import MissingObjectIdException
+from algoliasearch.responses import NullResponse
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
@@ -112,4 +113,58 @@ class TestSearchIndex(unittest.TestCase):
 
         # Test object id validation
         with self.assertRaises(MissingObjectIdException) as _:
+            self.index.save_synonym(F.synonym(object_id=False))
             self.index.save_synonyms([F.synonym(object_id=False)])
+
+    def test_save_rules(self):
+        # Test null response
+        self.index.save_synonyms([]).wait()
+
+        # Test object id validation
+        with self.assertRaises(MissingObjectIdException) as _:
+            self.index.save_synonym(F.synonym(object_id=False))
+            self.index.save_synonyms([F.synonym(object_id=False)])
+
+    def test_replace_all_objects(self):
+        self.index._SearchIndex__create_temporary_name = mock.Mock(
+            name="_SearchIndex__create_temporary_name")
+        self.index._SearchIndex__create_temporary_name.return_value = 'foo_tmp_bar'
+
+        obj = F.obj()
+        self.index.replace_all_objects([obj])
+
+        # Asserts the operations of the replace all objects.
+        self.transporter.write.assert_has_calls(
+            [mock.call('POST', '1/indexes/foo/operation',
+                       {'operation': 'copy', 'destination': 'foo_tmp_bar'},
+                       {'scope': ['settings', 'synonyms', 'rules']}),
+             mock.call('POST', '1/indexes/foo_tmp_bar/batch', {'requests': [
+                 {'action': 'updateObject',
+                  'body': obj}]},
+                       None),
+             mock.call('POST', '1/indexes/foo_tmp_bar/operation',
+                       {'operation': 'move', 'destination': 'foo'}, None)]
+        )
+
+        response = NullResponse()
+        response.wait = mock.Mock(name="wait")
+
+        self.index._SearchIndex__copy_to = mock.Mock(
+            name="_SearchIndex__copy_to")
+        self.index._SearchIndex__copy_to.return_value = response
+
+        self.index._SearchIndex__move_to = mock.Mock(
+            name="_SearchIndex__move_to")
+        self.index._SearchIndex__move_to.return_value = response
+
+        self.index.save_objects = mock.Mock(
+            name="save_objects")
+        self.index.save_objects.return_value = response
+
+        self.index.replace_all_objects([obj])
+        self.assertEqual(response.wait.call_count, 0)
+
+        result = self.index.replace_all_objects([obj], {'safe': True})
+        self.assertEqual(response.wait.call_count, 3)
+        self.assertEqual(len(result.responses), 3)
+        self.assertEqual(len(result._MultipleResponse__waitable), 0)

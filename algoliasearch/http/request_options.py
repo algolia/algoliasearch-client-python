@@ -13,6 +13,16 @@ class RequestOptions(object):
         self.timeouts = timeouts
         self.data = data
 
+    def __setitem__(self, option, value):
+        if option in Params.HEADERS:
+            self.headers[option] = value
+        elif option in Params.QUERY_PARAMETERS:
+            self.query_parameters[option] = value
+        elif option in Params.TIMEOUTS:
+            self.timeouts[option] = value
+        else:
+            self.data[option] = value
+
     @staticmethod
     def create(config, options=None):
         # type: (Config, Optional[dict]) -> RequestOptions
@@ -28,14 +38,7 @@ class RequestOptions(object):
         request_options = RequestOptions(headers, {}, timeouts, {})
 
         for option, value in get_items(options):
-            if option in Params.HEADERS:
-                request_options.headers[option] = value
-            elif option in Params.QUERY_PARAMETERS:
-                request_options.query_parameters[option] = value
-            elif option in Params.TIMEOUTS:
-                request_options.timeouts[option] = value
-            else:
-                request_options.data[option] = value
+            request_options[option] = value
 
         return request_options
 
