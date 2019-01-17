@@ -1,2 +1,1 @@
-# Pytest for running the coding style checks.
 flake8>=3.6,<4.0

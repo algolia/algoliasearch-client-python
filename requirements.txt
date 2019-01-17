@@ -14,3 +14,4 @@ tox>=3.7
 -r requirements/requirements-testing.txt
 -r requirements/requirements-code-style-checker.txt
 -r requirements/requirements-static-type-checker.txt
+-r requirements/requirements-coverage.txt
