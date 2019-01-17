@@ -33,10 +33,11 @@ class TestQueryParametersSerializer(unittest.TestCase):
     def setUp(self):
         self.data = {
             'boolean': True,
+            'dict': {'foo': 'bar'}
         }
 
     def test_result(self):
-        expected = 'boolean=true'
+        expected = 'boolean=true&dict=%7B%22foo%22%3A+%22bar%22%7D'
 
         data = QueryParametersSerializer.serialize(self.data)
         self.assertEqual(data, expected)
