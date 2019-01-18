@@ -13,7 +13,7 @@ class Response(object):
 
     @abc.abstractmethod
     def wait(self):
-        # type:() -> None
+        # type:() -> Response
 
         pass
 
@@ -29,13 +29,15 @@ class IndexingResponse(Response):
         self.__raw_waitable_responses = list(raw_responses)
 
     def wait(self):
-        # type: () -> None
+        # type: () -> IndexingResponse
 
         for raw_response in self.__raw_waitable_responses:
             self.__index.wait_task(raw_response['taskID'])
 
         # No longer waits on this responses.
         self.__raw_waitable_responses = []
+
+        return self
 
 
 class MultipleResponse(Response):
@@ -54,7 +56,7 @@ class MultipleResponse(Response):
         self.__waitable.append(response)
 
     def wait(self):
-        # type: () -> None
+        # type: () -> MultipleResponse
 
         for response in self.__waitable:
             response.wait()
@@ -62,10 +64,12 @@ class MultipleResponse(Response):
         # No longer waits on this responses.
         self.__waitable = []
 
+        return self
+
 
 class NullResponse(Response):
 
     def wait(self):
-        # type: () -> None
+        # type: () -> NullResponse
 
-        pass
+        return self
