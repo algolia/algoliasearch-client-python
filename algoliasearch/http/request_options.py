@@ -47,6 +47,7 @@ class Params(object):
     HEADERS = [
         'Content-type',
         'User-Agent',
+        'X-Algolia-User-ID',
     ]
 
     QUERY_PARAMETERS = [

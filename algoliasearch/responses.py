@@ -1,9 +1,16 @@
 import abc
 
-from typing import List, Any
+from typing import List
+
+from algoliasearch.exceptions import RequestException
 
 try:
     from algoliasearch.search_index import SearchIndex
+except ImportError:  # Already imported.
+    pass
+
+try:
+    from algoliasearch.search_client import SearchClient
 except ImportError:  # Already imported.
     pass
 
@@ -71,5 +78,29 @@ class NullResponse(Response):
 
     def wait(self):
         # type: () -> NullResponse
+
+        return self
+
+
+class AssignUserIdResponse(Response):
+
+    def __init__(self, client, user_id):
+        # type: (SearchClient, str) -> None
+
+        self.__client = client
+        self.__user_id = user_id
+        self.__done = False
+
+    def wait(self):
+        # type: () -> AssignUserIdResponse
+
+        while not self.__done:
+            try:
+                self.__client.get_user_id(self.__user_id)
+                self.__done = True
+            except RequestException as e:
+                print(e.status_code)
+                if e.status_code is not 404:
+                    raise e
 
         return self

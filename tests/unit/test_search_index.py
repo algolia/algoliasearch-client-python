@@ -146,12 +146,15 @@ class TestSearchIndex(unittest.TestCase):
         # Asserts the operations of the replace all objects.
         self.transporter.write.assert_has_calls(
             [mock.call('POST', '1/indexes/index-name/operation',
-                       {'operation': 'copy', 'destination': 'index-name_tmp_bar'},
+                       {'operation': 'copy',
+                        'destination': 'index-name_tmp_bar'},
                        {'scope': ['settings', 'synonyms', 'rules']}),
-             mock.call('POST', '1/indexes/index-name_tmp_bar/batch', {'requests': [
-                 {'action': 'updateObject', 'body': obj}]}, None),
+             mock.call('POST', '1/indexes/index-name_tmp_bar/batch',
+                       {'requests': [
+                           {'action': 'updateObject', 'body': obj}]}, None),
              mock.call('POST', '1/indexes/index-name_tmp_bar/operation',
-                       {'operation': 'move', 'destination': 'index-name'}, None)]
+                       {'operation': 'move', 'destination': 'index-name'},
+                       None)]
         )
 
         response = NullResponse()

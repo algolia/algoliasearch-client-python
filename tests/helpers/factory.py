@@ -2,13 +2,19 @@ import datetime
 import os
 import platform
 
+from typing import Optional
+
 from algoliasearch.search_client import SearchClient
 from faker import Faker
+
+from algoliasearch.search_index import SearchIndex
 
 
 class Factory(object):
     @staticmethod
     def client(app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> SearchClient
+
         app_id = app_id if app_id is not None else os.environ[
             'ALGOLIA_APPLICATION_ID_1']
         api_key = api_key if api_key is not None else os.environ[
@@ -18,45 +24,34 @@ class Factory(object):
 
     @staticmethod
     def index(name):
+        # type: (str) -> SearchIndex
+
         date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
         if 'TRAVIS' in os.environ:
             instance = os.environ['TRAVIS_JOB_NUMBER']
         else:
             instance = 'unknown'
-
-        client = Factory.client()
 
         python_version = platform.python_version()
 
-        index_name = 'python%s_%s_%s_%s' % (
-            python_version, date, instance, name)
-
-        return client.init_index(index_name)
+        return Factory.client().init_index(
+            'python%s_%s_%s_%s' % (python_version, date, instance, name)
+        )
 
     @staticmethod
-    def mcm(name):
-        date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-
-        if 'TRAVIS' in os.environ:
-            instance = os.environ['TRAVIS_JOB_NUMBER']
-        else:
-            instance = 'unknown'
+    def mcm():
+        # type: () -> SearchClient
 
         app_id = os.environ['ALGOLIA_APPLICATION_ID_MCM']
         api_key = os.environ['ALGOLIA_ADMIN_KEY_MCM']
 
-        client = Factory.client(app_id, api_key)
-
-        python_version = platform.python_version()
-
-        index_name = 'python%s_%s_%s_%s' % (
-            python_version, date, instance, name)
-
-        return client.init_index(index_name)
+        return Factory.client(app_id, api_key)
 
     @staticmethod
     def obj(data=None, object_id=True):
+        # type: (Optional[dict], Optional[bool, str, int]) -> dict
+
         fake = Faker()
 
         data = {} if data is None else data
@@ -73,6 +68,8 @@ class Factory(object):
 
     @staticmethod
     def synonym(data=None, object_id=True):
+        # type: (Optional[dict], Optional[bool, str, int]) -> dict
+
         fake = Faker()
 
         data = {} if data is None else data

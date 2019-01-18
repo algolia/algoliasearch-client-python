@@ -1,8 +1,8 @@
-from typing import Optional, Union, List
+from typing import Optional, Union
 
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.verbs import Verbs
-from algoliasearch.responses import IndexingResponse
+from algoliasearch.responses import IndexingResponse, AssignUserIdResponse
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
@@ -84,3 +84,90 @@ class SearchClient(object):
         request_options['scope'] = ['rules']
 
         return self.copy_index(src_index_name, dst_index_name, request_options)
+
+    def assign_user_id(self, user_id, cluster, request_options=None):
+        # type: (str, str,Optional[Union[dict, RequestOptions]]) -> AssignUserIdResponse  # noqa: E501
+
+        if request_options is None:
+            request_options = RequestOptions.create(self.__config)
+
+        request_options['X-Algolia-User-ID'] = user_id
+
+        self.__transporter.write(
+            Verbs.POST,
+            '1/clusters/mapping',
+            {'cluster': cluster},
+            request_options
+        )
+
+        return AssignUserIdResponse(self, user_id)
+
+    def remove_user_id(self, user_id, request_options=None):
+        # type: (str,Optional[Union[dict, RequestOptions]]) -> dict
+
+        if request_options is None:
+            request_options = RequestOptions.create(self.__config)
+
+        request_options['X-Algolia-User-ID'] = user_id
+
+        return self.__transporter.write(
+            Verbs.DELETE,
+            '1/clusters/mapping',
+            None,
+            request_options
+        )
+
+    def list_clusters(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/clusters',
+            {},
+            request_options
+        )
+
+    def get_user_id(self, user_id, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/clusters/mapping/%s' % user_id,
+            {},
+            request_options
+        )
+
+    def list_user_ids(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/clusters/mapping',
+            {},
+            request_options
+        )
+
+    def get_top_user_id(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/clusters/mapping/top',
+            {},
+            request_options
+        )
+
+    def search_user_ids(self, query, request_options=None):
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
+
+        if request_options is None:
+            request_options = RequestOptions.create(self.__config)
+
+        request_options['query'] = query
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/clusters/mapping/search',
+            {},
+            request_options
+        )

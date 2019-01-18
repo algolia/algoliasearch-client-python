@@ -170,7 +170,7 @@ class SearchIndex(object):
         return self.__chunk('deleteObject', objects, request_options)
 
     def delete_by(self, filters, request_options=None):
-        # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse  # noqa: E501
 
         raw_response = self.__transporter.write(
             Verbs.POST,

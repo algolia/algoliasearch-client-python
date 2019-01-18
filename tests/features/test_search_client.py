@@ -1,3 +1,6 @@
+import datetime
+import os
+import platform
 import unittest
 
 from algoliasearch.responses import MultipleResponse
@@ -77,3 +80,22 @@ class TestSearchClient(unittest.TestCase):
         )
         for obj in self.index.browse_objects():
             self.assertIn(obj, objects)
+
+    def test_mcm(self):
+        mcm = F.mcm()
+
+        clusters = mcm.list_clusters()['clusters']
+        self.assertEqual(len(clusters), 2)
+
+        date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        if 'TRAVIS' in os.environ:
+            instance = os.environ['TRAVIS_JOB_NUMBER']
+        else:
+            instance = 'unknown'
+
+        python_version = platform.python_version().replace('.', '')
+
+        user_id = 'python%s-%s-%s' % (python_version, date, instance)
+
+        mcm.assign_user_id(user_id, clusters[0]['clusterName']).wait()
