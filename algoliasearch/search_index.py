@@ -23,6 +23,10 @@ class SearchIndex(object):
     def app_id(self):
         return self.__config.app_id
 
+    @property
+    def name(self):
+        return self.__name
+
     def __init__(self, transporter, config, name):
         # type: (Transporter, SearchConfig, str) -> None
 
@@ -471,7 +475,8 @@ class SearchIndex(object):
                     assert_object_id(objects)
 
                 requests = build_raw_response_batch(action, objects)
-                raw_responses.append(self.__raw_batch(requests, request_options))
+                raw_responses.append(
+                    self.__raw_batch(requests, request_options))
                 batch = []
 
         if len(batch):

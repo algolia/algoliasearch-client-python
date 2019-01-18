@@ -20,10 +20,13 @@ class TestSearchIndex(unittest.TestCase):
         self.transporter.read.return_value = {}
         self.transporter.write = mock.Mock(name="write")
         self.transporter.write.return_value = {}
-        self.index = SearchIndex(self.transporter, self.config, 'foo')
+        self.index = SearchIndex(self.transporter, self.config, 'index-name')
 
     def test_app_id_getter(self):
         self.assertEqual(self.index.app_id, 'foo')
+
+    def test_name_getter(self):
+        self.assertEqual(self.index.name, 'index-name')
 
     def test_save_objects(self):
         # Saving an object without object id
@@ -39,7 +42,7 @@ class TestSearchIndex(unittest.TestCase):
 
         self.transporter.write.assert_called_once_with(
             'POST',
-            '1/indexes/foo/batch',
+            '1/indexes/index-name/batch',
             {'requests': [{'action': 'addObject', 'body': {'foo': 'bar'}}]},
             {},
         )
@@ -49,7 +52,7 @@ class TestSearchIndex(unittest.TestCase):
 
         self.transporter.write.assert_called_once_with(
             'POST',
-            '1/indexes/foo/batch',
+            '1/indexes/index-name/batch',
             {
                 'requests': [
                     {
@@ -72,7 +75,7 @@ class TestSearchIndex(unittest.TestCase):
                                           {'createIfNotExists': True})
 
         self.transporter.write.assert_called_once_with(
-            'POST', '1/indexes/foo/batch',
+            'POST', '1/indexes/index-name/batch',
             {'requests': [
                 {'action': 'partialUpdateObject', 'body': {'foo': 'bar'}}]},
             {},
@@ -83,7 +86,7 @@ class TestSearchIndex(unittest.TestCase):
         self.index.partial_update_objects([{'foo': 'bar', 'objectID': 'foo'}])
 
         self.transporter.write.assert_called_once_with(
-            'POST', '1/indexes/foo/batch',
+            'POST', '1/indexes/index-name/batch',
             {
                 'requests': [
                     {
@@ -102,7 +105,7 @@ class TestSearchIndex(unittest.TestCase):
 
         self.transporter.read.assert_called_once_with(
             'GET',
-            '1/indexes/foo/settings',
+            '1/indexes/index-name/settings',
             {'getVersion': 2},  # asserts version 2 it's used.
             {'foo': 'bar'}
         )
@@ -134,7 +137,7 @@ class TestSearchIndex(unittest.TestCase):
     def test_replace_all_objects(self):
         self.index._SearchIndex__create_temporary_name = mock.Mock(
             name="_SearchIndex__create_temporary_name")
-        tmp_index_name = 'foo_tmp_bar'
+        tmp_index_name = 'index-name_tmp_bar'
         self.index._SearchIndex__create_temporary_name.return_value = tmp_index_name  # noqa: E501
 
         obj = F.obj()
@@ -142,13 +145,13 @@ class TestSearchIndex(unittest.TestCase):
 
         # Asserts the operations of the replace all objects.
         self.transporter.write.assert_has_calls(
-            [mock.call('POST', '1/indexes/foo/operation',
-                       {'operation': 'copy', 'destination': 'foo_tmp_bar'},
+            [mock.call('POST', '1/indexes/index-name/operation',
+                       {'operation': 'copy', 'destination': 'index-name_tmp_bar'},
                        {'scope': ['settings', 'synonyms', 'rules']}),
-             mock.call('POST', '1/indexes/foo_tmp_bar/batch', {'requests': [
+             mock.call('POST', '1/indexes/index-name_tmp_bar/batch', {'requests': [
                  {'action': 'updateObject', 'body': obj}]}, None),
-             mock.call('POST', '1/indexes/foo_tmp_bar/operation',
-                       {'operation': 'move', 'destination': 'foo'}, None)]
+             mock.call('POST', '1/indexes/index-name_tmp_bar/operation',
+                       {'operation': 'move', 'destination': 'index-name'}, None)]
         )
 
         response = NullResponse()

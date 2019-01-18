@@ -30,3 +30,4 @@ class TestSearchClient(unittest.TestCase):
         client = SearchClient.create('foo', 'bar')
 
         self.assertEqual(client.app_id, 'foo')
+
