@@ -27,12 +27,12 @@ class RequestOptions(object):
     def create(config, options=None):
         # type: (Config, Optional[dict]) -> RequestOptions
 
-        headers = config.headers
+        headers = dict(config.headers)
 
         timeouts = {
-            'readTimeout': config.read_timeout,
-            'writeTimeout': config.write_timeout,
-            'connectTimeout': config.connect_timeout,
+            'readTimeout': int(config.read_timeout),
+            'writeTimeout': int(config.write_timeout),
+            'connectTimeout': int(config.connect_timeout),
         }
 
         request_options = RequestOptions(headers, {}, timeouts, {})

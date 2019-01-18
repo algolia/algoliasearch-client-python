@@ -99,3 +99,18 @@ class TestSearchClient(unittest.TestCase):
         user_id = 'python%s-%s-%s' % (python_version, date, instance)
 
         mcm.assign_user_id(user_id, clusters[0]['clusterName']).wait()
+
+        self.assertEqual(
+            mcm.search_user_ids(user_id)['hits'][0]['userID'],
+            user_id
+        )
+
+        users = mcm.list_user_ids()
+        self.assertIsInstance(users, dict)
+        self.assertIsInstance(users['userIDs'], list)
+        self.assertTrue(len(users['userIDs']) > 0)
+
+        users = mcm.get_top_user_id()
+        self.assertIsInstance(users, dict)
+        self.assertIsInstance(users['topUsers'], dict)
+        self.assertTrue(len(users['topUsers']) > 0)

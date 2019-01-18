@@ -17,6 +17,7 @@ class Requester(object):
         req = requests.Request(method=verb, url=url, headers=headers,
                                data=data_as_string)
 
+
         r = req.prepare()  # type: ignore
         s = requests.Session()  # type: ignore
 

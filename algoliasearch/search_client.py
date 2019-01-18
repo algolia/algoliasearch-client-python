@@ -133,7 +133,7 @@ class SearchClient(object):
         return self.__transporter.read(
             Verbs.GET,
             '1/clusters/mapping/%s' % user_id,
-            {},
+            None,
             request_options
         )
 
@@ -143,7 +143,7 @@ class SearchClient(object):
         return self.__transporter.read(
             Verbs.GET,
             '1/clusters/mapping',
-            {},
+            None,
             request_options
         )
 
@@ -153,21 +153,16 @@ class SearchClient(object):
         return self.__transporter.read(
             Verbs.GET,
             '1/clusters/mapping/top',
-            {},
+            None,
             request_options
         )
 
     def search_user_ids(self, query, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
-        if request_options is None:
-            request_options = RequestOptions.create(self.__config)
-
-        request_options['query'] = query
-
         return self.__transporter.read(
             Verbs.POST,
             '1/clusters/mapping/search',
-            {},
+            {'query': query},
             request_options
         )
