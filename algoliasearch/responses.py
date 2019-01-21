@@ -85,9 +85,10 @@ class NullResponse(Response):
 
 class AssignUserIdResponse(Response):
 
-    def __init__(self, client, user_id):
-        # type: (SearchClient, str) -> None
+    def __init__(self, client, raw_response, user_id):
+        # type: (SearchClient, dict, str) -> None
 
+        self.raw_response = raw_response
         self.__client = client
         self.__user_id = user_id
         self.__done = False
@@ -108,9 +109,10 @@ class AssignUserIdResponse(Response):
 
 class RemoveUserIdResponse(Response):
 
-    def __init__(self, client, user_id):
-        # type: (SearchClient, str) -> None
+    def __init__(self, client, raw_response, user_id):
+        # type: (SearchClient, dict, str) -> None
 
+        self.raw_response = raw_response
         self.__client = client
         self.__user_id = user_id
         self.__done = False
