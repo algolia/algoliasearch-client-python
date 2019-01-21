@@ -28,7 +28,9 @@ class QueryParametersSerializer(object):
 
             query_parameters[key] = value
 
-        return urlencode(query_parameters)
+        return urlencode(
+            sorted(get_items(query_parameters), key=lambda val: val[0])
+        )
 
 
 class DataSerializer(object):
