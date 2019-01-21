@@ -117,6 +117,7 @@ class TestSearchClient(unittest.TestCase):
         self.assertTrue(len(users['topUsers']) > 0)
 
         mcm.remove_user_id(user_id).wait()
+
         users = mcm.list_user_ids()
 
         date = datetime.datetime.now().strftime("%Y-%m-%d")
@@ -170,3 +171,16 @@ class TestSearchClient(unittest.TestCase):
         self.assertEqual(api_key['value'],
                          response.raw_response['key'])
         self.client.delete_api_key(api_key['value'])
+
+    def test_get_logs(self):
+
+        self.assertIsInstance(self.client.list_indices(), dict)
+        self.assertIsInstance(self.client.list_indices()['items'], list)
+
+        logs = self.client.get_logs({
+            'length': 2,
+            'offset': 0,
+            'type': 'all'
+        })['logs']
+
+        self.assertEqual(len(logs), 2)

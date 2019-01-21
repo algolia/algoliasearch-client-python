@@ -9,6 +9,7 @@ from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
 from algoliasearch.http.serializer import QueryParametersSerializer
+from algoliasearch.http.verbs import Verbs
 
 try:
     from algoliasearch.http.requester import Requester
@@ -56,13 +57,18 @@ class Transporter(object):
         if isinstance(data, dict):
             data.update(request_options.data)
 
+        query_parameters = dict(request_options.query_parameters)
+        if verb == Verbs.GET:
+            query_parameters.update(request_options.data)
+
+        query_parameters_as_string = QueryParametersSerializer.serialize(
+            query_parameters
+        )
+
         for host in hosts:
 
-            query_parameters = QueryParametersSerializer.serialize(
-                request_options.query_parameters
-            )
-
-            url = 'https://%s/%s?%s' % (host.url, path, query_parameters)
+            url = 'https://%s/%s?%s' % (
+                host.url, path, query_parameters_as_string)
 
             response = self.__requester.request(verb.upper(), url,
                                                 request_options.headers,

@@ -243,3 +243,23 @@ class SearchClient(object):
         )
 
         return RestoreApiKeyResponse(self, raw_response, key)
+
+    def list_indices(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/indexes',
+            None,
+            request_options
+        )
+
+    def get_logs(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/logs',
+            None,
+            request_options
+        )
