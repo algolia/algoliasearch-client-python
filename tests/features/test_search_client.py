@@ -128,3 +128,45 @@ class TestSearchClient(unittest.TestCase):
             if user['userID'].startswith(startswith) \
                     and not user['userID'].startswith(startswith_except):
                 mcm.remove_user_id(user['userID'])
+
+    def test_api_keys(self):
+        response = self.client.add_api_key(['search'], {
+            "description": "A description",
+            "indexes": ["index"],
+            "maxHitsPerQuery": 1000,
+            "maxQueriesPerIPPerHour": 1000,
+            "queryParameters": "typoTolerance=strict",
+            "referers": ["referer"],
+            "validity": 600
+        })
+
+        response.wait()
+
+        api_key = self.client.get_api_key(response.raw_response['key'])
+        self.assertEqual(api_key['value'],
+                         response.raw_response['key'])
+
+        api_keys = list(map(lambda facet: api_key['value'],
+                            self.client.list_api_keys()['keys']))
+
+        self.assertIn(api_key['value'], api_keys)
+
+        self.client.update_api_key(api_key['value'], {
+            'maxHitsPerQuery': 42
+        }).wait()
+
+        api_key = self.client.get_api_key(response.raw_response['key'])
+
+        self.assertEqual(api_key['maxHitsPerQuery'], 42)
+
+        self.client.delete_api_key(api_key['value']).wait()
+
+        with self.assertRaises(RequestException) as _:
+            self.client.get_api_key(api_key['value'])
+
+        self.client.restore_api_key(api_key['value']).wait()
+
+        api_key = self.client.get_api_key(api_key['value'])
+        self.assertEqual(api_key['value'],
+                         response.raw_response['key'])
+        self.client.delete_api_key(api_key['value'])

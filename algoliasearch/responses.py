@@ -3,6 +3,7 @@ import abc
 from typing import List
 
 from algoliasearch.exceptions import RequestException
+from algoliasearch.http.request_options import RequestOptions
 
 try:
     from algoliasearch.search_index import SearchIndex
@@ -99,8 +100,7 @@ class AssignUserIdResponse(Response):
                 self.__client.get_user_id(self.__user_id)
                 self.__done = True
             except RequestException as e:
-                print(e.status_code)
-                if e.status_code is not 404:
+                if e.status_code != 404:
                     raise e
 
         return self
@@ -123,5 +123,113 @@ class RemoveUserIdResponse(Response):
                 self.__client.get_user_id(self.__user_id)
             except RequestException as e:
                 self.__done = e.status_code == 404
+
+        return self
+
+
+class AddApiKeyResponse(Response):
+
+    def __init__(self, client, raw_response):
+        # type: (SearchClient, dict) -> None
+
+        self.raw_response = raw_response
+        self.__client = client
+        self.__done = False
+
+    def wait(self):
+        # type: () -> AddApiKeyResponse
+
+        while not self.__done:
+            try:
+                self.__client.get_api_key(self.raw_response['key'])
+                self.__done = True
+            except RequestException as e:
+                if e.status_code != 404:
+                    raise e
+
+        return self
+
+
+class UpdateApiKeyResponse(Response):
+
+    def __init__(self, client, raw_response, request_options):
+        # type: (SearchClient, dict, RequestOptions) -> None
+
+        self.raw_response = raw_response
+        self.__client = client
+        self.__request_options = request_options
+        self.__done = False
+
+    def wait(self):
+        # type: () -> UpdateApiKeyResponse
+
+        while not self.__done:
+            api_key = self.__client.get_api_key(self.raw_response['key'])
+
+            if self.__have_changed(api_key):
+                break
+
+        return self
+
+    def __have_changed(self, api_key):
+        # type: (dict) -> bool
+
+        valid_keys = [
+            'acl', 'indexes', 'referers',
+            'restrictSources', 'queryParameters', 'description',
+            'validity', 'maxQueriesPerIPPerHour', 'maxHitsPerQuery',
+        ]
+
+        for valid_key in valid_keys:
+            if valid_key in self.__request_options.data:
+                updated_value = self.__request_options.data[valid_key]
+                if updated_value == api_key.get(valid_key):
+                    return True
+
+        return False
+
+
+class DeleteApiKeyResponse(Response):
+
+    def __init__(self, client, raw_response, key):
+        # type: (SearchClient, dict, str) -> None
+
+        self.raw_response = raw_response
+        self.__client = client
+        self.__key = key
+        self.__done = False
+
+    def wait(self):
+        # type: () -> DeleteApiKeyResponse
+
+        while not self.__done:
+            try:
+                self.__client.get_api_key(self.__key)
+            except RequestException as e:
+                self.__done = e.status_code == 404
+
+        return self
+
+
+class RestoreApiKeyResponse(Response):
+
+    def __init__(self, client, raw_response, key):
+        # type: (SearchClient, dict, str) -> None
+
+        self.raw_response = raw_response
+        self.__client = client
+        self.__key = key
+        self.__done = False
+
+    def wait(self):
+        # type: () -> RestoreApiKeyResponse
+
+        while not self.__done:
+            try:
+                self.__client.get_api_key(self.__key)
+                self.__done = True
+            except RequestException as e:
+                if e.status_code != 404:
+                    raise e
 
         return self
