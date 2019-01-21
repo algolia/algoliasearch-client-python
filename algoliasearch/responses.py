@@ -104,3 +104,24 @@ class AssignUserIdResponse(Response):
                     raise e
 
         return self
+
+
+class RemoveUserIdResponse(Response):
+
+    def __init__(self, client, user_id):
+        # type: (SearchClient, str) -> None
+
+        self.__client = client
+        self.__user_id = user_id
+        self.__done = False
+
+    def wait(self):
+        # type: () -> RemoveUserIdResponse
+
+        while not self.__done:
+            try:
+                self.__client.get_user_id(self.__user_id)
+            except RequestException as e:
+                self.__done = e.status_code == 404
+
+        return self

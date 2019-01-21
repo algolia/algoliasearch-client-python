@@ -3,6 +3,7 @@ import os
 import platform
 import unittest
 
+from algoliasearch.exceptions import RequestException
 from algoliasearch.responses import MultipleResponse
 from tests.helpers.factory import Factory as F
 
@@ -94,7 +95,7 @@ class TestSearchClient(unittest.TestCase):
         else:
             instance = 'unknown'
 
-        python_version = platform.python_version().replace('.', '')
+        python_version = platform.python_version().replace('.', '')[:2]
 
         user_id = 'python%s-%s-%s' % (python_version, date, instance)
 
@@ -110,7 +111,20 @@ class TestSearchClient(unittest.TestCase):
         self.assertIsInstance(users['userIDs'], list)
         self.assertTrue(len(users['userIDs']) > 0)
 
-        users = mcm.get_top_user_id()
+        users = mcm.get_top_user_ids()
         self.assertIsInstance(users, dict)
         self.assertIsInstance(users['topUsers'], dict)
         self.assertTrue(len(users['topUsers']) > 0)
+
+        mcm.remove_user_id(user_id).wait()
+        users = mcm.list_user_ids()
+
+        date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        startswith = 'python%s' % python_version
+        startswith_except = 'python%s-%s' % (python_version, date)
+
+        for user in users['userIDs']:
+            if user['userID'].startswith(startswith) \
+                    and not user['userID'].startswith(startswith_except):
+                mcm.remove_user_id(user['userID'])

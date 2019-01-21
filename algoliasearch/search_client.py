@@ -2,7 +2,8 @@ from typing import Optional, Union
 
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.verbs import Verbs
-from algoliasearch.responses import IndexingResponse, AssignUserIdResponse
+from algoliasearch.responses import IndexingResponse, AssignUserIdResponse, \
+    RemoveUserIdResponse
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
@@ -103,19 +104,21 @@ class SearchClient(object):
         return AssignUserIdResponse(self, user_id)
 
     def remove_user_id(self, user_id, request_options=None):
-        # type: (str,Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (str,Optional[Union[dict, RequestOptions]]) -> RemoveUserIdResponse  # noqa: E501
 
         if request_options is None:
             request_options = RequestOptions.create(self.__config)
 
         request_options['X-Algolia-User-ID'] = user_id
 
-        return self.__transporter.write(
+        self.__transporter.write(
             Verbs.DELETE,
             '1/clusters/mapping',
             None,
             request_options
         )
+
+        return RemoveUserIdResponse(self, user_id)
 
     def list_clusters(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
@@ -147,7 +150,7 @@ class SearchClient(object):
             request_options
         )
 
-    def get_top_user_id(self, request_options=None):
+    def get_top_user_ids(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self.__transporter.read(
@@ -165,4 +168,4 @@ class SearchClient(object):
             '1/clusters/mapping/search',
             {'query': query},
             request_options
-        )
+        )git

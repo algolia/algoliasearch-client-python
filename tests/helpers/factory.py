@@ -33,7 +33,7 @@ class Factory(object):
         else:
             instance = 'unknown'
 
-        python_version = platform.python_version()
+        python_version = platform.python_version().replace('.', '')[:2]
 
         return Factory.client().init_index(
             'python%s_%s_%s_%s' % (python_version, date, instance, name)
