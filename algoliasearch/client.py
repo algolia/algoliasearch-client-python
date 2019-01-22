@@ -486,6 +486,11 @@ class Client(object):
         path = '/1/keys/%s' % api_key
         return self._req(False, path, 'DELETE', request_options)
 
+    def restore_api_key(self, api_key, request_options=None):
+        """Restore an api key."""
+        path = '/1/keys/%s/restore' % api_key
+        return self._req(False, path, 'POST', request_options)
+
     @deprecated
     def addUserKey(self, obj,
                    validity=0,

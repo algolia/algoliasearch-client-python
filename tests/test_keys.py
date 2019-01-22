@@ -46,7 +46,14 @@ def test_get_user_key(client):
     assert set(res['acl']) == set(['search'])
 
     client.delete_user_key(key)
+    wait_missing_key(client, key)
 
+    client.restore_api_key(key)
+    wait_key(client, key)
+    res = client.get_user_key_acl(key)
+    assert res['value'] == key
+    assert set(res['acl']) == set(['search'])
+    client.delete_user_key(key)
 
 @pytest.mark.skipif(is_community,
                     reason='API keys methods cannot be tested by the community')
