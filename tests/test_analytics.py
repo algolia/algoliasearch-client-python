@@ -4,12 +4,13 @@ from datetime import datetime
 from algoliasearch.helpers import AlgoliaException
 
 
-def test_ab_test_features(analytics, double_indexes):
+def test_ab_test_features(analytics, double_indexes, index):
+
     ab_test = {
         'name': "Python client ab integration test",
         'variants': [
             {'index': double_indexes[0].index_name, 'trafficPercentage': 90},
-            {'index': double_indexes[1].index_name, 'trafficPercentage': 10},
+            {'index': index.index_name, 'trafficPercentage': 10},
         ],
         'endAt': datetime.utcnow().replace(day=29).strftime(
             "%Y-%m-%dT%H:%M:%SZ"),
@@ -32,6 +33,7 @@ def test_ab_test_features(analytics, double_indexes):
 
     response = analytics.delete_ab_test(ab_test_id)
     analytics.wait_task(response['index'], response['taskID'])
+
     try:
         analytics.get_ab_test(ab_test_id)
         assert False
@@ -39,13 +41,18 @@ def test_ab_test_features(analytics, double_indexes):
         assert True
 
 
-def test_aa_test_features(analytics, double_indexes):
+def test_aa_test_features(analytics, index):
+    response = index.save_object({
+        'objectID': 1,
+    })
+    analytics.wait_task(index.index_name, response['taskID'])
+
     ab_test = {
         'name': "Python client aa integration test",
         'variants': [
-            {'index': double_indexes[0].index_name, 'trafficPercentage': 90},
+            {'index': index.index_name, 'trafficPercentage': 90},
             {
-                'index': double_indexes[0].index_name, 'trafficPercentage': 10,
+                'index': index.index_name, 'trafficPercentage': 10,
                 'customSearchParameters': {
                     'ignorePlurals': True
                 }
@@ -61,3 +68,6 @@ def test_aa_test_features(analytics, double_indexes):
     response = analytics.get_ab_test(ab_test_id)
     assert response['name'] == ab_test['name']
     assert response['status'] == 'active'
+
+    response = analytics.delete_ab_test(ab_test_id)
+    analytics.wait_task(response['index'], response['taskID'])
