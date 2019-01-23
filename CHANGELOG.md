@@ -4,6 +4,8 @@
 
 <Contributors, please add your changes below this line>
 
+### 1.20.0 - 2019-01-23
+
 * Adds `restore_api_key` method to client - Commit [57eb47a](https://github.com/algolia/algoliasearch-client-python/commit/57eb47ad44353d656b2baadd1676241769515527)
 
 ### 1.19.1 - 2018-12-20
