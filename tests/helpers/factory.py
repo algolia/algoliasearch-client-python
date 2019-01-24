@@ -4,6 +4,7 @@ import platform
 
 from typing import Optional
 
+from algoliasearch.analytics_client import AnalyticsClient
 from algoliasearch.search_client import SearchClient
 from faker import Faker
 
@@ -12,15 +13,25 @@ from algoliasearch.search_index import SearchIndex
 
 class Factory(object):
     @staticmethod
-    def client(app_id=None, api_key=None):
+    def search_client(app_id=None, api_key=None):
         # type: (Optional[str], Optional[str]) -> SearchClient
 
-        app_id = app_id if app_id is not None else os.environ[
-            'ALGOLIA_APPLICATION_ID_1']
-        api_key = api_key if api_key is not None else os.environ[
-            'ALGOLIA_ADMIN_KEY_1']
+        app_id = app_id if app_id is not None else Factory.get_app_id()
+        api_key = api_key if api_key is not None else Factory.get_api_key()
 
         return SearchClient.create(app_id, api_key)
+
+    @staticmethod
+    def get_app_id():
+        # type: () -> str
+
+        return os.environ['ALGOLIA_APPLICATION_ID_1']
+
+    @staticmethod
+    def get_api_key():
+        # type: () -> str
+
+        return os.environ['ALGOLIA_ADMIN_KEY_1']
 
     @staticmethod
     def index(name):
@@ -35,7 +46,7 @@ class Factory(object):
 
         python_version = platform.python_version().replace('.', '')[:2]
 
-        return Factory.client().init_index(
+        return Factory.search_client().init_index(
             'python%s_%s_%s_%s' % (python_version, date, instance, name)
         )
 
@@ -46,7 +57,7 @@ class Factory(object):
         app_id = os.environ['ALGOLIA_APPLICATION_ID_MCM']
         api_key = os.environ['ALGOLIA_ADMIN_KEY_MCM']
 
-        return Factory.client(app_id, api_key)
+        return Factory.search_client(app_id, api_key)
 
     @staticmethod
     def obj(data=None, object_id=True):
@@ -88,3 +99,12 @@ class Factory(object):
             data['objectID'] = object_id
 
         return data
+
+    @staticmethod
+    def analytics_client(app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> AnalyticsClient
+
+        app_id = app_id if app_id is not None else Factory.get_app_id()
+        api_key = api_key if api_key is not None else Factory.get_api_key()
+
+        return AnalyticsClient.create(app_id, api_key)
