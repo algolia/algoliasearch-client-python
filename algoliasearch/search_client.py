@@ -1,10 +1,11 @@
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.verbs import Verbs
 from algoliasearch.responses import IndexingResponse, AssignUserIdResponse, \
     RemoveUserIdResponse, AddApiKeyResponse, UpdateApiKeyResponse, \
-    DeleteApiKeyResponse, RestoreApiKeyResponse
+    DeleteApiKeyResponse, RestoreApiKeyResponse, \
+    MultipleIndexBatchIndexingResponse
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
@@ -263,3 +264,46 @@ class SearchClient(object):
             None,
             request_options
         )
+
+    def multiple_queries(self, queries, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/indexes/*/queries',
+            {
+                'requests': queries
+            },
+            request_options
+        )
+
+    def multiple_get_objects(self, requests, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.POST,
+            '1/indexes/*/objects',
+            {
+                'requests': requests
+            },
+            request_options
+        )
+
+    def multiple_batch(self, operations, request_options=None):
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> MultipleIndexBatchIndexingResponse # noqa: E501
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/*/batch',
+            {
+                'requests': operations
+            },
+            request_options
+        )
+
+        return MultipleIndexBatchIndexingResponse(self, raw_response)
+
+    def wait_task(self, index_name, task_id, request_options=None):
+        # type: (str, str, Optional[Union[dict, RequestOptions]]) -> None
+
+        self.init_index(index_name).wait_task(task_id, request_options)

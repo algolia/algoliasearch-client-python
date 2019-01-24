@@ -3,6 +3,7 @@ import abc
 from typing import List
 
 from algoliasearch.exceptions import RequestException
+from algoliasearch.helpers import get_items
 from algoliasearch.http.request_options import RequestOptions
 
 try:
@@ -233,5 +234,24 @@ class RestoreApiKeyResponse(Response):
             except RequestException as e:
                 if e.status_code != 404:
                     raise e
+
+        return self
+
+
+class MultipleIndexBatchIndexingResponse(Response):
+
+    def __init__(self, client, raw_response):
+        # type: (SearchClient, dict) -> None
+
+        self.raw_response = raw_response
+        self.__client = client
+        self.__done = False
+
+    def wait(self):
+        # type: () -> MultipleIndexBatchIndexingResponse
+        while not self.__done:
+            for index_name, task_id in get_items(self.raw_response['taskID']):
+                self.__client.wait_task(index_name, task_id)
+            self.__done = True
 
         return self

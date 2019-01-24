@@ -1,16 +1,24 @@
 import datetime
 import os
 import platform
+import time
 import unittest
 
+from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException
+from algoliasearch.http.hosts import HostsCollection, Host
+from algoliasearch.http.requester import Requester
+from algoliasearch.http.serializer import QueryParametersSerializer
+from algoliasearch.http.transporter import Transporter
 from algoliasearch.responses import MultipleResponse
+from algoliasearch.search_client import SearchClient
+from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
 
 
 class TestSearchClient(unittest.TestCase):
     def setUp(self):
-        self.client = F.client()
+        self.client = F.search_client()
         self.index = F.index(self._testMethodName)
 
     def tearDown(self):
@@ -184,3 +192,87 @@ class TestSearchClient(unittest.TestCase):
         })['logs']
 
         self.assertEqual(len(logs), 2)
+
+    def test_multiple_operations(self):
+        index_name1 = self.index.name
+
+        index_2 = F.index(self._testMethodName)
+        index_name2 = index_2.name
+
+        raw_response = self.client.multiple_batch([
+            {"indexName": index_name1, "action": "addObject",
+             "body": {"firstname": "Jimmie"}},
+            {"indexName": index_name1, "action": "addObject",
+             "body": {"firstname": "Jimmie"}},
+            {"indexName": index_name2, "action": "addObject",
+             "body": {"firstname": "Jimmie"}},
+            {"indexName": index_name2, "action": "addObject",
+             "body": {"firstname": "Jimmie"}}
+        ]).wait().raw_response
+
+        object_ids = list(
+            map(lambda object_id: object_id, raw_response['objectIDs']))
+
+        objects = self.client.multiple_get_objects([
+            {"indexName": index_name1, "objectID": object_ids[0]},
+            {"indexName": index_name1, "objectID": object_ids[1]},
+            {"indexName": index_name2, "objectID": object_ids[2]},
+            {"indexName": index_name2, "objectID": object_ids[3]}
+        ])['results']
+
+        self.assertEqual(objects[0]['objectID'], object_ids[0])
+        self.assertEqual(objects[1]['objectID'], object_ids[1])
+        self.assertEqual(objects[2]['objectID'], object_ids[2])
+        self.assertEqual(objects[3]['objectID'], object_ids[3])
+
+        results = self.client.multiple_queries([
+            {"indexName": index_name1,
+             "params": QueryParametersSerializer.serialize(
+                 {"query": "", "hitsPerPage": 2})},
+            {"indexName": index_name2,
+             "params": QueryParametersSerializer.serialize(
+                 {"query": "", "hitsPerPage": 2})},
+        ], {'strategy': 'none'})['results']
+
+        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results[0]['hits']), 2)
+        self.assertEqual(results[0]['nbHits'], 4)
+        self.assertEqual(len(results[1]['hits']), 2)
+        self.assertEqual(results[1]['nbHits'], 4)
+
+        results = self.client.multiple_queries([
+            {"indexName": index_name1,
+             "params": QueryParametersSerializer.serialize(
+                 {"query": "", "hitsPerPage": 2})},
+            {"indexName": index_name2,
+             "params": QueryParametersSerializer.serialize(
+                 {"query": "", "hitsPerPage": 2})}
+
+        ], {'strategy': 'stopIfEnoughMatches'})['results']
+
+        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results[0]['hits']), 2)
+        self.assertEqual(results[0]['nbHits'], 4)
+        self.assertEqual(len(results[1]['hits']), 0)
+        self.assertEqual(results[1]['nbHits'], 0)
+
+        index_2.delete()
+
+    def test_dns_timeout(self):
+        config = SearchConfig(F.get_app_id(), F.get_api_key())
+        config.hosts['read'] = HostsCollection([
+            Host("algolia.biz"),
+            Host(F.get_app_id() + "-1.algolianet.com"),
+            Host(F.get_app_id() + "-2.algolianet.com"),
+            Host(F.get_app_id() + "-2.algolianet.com")
+        ])
+        requester = Requester()
+        transporter = Transporter(requester, config)
+        index = SearchClient(transporter, config)
+
+        t0 = time.time()
+        for x in range(0, 10):
+            index.list_indices()
+        t1 = time.time()
+
+        self.assertGreater(5, t1 - t0)
