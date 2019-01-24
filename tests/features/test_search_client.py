@@ -12,7 +12,6 @@ from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
-from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
 
 

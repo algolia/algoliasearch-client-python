@@ -66,3 +66,25 @@ class SearchConfig(Config):
             'read': HostsCollection(read_hosts),
             'write': HostsCollection(write_hosts)
         }
+
+
+class AnalyticsConfig(Config):
+
+    def __init__(self, app_id, api_key, region='us'):
+        # type: (str, str, str) -> None
+
+        self.__region = region
+
+        super(AnalyticsConfig, self).__init__(app_id, api_key)
+
+    def build_hosts(self):
+        # type: () -> dict
+
+        read_hosts = write_hosts = [
+            Host('analytics.' + self.__region + '.algolia.com')
+        ]
+
+        return {
+            'read': HostsCollection(read_hosts),
+            'write': HostsCollection(write_hosts)
+        }
