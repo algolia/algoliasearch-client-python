@@ -15,10 +15,10 @@ class AnalyticsClient(object):
         self.__config = search_config
 
     @staticmethod
-    def create(app_id, api_key):
-        # type: (str, str) -> AnalyticsClient
+    def create(app_id, api_key, region='us'):
+        # type: (str, str, str) -> AnalyticsClient
 
-        config = AnalyticsConfig(app_id, api_key)
+        config = AnalyticsConfig(app_id, api_key, region)
         requester = Requester()
         transporter = Transporter(requester, config)
 
