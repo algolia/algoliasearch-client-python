@@ -8,21 +8,13 @@ from algoliasearch.http.requester import Requester
 
 
 class TestSearchClient(unittest.TestCase):
-    def test_init(self):
-        config = SearchConfig('foo', 'bar')
-        requester = Requester()
-        transporter = Transporter(requester, config)
-        client = SearchClient(transporter, config)
+    def test_create(self):
+        client = SearchClient.create('foo', 'bar')
 
         self.assertIsInstance(client, SearchClient)
 
     def test_init_index(self):
-        config = SearchConfig('foo', 'bar')
-        requester = Requester()
-        transporter = Transporter(requester, config)
-        client = SearchClient(transporter, config)
-
-        index = client.init_index('foo')
+        index = SearchClient.create('foo', 'bar').init_index('foo')
 
         self.assertIsInstance(index, SearchIndex)
 

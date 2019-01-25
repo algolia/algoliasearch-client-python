@@ -12,4 +12,5 @@ class TestAnalyticsClient(unittest.TestCase):
     def test_default_region(self):
         client = AnalyticsClient.create('foo', 'bar')
 
-        self.assertEqual(client._AnalyticsClient__config._AnalyticsConfig__region, 'us')
+        self.assertEqual(
+            client._AnalyticsClient__config._AnalyticsConfig__region, 'us')
