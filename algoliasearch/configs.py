@@ -70,7 +70,7 @@ class SearchConfig(Config):
 
 class AnalyticsConfig(Config):
 
-    def __init__(self, app_id, api_key, region='us'):
+    def __init__(self, app_id, api_key, region):
         # type: (str, str, str) -> None
 
         self.__region = region
@@ -82,6 +82,28 @@ class AnalyticsConfig(Config):
 
         read_hosts = write_hosts = [
             Host('analytics.' + self.__region + '.algolia.com')
+        ]
+
+        return {
+            'read': HostsCollection(read_hosts),
+            'write': HostsCollection(write_hosts)
+        }
+
+
+class InsightsConfig(Config):
+
+    def __init__(self, app_id, api_key, region):
+        # type: (str, str, str) -> None
+
+        self.__region = region
+
+        super(InsightsConfig, self).__init__(app_id, api_key)
+
+    def build_hosts(self):
+        # type: () -> dict
+
+        read_hosts = write_hosts = [
+            Host('insights.' + self.__region + '.algolia.io')
         ]
 
         return {
