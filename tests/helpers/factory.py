@@ -23,6 +23,24 @@ class Factory(object):
         return SearchClient.create(app_id, api_key)
 
     @staticmethod
+    def analytics_client(app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> AnalyticsClient
+
+        app_id = app_id if app_id is not None else Factory.get_app_id()
+        api_key = api_key if api_key is not None else Factory.get_api_key()
+
+        return AnalyticsClient.create(app_id, api_key)
+
+    @staticmethod
+    def insights_client(app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> InsightsClient
+
+        app_id = app_id if app_id is not None else Factory.get_app_id()
+        api_key = api_key if api_key is not None else Factory.get_api_key()
+
+        return InsightsClient.create(app_id, api_key)
+
+    @staticmethod
     def get_app_id():
         # type: () -> str
 
@@ -35,8 +53,8 @@ class Factory(object):
         return os.environ['ALGOLIA_ADMIN_KEY_1']
 
     @staticmethod
-    def index(name):
-        # type: (str) -> SearchIndex
+    def get_index_name(test_name):
+        # type: (str) -> str
 
         date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
@@ -47,9 +65,25 @@ class Factory(object):
 
         python_version = platform.python_version().replace('.', '')[:2]
 
-        return Factory.search_client().init_index(
-            'python%s_%s_%s_%s' % (python_version, date, instance, name)
-        )
+        return 'python%s_%s_%s_%s' % (
+            python_version, date, instance, test_name)
+
+    @staticmethod
+    def index(name):
+        # type: (str) -> SearchIndex
+
+        return Factory.search_client().init_index(Factory.get_index_name(name))
+
+    @staticmethod
+    def index2(name):
+        # type: (str) -> SearchIndex
+
+        app_id = os.environ['ALGOLIA_APPLICATION_ID_2']
+
+        api_key = os.environ['ALGOLIA_ADMIN_KEY_2']
+
+        return Factory.search_client(app_id, api_key).init_index(
+            Factory.get_index_name(name))
 
     @staticmethod
     def mcm():
@@ -102,19 +136,30 @@ class Factory(object):
         return data
 
     @staticmethod
-    def analytics_client(app_id=None, api_key=None):
-        # type: (Optional[str], Optional[str]) -> AnalyticsClient
+    def rule(data=None, object_id=True):
+        # type: (Optional[dict], Optional[bool, str, int]) -> dict
 
-        app_id = app_id if app_id is not None else Factory.get_app_id()
-        api_key = api_key if api_key is not None else Factory.get_api_key()
+        fake = Faker()
 
-        return AnalyticsClient.create(app_id, api_key)
+        data = {} if data is None else data
 
-    @staticmethod
-    def insights_client(app_id=None, api_key=None):
-        # type: (Optional[str], Optional[str]) -> InsightsClient
+        data.update({
+            "condition": {"anchoring": "is", "pattern": "pattern"},
+            "consequence": {
+                "params": {
+                    "query": {
+                        "edits": [
+                            {"type": "remove", "delete": "pattern"}
+                        ]
+                    }
+                }
+            }
+        })
 
-        app_id = app_id if app_id is not None else Factory.get_app_id()
-        api_key = api_key if api_key is not None else Factory.get_api_key()
+        if isinstance(object_id, bool):
+            if object_id:
+                data['objectID'] = fake.md5()
+        elif isinstance(object_id, (str, int)):
+            data['objectID'] = object_id
 
-        return InsightsClient.create(app_id, api_key)
+        return data

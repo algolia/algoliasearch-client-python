@@ -4,7 +4,7 @@ import random
 import string
 import time
 
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Iterator
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import MissingObjectIdException
@@ -40,7 +40,7 @@ class SearchIndex(object):
         return self.save_objects([obj], request_options)
 
     def save_objects(self, objects, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         generate_object_id = False
 
@@ -59,16 +59,19 @@ class SearchIndex(object):
                                         request_options)
             except MissingObjectIdException as e:
                 message = str(e)
-                message += ". All objects must have an unique objectID (like a primary key) to be valid."  # noqa: E501
-                message += "Algolia is also able to generate objectIDs automatically but *it's not recommended*."  # noqa: E501
-                message += "To do it, use `save_objects(objects, {'autoGenerateObjectIDIfNotExist' => True})`."  # noqa: E501
+                message += ". All objects must have an unique objectID " \
+                           "(like a primary key) to be valid. " \
+                           "Algolia is also able to generate objectIDs " \
+                           "automatically but *it's not recommended*. " \
+                           "To do it, use `save_objects(objects, " \
+                           "{'autoGenerateObjectIDIfNotExist' => True})`."
 
                 raise MissingObjectIdException(message, e.obj)
 
         return response
 
     def replace_all_objects(self, objects, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> MultipleResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> MultipleResponse # noqa: E501
 
         safe = False
         if isinstance(request_options, dict) \
@@ -110,7 +113,7 @@ class SearchIndex(object):
         )
 
     def get_objects(self, object_ids, request_options=None):
-        # type: (List[int], Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (Iterator[int], Optional[Union[dict, RequestOptions]]) -> dict
 
         requests = []
         for object_id in object_ids:
@@ -137,7 +140,7 @@ class SearchIndex(object):
         return self.partial_update_objects([obj], request_options)
 
     def partial_update_objects(self, objects, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         generate_object_id = False
 
@@ -162,7 +165,7 @@ class SearchIndex(object):
         return self.delete_objects([object_id], request_options)
 
     def delete_objects(self, object_ids, request_options=None):
-        # type: (List[str], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[str], Iterator[str]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         objects = list(
             map(lambda object_id: {'objectID': object_id}, object_ids))
@@ -170,7 +173,7 @@ class SearchIndex(object):
         return self.__chunk('deleteObject', objects, request_options)
 
     def delete_by(self, filters, request_options=None):
-        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse  # noqa: E501
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         raw_response = self.__transporter.write(
             Verbs.POST,
@@ -248,7 +251,7 @@ class SearchIndex(object):
         return self.save_synonyms([synonym], request_options)
 
     def save_synonyms(self, synonyms, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if not synonyms:
             return IndexingResponse(self, [])
@@ -258,14 +261,14 @@ class SearchIndex(object):
         raw_response = self.__transporter.write(
             Verbs.POST,
             '1/indexes/%s/synonyms/batch' % self.__name,
-            synonyms,
+            list(synonyms),
             request_options
         )
 
         return IndexingResponse(self, [raw_response])
 
     def replace_all_synonyms(self, synoyms, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if request_options is None:
             request_options = RequestOptions.create(self.__config)
@@ -275,7 +278,7 @@ class SearchIndex(object):
 
         request_options['replaceExistingSynonyms'] = True
 
-        return self.save_synonyms(synoyms, request_options)
+        return self.save_synonyms(list(synoyms), request_options)
 
     def get_synonym(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
@@ -335,7 +338,7 @@ class SearchIndex(object):
         return self.save_rules([rule], request_options)
 
     def save_rules(self, rules, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if not rules:
             return IndexingResponse(self, [])
@@ -345,14 +348,14 @@ class SearchIndex(object):
         raw_response = self.__transporter.write(
             Verbs.POST,
             '1/indexes/%s/rules/batch' % self.__name,
-            rules,
+            list(rules),
             request_options
         )
 
         return IndexingResponse(self, [raw_response])
 
     def replace_all_rules(self, rules, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if request_options is None:
             request_options = RequestOptions.create(self.__config)
@@ -362,7 +365,7 @@ class SearchIndex(object):
 
         request_options.query_parameters['clearExistingRules'] = 1
 
-        return self.save_rules(rules, request_options)
+        return self.save_rules(list(rules), request_options)
 
     def get_rule(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
@@ -454,7 +457,7 @@ class SearchIndex(object):
         return IndexingResponse(self, [raw_response])
 
     def batch(self, requests, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         raw_response = self.__raw_batch(requests, request_options)
 
@@ -462,7 +465,7 @@ class SearchIndex(object):
 
     def __chunk(self, action, objects, request_options,
                 validate_object_id=True):
-        # type: (str, List[dict], Optional[Union[dict, RequestOptions]], bool) -> IndexingResponse # noqa: E501
+        # type: (str, Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]], bool) -> IndexingResponse # noqa: E501
 
         raw_responses = []
         batch = []
@@ -488,19 +491,19 @@ class SearchIndex(object):
         return IndexingResponse(self, raw_responses)
 
     def __raw_batch(self, requests, request_options):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         return self.__transporter.write(
             Verbs.POST,
             '1/indexes/%s/batch' % self.__name,
             {
-                'requests': requests
+                'requests': list(requests)
             },
             request_options
         )
 
     def __move_to(self, name, request_options=None):
-        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse  # noqa: E501
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         raw_response = self.__transporter.write(
             Verbs.POST,
@@ -515,7 +518,7 @@ class SearchIndex(object):
         return IndexingResponse(self, [raw_response])
 
     def __copy_to(self, name, request_options=None):
-        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse  # noqa: E501
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         raw_response = self.__transporter.write(
             Verbs.POST,

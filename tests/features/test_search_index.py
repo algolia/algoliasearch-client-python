@@ -489,19 +489,7 @@ class TestSearchIndex(unittest.TestCase):
     def test_replacing(self):
         responses = MultipleResponse()
         responses.push(self.index.save_object({"objectID": "one"}))
-        responses.push(self.index.save_rule({
-            "objectID": "one",
-            "condition": {"anchoring": "is", "pattern": "pattern"},
-            "consequence": {
-                "params": {
-                    "query": {
-                        "edits": [
-                            {"type": "remove", "delete": "pattern"}
-                        ]
-                    }
-                }
-            }
-        }))
+        responses.push(self.index.save_rule(F.rule(object_id="one")))
 
         responses.push(self.index.save_synonym(
             {"objectID": "one", "type": "synonym", "synonyms": ["one", "two"]}
