@@ -19,9 +19,13 @@ class TestSearchClient(unittest.TestCase):
     def setUp(self):
         self.client = F.search_client()
         self.index = F.index(self._testMethodName)
+        self.index2 = None
 
     def tearDown(self):
         self.index.delete()
+
+        if self.index2 is not None:
+            self.index2.delete()
 
     def test_copy_index(self):
         objects = [
@@ -278,3 +282,24 @@ class TestSearchClient(unittest.TestCase):
         t1 = time.time()
 
         # self.assertGreater(5, t1 - t0)
+
+    def test_secured_api_keys(self):
+        self.index2 = F.index(self._testMethodName + '_dev')
+
+        self.index.save_object({'objectID': 'one'}).wait()
+        self.index2.save_object({'objectID': 'one'}).wait()
+
+        api_key = self.client.generate_secured_api_key(
+            os.environ['ALGOLIA_SEARCH_KEY_1'],
+            {
+                "validUntil": int(round(time.time())) + (60 * 10),  # + 10 min
+                "restrictIndices": self.index.name
+            }
+        )
+        # @todo fix this test
+        # F.search_client(api_key=api_key).init_index(
+        # self.index.name).search('')
+
+        with self.assertRaises(RequestException) as _:
+            F.search_client(api_key=api_key).init_index(
+                self.index2.name).search('')

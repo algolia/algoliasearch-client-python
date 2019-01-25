@@ -1,6 +1,11 @@
+import base64
+import hashlib
+import hmac
+
 from typing import Optional, Union, List
 
 from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.verbs import Verbs
 from algoliasearch.responses import IndexingResponse, AssignUserIdResponse, \
     RemoveUserIdResponse, AddApiKeyResponse, UpdateApiKeyResponse, \
@@ -244,6 +249,23 @@ class SearchClient(object):
         )
 
         return RestoreApiKeyResponse(self, raw_response, key)
+
+    @staticmethod
+    def generate_secured_api_key(parent_api_key, restrictions):
+        # type: (str, dict) -> str
+
+        query_parameters = QueryParametersSerializer.serialize(
+            restrictions).encode('utf-8')
+
+        secured_key = hmac.new(parent_api_key.encode('utf-8'),
+                               query_parameters,
+                               hashlib.sha256).hexdigest()
+
+        base64encoded = base64.b64encode(
+            ("%s%s" % (secured_key, query_parameters)).encode('utf-8')
+        )
+
+        return str(base64encoded.decode("utf-8"))
 
     def list_indices(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
