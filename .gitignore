@@ -11,6 +11,7 @@ venv/
 .venv/
 .mypy_cache/
 .cache
+.stestr
 
 # Packages
 *.egg
