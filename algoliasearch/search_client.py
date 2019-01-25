@@ -304,6 +304,6 @@ class SearchClient(object):
         return MultipleIndexBatchIndexingResponse(self, raw_response)
 
     def wait_task(self, index_name, task_id, request_options=None):
-        # type: (str, str, Optional[Union[dict, RequestOptions]]) -> None
+        # type: (str, int, Optional[Union[dict, RequestOptions]]) -> None
 
         self.init_index(index_name).wait_task(task_id, request_options)

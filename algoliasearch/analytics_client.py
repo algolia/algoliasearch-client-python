@@ -34,16 +34,6 @@ class AnalyticsClient(object):
             request_options
         )
 
-    def add_ab_test(self, ab_test, request_options=None):
-        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
-
-        return self.__transporter.write(
-            Verbs.POST,
-            '2/abtests',
-            ab_test,
-            request_options
-        )
-
     def get_ab_test(self, ab_test_id, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
@@ -51,6 +41,16 @@ class AnalyticsClient(object):
             Verbs.GET,
             '2/abtests/%s' % ab_test_id,
             None,
+            request_options
+        )
+
+    def add_ab_test(self, ab_test, request_options=None):
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.write(
+            Verbs.POST,
+            '2/abtests',
+            ab_test,
             request_options
         )
 
