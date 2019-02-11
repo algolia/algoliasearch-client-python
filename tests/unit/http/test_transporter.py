@@ -104,10 +104,8 @@ class TestRetryStrategy(unittest.TestCase):
         self.response = Response()
 
     def test_success_decision(self):
-
         self.response.status_code = 200
-        self.response.is_timed_out_error
-        decision = self.retry_strategy.decide(self.host, 200, False)
+        decision = self.retry_strategy.decide(self.host, self.response)
 
         self.assertEqual(decision, RetryOutcome.SUCCESS)
         self.assertEqual(self.host.up, True)
@@ -115,7 +113,8 @@ class TestRetryStrategy(unittest.TestCase):
         self.assertEqual(self.host.retry_count, 0)
 
     def test_retryable_decision_because_status_code(self):
-        decision = self.retry_strategy.decide(self.host, 300, False)
+        self.response.status_code = 300
+        decision = self.retry_strategy.decide(self.host, self.response)
 
         self.assertEqual(decision, RetryOutcome.RETRY)
         self.assertEqual(self.host.up, False)
@@ -123,7 +122,8 @@ class TestRetryStrategy(unittest.TestCase):
         self.assertEqual(self.host.retry_count, 0)
 
     def test_retryable_decision_because_timed_out(self):
-        decision = self.retry_strategy.decide(self.host, 0, True)
+        self.response.is_timed_out_error = True
+        decision = self.retry_strategy.decide(self.host, self.response)
 
         self.assertEqual(decision, RetryOutcome.RETRY)
         self.assertEqual(self.host.up, True)
@@ -131,7 +131,8 @@ class TestRetryStrategy(unittest.TestCase):
         self.assertEqual(self.host.retry_count, 1)
 
     def test_fail_decision(self):
-        decision = self.retry_strategy.decide(self.host, 401, False)
+        self.response.status_code = 401
+        decision = self.retry_strategy.decide(self.host, self.response)
 
         self.assertEqual(decision, RetryOutcome.FAIL)
         self.assertEqual(self.host.up, True)

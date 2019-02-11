@@ -19,9 +19,11 @@ class TestAnalyticsClient(unittest.TestCase):
     def test_ab_testing(self):
         python_version = platform.python_version().replace('.', '')[:2]
 
-        for ab_test in self.client.get_ab_tests()['abtests']:
-            if ab_test['name'].startswith('python' + python_version):
-                self.client.delete_ab_test(ab_test['abTestID'])
+        ab_tests = self.client.get_ab_tests()
+        if ab_tests['total'] > 0:
+            for ab_test in self.client.get_ab_tests()['abtests']:
+                if ab_test['name'].startswith('python' + python_version):
+                    self.client.delete_ab_test(ab_test['abTestID'])
 
         self.index.save_object({'objectID': 'one'}).wait()
         self.index2.save_object({'objectID': 'one'}).wait()
