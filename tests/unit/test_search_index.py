@@ -99,9 +99,14 @@ class TestSearchIndex(unittest.TestCase):
         )
 
     def test_get_settings(self):
-        # Saving an object without object id
+        self.transporter.read.return_value = {
+            'attributesToIndex': ['attr1', 'attr2'],
+            'numericAttributesToIndex': ['attr1', 'attr2'],
+            'slaves': ['index1', 'index2'],
+            'ignorePlurals': True,
+        }
 
-        self.index.get_settings({'foo': 'bar'})
+        settings = self.index.get_settings({'foo': 'bar'})
 
         self.transporter.read.assert_called_once_with(
             'GET',
@@ -109,6 +114,13 @@ class TestSearchIndex(unittest.TestCase):
             {'getVersion': 2},  # asserts version 2 it's used.
             {'foo': 'bar'}
         )
+
+        self.assertEqual(settings, {
+            'searchableAttributes': ['attr1', 'attr2'],
+            'numericAttributesForFiltering': ['attr1', 'attr2'],
+            'replicas': ['index1', 'index2'],
+            'ignorePlurals': True,
+        })
 
     def test_save_synonyms(self):
         # Test null response

@@ -10,6 +10,7 @@ from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import MissingObjectIdException
 from algoliasearch.helpers import assert_object_id, build_raw_response_batch
 from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.serializer import SettingsDeserializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
 from algoliasearch.iterators import ObjectIterator, SynonymIterator, \
@@ -213,12 +214,14 @@ class SearchIndex(object):
 
         params = {'getVersion': 2}
 
-        return self.__transporter.read(
+        raw_response = self.__transporter.read(
             Verbs.GET,
             '1/indexes/%s/settings' % self.__name,
             params,
             request_options
         )
+
+        return SettingsDeserializer.deserialize(raw_response)
 
     def search(self, query, request_options=None):
         # type: (Optional[str], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501

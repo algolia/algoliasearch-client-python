@@ -111,7 +111,7 @@ class SearchClient(object):
         return AssignUserIdResponse(self, raw_response, user_id)
 
     def remove_user_id(self, user_id, request_options=None):
-        # type: (str,Optional[Union[dict, RequestOptions]]) -> RemoveUserIdResponse  # noqa: E501
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> RemoveUserIdResponse  # noqa: E501
 
         if request_options is None:
             request_options = RequestOptions.create(self.__config)
@@ -251,21 +251,24 @@ class SearchClient(object):
         return RestoreApiKeyResponse(self, raw_response, key)
 
     @staticmethod
-    def generate_secured_api_key(parent_api_key, restrictions):
-        # type: (str, dict) -> str
+    def generate_secured_api_key(parent_api_key, restrictions=None):
+        # type: (str, Optional[dict]) -> str
+
+        if restrictions is None:
+            restrictions = {}
 
         query_parameters = QueryParametersSerializer.serialize(
-            restrictions).encode('utf-8')
+            restrictions)
 
         secured_key = hmac.new(parent_api_key.encode('utf-8'),
-                               query_parameters,
+                               query_parameters.encode('utf-8'),
                                hashlib.sha256).hexdigest()
 
         base64encoded = base64.b64encode(
             ("%s%s" % (secured_key, query_parameters)).encode('utf-8')
         )
 
-        return str(base64encoded.decode("utf-8"))
+        return str(base64encoded.decode('utf-8'))
 
     def list_indices(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict

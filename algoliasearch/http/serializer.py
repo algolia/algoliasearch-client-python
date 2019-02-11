@@ -33,6 +33,25 @@ class QueryParametersSerializer(object):
         )
 
 
+class SettingsDeserializer(object):
+    @staticmethod
+    def deserialize(data):
+        # type: (dict) -> dict
+
+        keys = {
+            'attributesToIndex': 'searchableAttributes',
+            'numericAttributesToIndex': 'numericAttributesForFiltering',
+            'slaves': 'replicas',
+        }
+
+        for deprecated_key, current_key in get_items(keys):
+            if deprecated_key in data:
+                data[current_key] = data[deprecated_key]
+                del data[deprecated_key]
+
+        return data
+
+
 class DataSerializer(object):
     @staticmethod
     def serialize(data):

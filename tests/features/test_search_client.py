@@ -299,9 +299,8 @@ class TestSearchClient(unittest.TestCase):
                 "restrictIndices": self.index.name
             }
         )
-        # @todo fix this test
-        # F.search_client(api_key=api_key).init_index(
-        # self.index.name).search('')
+
+        F.search_client(api_key=api_key).init_index(self.index.name).search('')
 
         with self.assertRaises(RequestException) as _:
             F.search_client(api_key=api_key).init_index(
