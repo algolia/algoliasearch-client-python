@@ -101,8 +101,12 @@ class TestRetryStrategy(unittest.TestCase):
         self.time = time.time()
         self.retry_strategy = RetryStrategy()
         self.host = Host('foo.com')
+        self.response = Response()
 
     def test_success_decision(self):
+
+        self.response.status_code = 200
+        self.response.is_timed_out_error
         decision = self.retry_strategy.decide(self.host, 200, False)
 
         self.assertEqual(decision, RetryOutcome.SUCCESS)

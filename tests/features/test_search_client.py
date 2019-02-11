@@ -263,7 +263,6 @@ class TestSearchClient(unittest.TestCase):
         index_2.delete()
 
     def test_dns_timeout(self):
-        # @todo Test not working...
 
         config = SearchConfig(F.get_app_id(), F.get_api_key())
         config.hosts['read'] = HostsCollection([
@@ -282,6 +281,10 @@ class TestSearchClient(unittest.TestCase):
         t1 = time.time()
 
         self.assertGreater(5, t1 - t0)
+        self.assertFalse(config.hosts['read']._hosts[0].up)
+        self.assertTrue(config.hosts['read']._hosts[1].up)
+        self.assertTrue(config.hosts['read']._hosts[2].up)
+        self.assertTrue(config.hosts['read']._hosts[3].up)
 
     def test_secured_api_keys(self):
         self.index2 = F.index(self._testMethodName + '_dev')
