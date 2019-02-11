@@ -75,8 +75,7 @@ class Transporter(object):
                                                 data, timeout,
                                                 self.__config.connect_timeout)
 
-            decision = self.__retry_strategy.decide(host, response.status_code,
-                                                    response.timed_out)
+            decision = self.__retry_strategy.decide(host, response)
 
             if decision == RetryOutcome.SUCCESS:
                 return response.content if response.content is not None else {}
@@ -92,42 +91,49 @@ class Transporter(object):
 
 class Response(object):
     def __init__(self, status_code=None, content=None,
-                 error_message='', timed_out=False):
-        # type: (int, Optional[dict], str, bool) -> None
+                 error_message='', is_timed_out_error=False,
+                 is_network_error=False):
+        # type: (int, Optional[dict], str, bool, bool) -> None
 
         self.status_code = status_code
         self.content = content
         self.error_message = error_message
-        self.timed_out = timed_out
+        self.is_timed_out_error = is_timed_out_error
+        self.is_network_error = is_network_error
 
 
 class RetryStrategy(object):
-    def decide(self, host, status_code, timed_out):
-        # type: (Host, Optional[int], bool) -> str
+    def decide(self, host, response):
+        # type: (Host, Response) -> str
 
         host.last_use = time.time()
 
-        if timed_out:
+        if response.is_timed_out_error:
             host.retry_count += 1
 
             return RetryOutcome.RETRY
-        elif status_code is not None and self.__is_retryable(status_code):
+        elif self.__is_retryable(response):
             host.up = False
             return RetryOutcome.RETRY
-        elif status_code is not None and self.__is_success(status_code):
+        elif response.status_code is not None and self.__is_success(response):
             return RetryOutcome.SUCCESS
 
         return RetryOutcome.FAIL
 
-    def __is_success(self, status_code):
-        # type: (int) -> bool
+    def __is_success(self, response):
+        # type: (Response) -> bool
 
-        return (status_code // 100) == 2
+        return (response.status_code // 100) == 2
 
-    def __is_retryable(self, status_code):
-        # type: (int) -> bool
+    def __is_retryable(self, response):
+        # type: (Response) -> bool
 
-        return (status_code // 100) != 2 and (status_code // 100) != 4
+        if response.is_network_error:
+            return True
+
+        return response.status_code is not None and (
+                response.status_code // 100) != 2 and (
+                       response.status_code // 100) != 4
 
 
 class RetryOutcome(object):

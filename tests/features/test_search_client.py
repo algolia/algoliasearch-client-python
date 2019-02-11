@@ -267,7 +267,7 @@ class TestSearchClient(unittest.TestCase):
 
         config = SearchConfig(F.get_app_id(), F.get_api_key())
         config.hosts['read'] = HostsCollection([
-            Host("algolia.biz"),
+            Host("algolia.biz", 10),
             Host(F.get_app_id() + "-1.algolianet.com"),
             Host(F.get_app_id() + "-2.algolianet.com"),
             Host(F.get_app_id() + "-2.algolianet.com")
@@ -277,11 +277,11 @@ class TestSearchClient(unittest.TestCase):
         index = SearchClient(transporter, config)
 
         t0 = time.time()
-        for x in range(0, 10):
-            pass  # index.list_indices()
+        for x in range(0, 2):
+            index.list_indices()
         t1 = time.time()
 
-        # self.assertGreater(5, t1 - t0)
+        self.assertGreater(5, t1 - t0)
 
     def test_secured_api_keys(self):
         self.index2 = F.index(self._testMethodName + '_dev')
