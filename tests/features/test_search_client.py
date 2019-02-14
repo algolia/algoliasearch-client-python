@@ -305,3 +305,7 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(RequestException) as _:
             F.search_client(api_key=api_key).init_index(
                 self.index2.name).search('')
+
+    def test_personalization_strategy(self):
+        response = self.client.get_personalization_strategy()
+        self.assertIn('taskID', response)

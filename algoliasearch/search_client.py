@@ -332,3 +332,23 @@ class SearchClient(object):
         # type: (str, int, Optional[Union[dict, RequestOptions]]) -> None
 
         self.init_index(index_name).wait_task(task_id, request_options)
+
+    def set_personalization_strategy(self, strategy, request_options=None):
+        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.write(
+            Verbs.POST,
+            '1/recommendation/personalization/strategy',
+            strategy,
+            request_options
+        )
+
+    def get_personalization_strategy(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
+
+        return self.__transporter.read(
+            Verbs.GET,
+            '1/recommendation/personalization/strategy',
+            None,
+            request_options
+        )
