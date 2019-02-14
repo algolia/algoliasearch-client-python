@@ -123,7 +123,8 @@ class RetryStrategy(object):
     def __is_success(self, response):
         # type: (Response) -> bool
 
-        return (response.status_code // 100) == 2
+        return response.status_code is not None and (
+                response.status_code // 100) == 2
 
     def __is_retryable(self, response):
         # type: (Response) -> bool
