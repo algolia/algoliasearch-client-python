@@ -27,7 +27,7 @@ class TestSearchClient(unittest.TestCase):
         if self.index2 is not None:
             self.index2.delete()
 
-    def test_copy_index(self):
+    def test_copy_move_index(self):
         objects = [
             {'objectID': 'one', 'company': 'apple'},
             {'objectID': 'two', 'company': 'algolia'}
@@ -93,6 +93,25 @@ class TestSearchClient(unittest.TestCase):
         for obj in self.index.browse_objects():
             self.assertIn(obj, objects)
 
+        self.client.move_index(
+            self.index.name,
+            self.index.name + '_after_move'
+        )
+
+        self.index.__SearchIndex_name = self.index.name + '_after_move'
+        self.index.get_synonym('google_placeholder')
+        self.index.get_rule('company_auto_faceting')
+        self.assertEqual(
+            self.index.get_settings()['attributesForFaceting'], ['company']
+        )
+        for obj in self.index.browse_objects():
+            self.assertIn(obj, objects)
+
+        with self.assertRaises(RequestException) as cm:
+            self.client.init_index('copy_index_full_copy').search('')
+
+        self.assertEqual(cm.exception.status_code, 404)
+
     def test_mcm(self):
         mcm = F.mcm()
 
@@ -127,8 +146,7 @@ class TestSearchClient(unittest.TestCase):
         self.assertIsInstance(users['topUsers'], dict)
         self.assertTrue(len(users['topUsers']) > 0)
 
-        # @todo Test not working...
-        # mcm.remove_user_id(user_id).wait()
+        mcm.remove_user_id(user_id).wait()
 
         users = mcm.list_user_ids()
 

@@ -360,9 +360,7 @@ class SearchIndex(object):
     def replace_all_rules(self, rules, request_options=None):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        if request_options is None:
-            request_options = RequestOptions.create(self.__config)
-        elif isinstance(request_options, dict):
+        if request_options is None or isinstance(request_options, dict):
             request_options = RequestOptions.create(self.__config,
                                                     request_options)
 

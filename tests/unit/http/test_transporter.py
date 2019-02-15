@@ -83,7 +83,6 @@ class TestTransporter(unittest.TestCase):
         with self.assertRaises(AlgoliaUnreachableHostException) as _:
             self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
-
         # Remains 5, all hosts here down.
         self.assertEqual(self.requester.request.call_count, 5)
 

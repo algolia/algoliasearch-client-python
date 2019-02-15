@@ -45,6 +45,22 @@ class SearchClient(object):
 
         return SearchClient(transporter, config)
 
+    def move_index(self, src_index_name, dst_index_name, request_options=None):
+        # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
+
+        raw_response = self.__transporter.write(
+            Verbs.POST,
+            '1/indexes/%s/operation' % src_index_name,
+            {
+                'operation': 'move',
+                'destination': dst_index_name
+            },
+            request_options
+        )
+
+        return IndexingResponse(self.init_index(src_index_name),
+                                [raw_response])
+
     def copy_index(self, src_index_name, dst_index_name, request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
@@ -251,11 +267,8 @@ class SearchClient(object):
         return RestoreApiKeyResponse(self, raw_response, key)
 
     @staticmethod
-    def generate_secured_api_key(parent_api_key, restrictions=None):
-        # type: (str, Optional[dict]) -> str
-
-        if restrictions is None:
-            restrictions = {}
+    def generate_secured_api_key(parent_api_key, restrictions):
+        # type: (str, dict) -> str
 
         query_parameters = QueryParametersSerializer.serialize(
             restrictions)

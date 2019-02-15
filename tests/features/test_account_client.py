@@ -15,7 +15,7 @@ class TestAccountClient(unittest.TestCase):
         self.index.delete()
         self.index2.delete()
 
-    def test_copy_index(self):
+    def test_cross_app_copy_index(self):
         rule = F.rule(object_id='one')
         synonym = F.synonym(object_id='one')
         responses = [

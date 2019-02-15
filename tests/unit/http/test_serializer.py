@@ -11,22 +11,35 @@ class TestDataSerializer(unittest.TestCase):
     def setUp(self):
         self.data = {
             'decimal': decimal.Decimal(0.20),
-            'datetime': datetime.date.fromtimestamp(1546300800),
+            'datetime': datetime.datetime(2012, 9, 6),
             'value': 'foo',
-            'integer': 1
+            'integer': 1,
+            'json': {
+                'foo': 'bar'
+            },
+            'objToString': FakeObjectSerializable()
         }
 
     def test_result(self):
         expected = {
-            "decimal": 0.2,
-            "datetime": "2019-01-01",
-            "value": "foo",
-            "integer": 1
+            'decimal': 0.2,
+            'datetime': 1346889600,
+            'value': 'foo',
+            'integer': 1,
+            'json': {
+                'foo': 'bar'
+            },
+            'objToString': 'foo',
         }
 
         data = DataSerializer.serialize(self.data)
 
         self.assertEqual(data, json.dumps(expected))
+
+        with self.assertRaises(TypeError) as _:
+            DataSerializer.serialize({
+                'obj': FakeObject()
+            })
 
 
 class TestQueryParametersSerializer(unittest.TestCase):
@@ -41,3 +54,12 @@ class TestQueryParametersSerializer(unittest.TestCase):
 
         data = QueryParametersSerializer.serialize(self.data)
         self.assertEqual(data, expected)
+
+
+class FakeObject(object):
+    pass
+
+
+class FakeObjectSerializable(object):
+    def __str__(self):
+        return 'foo'

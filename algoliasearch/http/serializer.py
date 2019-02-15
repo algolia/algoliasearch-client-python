@@ -64,15 +64,13 @@ class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         # type: (object) -> object
 
+        print(type(obj).__name__)
+
         if isinstance(obj, decimal.Decimal):
             return float(obj)
         elif isinstance(obj, datetime.datetime):
-            try:
-                return int(calendar.timegm(obj.utctimetuple()))
-            except ValueError:
-                return 0
-
-        try:
-            return json.JSONEncoder.default(self, obj)
-        except TypeError:
+            return int(calendar.timegm(obj.utctimetuple()))
+        elif type(obj).__str__ is not object.__str__:
             return str(obj)
+
+        return json.JSONEncoder.default(self, obj)

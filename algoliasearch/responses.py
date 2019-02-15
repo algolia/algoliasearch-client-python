@@ -76,14 +76,6 @@ class MultipleResponse(Response):
         return self
 
 
-class NullResponse(Response):
-
-    def wait(self):
-        # type: () -> NullResponse
-
-        return self
-
-
 class AssignUserIdResponse(Response):
 
     def __init__(self, client, raw_response, user_id):
@@ -126,6 +118,9 @@ class RemoveUserIdResponse(Response):
                 self.__client.get_user_id(self.__user_id)
             except RequestException as e:
                 self.__done = e.status_code == 404
+
+                if not self.__done and e.status_code != 200:
+                    raise e
 
         return self
 

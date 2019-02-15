@@ -21,7 +21,7 @@ class Iterator(object):
     def next(self):
         # type: () -> dict
 
-        return self.__next__()
+        return self.__next__()  # pragma: no cover
 
     def __iter__(self):
         # type: () -> Iterator
@@ -32,7 +32,7 @@ class Iterator(object):
     def __next__(self):
         # type: () -> dict
 
-        pass
+        pass  # pragma: no cover
 
 
 class PaginatorIterator(Iterator):
@@ -79,7 +79,8 @@ class PaginatorIterator(Iterator):
     @abc.abstractmethod
     def get_endpoint(self):
         # type: () -> str
-        pass
+
+        pass  # pragma: no cover
 
 
 class ObjectIterator(Iterator):
