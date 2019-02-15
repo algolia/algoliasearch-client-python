@@ -12,7 +12,7 @@ from algoliasearch.helpers import get_items
 if sys.version_info >= (3, 0):
     from urllib.parse import urlencode
 else:
-    from urllib import urlencode
+    from urllib import urlencode  # pragma: no cover
 
 
 class QueryParametersSerializer(object):

@@ -38,7 +38,7 @@ class Config(object):
     def build_hosts(self):
         # type: () -> dict
 
-        pass
+        pass  # pragma: no cover
 
 
 class SearchConfig(Config):

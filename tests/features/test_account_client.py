@@ -6,7 +6,7 @@ from algoliasearch.responses import MultipleResponse
 from tests.helpers.factory import Factory as F
 
 
-class TestInsightsClient(unittest.TestCase):
+class TestAccountClient(unittest.TestCase):
     def setUp(self):
         self.index = F.index(self._testMethodName)
         self.index2 = F.index2(self._testMethodName)
@@ -31,6 +31,7 @@ class TestInsightsClient(unittest.TestCase):
 
         # Assert objects got copied
         res = self.index2.search('')
+
         self.assertEqual(len(res['hits']), 1)
         self.assertEqual(res['hits'][0], {'objectID': 'one'})
 

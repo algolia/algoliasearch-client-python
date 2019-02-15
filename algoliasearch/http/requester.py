@@ -26,9 +26,6 @@ class Requester(object):
             response = s.send(r, timeout=requests_timeout)  # type: ignore
         except Timeout as e:
             return Response(error_message=str(e), is_timed_out_error=True)
-        except HTTPError as e:
-            return Response(status_code=e.response.status_code,
-                            error_message=str(e))
         except RequestException as e:
             return Response(error_message=str(e), is_network_error=True)
         finally:

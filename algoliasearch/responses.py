@@ -24,7 +24,7 @@ class Response(object):
     def wait(self):
         # type:() -> Response
 
-        pass
+        pass  # pragma: no cover
 
 
 class IndexingResponse(Response):

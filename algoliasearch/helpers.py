@@ -14,7 +14,7 @@ def get_items(dictionary=None):
     elif sys.version_info >= (3, 0):
         items = dictionary.items()
     else:
-        items = dictionary.iteritems()
+        items = dictionary.iteritems()  # pragma: no cover
 
     return items
 

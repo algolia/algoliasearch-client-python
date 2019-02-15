@@ -47,7 +47,7 @@ class HostsCollection(object):
     def next(self):  # Python 2
         # type: () -> Host
 
-        return self.__next__()
+        return self.__next__()  # pragma: no cover
 
     def __now(self):
         # type: () -> float
