@@ -273,14 +273,11 @@ class TestSearchClient(unittest.TestCase):
         ])
         requester = Requester()
         transporter = Transporter(requester, config)
-        index = SearchClient(transporter, config)
+        client = SearchClient(transporter, config)
 
-        t0 = time.time()
-        for x in range(0, 2):
-            index.list_indices()
-        t1 = time.time()
+        client.list_indices()
 
-        self.assertGreater(5, t1 - t0)
+        # We test that the first Host `algolia.biz` is down.
         self.assertFalse(config.hosts['read']._hosts[0].up)
         self.assertTrue(config.hosts['read']._hosts[1].up)
         self.assertTrue(config.hosts['read']._hosts[2].up)
