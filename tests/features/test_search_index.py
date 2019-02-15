@@ -31,8 +31,8 @@ class TestSearchIndex(unittest.TestCase):
         responses.append(self.index.save_object(obj2, opts))
 
         # adding two objects with object id
-        obj3 = F.obj()
-        obj4 = F.obj()
+        obj3 = F.obj({'_tags': ['algolia']})
+        obj4 = F.obj({'_tags': ['algolia']})
         responses.append(self.index.save_objects([obj3, obj4]))
 
         # adding two objects w/o object id
@@ -119,9 +119,10 @@ class TestSearchIndex(unittest.TestCase):
         # Delete the 6 first records with delete_object
         responses.append(self.index.delete_object(object1_id))
         responses.append(self.index.delete_object(object2_id))
-        responses.append(self.index.delete_objects([
-            object3_id, object4_id, object5_id, object6_id
 
+        responses.append(self.index.delete_by({'tagFilters': ['algolia']}))
+        responses.append(self.index.delete_objects([
+            object5_id, object6_id
         ]))
 
         # Delete the 1000 remaining records with delete_objects
