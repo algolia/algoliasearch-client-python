@@ -163,6 +163,9 @@ class SearchIndex(object):
     def delete_object(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
+        if not object_id:
+            raise ValueError('object_id cannot be empty')
+
         return self.delete_objects([object_id], request_options)
 
     def delete_objects(self, object_ids, request_options=None):
