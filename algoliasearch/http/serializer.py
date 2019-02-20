@@ -64,8 +64,6 @@ class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         # type: (object) -> object
 
-        print(type(obj).__name__)
-
         if isinstance(obj, decimal.Decimal):
             return float(obj)
         elif isinstance(obj, datetime.datetime):
