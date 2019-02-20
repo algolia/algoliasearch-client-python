@@ -12,6 +12,7 @@ from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
+from tests.helpers.env import Env
 from tests.helpers.factory import Factory as F
 
 
@@ -96,15 +97,16 @@ class TestSearchClient(unittest.TestCase):
         self.client.move_index(
             self.index.name,
             self.index.name + '_after_move'
-        )
+        ).wait()
 
-        self.index.__SearchIndex_name = self.index.name + '_after_move'
-        self.index.get_synonym('google_placeholder')
-        self.index.get_rule('company_auto_faceting')
+        moved_index = self.client.init_index(self.index.name + '_after_move')
+
+        moved_index.get_synonym('google_placeholder')
+        moved_index.get_rule('company_auto_faceting')
         self.assertEqual(
-            self.index.get_settings()['attributesForFaceting'], ['company']
+            moved_index.get_settings()['attributesForFaceting'], ['company']
         )
-        for obj in self.index.browse_objects():
+        for obj in moved_index.browse_objects():
             self.assertIn(obj, objects)
 
         with self.assertRaises(RequestException) as cm:
@@ -112,13 +114,15 @@ class TestSearchClient(unittest.TestCase):
 
         self.assertEqual(cm.exception.status_code, 404)
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test mcm operations")
     def test_mcm(self):
         mcm = F.mcm()
 
         clusters = mcm.list_clusters()['clusters']
         self.assertEqual(len(clusters), 2)
 
-        date = datetime.datetime.now().strftime("%Y-%m-%d")
+        date = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
         if 'TRAVIS' in os.environ:
             instance = os.environ['TRAVIS_JOB_NUMBER']
@@ -152,12 +156,12 @@ class TestSearchClient(unittest.TestCase):
 
         date = datetime.datetime.now().strftime("%Y-%m-%d")
 
-        startswith = 'python%s' % python_version
-        startswith_except = 'python%s-%s' % (python_version, date)
+        a = 'python%s' % python_version
+        b = '%s-%s' % (a, date)
 
         for user in users['userIDs']:
-            if user['userID'].startswith(startswith) \
-                    and not user['userID'].startswith(startswith_except):
+            if (user['userID'].startswith(a)
+                    and not user['userID'].startswith(b)):
                 mcm.remove_user_id(user['userID'])
 
     def test_api_keys(self):
@@ -321,6 +325,8 @@ class TestSearchClient(unittest.TestCase):
             F.search_client(api_key=api_key).init_index(
                 self.index2.name).search('')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test personalization operations")
     def test_personalization_strategy(self):
         response = self.client.get_personalization_strategy()
         self.assertIn('taskID', response)

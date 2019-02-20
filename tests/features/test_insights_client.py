@@ -1,5 +1,6 @@
 import unittest
 
+from tests.helpers.env import Env
 from tests.helpers.factory import Factory as F
 
 
@@ -11,6 +12,8 @@ class TestInsightsClient(unittest.TestCase):
     def tearDown(self):
         self.index.delete()
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_clicked_object_ids(self):
         user_insights_client = self.client.user('userToken')
         response = user_insights_client.clicked_object_ids('eventName',
@@ -19,6 +22,8 @@ class TestInsightsClient(unittest.TestCase):
         self.assertTrue(response['status'] == 200)
         self.assertTrue(response['message'] == 'OK')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_clicked_object_ids_after_search(self):
         self.index.save_object({'objectID': 'obj1'}).wait()
 
@@ -33,6 +38,8 @@ class TestInsightsClient(unittest.TestCase):
         self.assertTrue(response['status'] == 200)
         self.assertTrue(response['message'] == 'OK')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_clicked_filters(self):
         user_insights_client = self.client.user('userToken')
         response = user_insights_client.clicked_filters('eventName',
@@ -42,6 +49,8 @@ class TestInsightsClient(unittest.TestCase):
         self.assertTrue(response['status'] == 200)
         self.assertTrue(response['message'] == 'OK')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_converted_object_ids(self):
         user_insights_client = self.client.user('userToken')
         response = user_insights_client.converted_object_ids('eventName',
@@ -50,6 +59,8 @@ class TestInsightsClient(unittest.TestCase):
         self.assertTrue(response['status'] == 200)
         self.assertTrue(response['message'] == 'OK')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_converted_object_ids_after_search(self):
         self.index.save_object({'objectID': 'obj1'}).wait()
 
@@ -64,6 +75,8 @@ class TestInsightsClient(unittest.TestCase):
         self.assertTrue(response['status'] == 200)
         self.assertTrue(response['message'] == 'OK')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_converted_filters(self):
         user_insights_client = self.client.user('userToken')
         response = user_insights_client.converted_filters('eventName',
@@ -73,6 +86,8 @@ class TestInsightsClient(unittest.TestCase):
         self.assertTrue(response['status'] == 200)
         self.assertTrue(response['message'] == 'OK')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_viewed_object_ids(self):
         user_insights_client = self.client.user('userToken')
         response = user_insights_client.viewed_object_ids('eventName',
@@ -81,6 +96,8 @@ class TestInsightsClient(unittest.TestCase):
         self.assertTrue(response['status'] == 200)
         self.assertTrue(response['message'] == 'OK')
 
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
     def test_viewed_filters(self):
         user_insights_client = self.client.user('userToken')
         response = user_insights_client.viewed_filters('eventName',
