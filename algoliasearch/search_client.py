@@ -4,6 +4,7 @@ import hmac
 
 from typing import Optional, Union, List
 
+from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.verbs import Verbs
@@ -50,7 +51,7 @@ class SearchClient(object):
 
         raw_response = self.__transporter.write(
             Verbs.POST,
-            '1/indexes/%s/operation' % src_index_name,
+            endpoint('1/indexes/%s/operation', src_index_name),
             {
                 'operation': 'move',
                 'destination': dst_index_name
@@ -66,7 +67,7 @@ class SearchClient(object):
 
         raw_response = self.__transporter.write(
             Verbs.POST,
-            '1/indexes/%s/operation' % src_index_name,
+            endpoint('1/indexes/%s/operation', src_index_name),
             {
                 'operation': 'copy',
                 'destination': dst_index_name
@@ -158,7 +159,7 @@ class SearchClient(object):
 
         return self.__transporter.read(
             Verbs.GET,
-            '1/clusters/mapping/%s' % user_id,
+            endpoint('1/clusters/mapping/%s', user_id),
             None,
             request_options
         )
@@ -208,7 +209,7 @@ class SearchClient(object):
 
         return self.__transporter.read(
             Verbs.GET,
-            '1/keys/%s' % key,
+            endpoint('1/keys/%s', key),
             None,
             request_options
         )
@@ -218,7 +219,7 @@ class SearchClient(object):
 
         raw_response = self.__transporter.write(
             Verbs.DELETE,
-            '1/keys/%s' % key,
+            endpoint('1/keys/%s', key),
             None,
             request_options
         )
@@ -247,7 +248,7 @@ class SearchClient(object):
 
         raw_response = self.__transporter.write(
             Verbs.PUT,
-            '1/keys/%s' % key,
+            endpoint('1/keys/%s', key),
             {},
             request_options
         )
@@ -259,7 +260,7 @@ class SearchClient(object):
 
         raw_response = self.__transporter.write(
             Verbs.POST,
-            '1/keys/%s/restore' % key,
+            endpoint('1/keys/%s/restore', key),
             None,
             request_options
         )

@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 from algoliasearch.configs import AnalyticsConfig
+from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
@@ -39,7 +40,7 @@ class AnalyticsClient(object):
 
         return self.__transporter.read(
             Verbs.GET,
-            '2/abtests/%s' % ab_test_id,
+            endpoint('2/abtests/%s', ab_test_id),
             None,
             request_options
         )
@@ -59,7 +60,7 @@ class AnalyticsClient(object):
 
         return self.__transporter.write(
             Verbs.POST,
-            '2/abtests/%s/stop' % ab_test_id,
+            endpoint('2/abtests/%s/stop', ab_test_id),
             None,
             request_options
         )
@@ -69,7 +70,7 @@ class AnalyticsClient(object):
 
         return self.__transporter.write(
             Verbs.DELETE,
-            '2/abtests/%s' % ab_test_id,
+            endpoint('2/abtests/%s', ab_test_id),
             None,
             request_options
         )

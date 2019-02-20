@@ -5,6 +5,24 @@ from typing import Optional, Iterable, List, Union, Iterator
 
 from algoliasearch.exceptions import MissingObjectIdException
 
+if sys.version_info >= (3, 0):
+    from urllib.parse import quote
+else:
+    from urllib import quote
+
+
+def endpoint(path, *args):
+    # type: (str, Optional[*str,*int]) -> str
+
+    arguments = []
+    for arg in args:
+        if not sys.version_info >= (3, 0) and isinstance(arg, unicode):
+            arguments.append(quote(arg.encode('utf-8'), safe=''))
+        else:
+            arguments.append(quote(str(arg), safe=''))
+
+    return path % tuple(arguments)
+
 
 def get_items(dictionary=None):
     # type: (Optional[dict]) -> Iterable

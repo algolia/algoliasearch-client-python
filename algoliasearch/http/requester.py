@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import requests
 
 from requests import Timeout, RequestException, HTTPError

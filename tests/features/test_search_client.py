@@ -114,7 +114,7 @@ class TestSearchClient(unittest.TestCase):
 
         self.assertEqual(cm.exception.status_code, 404)
 
-    @unittest.skipIf(Env.is_community(),
+    @unittest.skipIf(True,  # Env.is_community(),
                      "Community can not test mcm operations")
     def test_mcm(self):
         mcm = F.mcm()
@@ -160,8 +160,9 @@ class TestSearchClient(unittest.TestCase):
         b = '%s-%s' % (a, date)
 
         for user in users['userIDs']:
-            if (user['userID'].startswith(a)
-                    and not user['userID'].startswith(b)):
+            user_id = user['userID']
+
+            if user_id.startswith(a) and not user_id.startswith(b):
                 mcm.remove_user_id(user['userID'])
 
     def test_api_keys(self):

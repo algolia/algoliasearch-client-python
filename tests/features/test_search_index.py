@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import sys
 import unittest
 
 from algoliasearch.exceptions import RequestException
@@ -540,6 +542,30 @@ class TestSearchIndex(unittest.TestCase):
 
         # Check that synonym with objectID="two" does exist using getSynonym
         self.assertEqual(self.index.get_synonym('two')['objectID'], 'two')
+
+    def test_url_encoding(self):
+        objects = [
+            # unicode
+            '中文',
+
+            # bytestring
+            'celery-task-meta-c4f1201f-eb7b-41d5-9318-a75a8cfbdaa0',
+            b'celery-task-meta-c4f1201f-eb7b-41d5-9318-a75a8cfbdaa0',
+
+            # misc
+            'àlgol?a',
+            b'\xe4\xb8\xad\xe6\x96\x87',
+            '$^^`',
+        ]
+
+        if sys.version_info >= (3, 0):
+            objects.append("中文".encode('utf-8'))
+
+        self.index.save_objects(
+            [{'objectID': object_id} for object_id in objects]).wait()
+
+        for obj in objects:
+            self.index.get_object(obj)
 
     def get_object_id(self, indexing_response, index=0):
         return indexing_response.raw_responses[0]['objectIDs'][index]
