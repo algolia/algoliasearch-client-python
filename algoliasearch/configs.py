@@ -24,13 +24,13 @@ class Config(object):
 
         self.hosts = self.build_hosts()
 
-        version = str(python_version())  # type: ignore
+        python_version_str = str(python_version())  # type: ignore
 
         self.headers = {
             'X-Algolia-Application-Id': app_id,
             'X-Algolia-API-Key': api_key,
             'User-Agent': 'Algolia for Python (%s); Python (%s)' % (
-                VERSION, version),
+                VERSION, python_version_str),
             'Content-Type': 'application/json',
         }
 
