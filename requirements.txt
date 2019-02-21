@@ -8,7 +8,7 @@ requests>=2.21,<3.0
 typing>=3.6,<4.0
 
 # Testing suite
-tox>=3.7
+tox>=3.7,<4.0
 
 # Dev requirements
 -r requirements/requirements-testing.txt
