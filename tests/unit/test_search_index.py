@@ -194,7 +194,7 @@ class TestSearchIndex(unittest.TestCase):
 
     def test_get_task(self):
         with self.assertRaises(ValueError) as _:
-            self.index.test_get_task('')
+            self.index.get_task('')
 
 
 class NullResponse(Response):
