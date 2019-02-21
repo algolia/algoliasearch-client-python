@@ -1,4 +1,5 @@
 import abc
+import time
 
 from typing import List
 
@@ -101,6 +102,7 @@ class AssignUserIdResponse(Response):
 
 
 class RemoveUserIdResponse(Response):
+    BUSY_MESSAGE = 'Another mapping operation is already running for this userID'  # noqa: E501
 
     def __init__(self, client, raw_response, user_id):
         # type: (SearchClient, dict, str) -> None
