@@ -28,21 +28,21 @@ class HostsCollection(object):
     def __init__(self, hosts):
         # type: (List[Host]) -> None
 
-        self.index = 0
-        self._hosts = hosts
+        self.__index = 0
+        self.__hosts = hosts
 
-        for host in self._hosts:
+        for host in self.__hosts:
             host.reset()
 
-        shuffle(self._hosts)
+        shuffle(self.__hosts)
 
-        self._hosts = sorted(self._hosts, key=lambda x: x.priority,
-                             reverse=True)
+        self.__hosts = sorted(self.__hosts, key=lambda x: x.priority,
+                              reverse=True)
 
     def reset(self):
         # type: () -> None
 
-        self.index = 0
+        self.__index = 0
 
     def next(self):  # Python 2
         # type: () -> Host
@@ -62,13 +62,13 @@ class HostsCollection(object):
     def __next__(self):
         # type: () -> Host
 
-        if self.index == len(self._hosts):
-            self.index = 0
+        if self.__index == len(self.__hosts):
+            self.__index = 0
             raise StopIteration
 
-        host = self._hosts[self.index]
+        host = self.__hosts[self.__index]
 
-        self.index += 1
+        self.__index += 1
 
         if not host.up and self.__now() - host.last_use > Host.TTL:
             host.up = True

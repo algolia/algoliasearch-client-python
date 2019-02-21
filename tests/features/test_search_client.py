@@ -301,10 +301,10 @@ class TestSearchClient(unittest.TestCase):
         client.list_indices()
 
         # We test that the first Host `algolia.biz` is down.
-        self.assertFalse(config.hosts['read']._hosts[0].up)
-        self.assertTrue(config.hosts['read']._hosts[1].up)
-        self.assertTrue(config.hosts['read']._hosts[2].up)
-        self.assertTrue(config.hosts['read']._hosts[3].up)
+        self.assertFalse(config.hosts['read'].__HostsCollection_hosts[0].up)
+        self.assertTrue(config.hosts['read'].__HostsCollection_hosts[1].up)
+        self.assertTrue(config.hosts['read'].__HostsCollection_hosts[2].up)
+        self.assertTrue(config.hosts['read'].__HostsCollection_hosts[3].up)
 
     def test_secured_api_keys(self):
         self.index2 = F.index(self._testMethodName + '_dev')

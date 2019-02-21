@@ -37,7 +37,7 @@ class TestTransporter(unittest.TestCase):
         response = self.transporter.write('post', 'endpoint/foo', self.data,
                                           self.request_options)
 
-        host = self.config.hosts['write']._hosts[0]  # type: Host
+        host = self.config.hosts['write']._HostsCollection__hosts[0]  # type: Host
 
         self.requester.request.assert_called_once_with(
             'POST',  # Upper case letters
@@ -55,7 +55,7 @@ class TestTransporter(unittest.TestCase):
         response = self.transporter.read('get', 'endpoint/bar', {},
                                          self.request_options)
 
-        host = self.config.hosts['read']._hosts[0]  # type: Host
+        host = self.config.hosts['read']._HostsCollection__hosts[0]  # type: Host
 
         self.requester.request.assert_called_once_with(
             'GET',  # Upper case letters

@@ -52,5 +52,9 @@ class TestSearchConfig(unittest.TestCase):
         self.assertIsInstance(self.config.hosts['read'], HostsCollection)
 
         # Assert that hosts here assigned.
-        self.assertNotEqual(len(self.config.hosts['write']._hosts), 0)
-        self.assertNotEqual(len(self.config.hosts['read']._hosts), 0)
+        self.assertNotEqual(
+            len(self.config.hosts['write']._HostsCollection__hosts), 0
+        )
+        self.assertNotEqual(
+            len(self.config.hosts['read']._HostsCollection__hosts), 0
+        )

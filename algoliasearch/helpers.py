@@ -8,7 +8,7 @@ from algoliasearch.exceptions import MissingObjectIdException
 if sys.version_info >= (3, 0):
     from urllib.parse import quote
 else:
-    from urllib import quote
+    from urllib import quote  # pragma: no cover
 
 
 def endpoint(path, *args):
@@ -17,9 +17,11 @@ def endpoint(path, *args):
     arguments = []
     for arg in args:
         if not sys.version_info >= (3, 0) and isinstance(arg, unicode):
-            arguments.append(quote(arg.encode('utf-8'), safe=''))
+            arguments.append(
+                quote(arg.encode('utf-8'), safe='')
+            )  # pragma: no cover
         else:
-            arguments.append(quote(str(arg), safe=''))
+            arguments.append(quote(str(arg), safe=''))  # pragma: no cover
 
     return path % tuple(arguments)
 
