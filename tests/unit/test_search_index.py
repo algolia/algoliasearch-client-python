@@ -192,9 +192,9 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(len(result.responses), 3)
         self.assertEqual(len(result._MultipleResponse__waitable), 0)
 
-    def test_delete_object(self):
+    def test_get_task(self):
         with self.assertRaises(ValueError) as _:
-            self.index.delete_object('')
+            self.index.test_get_task('')
 
 
 class NullResponse(Response):
