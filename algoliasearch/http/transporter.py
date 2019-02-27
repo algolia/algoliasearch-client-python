@@ -8,7 +8,8 @@ from algoliasearch.exceptions import AlgoliaUnreachableHostException, \
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
-from algoliasearch.http.serializer import QueryParametersSerializer
+from algoliasearch.http.serializer import QueryParametersSerializer, \
+    DataSerializer
 from algoliasearch.http.verbs import Verbs
 
 try:
@@ -21,35 +22,35 @@ class Transporter(object):
     def __init__(self, requester, config):
         # type: (Requester, Config) -> None
 
-        self.__requester = requester
-        self.__config = config
-        self.__retry_strategy = RetryStrategy()
+        self._requester = requester
+        self._config = config
+        self._retry_strategy = RetryStrategy()
 
     def write(self, verb, path, data, request_options):
         # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self.__config,
+            request_options = RequestOptions.create(self._config,
                                                     request_options)
 
         timeout = request_options.timeouts['writeTimeout']
 
-        return self.__request(verb, self.__config.hosts['write'], path, data,
-                              request_options, timeout)
+        return self.request(verb, self._config.hosts['write'], path, data,
+                            request_options, timeout)
 
     def read(self, verb, path, data, request_options):
         # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self.__config,
+            request_options = RequestOptions.create(self._config,
                                                     request_options)
 
         timeout = request_options.timeouts['readTimeout']
 
-        return self.__request(verb, self.__config.hosts['read'], path, data,
-                              request_options, timeout)
+        return self.request(verb, self._config.hosts['read'], path, data,
+                            request_options, timeout)
 
-    def __request(self, verb, hosts, path, data, request_options, timeout):
+    def request(self, verb, hosts, path, data, request_options, timeout):
         # type: (str, HostsCollection, str, Optional[Union[dict, list]], RequestOptions, int) -> dict # noqa: E501
 
         hosts.reset()
@@ -61,21 +62,24 @@ class Transporter(object):
         if verb == Verbs.GET:
             query_parameters.update(request_options.data)
 
-        query_parameters_as_string = QueryParametersSerializer.serialize(
+        relative_url = '%s?%s' % (path, QueryParametersSerializer.serialize(
             query_parameters
-        )
+        ))
 
+        request = Request(verb.upper(), request_options.headers, data,
+                          self._config.connect_timeout, timeout)
+
+        return self.retry(hosts, request, relative_url)
+
+    def retry(self, hosts, request, relative_url):
         for host in hosts:
 
-            url = 'https://%s/%s?%s' % (
-                host.url, path, query_parameters_as_string)
+            request.url = 'https://%s/%s' % (
+                host.url, relative_url)
 
-            response = self.__requester.request(verb.upper(), url,
-                                                request_options.headers,
-                                                data, timeout,
-                                                self.__config.connect_timeout)
+            response = self._requester.send(request)
 
-            decision = self.__retry_strategy.decide(host, response)
+            decision = self._retry_strategy.decide(host, response)
 
             if decision == RetryOutcome.SUCCESS:
                 return response.content if response.content is not None else {}
@@ -87,6 +91,19 @@ class Transporter(object):
                 raise RequestException(content, response.status_code)
 
         raise AlgoliaUnreachableHostException('Unreachable hosts')
+
+
+class Request(object):
+    def __init__(self, verb, headers, data, connect_timeout, timeout):
+        self.verb = verb
+        self.data = data
+        self.data_as_string = '' if data is None else DataSerializer.serialize(
+            data
+        )
+        self.headers = headers
+        self.connect_timeout = connect_timeout
+        self.timeout = timeout
+        self.url = ''
 
 
 class Response(object):

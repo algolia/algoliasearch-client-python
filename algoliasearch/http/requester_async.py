@@ -4,27 +4,25 @@ import aiohttp
 from typing import Optional, Union
 
 from algoliasearch.http.serializer import DataSerializer
-from algoliasearch.http.transporter import Response
+from algoliasearch.http.transporter import Response, Request
 
 
 class RequesterAsync(object):
 
     @asyncio.coroutine
-    def request(self, verb, url, headers, data, timeout, connect_timeout):
-        # type: (str, str, dict, Optional[Union[dict, list]], int, int) -> Response  # noqa: E501
+    def send(self, request):
+        # type: (Request) -> Response  # noqa: E501
 
         connector = aiohttp.TCPConnector(use_dns_cache=False)
 
-        data_as_string = '' if data is None else DataSerializer.serialize(data)
-
         session = aiohttp.ClientSession(connector=connector,
-                                        timeout=connect_timeout)
+                                        timeout=request.connect_timeout)
 
         request = session.request(
-            method=verb, url=url,
-            headers=headers,
-            data=data_as_string,
-            timeout=timeout,
+            method=request.verb, url=request.url,
+            headers=request.headers,
+            data=request.data_as_string,
+            timeout=request.timeout,
         )
 
         try:

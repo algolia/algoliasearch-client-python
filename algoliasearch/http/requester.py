@@ -9,18 +9,17 @@ from algoliasearch.http.transporter import Response
 
 class Requester(object):
 
-    def request(self, verb, url, headers, data, timeout, connect_timeout):
-        # type: (str, str, dict, Optional[Union[dict, list]], int, int) -> Response  # noqa: E501
+    def send(self, request):
+        # type: (request) -> Response  # noqa: E501
 
-        data_as_string = '' if data is None else DataSerializer.serialize(data)
-
-        req = requests.Request(method=verb, url=url, headers=headers,
-                               data=data_as_string)
+        req = requests.Request(method=request.verb, url=request.url,
+                               headers=request.headers,
+                               data=request.data_as_string)
 
         r = req.prepare()  # type: ignore
         s = requests.Session()  # type: ignore
 
-        requests_timeout = (connect_timeout, timeout)
+        requests_timeout = (request.connect_timeout, request.timeout)
 
         try:
             response = s.send(r, timeout=requests_timeout)  # type: ignore
