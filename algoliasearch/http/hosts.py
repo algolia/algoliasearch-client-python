@@ -40,9 +40,11 @@ class HostsCollection(object):
                               reverse=True)
 
     def reset(self):
-        # type: () -> None
+        # type: () -> Hosts
 
         self.__index = 0
+
+        return self
 
     def next(self):  # Python 2
         # type: () -> Host
