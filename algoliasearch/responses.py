@@ -76,56 +76,6 @@ class MultipleResponse(Response):
         return self
 
 
-class AssignUserIdResponse(Response):
-
-    def __init__(self, client, raw_response, user_id):
-        # type: (SearchClient, dict, str) -> None
-
-        self.raw_response = raw_response
-        self.__client = client
-        self.__user_id = user_id
-        self.__done = False
-
-    def wait(self):
-        # type: () -> AssignUserIdResponse
-
-        while not self.__done:
-            try:
-                self.__client.get_user_id(self.__user_id)
-                self.__done = True
-            except RequestException as e:
-                if e.status_code != 404:
-                    raise e
-
-        return self
-
-
-class RemoveUserIdResponse(Response):
-    BUSY_MESSAGE = 'Another mapping operation is already running for this userID'  # noqa: E501
-
-    def __init__(self, client, raw_response, user_id):
-        # type: (SearchClient, dict, str) -> None
-
-        self.raw_response = raw_response
-        self.__client = client
-        self.__user_id = user_id
-        self.__done = False
-
-    def wait(self):
-        # type: () -> RemoveUserIdResponse
-
-        while not self.__done:
-            try:
-                self.__client.get_user_id(self.__user_id)
-            except RequestException as e:
-                self.__done = e.status_code == 404
-
-                if not self.__done and e.status_code != 200:
-                    raise e
-
-        return self
-
-
 class AddApiKeyResponse(Response):
 
     def __init__(self, client, raw_response):

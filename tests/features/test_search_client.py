@@ -114,7 +114,7 @@ class TestSearchClient(unittest.TestCase):
 
         self.assertEqual(cm.exception.status_code, 404)
 
-    @unittest.skipIf(True,  # Env.is_community(),
+    @unittest.skipIf(Env.is_community(),
                      "Community can not test mcm operations")
     def test_mcm(self):
         mcm = F.mcm()
@@ -133,7 +133,7 @@ class TestSearchClient(unittest.TestCase):
 
         user_id = 'python%s-%s-%s' % (python_version, date, instance)
 
-        mcm.assign_user_id(user_id, clusters[0]['clusterName']).wait()
+        mcm.assign_user_id(user_id, clusters[0]['clusterName'])
 
         self.assertEqual(
             mcm.search_user_ids(user_id)['hits'][0]['userID'],
@@ -150,7 +150,12 @@ class TestSearchClient(unittest.TestCase):
         self.assertIsInstance(users['topUsers'], dict)
         self.assertTrue(len(users['topUsers']) > 0)
 
-        mcm.remove_user_id(user_id).wait()
+        result = None
+        while result is None:
+            try:
+                result = mcm.remove_user_id(user_id)
+            except:
+                pass
 
         users = mcm.list_user_ids()
 

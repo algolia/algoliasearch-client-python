@@ -9,8 +9,8 @@ from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.verbs import Verbs
 from algoliasearch.responses import (
-    IndexingResponse, AssignUserIdResponse,
-    RemoveUserIdResponse, AddApiKeyResponse,
+    IndexingResponse,
+    AddApiKeyResponse,
     UpdateApiKeyResponse,
     DeleteApiKeyResponse,
     RestoreApiKeyResponse,
@@ -126,38 +126,34 @@ class SearchClient(object):
         return self.copy_index(src_index_name, dst_index_name, request_options)
 
     def assign_user_id(self, user_id, cluster, request_options=None):
-        # type: (str, str,Optional[Union[dict, RequestOptions]]) -> AssignUserIdResponse  # noqa: E501
+        # type: (str, str,Optional[Union[dict, RequestOptions]]) -> dict
 
         if request_options is None:
             request_options = RequestOptions.create(self._config)
 
         request_options['X-Algolia-User-ID'] = user_id
 
-        raw_response = self._transporter.write(
+        return self._transporter.write(
             Verbs.POST,
             '1/clusters/mapping',
             {'cluster': cluster},
             request_options
         )
 
-        return AssignUserIdResponse(self, raw_response, user_id)
-
     def remove_user_id(self, user_id, request_options=None):
-        # type: (str, Optional[Union[dict, RequestOptions]]) -> RemoveUserIdResponse  # noqa: E501
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         if request_options is None:
             request_options = RequestOptions.create(self._config)
 
         request_options['X-Algolia-User-ID'] = user_id
 
-        raw_response = self._transporter.write(
+        return self._transporter.write(
             Verbs.DELETE,
             '1/clusters/mapping',
             None,
             request_options
         )
-
-        return RemoveUserIdResponse(self, raw_response, user_id)
 
     def list_clusters(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
