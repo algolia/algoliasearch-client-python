@@ -12,12 +12,12 @@ class SearchClientAsync(SearchClient):
         # type: (SearchClient, Transporter, SearchConfig) -> None
 
         self._search_client = search_client
+        self._transporter_async = transporter
 
         super(SearchClientAsync, self).__init__(transporter, search_config)
         _create_async_methods_in(self)
 
         self._transporter = search_client._transporter
-        self._transporter_async = transporter
 
     def init_index(self, name):
         # type: (str) -> SearchIndexAsync
