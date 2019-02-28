@@ -23,6 +23,9 @@ class SearchIndexAsync(SearchIndex):
     def __init__(self, search_index, transporter, config, name):
         # type: (SearchIndex, Transporter, SearchConfig, str) -> None
 
+        self._search_index = search_index
+        self._transporter_async = transporter
+
         super(SearchIndexAsync, self).__init__(transporter, config, name)
 
         # First, we bind an async version of the method `wait_task` to the
@@ -38,9 +41,7 @@ class SearchIndexAsync(SearchIndex):
         # Finally, the re-bound the `wait_task` to his original definition
         self.__setattr__('wait_task', wait_task)
 
-        self._search_index = search_index
         self._transporter = search_index._transporter
-        self._transporter_async = transporter
 
     def wait_task_async(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> None
