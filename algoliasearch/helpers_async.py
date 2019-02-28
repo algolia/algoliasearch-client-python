@@ -31,12 +31,16 @@ def _gen_async(instance, method):
     def closure(*args, **kwargs):
         result = m(*args, **kwargs)
 
-        # We make sure we resolve the promise from the raw_response
-        if isinstance(result, IndexingResponse):
+        # We make sure we resolve the promise from the raw_responses
+        if hasattr(result, 'raw_responses'):
             i = 0
             for raw_response in result.raw_responses:
                 result.raw_responses[i] = yield from raw_response
                 i += 1
+
+        # We make sure we resolve the promise from the raw_response
+        if hasattr(result, 'raw_response'):
+            result.raw_response = yield from result.raw_response
 
         # We make sure we resolve the promise
         if str(type(result)) == "<class 'generator'>":
