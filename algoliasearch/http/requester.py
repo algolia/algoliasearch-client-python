@@ -1,16 +1,14 @@
 import requests
 
-from requests import Timeout, RequestException, HTTPError
-from typing import Optional, Union
+from requests import Timeout, RequestException
 
-from algoliasearch.http.serializer import DataSerializer
-from algoliasearch.http.transporter import Response
+from algoliasearch.http.transporter import Response, Request
 
 
 class Requester(object):
 
     def send(self, request):
-        # type: (request) -> Response  # noqa: E501
+        # type: (Request) -> Response  # noqa: E501
 
         req = requests.Request(method=request.verb, url=request.url,
                                headers=request.headers,

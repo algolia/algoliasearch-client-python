@@ -53,8 +53,6 @@ class Transporter(object):
     def request(self, verb, hosts, path, data, request_options, timeout):
         # type: (str, HostsCollection, str, Optional[Union[dict, list]], RequestOptions, int) -> dict # noqa: E501
 
-        hosts.reset()
-
         if isinstance(data, dict):
             data.update(request_options.data)
 
@@ -72,7 +70,9 @@ class Transporter(object):
         return self.retry(hosts, request, relative_url)
 
     def retry(self, hosts, request, relative_url):
-        for host in hosts:
+        # type: (str, HostsCollection, Request, str) -> dict
+
+        for host in hosts.reset():
 
             request.url = 'https://%s/%s' % (
                 host.url, relative_url)
@@ -95,6 +95,8 @@ class Transporter(object):
 
 class Request(object):
     def __init__(self, verb, headers, data, connect_timeout, timeout):
+        # type: (str, dict, dict, int, int) -> None
+
         self.verb = verb
         self.data = data
         self.data_as_string = '' if data is None else DataSerializer.serialize(
@@ -104,6 +106,9 @@ class Request(object):
         self.connect_timeout = connect_timeout
         self.timeout = timeout
         self.url = ''
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
 
 
 class Response(object):

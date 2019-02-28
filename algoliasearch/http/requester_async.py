@@ -1,9 +1,6 @@
 import asyncio
 import aiohttp
 
-from typing import Optional, Union
-
-from algoliasearch.http.serializer import DataSerializer
 from algoliasearch.http.transporter import Response, Request
 
 
