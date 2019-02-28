@@ -1,1 +1,6 @@
+
+# To avoid missing modules error
+asyncio>=3.4,<4.0
+aiohttp>=3.5,<4.0
+
 mypy>=0.6,<7.0

@@ -59,7 +59,7 @@ class TestSearchIndex(unittest.TestCase):
                 'name': object_id,
             })
 
-        self.index._SearchIndex__config.batch_size = 100
+        self.index._config.batch_size = 100
         responses.append(self.index.save_objects(objects))
 
         # waiting for all responses

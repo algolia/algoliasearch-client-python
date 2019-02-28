@@ -10,8 +10,8 @@ from algoliasearch.search_client import SearchClient
 class TestResponses(unittest.TestCase):
     def setUp(self):
         self.client = SearchClient.create('foo', 'bar')
-        self.client._SearchClient__transporter.write = mock.Mock(name='write')
-        self.client._SearchClient__transporter.write.return_value = {}
+        self.client._transporter.write = mock.Mock(name='write')
+        self.client._transporter.write.return_value = {}
 
     def test_dict_access(self):
         response = {
@@ -43,7 +43,7 @@ class TestResponses(unittest.TestCase):
 
         self.assertEqual(cm.exception.status_code, 300)
 
-        self.client._SearchClient__transporter.write.return_value = {
+        self.client._transporter.write.return_value = {
             'key': 'foo'
         }
 

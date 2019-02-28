@@ -28,12 +28,6 @@ class Iterator(object):
 
         return self
 
-    @abc.abstractmethod
-    def __next__(self):
-        # type: () -> dict
-
-        pass  # pragma: no cover
-
 
 class PaginatorIterator(Iterator):
     def __init__(self, transporter, index_name, request_options=None):

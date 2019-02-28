@@ -147,10 +147,10 @@ class TestSearchIndex(unittest.TestCase):
             self.index.save_rules([{'foo': 'bar'}])
 
     def test_replace_all_objects(self):
-        self.index._SearchIndex__create_temporary_name = mock.Mock(
-            name="_SearchIndex__create_temporary_name")
+        self.index._create_temporary_name = mock.Mock(
+            name="_create_temporary_name")
         tmp_index_name = 'index-name_tmp_bar'
-        self.index._SearchIndex__create_temporary_name.return_value = tmp_index_name  # noqa: E501
+        self.index._create_temporary_name.return_value = tmp_index_name  # noqa: E501
 
         obj = F.obj()
         self.index.replace_all_objects([obj])
@@ -172,13 +172,13 @@ class TestSearchIndex(unittest.TestCase):
         response = NullResponse()
         response.wait = mock.Mock(name="wait")
 
-        self.index._SearchIndex__copy_to = mock.Mock(
-            name="_SearchIndex__copy_to")
-        self.index._SearchIndex__copy_to.return_value = response
+        self.index.copy_to = mock.Mock(
+            name="copy_to")
+        self.index.copy_to.return_value = response
 
-        self.index._SearchIndex__move_to = mock.Mock(
-            name="_SearchIndex__move_to")
-        self.index._SearchIndex__move_to.return_value = response
+        self.index.move_to = mock.Mock(
+            name="move_to")
+        self.index.move_to.return_value = response
 
         self.index.save_objects = mock.Mock(
             name="save_objects")

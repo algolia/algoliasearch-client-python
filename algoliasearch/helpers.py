@@ -12,7 +12,7 @@ else:
 
 
 def endpoint(path, *args):
-    # type: (str, Optional[*str,*int]) -> str
+    # type: (str, Optional[Union[str, int]]) -> str
 
     arguments = []
     for arg in args:
@@ -59,3 +59,13 @@ def build_raw_response_batch(action, objects):
         })
 
     return requests
+
+
+def async_modules_exists():
+    try:
+        import asyncio
+        import aiohttp
+
+        return True
+    except ImportError:
+        return False

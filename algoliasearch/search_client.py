@@ -4,14 +4,18 @@ import hmac
 
 from typing import Optional, Union, List
 
-from algoliasearch.helpers import endpoint
+from algoliasearch.helpers import endpoint, async_modules_exists
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.verbs import Verbs
-from algoliasearch.responses import IndexingResponse, AssignUserIdResponse, \
-    RemoveUserIdResponse, AddApiKeyResponse, UpdateApiKeyResponse, \
-    DeleteApiKeyResponse, RestoreApiKeyResponse, \
+from algoliasearch.responses import (
+    IndexingResponse, AssignUserIdResponse,
+    RemoveUserIdResponse, AddApiKeyResponse,
+    UpdateApiKeyResponse,
+    DeleteApiKeyResponse,
+    RestoreApiKeyResponse,
     MultipleIndexBatchIndexingResponse
+)
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.transporter import Transporter
@@ -23,18 +27,18 @@ class SearchClient(object):
     def app_id(self):
         # type: () -> str
 
-        return self.__config.app_id
+        return self._config.app_id
 
     def __init__(self, transporter, search_config):
         # type: (Transporter, SearchConfig) -> None
 
-        self.__transporter = transporter
-        self.__config = search_config
+        self._transporter = transporter
+        self._config = search_config
 
     def init_index(self, name):
         # type: (str) -> SearchIndex
 
-        return SearchIndex(self.__transporter, self.__config, name)
+        return SearchIndex(self._transporter, self._config, name)
 
     @staticmethod
     def create(app_id, api_key):
@@ -44,12 +48,23 @@ class SearchClient(object):
         requester = Requester()
         transporter = Transporter(requester, config)
 
-        return SearchClient(transporter, config)
+        client = SearchClient(transporter, config)
+
+        if async_modules_exists():
+            from algoliasearch.search_client_async import SearchClientAsync
+            from algoliasearch.http.transporter_async import TransporterAsync
+            from algoliasearch.http.requester_async import RequesterAsync
+
+            return SearchClientAsync(
+                client, TransporterAsync(RequesterAsync(), config), config
+            )
+
+        return client
 
     def move_index(self, src_index_name, dst_index_name, request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
             endpoint('1/indexes/%s/operation', src_index_name),
             {
@@ -65,7 +80,7 @@ class SearchClient(object):
     def copy_index(self, src_index_name, dst_index_name, request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
             endpoint('1/indexes/%s/operation', src_index_name),
             {
@@ -114,11 +129,11 @@ class SearchClient(object):
         # type: (str, str,Optional[Union[dict, RequestOptions]]) -> AssignUserIdResponse  # noqa: E501
 
         if request_options is None:
-            request_options = RequestOptions.create(self.__config)
+            request_options = RequestOptions.create(self._config)
 
         request_options['X-Algolia-User-ID'] = user_id
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
             '1/clusters/mapping',
             {'cluster': cluster},
@@ -131,11 +146,11 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> RemoveUserIdResponse  # noqa: E501
 
         if request_options is None:
-            request_options = RequestOptions.create(self.__config)
+            request_options = RequestOptions.create(self._config)
 
         request_options['X-Algolia-User-ID'] = user_id
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.DELETE,
             '1/clusters/mapping',
             None,
@@ -147,7 +162,7 @@ class SearchClient(object):
     def list_clusters(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             '1/clusters',
             {},
@@ -157,7 +172,7 @@ class SearchClient(object):
     def get_user_id(self, user_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             endpoint('1/clusters/mapping/%s', user_id),
             None,
@@ -167,7 +182,7 @@ class SearchClient(object):
     def list_user_ids(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             '1/clusters/mapping',
             None,
@@ -177,7 +192,7 @@ class SearchClient(object):
     def get_top_user_ids(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             '1/clusters/mapping/top',
             None,
@@ -187,7 +202,7 @@ class SearchClient(object):
     def search_user_ids(self, query, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
             '1/clusters/mapping/search',
             {'query': query},
@@ -197,7 +212,7 @@ class SearchClient(object):
     def list_api_keys(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             '1/keys',
             None,
@@ -207,7 +222,7 @@ class SearchClient(object):
     def get_api_key(self, key, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             endpoint('1/keys/%s', key),
             None,
@@ -217,7 +232,7 @@ class SearchClient(object):
     def delete_api_key(self, key, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> DeleteApiKeyResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.DELETE,
             endpoint('1/keys/%s', key),
             None,
@@ -228,7 +243,7 @@ class SearchClient(object):
     def add_api_key(self, acl, request_options=None):
         # type: (list, Optional[Union[dict, RequestOptions]]) -> AddApiKeyResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
             '1/keys',
             {
@@ -243,10 +258,10 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> UpdateApiKeyResponse # noqa: E501
 
         if not isinstance(request_options, RequestOptions):
-            request_options = RequestOptions.create(self.__config,
+            request_options = RequestOptions.create(self._config,
                                                     request_options)
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.PUT,
             endpoint('1/keys/%s', key),
             {},
@@ -258,7 +273,7 @@ class SearchClient(object):
     def restore_api_key(self, key, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> RestoreApiKeyResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
             endpoint('1/keys/%s/restore', key),
             None,
@@ -287,7 +302,7 @@ class SearchClient(object):
     def list_indices(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             '1/indexes',
             None,
@@ -297,7 +312,7 @@ class SearchClient(object):
     def get_logs(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             '1/logs',
             None,
@@ -307,7 +322,7 @@ class SearchClient(object):
     def multiple_queries(self, queries, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
             '1/indexes/*/queries',
             {
@@ -319,7 +334,7 @@ class SearchClient(object):
     def multiple_get_objects(self, requests, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
             '1/indexes/*/objects',
             {
@@ -331,7 +346,7 @@ class SearchClient(object):
     def multiple_batch(self, operations, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> MultipleIndexBatchIndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
             '1/indexes/*/batch',
             {
@@ -350,7 +365,7 @@ class SearchClient(object):
     def set_personalization_strategy(self, strategy, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.write(
+        return self._transporter.write(
             Verbs.POST,
             '1/recommendation/personalization/strategy',
             strategy,
@@ -360,7 +375,7 @@ class SearchClient(object):
     def get_personalization_strategy(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
             '1/recommendation/personalization/strategy',
             None,

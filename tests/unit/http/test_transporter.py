@@ -9,14 +9,14 @@ from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter, Response, \
-    RetryStrategy, RetryOutcome
+    RetryStrategy, RetryOutcome, Request
 
 
 class TestTransporter(unittest.TestCase):
     def setUp(self):
         self.requester = Requester()
-        self.requester.request = mock.Mock(name="request")
-        self.requester.request.return_value = Response(200, {'foo': 'bar'})
+        self.requester.send = mock.Mock(name="send")
+        self.requester.send.return_value = Response(200, {'foo': 'bar'})
 
         self.data = {
             'data': 'foo'
@@ -37,62 +37,70 @@ class TestTransporter(unittest.TestCase):
         response = self.transporter.write('post', 'endpoint/foo', self.data,
                                           self.request_options)
 
-        host = self.config.hosts['write']._HostsCollection__hosts[0]  # type: Host
+        host = self.config.hosts['write']._HostsCollection__hosts[
+            0]  # type: Host
 
-        self.requester.request.assert_called_once_with(
-            'POST',  # Upper case letters
-            'https://' + host.url + '/endpoint/foo?createIfNotExists=true',
+        request = Request(
+            'POST',
             self.request_options.headers,
             self.data,
+            2,  # Default connect timeout
             30,  # Default timeout
-            2  # Default connect timeout
         )
+        request.url = 'https://' + host.url + \
+                      '/endpoint/foo?createIfNotExists=true'
+
+        self.requester.send.assert_called_once_with(request)
 
         self.assertEqual({'foo': 'bar'}, response)
-        self.assertEqual(self.requester.request.call_count, 1)
+        self.assertEqual(self.requester.send.call_count, 1)
 
     def test_success_read(self):
         response = self.transporter.read('get', 'endpoint/bar', {},
                                          self.request_options)
 
-        host = self.config.hosts['read']._HostsCollection__hosts[0]  # type: Host
+        host = self.config.hosts['read']._HostsCollection__hosts[
+            0]  # type: Host
 
-        self.requester.request.assert_called_once_with(
+        request = Request(
             'GET',  # Upper case letters
-            'https://' + host.url + '/endpoint/bar?createIfNotExists=true',
             self.request_options.headers,
             {'bodyParam': 'bar'},
-            109,  # Customized timeout
-            2  # Default connect timeout
+            2,  # Default connect timeout
+            109  # Customized timeout
         )
+        request.url = 'https://' + host.url \
+                      + '/endpoint/bar?createIfNotExists=true'
+
+        self.requester.send.assert_called_once_with(request)
 
         self.assertEqual({'foo': 'bar'}, response)
-        self.assertEqual(self.requester.request.call_count, 1)
+        self.assertEqual(self.requester.send.call_count, 1)
 
     def test_unreachable_hosts_exception(self):
-        self.requester.request.return_value = Response(300, {'foo': 'bar'})
+        self.requester.send.return_value = Response(300, {'foo': 'bar'})
 
         with self.assertRaises(AlgoliaUnreachableHostException) as _:
             self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
 
-        self.assertEqual(self.requester.request.call_count, 5)
+        self.assertEqual(self.requester.send.call_count, 5)
 
-        self.requester.request.return_value = Response(100, {'foo': 'bar'})
+        self.requester.send.return_value = Response(100, {'foo': 'bar'})
 
         with self.assertRaises(AlgoliaUnreachableHostException) as _:
             self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
         # Remains 5, all hosts here down.
-        self.assertEqual(self.requester.request.call_count, 5)
+        self.assertEqual(self.requester.send.call_count, 5)
 
     def test_algolia_exception(self):
-        self.requester.request.return_value = Response(401, {'foo': 'bar'})
+        self.requester.send.return_value = Response(401, {'foo': 'bar'})
 
         with self.assertRaises(AlgoliaException) as _:
             self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
-        self.assertEqual(self.requester.request.call_count, 1)
+        self.assertEqual(self.requester.send.call_count, 1)
 
 
 class TestRetryStrategy(unittest.TestCase):

@@ -1,5 +1,4 @@
 import abc
-import time
 
 from typing import List
 
@@ -34,18 +33,18 @@ class IndexingResponse(Response):
         # type: (SearchIndex, List[dict]) -> None
 
         self.__index = index
-
         self.raw_responses = raw_responses
-        self.__raw_waitable_responses = list(raw_responses)
+        self.waited = False
 
     def wait(self):
         # type: () -> IndexingResponse
 
-        for raw_response in self.__raw_waitable_responses:
-            self.__index.wait_task(raw_response['taskID'])
+        if not self.waited:
+            for raw_response in self.raw_responses:
+                self.__index.wait_task(raw_response['taskID'])
 
         # No longer waits on this responses.
-        self.__raw_waitable_responses = []
+        self.waited = True
 
         return self
 

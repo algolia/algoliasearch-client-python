@@ -23,18 +23,18 @@ from algoliasearch.responses import Response, IndexingResponse, \
 class SearchIndex(object):
     @property
     def app_id(self):
-        return self.__config.app_id
+        return self._config.app_id
 
     @property
     def name(self):
-        return self.__name
+        return self._name
 
     def __init__(self, transporter, config, name):
         # type: (Transporter, SearchConfig, str) -> None
 
-        self.__transporter = transporter
-        self.__config = config
-        self.__name = name
+        self._transporter = transporter
+        self._config = config
+        self._name = name
 
     def save_object(self, obj, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
@@ -80,9 +80,9 @@ class SearchIndex(object):
                 and 'safe' in request_options:
             safe = request_options.pop('safe')
 
-        tmp_index_name = self.__create_temporary_name()
+        tmp_index_name = self._create_temporary_name()
         responses = MultipleResponse()
-        responses.push(self.__copy_to(tmp_index_name, {
+        responses.push(self.copy_to(tmp_index_name, {
             'scope': ['settings', 'synonyms', 'rules']
         }))
 
@@ -90,14 +90,14 @@ class SearchIndex(object):
             responses.wait()
 
         tmp_index = copy.copy(self)
-        tmp_index.__name = tmp_index_name
+        tmp_index._name = tmp_index_name
 
         responses.push(tmp_index.save_objects(objects, request_options))
 
         if safe:
             responses.wait()
 
-        responses.push(tmp_index.__move_to(self.__name))
+        responses.push(tmp_index.move_to(self._name))
 
         if safe:
             responses.wait()
@@ -107,9 +107,9 @@ class SearchIndex(object):
     def get_object(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/%s', self.__name, object_id),
+            endpoint('1/indexes/%s/%s', self._name, object_id),
             None,
             request_options
         )
@@ -119,10 +119,10 @@ class SearchIndex(object):
 
         requests = []
         for object_id in object_ids:
-            request = {'indexName': self.__name, 'objectID': str(object_id)}
+            request = {'indexName': self._name, 'objectID': str(object_id)}
             requests.append(request)
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
             '1/indexes/*/objects',
             {
@@ -134,7 +134,7 @@ class SearchIndex(object):
     def browse_objects(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> ObjectIterator
 
-        return ObjectIterator(self.__transporter, self.__name, request_options)
+        return ObjectIterator(self._transporter, self._name, request_options)
 
     def partial_update_object(self, obj, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
@@ -177,9 +177,9 @@ class SearchIndex(object):
     def delete_by(self, filters, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/deleteByQuery', self.__name),
+            endpoint('1/indexes/%s/deleteByQuery', self._name),
             filters,
             request_options
         )
@@ -189,9 +189,9 @@ class SearchIndex(object):
     def clear_objects(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/clear', self.__name),
+            endpoint('1/indexes/%s/clear', self._name),
             None,
             request_options
         )
@@ -201,9 +201,9 @@ class SearchIndex(object):
     def set_settings(self, settings, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.PUT,
-            endpoint('1/indexes/%s/settings', self.__name),
+            endpoint('1/indexes/%s/settings', self._name),
             settings,
             request_options
         )
@@ -215,9 +215,9 @@ class SearchIndex(object):
 
         params = {'getVersion': 2}
 
-        raw_response = self.__transporter.read(
+        raw_response = self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/settings', self.__name),
+            endpoint('1/indexes/%s/settings', self._name),
             params,
             request_options
         )
@@ -227,9 +227,9 @@ class SearchIndex(object):
     def search(self, query, request_options=None):
         # type: (Optional[str], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/query', self.__name),
+            endpoint('1/indexes/%s/query', self._name),
             {
                 'query': str(query)
             },
@@ -240,9 +240,9 @@ class SearchIndex(object):
                                request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/facets/%s/query', self.__name, facet_name),
+            endpoint('1/indexes/%s/facets/%s/query', self._name, facet_name),
             {
                 'facetQuery': facet_query
             },
@@ -262,9 +262,9 @@ class SearchIndex(object):
 
         assert_object_id(synonyms)
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/synonyms/batch', self.__name),
+            endpoint('1/indexes/%s/synonyms/batch', self._name),
             list(synonyms),
             request_options
         )
@@ -275,7 +275,7 @@ class SearchIndex(object):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self.__config,
+            request_options = RequestOptions.create(self._config,
                                                     request_options)
 
         request_options['replaceExistingSynonyms'] = True
@@ -285,9 +285,9 @@ class SearchIndex(object):
     def get_synonym(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/synonyms/%s', self.__name, object_id),
+            endpoint('1/indexes/%s/synonyms/%s', self._name, object_id),
             None,
             request_options
         )
@@ -295,9 +295,9 @@ class SearchIndex(object):
     def search_synonyms(self, query, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/synonyms/search', self.__name),
+            endpoint('1/indexes/%s/synonyms/search', self._name),
             {
                 'query': str(query)
             },
@@ -307,15 +307,15 @@ class SearchIndex(object):
     def browse_synonyms(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> SynonymIterator
 
-        return SynonymIterator(self.__transporter, self.__name,
+        return SynonymIterator(self._transporter, self._name,
                                request_options)
 
     def delete_synonym(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.DELETE,
-            endpoint('1/indexes/%s/synonyms/%s', self.__name, object_id),
+            endpoint('1/indexes/%s/synonyms/%s', self._name, object_id),
             None,
             request_options
         )
@@ -325,9 +325,9 @@ class SearchIndex(object):
     def clear_synonyms(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/synonyms/clear', self.__name),
+            endpoint('1/indexes/%s/synonyms/clear', self._name),
             None,
             request_options
         )
@@ -347,9 +347,9 @@ class SearchIndex(object):
 
         assert_object_id(rules)
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/rules/batch', self.__name),
+            endpoint('1/indexes/%s/rules/batch', self._name),
             list(rules),
             request_options
         )
@@ -360,7 +360,7 @@ class SearchIndex(object):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self.__config,
+            request_options = RequestOptions.create(self._config,
                                                     request_options)
 
         request_options.query_parameters['clearExistingRules'] = 1
@@ -370,9 +370,9 @@ class SearchIndex(object):
     def get_rule(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/rules/%s', self.__name, object_id),
+            endpoint('1/indexes/%s/rules/%s', self._name, object_id),
             None,
             request_options
         )
@@ -380,9 +380,9 @@ class SearchIndex(object):
     def search_rules(self, query, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
-        return self.__transporter.read(
+        return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/rules/search', self.__name),
+            endpoint('1/indexes/%s/rules/search', self._name),
             {
                 'query': str(query)
             },
@@ -392,15 +392,15 @@ class SearchIndex(object):
     def browse_rules(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> RuleIterator
 
-        return RuleIterator(self.__transporter, self.__name,
+        return RuleIterator(self._transporter, self._name,
                             request_options)
 
     def delete_rule(self, object_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.DELETE,
-            endpoint('1/indexes/%s/rules/%s', self.__name, object_id),
+            endpoint('1/indexes/%s/rules/%s', self._name, object_id),
             None,
             request_options
         )
@@ -410,9 +410,9 @@ class SearchIndex(object):
     def clear_rules(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> IndexingResponse
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/rules/clear', self.__name),
+            endpoint('1/indexes/%s/rules/clear', self._name),
             None,
             request_options
         )
@@ -425,9 +425,9 @@ class SearchIndex(object):
         if not task_id:
             raise ValueError('task_id cannot be empty')
 
-        return self.__transporter.read(
+        return self._transporter.read(
             'GET',
-            endpoint('1/indexes/%s/task/%s', self.__name, task_id),
+            endpoint('1/indexes/%s/task/%s', self._name, task_id),
             None,
             request_options
         )
@@ -444,15 +444,15 @@ class SearchIndex(object):
 
             retries_count += 1
             factor = math.ceil(retries_count / 10)
-            sleep_for = factor * self.__config.wait_task_time_before_retry
+            sleep_for = factor * self._config.wait_task_time_before_retry
             time.sleep(sleep_for / 1000000.0)
 
     def delete(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> Response
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.DELETE,
-            endpoint('1/indexes/%s', self.__name),
+            endpoint('1/indexes/%s', self._name),
             None,
             request_options
         )
@@ -472,7 +472,7 @@ class SearchIndex(object):
 
         raw_responses = []
         batch = []
-        batch_size = self.__config.batch_size
+        batch_size = self._config.batch_size
         for obj in objects:
             batch.append(obj)
 
@@ -496,21 +496,21 @@ class SearchIndex(object):
     def __raw_batch(self, requests, request_options):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
-        return self.__transporter.write(
+        return self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/batch', self.__name),
+            endpoint('1/indexes/%s/batch', self._name),
             {
                 'requests': list(requests)
             },
             request_options
         )
 
-    def __move_to(self, name, request_options=None):
+    def move_to(self, name, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/operation', self.__name),
+            endpoint('1/indexes/%s/operation', self._name),
             {
                 'operation': 'move',
                 'destination': name
@@ -520,12 +520,12 @@ class SearchIndex(object):
 
         return IndexingResponse(self, [raw_response])
 
-    def __copy_to(self, name, request_options=None):
+    def copy_to(self, name, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__transporter.write(
+        raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/operation', self.__name),
+            endpoint('1/indexes/%s/operation', self._name),
             {
                 'operation': 'copy',
                 'destination': name
@@ -535,11 +535,11 @@ class SearchIndex(object):
 
         return IndexingResponse(self, [raw_response])
 
-    def __create_temporary_name(self):
+    def _create_temporary_name(self):
         # type: () -> str
 
         letters = string.ascii_letters
         random_string = ''.join(random.choice(letters) for i in range(10))
-        tmp_index_name = self.__name + '_tmp_' + random_string
+        tmp_index_name = self._name + '_tmp_' + random_string
 
         return tmp_index_name

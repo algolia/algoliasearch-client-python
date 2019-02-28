@@ -5,6 +5,7 @@ import platform
 from typing import Optional
 
 from algoliasearch.analytics_client import AnalyticsClient
+from algoliasearch.helpers import async_modules_exists
 from algoliasearch.insights_client import InsightsClient
 from algoliasearch.search_client import SearchClient
 from faker import Faker
@@ -19,6 +20,13 @@ class Factory(object):
 
         app_id = app_id if app_id is not None else Factory.get_app_id()
         api_key = api_key if api_key is not None else Factory.get_api_key()
+
+        client = SearchClient.create(app_id, api_key)
+
+        if async_modules_exists():
+            from tests.fixtures.sync_decorator import SyncDecorator
+
+            return SyncDecorator(client)
 
         return SearchClient.create(app_id, api_key)
 
