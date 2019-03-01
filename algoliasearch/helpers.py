@@ -62,6 +62,8 @@ def build_raw_response_batch(action, objects):
 
 
 def async_modules_exists():
+    # type: () -> bool
+
     try:
         import asyncio
         import aiohttp

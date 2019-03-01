@@ -8,7 +8,7 @@ from algoliasearch.http.transporter import Response, Request
 class Requester(object):
 
     def send(self, request):
-        # type: (Request) -> Response  # noqa: E501
+        # type: (Request) -> Response
 
         req = requests.Request(method=request.verb, url=request.url,
                                headers=request.headers,

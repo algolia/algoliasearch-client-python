@@ -1,7 +1,6 @@
 from algoliasearch.configs import SearchConfig
 from algoliasearch.helpers_async import _create_async_methods_in
-from algoliasearch.http.requester_async import RequesterAsync
-from algoliasearch.http.transporter_async import TransporterAsync
+from algoliasearch.http.transporter import Transporter
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index_async import SearchIndexAsync
 

@@ -36,7 +36,7 @@ class AnalyticsClient(object):
         )
 
     def get_ab_test(self, ab_test_id, request_options=None):
-        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         if not ab_test_id:
             raise ValueError('ab_test_id cannot be empty')

@@ -2,14 +2,15 @@ import asyncio
 
 from algoliasearch.exceptions import RequestException, \
     AlgoliaUnreachableHostException
-from algoliasearch.http.transporter import Transporter, RetryOutcome
+from algoliasearch.http.hosts import HostsCollection
+from algoliasearch.http.transporter import Transporter, RetryOutcome, Request
 
 
 class TransporterAsync(Transporter):
 
     @asyncio.coroutine
     def retry(self, hosts, request, relative_url):
-        # type: (str, HostsCollection, Request, str) -> dict
+        # type: (HostsCollection, Request, str) -> dict
 
         for host in hosts.reset():
 

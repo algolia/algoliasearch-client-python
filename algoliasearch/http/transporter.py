@@ -1,4 +1,3 @@
-import sys
 import time
 
 from typing import Optional, Union
@@ -70,7 +69,7 @@ class Transporter(object):
         return self.retry(hosts, request, relative_url)
 
     def retry(self, hosts, request, relative_url):
-        # type: (str, HostsCollection, Request, str) -> dict
+        # type: (HostsCollection, Request, str) -> dict
 
         for host in hosts.reset():
 
@@ -95,7 +94,7 @@ class Transporter(object):
 
 class Request(object):
     def __init__(self, verb, headers, data, connect_timeout, timeout):
-        # type: (str, dict, dict, int, int) -> None
+        # type: (str, dict, Optional[Union[dict, list]], int, int) -> None
 
         self.verb = verb
         self.data = data
