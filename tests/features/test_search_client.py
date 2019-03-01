@@ -154,7 +154,7 @@ class TestSearchClient(unittest.TestCase):
         while result is None:
             try:
                 result = mcm.remove_user_id(user_id)
-            except:
+            except RequestException:
                 pass
 
         users = mcm.list_user_ids()
