@@ -1,6 +1,7 @@
 from typing import Optional, Union, List
 
 from algoliasearch.configs import InsightsConfig
+from algoliasearch.helpers import async_modules_exists
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
@@ -11,8 +12,8 @@ class InsightsClient(object):
     def __init__(self, transporter, search_config):
         # type: (Transporter, InsightsConfig) -> None
 
-        self.__transporter = transporter
-        self.__config = search_config
+        self._transporter = transporter
+        self._config = search_config
 
     @staticmethod
     def create(app_id, api_key, region='us'):
@@ -22,7 +23,19 @@ class InsightsClient(object):
         requester = Requester()
         transporter = Transporter(requester, config)
 
-        return InsightsClient(transporter, config)
+        client = InsightsClient(transporter, config)
+
+        if async_modules_exists():
+            from algoliasearch.insights_client_async import InsightsClientAsync
+            from algoliasearch.http.transporter_async import \
+                TransporterAsync
+            from algoliasearch.http.requester_async import RequesterAsync
+
+            return InsightsClientAsync(
+                client, TransporterAsync(RequesterAsync(), config), config
+            )
+
+        return client
 
     def user(self, user_token):
         # type: (str) -> UserInsightsClient
@@ -37,7 +50,7 @@ class InsightsClient(object):
     def send_events(self, events, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self.__transporter.write(
+        return self._transporter.write(
             Verbs.POST,
             '1/events',
             {'events': events},

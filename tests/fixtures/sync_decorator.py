@@ -34,9 +34,10 @@ class SyncDecorator(object):
         return closure
 
     def init_index(self, name):
-        index = self.__base.init_index(name)
+        return SyncDecorator(self.__base.init_index(name))
 
-        return SyncDecorator(index)
+    def user(self, user_token):
+        return SyncDecorator(self.__base.user(user_token))
 
     def iterator_to_array(self, iterator):
         async def closure():
