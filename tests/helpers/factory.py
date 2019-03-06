@@ -37,7 +37,14 @@ class Factory(object):
         app_id = app_id if app_id is not None else Factory.get_app_id()
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
-        return AnalyticsClient.create(app_id, api_key)
+        analytics_client = AnalyticsClient.create(app_id, api_key)
+
+        if async_modules_exists():
+            from tests.fixtures.sync_decorator import SyncDecorator
+
+            return SyncDecorator(analytics_client)
+
+        return analytics_client
 
     @staticmethod
     def insights_client(app_id=None, api_key=None):
@@ -54,8 +61,6 @@ class Factory(object):
             return SyncDecorator(insights_client)
 
         return insights_client
-
-        return InsightsClient.create(app_id, api_key)
 
     @staticmethod
     def get_app_id():
