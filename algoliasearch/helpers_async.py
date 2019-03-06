@@ -1,32 +1,32 @@
 import asyncio
 import copy
 
-from algoliasearch.responses import IndexingResponse
 
-
-def _create_async_methods_in(instance):
+def _create_async_methods_in(async_client, sync_client):
     # type: (object) -> None
 
     # First, we get the methods from the sync class (the parent class)
-    methods = [func for func in dir(instance) if
-               callable(getattr(instance, func))]
+    methods = [func for func in dir(async_client) if
+               callable(getattr(async_client, func))]
 
-    # Then, we get methods from the instance
-    instance_methods = [func for func in instance.__class__.__dict__.keys()]
-    instance_copy = copy.copy(instance)
+    # Then, we get methods from the async_client
+    async_client_methods = [func for func in
+                            async_client.__class__.__dict__.keys()]
 
     # Finally, for each method we create a {method}_async version of it
     for method in methods:
-        if method not in instance_methods and not method.startswith('_'):
-            if method + '_async' not in instance_methods:
-                instance.__setattr__(method + '_async',
-                                     _gen_async(instance_copy, method))
+        if method not in async_client_methods and not method.startswith('_'):
+            if method + '_async' not in async_client_methods:
+                async_client.__setattr__(
+                    method + '_async',
+                    _gen_async(sync_client, method)
+                )
 
 
-def _gen_async(instance, method):
+def _gen_async(client, method):
     # type: (object, str) -> None
 
-    m = getattr(instance, method)
+    m = getattr(client, method)
 
     def closure(*args, **kwargs):
         result = m(*args, **kwargs)

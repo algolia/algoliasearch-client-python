@@ -26,22 +26,21 @@ class SearchIndexAsync(SearchIndex):
         self._search_index = search_index
         self._transporter_async = transporter
 
-        super(SearchIndexAsync, self).__init__(transporter, config, name)
+        super(SearchIndexAsync, self).__init__(
+            search_index._transporter,
+            config,
+            name
+        )
 
         # First, we bind an async version of the method `wait_task` to the
         # method `wait_task` itself, to be used by async methods
-        wait_task = self.__getattribute__('wait_task')
-        self.__setattr__('wait_task', self.wait_task_async)
+        search_index = SearchIndex(transporter, config, name)
+        search_index.__setattr__('wait_task', self.wait_task_async)
 
         # Then, we dynamically create {method}_async versions of all
         # public methods of the parent class, using a copy of
         # the current instance that contains an async `wait_task`
-        _create_async_methods_in(self)
-
-        # Finally, the re-bound the `wait_task` to his original definition
-        self.__setattr__('wait_task', wait_task)
-
-        self._transporter = search_index._transporter
+        _create_async_methods_in(self, search_index)
 
     def wait_task_async(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> None
