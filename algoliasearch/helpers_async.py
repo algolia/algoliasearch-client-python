@@ -1,9 +1,10 @@
 import asyncio
 import copy
+from types import CoroutineType
 
 
 def _create_async_methods_in(async_client, sync_client):
-    # type: (object) -> None
+    # type: (object, object) -> None
 
     # First, we get the methods from the sync class (the parent class)
     methods = [func for func in dir(async_client) if
@@ -24,7 +25,7 @@ def _create_async_methods_in(async_client, sync_client):
 
 
 def _gen_async(client, method):
-    # type: (object, str) -> None
+    # type: (object, str) -> Callable
 
     m = getattr(client, method)
 

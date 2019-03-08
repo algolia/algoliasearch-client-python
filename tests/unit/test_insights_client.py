@@ -13,9 +13,9 @@ class TestInsightsClient(unittest.TestCase):
         client = InsightsClient.create('foo', 'bar')
 
         self.assertEqual(
-            client._InsightsClient__config._InsightsConfig__region, 'us')
+            client._config._InsightsConfig__region, 'us')
 
         client = InsightsClient.create('foo', 'bar', 'fr')
 
         self.assertEqual(
-            client._InsightsClient__config._InsightsConfig__region, 'fr')
+            client._config._InsightsConfig__region, 'fr')

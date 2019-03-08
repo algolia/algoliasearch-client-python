@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
 from algoliasearch.configs import AnalyticsConfig
-from algoliasearch.helpers import endpoint, async_modules_exists
+from algoliasearch.helpers import endpoint, is_async_available
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
@@ -25,7 +25,7 @@ class AnalyticsClient(object):
 
         client = AnalyticsClient(transporter, config)
 
-        if async_modules_exists():
+        if is_async_available():
             from algoliasearch.analytics_client_async import \
                 AnalyticsClientAsync
             from algoliasearch.http.transporter_async import \

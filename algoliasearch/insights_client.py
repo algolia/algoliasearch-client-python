@@ -1,7 +1,7 @@
 from typing import Optional, Union, List
 
 from algoliasearch.configs import InsightsConfig
-from algoliasearch.helpers import async_modules_exists
+from algoliasearch.helpers import is_async_available
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
@@ -25,7 +25,7 @@ class InsightsClient(object):
 
         client = InsightsClient(transporter, config)
 
-        if async_modules_exists():
+        if is_async_available():
             from algoliasearch.insights_client_async import InsightsClientAsync
             from algoliasearch.http.transporter_async import \
                 TransporterAsync

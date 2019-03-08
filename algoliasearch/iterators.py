@@ -21,7 +21,12 @@ class Iterator(object):
     def next(self):
         # type: () -> dict
 
-        return self.__next__()  # pragma: no cover
+        return self.__next__()
+
+    def __next__(self):
+        # type: () -> dict
+
+        pass
 
     def __iter__(self):
         # type: () -> Iterator

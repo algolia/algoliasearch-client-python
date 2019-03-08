@@ -1,3 +1,4 @@
+import os
 import platform
 import unittest
 import datetime
@@ -18,7 +19,8 @@ class TestAnalyticsClient(unittest.TestCase):
 
     def test_ab_testing(self):
         python_version = platform.python_version().replace('.', '')[:2]
-
+        python_version += os.environ.get('TEST_TYPE', '')
+        print(python_version)
         ab_tests = self.client.get_ab_tests()
         if ab_tests['total'] > 0:
             for ab_test in self.client.get_ab_tests()['abtests']:

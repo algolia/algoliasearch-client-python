@@ -5,7 +5,6 @@ import platform
 from typing import Optional
 
 from algoliasearch.analytics_client import AnalyticsClient
-from algoliasearch.helpers import async_modules_exists
 from algoliasearch.insights_client import InsightsClient
 from algoliasearch.search_client import SearchClient
 from faker import Faker
@@ -21,14 +20,7 @@ class Factory(object):
         app_id = app_id if app_id is not None else Factory.get_app_id()
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
-        client = SearchClient.create(app_id, api_key)
-
-        if async_modules_exists():
-            from tests.fixtures.sync_decorator import SyncDecorator
-
-            return SyncDecorator(client)
-
-        return client
+        return Factory.decide(SearchClient.create(app_id, api_key))
 
     @staticmethod
     def analytics_client(app_id=None, api_key=None):
@@ -37,14 +29,7 @@ class Factory(object):
         app_id = app_id if app_id is not None else Factory.get_app_id()
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
-        analytics_client = AnalyticsClient.create(app_id, api_key)
-
-        if async_modules_exists():
-            from tests.fixtures.sync_decorator import SyncDecorator
-
-            return SyncDecorator(analytics_client)
-
-        return analytics_client
+        return Factory.decide(AnalyticsClient.create(app_id, api_key))
 
     @staticmethod
     def insights_client(app_id=None, api_key=None):
@@ -53,14 +38,7 @@ class Factory(object):
         app_id = app_id if app_id is not None else Factory.get_app_id()
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
-        insights_client = InsightsClient.create(app_id, api_key)
-
-        if async_modules_exists():
-            from tests.fixtures.sync_decorator import SyncDecorator
-
-            return SyncDecorator(insights_client)
-
-        return insights_client
+        return Factory.decide(InsightsClient.create(app_id, api_key))
 
     @staticmethod
     def get_app_id():
@@ -87,6 +65,7 @@ class Factory(object):
 
         python_version = platform.python_version().replace('.', '')[:2]
 
+        python_version += os.environ.get('TEST_TYPE', '')
         return 'python%s_%s_%s_%s' % (
             python_version, date, instance, test_name)
 
@@ -185,3 +164,16 @@ class Factory(object):
             data['objectID'] = object_id
 
         return data
+
+    @staticmethod
+    def decide(client):
+
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            print('Decorator: Used!')
+            from tests.fixtures.sync_decorator import SyncDecorator
+
+            return SyncDecorator(client)
+
+        print('Decorated: Not used!')
+
+        return client

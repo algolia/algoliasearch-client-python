@@ -4,7 +4,7 @@ import hmac
 
 from typing import Optional, Union, List
 
-from algoliasearch.helpers import endpoint, async_modules_exists
+from algoliasearch.helpers import endpoint, is_async_available
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.verbs import Verbs
@@ -50,7 +50,7 @@ class SearchClient(object):
 
         client = SearchClient(transporter, config)
 
-        if async_modules_exists():
+        if is_async_available():
             from algoliasearch.search_client_async import SearchClientAsync
             from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync

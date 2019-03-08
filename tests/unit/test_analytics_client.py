@@ -26,9 +26,9 @@ class TestAnalyticsClient(unittest.TestCase):
         client = AnalyticsClient.create('foo', 'bar')
 
         self.assertEqual(
-            client._AnalyticsClient__config._AnalyticsConfig__region, 'us')
+            client._config._AnalyticsConfig__region, 'us')
 
         client = AnalyticsClient.create('foo', 'bar', 'fr')
 
         self.assertEqual(
-            client._AnalyticsClient__config._AnalyticsConfig__region, 'fr')
+            client._config._AnalyticsConfig__region, 'fr')

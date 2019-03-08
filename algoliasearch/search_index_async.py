@@ -32,14 +32,8 @@ class SearchIndexAsync(SearchIndex):
             name
         )
 
-        # First, we bind an async version of the method `wait_task` to the
-        # method `wait_task` itself, to be used by async methods
         search_index = SearchIndex(transporter, config, name)
         search_index.__setattr__('wait_task', self.wait_task_async)
-
-        # Then, we dynamically create {method}_async versions of all
-        # public methods of the parent class, using a copy of
-        # the current instance that contains an async `wait_task`
         _create_async_methods_in(self, search_index)
 
     def wait_task_async(self, task_id, request_options=None):

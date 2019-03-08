@@ -61,13 +61,17 @@ def build_raw_response_batch(action, objects):
     return requests
 
 
-def async_modules_exists():
+def is_async_available():
     # type: () -> bool
 
-    try:
-        import asyncio
-        import aiohttp
+    if sys.version_info >= (3, 0):
+        try:
+            import asyncio
+            import aiohttp
 
-        return True
-    except ImportError:
-        return False
+            return True
+        except ImportError:
+            print('NOP NOT IMPORTED')
+            pass
+
+    return False
