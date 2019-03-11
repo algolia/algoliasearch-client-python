@@ -543,3 +543,8 @@ class SearchIndex(object):
         tmp_index_name = self._name + '_tmp_' + random_string
 
         return tmp_index_name
+
+    def sync(self):
+        # type: () -> SearchIndex
+
+        return self

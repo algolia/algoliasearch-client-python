@@ -25,7 +25,6 @@ class RequesterAsync(Requester):
         )
 
         try:
-            # @todo Why time test is failing here.
             response = yield from request
             json = yield from response.json()
         except asyncio.TimeoutError as e:

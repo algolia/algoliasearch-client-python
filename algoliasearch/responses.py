@@ -41,7 +41,7 @@ class IndexingResponse(Response):
 
         if not self.waited:
             for raw_response in self.raw_responses:
-                self.__index.wait_task(raw_response['taskID'])
+                self.__index.sync().wait_task(raw_response['taskID'])
 
         # No longer waits on this responses.
         self.waited = True
@@ -90,7 +90,7 @@ class AddApiKeyResponse(Response):
 
         while not self.__done:
             try:
-                self.__client.get_api_key(self.raw_response['key'])
+                self.__client.sync().get_api_key(self.raw_response['key'])
                 self.__done = True
             except RequestException as e:
                 if e.status_code != 404:
@@ -113,7 +113,9 @@ class UpdateApiKeyResponse(Response):
         # type: () -> UpdateApiKeyResponse
 
         while not self.__done:
-            api_key = self.__client.get_api_key(self.raw_response['key'])
+            api_key = self.__client.sync().get_api_key(
+                self.raw_response['key']
+            )
 
             if self.__have_changed(api_key):
                 break
@@ -153,7 +155,7 @@ class DeleteApiKeyResponse(Response):
 
         while not self.__done:
             try:
-                self.__client.get_api_key(self.__key)
+                self.__client.sync().get_api_key(self.__key)
             except RequestException as e:
                 self.__done = e.status_code == 404
 
@@ -175,7 +177,7 @@ class RestoreApiKeyResponse(Response):
 
         while not self.__done:
             try:
-                self.__client.get_api_key(self.__key)
+                self.__client.sync().get_api_key(self.__key)
                 self.__done = True
             except RequestException as e:
                 if e.status_code != 404:
@@ -197,7 +199,7 @@ class MultipleIndexBatchIndexingResponse(Response):
         # type: () -> MultipleIndexBatchIndexingResponse
         while not self.__done:
             for index_name, task_id in get_items(self.raw_response['taskID']):
-                self.__client.wait_task(index_name, task_id)
+                self.__client.sync().wait_task(index_name, task_id)
             self.__done = True
 
         return self
