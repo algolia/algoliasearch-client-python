@@ -1,6 +1,7 @@
 import requests
 
 from requests import Timeout, RequestException
+from typing import Generator
 
 from algoliasearch.http.transporter import Response, Request
 

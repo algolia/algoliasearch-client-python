@@ -9,22 +9,23 @@ class RequesterAsync(Requester):
 
     @asyncio.coroutine
     def send(self, request):
-        # type: (Request) -> Response
+        # type: (Request) -> Generator[Response]
 
         connector = aiohttp.TCPConnector(use_dns_cache=False)
+        timeout = aiohttp.ClientTimeout(total=request.timeout,
+                                        connect=request.connect_timeout)
 
         session = aiohttp.ClientSession(connector=connector,
-                                        timeout=request.connect_timeout)
+                                        timeout=timeout)
 
         request = session.request(
             method=request.verb, url=request.url,
             headers=request.headers,
-            data=request.data_as_string,
-            timeout=request.timeout,
+            data=request.data_as_string
         )
 
         try:
-            # @todo Check if we need to do this yield here.
+            # @todo Why time test is failing here.
             response = yield from request
             json = yield from response.json()
         except asyncio.TimeoutError as e:

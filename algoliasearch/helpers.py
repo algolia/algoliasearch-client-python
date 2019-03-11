@@ -71,7 +71,6 @@ def is_async_available():
 
             return True
         except ImportError:
-            print('NOP NOT IMPORTED')
             pass
 
     return False

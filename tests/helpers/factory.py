@@ -169,11 +169,8 @@ class Factory(object):
     def decide(client):
 
         if os.environ.get('TEST_TYPE', False) == 'async':
-            print('Decorator: Used!')
             from tests.fixtures.sync_decorator import SyncDecorator
 
             return SyncDecorator(client)
-
-        print('Decorated: Not used!')
 
         return client

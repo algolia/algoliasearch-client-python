@@ -1,6 +1,6 @@
 import asyncio
-import copy
-from types import CoroutineType
+
+from typing import Callable
 
 
 def _create_async_methods_in(async_client, sync_client):

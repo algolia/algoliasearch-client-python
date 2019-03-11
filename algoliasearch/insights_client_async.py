@@ -1,4 +1,4 @@
-from algoliasearch.configs import SearchConfig
+from algoliasearch.configs import InsightsConfig, InsightsConfig
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.insights_client import InsightsClient, UserInsightsClient
@@ -6,18 +6,18 @@ from algoliasearch.insights_client import InsightsClient, UserInsightsClient
 
 class InsightsClientAsync(InsightsClient):
 
-    def __init__(self, insights_client, transporter, search_config):
-        # type: (InsightsClient, Transporter, SearchConfig) -> None
+    def __init__(self, insights_client, transporter, insights_config):
+        # type: (InsightsClient, Transporter, InsightsConfig) -> None
 
         super(InsightsClientAsync, self).__init__(insights_client._transporter,
-                                                  search_config)
+                                                  insights_config)
 
-        client = InsightsClient(transporter, search_config)
+        client = InsightsClient(transporter, insights_config)
 
         _create_async_methods_in(self, client)
 
     def user(self, user_token):
-        # type: (str) -> UserInsightsClient
+        # type: (str) -> UserInsightsClientAsync
 
         return UserInsightsClientAsync(self, user_token)
 
@@ -25,10 +25,10 @@ class InsightsClientAsync(InsightsClient):
 class UserInsightsClientAsync(UserInsightsClient):
 
     def __init__(self, insights_client, user_token):
-        # type: (InsightsClient, Transporter, SearchConfig) -> None
+        # type: (InsightsClient, Transporter, InsightsConfig) -> None
 
         super(UserInsightsClientAsync, self).__init__(
-            insights_client,
+            insights_client._transporter,
             user_token
         )
 
