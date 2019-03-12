@@ -23,7 +23,7 @@ class PaginatorIteratorAsync(Iterator):
     def __aiter__(self):
         return self
 
-    @asyncio.coroutine
+    @asyncio.coroutine  # type: ignore
     def __anext__(self):
         # type: () -> dict
 
@@ -66,7 +66,7 @@ class ObjectIteratorAsync(Iterator):
     def __aiter__(self):
         return self
 
-    @asyncio.coroutine
+    @asyncio.coroutine  # type: ignore
     def __anext__(self):
         # type: () -> dict
 

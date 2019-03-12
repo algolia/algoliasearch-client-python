@@ -68,6 +68,7 @@ def is_async_available():
         try:
             import asyncio
             import aiohttp
+            import async_timeout
 
             return True
         except ImportError:

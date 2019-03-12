@@ -37,13 +37,17 @@ class SearchIndexAsync(SearchIndex):
 
         _create_async_methods_in(self, search_index)
 
-    def wait_task_async(self, task_id, request_options=None):
+    @asyncio.coroutine  # type: ignore
+    def wait_task_async(self, task_id, request_options=None):  # type: ignore
         # type: (int, Optional[Union[dict, RequestOptions]]) -> None
 
         retries_count = 1
 
         while True:
-            task = yield from self.get_task_async(task_id, request_options)
+            task = yield from self.get_task_async(  # type: ignore
+                task_id,
+                request_options
+            )
 
             if task['status'] == 'published':
                 break
@@ -71,9 +75,8 @@ class SearchIndexAsync(SearchIndex):
         return RuleIteratorAsync(self._transporter_async, self._name,
                                  request_options)
 
-    @asyncio.coroutine
-    def get_settings_async(self, request_options=None):
-        # type: (Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+    def get_settings_async(self, request_options=None):  # type: ignore
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         params = {'getVersion': 2}
 
@@ -86,8 +89,8 @@ class SearchIndexAsync(SearchIndex):
 
         return SettingsDeserializer.deserialize(raw_response)
 
-    @asyncio.coroutine
-    def replace_all_objects_async(self, objects, request_options=None):
+    def replace_all_objects_async(self, objects,  # type: ignore
+                                  request_options=None):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> MultipleResponse # noqa: E501
 
         safe = False
@@ -97,9 +100,13 @@ class SearchIndexAsync(SearchIndex):
 
         tmp_index_name = self._create_temporary_name()
         responses = MultipleResponse()
-        response = yield from self.copy_to_async(tmp_index_name, {
-            'scope': ['settings', 'synonyms', 'rules']
-        })
+        response = yield from self.copy_to_async(  # type: ignore
+            tmp_index_name,
+            {
+                'scope': ['settings',
+                          'synonyms',
+                          'rules']
+            })
         responses.push(response)
 
         if safe:
@@ -112,14 +119,17 @@ class SearchIndexAsync(SearchIndex):
             tmp_index_name
         )
 
-        response = yield from tmp_index.save_objects_async(objects,
-                                                           request_options)
+        response = yield from tmp_index.save_objects_async(  # type: ignore
+            objects,
+            request_options
+        )
         responses.push(response)
 
         if safe:
             responses.wait()
 
-        response = yield from tmp_index.move_to_async(self._name)
+        response = yield from tmp_index.move_to_async(  # type: ignore
+            self._name)
         responses.push(response)
 
         if safe:

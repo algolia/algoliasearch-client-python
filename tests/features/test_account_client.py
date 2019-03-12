@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from algoliasearch.account_client import AccountClient
@@ -15,6 +16,8 @@ class TestAccountClient(unittest.TestCase):
         self.index.delete()
         self.index2.delete()
 
+    @unittest.skipIf(os.environ.get('TEST_TYPE', False) == 'async',
+                     'Cross App Copy Index is not available in async mode.')
     def test_cross_app_copy_index(self):
         rule = F.rule(object_id='one')
         synonym = F.synonym(object_id='one')

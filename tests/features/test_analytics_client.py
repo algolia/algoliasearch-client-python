@@ -46,6 +46,7 @@ class TestAnalyticsClient(unittest.TestCase):
         })
 
         self.index.wait_task(response['taskID'])
+
         ab_test_id = response['abTestID']
         ab_test = self.client.get_ab_test(ab_test_id)
         self.assertEqual(ab_test['name'], ab_test_name)

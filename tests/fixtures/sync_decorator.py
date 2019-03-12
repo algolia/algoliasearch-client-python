@@ -40,7 +40,17 @@ class SyncDecorator(object):
         return SyncDecorator(self.__base.user(user_token))
 
     def iterator_to_array(self, iterator):
-        async def closure():
-            return [obj async for obj in iterator]
+        def closure():
+            objects = []
+
+            while True:
+                try:
+                    obj = yield from iterator.__anext__()
+                except Exception:
+                    break
+                else:
+                    objects.append(obj)
+
+            return objects
 
         return asyncio.get_event_loop().run_until_complete(closure())
