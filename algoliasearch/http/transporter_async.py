@@ -1,14 +1,15 @@
 import asyncio
 
-from typing import Generator
-
 from algoliasearch.exceptions import (
     RequestException,
     AlgoliaUnreachableHostException
 )
 from algoliasearch.http.hosts import HostsCollection
 from algoliasearch.http.transporter import (
-    Transporter, RetryOutcome, Request, Response)
+    Transporter,
+    RetryOutcome,
+    Request
+)
 
 
 class TransporterAsync(Transporter):

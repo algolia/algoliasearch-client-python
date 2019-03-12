@@ -2,13 +2,17 @@ import time
 
 from typing import Optional, Union
 
-from algoliasearch.exceptions import AlgoliaUnreachableHostException, \
+from algoliasearch.exceptions import (
+    AlgoliaUnreachableHostException,
     RequestException
+)
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
-from algoliasearch.http.serializer import QueryParametersSerializer, \
+from algoliasearch.http.serializer import (
+    QueryParametersSerializer,
     DataSerializer
+)
 from algoliasearch.http.verbs import Verbs
 
 try:

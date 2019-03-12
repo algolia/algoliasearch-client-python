@@ -8,16 +8,25 @@ from typing import Optional, List, Union, Iterator
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import MissingObjectIdException
-from algoliasearch.helpers import assert_object_id, build_raw_response_batch, \
+from algoliasearch.helpers import (
+    assert_object_id,
+    build_raw_response_batch,
     endpoint
+)
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import SettingsDeserializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verbs import Verbs
-from algoliasearch.iterators import ObjectIterator, SynonymIterator, \
+from algoliasearch.iterators import (
+    ObjectIterator,
+    SynonymIterator,
     RuleIterator
-from algoliasearch.responses import Response, IndexingResponse, \
+)
+from algoliasearch.responses import (
+    Response,
+    IndexingResponse,
     MultipleResponse
+)
 
 
 class SearchIndex(object):

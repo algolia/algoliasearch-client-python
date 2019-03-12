@@ -1,5 +1,3 @@
-import asyncio
-
 from algoliasearch.configs import SearchConfig
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.http.transporter import Transporter

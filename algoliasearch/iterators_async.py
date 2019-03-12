@@ -21,7 +21,9 @@ class PaginatorIteratorAsync(Iterator):
         }
 
     def __aiter__(self):
-        return self
+        # type: () -> PaginatorIteratorAsync
+
+        return self  # pragma: no cover
 
     @asyncio.coroutine  # type: ignore
     def __anext__(self):
@@ -64,7 +66,9 @@ class PaginatorIteratorAsync(Iterator):
 class ObjectIteratorAsync(Iterator):
 
     def __aiter__(self):
-        return self
+        # type: () -> ObjectIteratorAsync
+
+        return self  # pragma: no cover
 
     @asyncio.coroutine  # type: ignore
     def __anext__(self):

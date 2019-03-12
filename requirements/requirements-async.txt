@@ -1,4 +1,0 @@
--r requirements-testing.txt
-
-asyncio>=3.4,<4.0
-aiohttp>=3.5,<4.0
