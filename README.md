@@ -1,8 +1,6 @@
 # Introducing Algolia's API Client Python v2
 
-Current version: **v2.0.0-alpha.1**
-
-Final release: No date is set, but this should happen sometime in end-March/begin-April.
+Release of v2: No date is set, but this should happen sometime in end-March/begin-April.
 
 ## Preface
 
