@@ -11,8 +11,8 @@ class Config(object):
     def __init__(self, app_id, api_key):
         # type: (str, str) -> None
 
-        self.app_id = app_id
-        self.api_key = api_key
+        self.app_id = str(app_id)
+        self.api_key = str(api_key)
 
         # In seconds
         self.read_timeout = 5
