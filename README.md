@@ -1,17 +1,17 @@
 # Introducing Algolia's API Client Python v2
 
-Version: **v2.0.0-alpha.1**
+Current version: **v2.0.0-alpha.1**
 
 Final release: No date is set, but this should happen sometime in end-March/begin-April.
 
 ## Preface
 
-Big news: Algolia's API Client Python v2 is coming! So, what changes can we look forward to for this API Client?
+Big news, the Algolia's API Client Python v2 is coming! So, what changes can we look forward for this API Client?
 
-- Follows 100% of the **API Client v2 specs** (just like PHP v2, and c# v2): contains waitable response objects, up-to-date retry strategy, `replace_all_objects`,`clear_objects`, and more
+- Follows 100% of the **API Client v2 specs**, just like PHP v2, and c# v2: contains waitable response objects, up-to-date retry strategy, `replace_all_objects`,`clear_objects`, and more
 - Supports Python: **2.7 🥳**, 3.4, 3.5, 3.6, and 3.7
 - Strong test suite, 100% test coverage on `unittest` (tests === **30secs locally!** 🏎), `flake8` (linter), and `mypy` (static-analysis) to ensure the quality of the code.
-- Supports synchronous and **asynchronous** environments. 👉🏻 **Yes, in the same client and with support Python 2. It's amazing!**. Asynchronous methods are available using the `async` suffix:
+- Supports synchronous and **asynchronous** environments. 👉🏻 **Yes, in the same client and with support Python 2. It's amazing!** Asynchronous methods are available using the `async` suffix:
 
 | synchronous   | asynchronous          |
 |-------------- |--------------------   |
@@ -34,7 +34,7 @@ Thank you for considering to contribute to Algolia's API Client Python v2. Here 
 > **Requires:**
 - **[Homebrew](https://brew.sh)**
 
-First, You may use [Homebrew](https://brew.sh) to install Python 3.7:
+First, use [Homebrew](https://brew.sh) to install Python 3.7:
 ```bash
 brew install python
 ```
