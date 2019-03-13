@@ -2,6 +2,7 @@ import unittest
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.user_agent import UserAgent
 
 
 class TestRequestOptions(unittest.TestCase):
@@ -27,6 +28,12 @@ class TestRequestOptions(unittest.TestCase):
     def test_with_options(self):
         self.assertIsInstance(RequestOptions.create(self.config),
                               RequestOptions)
+
+    def test_default_user_agent(self):
+        self.assertEqual(
+            RequestOptions.create(self.config).headers['User-Agent'],
+            UserAgent.get()
+        )
 
     def test_headers(self):
         self.assertEqual(self.request_options.headers['User-Agent'], 'foo')
