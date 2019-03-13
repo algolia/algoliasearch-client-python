@@ -15,7 +15,7 @@ class RequestOptions(object):
 
     def __setitem__(self, option, value):
         if option in Params.HEADERS:
-            self.headers[option] = value
+            self.headers[option] = str(value)
         elif option in Params.QUERY_PARAMETERS:
             self.query_parameters[option] = value
         elif option in Params.TIMEOUTS:
