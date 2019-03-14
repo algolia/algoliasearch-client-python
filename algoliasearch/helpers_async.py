@@ -1,4 +1,5 @@
 import asyncio
+import types
 
 from typing import Callable
 
@@ -41,7 +42,7 @@ def _gen_async(client, method):
             result.raw_response = yield from result.raw_response
 
         # We make sure we resolve the promise
-        if str(type(result)) == "<class 'generator'>":
+        if isinstance(result, types.GeneratorType):
             result = yield from result
 
         return result

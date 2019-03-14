@@ -1,4 +1,5 @@
 import asyncio
+import types
 
 from algoliasearch.iterators import Iterator
 
@@ -22,7 +23,7 @@ class SyncDecorator(object):
         def closure(*args, **kwargs):
             result = method(*args, **kwargs)
 
-            if str(type(result)) == "<class 'generator'>":
+            if isinstance(result, types.GeneratorType):
                 return asyncio.get_event_loop().run_until_complete(
                     asyncio.gather(result))[0]
 
