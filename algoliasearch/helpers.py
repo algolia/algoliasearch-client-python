@@ -50,15 +50,7 @@ def assert_object_id(objects):
 
 def build_raw_response_batch(action, objects):
     # type: (str, Union[List[dict], Iterator[dict]]) -> List[dict]
-
-    requests = []
-    for obj in objects:
-        requests.append({
-            'action': action,
-            'body': obj
-        })
-
-    return requests
+    return [{'action': action, 'body': obj} for obj in objects]
 
 
 def is_async_available():
