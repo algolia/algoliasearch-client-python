@@ -245,7 +245,7 @@ class SearchIndex(object):
             request_options
         )
 
-    def search_for_facet_value(self, facet_name, facet_query,
+    def search_for_facet_values(self, facet_name, facet_query,
                                request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 

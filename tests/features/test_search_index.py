@@ -222,7 +222,7 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertEqual(result['nbHits'], 2)
 
-        result = self.index.search_for_facet_value('company', 'a')['facetHits']
+        result = self.index.search_for_facet_values('company', 'a')['facetHits']
         values = list(
             map(lambda facet: facet['value'], result))
 
