@@ -34,7 +34,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(self.config.headers, {
             'X-Algolia-Application-Id': 'foo',
             'X-Algolia-API-Key': 'bar',
-            'User-Agent': 'Algolia for Python (%s); Python (%s)' % (
+            'User-Agent': 'Algolia for Python ({}); Python ({})'.format(
                 VERSION, version),
             'Content-Type': 'application/json',
         })

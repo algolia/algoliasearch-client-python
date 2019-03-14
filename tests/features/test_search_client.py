@@ -131,7 +131,7 @@ class TestSearchClient(unittest.TestCase):
 
         python_version = platform.python_version().replace('.', '')[:2]
 
-        user_id = 'python%s-%s-%s' % (python_version, date, instance)
+        user_id = 'python{}-{}-{}'.format(python_version, date, instance)
 
         mcm.assign_user_id(user_id, clusters[0]['clusterName'])
 
@@ -161,8 +161,8 @@ class TestSearchClient(unittest.TestCase):
 
         date = datetime.datetime.now().strftime("%Y-%m-%d")
 
-        a = 'python%s' % python_version
-        b = '%s-%s' % (a, date)
+        a = 'python{}'.format(python_version)
+        b = '{}-{}'.format(a, date)
 
         for user in users['userIDs']:
             user_id = user['userID']

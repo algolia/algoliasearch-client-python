@@ -56,7 +56,7 @@ class AnalyticsClient(object):
 
         return self._transporter.read(
             Verbs.GET,
-            endpoint('2/abtests/%s', ab_test_id),
+            endpoint('2/abtests/{}', ab_test_id),
             None,
             request_options
         )
@@ -79,7 +79,7 @@ class AnalyticsClient(object):
 
         return self._transporter.write(
             Verbs.POST,
-            endpoint('2/abtests/%s/stop', ab_test_id),
+            endpoint('2/abtests/{}/stop', ab_test_id),
             None,
             request_options
         )
@@ -92,7 +92,7 @@ class AnalyticsClient(object):
 
         return self._transporter.write(
             Verbs.DELETE,
-            endpoint('2/abtests/%s', ab_test_id),
+            endpoint('2/abtests/{}', ab_test_id),
             None,
             request_options
         )

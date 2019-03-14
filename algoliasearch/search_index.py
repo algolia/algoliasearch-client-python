@@ -118,7 +118,7 @@ class SearchIndex(object):
 
         return self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/%s', self._name, object_id),
+            endpoint('1/indexes/{}/{}', self._name, object_id),
             None,
             request_options
         )
@@ -188,7 +188,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/deleteByQuery', self._name),
+            endpoint('1/indexes/{}/deleteByQuery', self._name),
             filters,
             request_options
         )
@@ -200,7 +200,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/clear', self._name),
+            endpoint('1/indexes/{}/clear', self._name),
             None,
             request_options
         )
@@ -212,7 +212,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.PUT,
-            endpoint('1/indexes/%s/settings', self._name),
+            endpoint('1/indexes/{}/settings', self._name),
             settings,
             request_options
         )
@@ -226,7 +226,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/settings', self._name),
+            endpoint('1/indexes/{}/settings', self._name),
             params,
             request_options
         )
@@ -238,7 +238,7 @@ class SearchIndex(object):
 
         return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/query', self._name),
+            endpoint('1/indexes/{}/query', self._name),
             {
                 'query': str(query)
             },
@@ -246,12 +246,12 @@ class SearchIndex(object):
         )
 
     def search_for_facet_values(self, facet_name, facet_query,
-                               request_options=None):
+                                request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/facets/%s/query', self._name, facet_name),
+            endpoint('1/indexes/{}/facets/{}/query', self._name, facet_name),
             {
                 'facetQuery': facet_query
             },
@@ -273,7 +273,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/synonyms/batch', self._name),
+            endpoint('1/indexes/{}/synonyms/batch', self._name),
             list(synonyms),
             request_options
         )
@@ -296,7 +296,7 @@ class SearchIndex(object):
 
         return self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/synonyms/%s', self._name, object_id),
+            endpoint('1/indexes/{}/synonyms/{}', self._name, object_id),
             None,
             request_options
         )
@@ -306,7 +306,7 @@ class SearchIndex(object):
 
         return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/synonyms/search', self._name),
+            endpoint('1/indexes/{}/synonyms/search', self._name),
             {
                 'query': str(query)
             },
@@ -324,7 +324,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.DELETE,
-            endpoint('1/indexes/%s/synonyms/%s', self._name, object_id),
+            endpoint('1/indexes/{}/synonyms/{}', self._name, object_id),
             None,
             request_options
         )
@@ -336,7 +336,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/synonyms/clear', self._name),
+            endpoint('1/indexes/{}/synonyms/clear', self._name),
             None,
             request_options
         )
@@ -358,7 +358,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/rules/batch', self._name),
+            endpoint('1/indexes/{}/rules/batch', self._name),
             list(rules),
             request_options
         )
@@ -381,7 +381,7 @@ class SearchIndex(object):
 
         return self._transporter.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/rules/%s', self._name, object_id),
+            endpoint('1/indexes/{}/rules/{}', self._name, object_id),
             None,
             request_options
         )
@@ -391,7 +391,7 @@ class SearchIndex(object):
 
         return self._transporter.read(
             Verbs.POST,
-            endpoint('1/indexes/%s/rules/search', self._name),
+            endpoint('1/indexes/{}/rules/search', self._name),
             {
                 'query': str(query)
             },
@@ -409,7 +409,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.DELETE,
-            endpoint('1/indexes/%s/rules/%s', self._name, object_id),
+            endpoint('1/indexes/{}/rules/{}', self._name, object_id),
             None,
             request_options
         )
@@ -421,7 +421,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/rules/clear', self._name),
+            endpoint('1/indexes/{}/rules/clear', self._name),
             None,
             request_options
         )
@@ -436,7 +436,7 @@ class SearchIndex(object):
 
         return self._transporter.read(
             'GET',
-            endpoint('1/indexes/%s/task/%s', self._name, task_id),
+            endpoint('1/indexes/{}/task/{}', self._name, task_id),
             None,
             request_options
         )
@@ -461,7 +461,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.DELETE,
-            endpoint('1/indexes/%s', self._name),
+            endpoint('1/indexes/{}', self._name),
             None,
             request_options
         )
@@ -507,7 +507,7 @@ class SearchIndex(object):
 
         return self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/batch', self._name),
+            endpoint('1/indexes/{}/batch', self._name),
             {
                 'requests': list(requests)
             },
@@ -519,7 +519,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/operation', self._name),
+            endpoint('1/indexes/{}/operation', self._name),
             {
                 'operation': 'move',
                 'destination': name
@@ -534,7 +534,7 @@ class SearchIndex(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/operation', self._name),
+            endpoint('1/indexes/{}/operation', self._name),
             {
                 'operation': 'copy',
                 'destination': name

@@ -23,7 +23,7 @@ def endpoint(path, *args):
         else:
             arguments.append(quote(str(arg), safe=''))  # pragma: no cover
 
-    return path % tuple(arguments)
+    return getattr(path, 'format')(*arguments)
 
 
 def get_items(dictionary=None):

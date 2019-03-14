@@ -101,7 +101,7 @@ class ObjectIterator(Iterator):
 
         self._raw_response = self._transporter.read(
             Verbs.POST,
-            '1/indexes/%s/browse' % self._index_name,
+            '1/indexes/{}/browse'.format(self._index_name),
             data,
             self._request_options
         )
@@ -113,11 +113,11 @@ class SynonymIterator(PaginatorIterator):
 
     def get_endpoint(self):
         # type: () -> str
-        return '1/indexes/%s/synonyms/search' % self._index_name
+        return '1/indexes/{}/synonyms/search'.format(self._index_name)
 
 
 class RuleIterator(PaginatorIterator):
 
     def get_endpoint(self):
         # type: () -> str
-        return '1/indexes/%s/rules/search' % self._index_name
+        return '1/indexes/{}/rules/search'.format(self._index_name)

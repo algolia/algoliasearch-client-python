@@ -82,7 +82,7 @@ class SearchIndexAsync(SearchIndex):
 
         raw_response = yield from self._transporter_async.read(
             Verbs.GET,
-            endpoint('1/indexes/%s/settings', self._name),
+            endpoint('1/indexes/{}/settings', self._name),
             params,
             request_options
         )

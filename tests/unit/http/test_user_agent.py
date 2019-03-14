@@ -6,7 +6,7 @@ from algoliasearch.version import VERSION
 
 
 class TestUserAgent(unittest.TestCase):
-    default = 'Algolia for Python (%s); Python (%s)' % (
+    default = 'Algolia for Python ({}); Python ({})'.format(
         VERSION, str(python_version()))
 
     def tearDown(self):
@@ -20,5 +20,5 @@ class TestUserAgent(unittest.TestCase):
 
         self.assertEqual(
             UserAgent.get(),
-            '%s; Foo Bar (v1.0)' % TestUserAgent.default
+            '{}; Foo Bar (v1.0)'.format(TestUserAgent.default)
         )

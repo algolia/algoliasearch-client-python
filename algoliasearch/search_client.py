@@ -66,7 +66,7 @@ class SearchClient(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/operation', src_index_name),
+            endpoint('1/indexes/{}/operation', src_index_name),
             {
                 'operation': 'move',
                 'destination': dst_index_name
@@ -82,7 +82,7 @@ class SearchClient(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/indexes/%s/operation', src_index_name),
+            endpoint('1/indexes/{}/operation', src_index_name),
             {
                 'operation': 'copy',
                 'destination': dst_index_name
@@ -170,7 +170,7 @@ class SearchClient(object):
 
         return self._transporter.read(
             Verbs.GET,
-            endpoint('1/clusters/mapping/%s', user_id),
+            endpoint('1/clusters/mapping/{}', user_id),
             None,
             request_options
         )
@@ -220,7 +220,7 @@ class SearchClient(object):
 
         return self._transporter.read(
             Verbs.GET,
-            endpoint('1/keys/%s', key),
+            endpoint('1/keys/{}', key),
             None,
             request_options
         )
@@ -230,7 +230,7 @@ class SearchClient(object):
 
         raw_response = self._transporter.write(
             Verbs.DELETE,
-            endpoint('1/keys/%s', key),
+            endpoint('1/keys/{}', key),
             None,
             request_options
         )
@@ -259,7 +259,7 @@ class SearchClient(object):
 
         raw_response = self._transporter.write(
             Verbs.PUT,
-            endpoint('1/keys/%s', key),
+            endpoint('1/keys/{}', key),
             {},
             request_options
         )
@@ -271,7 +271,7 @@ class SearchClient(object):
 
         raw_response = self._transporter.write(
             Verbs.POST,
-            endpoint('1/keys/%s/restore', key),
+            endpoint('1/keys/{}/restore', key),
             None,
             request_options
         )
@@ -290,7 +290,7 @@ class SearchClient(object):
                                hashlib.sha256).hexdigest()
 
         base64encoded = base64.b64encode(
-            ("%s%s" % (secured_key, query_parameters)).encode('utf-8')
+            ("{}{}".format(secured_key, query_parameters)).encode('utf-8')
         )
 
         return str(base64encoded.decode('utf-8'))

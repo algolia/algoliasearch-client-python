@@ -20,7 +20,7 @@ class TransporterAsync(Transporter):
 
         for host in hosts.reset():
 
-            request.url = 'https://%s/%s' % (
+            request.url = 'https://{}/{}'.format(
                 host.url, relative_url)
 
             response = yield from self._requester.send(request)  # type: ignore

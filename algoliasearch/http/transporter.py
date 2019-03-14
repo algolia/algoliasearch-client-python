@@ -63,9 +63,10 @@ class Transporter(object):
         if verb == Verbs.GET:
             query_parameters.update(request_options.data)
 
-        relative_url = '%s?%s' % (path, QueryParametersSerializer.serialize(
-            query_parameters
-        ))
+        relative_url = '{}?{}'.format(path,
+                                      QueryParametersSerializer.serialize(
+                                          query_parameters
+                                      ))
 
         request = Request(verb.upper(), request_options.headers, data,
                           self._config.connect_timeout, timeout)
@@ -77,7 +78,7 @@ class Transporter(object):
 
         for host in hosts.reset():
 
-            request.url = 'https://%s/%s' % (
+            request.url = 'https://{}/{}'.format(
                 host.url, relative_url)
 
             response = self._requester.send(request)
