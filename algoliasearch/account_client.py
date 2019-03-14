@@ -14,7 +14,7 @@ class AccountClient(object):
 
         if source_index.app_id == destination_index.app_id:
             raise AlgoliaException(
-                'The indexes are on the same application. '
+                'The indices are on the same application. '
                 'Use client.copy_index instead.')
 
         try:
