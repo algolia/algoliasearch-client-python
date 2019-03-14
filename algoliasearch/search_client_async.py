@@ -20,7 +20,7 @@ class SearchClientAsync(SearchClient):
 
         search_client = SearchClient(transporter, search_config)
         search_client.__setattr__('init_index', self.init_index)
-        search_client.__setattr__('sync', self.sync)
+        search_client.__setattr__('_sync', self._sync)
         _create_async_methods_in(self, search_client)
 
     def init_index(self, name):
@@ -31,7 +31,7 @@ class SearchClientAsync(SearchClient):
         return SearchIndexAsync(
             index, self._transporter_async, self._config, name)
 
-    def sync(self):
+    def _sync(self):
         # type: () -> SearchClient
 
         return self._search_client

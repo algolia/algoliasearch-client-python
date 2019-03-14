@@ -378,7 +378,7 @@ class SearchClient(object):
             request_options
         )
 
-    def sync(self):
+    def _sync(self):
         # type: () -> SearchClient
 
         return self

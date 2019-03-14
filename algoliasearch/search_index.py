@@ -553,7 +553,7 @@ class SearchIndex(object):
 
         return tmp_index_name
 
-    def sync(self):
+    def _sync(self):
         # type: () -> SearchIndex
 
         return self

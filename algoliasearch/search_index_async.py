@@ -33,7 +33,7 @@ class SearchIndexAsync(SearchIndex):
         )
 
         search_index = SearchIndex(transporter, config, name)
-        search_index.__setattr__('sync', self.sync)
+        search_index.__setattr__('_sync', self._sync)
 
         _create_async_methods_in(self, search_index)
 
@@ -137,7 +137,7 @@ class SearchIndexAsync(SearchIndex):
 
         return responses
 
-    def sync(self):
+    def _sync(self):
         # type: () -> SearchIndex
 
         return self._search_index
