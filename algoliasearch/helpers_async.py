@@ -11,8 +11,7 @@ def _create_async_methods_in(async_client, sync_client):
                callable(getattr(async_client, func))]
 
     # Then, we get methods from the async_client
-    async_client_methods = [func for func in
-                            async_client.__class__.__dict__.keys()]
+    async_client_methods = list(async_client.__class__.__dict__.keys())
 
     # Finally, for each method we create a {method}_async version of it
     for method in methods:
