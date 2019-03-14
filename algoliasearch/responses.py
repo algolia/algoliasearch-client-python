@@ -131,13 +131,14 @@ class UpdateApiKeyResponse(Response):
             'validity', 'maxQueriesPerIPPerHour', 'maxHitsPerQuery',
         )
 
-        for valid_key in valid_keys:
-            if valid_key in self.__request_options.data:
-                updated_value = self.__request_options.data[valid_key]
-                if updated_value == api_key.get(valid_key):
-                    return True
-
-        return False
+        return any([
+            (
+                    valid_key in self.__request_options.data and
+                    self.__request_options.data[valid_key] == api_key.get(
+                valid_key)
+            )
+            for valid_key in valid_keys
+        ])
 
 
 class DeleteApiKeyResponse(Response):
