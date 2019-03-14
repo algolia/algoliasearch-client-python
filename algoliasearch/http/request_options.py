@@ -44,22 +44,22 @@ class RequestOptions(object):
 
 
 class Params(object):
-    HEADERS = [
+    HEADERS = (
         'Content-type',
         'User-Agent',
         'X-Algolia-User-ID',
-    ]
+    )
 
-    QUERY_PARAMETERS = [
+    QUERY_PARAMETERS = (
         'createIfNotExists',
         'forwardToReplicas',
         'replaceExistingSynonyms',
         'clearExistingRules',
         'getVersion',
-    ]
+    )
 
-    TIMEOUTS = [
+    TIMEOUTS = (
         'readTimeout',
         'writeTimeout',
         'connectTimeout',
-    ]
+    )
