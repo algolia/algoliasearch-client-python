@@ -125,11 +125,11 @@ class UpdateApiKeyResponse(Response):
     def __have_changed(self, api_key):
         # type: (dict) -> bool
 
-        valid_keys = [
+        valid_keys = (
             'acl', 'indexes', 'referers',
             'restrictSources', 'queryParameters', 'description',
             'validity', 'maxQueriesPerIPPerHour', 'maxHitsPerQuery',
-        ]
+        )
 
         for valid_key in valid_keys:
             if valid_key in self.__request_options.data:
