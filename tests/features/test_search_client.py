@@ -57,35 +57,41 @@ class TestSearchClient(unittest.TestCase):
         ]).wait()
 
         responses.push(self.client.copy_settings(
-            self.index.name, self.index.name + '_settings'
+            self.index.name, '{}_settings'.format(self.index.name)
         ))
 
         responses.push(self.client.copy_rules(
-            self.index.name, self.index.name + '_rules'
+            self.index.name, '{}_rules'.format(self.index.name)
         ))
 
         responses.push(self.client.copy_synonyms(
-            self.index.name, self.index.name + '_synonyms'
+            self.index.name, '{}_synonyms'.format(self.index.name)
         ))
 
         responses.push(self.client.copy_index(
-            self.index.name, self.index.name + '_full_copy'
+            self.index.name, '{}_full_copy'.format(self.index.name)
         ))
 
         responses.wait()
 
-        self.index.__SearchIndex_name = self.index.name + '_settings'
+        index_name = self.index.name
+
+        self.index._name = '{}_settings'.format(index_name)
         self.assertEqual(
             self.index.get_settings()['attributesForFaceting'], ['company']
         )
 
-        self.index.__SearchIndex_name = self.index.name + '_rules'
+        self.index._name = '{}_rules'.format(index_name)
         self.index.get_rule('company_auto_faceting')
+        with self.assertRaises(RequestException) as cm:
+            self.index.get_synonym('google_placeholder')
 
-        self.index.__SearchIndex_name = self.index.name + '_synonym'
+        self.index._name = '{}_synonyms'.format(index_name)
         self.index.get_synonym('google_placeholder')
+        with self.assertRaises(RequestException) as cm:
+            self.index.get_rule('company_auto_faceting')
 
-        self.index.__SearchIndex_name = self.index.name + '_full_copy'
+        self.index._name = '{}_full_copy'.format(index_name)
         self.index.get_synonym('google_placeholder')
         self.index.get_rule('company_auto_faceting')
         self.assertEqual(
@@ -96,10 +102,11 @@ class TestSearchClient(unittest.TestCase):
 
         self.client.move_index(
             self.index.name,
-            self.index.name + '_after_move'
+            '{}_after_move'.format(index_name)
         ).wait()
 
-        moved_index = self.client.init_index(self.index.name + '_after_move')
+        moved_index = self.client.init_index(
+            '{}_after_move'.format(index_name))
 
         moved_index.get_synonym('google_placeholder')
         moved_index.get_rule('company_auto_faceting')
@@ -294,10 +301,10 @@ class TestSearchClient(unittest.TestCase):
 
         config = SearchConfig(F.get_app_id(), F.get_api_key())
         config.hosts['read'] = HostsCollection([
-            Host("algolia.biz", 10),
-            Host(F.get_app_id() + "-1.algolianet.com"),
-            Host(F.get_app_id() + "-2.algolianet.com"),
-            Host(F.get_app_id() + "-2.algolianet.com")
+            Host('algolia.biz', 10),
+            Host('{}-1.algolianet.com'.format(F.get_app_id())),
+            Host('{}-2.algolianet.com'.format(F.get_app_id())),
+            Host('{}-3.algolianet.com'.format(F.get_app_id()))
         ])
         requester = Requester()
         transporter = Transporter(requester, config)
@@ -312,7 +319,7 @@ class TestSearchClient(unittest.TestCase):
         self.assertTrue(config.hosts['read']._HostsCollection__hosts[3].up)
 
     def test_secured_api_keys(self):
-        self.index2 = F.index(self._testMethodName + '_dev')
+        self.index2 = F.index('{}_dev'.format(self._testMethodName))
 
         self.index.save_object({'objectID': 'one'}).wait()
         self.index2.save_object({'objectID': 'one'}).wait()

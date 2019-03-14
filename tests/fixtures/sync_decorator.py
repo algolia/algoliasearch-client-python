@@ -18,7 +18,7 @@ class SyncDecorator(object):
                 type(method)) != "<class 'function'>":
             return method
 
-        method = getattr(self.__base, name + '_async')
+        method = getattr(self.__base, '{}_async'.format(name))
 
         def closure(*args, **kwargs):
             result = method(*args, **kwargs)

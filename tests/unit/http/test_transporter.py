@@ -47,8 +47,9 @@ class TestTransporter(unittest.TestCase):
             2,  # Default connect timeout
             30,  # Default timeout
         )
-        request.url = 'https://' + host.url + \
-                      '/endpoint/foo?createIfNotExists=true'
+
+        request.url = 'https://{}/endpoint/foo?createIfNotExists=true'.format(
+            host.url)
 
         self.requester.send.assert_called_once_with(request)
 
@@ -69,8 +70,8 @@ class TestTransporter(unittest.TestCase):
             2,  # Default connect timeout
             109  # Customized timeout
         )
-        request.url = 'https://' + host.url \
-                      + '/endpoint/bar?createIfNotExists=true'
+        request.url = 'https://{}/endpoint/bar?createIfNotExists=true'.format(
+            host.url)
 
         self.requester.send.assert_called_once_with(request)
 

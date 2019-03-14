@@ -17,9 +17,9 @@ def _create_async_methods_in(async_client, sync_client):
     # Finally, for each method we create a {method}_async version of it
     for method in methods:
         if method not in async_client_methods and not method.startswith('_'):
-            if method + '_async' not in async_client_methods:
+            if '{}_async'.format(method) not in async_client_methods:
                 async_client.__setattr__(
-                    method + '_async',
+                    '{}_async'.format(method),
                     _gen_async(sync_client, method)
                 )
 

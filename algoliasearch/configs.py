@@ -77,7 +77,7 @@ class AnalyticsConfig(Config):
         # type: () -> dict
 
         read_hosts = write_hosts = [
-            Host('analytics.' + self.__region + '.algolia.com')
+            Host('{}.{}.{}'.format('analytics', self.__region, 'algolia.com'))
         ]
 
         return {
@@ -99,7 +99,7 @@ class InsightsConfig(Config):
         # type: () -> dict
 
         read_hosts = write_hosts = [
-            Host('insights.' + self.__region + '.algolia.io')
+            Host('{}.{}.{}'.format('insights', self.__region, 'algolia.io'))
         ]
 
         return {

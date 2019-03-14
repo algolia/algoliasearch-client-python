@@ -45,7 +45,7 @@ def assert_object_id(objects):
     for obj in objects:
         if 'objectID' not in obj:
             raise MissingObjectIdException(
-                'Missing `objectID` in: ' + json.dumps(obj), obj)
+                'Missing `objectID` in: {}'.format(json.dumps(obj)), obj)
 
 
 def build_raw_response_batch(action, objects):
