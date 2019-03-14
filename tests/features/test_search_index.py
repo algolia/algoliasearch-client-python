@@ -132,9 +132,7 @@ class TestSearchIndex(unittest.TestCase):
 
         MultipleResponse(responses).wait()
 
-        objects = []
-        for obj in self.index.browse_objects():
-            objects.append(obj)
+        objects = [obj for obj in self.index.browse_objects()]
 
         self.assertEqual(len(objects), 0)
 
@@ -483,9 +481,7 @@ class TestSearchIndex(unittest.TestCase):
             {"objectID": "five", "key": "value"},
         ]
 
-        results = []
-        for obj in self.index.browse_objects():
-            results.append(obj)
+        results = [obj for obj in self.index.browse_objects()]
 
         for obj in objects:
             self.assertIn(obj, results)
