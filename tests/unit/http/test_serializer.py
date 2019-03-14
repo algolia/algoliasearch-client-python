@@ -4,7 +4,7 @@ import json
 import unittest
 
 from algoliasearch.http.serializer import DataSerializer, \
-    QueryParametersSerializer
+    QueryParametersSerializer, SettingsDeserializer
 
 
 class TestDataSerializer(unittest.TestCase):
@@ -53,6 +53,27 @@ class TestQueryParametersSerializer(unittest.TestCase):
         expected = 'boolean=true&dict=%7B%22foo%22%3A+%22bar%22%7D'
 
         data = QueryParametersSerializer.serialize(self.data)
+        self.assertEqual(data, expected)
+
+
+class TestSettingsDeserializer(unittest.TestCase):
+    def setUp(self):
+        self.data = {
+            'attributesToIndex': 'bar 1',
+            'numericAttributesToIndex': 'bar 2',
+            'slaves': 'bar 3',
+            'foo': 'bar 4',
+        }
+
+    def test_result(self):
+        expected = {
+            'searchableAttributes': 'bar 1',
+            'numericAttributesForFiltering': 'bar 2',
+            'replicas': 'bar 3',
+            'foo': 'bar 4',  # Should keep this one
+        }
+
+        data = SettingsDeserializer.deserialize(self.data)
         self.assertEqual(data, expected)
 
 

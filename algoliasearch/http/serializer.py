@@ -46,8 +46,7 @@ class SettingsDeserializer(object):
 
         for deprecated_key, current_key in get_items(keys):
             if deprecated_key in data:
-                data[current_key] = data[deprecated_key]
-                del data[deprecated_key]
+                data[current_key] = data.pop(deprecated_key)
 
         return data
 
