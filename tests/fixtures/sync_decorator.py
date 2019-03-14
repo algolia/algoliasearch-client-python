@@ -14,8 +14,8 @@ class SyncDecorator(object):
 
     def __getattr__(self, name):
         method = getattr(self.__base, name)
-        if str(type(method)) != "<class 'method'>" and str(
-                type(method)) != "<class 'function'>":
+
+        if not callable(method):
             return method
 
         method = getattr(self.__base, '{}_async'.format(name))
