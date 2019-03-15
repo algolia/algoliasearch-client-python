@@ -193,7 +193,7 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(len(result._MultipleResponse__waitable), 0)
 
     def test_get_task(self):
-        with self.assertRaises(ValueError) as _:
+        with self.assertRaises(AssertionError) as _:
             self.index.get_task('')
 
 

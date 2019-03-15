@@ -13,8 +13,7 @@ class Config(object):
 
         self.app_id = str(app_id)
 
-        if not app_id:
-            raise ValueError('Application cannot be empty.')
+        assert app_id, 'app_id cannot be empty.'
 
         self.api_key = str(api_key)
 

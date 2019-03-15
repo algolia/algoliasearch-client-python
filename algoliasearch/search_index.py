@@ -431,8 +431,7 @@ class SearchIndex(object):
     def get_task(self, task_id, request_options=None):
         # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 
-        if not task_id:
-            raise ValueError('task_id cannot be empty')
+        assert task_id, 'task_id cannot be empty.'
 
         return self._transporter.read(
             'GET',
