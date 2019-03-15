@@ -2,6 +2,7 @@ import unittest
 
 import mock
 
+from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
@@ -22,6 +23,8 @@ class TestSearchClient(unittest.TestCase):
 
     def test_create(self):
         self.assertIsInstance(self.client, SearchClient)
+        with self.assertRaises(AlgoliaException) as _:
+            SearchClient.create('', '')
 
     def test_init_index(self):
         index = self.client.init_index('foo')

@@ -1,5 +1,6 @@
 import unittest
 
+from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.insights_client import InsightsClient
 
 
@@ -8,6 +9,8 @@ class TestInsightsClient(unittest.TestCase):
         client = InsightsClient.create('foo', 'bar')
 
         self.assertIsInstance(client, InsightsClient)
+        with self.assertRaises(AlgoliaException) as _:
+            InsightsClient.create('', '')
 
     def test_region(self):
         client = InsightsClient.create('foo', 'bar')

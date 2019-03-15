@@ -1,6 +1,7 @@
 import unittest
 
 from algoliasearch.analytics_client import AnalyticsClient
+from algoliasearch.exceptions import AlgoliaException
 
 
 class TestAnalyticsClient(unittest.TestCase):
@@ -9,6 +10,8 @@ class TestAnalyticsClient(unittest.TestCase):
 
     def test_create(self):
         self.assertIsInstance(self.client, AnalyticsClient)
+        with self.assertRaises(AlgoliaException) as _:
+            AnalyticsClient.create('', '')
 
     def test_get_ab_test(self):
         with self.assertRaises(ValueError) as _:

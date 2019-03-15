@@ -3,13 +3,20 @@ import unittest
 import mock as mock
 
 from algoliasearch.configs import SearchConfig
-from algoliasearch.exceptions import AlgoliaUnreachableHostException, \
+from algoliasearch.exceptions import (
+    AlgoliaUnreachableHostException,
     AlgoliaException
+)
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
-from algoliasearch.http.transporter import Transporter, Response, \
-    RetryStrategy, RetryOutcome, Request
+from algoliasearch.http.transporter import (
+    Transporter,
+    Response,
+    RetryStrategy,
+    RetryOutcome,
+    Request
+)
 
 
 class TestTransporter(unittest.TestCase):

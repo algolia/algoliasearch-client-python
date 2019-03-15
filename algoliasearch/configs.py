@@ -1,5 +1,6 @@
 import abc
 
+from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.user_agent import UserAgent
 
@@ -11,6 +12,10 @@ class Config(object):
         # type: (str, str) -> None
 
         self.app_id = str(app_id)
+
+        if not app_id:
+            raise AlgoliaException('Application cannot be empty.')
+
         self.api_key = str(api_key)
 
         # In seconds
