@@ -23,7 +23,7 @@ class TestSearchClient(unittest.TestCase):
 
     def test_create(self):
         self.assertIsInstance(self.client, SearchClient)
-        with self.assertRaises(AlgoliaException) as _:
+        with self.assertRaises(ValueError) as _:
             SearchClient.create('', '')
 
     def test_init_index(self):

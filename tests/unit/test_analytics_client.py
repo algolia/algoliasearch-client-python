@@ -10,7 +10,7 @@ class TestAnalyticsClient(unittest.TestCase):
 
     def test_create(self):
         self.assertIsInstance(self.client, AnalyticsClient)
-        with self.assertRaises(AlgoliaException) as _:
+        with self.assertRaises(ValueError) as _:
             AnalyticsClient.create('', '')
 
     def test_get_ab_test(self):

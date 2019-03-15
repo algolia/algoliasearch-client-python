@@ -9,7 +9,7 @@ class TestInsightsClient(unittest.TestCase):
         client = InsightsClient.create('foo', 'bar')
 
         self.assertIsInstance(client, InsightsClient)
-        with self.assertRaises(AlgoliaException) as _:
+        with self.assertRaises(ValueError) as _:
             InsightsClient.create('', '')
 
     def test_region(self):

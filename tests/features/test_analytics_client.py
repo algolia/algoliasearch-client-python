@@ -35,6 +35,9 @@ class TestAnalyticsClient(unittest.TestCase):
 
         ab_test_name = str(self.index.name)
 
+        with self.assertRaises(RequestException) as _:
+            self.client.get_ab_test('foo')
+
         response = self.client.add_ab_test({
             "name": ab_test_name,
             "variants": [

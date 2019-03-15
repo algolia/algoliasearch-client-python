@@ -52,7 +52,7 @@ class AnalyticsClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         if not ab_test_id:
-            raise ValueError('ab_test_id cannot be empty')
+            raise ValueError('ab_test_id cannot be empty.')
 
         return self._transporter.read(
             Verbs.GET,

@@ -14,7 +14,7 @@ class Config(object):
         self.app_id = str(app_id)
 
         if not app_id:
-            raise AlgoliaException('Application cannot be empty.')
+            raise ValueError('Application cannot be empty.')
 
         self.api_key = str(api_key)
 
