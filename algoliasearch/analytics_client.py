@@ -72,7 +72,7 @@ class AnalyticsClient(object):
         )
 
     def stop_ab_test(self, ab_test_id, request_options=None):
-        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 
         if not ab_test_id:
             raise ValueError('ab_test_id cannot be empty')
@@ -85,7 +85,7 @@ class AnalyticsClient(object):
         )
 
     def delete_ab_test(self, ab_test_id, request_options=None):
-        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
 
         if not ab_test_id:
             raise ValueError('ab_test_id cannot be empty')
