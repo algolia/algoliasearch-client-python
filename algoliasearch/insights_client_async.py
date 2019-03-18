@@ -1,12 +1,16 @@
+import types
+
 from algoliasearch.configs import InsightsConfig
 from algoliasearch.helpers_async import _create_async_methods_in
-from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.insights_client import InsightsClient, UserInsightsClient
 
 
 class InsightsClientAsync(InsightsClient):
     def __init__(self, insights_client, transporter, insights_config):
-        # type: (InsightsClient, Transporter, InsightsConfig) -> None
+        # type: (InsightsClient, TransporterAsync, InsightsConfig) -> None
+
+        self._transporter_async = transporter
 
         super(InsightsClientAsync, self).__init__(insights_client._transporter,
                                                   insights_config)
@@ -18,6 +22,11 @@ class InsightsClientAsync(InsightsClient):
         # type: (str) -> UserInsightsClientAsync
 
         return UserInsightsClientAsync(self, user_token)
+
+    def close(self):
+        # type: () -> types.GeneratorType
+
+        return self._transporter_async._requester.close()  # type: ignore
 
 
 class UserInsightsClientAsync(UserInsightsClient):

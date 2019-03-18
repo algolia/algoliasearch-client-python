@@ -1,5 +1,6 @@
 import asyncio
 import math
+import types
 from typing import Optional, Union, List, Iterator
 
 from algoliasearch.configs import SearchConfig
@@ -7,7 +8,7 @@ from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import SettingsDeserializer
-from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.http.verb import Verb
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_index import SearchIndex
@@ -21,7 +22,7 @@ from algoliasearch.iterators_async import (
 class SearchIndexAsync(SearchIndex):
 
     def __init__(self, search_index, transporter, config, name):
-        # type: (SearchIndex, Transporter, SearchConfig, str) -> None
+        # type: (SearchIndex, TransporterAsync, SearchConfig, str) -> None
 
         self._search_index = search_index
         self._transporter_async = transporter
@@ -142,3 +143,8 @@ class SearchIndexAsync(SearchIndex):
         # type: () -> SearchIndex
 
         return self._search_index
+
+    def close(self):
+        # type: () -> types.GeneratorType
+
+        return self._transporter_async._requester.close()  # type: ignore

@@ -1,6 +1,8 @@
+import types
+
 from algoliasearch.configs import SearchConfig
 from algoliasearch.helpers_async import _create_async_methods_in
-from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index_async import SearchIndexAsync
 
@@ -8,7 +10,7 @@ from algoliasearch.search_index_async import SearchIndexAsync
 class SearchClientAsync(SearchClient):
 
     def __init__(self, search_client, transporter, search_config):
-        # type: (SearchClient, Transporter, SearchConfig) -> None
+        # type: (SearchClient, TransporterAsync, SearchConfig) -> None
 
         self._search_client = search_client
         self._transporter_async = transporter
@@ -30,6 +32,11 @@ class SearchClientAsync(SearchClient):
 
         return SearchIndexAsync(
             index, self._transporter_async, self._config, name)
+
+    def close(self):
+        # type: () -> types.GeneratorType
+
+        return self._transporter_async._requester.close()  # type: ignore
 
     def _sync(self):
         # type: () -> SearchClient

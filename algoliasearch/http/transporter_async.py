@@ -1,10 +1,12 @@
 import asyncio
 
+from algoliasearch.configs import Config
 from algoliasearch.exceptions import (
     RequestException,
     AlgoliaUnreachableHostException
 )
 from algoliasearch.http.hosts import HostsCollection
+from algoliasearch.http.requester_async import RequesterAsync
 from algoliasearch.http.transporter import (
     Transporter,
     RetryOutcome,

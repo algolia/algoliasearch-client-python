@@ -8,19 +8,22 @@ class SyncDecorator(object):
     @property
     def name(self):
 
-        return self.__base.name
+        return self._base.name
 
     def __init__(self, base):
 
-        self.__base = base
+        self._base = base
+
+    def close(self):
+        return self._base.close()
 
     def __getattr__(self, name):
-        method = getattr(self.__base, name)
+        method = getattr(self._base, name)
 
         if not callable(method):
             return method
 
-        method = getattr(self.__base, '{}_async'.format(name))
+        method = getattr(self._base, '{}_async'.format(name))
 
         def closure(*args, **kwargs):
             result = method(*args, **kwargs)
@@ -38,11 +41,18 @@ class SyncDecorator(object):
 
     def init_index(self, name):
 
-        return SyncDecorator(self.__base.init_index(name))
+        search_index = self._base.init_index(name)
+
+        search_index.__setattr__('close', self._base.close)
+
+        return SyncDecorator(search_index)
 
     def user(self, user_token):
 
-        return SyncDecorator(self.__base.user(user_token))
+        user_insights_client = self._base.user(user_token)
+        user_insights_client.__setattr__('close', self._base.close)
+
+        return SyncDecorator(user_insights_client)
 
     def iterator_to_array(self, iterator):
 
@@ -60,3 +70,9 @@ class SyncDecorator(object):
             return objects
 
         return asyncio.get_event_loop().run_until_complete(closure())
+
+    def __del__(self):
+
+        asyncio.get_event_loop().run_until_complete(
+            asyncio.gather(self._base.close())
+        )
