@@ -1,5 +1,8 @@
 import types
 
+import asyncio
+from typing import Optional, Type
+
 from algoliasearch.configs import SearchConfig
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.http.transporter_async import TransporterAsync
@@ -37,6 +40,11 @@ class SearchClientAsync(SearchClient):
         # type: () -> types.GeneratorType
 
         return self._transporter_async._requester.close()  # type: ignore
+
+    def __aexit__(self, exc_type, exc, tb):
+        # type: (Optional[Type[BaseException]], Optional[BaseException],Optional[types.TracebackType]) -> types.GeneratorType # noqa: E501
+
+        return self.close()
 
     def _sync(self):
         # type: () -> SearchClient
