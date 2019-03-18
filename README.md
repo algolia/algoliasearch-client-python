@@ -67,8 +67,8 @@ You can find both on [your Algolia account](https://www.algolia.com/api-keys).
 ```python
 from algoliasearch import algoliasearch
 
-client = algoliasearch.Client("YourApplicationID", 'YourAPIKey')
-index = client.init_index('your_index_name')
+client = algoliasearch.Client("YourApplicationID", "YourAPIKey")
+index = client.init_index("your_index_name")
 ```
 
 ## Push data
@@ -76,7 +76,7 @@ index = client.init_index('your_index_name')
 Without any prior configuration, you can start indexing [500 contacts](https://github.com/algolia/datasets/blob/master/contacts/contacts.json) in the ```contacts``` index using the following code:
 ```python
 index = client.init_index("contacts")
-batch = json.load(open('contacts.json'))
+batch = json.load(open("contacts.json"))
 index.add_objects(batch)
 ```
 
