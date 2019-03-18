@@ -1,5 +1,7 @@
 import abc
 
+from typing import Dict
+
 from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.user_agent import UserAgent
@@ -78,7 +80,7 @@ class AnalyticsConfig(Config):
         super(AnalyticsConfig, self).__init__(app_id, api_key)
 
     def build_hosts(self):
-        # type: () -> dict
+        # type: () -> Dict[str, HostsCollection]
 
         read_hosts = write_hosts = [
             Host('{}.{}.{}'.format('analytics', self.__region, 'algolia.com'))

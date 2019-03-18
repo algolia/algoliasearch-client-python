@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 
 from algoliasearch.exceptions import AlgoliaException, RequestException
 from algoliasearch.http.request_options import RequestOptions
@@ -10,7 +10,7 @@ class AccountClient(object):
 
     @staticmethod
     def copy_index(source_index, destination_index, request_options=None):
-        # type: (SearchIndex, SearchIndex, Optional[Union[dict, RequestOptions]]) -> MultipleResponse  # noqa: E501
+        # type: (SearchIndex, SearchIndex, Optional[Union[Dict[str, Any], RequestOptions]]) -> MultipleResponse  # noqa: E501
 
         if source_index.app_id == destination_index.app_id:
             raise AlgoliaException(

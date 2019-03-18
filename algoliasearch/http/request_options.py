@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Optional, Any, Dict
 
 from algoliasearch.configs import Config
 from algoliasearch.helpers import get_items
@@ -14,6 +14,8 @@ class RequestOptions(object):
         self.data = data
 
     def __setitem__(self, option, value):
+        # type: (str, Any) -> None
+
         if option in Params.HEADERS:
             self.headers[option] = str(value)
         elif option in Params.QUERY_PARAMETERS:

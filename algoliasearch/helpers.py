@@ -1,7 +1,7 @@
 import json
 import sys
 
-from typing import Optional, Iterable, List, Union, Iterator
+from typing import Optional, Iterable, List, Union, Iterator, Dict, Any
 
 from algoliasearch.exceptions import MissingObjectIdException
 
@@ -40,7 +40,7 @@ def get_items(dictionary=None):
 
 
 def assert_object_id(objects):
-    # type: (Iterable[dict]) -> None
+    # type: (Iterable[Dict[str, Any]]) -> None
 
     for obj in objects:
         if 'objectID' not in obj:

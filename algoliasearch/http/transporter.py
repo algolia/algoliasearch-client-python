@@ -1,6 +1,6 @@
 import time
 
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 
 from algoliasearch.exceptions import (
     AlgoliaUnreachableHostException,
@@ -112,7 +112,7 @@ class Request(object):
         self.url = ''
 
     def __eq__(self, other):
-        # type: (dict) -> bool
+        # type: (object) -> bool
 
         return self.__dict__ == other.__dict__
 
@@ -121,7 +121,7 @@ class Response(object):
     def __init__(self, status_code=None, content=None,
                  error_message='', is_timed_out_error=False,
                  is_network_error=False):
-        # type: (int, Optional[dict], str, bool, bool) -> None
+        # type: (int, Optional[Dict[str, Any]], str, bool, bool) -> None
 
         self.status_code = status_code
         self.content = content

@@ -4,7 +4,7 @@ import datetime
 import decimal
 import sys
 
-from typing import Union
+from typing import Union, Any, Dict
 
 from algoliasearch.helpers import get_items
 
@@ -18,7 +18,7 @@ else:
 class QueryParametersSerializer(object):
     @staticmethod
     def serialize(query_parameters):
-        # type: (dict) -> str
+        # type: (Dict[str, Any]) -> str
 
         for key, value in get_items(query_parameters):
             if isinstance(value, (list, dict)):
@@ -36,7 +36,7 @@ class QueryParametersSerializer(object):
 class SettingsDeserializer(object):
     @staticmethod
     def deserialize(data):
-        # type: (dict) -> dict
+        # type: (Dict[str, Any]) -> dict
 
         keys = {
             'attributesToIndex': 'searchableAttributes',
@@ -54,7 +54,7 @@ class SettingsDeserializer(object):
 class DataSerializer(object):
     @staticmethod
     def serialize(data):
-        # type: (Union[dict, list]) -> str
+        # type: (Union[Dict[str, Any], list]) -> str
 
         return json.dumps(data, cls=JSONEncoder)
 

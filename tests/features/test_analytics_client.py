@@ -124,6 +124,6 @@ class TestAnalyticsClient(unittest.TestCase):
 
         if ab_tests['total'] > 0:
             for ab_test in self.client.get_ab_tests()['abtests']:
-                if (ab_test['name'].startswith(python_version) and not
-                ab_test['name'].startswith(prefix_of_today_tests)):
-                    self.client.delete_ab_test(ab_test['abTestID'])
+                if ab_test['name'].startswith(python_version):
+                    if not ab_test['name'].startswith(prefix_of_today_tests):
+                        self.client.delete_ab_test(ab_test['abTestID'])

@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 
 from algoliasearch.configs import AnalyticsConfig
 from algoliasearch.helpers import endpoint, is_async_available
@@ -39,7 +39,7 @@ class AnalyticsClient(object):
         return client
 
     def get_ab_tests(self, request_options=None):
-        # type: (Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (Optional[Union[Dict[str, Any], RequestOptions]]) -> dict
 
         return self._transporter.read(
             Verbs.GET,
@@ -49,7 +49,7 @@ class AnalyticsClient(object):
         )
 
     def get_ab_test(self, ab_test_id, request_options=None):
-        # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (str, Optional[Union[Dict[str, Any], RequestOptions]]) -> dict
 
         assert ab_test_id, 'ab_test_id cannot be empty.'
 
@@ -61,7 +61,7 @@ class AnalyticsClient(object):
         )
 
     def add_ab_test(self, ab_test, request_options=None):
-        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (dict, Optional[Union[Dict[str, Any], RequestOptions]]) -> dict
 
         return self._transporter.write(
             Verbs.POST,
@@ -71,7 +71,7 @@ class AnalyticsClient(object):
         )
 
     def stop_ab_test(self, ab_test_id, request_options=None):
-        # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (int, Optional[Union[Dict[str, Any], RequestOptions]]) -> dict
 
         assert ab_test_id, 'ab_test_id cannot be empty.'
 
@@ -83,7 +83,7 @@ class AnalyticsClient(object):
         )
 
     def delete_ab_test(self, ab_test_id, request_options=None):
-        # type: (int, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (int, Optional[Union[Dict[str, Any], RequestOptions]]) -> dict
 
         assert ab_test_id, 'ab_test_id cannot be empty.'
 
