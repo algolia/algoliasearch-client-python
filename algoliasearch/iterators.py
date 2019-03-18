@@ -113,6 +113,7 @@ class SynonymIterator(PaginatorIterator):
 
     def get_endpoint(self):
         # type: () -> str
+
         return '1/indexes/{}/synonyms/search'.format(self._index_name)
 
 
@@ -120,4 +121,5 @@ class RuleIterator(PaginatorIterator):
 
     def get_endpoint(self):
         # type: () -> str
+
         return '1/indexes/{}/rules/search'.format(self._index_name)

@@ -28,6 +28,7 @@ class TransporterAsync(Transporter):
             decision = self._retry_strategy.decide(host, response)
 
             if decision == RetryOutcome.SUCCESS:
+
                 return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
                 content = response.error_message

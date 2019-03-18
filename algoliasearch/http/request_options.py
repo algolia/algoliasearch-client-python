@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from algoliasearch.configs import Config
 from algoliasearch.helpers import get_items
@@ -6,7 +6,7 @@ from algoliasearch.helpers import get_items
 
 class RequestOptions(object):
     def __init__(self, headers, query_parameters, timeouts, data):
-        # type: (dict, dict, dict, dict) -> None
+        # type: (Dict[str, str], Dict[str, Any], Dict[str, int], Dict[str, Any]) -> None  # noqa: E501
 
         self.headers = headers
         self.query_parameters = query_parameters
@@ -25,7 +25,7 @@ class RequestOptions(object):
 
     @staticmethod
     def create(config, options=None):
-        # type: (Config, Optional[dict]) -> RequestOptions
+        # type: (Config, Optional[Dict[str, Any]]) -> RequestOptions
 
         headers = dict(config.headers)
 

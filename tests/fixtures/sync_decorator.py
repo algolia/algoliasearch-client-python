@@ -7,9 +7,11 @@ from algoliasearch.iterators import Iterator
 class SyncDecorator(object):
     @property
     def name(self):
+
         return self.__base.name
 
     def __init__(self, base):
+
         self.__base = base
 
     def __getattr__(self, name):
@@ -35,12 +37,15 @@ class SyncDecorator(object):
         return closure
 
     def init_index(self, name):
+
         return SyncDecorator(self.__base.init_index(name))
 
     def user(self, user_token):
+
         return SyncDecorator(self.__base.user(user_token))
 
     def iterator_to_array(self, iterator):
+
         def closure():
             objects = []
 

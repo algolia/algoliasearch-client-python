@@ -112,6 +112,8 @@ class Request(object):
         self.url = ''
 
     def __eq__(self, other):
+        # type: (dict) -> bool
+
         return self.__dict__ == other.__dict__
 
 
@@ -140,8 +142,10 @@ class RetryStrategy(object):
             return RetryOutcome.RETRY
         elif self.__is_retryable(response):
             host.up = False
+
             return RetryOutcome.RETRY
         elif response.status_code is not None and self.__is_success(response):
+
             return RetryOutcome.SUCCESS
 
         return RetryOutcome.FAIL

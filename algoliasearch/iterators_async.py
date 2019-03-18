@@ -79,6 +79,7 @@ class ObjectIteratorAsync(Iterator):
         if self._raw_response:
             if len(self._raw_response['hits']):
                 result = self._raw_response['hits'].pop(0)
+
                 return result
 
             if 'cursor' not in self._raw_response:
@@ -101,6 +102,7 @@ class SynonymIteratorAsync(PaginatorIteratorAsync):
 
     def get_endpoint(self):
         # type: () -> str
+
         return '1/indexes/{}/synonyms/search'.format(self._index_name)
 
 
@@ -108,4 +110,5 @@ class RuleIteratorAsync(PaginatorIteratorAsync):
 
     def get_endpoint(self):
         # type: () -> str
+
         return '1/indexes/{}/rules/search'.format(self._index_name)

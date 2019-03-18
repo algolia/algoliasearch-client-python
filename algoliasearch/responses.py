@@ -131,14 +131,10 @@ class UpdateApiKeyResponse(Response):
             'validity', 'maxQueriesPerIPPerHour', 'maxHitsPerQuery',
         )
 
-        return any([
-            (
-                    valid_key in self.__request_options.data and
-                    self.__request_options.data[valid_key] == api_key.get(
-                valid_key)
-            )
-            for valid_key in valid_keys
-        ])
+        body = self.__request_options.data
+
+        return any([(valid_key in body and body[valid_key] == api_key.get(
+            valid_key)) for valid_key in valid_keys])
 
 
 class DeleteApiKeyResponse(Response):
@@ -198,6 +194,7 @@ class MultipleIndexBatchIndexingResponse(Response):
 
     def wait(self):
         # type: () -> MultipleIndexBatchIndexingResponse
+
         while not self.__done:
             for index_name, task_id in get_items(self.raw_response['taskID']):
                 self.__client._sync().wait_task(index_name, task_id)

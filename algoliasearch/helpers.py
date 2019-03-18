@@ -50,6 +50,7 @@ def assert_object_id(objects):
 
 def build_raw_response_batch(action, objects):
     # type: (str, Union[List[dict], Iterator[dict]]) -> List[dict]
+
     return [{'action': action, 'body': obj} for obj in objects]
 
 

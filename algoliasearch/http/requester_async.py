@@ -28,6 +28,7 @@ class RequesterAsync(Requester):
                 json = yield from response.json()
 
         except asyncio.TimeoutError as e:
+
             return Response(
                 error_message=str(e),
                 is_timed_out_error=True
