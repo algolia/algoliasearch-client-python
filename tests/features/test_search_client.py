@@ -20,13 +20,16 @@ class TestSearchClient(unittest.TestCase):
     def setUp(self):
         self.client = F.search_client()
         self.index = F.index(self._testMethodName)
-        self.index2 = None
+        self.index2 = self.index3 = self.index4 = self.index5 = self.index5 = None
 
     def tearDown(self):
         self.index.delete()
 
-        if self.index2 is not None:
-            self.index2.delete()
+        indices = [self.index2, self.index3, self.index4, self.index5,
+                   self.index6]
+        indices_used = (index for index in indices if index is not None)
+        for index in indices_used:
+            index.delete()
 
     def test_copy_move_index(self):
         objects = [
@@ -56,68 +59,66 @@ class TestSearchClient(unittest.TestCase):
             })
         ]).wait()
 
+        self.index2 = F.index('{}_settings'.format(self._testMethodName))
         responses.push(self.client.copy_settings(
-            self.index.name, '{}_settings'.format(self.index.name)
+            self.index.name, self.index2.name
         ))
 
+        self.index3 = F.index('{}_rules'.format(self._testMethodName))
         responses.push(self.client.copy_rules(
-            self.index.name, '{}_rules'.format(self.index.name)
+            self.index.name, self.index3.name
         ))
 
+        self.index4 = F.index('{}_synonyms'.format(self._testMethodName))
         responses.push(self.client.copy_synonyms(
-            self.index.name, '{}_synonyms'.format(self.index.name)
+            self.index.name, self.index4.name
         ))
 
+        self.index5 = F.index('{}_full_copy'.format(self._testMethodName))
         responses.push(self.client.copy_index(
-            self.index.name, '{}_full_copy'.format(self.index.name)
+            self.index.name, self.index5.name
         ))
 
         responses.wait()
 
         index_name = self.index.name
 
-        self.index._name = '{}_settings'.format(index_name)
         self.assertEqual(
-            self.index.get_settings()['attributesForFaceting'], ['company']
+            self.index2.get_settings()['attributesForFaceting'], ['company']
         )
 
-        self.index._name = '{}_rules'.format(index_name)
-        self.index.get_rule('company_auto_faceting')
+        self.index3.get_rule('company_auto_faceting')
         with self.assertRaises(RequestException) as cm:
-            self.index.get_synonym('google_placeholder')
+            self.index3.get_synonym('google_placeholder')
 
-        self.index._name = '{}_synonyms'.format(index_name)
-        self.index.get_synonym('google_placeholder')
+        self.index4.get_synonym('google_placeholder')
         with self.assertRaises(RequestException) as cm:
-            self.index.get_rule('company_auto_faceting')
+            self.index4.get_rule('company_auto_faceting')
 
-        self.index._name = '{}_full_copy'.format(index_name)
-        self.index.get_synonym('google_placeholder')
-        self.index.get_rule('company_auto_faceting')
+        self.index5.get_synonym('google_placeholder')
+        self.index5.get_rule('company_auto_faceting')
         self.assertEqual(
-            self.index.get_settings()['attributesForFaceting'], ['company']
+            self.index5.get_settings()['attributesForFaceting'], ['company']
         )
-        for obj in self.index.browse_objects():
+        for obj in self.index5.browse_objects():
             self.assertIn(obj, objects)
 
+        self.index6 = F.index('{}_after_move'.format(self._testMethodName))
         self.client.move_index(
             self.index.name,
-            '{}_after_move'.format(index_name)
+            self.index6.name
         ).wait()
 
-        moved_index = self.client.init_index(
-            '{}_after_move'.format(index_name))
-
-        moved_index.get_synonym('google_placeholder')
-        moved_index.get_rule('company_auto_faceting')
+        self.index6.get_synonym('google_placeholder')
+        self.index6.get_rule('company_auto_faceting')
         self.assertEqual(
-            moved_index.get_settings()['attributesForFaceting'], ['company']
+            self.index6.get_settings()['attributesForFaceting'], ['company']
         )
-        for obj in moved_index.browse_objects():
+        for obj in self.index6.browse_objects():
             self.assertIn(obj, objects)
 
         with self.assertRaises(RequestException) as cm:
-            self.client.init_index('copy_index_full_copy').search('')
+            self.client.init_index(self.index.name).search('')
 
         self.assertEqual(cm.exception.status_code, 404)
 
