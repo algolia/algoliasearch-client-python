@@ -13,20 +13,20 @@ class RequesterAsync(Requester):
     def __init__(self):
         # type: () -> None
 
-        self.__session = None
+        self._session = None
 
     @asyncio.coroutine  # type: ignore
     def send(self, request):  # type: ignore
         # type: (Request) -> Response
 
-        if self.__session is None:
+        if self._session is None:
             connector = aiohttp.TCPConnector(use_dns_cache=False)
-            self.__session = aiohttp.ClientSession(  # type: ignore
+            self._session = aiohttp.ClientSession(  # type: ignore
                 connector=connector)
 
         try:
             with async_timeout.timeout(request.timeout):
-                response = yield from (self.__session.request(  # type: ignore
+                response = yield from (self._session.request(  # type: ignore
                     method=request.verb, url=request.url,
                     headers=request.headers,
                     data=request.data_as_string
@@ -51,5 +51,5 @@ class RequesterAsync(Requester):
     def close(self):
         # type: () -> None
 
-        if self.__session is not None and not self.__session.closed:
-            yield from self.__session.close()
+        if self._session is not None and not self._session.closed:
+            yield from self._session.close()

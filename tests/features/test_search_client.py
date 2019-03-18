@@ -13,7 +13,7 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
 from tests.helpers.env import Env
-from tests.helpers.factory import Factory as F
+from tests.helpers.factory import Factory as F, Factory
 
 
 class TestSearchClient(unittest.TestCase):
@@ -344,3 +344,26 @@ class TestSearchClient(unittest.TestCase):
     def test_personalization_strategy(self):
         response = self.client.get_personalization_strategy()
         self.assertIn('taskID', response)
+
+    @unittest.skipIf(os.environ.get('TEST_TYPE', False) != 'async',
+                     'Specific asnyc tests')
+    def test_async_session(self):
+        app_id = Factory.get_app_id()
+        api_key = Factory.get_api_key()
+
+        client = SearchClient.create(app_id, api_key)
+
+        import asyncio
+
+        result = asyncio.get_event_loop().run_until_complete(
+            asyncio.gather(client.list_api_keys_async())
+        )
+        self.assertIsInstance(result, list)
+
+        asyncio.get_event_loop().run_until_complete(
+            asyncio.gather(client.close())
+        )
+
+        self.assertTrue(
+            client._transporter_async._requester._session.closed
+        )
