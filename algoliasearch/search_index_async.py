@@ -8,7 +8,7 @@ from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import SettingsDeserializer
 from algoliasearch.http.transporter import Transporter
-from algoliasearch.http.verbs import Verbs
+from algoliasearch.http.verb import Verb
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.iterators_async import (
@@ -82,7 +82,7 @@ class SearchIndexAsync(SearchIndex):
         params = {'getVersion': 2}
 
         raw_response = yield from self._transporter_async.read(
-            Verbs.GET,
+            Verb.GET,
             endpoint('1/indexes/{}/settings', self._name),
             params,
             request_options

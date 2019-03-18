@@ -7,7 +7,7 @@ from typing import Optional, Union, List
 from algoliasearch.helpers import endpoint, is_async_available
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer
-from algoliasearch.http.verbs import Verbs
+from algoliasearch.http.verb import Verb
 from algoliasearch.responses import (
     IndexingResponse,
     AddApiKeyResponse,
@@ -65,7 +65,7 @@ class SearchClient(object):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             endpoint('1/indexes/{}/operation', src_index_name),
             {
                 'operation': 'move',
@@ -81,7 +81,7 @@ class SearchClient(object):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             endpoint('1/indexes/{}/operation', src_index_name),
             {
                 'operation': 'copy',
@@ -134,7 +134,7 @@ class SearchClient(object):
         request_options['X-Algolia-User-ID'] = user_id
 
         return self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             '1/clusters/mapping',
             {'cluster': cluster},
             request_options
@@ -149,7 +149,7 @@ class SearchClient(object):
         request_options['X-Algolia-User-ID'] = user_id
 
         return self._transporter.write(
-            Verbs.DELETE,
+            Verb.DELETE,
             '1/clusters/mapping',
             None,
             request_options
@@ -159,7 +159,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '1/clusters',
             {},
             request_options
@@ -169,7 +169,7 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             endpoint('1/clusters/mapping/{}', user_id),
             None,
             request_options
@@ -179,7 +179,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '1/clusters/mapping',
             None,
             request_options
@@ -189,7 +189,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '1/clusters/mapping/top',
             None,
             request_options
@@ -199,7 +199,7 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.POST,
+            Verb.POST,
             '1/clusters/mapping/search',
             {'query': query},
             request_options
@@ -209,7 +209,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '1/keys',
             None,
             request_options
@@ -219,7 +219,7 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             endpoint('1/keys/{}', key),
             None,
             request_options
@@ -229,7 +229,7 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> DeleteApiKeyResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verbs.DELETE,
+            Verb.DELETE,
             endpoint('1/keys/{}', key),
             None,
             request_options
@@ -240,7 +240,7 @@ class SearchClient(object):
         # type: (list, Optional[Union[dict, RequestOptions]]) -> AddApiKeyResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             '1/keys',
             {
                 'acl': acl
@@ -258,7 +258,7 @@ class SearchClient(object):
                                                     request_options)
 
         raw_response = self._transporter.write(
-            Verbs.PUT,
+            Verb.PUT,
             endpoint('1/keys/{}', key),
             {},
             request_options
@@ -270,7 +270,7 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> RestoreApiKeyResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             endpoint('1/keys/{}/restore', key),
             None,
             request_options
@@ -299,7 +299,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '1/indexes',
             None,
             request_options
@@ -309,7 +309,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '1/logs',
             None,
             request_options
@@ -319,7 +319,7 @@ class SearchClient(object):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.POST,
+            Verb.POST,
             '1/indexes/*/queries',
             {
                 'requests': queries
@@ -331,7 +331,7 @@ class SearchClient(object):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.POST,
+            Verb.POST,
             '1/indexes/*/objects',
             {
                 'requests': requests
@@ -343,7 +343,7 @@ class SearchClient(object):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> MultipleIndexBatchIndexingResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             '1/indexes/*/batch',
             {
                 'requests': operations
@@ -362,7 +362,7 @@ class SearchClient(object):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             '1/recommendation/personalization/strategy',
             strategy,
             request_options
@@ -372,7 +372,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '1/recommendation/personalization/strategy',
             None,
             request_options

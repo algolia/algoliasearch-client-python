@@ -5,7 +5,7 @@ from algoliasearch.helpers import is_async_available
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
-from algoliasearch.http.verbs import Verbs
+from algoliasearch.http.verb import Verb
 
 
 class InsightsClient(object):
@@ -51,7 +51,7 @@ class InsightsClient(object):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             '1/events',
             {'events': events},
             request_options

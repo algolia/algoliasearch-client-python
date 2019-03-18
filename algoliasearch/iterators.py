@@ -4,7 +4,7 @@ from typing import Optional, Union
 
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
-from algoliasearch.http.verbs import Verbs
+from algoliasearch.http.verb import Verb
 
 
 class Iterator(object):
@@ -65,7 +65,7 @@ class PaginatorIterator(Iterator):
                 raise StopIteration
 
         self._raw_response = self._transporter.read(
-            Verbs.POST,
+            Verb.POST,
             self.get_endpoint(),
             self._data,
             self._request_options
@@ -100,7 +100,7 @@ class ObjectIterator(Iterator):
                 data['cursor'] = self._raw_response['cursor']
 
         self._raw_response = self._transporter.read(
-            Verbs.POST,
+            Verb.POST,
             '1/indexes/{}/browse'.format(self._index_name),
             data,
             self._request_options

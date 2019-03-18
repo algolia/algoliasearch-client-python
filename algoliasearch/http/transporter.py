@@ -13,7 +13,7 @@ from algoliasearch.http.serializer import (
     QueryParametersSerializer,
     DataSerializer
 )
-from algoliasearch.http.verbs import Verbs
+from algoliasearch.http.verb import Verb
 
 try:
     from algoliasearch.http.requester import Requester
@@ -60,7 +60,7 @@ class Transporter(object):
             data.update(request_options.data)
 
         query_parameters = dict(request_options.query_parameters)
-        if verb == Verbs.GET:
+        if verb == Verb.GET:
             query_parameters.update(request_options.data)
 
         relative_url = '{}?{}'.format(path,

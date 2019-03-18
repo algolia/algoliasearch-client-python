@@ -5,7 +5,7 @@ from algoliasearch.helpers import endpoint, is_async_available
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
-from algoliasearch.http.verbs import Verbs
+from algoliasearch.http.verb import Verb
 
 
 class AnalyticsClient(object):
@@ -42,7 +42,7 @@ class AnalyticsClient(object):
         # type: (Optional[Union[Dict[str, Any], RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             '2/abtests',
             None,
             request_options
@@ -54,7 +54,7 @@ class AnalyticsClient(object):
         assert ab_test_id, 'ab_test_id cannot be empty.'
 
         return self._transporter.read(
-            Verbs.GET,
+            Verb.GET,
             endpoint('2/abtests/{}', ab_test_id),
             None,
             request_options
@@ -64,7 +64,7 @@ class AnalyticsClient(object):
         # type: (dict, Optional[Union[Dict[str, Any], RequestOptions]]) -> dict
 
         return self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             '2/abtests',
             ab_test,
             request_options
@@ -76,7 +76,7 @@ class AnalyticsClient(object):
         assert ab_test_id, 'ab_test_id cannot be empty.'
 
         return self._transporter.write(
-            Verbs.POST,
+            Verb.POST,
             endpoint('2/abtests/{}/stop', ab_test_id),
             None,
             request_options
@@ -88,7 +88,7 @@ class AnalyticsClient(object):
         assert ab_test_id, 'ab_test_id cannot be empty.'
 
         return self._transporter.write(
-            Verbs.DELETE,
+            Verb.DELETE,
             endpoint('2/abtests/{}', ab_test_id),
             None,
             request_options

@@ -20,7 +20,7 @@ class TestSearchClient(unittest.TestCase):
     def setUp(self):
         self.client = F.search_client()
         self.index = F.index(self._testMethodName)
-        self.index2 = self.index3 = self.index4 = self.index5 = self.index5 = None  # noqa: E501
+        self.index2 = self.index3 = self.index4 = self.index5 = self.index5 = self.index6 = None  # noqa: E501
 
     def tearDown(self):
         self.index.delete()
