@@ -143,8 +143,3 @@ class SearchIndexAsync(SearchIndex):
         # type: () -> SearchIndex
 
         return self._search_index
-
-    def close(self):
-        # type: () -> types.GeneratorType
-
-        return self._transporter_async._requester.close()  # type: ignore
