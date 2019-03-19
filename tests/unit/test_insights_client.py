@@ -1,5 +1,6 @@
 import unittest
 
+from algoliasearch.configs import InsightsConfig
 from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.insights_client import InsightsClient
 
@@ -11,6 +12,14 @@ class TestInsightsClient(unittest.TestCase):
         self.assertIsInstance(client, InsightsClient)
         with self.assertRaises(AssertionError) as _:
             InsightsClient.create('', '')
+
+    def test_create_with_config(self):
+        config = InsightsConfig('foo', 'bar')
+
+        self.assertIsInstance(
+            InsightsClient.create_with_config(config),
+            InsightsClient
+        )
 
     def test_region(self):
         client = InsightsClient.create('foo', 'bar')

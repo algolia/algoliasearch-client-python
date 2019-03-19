@@ -94,7 +94,7 @@ class AnalyticsConfig(Config):
 
 class InsightsConfig(Config):
 
-    def __init__(self, app_id, api_key, region):
+    def __init__(self, app_id, api_key, region='us'):
         # type: (str, str, str) -> None
 
         self.__region = region

@@ -20,6 +20,13 @@ class InsightsClient(object):
         # type: (str, str, str) -> InsightsClient
 
         config = InsightsConfig(app_id, api_key, region)
+
+        return InsightsClient.create_with_config(config)
+
+    @staticmethod
+    def create_with_config(config):
+        # type: (InsightsConfig) -> InsightsClient
+
         requester = Requester()
         transporter = Transporter(requester, config)
 

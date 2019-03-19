@@ -20,6 +20,13 @@ class AnalyticsClient(object):
         # type: (str, str, str) -> AnalyticsClient
 
         config = AnalyticsConfig(app_id, api_key, region)
+
+        return AnalyticsClient.create_with_config(config)
+
+    @staticmethod
+    def create_with_config(config):
+        # type: (AnalyticsConfig) -> AnalyticsClient
+
         requester = Requester()
         transporter = Transporter(requester, config)
 

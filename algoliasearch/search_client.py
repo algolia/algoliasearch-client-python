@@ -45,6 +45,13 @@ class SearchClient(object):
         # type: (str, str) -> SearchClient
 
         config = SearchConfig(app_id, api_key)
+
+        return SearchClient.create_with_config(config)
+
+    @staticmethod
+    def create_with_config(config):
+        # type: (SearchConfig) -> SearchClient
+
         requester = Requester()
         transporter = Transporter(requester, config)
 
