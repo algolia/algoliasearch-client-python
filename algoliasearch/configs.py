@@ -1,6 +1,7 @@
 import abc
+import os
 
-from typing import Dict
+from typing import Dict, Optional
 
 from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.http.hosts import Host, HostsCollection
@@ -10,8 +11,11 @@ from algoliasearch.user_agent import UserAgent
 class Config(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, app_id, api_key):
-        # type: (str, str) -> None
+    def __init__(self, app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> None
+
+        app_id = os.environ['ALGOLIA_APP_ID'] if app_id is None else app_id
+        api_key = os.environ['ALGOLIA_API_KEY'] if api_key is None else api_key
 
         self.app_id = str(app_id)
 
@@ -45,8 +49,8 @@ class Config(object):
 
 class SearchConfig(Config):
 
-    def __init__(self, app_id, api_key):
-        # type: (str, str) -> None
+    def __init__(self, app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> None
 
         super(SearchConfig, self).__init__(app_id, api_key)
 
@@ -72,10 +76,10 @@ class SearchConfig(Config):
 
 class AnalyticsConfig(Config):
 
-    def __init__(self, app_id, api_key, region):
-        # type: (str, str, str) -> None
+    def __init__(self, app_id=None, api_key=None, region=None):
+        # type: (Optional[str], Optional[str], Optional[str]) -> None
 
-        self.__region = region
+        self.__region = 'us' if region is None else region
 
         super(AnalyticsConfig, self).__init__(app_id, api_key)
 
@@ -94,10 +98,10 @@ class AnalyticsConfig(Config):
 
 class InsightsConfig(Config):
 
-    def __init__(self, app_id, api_key, region='us'):
-        # type: (str, str, str) -> None
+    def __init__(self, app_id=None, api_key=None, region=None):
+        # type: (Optional[str], Optional[str], Optional[str]) -> None
 
-        self.__region = region
+        self.__region = 'us' if region is None else region
 
         super(InsightsConfig, self).__init__(app_id, api_key)
 

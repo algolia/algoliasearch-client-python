@@ -41,8 +41,8 @@ class SearchClient(object):
         return SearchIndex(self._transporter, self._config, name)
 
     @staticmethod
-    def create(app_id, api_key):
-        # type: (str, str) -> SearchClient
+    def create(app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> SearchClient
 
         config = SearchConfig(app_id, api_key)
 

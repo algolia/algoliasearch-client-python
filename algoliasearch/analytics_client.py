@@ -16,8 +16,8 @@ class AnalyticsClient(object):
         self._config = search_config
 
     @staticmethod
-    def create(app_id, api_key, region='us'):
-        # type: (str, str, str) -> AnalyticsClient
+    def create(app_id=None, api_key=None, region=None):
+        # type: (Optional[str], Optional[str], Optional[str]) -> AnalyticsClient  # noqa: E501
 
         config = AnalyticsConfig(app_id, api_key, region)
 

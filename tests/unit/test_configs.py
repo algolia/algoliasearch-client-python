@@ -1,7 +1,8 @@
+import os
 import unittest
 from platform import python_version
 
-from algoliasearch.configs import SearchConfig
+from algoliasearch.configs import SearchConfig, Config
 from algoliasearch.http.hosts import HostsCollection
 from algoliasearch.version import VERSION
 
@@ -9,6 +10,25 @@ from algoliasearch.version import VERSION
 class TestConfig(unittest.TestCase):
     def setUp(self):
         self.config = SearchConfig('foo', 'bar')
+
+    def test_credentials_from_env(self):
+        old_app_id = os.environ['ALGOLIA_APP_ID']
+        old_api_key = os.environ['ALGOLIA_API_KEY']
+
+        try:
+            os.environ['ALGOLIA_APP_ID'] = 'foo-1'
+            os.environ['ALGOLIA_API_KEY'] = 'bar-1'
+
+            config = FakeConfig()
+            self.assertEqual(config.app_id, 'foo-1')
+            self.assertEqual(config.api_key, 'bar-1')
+
+            config = FakeConfig('foo-2', 'bar-2')
+            self.assertEqual(config.app_id, 'foo-2')
+            self.assertEqual(config.api_key, 'bar-2')
+        finally:
+            os.environ['ALGOLIA_APP_ID'] = old_app_id
+            os.environ['ALGOLIA_API_KEY'] = old_api_key
 
     def test_app_id(self):
         self.assertEqual(self.config.app_id, 'foo')
@@ -38,6 +58,11 @@ class TestConfig(unittest.TestCase):
                 VERSION, version),
             'Content-Type': 'application/json',
         })
+
+
+class FakeConfig(Config):
+    def build_hosts(self):
+        pass
 
 
 class TestSearchConfig(unittest.TestCase):
