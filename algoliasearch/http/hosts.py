@@ -7,11 +7,13 @@ from typing import List
 class Host(object):
     TTL = 300.0
 
-    def __init__(self, url, priority=0):
-        # type: (str, int) -> None
+    def __init__(self, url, priority=0, accept=None):
+        # type: (str, Optional[int], Optional[int]) -> None
 
         self.url = url
         self.priority = priority
+        self.accept = ((CallType.WRITE | CallType.READ) if accept is None
+                       else accept)
         self.last_use = 0.0
         self.retry_count = 0
         self.up = True
@@ -39,43 +41,17 @@ class HostsCollection(object):
         self.__hosts = sorted(self.__hosts, key=lambda x: x.priority,
                               reverse=True)
 
-    def reset(self):
+    def read(self):
         # type: () -> HostsCollection
 
-        self.__index = 0
+        return [host for host in self.__hosts if host.accept & CallType.READ]
 
-        return self
-
-    def next(self):  # Python 2
-        # type: () -> Host
-
-        return self.__next__()  # pragma: no cover
-
-    def __now(self):
-        # type: () -> float
-
-        return time.time()
-
-    def __iter__(self):
+    def write(self):
         # type: () -> HostsCollection
 
-        return self
+        return [host for host in self.__hosts if host.accept & CallType.WRITE]
 
-    def __next__(self):
-        # type: () -> Host
 
-        if self.__index == len(self.__hosts):
-            self.__index = 0
-            raise StopIteration
-
-        host = self.__hosts[self.__index]
-
-        self.__index += 1
-
-        if not host.up and self.__now() - host.last_use > Host.TTL:
-            host.up = True
-
-        if not host.up:
-            return self.__next__()
-
-        return host
+class CallType(object):
+    READ = 1
+    WRITE = 2

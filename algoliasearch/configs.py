@@ -4,7 +4,7 @@ import os
 from typing import Dict, Optional
 
 from algoliasearch.exceptions import AlgoliaException
-from algoliasearch.http.hosts import Host, HostsCollection
+from algoliasearch.http.hosts import Host, HostsCollection, CallType
 from algoliasearch.user_agent import UserAgent
 
 
@@ -42,7 +42,7 @@ class Config(object):
 
     @abc.abstractmethod
     def build_hosts(self):
-        # type: () -> dict
+        # type: () -> HostsCollection
 
         pass  # pragma: no cover
 
@@ -57,21 +57,15 @@ class SearchConfig(Config):
         self.batch_size = 1000
 
     def build_hosts(self):
-        # type: () -> dict
+        # type: () -> HostsCollection
 
-        read_hosts = write_hosts = [
+        return HostsCollection([
+            Host('{}-dsn.algolia.net'.format(self.app_id), 10, CallType.READ),
+            Host('{}.algolia.net'.format(self.app_id), 10, CallType.WRITE),
             Host('{}-1.algolianet.com'.format(self.app_id)),
             Host('{}-2.algolianet.com'.format(self.app_id)),
             Host('{}-3.algolianet.com'.format(self.app_id))
-        ]
-
-        read_hosts.append(Host('{}-dsn.algolia.net'.format(self.app_id, 10)))
-        write_hosts.append(Host('{}.algolia.net'.format(self.app_id, 10)))
-
-        return {
-            'read': HostsCollection(read_hosts),
-            'write': HostsCollection(write_hosts)
-        }
+        ])
 
 
 class AnalyticsConfig(Config):
@@ -84,16 +78,11 @@ class AnalyticsConfig(Config):
         super(AnalyticsConfig, self).__init__(app_id, api_key)
 
     def build_hosts(self):
-        # type: () -> Dict[str, HostsCollection]
+        # type: () -> HostsCollection
 
-        read_hosts = write_hosts = [
+        return HostsCollection([
             Host('{}.{}.{}'.format('analytics', self.__region, 'algolia.com'))
-        ]
-
-        return {
-            'read': HostsCollection(read_hosts),
-            'write': HostsCollection(write_hosts)
-        }
+        ])
 
 
 class InsightsConfig(Config):
@@ -106,13 +95,8 @@ class InsightsConfig(Config):
         super(InsightsConfig, self).__init__(app_id, api_key)
 
     def build_hosts(self):
-        # type: () -> dict
+        # type: () -> HostsCollection
 
-        read_hosts = write_hosts = [
+        return HostsCollection([
             Host('{}.{}.{}'.format('insights', self.__region, 'algolia.io'))
-        ]
-
-        return {
-            'read': HostsCollection(read_hosts),
-            'write': HostsCollection(write_hosts)
-        }
+        ])

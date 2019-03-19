@@ -6,7 +6,7 @@ import unittest
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException
-from algoliasearch.http.hosts import HostsCollection, Host
+from algoliasearch.http.hosts import HostsCollection, Host, CallType
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.transporter import Transporter
@@ -301,23 +301,22 @@ class TestSearchClient(unittest.TestCase):
     def test_dns_timeout(self):
 
         config = SearchConfig(F.get_app_id(), F.get_api_key())
-        config.hosts['read'] = HostsCollection([
+
+        config.hosts = HostsCollection([
             Host('algolia.biz', 10),
             Host('{}-1.algolianet.com'.format(F.get_app_id())),
             Host('{}-2.algolianet.com'.format(F.get_app_id())),
             Host('{}-3.algolianet.com'.format(F.get_app_id()))
         ])
-        requester = Requester()
-        transporter = Transporter(requester, config)
-        client = SearchClient(transporter, config)
+
+        client = SearchClient.create_with_config(config)
 
         client.list_indices()
-
         # We test that the first Host `algolia.biz` is down.
-        self.assertFalse(config.hosts['read']._HostsCollection__hosts[0].up)
-        self.assertTrue(config.hosts['read']._HostsCollection__hosts[1].up)
-        self.assertTrue(config.hosts['read']._HostsCollection__hosts[2].up)
-        self.assertTrue(config.hosts['read']._HostsCollection__hosts[3].up)
+        self.assertFalse(config.hosts.read()[0].up)
+        self.assertTrue(config.hosts.read()[1].up)
+        self.assertTrue(config.hosts.read()[2].up)
+        self.assertTrue(config.hosts.read()[3].up)
 
     def test_secured_api_keys(self):
         self.index2 = F.index('{}_dev'.format(self._testMethodName))

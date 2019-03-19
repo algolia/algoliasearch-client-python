@@ -7,7 +7,7 @@ from algoliasearch.exceptions import (
     AlgoliaUnreachableHostException,
     AlgoliaException
 )
-from algoliasearch.http.hosts import Host, HostsCollection
+from algoliasearch.http.hosts import Host, HostsCollection, CallType
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import (
@@ -44,7 +44,7 @@ class TestTransporter(unittest.TestCase):
         response = self.transporter.write('post', 'endpoint/foo', self.data,
                                           self.request_options)
 
-        host = self.config.hosts['write']._HostsCollection__hosts[
+        host = self.config.hosts.write()[
             0]  # type: Host
 
         request = Request(
@@ -67,8 +67,7 @@ class TestTransporter(unittest.TestCase):
         response = self.transporter.read('get', 'endpoint/bar', {},
                                          self.request_options)
 
-        host = self.config.hosts['read']._HostsCollection__hosts[
-            0]  # type: Host
+        host = self.config.hosts.read()[0]  # type: Host
 
         request = Request(
             'GET',  # Upper case letters
@@ -92,15 +91,15 @@ class TestTransporter(unittest.TestCase):
             self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
 
-        self.assertEqual(self.requester.send.call_count, 5)
+        self.assertEqual(self.requester.send.call_count, 4)
 
         self.requester.send.return_value = Response(100, {'foo': 'bar'})
 
         with self.assertRaises(AlgoliaUnreachableHostException) as _:
             self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
-        # Remains 5, all hosts here down.
-        self.assertEqual(self.requester.send.call_count, 5)
+        # Remains 4, all hosts here down.
+        self.assertEqual(self.requester.send.call_count, 4)
 
     def test_algolia_exception(self):
         self.requester.send.return_value = Response(401, {'foo': 'bar'})
@@ -154,39 +153,39 @@ class TestRetryStrategy(unittest.TestCase):
         self.assertGreaterEqual(self.host.last_use, self.time)
         self.assertEqual(self.host.retry_count, 0)
 
+    def test_down_hosts(self):
+        a = Host('a', 10)
+        b = Host('b', 20)
+        c = Host('c')
+
+        self.retry_strategy._RetryStrategy__now = mock.Mock(
+            name="_RetryStrategy__now")
+        self.retry_strategy._RetryStrategy__now.return_value = 1000
+
+        hosts = list(self.retry_strategy.valid_hosts([a, b, c]))
+        self.assertEqual(len(hosts), 3)
+
+        a.last_use = 800.0  # 1000 - 800 = 200 (lower than TTL - 300)
+        a.up = False
+        hosts = list(self.retry_strategy.valid_hosts([a, b, c]))
+        self.assertEqual(len(hosts), 2)  # still down
+
+        a.last_use = 400.0  # 1000 - 400 = 600 (bigger than TTL - 300)
+        hosts = list(self.retry_strategy.valid_hosts([a, b, c]))
+        self.assertEqual(len(hosts), 3)  # got up
+
 
 class TestHostCollection(unittest.TestCase):
-    def setUp(self):
-        self.a = Host('a', 10)
-        self.b = Host('b', 20)
-        self.c = Host('c')
-
-        self.collection = HostsCollection([
-            self.a,
-            self.b,
-            self.c
-        ])
-
-        self.collection._HostsCollection__now = mock.Mock(
-            name="_HostsCollection__now")
-        self.collection._HostsCollection__now.return_value = 1000
 
     def test_hosts_got_sorted(self):
-        hosts = list(map(lambda x: x, self.collection))
+        collection = HostsCollection([
+            Host('a', 10),
+            Host('b', 20),
+            Host('c')
+        ])
+
+        hosts = collection.read()
 
         self.assertEqual(hosts[0].url, 'b')
         self.assertEqual(hosts[1].url, 'a')
         self.assertEqual(hosts[2].url, 'c')
-
-    def test_down_hosts(self):
-        hosts = list(map(lambda x: x, self.collection))
-        self.assertEqual(len(hosts), 3)
-
-        self.a.last_use = 800.0  # 1000 - 800 = 200 (lower than TTL - 300)
-        self.a.up = False
-        hosts = list(map(lambda x: x, self.collection))
-        self.assertEqual(len(hosts), 2)  # still down
-
-        self.a.last_use = 400.0  # 1000 - 400 = 600 (bigger than TTL - 300)
-        hosts = list(map(lambda x: x, self.collection))
-        self.assertEqual(len(hosts), 3)  # got up

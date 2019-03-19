@@ -73,13 +73,13 @@ class TestSearchConfig(unittest.TestCase):
         self.assertEqual(self.config.batch_size, 1000)
 
     def test_hosts(self):
-        self.assertIsInstance(self.config.hosts['write'], HostsCollection)
-        self.assertIsInstance(self.config.hosts['read'], HostsCollection)
+        self.assertIsInstance(self.config.hosts.write(), list)
+        self.assertIsInstance(self.config.hosts.read(), list)
 
         # Assert that hosts here assigned.
         self.assertNotEqual(
-            len(self.config.hosts['write']._HostsCollection__hosts), 0
+            len(self.config.hosts.write()), 0
         )
         self.assertNotEqual(
-            len(self.config.hosts['read']._HostsCollection__hosts), 0
+            len(self.config.hosts.read()), 0
         )

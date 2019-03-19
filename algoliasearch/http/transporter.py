@@ -6,7 +6,7 @@ from algoliasearch.exceptions import (
     AlgoliaUnreachableHostException,
     RequestException
 )
-from algoliasearch.http.hosts import Host, HostsCollection
+from algoliasearch.http.hosts import Host, HostsCollection, CallType
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
 from algoliasearch.http.serializer import (
@@ -38,8 +38,9 @@ class Transporter(object):
 
         timeout = request_options.timeouts['writeTimeout']
 
-        return self.request(verb, self._config.hosts['write'], path, data,
-                            request_options, timeout)
+        hosts = self._config.hosts.write()
+
+        return self.request(verb, hosts, path, data, request_options, timeout)
 
     def read(self, verb, path, data, request_options):
         # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
@@ -50,11 +51,12 @@ class Transporter(object):
 
         timeout = request_options.timeouts['readTimeout']
 
-        return self.request(verb, self._config.hosts['read'], path, data,
-                            request_options, timeout)
+        hosts = self._config.hosts.read()
+
+        return self.request(verb, hosts, path, data, request_options, timeout)
 
     def request(self, verb, hosts, path, data, request_options, timeout):
-        # type: (str, HostsCollection, str, Optional[Union[dict, list]], RequestOptions, int) -> dict # noqa: E501
+        # type: (str, list, int, str, Optional[Union[dict, list]], RequestOptions, int) -> dict # noqa: E501
 
         if isinstance(data, dict):
             data.update(request_options.data)
@@ -74,9 +76,9 @@ class Transporter(object):
         return self.retry(hosts, request, relative_url)
 
     def retry(self, hosts, request, relative_url):
-        # type: (HostsCollection, Request, str) -> dict
+        # type: (list, Request, str) -> dict
 
-        for host in hosts.reset():
+        for host in self._retry_strategy.valid_hosts(hosts):
 
             request.url = 'https://{}/{}'.format(
                 host.url, relative_url)
@@ -110,6 +112,7 @@ class Request(object):
         self.connect_timeout = connect_timeout
         self.timeout = timeout
         self.url = ''
+        self;
 
     def __eq__(self, other):
         # type: (object) -> bool
@@ -131,6 +134,21 @@ class Response(object):
 
 
 class RetryStrategy(object):
+
+    def valid_hosts(self, hosts):
+        # type: (list) -> list
+
+        for host in hosts:
+            if not host.up and self.__now() - host.last_use > Host.TTL:
+                host.up = True
+
+        return [host for host in hosts if host.up]
+
+    def __now(self):
+        # type: () -> float
+
+        return time.time()
+
     def decide(self, host, response):
         # type: (Host, Response) -> str
 

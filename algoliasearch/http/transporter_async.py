@@ -10,17 +10,17 @@ from algoliasearch.http.requester_async import RequesterAsync
 from algoliasearch.http.transporter import (
     Transporter,
     RetryOutcome,
-    Request
-)
+    Request,
+    RetryStrategy)
 
 
 class TransporterAsync(Transporter):
 
     @asyncio.coroutine  # type: ignore
     def retry(self, hosts, request, relative_url):  # type: ignore
-        # type: (HostsCollection, Request, str) -> dict
+        # type: (list, Request, str) -> dict
 
-        for host in hosts.reset():
+        for host in self._retry_strategy.valid_hosts(hosts):
 
             request.url = 'https://{}/{}'.format(
                 host.url, relative_url)
