@@ -37,19 +37,17 @@ class AccountClient(object):
         # Copy synonyms
         synonyms = source_index.browse_synonyms()
         responses.push(
-            destination_index.replace_all_synonyms(synonyms, request_options)
+            destination_index.save_synonyms(synonyms, request_options)
         )
 
         # Copy rules
         rules = source_index.browse_rules()
-        responses.push(
-            destination_index.replace_all_rules(rules, request_options)
-        )
+        responses.push(destination_index.save_rules(rules, request_options))
 
         # Copy objects
         objects = source_index.browse_objects()
         responses.push(
-            destination_index.replace_all_objects(objects)
+            destination_index.save_objects(objects, request_options)
         )
 
         return responses
