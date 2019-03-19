@@ -12,8 +12,8 @@ class TestConfig(unittest.TestCase):
         self.config = SearchConfig('foo', 'bar')
 
     def test_credentials_from_env(self):
-        old_app_id = os.environ['ALGOLIA_APP_ID']
-        old_api_key = os.environ['ALGOLIA_API_KEY']
+        old_app_id = os.environ.get('ALGOLIA_APP_ID')
+        old_api_key = os.environ.get('ALGOLIA_API_KEY')
 
         try:
             os.environ['ALGOLIA_APP_ID'] = 'foo-1'
