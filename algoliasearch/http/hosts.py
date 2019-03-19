@@ -38,7 +38,7 @@ class HostsCollection(object):
         shuffle(self._hosts)
 
         self._hosts = sorted(self._hosts, key=lambda x: x.priority,
-                              reverse=True)
+                             reverse=True)
 
     def read(self):
         # type: () -> HostsCollection
