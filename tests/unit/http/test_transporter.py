@@ -7,7 +7,7 @@ from algoliasearch.exceptions import (
     AlgoliaUnreachableHostException,
     AlgoliaException
 )
-from algoliasearch.http.hosts import Host, HostsCollection, CallType
+from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import (
@@ -158,9 +158,9 @@ class TestRetryStrategy(unittest.TestCase):
         b = Host('b', 20)
         c = Host('c')
 
-        self.retry_strategy._RetryStrategy__now = mock.Mock(
+        self.retry_strategy._now = mock.Mock(
             name="_RetryStrategy__now")
-        self.retry_strategy._RetryStrategy__now.return_value = 1000
+        self.retry_strategy._now.return_value = 1000
 
         hosts = list(self.retry_strategy.valid_hosts([a, b, c]))
         self.assertEqual(len(hosts), 3)

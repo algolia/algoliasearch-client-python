@@ -62,11 +62,11 @@ class SearchIndex(object):
             )
 
         if generate_object_id:
-            response = self.__chunk('addObject', objects, request_options,
+            response = self._chunk('addObject', objects, request_options,
                                     False)
         else:
             try:
-                response = self.__chunk('updateObject', objects,
+                response = self._chunk('updateObject', objects,
                                         request_options)
             except MissingObjectIdException as e:
                 message = str(e)
@@ -162,10 +162,10 @@ class SearchIndex(object):
             )
 
         if generate_object_id:
-            response = self.__chunk('partialUpdateObject', objects,
+            response = self._chunk('partialUpdateObject', objects,
                                     request_options, False)
         else:
-            response = self.__chunk('partialUpdateObjectNoCreate', objects,
+            response = self._chunk('partialUpdateObjectNoCreate', objects,
                                     request_options)
 
         return response
@@ -181,7 +181,7 @@ class SearchIndex(object):
         objects = list(
             map(lambda object_id: {'objectID': object_id}, object_ids))
 
-        return self.__chunk('deleteObject', objects, request_options)
+        return self._chunk('deleteObject', objects, request_options)
 
     def delete_by(self, filters, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
@@ -470,11 +470,11 @@ class SearchIndex(object):
     def batch(self, requests, request_options=None):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
-        raw_response = self.__raw_batch(requests, request_options)
+        raw_response = self._raw_batch(requests, request_options)
 
         return IndexingResponse(self, [raw_response])
 
-    def __chunk(self, action, objects, request_options,
+    def _chunk(self, action, objects, request_options,
                 validate_object_id=True):
         # type: (str, Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]], bool) -> IndexingResponse # noqa: E501
 
@@ -490,18 +490,18 @@ class SearchIndex(object):
 
                 requests = build_raw_response_batch(action, objects)
                 raw_responses.append(
-                    self.__raw_batch(requests, request_options))
+                    self._raw_batch(requests, request_options))
                 batch = []
 
         if len(batch):
             if validate_object_id:
                 assert_object_id(objects)
             requests = build_raw_response_batch(action, objects)
-            raw_responses.append(self.__raw_batch(requests, request_options))
+            raw_responses.append(self._raw_batch(requests, request_options))
 
         return IndexingResponse(self, raw_responses)
 
-    def __raw_batch(self, requests, request_options):
+    def _raw_batch(self, requests, request_options):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         return self._transporter.write(

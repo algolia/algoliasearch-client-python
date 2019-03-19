@@ -139,12 +139,12 @@ class RetryStrategy(object):
         # type: (list) -> list
 
         for host in hosts:
-            if not host.up and self.__now() - host.last_use > Host.TTL:
+            if not host.up and self._now() - host.last_use > Host.TTL:
                 host.up = True
 
         return [host for host in hosts if host.up]
 
-    def __now(self):
+    def _now(self):
         # type: () -> float
 
         return time.time()
@@ -158,23 +158,23 @@ class RetryStrategy(object):
             host.retry_count += 1
 
             return RetryOutcome.RETRY
-        elif self.__is_retryable(response):
+        elif self._is_retryable(response):
             host.up = False
 
             return RetryOutcome.RETRY
-        elif response.status_code is not None and self.__is_success(response):
+        elif response.status_code is not None and self._is_success(response):
 
             return RetryOutcome.SUCCESS
 
         return RetryOutcome.FAIL
 
-    def __is_success(self, response):
+    def _is_success(self, response):
         # type: (Response) -> bool
 
         return response.status_code is not None and (
                 response.status_code // 100) == 2
 
-    def __is_retryable(self, response):
+    def _is_retryable(self, response):
         # type: (Response) -> bool
 
         if response.is_network_error:

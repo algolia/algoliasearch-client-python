@@ -73,7 +73,7 @@ class AnalyticsConfig(Config):
     def __init__(self, app_id=None, api_key=None, region=None):
         # type: (Optional[str], Optional[str], Optional[str]) -> None
 
-        self.__region = 'us' if region is None else region
+        self._region = 'us' if region is None else region
 
         super(AnalyticsConfig, self).__init__(app_id, api_key)
 
@@ -81,7 +81,7 @@ class AnalyticsConfig(Config):
         # type: () -> HostsCollection
 
         return HostsCollection([
-            Host('{}.{}.{}'.format('analytics', self.__region, 'algolia.com'))
+            Host('{}.{}.{}'.format('analytics', self._region, 'algolia.com'))
         ])
 
 
@@ -90,7 +90,7 @@ class InsightsConfig(Config):
     def __init__(self, app_id=None, api_key=None, region=None):
         # type: (Optional[str], Optional[str], Optional[str]) -> None
 
-        self.__region = 'us' if region is None else region
+        self._region = 'us' if region is None else region
 
         super(InsightsConfig, self).__init__(app_id, api_key)
 
@@ -98,5 +98,5 @@ class InsightsConfig(Config):
         # type: () -> HostsCollection
 
         return HostsCollection([
-            Host('{}.{}.{}'.format('insights', self.__region, 'algolia.io'))
+            Host('{}.{}.{}'.format('insights', self._region, 'algolia.io'))
         ])

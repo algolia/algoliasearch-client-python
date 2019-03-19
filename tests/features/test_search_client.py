@@ -7,9 +7,7 @@ import unittest
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException
 from algoliasearch.http.hosts import HostsCollection, Host, CallType
-from algoliasearch.http.requester import Requester
 from algoliasearch.http.serializer import QueryParametersSerializer
-from algoliasearch.http.transporter import Transporter
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
 from tests.helpers.env import Env

@@ -30,26 +30,25 @@ class HostsCollection(object):
     def __init__(self, hosts):
         # type: (List[Host]) -> None
 
-        self.__index = 0
-        self.__hosts = hosts
+        self._hosts = hosts
 
-        for host in self.__hosts:
+        for host in self._hosts:
             host.reset()
 
-        shuffle(self.__hosts)
+        shuffle(self._hosts)
 
-        self.__hosts = sorted(self.__hosts, key=lambda x: x.priority,
+        self._hosts = sorted(self._hosts, key=lambda x: x.priority,
                               reverse=True)
 
     def read(self):
         # type: () -> HostsCollection
 
-        return [host for host in self.__hosts if host.accept & CallType.READ]
+        return [host for host in self._hosts if host.accept & CallType.READ]
 
     def write(self):
         # type: () -> HostsCollection
 
-        return [host for host in self.__hosts if host.accept & CallType.WRITE]
+        return [host for host in self._hosts if host.accept & CallType.WRITE]
 
 
 class CallType(object):

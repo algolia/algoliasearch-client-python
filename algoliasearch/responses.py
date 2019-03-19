@@ -32,7 +32,7 @@ class IndexingResponse(Response):
     def __init__(self, index, raw_responses):
         # type: (SearchIndex, List[dict]) -> None
 
-        self.__index = index
+        self._index = index
         self.raw_responses = raw_responses
         self.waited = False
 
@@ -41,7 +41,7 @@ class IndexingResponse(Response):
 
         if not self.waited:
             for raw_response in self.raw_responses:
-                self.__index._sync().wait_task(raw_response['taskID'])
+                self._index._sync().wait_task(raw_response['taskID'])
 
         # No longer waits on this responses.
         self.waited = True
@@ -55,23 +55,23 @@ class MultipleResponse(Response):
         # type: (List[Response]) -> None
 
         self.responses = [] if responses is None else responses
-        self.__waitable = list(self.responses)
+        self._waitable = list(self.responses)
 
     def push(self, response):
         # type: (Response) -> None
 
         self.responses.append(response)
 
-        self.__waitable.append(response)
+        self._waitable.append(response)
 
     def wait(self):
         # type: () -> MultipleResponse
 
-        for response in self.__waitable:
+        for response in self._waitable:
             response.wait()
 
         # No longer waits on this responses.
-        self.__waitable = []
+        self._waitable = []
 
         return self
 
@@ -82,16 +82,16 @@ class AddApiKeyResponse(Response):
         # type: (SearchClient, dict) -> None
 
         self.raw_response = raw_response
-        self.__client = client
-        self.__done = False
+        self._client = client
+        self._done = False
 
     def wait(self):
         # type: () -> AddApiKeyResponse
 
-        while not self.__done:
+        while not self._done:
             try:
-                self.__client._sync().get_api_key(self.raw_response['key'])
-                self.__done = True
+                self._client._sync().get_api_key(self.raw_response['key'])
+                self._done = True
             except RequestException as e:
                 if e.status_code != 404:
                     raise e
@@ -105,24 +105,24 @@ class UpdateApiKeyResponse(Response):
         # type: (SearchClient, dict, RequestOptions) -> None
 
         self.raw_response = raw_response
-        self.__client = client
-        self.__request_options = request_options
-        self.__done = False
+        self._client = client
+        self._request_options = request_options
+        self._done = False
 
     def wait(self):
         # type: () -> UpdateApiKeyResponse
 
-        while not self.__done:
-            api_key = self.__client._sync().get_api_key(
+        while not self._done:
+            api_key = self._client._sync().get_api_key(
                 self.raw_response['key']
             )
 
-            if self.__have_changed(api_key):
+            if self._have_changed(api_key):
                 break
 
         return self
 
-    def __have_changed(self, api_key):
+    def _have_changed(self, api_key):
         # type: (dict) -> bool
 
         valid_keys = (
@@ -131,7 +131,7 @@ class UpdateApiKeyResponse(Response):
             'validity', 'maxQueriesPerIPPerHour', 'maxHitsPerQuery',
         )
 
-        body = self.__request_options.data
+        body = self._request_options.data
 
         return any([(valid_key in body and body[valid_key] == api_key.get(
             valid_key)) for valid_key in valid_keys])
@@ -143,18 +143,18 @@ class DeleteApiKeyResponse(Response):
         # type: (SearchClient, dict, str) -> None
 
         self.raw_response = raw_response
-        self.__client = client
-        self.__key = key
-        self.__done = False
+        self._client = client
+        self._key = key
+        self._done = False
 
     def wait(self):
         # type: () -> DeleteApiKeyResponse
 
-        while not self.__done:
+        while not self._done:
             try:
-                self.__client._sync().get_api_key(self.__key)
+                self._client._sync().get_api_key(self._key)
             except RequestException as e:
-                self.__done = e.status_code == 404
+                self._done = e.status_code == 404
 
         return self
 
@@ -165,17 +165,17 @@ class RestoreApiKeyResponse(Response):
         # type: (SearchClient, dict, str) -> None
 
         self.raw_response = raw_response
-        self.__client = client
-        self.__key = key
-        self.__done = False
+        self._client = client
+        self._key = key
+        self._done = False
 
     def wait(self):
         # type: () -> RestoreApiKeyResponse
 
-        while not self.__done:
+        while not self._done:
             try:
-                self.__client._sync().get_api_key(self.__key)
-                self.__done = True
+                self._client._sync().get_api_key(self._key)
+                self._done = True
             except RequestException as e:
                 if e.status_code != 404:
                     raise e
@@ -189,15 +189,15 @@ class MultipleIndexBatchIndexingResponse(Response):
         # type: (SearchClient, dict) -> None
 
         self.raw_response = raw_response
-        self.__client = client
-        self.__done = False
+        self._client = client
+        self._done = False
 
     def wait(self):
         # type: () -> MultipleIndexBatchIndexingResponse
 
-        while not self.__done:
+        while not self._done:
             for index_name, task_id in get_items(self.raw_response['taskID']):
-                self.__client._sync().wait_task(index_name, task_id)
-            self.__done = True
+                self._client._sync().wait_task(index_name, task_id)
+            self._done = True
 
         return self

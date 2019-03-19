@@ -190,7 +190,7 @@ class TestSearchIndex(unittest.TestCase):
         result = self.index.replace_all_objects([obj], {'safe': True})
         self.assertEqual(response.wait.call_count, 3)
         self.assertEqual(len(result.responses), 3)
-        self.assertEqual(len(result._MultipleResponse__waitable), 0)
+        self.assertEqual(len(result._waitable), 0)
 
     def test_get_task(self):
         with self.assertRaises(AssertionError) as _:

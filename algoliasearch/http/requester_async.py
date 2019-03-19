@@ -1,5 +1,4 @@
 import asyncio
-import types
 
 import aiohttp
 import async_timeout
