@@ -159,7 +159,7 @@ class TestRetryStrategy(unittest.TestCase):
         c = Host('c')
 
         self.retry_strategy._now = mock.Mock(
-            name="_RetryStrategy__now")
+            name="_now")
         self.retry_strategy._now.return_value = 1000
 
         hosts = list(self.retry_strategy.valid_hosts([a, b, c]))
