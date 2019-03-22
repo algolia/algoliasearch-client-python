@@ -15,3 +15,4 @@ tox>=3.7,<4.0
 -r requirements/requirements-code-style-checker.txt
 -r requirements/requirements-static-type-checker.txt
 -r requirements/requirements-coverage.txt
+-r requirements/requirements-release.txt
