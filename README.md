@@ -6,7 +6,7 @@ of Algolia within your Python Project.
 
 ## Preface
 
-- Features tons of features: contains waitable response objects, up-to-date retry strategy, `replace_all_objects`,`clear_objects`, and more!
+- Tons of new features: contains waitable response objects, up-to-date retry strategy, `replace_all_objects`,`clear_objects`, and more!
 
 - Supports Python: **2.7 🥳**, 3.4, 3.5, 3.6, and 3.7.
 
