@@ -20,3 +20,5 @@ class TestRequester(unittest.TestCase):
 
         exception = cm.exception
         self.assertEqual(exception.status_code, 400)
+        self.assertEqual(str(exception),
+                         'Invalid object attributes: zadaz near line:1 column:8')

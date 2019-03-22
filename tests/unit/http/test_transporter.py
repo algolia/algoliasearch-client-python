@@ -101,6 +101,20 @@ class TestTransporter(unittest.TestCase):
         # Remains 4, all hosts here down.
         self.assertEqual(self.requester.send.call_count, 4)
 
+        with self.assertRaises(AlgoliaUnreachableHostException) as _:
+            self.transporter.write('get', 'endpoint/bar', {},
+                                   self.request_options)
+
+        # It's now 5, write have one different host.
+        self.assertEqual(self.requester.send.call_count, 5)
+
+        with self.assertRaises(AlgoliaUnreachableHostException) as _:
+            self.transporter.write('get', 'endpoint/bar', {},
+                                   self.request_options)
+
+        # Remains 5, all hosts here down.
+        self.assertEqual(self.requester.send.call_count, 5)
+
     def test_algolia_exception(self):
         self.requester.send.return_value = Response(401, {'foo': 'bar'})
 
