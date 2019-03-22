@@ -112,7 +112,6 @@ class Request(object):
         self.connect_timeout = connect_timeout
         self.timeout = timeout
         self.url = ''
-        self;
 
     def __eq__(self, other):
         # type: (object) -> bool

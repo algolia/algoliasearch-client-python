@@ -63,11 +63,11 @@ class SearchIndex(object):
 
         if generate_object_id:
             response = self._chunk('addObject', objects, request_options,
-                                    False)
+                                   False)
         else:
             try:
                 response = self._chunk('updateObject', objects,
-                                        request_options)
+                                       request_options)
             except MissingObjectIdException as e:
                 message = str(e)
                 message += ". All objects must have an unique objectID " \
@@ -163,10 +163,10 @@ class SearchIndex(object):
 
         if generate_object_id:
             response = self._chunk('partialUpdateObject', objects,
-                                    request_options, False)
+                                   request_options, False)
         else:
             response = self._chunk('partialUpdateObjectNoCreate', objects,
-                                    request_options)
+                                   request_options)
 
         return response
 
@@ -475,7 +475,7 @@ class SearchIndex(object):
         return IndexingResponse(self, [raw_response])
 
     def _chunk(self, action, objects, request_options,
-                validate_object_id=True):
+               validate_object_id=True):
         # type: (str, Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]], bool) -> IndexingResponse # noqa: E501
 
         raw_responses = []
