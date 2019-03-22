@@ -1,14 +1,18 @@
-# Introducing Algolia's API Client Python v2
+**Note:** The readme/code you are seeing it's part of upcoming release: Algolia API Client Python v2.
 
-Release of v2: No date is set, but this should happen sometime in end-March/begin-April.
+Algolia's Python client provides the perfect starting point to integrate
+Algolia into your Python application. It is carefully crafted to simplify the usage
+of Algolia within your Python Project.
 
 ## Preface
 
-Big news, the Algolia's API Client Python v2 is coming! So, what changes can we look forward for this API Client?
+- Features tons of features: contains waitable response objects, up-to-date retry strategy, `replace_all_objects`,`clear_objects`, and more!
 
-- Follows 100% of the **API Client v2 specs**, just like PHP v2, and c# v2: contains waitable response objects, up-to-date retry strategy, `replace_all_objects`,`clear_objects`, and more
-- Supports Python: **2.7 🥳**, 3.4, 3.5, 3.6, and 3.7
-- Strong test suite, 100% test coverage on `unittest` (tests === **30secs locally!** 🏎), `flake8` (linter), and `mypy` (static-analysis) to ensure the quality of the code.
+- Supports Python: **2.7 🥳**, 3.4, 3.5, 3.6, and 3.7.
+
+- Strong test suite, 100% test coverage on `unittest` (tests === **30secs locally!** 🏎), `flake8` 
+(linter), and `mypy` (static-analysis) to ensure the quality of the code.
+
 - Supports synchronous and **asynchronous** environments. 👉🏻 **Yes, in the same client and with support Python 2. It's amazing!** Asynchronous methods are available using the `async` suffix:
 
 | synchronous   | asynchronous          |
@@ -21,11 +25,10 @@ Big news, the Algolia's API Client Python v2 is coming! So, what changes can we 
 
 Thank you for considering to contribute to Algolia's API Client Python v2. Here is the list of tasks that I would love to get your help:
 
-1. Using Python v1 within Algolia for non-critical projects? Start using this v2 today! Found a bug? Report it here: [https://github.com/algolia/algoliasearch-client-python](https://github.com/algolia/algoliasearch-client-python).
-2. Have experience in Python? Check if the code/structure *Pythonic*
-3. Coming from Java, or another robust language? Take a moment to analyze the quality of the code
-4. Are you a test addicted like me? Take a moment to analyze the quality of tests
-5. Play with the client.
+1. Using Python v1 within Algolia for non-critical projects? Start using this v2 today!
+3. Analyze the code quality
+4. Analyze the quality of tests
+5. Create a [free account](https://www.algolia.com/users/sign_up/hacker) at Algolia, and play with this client.
 
 ## Get started locally
 
@@ -34,12 +37,21 @@ Thank you for considering to contribute to Algolia's API Client Python v2. Here 
 
 First, use [Homebrew](https://brew.sh) to install Python 3.7:
 ```bash
-brew install python
-```
+# Install Python 3
+brew install python3
 
-Then, install `pip`:
-```
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
+# Create your Python project directory
+mkdir my-new-project
+cd my-new-project
+
+# Create a Python Virtual Environment inside your directory
+python3 -m venv venv
+
+# Activate the Python Virtual Environment
+source venv/bin/activate
+
+# At any time, use the following command to deactivate it
+deactivate
 ```
 
 Finally, install `algoliasearch` - API Client Python v2:
@@ -82,40 +94,34 @@ pip install 'asyncio>=3.4,<4.0' 'aiohttp>=2.0,<4.0' 'async_timeout>=2.0,<4.0'
 
 
 ```py
+import asyncio
 import os
 
 from algoliasearch.search_client import SearchClient
 from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.responses import MultipleResponse
 
-client = SearchClient.create(
-    os.environ.get('ALGOLIA_APPLICATION_ID_1'),
-    os.environ.get('ALGOLIA_ADMIN_KEY_1')
-)
+app_id = os.environ.get('ALGOLIA_APPLICATION_ID_1')
+api_key = os.environ.get('ALGOLIA_ADMIN_KEY_1')
 
-index = client.init_index('articles')
 
-try:
-    index.clear_objects().wait()
-except AlgoliaException:  # Index not found
-    pass
+async def main():
+    async with SearchClient.create(app_id, api_key) as client:
+        index = client.init_index('articles')
 
-import asyncio
+        try:
+            (await index.clear_objects_async()).wait()
+        except AlgoliaException:  # Index not found
+            pass
 
-loop = asyncio.get_event_loop()
+        results = await asyncio.gather(
+            index.save_object_async({'objectID': 1, 'foo': 'bar'}),
+            index.save_object_async({'objectID': 2, 'foo': 'foo'})
+        )
 
-tasks = [
-    index.save_object_async({'objectID': 1, 'foo': 'bar'}),
-    index.save_object_async({'objectID': 2, 'foo': 'bar'}),
-]
+        MultipleResponse(results).wait()
 
-MultipleResponse(
-    loop.run_until_complete(asyncio.gather(*tasks))
-).wait()
+        print(await index.search_async(''))
 
-result = loop.run_until_complete(index.search_async(''))
-
-loop.close()
-
-print(result)
+asyncio.run(main())
 ```
