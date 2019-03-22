@@ -27,8 +27,11 @@ class TestConfig(unittest.TestCase):
             self.assertEqual(config.app_id, 'foo-2')
             self.assertEqual(config.api_key, 'bar-2')
         finally:
-            os.environ['ALGOLIA_APP_ID'] = old_app_id
-            os.environ['ALGOLIA_API_KEY'] = old_api_key
+            if old_app_id:
+                os.environ['ALGOLIA_APP_ID'] = old_app_id
+
+            if old_api_key:
+                os.environ['ALGOLIA_API_KEY'] = old_api_key
 
     def test_app_id(self):
         self.assertEqual(self.config.app_id, 'foo')
