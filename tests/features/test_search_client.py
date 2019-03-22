@@ -137,6 +137,8 @@ class TestSearchClient(unittest.TestCase):
 
         python_version = platform.python_version().replace('.', '')[:2]
 
+        python_version += os.environ.get('TEST_TYPE', '')
+
         user_id = 'python{}-{}-{}'.format(python_version, date, instance)
 
         mcm.assign_user_id(user_id, clusters[0]['clusterName'])
