@@ -17,8 +17,9 @@ class TestUserAgent(unittest.TestCase):
 
     def test_add(self):
         UserAgent.add('Foo Bar', 'v1.0')
+        UserAgent.add('Front Web', '2.0')
 
         self.assertEqual(
             UserAgent.get(),
-            '{}; Foo Bar (v1.0)'.format(TestUserAgent.default)
+            '{}; Foo Bar (v1.0); Front Web (2.0)'.format(TestUserAgent.default)
         )
