@@ -1,4 +1,3 @@
-import time
 from random import shuffle
 
 from typing import List
@@ -14,6 +13,7 @@ class Host(object):
         self.priority = priority
         self.accept = ((CallType.WRITE | CallType.READ) if accept is None
                        else accept)
+
         self.last_use = 0.0
         self.retry_count = 0
         self.up = True
