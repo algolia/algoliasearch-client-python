@@ -1,7 +1,6 @@
 import time
 
-from typing import Optional, Union, Dict, Any
-
+from typing import Optional, Union, Dict, Any, List
 from algoliasearch.exceptions import (
     AlgoliaUnreachableHostException,
     RequestException
@@ -56,7 +55,7 @@ class Transporter(object):
         return self.request(verb, hosts, path, data, request_options, timeout)
 
     def request(self, verb, hosts, path, data, request_options, timeout):
-        # type: (str, list, int, str, Optional[Union[dict, list]], RequestOptions, int) -> dict # noqa: E501
+        # type: (str, List[Host], str, Optional[Union[dict, list]], RequestOptions, int) -> dict # noqa: E501
 
         if isinstance(data, dict):
             data.update(request_options.data)
@@ -76,7 +75,7 @@ class Transporter(object):
         return self.retry(hosts, request, relative_url)
 
     def retry(self, hosts, request, relative_url):
-        # type: (list, Request, str) -> dict
+        # type: (List[Host], Request, str) -> dict
 
         for host in self._retry_strategy.valid_hosts(hosts):
 

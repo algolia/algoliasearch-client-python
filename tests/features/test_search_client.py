@@ -143,9 +143,12 @@ class TestSearchClient(unittest.TestCase):
 
         mcm.assign_user_id(user_id, clusters[0]['clusterName'])
 
-        self.assertEqual(
-            mcm.search_user_ids(user_id)['hits'][0]['userID'],
-            user_id
+        users_ids = [user['userID'] for user in
+                     mcm.search_user_ids(user_id)['hits']]
+
+        self.assertIn(
+            user_id,
+            users_ids
         )
 
         users = mcm.list_user_ids()

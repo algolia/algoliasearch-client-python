@@ -1,6 +1,8 @@
 import asyncio
+import time
 import types
 
+from algoliasearch.exceptions import RequestException
 from algoliasearch.iterators import Iterator
 
 
@@ -15,9 +17,11 @@ class SyncDecorator(object):
         self._base = base
 
     def close(self):
+
         return self._base.close()
 
     def __getattr__(self, name):
+
         method = getattr(self._base, name)
 
         if not callable(method):
@@ -57,6 +61,7 @@ class SyncDecorator(object):
     def iterator_to_array(self, iterator):
 
         def closure():
+
             objects = []
 
             while True:

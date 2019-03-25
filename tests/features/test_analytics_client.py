@@ -5,11 +5,12 @@ import datetime
 
 from algoliasearch.exceptions import RequestException
 from tests.helpers.factory import Factory as F
+from tests.helpers.misc import RetryableClient
 
 
 class TestAnalyticsClient(unittest.TestCase):
     def setUp(self):
-        self.client = F.analytics_client()
+        self.client = RetryableClient(F.analytics_client())
         self.index = F.index(self._testMethodName)
         self.index2 = F.index('{}2'.format(self._testMethodName))
 

@@ -1,6 +1,6 @@
 from random import shuffle
 
-from typing import List
+from typing import List, Optional
 
 
 class Host(object):
@@ -41,12 +41,12 @@ class HostsCollection(object):
                              reverse=True)
 
     def read(self):
-        # type: () -> HostsCollection
+        # type: () -> List[Host]
 
         return [host for host in self._hosts if host.accept & CallType.READ]
 
     def write(self):
-        # type: () -> HostsCollection
+        # type: () -> List[Host]
 
         return [host for host in self._hosts if host.accept & CallType.WRITE]
 

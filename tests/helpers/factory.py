@@ -170,7 +170,7 @@ class Factory(object):
     def decide(client):
 
         if os.environ.get('TEST_TYPE', False) == 'async':
-            from tests.fixtures.sync_decorator import SyncDecorator
+            from tests.helpers.misc_async import SyncDecorator
 
             return SyncDecorator(client)
 
