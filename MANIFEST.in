@@ -1,2 +1,2 @@
 include LICENSE
-prune tests*
+prune tests
