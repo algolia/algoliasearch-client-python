@@ -1,7 +1,15 @@
-tox
-wheel
-pypandoc
+# Laying these out as separate requirements files, allows us to
+# only included the relevant sets when running tox, and ensures
+# we are only ever declaring our dependencies in one place.
 
-requests[security]>=2.9.1
-faker
-pytest
+
+# Requirements
+requests>=2.21,<3.0
+typing>=3.6,<4.0
+
+# Dev requirements
+-r requirements/requirements-testing.txt
+-r requirements/requirements-code-style-checker.txt
+-r requirements/requirements-static-type-checker.txt
+-r requirements/requirements-coverage.txt
+-r requirements/requirements-release.txt

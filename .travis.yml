@@ -1,5 +1,9 @@
 language: python
 
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 branches:
   only:
     - master
@@ -11,14 +15,16 @@ python:
   - "3.5"
   - "3.6"
 
+matrix:
+  include:
+    - python: 3.7
+      dist: xenial
+      sudo: true
+
 before_script:
-  - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.27.zip
-  - unzip -q google_appengine_1.9.27.zip
   - wget https://alg.li/algolia-keys && chmod +x algolia-keys
 
 install:
-  - pip install --upgrade pip
-  - if [[ $TOXENV == 'py32' ]]; then pip install -I 'virtualenv<14.0'; fi
   - pip install tox-travis
 
 script:

@@ -25,18 +25,18 @@ If you find any security risk in the project, please open an issue.
 
 ### API Breaking changes
 
-We care deeply about backward compatibility for our API clients libraries. 
+We care deeply about backward compatibility for our API clients libraries.
 If it's necessary, we're ready to break backward compatibility,
 but this should be pretty rare.
 
-If you want to make a change that will break the backward compatibility of the API, 
+If you want to make a change that will break the backward compatibility of the API,
 open an issue first to discuss it with the maintainers.
 
 ### Editing `README.md` and similar files
 
 Note that some files are managed outside this repository and are committed automatically.
 
-The `README.md` is generated automatically from our doc. If you'd like us to update this file, 
+The `README.md` is generated automatically from our doc. If you'd like us to update this file,
 feel free to open an issue.
 
 `.github` directory is managed in [this repository](https://github.com/algolia/algoliasearch-client-common),

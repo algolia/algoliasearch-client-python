@@ -2,5 +2,5 @@
 
 | Name             | Email                       |
 |------------------|-----------------------------|
-| Léo Ercolanelli | leo.ercolanelli@algolia.com |
+| Nuno Maduro      | enunomaduro@gmail.com       |
 | Julien Bourdeau  | julien.bourdeau@algolia.com |

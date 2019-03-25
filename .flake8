@@ -1,0 +1,2 @@
+[flake8]
+ignore = F401, F821, F841 local variable '_' is assigned to but never used, E126 continuation line over-indented for hanging indent

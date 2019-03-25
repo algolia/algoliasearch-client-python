@@ -1,34 +1,34 @@
-*.py[co]
+build/
+dist/
+__pycache__
+*.py[cod]
+*~
+@*
+/build
+/env
+*.iml
+/out/
+venv/
+.venv/
+.mypy_cache/
+.cache
+.stestr
 
 # Packages
 *.egg
 *.egg-info
-dist
-build
-eggs
-parts
-bin
-develop-eggs
-.installed.cfg
-scratch
-env
-env3
-venv
+*.eggs
 
-MANIFEST
-
-# Installer logs
-pip-log.txt
-
-# Unit test / coverage reports
-.coverage
-.tox
-.pytest_cache/
-
-# IDE/OS Files
+# IDEs
 .idea
-.DS_Store
+*.swp
 .vscode
-pytest.ini
-tags
-.cache
+
+# Operating Systems
+.DS_Store
+
+# Tests
+.pytest_cache/
+.coverage*
+.tox
+htmlcov
