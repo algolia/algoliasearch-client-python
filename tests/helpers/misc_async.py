@@ -1,8 +1,6 @@
 import asyncio
-import time
 import types
 
-from algoliasearch.exceptions import RequestException
 from algoliasearch.iterators import Iterator
 
 

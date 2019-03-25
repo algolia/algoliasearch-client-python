@@ -5,7 +5,7 @@ from algoliasearch.exceptions import (
     AlgoliaUnreachableHostException,
     RequestException
 )
-from algoliasearch.http.hosts import Host, HostsCollection, CallType
+from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
 from algoliasearch.http.serializer import (

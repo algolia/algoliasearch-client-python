@@ -65,7 +65,7 @@ class Factory(object):
 
         python_version = platform.python_version().replace('.', '')[:2]
 
-        python_version += os.environ.get('TEST_TYPE', '')
+        python_version += os.environ.get('TEST_TYPE', 'sync')
 
         return 'python{}_{}_{}_{}'.format(
             python_version, date, instance, test_name)

@@ -79,8 +79,6 @@ class TestSearchClient(unittest.TestCase):
 
         responses.wait()
 
-        index_name = self.index.name
-
         self.assertEqual(
             self.index2.get_settings()['attributesForFaceting'], ['company']
         )
@@ -142,6 +140,13 @@ class TestSearchClient(unittest.TestCase):
         user_id = 'python{}-{}-{}'.format(python_version, date, instance)
 
         mcm.assign_user_id(user_id, clusters[0]['clusterName'])
+
+        result = None
+        while result is None:
+            try:
+                result = mcm.get_user_id(user_id)
+            except RequestException:
+                pass
 
         users_ids = [user['userID'] for user in
                      mcm.search_user_ids(user_id)['hits']]
