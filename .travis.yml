@@ -7,7 +7,6 @@ cache:
 branches:
   only:
     - master
-    - develop
 
 python:
   - "2.7"
