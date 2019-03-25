@@ -28,7 +28,6 @@ class TestAnalyticsClient(unittest.TestCase):
             days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         ab_test_name = str(self.index.name)
-
         with self.assertRaises(RequestException) as _:
             self.client.get_ab_test('foo')
 
@@ -51,7 +50,8 @@ class TestAnalyticsClient(unittest.TestCase):
         self.assertEqual(ab_test['status'], 'active')
 
         found = False
-        for ab_test in self.client.get_ab_tests()['abtests']:
+
+        for ab_test in self.client.get_ab_tests({'limit': 999999})['abtests']:
             if ab_test['name'] == ab_test_name:
                 self.assertEqual(ab_test['endAt'], tomorrow)
                 self.assertEqual(ab_test['status'], 'active')
