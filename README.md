@@ -1,9 +1,14 @@
-<p align="center">
-    <h4 align="center">The readme/code you are seeing it's part of upcoming release</h4>
-    <h2 align="center">Algolia API Client Python v2</h2>
-</p>
+⚠️ This is the beta for our v2 client!
 
-**[Algolia Search](https://www.algolia.com)** is a hosted search engine capable of delivering real-time results from the first keystroke.
+Our [v1 client](https://github.com/algolia/algoliasearch-client-python/tree/1.x) is still the LTS in [PyPI](https://pypi.org/project/algoliasearch/). Meaning, `pip install algoliasearch` still gets you the v1.
+
+Once v2 comes out of beta (soon!), we'll update PyPI.
+
+---
+
+## Algolia API Client Python
+
+[Algolia Search](https://www.algolia.com) is a hosted search engine capable of delivering real-time results from the first keystroke.
 
 This readme/code introduces the upcoming Algolia API Client Python v2, the next major release of our API Client. This release includes several new features along with the latest bug fixes and improvements:
 
