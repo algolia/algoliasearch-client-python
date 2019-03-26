@@ -1,17 +1,91 @@
-**Note:** The readme/code you are seeing it's part of upcoming release: Algolia API Client Python **v2**.
+<p align="center">
+    <h4 align="center">The readme/code you are seeing it's part of upcoming release</h4>
+    <h2 align="center">Algolia API Client Python v2</h2>
+</p>
 
-# Algolia Search API Client for Python
+**[Algolia Search](https://www.algolia.com)** is a hosted search engine capable of delivering real-time results from the first keystroke.
 
-[Algolia Search](https://www.algolia.com) is a hosted search engine capable of delivering realtime results from the first keystroke.
+This readme/code introduces the upcoming Algolia API Client Python v2, the next major release of our API Client. This release includes several new features along with the latest bug fixes and improvements:
 
-The **Algolia Search API Client for Python** lets
-you easily use the [Algolia Search REST API](https://www.algolia.com/doc/rest-api/search) from
-your Python code.
+- Supports Python: 2.7, 3.4, 3.5, 3.6, and 3.7.
+- Works in synchronous and **asynchronous** environments.
+- Tons of new methods: waitable response objects, `replace_all_objects`,`clear_objects`, and more!
 
-[![Build Status](https://travis-ci.org/algolia/algoliasearch-client-python.svg?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-python)
-[![PyPI version](https://badge.fury.io/py/algoliasearch.svg?branch=master)](http://badge.fury.io/py/algoliasearch)
+**Development Status**: 4 - Beta.
 
-## Getting Help
+**Changelog**: Comming soon.
 
-- **Need help**? Ask a question to the [Algolia Community](https://discourse.algolia.com/) or on [Stack Overflow](http://stackoverflow.com/questions/tagged/algolia).
-- **Found a bug?** You can open a [GitHub issue](https://github.com/algolia/algoliasearch-client-python/issues).
+You'd like to contribute? Before start, we want to let you know that your **feedback** is important to us! Please consider start using this `v2` today! Found a bug? Report it here: [github.com/algolia/algoliasearch-client-python/issues](https://github.com/algolia/algoliasearch-client-python/issues).
+
+### Example with synchronous usage:
+
+```py
+import os
+
+from algoliasearch.search_client import SearchClient
+
+client = SearchClient.create(
+    'ALGOLIA_APPLICATION_ID',
+    'ALGOLIA_ADMIN_KEY'
+)
+
+index = client.init_index('articles')
+
+index.save_objects([
+    {'objectID': 1, 'firstname': 'Jimmie', 'lastname': 'Barninger'},
+    {'objectID': 2, 'firstname': 'Warren', 'lastname': 'Speach'}
+]).wait()
+
+hits = index.search('Jimmie')
+
+print(hits)
+```
+
+### Example with asynchronous usage:
+
+First, require asynchronous libraries:
+
+```
+pip install 'asyncio>=3.4,<4.0' 'aiohttp>=2.0,<4.0' 'async_timeout>=2.0,<4.0'
+```
+
+Then, asynchronous methods are available using the `async` suffix:
+
+| synchronous   | asynchronous          |
+|-------------- |--------------------   |
+| search        | search_async          |
+| save_objects  | save_objects_async    |
+| set_settings  | set_settings_async    |
+| save_synonyms | save_synonyms_async   |
+| ...           | ...                   |
+
+
+```py
+import asyncio
+
+from algoliasearch.search_client import SearchClient
+from algoliasearch.responses import MultipleResponse
+
+app_id = 'ALGOLIA_APPLICATION_ID'
+api_key = 'ALGOLIA_ADMIN_KEY'    
+
+async def main():
+    async with SearchClient.create(app_id, api_key) as client:
+        index = client.init_index('articles')
+
+        results = await asyncio.gather(
+            index.save_object_async({'objectID': 1, 'foo': 'bar'}),
+            index.save_object_async({'objectID': 2, 'foo': 'foo'})
+        )
+
+        MultipleResponse(results).wait()
+
+        print(await index.search_async(''))
+
+asyncio.run(main())
+
+```
+
+### License
+
+Algolia API Client Python is an open-sourced software licensed under the [MIT license](LICENSE).
