@@ -13,7 +13,7 @@ This readme/code introduces the upcoming Algolia API Client Python v2, the next 
 
 **Development Status**: 4 - Beta.
 
-**Changelog**: Comming soon.
+**Changelog**: Coming soon.
 
 You'd like to contribute? Before start, we want to let you know that your **feedback** is important to us! Please consider start using this `v2` today! Found a bug? Report it here: [github.com/algolia/algoliasearch-client-python/issues](https://github.com/algolia/algoliasearch-client-python/issues).
 
@@ -67,7 +67,7 @@ from algoliasearch.search_client import SearchClient
 from algoliasearch.responses import MultipleResponse
 
 app_id = 'ALGOLIA_APPLICATION_ID'
-api_key = 'ALGOLIA_ADMIN_KEY'    
+api_key = 'ALGOLIA_ADMIN_KEY'
 
 async def main():
     async with SearchClient.create(app_id, api_key) as client:
