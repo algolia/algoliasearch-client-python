@@ -18,7 +18,7 @@ This readme/code introduces the upcoming Algolia API Client Python v2, the next 
 You'd like to contribute? Before start, we want to let you know that your **feedback** is important to us! Please consider start using this `v2` today! Found a bug or see something that can improved? Report it here: [github.com/algolia/algoliasearch-client-python/issues](https://github.com/algolia/algoliasearch-client-python/issues).
 
 First, install Algoliasearch - API Client Python v2:
-```py
+```
 pip install --pre algoliasearch
 ```
 
