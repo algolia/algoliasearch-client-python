@@ -78,12 +78,13 @@ async def main():
     async with SearchClient.create(app_id, api_key) as client:
         index = client.init_index('articles')
 
-        results = await asyncio.gather(
-            index.save_object_async({'objectID': 1, 'foo': 'bar'}),
-            index.save_object_async({'objectID': 2, 'foo': 'foo'})
-        )
+        response = await index.save_objects_async([
+            {'objectID': 1, 'foo': 'bar'},
+            {'objectID': 2, 'foo': 'foo'}
+        ])
 
-        MultipleResponse(results).wait()
+        for raw_response in response.raw_responses:
+            await index.wait_task_async(raw_response['taskID'])
 
         print(await index.search_async(''))
 
