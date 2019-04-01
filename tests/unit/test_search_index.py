@@ -3,6 +3,7 @@ import unittest
 import mock
 
 from algoliasearch.exceptions import MissingObjectIdException
+from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import Response
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
@@ -97,6 +98,45 @@ class TestSearchIndex(unittest.TestCase):
             },
             None,
         )
+
+    def test_get_objects(self):
+        request_options = RequestOptions.create(self.config)
+
+        requests = [{
+            'indexName': 'index-name',
+            'objectID': 'foo_id'
+        }]
+
+        self.index.get_objects(['foo_id'], request_options)
+
+        self.transporter.read.assert_called_once_with(
+            'POST',
+            '1/indexes/*/objects',
+            {'requests': requests},  # asserts version 2 it's used.
+            request_options
+        )
+
+    def test_get_objects_with_attributes_to_retreive(self):
+        request_options = RequestOptions.create(self.config, {
+            'attributesToRetrieve': ['firstname', 'lastname']
+        })
+
+        requests = [{
+            'indexName': 'index-name',
+            'objectID': 'foo_id',
+            'attributesToRetrieve': ['firstname', 'lastname']
+        }]
+
+        self.index.get_objects(['foo_id'], request_options)
+
+        self.transporter.read.assert_called_once_with(
+            'POST',
+            '1/indexes/*/objects',
+            {'requests': requests},  # asserts version 2 it's used.
+            request_options
+        )
+
+        self.assertNotIn('attributesToRetrieve', request_options.data)
 
     def test_get_settings(self):
         self.transporter.read.return_value = {

@@ -126,9 +126,21 @@ class SearchIndex(object):
     def get_objects(self, object_ids, request_options=None):
         # type: (Iterator[str], Optional[Union[dict, RequestOptions]]) -> dict
 
+        if request_options is None or isinstance(request_options, dict):
+            request_options = RequestOptions.create(
+                self._config,
+                request_options
+            )
+
         requests = []
         for object_id in object_ids:
             request = {'indexName': self._name, 'objectID': str(object_id)}
+
+            if 'attributesToRetrieve' in request_options.data:
+                request['attributesToRetrieve'] = request_options.data.pop(
+                    'attributesToRetrieve'
+                )
+
             requests.append(request)
 
         return self._transporter.read(
