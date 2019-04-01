@@ -16,7 +16,7 @@ class RequestOptions(object):
     def __setitem__(self, option, value):
         # type: (str, Any) -> None
 
-        if option in Params.HEADERS:
+        if option.upper() in [header.upper() for header in Params.HEADERS]:
             self.headers[option] = str(value)
         elif option in Params.QUERY_PARAMETERS:
             self.query_parameters[option] = value
