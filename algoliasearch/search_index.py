@@ -75,7 +75,7 @@ class SearchIndex(object):
                            "Algolia is also able to generate objectIDs " \
                            "automatically but *it's not recommended*. " \
                            "To do it, use `save_objects(objects, " \
-                           "{'autoGenerateObjectIDIfNotExist' => True})`."
+                           "{'autoGenerateObjectIDIfNotExist': True})`."
 
                 raise MissingObjectIdException(message, e.obj)
 
