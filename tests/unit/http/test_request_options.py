@@ -14,6 +14,7 @@ class TestRequestOptions(unittest.TestCase):
 
             # Headers
             'User-Agent': 'foo',
+            'X-Forwarded-For': '1.1.1.1',
 
             # Query Params
             'createIfNotExists': True,
@@ -37,6 +38,10 @@ class TestRequestOptions(unittest.TestCase):
 
     def test_headers(self):
         self.assertEqual(self.request_options.headers['User-Agent'], 'foo')
+        self.assertEqual(
+            self.request_options.headers['X-Forwarded-For'],
+            '1.1.1.1'
+        )
 
         # Default Value
         self.assertEqual(self.request_options.headers['Content-Type'],

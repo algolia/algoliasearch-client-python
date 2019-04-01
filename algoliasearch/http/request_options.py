@@ -50,6 +50,7 @@ class Params(object):
         'Content-type',
         'User-Agent',
         'X-Algolia-User-ID',
+        'X-Forwarded-For'
     )
 
     QUERY_PARAMETERS = (
