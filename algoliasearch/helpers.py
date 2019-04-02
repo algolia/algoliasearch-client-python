@@ -1,5 +1,7 @@
 import json
+import math
 import sys
+import time
 
 from typing import Optional, Iterable, List, Union, Iterator, Dict, Any
 
@@ -68,3 +70,10 @@ def is_async_available():
             pass
 
     return False
+
+
+def sleep_for(retries_count, before_retry):
+    # type: (int, int) -> None
+
+    factor = math.ceil(retries_count / 10)
+    time.sleep(factor * before_retry / 1000000.0)

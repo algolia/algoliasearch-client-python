@@ -1,9 +1,11 @@
 import abc
+import math
+import time
 
 from typing import List, Union
 
 from algoliasearch.exceptions import RequestException
-from algoliasearch.helpers import get_items
+from algoliasearch.helpers import get_items, sleep_for
 from algoliasearch.http.request_options import RequestOptions
 
 try:
@@ -98,6 +100,8 @@ class AddApiKeyResponse(Response):
     def wait(self):
         # type: () -> AddApiKeyResponse
 
+        retries_count = 1
+
         while not self._done:
             try:
                 self._client._sync().get_api_key(self.raw_response['key'])
@@ -105,6 +109,11 @@ class AddApiKeyResponse(Response):
             except RequestException as e:
                 if e.status_code != 404:
                     raise e
+                retries_count += 1
+                sleep_for(
+                    retries_count,
+                    self._client._config.wait_task_time_before_retry
+                )
 
         return self
 
@@ -127,14 +136,22 @@ class UpdateApiKeyResponse(Response):
     def wait(self):
         # type: () -> UpdateApiKeyResponse
 
+        retries_count = 1
+
         while not self._done:
             api_key = self._client._sync().get_api_key(
                 self.raw_response['key'],
                 self._request_options
             )
 
-            if self._have_changed(api_key):
-                break
+            self._done = self._have_changed(api_key)
+
+            if not self._done:
+                retries_count += 1
+                sleep_for(
+                    retries_count,
+                    self._client._config.wait_task_time_before_retry
+                )
 
         return self
 
@@ -171,11 +188,20 @@ class DeleteApiKeyResponse(Response):
     def wait(self):
         # type: () -> DeleteApiKeyResponse
 
+        retries_count = 1
+
         while not self._done:
             try:
                 self._client._sync().get_api_key(self._key)
             except RequestException as e:
                 self._done = e.status_code == 404
+
+            if not self._done:
+                retries_count += 1
+                sleep_for(
+                    retries_count,
+                    self._client._config.wait_task_time_before_retry
+                )
 
         return self
 
@@ -198,6 +224,8 @@ class RestoreApiKeyResponse(Response):
     def wait(self):
         # type: () -> RestoreApiKeyResponse
 
+        retries_count = 1
+
         while not self._done:
             try:
                 self._client._sync().get_api_key(self._key)
@@ -205,6 +233,11 @@ class RestoreApiKeyResponse(Response):
             except RequestException as e:
                 if e.status_code != 404:
                     raise e
+                retries_count += 1
+                sleep_for(
+                    retries_count,
+                    self._client._config.wait_task_time_before_retry
+                )
 
         return self
 
