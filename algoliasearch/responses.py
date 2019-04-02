@@ -26,12 +26,6 @@ class Response(object):
 
         pass  # pragma: no cover
 
-    @abc.abstractmethod
-    def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
-
-        pass  # pragma: no cover
-
 
 class IndexingResponse(Response):
 
@@ -55,7 +49,7 @@ class IndexingResponse(Response):
         return self
 
     def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
+        # type:(int) -> dict
 
         return self.raw_responses[key]
 
@@ -67,9 +61,6 @@ class MultipleResponse(Response):
 
         self.responses = [] if responses is None else responses
         self._waitable = list(self.responses)
-
-    def __repr__(self):
-        return self.responses
 
     def push(self, response):
         # type: (Response) -> None
@@ -90,7 +81,7 @@ class MultipleResponse(Response):
         return self
 
     def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
+        # type:(int) -> Response
 
         return self.responses[key]
 
@@ -118,7 +109,7 @@ class AddApiKeyResponse(Response):
         return self
 
     def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
+        # type:(str) -> Union[int, str, dict, list]
 
         return self.raw_response[key]
 
@@ -162,7 +153,7 @@ class UpdateApiKeyResponse(Response):
             valid_key)) for valid_key in valid_keys])
 
     def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
+        # type:(str) -> Union[int, str, dict, list]
 
         return self.raw_response[key]
 
@@ -189,7 +180,7 @@ class DeleteApiKeyResponse(Response):
         return self
 
     def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
+        # type:(str) -> Union[int, str, dict, list]
 
         return self.raw_response[key]
 
@@ -218,7 +209,7 @@ class RestoreApiKeyResponse(Response):
         return self
 
     def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
+        # type:(str) -> Union[int, str, dict, list]
 
         return self.raw_response[key]
 
@@ -243,6 +234,6 @@ class MultipleIndexBatchIndexingResponse(Response):
         return self
 
     def __getitem__(self, key):
-        # type:(Union[int, str]) -> Union[int, str, dict]
+        # type:(str) -> Union[int, str, dict, list]
 
         return self.raw_response[key]
