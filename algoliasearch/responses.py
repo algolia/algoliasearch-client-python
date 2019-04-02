@@ -1,6 +1,6 @@
 import abc
 
-from typing import List
+from typing import List, Union
 
 from algoliasearch.exceptions import RequestException
 from algoliasearch.helpers import get_items
@@ -26,6 +26,12 @@ class Response(object):
 
         pass  # pragma: no cover
 
+    @abc.abstractmethod
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        pass  # pragma: no cover
+
 
 class IndexingResponse(Response):
 
@@ -48,6 +54,11 @@ class IndexingResponse(Response):
 
         return self
 
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        return self.raw_responses[key]
+
 
 class MultipleResponse(Response):
 
@@ -56,6 +67,9 @@ class MultipleResponse(Response):
 
         self.responses = [] if responses is None else responses
         self._waitable = list(self.responses)
+
+    def __repr__(self):
+        return self.responses
 
     def push(self, response):
         # type: (Response) -> None
@@ -74,6 +88,11 @@ class MultipleResponse(Response):
         self._waitable = []
 
         return self
+
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        return self.responses[key]
 
 
 class AddApiKeyResponse(Response):
@@ -98,6 +117,11 @@ class AddApiKeyResponse(Response):
 
         return self
 
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        return self.raw_response[key]
+
 
 class UpdateApiKeyResponse(Response):
 
@@ -114,7 +138,8 @@ class UpdateApiKeyResponse(Response):
 
         while not self._done:
             api_key = self._client._sync().get_api_key(
-                self.raw_response['key']
+                self.raw_response['key'],
+                self._request_options
             )
 
             if self._have_changed(api_key):
@@ -135,6 +160,11 @@ class UpdateApiKeyResponse(Response):
 
         return any([(valid_key in body and body[valid_key] == api_key.get(
             valid_key)) for valid_key in valid_keys])
+
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        return self.raw_response[key]
 
 
 class DeleteApiKeyResponse(Response):
@@ -157,6 +187,11 @@ class DeleteApiKeyResponse(Response):
                 self._done = e.status_code == 404
 
         return self
+
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        return self.raw_response[key]
 
 
 class RestoreApiKeyResponse(Response):
@@ -182,6 +217,11 @@ class RestoreApiKeyResponse(Response):
 
         return self
 
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        return self.raw_response[key]
+
 
 class MultipleIndexBatchIndexingResponse(Response):
 
@@ -201,3 +241,8 @@ class MultipleIndexBatchIndexingResponse(Response):
             self._done = True
 
         return self
+
+    def __getitem__(self, key):
+        # type:(Union[int, str]) -> Union[int, str, dict]
+
+        return self.raw_response[key]

@@ -3,7 +3,11 @@ import unittest
 import mock
 
 from algoliasearch.exceptions import RequestException
-from algoliasearch.responses import IndexingResponse
+from algoliasearch.responses import (
+    IndexingResponse, MultipleResponse,
+    AddApiKeyResponse, UpdateApiKeyResponse,
+    DeleteApiKeyResponse, MultipleIndexBatchIndexingResponse
+)
 from algoliasearch.search_client import SearchClient
 
 
@@ -18,9 +22,26 @@ class TestResponses(unittest.TestCase):
             'foo': 'bar',
         }
 
-        index = self.client.init_index('foo')
-        response = IndexingResponse(index, [response])
-        self.assertEqual(response.raw_responses[0]['foo'], 'bar')
+        response_object = IndexingResponse({}, [response])
+        self.assertEqual(response_object[0]['foo'], 'bar')
+
+        response_object = MultipleResponse([response])
+        self.assertEqual(response_object[0]['foo'], 'bar')
+
+        response_object = MultipleResponse([IndexingResponse({}, [response])])
+        self.assertEqual(response_object[0][0]['foo'], 'bar')
+
+        response_object = AddApiKeyResponse({}, response)
+        self.assertEqual(response_object['foo'], 'bar')
+
+        response_object = UpdateApiKeyResponse({}, response, {})
+        self.assertEqual(response_object['foo'], 'bar')
+
+        response_object = DeleteApiKeyResponse({}, response, '')
+        self.assertEqual(response_object['foo'], 'bar')
+
+        response_object = MultipleIndexBatchIndexingResponse({}, response)
+        self.assertEqual(response_object['foo'], 'bar')
 
     def test_request_exception(self):
         self.client._transporter.write.side_effect = RequestException('', 300)
