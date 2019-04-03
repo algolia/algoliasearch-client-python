@@ -3,6 +3,7 @@ import unittest
 import mock
 
 from algoliasearch.exceptions import RequestException
+from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import (
     IndexingResponse, MultipleResponse,
     AddApiKeyResponse, UpdateApiKeyResponse,
@@ -61,3 +62,21 @@ class TestResponses(unittest.TestCase):
         with self.assertRaises(RequestException) as cm:
             self.client.add_api_key(['search']).wait()
         self.assertEqual(cm.exception.status_code, 300)
+
+    def test_update_api_key_response(self):
+        request_options = RequestOptions({}, {}, {}, {
+            'data': {'validity': 300}
+        })
+        response = UpdateApiKeyResponse({}, {}, request_options)
+        self.assertTrue(response._have_changed({}))
+        self.assertTrue(response._have_changed({'validity': 297}))
+
+        request_options.data = {'maxQueriesPerIPPerHour': 2}
+        self.assertFalse(response._have_changed({}))
+        self.assertFalse(response._have_changed({'maxQueriesPerIPPerHour': 1}))
+        self.assertTrue(response._have_changed({'maxQueriesPerIPPerHour': 2}))
+
+        request_options.data = {'acl': ['search']}
+        self.assertFalse(response._have_changed({}))
+        self.assertFalse(response._have_changed({'acl': []}))
+        self.assertTrue(response._have_changed({'acl': ['search']}))

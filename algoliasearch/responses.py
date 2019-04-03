@@ -159,13 +159,17 @@ class UpdateApiKeyResponse(Response):
         valid_keys = (
             'acl', 'indexes', 'referers',
             'restrictSources', 'queryParameters', 'description',
-            'validity', 'maxQueriesPerIPPerHour', 'maxHitsPerQuery',
+            'maxQueriesPerIPPerHour', 'maxHitsPerQuery',
         )
 
         body = self._request_options.data
 
-        return any([(valid_key in body and body[valid_key] == api_key.get(
-            valid_key)) for valid_key in valid_keys])
+        valid_key_exists = any([key in valid_keys for key in body.keys()])
+
+        return not valid_key_exists or any(
+            [(valid_key in body and body[valid_key] == api_key.get(
+                valid_key)) for valid_key in valid_keys]
+        )
 
     def __getitem__(self, key):
         # type:(str) -> Union[int, str, dict, list]
