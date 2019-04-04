@@ -1,6 +1,6 @@
 import abc
 
-from typing import List, Union
+from typing import List, Union, Optional
 
 from algoliasearch.exceptions import RequestException
 from algoliasearch.helpers import get_items, sleep_for
@@ -21,8 +21,8 @@ class Response(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
-    def wait(self):
-        # type:() -> Response
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> Response
 
         pass  # pragma: no cover
 
@@ -36,12 +36,15 @@ class IndexingResponse(Response):
         self.raw_responses = raw_responses
         self.waited = False
 
-    def wait(self):
-        # type: () -> IndexingResponse
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> IndexingResponse
 
         if not self.waited:
             for raw_response in self.raw_responses:
-                self._index._sync().wait_task(raw_response['taskID'])
+                self._index._sync().wait_task(
+                    raw_response['taskID'],
+                    request_options
+                )
 
         # No longer waits on this responses.
         self.waited = True
@@ -69,11 +72,11 @@ class MultipleResponse(Response):
 
         self._waitable.append(response)
 
-    def wait(self):
-        # type: () -> MultipleResponse
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]])-> MultipleResponse
 
         for response in self._waitable:
-            response.wait()
+            response.wait(request_options)
 
         # No longer waits on this responses.
         self._waitable = []
@@ -95,14 +98,17 @@ class AddApiKeyResponse(Response):
         self._client = client
         self._done = False
 
-    def wait(self):
-        # type: () -> AddApiKeyResponse
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> AddApiKeyResponse
 
         retries_count = 1
 
         while not self._done:
             try:
-                self._client._sync().get_api_key(self.raw_response['key'])
+                self._client._sync().get_api_key(
+                    self.raw_response['key'],
+                    request_options
+                )
                 self._done = True
             except RequestException as e:
                 if e.status_code != 404:
@@ -131,15 +137,15 @@ class UpdateApiKeyResponse(Response):
         self._request_options = request_options
         self._done = False
 
-    def wait(self):
-        # type: () -> UpdateApiKeyResponse
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> UpdateApiKeyResponse
 
         retries_count = 1
 
         while not self._done:
             api_key = self._client._sync().get_api_key(
                 self.raw_response['key'],
-                self._request_options
+                request_options
             )
 
             self._done = self._have_changed(api_key)
@@ -187,14 +193,17 @@ class DeleteApiKeyResponse(Response):
         self._key = key
         self._done = False
 
-    def wait(self):
-        # type: () -> DeleteApiKeyResponse
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> DeleteApiKeyResponse
 
         retries_count = 1
 
         while not self._done:
             try:
-                self._client._sync().get_api_key(self._key)
+                self._client._sync().get_api_key(
+                    self._key,
+                    request_options
+                )
             except RequestException as e:
                 self._done = e.status_code == 404
 
@@ -223,14 +232,17 @@ class RestoreApiKeyResponse(Response):
         self._key = key
         self._done = False
 
-    def wait(self):
-        # type: () -> RestoreApiKeyResponse
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> RestoreApiKeyResponse # noqa: E501
 
         retries_count = 1
 
         while not self._done:
             try:
-                self._client._sync().get_api_key(self._key)
+                self._client._sync().get_api_key(
+                    self._key,
+                    request_options
+                )
                 self._done = True
             except RequestException as e:
                 if e.status_code != 404:
@@ -258,12 +270,16 @@ class MultipleIndexBatchIndexingResponse(Response):
         self._client = client
         self._done = False
 
-    def wait(self):
-        # type: () -> MultipleIndexBatchIndexingResponse
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> MultipleIndexBatchIndexingResponse # noqa: E501
 
         while not self._done:
             for index_name, task_id in get_items(self.raw_response['taskID']):
-                self._client._sync().wait_task(index_name, task_id)
+                self._client._sync().wait_task(
+                    index_name,
+                    task_id,
+                    request_options
+                )
             self._done = True
 
         return self

@@ -2,6 +2,7 @@ import unittest
 
 import mock
 
+from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import (
@@ -80,3 +81,13 @@ class TestResponses(unittest.TestCase):
         self.assertFalse(response._have_changed({}))
         self.assertFalse(response._have_changed({'acl': []}))
         self.assertTrue(response._have_changed({'acl': ['search']}))
+
+    def test_uses_request_options_on_wait(self):
+        index = SearchClient.create('foo', 'bar').init_index('foo')
+        index.wait_task = mock.Mock(name='wait_task')
+        index._sync = mock.Mock(name='_sync')
+        index._sync.return_value = index
+
+        response = IndexingResponse(index, [{'taskID': 1}])
+        response.wait({'bar': 2})
+        index.wait_task.assert_called_once_with(1, {'bar': 2})
