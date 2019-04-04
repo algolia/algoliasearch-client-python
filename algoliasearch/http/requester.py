@@ -27,12 +27,13 @@ class Requester(object):
                                data=request.data_as_string)
 
         r = req.prepare()  # type: ignore
-        s = requests.Session()  # type: ignore
 
         requests_timeout = (request.connect_timeout, request.timeout)
 
         try:
-            response = s.send(r, timeout=requests_timeout)  # type: ignore
+            response = self.session.send(  # type: ignore
+                r, timeout=requests_timeout
+            )
         except Timeout as e:
             return Response(error_message=str(e), is_timed_out_error=True)
         except RequestException as e:
