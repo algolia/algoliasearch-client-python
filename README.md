@@ -9,13 +9,6 @@ your Python code.
 [![Build Status](https://travis-ci.org/algolia/algoliasearch-client-python.svg?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-python) [![PyPI version](https://badge.fury.io/py/algoliasearch.svg?branch=master)](http://badge.fury.io/py/algoliasearch)
 
 
-We implemented an asynchronous version of the client that may suit your need if
-you are using a framework such as `aiohttp` in your backend. This version can
-be found [here](https://github.com/algolia/algoliasearch-client-python-async).
-
-
-
-
 ## API Documentation
 
 You can find the full reference on [Algolia's website](https://www.algolia.com/doc/api-client/python/).
