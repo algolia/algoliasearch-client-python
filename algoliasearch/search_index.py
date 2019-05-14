@@ -498,17 +498,17 @@ class SearchIndex(object):
 
             if len(batch) == batch_size:
                 if validate_object_id:
-                    assert_object_id(objects)
+                    assert_object_id(batch)
 
-                requests = build_raw_response_batch(action, objects)
+                requests = build_raw_response_batch(action, batch)
                 raw_responses.append(
                     self._raw_batch(requests, request_options))
                 batch = []
 
         if len(batch):
             if validate_object_id:
-                assert_object_id(objects)
-            requests = build_raw_response_batch(action, objects)
+                assert_object_id(batch)
+            requests = build_raw_response_batch(action, batch)
             raw_responses.append(self._raw_batch(requests, request_options))
 
         return IndexingResponse(self, raw_responses)
