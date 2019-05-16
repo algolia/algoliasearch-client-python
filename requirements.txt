@@ -5,7 +5,10 @@
 
 # Requirements
 requests>=2.21,<3.0
-typing>=3.6,<4.0
+
+# Typing is included in the Python standard library as of 3.5
+# See - https://docs.python.org/3/library/typing.html
+typing>=3.6,<4.0; python_version < '3.5'
 
 # Dev requirements
 -r requirements/requirements-testing.txt
