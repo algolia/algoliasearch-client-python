@@ -138,6 +138,32 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertNotIn('attributesToRetrieve', request_options.data)
 
+    def test_get_objects_with_attributes_to_retreive_bulk(self):
+        request_options = RequestOptions.create(self.config, {
+            'attributesToRetrieve': ['firstname', 'lastname']
+        })
+
+        requests = [{
+            'indexName': 'index-name',
+            'objectID': 'foo_id',
+            'attributesToRetrieve': ['firstname', 'lastname']
+        }, {
+            'indexName': 'index-name',
+            'objectID': 'bar_id',
+            'attributesToRetrieve': ['firstname', 'lastname']
+        }]
+
+        self.index.get_objects(['foo_id', 'bar_id'], request_options)
+
+        self.transporter.read.assert_called_once_with(
+            'POST',
+            '1/indexes/*/objects',
+            {'requests': requests},  # asserts version 2 it's used.
+            request_options
+        )
+
+        self.assertNotIn('attributesToRetrieve', request_options.data)
+
     def test_get_settings(self):
         self.transporter.read.return_value = {
             'attributesToIndex': ['attr1', 'attr2'],

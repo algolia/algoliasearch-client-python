@@ -131,15 +131,15 @@ class SearchIndex(object):
                 self._config,
                 request_options
             )
+        # store attributesToRetrieve for use in each request
+        attributes_to_retrieve = request_options.data.pop('attributesToRetrieve', None)
 
         requests = []
         for object_id in object_ids:
             request = {'indexName': self._name, 'objectID': str(object_id)}
 
-            if 'attributesToRetrieve' in request_options.data:
-                request['attributesToRetrieve'] = request_options.data.pop(
-                    'attributesToRetrieve'
-                )
+            if attributes_to_retrieve:
+                request['attributesToRetrieve'] = attributes_to_retrieve
 
             requests.append(request)
 
