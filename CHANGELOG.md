@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
+## [v2.0.3](https://github.com/algolia/algoliasearch-client-python/compare/2.0.2...2.0.3)
+
+### Fixed
+- Missing `attributesToRetrieve` data on multiple `get_objects` ([#424](https://github.com/algolia/algoliasearch-client-python/pull/424))
+
 ## [v2.0.2](https://github.com/algolia/algoliasearch-client-python/compare/2.0.1...2.0.2)
 
 ### Fixed
