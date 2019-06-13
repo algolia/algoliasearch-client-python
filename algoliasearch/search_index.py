@@ -236,6 +236,11 @@ class SearchIndex(object):
 
         params = {'getVersion': 2}
 
+        if request_options is None:
+            request_options = {'getVersion':2}
+        else:
+            request_options.append({'getVersion':2})
+
         raw_response = self._transporter.read(
             Verb.GET,
             endpoint('1/indexes/{}/settings', self._name),
