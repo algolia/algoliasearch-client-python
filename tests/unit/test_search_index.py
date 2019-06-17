@@ -205,7 +205,7 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertEqual(args[3].query_parameters['getVersion'], 2)
 
-    def test_get_settings_dict_as_request_options(self):
+    def test_get_settings_with_request_options(self):
         request_options = RequestOptions.create(self.config, {'foo': 'bar'})
 
         self.index.get_settings(request_options)
