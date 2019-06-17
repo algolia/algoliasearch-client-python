@@ -172,14 +172,17 @@ class TestSearchIndex(unittest.TestCase):
             'ignorePlurals': True,
         }
 
-        settings = self.index.get_settings({'foo': 'bar'})
+        request_options = RequestOptions.create(self.config, {'foo': 'bar'})
+        settings = self.index.get_settings(request_options)
 
         self.transporter.read.assert_called_once_with(
             'GET',
             '1/indexes/index-name/settings',
-            {'getVersion': 2},  # asserts version 2 it's used.
-            {'foo': 'bar'}
+            None,
+            request_options
         )
+
+        self.assertEqual(request_options.query_parameters['getVersion'], 2)
 
         self.assertEqual(settings, {
             'searchableAttributes': ['attr1', 'attr2'],
@@ -187,6 +190,29 @@ class TestSearchIndex(unittest.TestCase):
             'replicas': ['index1', 'index2'],
             'ignorePlurals': True,
         })
+
+    def test_get_settings_none_as_request_options(self):
+        self.index.get_settings()
+
+        args = self.transporter.read.call_args[0]
+
+        self.assertEqual(args[3].query_parameters['getVersion'], 2)
+
+    def test_get_settings_dict_as_request_options(self):
+        self.index.get_settings({'foo': 'bar'})
+
+        args = self.transporter.read.call_args[0]
+
+        self.assertEqual(args[3].query_parameters['getVersion'], 2)
+
+    def test_get_settings_with_request_options(self):
+        request_options = RequestOptions.create(self.config, {'foo': 'bar'})
+
+        self.index.get_settings(request_options)
+
+        args = self.transporter.read.call_args[0]
+
+        self.assertEqual(args[3].query_parameters['getVersion'], 2)
 
     def test_save_synonyms(self):
         # Test null response

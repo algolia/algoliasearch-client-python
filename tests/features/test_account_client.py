@@ -46,6 +46,12 @@ class TestAccountClient(unittest.TestCase):
         self.assertEqual(self.index2.get_rule('one'), rule)
 
         # Assert synonyms got copied
+        list_synonyms1 = [synonym for synonym in self.index.browse_synonyms()]
+        list_synonyms2 = [synonym for synonym in self.index2.browse_synonyms()]
+
+        self.assertEqual(list_synonyms1, list_synonyms2)
+
+        # Assert synomys are the same
         self.assertEqual(self.index2.get_synonym('one'), synonym)
 
         # Assert that copying again fails because index already exists
