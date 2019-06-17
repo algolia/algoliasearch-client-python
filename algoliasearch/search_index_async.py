@@ -80,10 +80,11 @@ class SearchIndexAsync(SearchIndex):
     def get_settings_async(self, request_options=None):  # type: ignore
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        if request_options == None:
-            request_options = {'getVersion':2}
-        else:
-            request_options.append({'getVersion':2})
+        if request_options is None or isinstance(request_options, dict):
+            request_options = RequestOptions.create(self._config,
+                                                    request_options)
+
+        request_options.query_parameters['getVersion'] = 2
 
         raw_response = yield from self._transporter_async.read(
             Verb.GET,

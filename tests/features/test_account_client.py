@@ -46,16 +46,10 @@ class TestAccountClient(unittest.TestCase):
         self.assertEqual(self.index2.get_rule('one'), rule)
 
         # Assert synonyms got copied
-        list_synonyms1 = []
-        list_synonyms2 = []
+        list_synonyms1 = [synonym for synonym in self.index.browse_synonyms()]
+        list_synonyms2 = [synonym for synonym in self.index2.browse_synonyms()]
 
-        for synonym1 in self.index.browse_synonyms():
-            list_synonyms1.append(synonym1)
-
-        for synonym2 in self.index2.browse_synonyms():
-            list_synonyms2.append(synonym2)
-
-        self.assertEqual(list_synonyms1,list_synonyms1)
+        self.assertEqual(list_synonyms1, list_synonyms2)
 
         # Assert synomys are the same
         self.assertEqual(self.index2.get_synonym('one'), synonym)
