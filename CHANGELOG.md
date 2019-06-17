@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
+## Unreleased
+
+### Fixed
+- On `getVersion` param used by `search_index.get_settings` ([#426](https://github.com/algolia/algoliasearch-client-python/pull/426))
+
 ## [v2.0.3](https://github.com/algolia/algoliasearch-client-python/compare/2.0.2...2.0.3)
 
 ### Fixed

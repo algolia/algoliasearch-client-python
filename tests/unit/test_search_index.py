@@ -178,7 +178,7 @@ class TestSearchIndex(unittest.TestCase):
         self.transporter.read.assert_called_once_with(
             'GET',
             '1/indexes/index-name/settings',
-            None,  # asserts version 2 it's used.
+            None,
             request_options
         )
 
