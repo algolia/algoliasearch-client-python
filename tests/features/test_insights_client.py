@@ -1,3 +1,4 @@
+import datetime
 import unittest
 
 from tests.helpers.env import Env
@@ -11,6 +12,50 @@ class TestInsightsClient(unittest.TestCase):
 
     def tearDown(self):
         self.index.delete()
+
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
+    def test_send_event(self):
+        response = self.client.send_event({
+            "eventType": "click",
+            "eventName": "foo",
+            "index": self.index.name,
+            "userToken": "bar",
+            "objectIDs": ["one", "two"],
+            "timestamp": F.two_days_ago_timestamp()
+        })
+
+        self.assertTrue(response['status'] == 200)
+        self.assertTrue(response['message'] == 'OK')
+
+    @unittest.skipIf(Env.is_community(),
+                     "Community can not test insights operations")
+    def test_send_events(self):
+        two_days_ago_timestamp = int(
+            (datetime.datetime.now() - datetime.timedelta(days=2)).timestamp()
+        ) * 1000
+
+        response = self.client.send_events([
+            {
+                "eventType": "click",
+                "eventName": "foo",
+                "index": self.index.name,
+                "userToken": "bar",
+                "objectIDs": ["one", "two"],
+                "timestamp": F.two_days_ago_timestamp()
+            },
+            {
+                "eventType": "click",
+                "eventName": "foo",
+                "index": self.index.name,
+                "userToken": "bar",
+                "objectIDs": ["one", "two"],
+                "timestamp": F.two_days_ago_timestamp()
+            }
+        ])
+
+        self.assertTrue(response['status'] == 200)
+        self.assertTrue(response['message'] == 'OK')
 
     @unittest.skipIf(Env.is_community(),
                      "Community can not test insights operations")
