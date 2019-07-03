@@ -175,3 +175,11 @@ class Factory(object):
             return SyncDecorator(client)
 
         return client
+
+    @staticmethod
+    def two_days_ago_timestamp():
+        # type: () -> int
+
+        return int(
+            (datetime.datetime.now() - datetime.timedelta(days=2)).timestamp()
+        ) * 1000
