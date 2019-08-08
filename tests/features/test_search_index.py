@@ -165,6 +165,13 @@ class TestSearchIndex(unittest.TestCase):
             ['name']
         )
 
+        self.index.set_settings({'indexLanguages': ['ja']}).wait()
+
+        self.assertEqual(
+            self.index.get_settings()['indexLanguages'],
+            ['ja']
+        )
+
     def test_search(self):
         responses = MultipleResponse()
 
