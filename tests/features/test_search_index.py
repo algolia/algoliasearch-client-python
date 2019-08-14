@@ -387,7 +387,11 @@ class TestSearchIndex(unittest.TestCase):
 
         rule2 = {
             "objectID": "query_edits",
-            "condition": {"anchoring": "is", "pattern": "mobile phone"},
+            "condition": {
+                "anchoring": "is",
+                "pattern": "mobile phone",
+                "alternatives": True
+            },
             "consequence": {
                 "params": {
                     "query": {
