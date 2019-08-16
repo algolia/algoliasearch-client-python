@@ -77,3 +77,14 @@ def sleep_for(retries_count, before_retry):
 
     factor = math.ceil(retries_count / 10)
     time.sleep(factor * before_retry / 1000000.0)
+
+
+def get_object_id_position(res, object_id):
+    # type: (dict, str) -> int
+    hits = res['hits']
+
+    for i, hit in enumerate(hits):
+        if hit.get('objectID') == object_id:
+            return i
+
+    return -1

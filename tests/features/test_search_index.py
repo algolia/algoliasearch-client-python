@@ -3,6 +3,7 @@ import sys
 import unittest
 
 from algoliasearch.exceptions import RequestException, ObjectNotFoundException
+from algoliasearch.helpers import get_object_id_position
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import MultipleResponse
 from tests.helpers.factory import Factory as F
@@ -177,8 +178,8 @@ class TestSearchIndex(unittest.TestCase):
         responses = MultipleResponse()
 
         responses.push(self.index.save_objects([
-            {"company": "Algolia", "name": "Julien Lemoine"},
-            {"company": "Algolia", "name": "Nicolas Dessaigne"},
+            {"company": "Algolia", "name": "Julien Lemoine", "objectID": "julien-lemoine"},  # noqa: E501
+            {"company": "Algolia", "name": "Nicolas Dessaigne", "objectID": "nicolas-dessaigne"},  # noqa: E501
             {"company": "Amazon", "name": "Jeff Bezos"},
             {"company": "Apple", "name": "Steve Jobs"},
             {"company": "Apple", "name": "Steve Wozniak"},
@@ -202,6 +203,9 @@ class TestSearchIndex(unittest.TestCase):
         # parameter and check that the number of returned hits is equal to 2
         result = self.index.search('algolia')
         self.assertEqual(result['nbHits'], 2)
+        self.assertEqual(get_object_id_position(result, 'nicolas-dessaigne'), 0)  # noqa: E501
+        self.assertEqual(get_object_id_position(result, 'julien-lemoine'), 1)
+        self.assertEqual(get_object_id_position(result, ''), -1)
 
         # Call find_first_object with the following parameters and check that
         # no object is found
