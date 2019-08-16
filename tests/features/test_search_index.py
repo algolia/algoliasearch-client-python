@@ -2,7 +2,8 @@
 import sys
 import unittest
 
-from algoliasearch.exceptions import RequestException
+from algoliasearch.exceptions import RequestException, ObjectNotFoundException
+from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import MultipleResponse
 from tests.helpers.factory import Factory as F
 
@@ -201,6 +202,39 @@ class TestSearchIndex(unittest.TestCase):
         # parameter and check that the number of returned hits is equal to 2
         result = self.index.search('algolia')
         self.assertEqual(result['nbHits'], 2)
+
+        # Call find_first_object with the following parameters and check that
+        # no object is found
+        with self.assertRaises(ObjectNotFoundException):
+            self.index.find_first_object(lambda _: False, "")
+
+        # Call find_first_object with the following parameters and check that
+        # the first object is returned with a `position=0` and `page=0`
+        found = self.index.find_first_object(lambda _: True, "")
+        self.assertEqual(found['position'], 0)
+        self.assertEqual(found['page'], 0)
+
+        def filter_func(obj):
+            # type: (dict) -> bool
+            return obj.get('company') == 'Apple'
+
+        # Call find_first_object with the following parameters and check that
+        # no object is found
+        with self.assertRaises(ObjectNotFoundException):
+            self.index.find_first_object(filter_func, "algolia")
+
+        opts = {'hitsPerPage': 5}
+
+        # Call find_first_object with the following parameters and check that
+        # no object is found
+        with self.assertRaises(ObjectNotFoundException):
+            self.index.find_first_object(filter_func, "algolia", True, opts)
+
+        # Call find_first_object with the following parameters and check that
+        # the first object is returned with a `position=0` and `page=2`
+        found = self.index.find_first_object(filter_func, "", False, opts)
+        self.assertEqual(found['position'], 0)
+        self.assertEqual(found['page'], 2)
 
         # Perform a search using search with the query `elon` and the
         # following parameter and check that the queryID field from

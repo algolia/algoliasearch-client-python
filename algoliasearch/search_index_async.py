@@ -1,9 +1,12 @@
+import copy
+
 import asyncio
 import math
 import types
-from typing import Optional, Union, List, Iterator
+from typing import Optional, Union, List, Iterator, Callable
 
 from algoliasearch.configs import SearchConfig
+from algoliasearch.exceptions import ObjectNotFoundException
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
@@ -94,6 +97,43 @@ class SearchIndexAsync(SearchIndex):
         )
 
         return SettingsDeserializer.deserialize(raw_response)
+
+    def find_first_object_async(self, filter_func, query, do_not_paginate=False, request_options=None):  # type: ignore # noqa: E501
+        # type: (Callable[[dict], bool], Optional[str], bool, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        res = self.search(query, request_options)
+
+        hits = res['hits']
+        page = int(res['page'])
+        nb_pages = int(res['nbPages'])
+
+        for pos, hit in enumerate(hits):
+            if filter_func(hit):
+                return {
+                    'object': hit,
+                    'position': pos,
+                    'page': page,
+                }
+
+        has_next_page = page + 1 < nb_pages
+
+        if do_not_paginate or not has_next_page:
+            raise ObjectNotFoundException
+
+        if request_options is None or isinstance(request_options, dict):
+            request_options = RequestOptions.create(self._config,
+                                                    request_options)
+        else:
+            request_options = copy.copy(request_options)
+
+        request_options['page'] = page + 1
+
+        return self.find_first_object_async(
+            filter_func,
+            query,
+            do_not_paginate,
+            request_options,
+        )
 
     def replace_all_objects_async(self, objects,  # type: ignore
                                   request_options=None):
