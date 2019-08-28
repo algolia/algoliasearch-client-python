@@ -31,10 +31,6 @@ class TestInsightsClient(unittest.TestCase):
     @unittest.skipIf(Env.is_community(),
                      "Community can not test insights operations")
     def test_send_events(self):
-        two_days_ago_timestamp = int(
-            (datetime.datetime.now() - datetime.timedelta(days=2)).timestamp()
-        ) * 1000
-
         response = self.client.send_events([
             {
                 "eventType": "click",

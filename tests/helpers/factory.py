@@ -1,6 +1,8 @@
 import datetime
 import os
 import platform
+import sys
+from time import time
 
 from typing import Optional
 
@@ -180,6 +182,11 @@ class Factory(object):
     def two_days_ago_timestamp():
         # type: () -> int
 
-        return int(
-            (datetime.datetime.now() - datetime.timedelta(days=2)).timestamp()
-        ) * 1000
+        if sys.version_info >= (3, 0):
+            timestamp = (
+                    datetime.datetime.now() - datetime.timedelta(days=2)
+            ).timestamp()
+        else:
+            timestamp = time()
+
+        return int(timestamp) * 1000
