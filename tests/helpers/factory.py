@@ -1,6 +1,8 @@
 import datetime
 import os
 import platform
+import sys
+from time import time
 
 from typing import Optional
 
@@ -175,3 +177,16 @@ class Factory(object):
             return SyncDecorator(client)
 
         return client
+
+    @staticmethod
+    def two_days_ago_timestamp():
+        # type: () -> int
+
+        if sys.version_info >= (3, 0):
+            timestamp = (
+                    datetime.datetime.now() - datetime.timedelta(days=2)
+            ).timestamp()
+        else:
+            timestamp = time()
+
+        return int(timestamp) * 1000
