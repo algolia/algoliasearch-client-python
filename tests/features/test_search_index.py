@@ -165,6 +165,13 @@ class TestSearchIndex(unittest.TestCase):
             ['name']
         )
 
+        self.index.set_settings({'indexLanguages': ['ja']}).wait()
+
+        self.assertEqual(
+            self.index.get_settings()['indexLanguages'],
+            ['ja']
+        )
+
     def test_search(self):
         responses = MultipleResponse()
 
@@ -380,7 +387,11 @@ class TestSearchIndex(unittest.TestCase):
 
         rule2 = {
             "objectID": "query_edits",
-            "condition": {"anchoring": "is", "pattern": "mobile phone"},
+            "condition": {
+                "anchoring": "is",
+                "pattern": "mobile phone",
+                "alternatives": True
+            },
             "consequence": {
                 "params": {
                     "query": {
