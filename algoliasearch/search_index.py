@@ -46,12 +46,15 @@ class SearchIndex(object):
         self._name = name
 
     def exists(self):
+        # type: () -> bool
+
         try:
             self.get_settings()
         except RequestException as e:
-            if (e.status_code == 404):
+            if e.status_code == 404:
                 return False
             raise e
+
         return True
 
     def save_object(self, obj, request_options=None):
