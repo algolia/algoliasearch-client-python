@@ -551,6 +551,11 @@ class TestSearchIndex(unittest.TestCase):
         # Check that synonym with objectID="two" does exist using getSynonym
         self.assertEqual(self.index.get_synonym('two')['objectID'], 'two')
 
+    def test_exists(self):
+        self.assertFalse(self.index.exists())
+        self.index.save_object(F.obj()).wait()
+        self.assertTrue(self.index.exists())
+
     def test_url_encoding(self):
         objects = [
             # unicode

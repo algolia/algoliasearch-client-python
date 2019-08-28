@@ -31,16 +31,30 @@ class TestSearchIndex(unittest.TestCase):
 
     def test_index_does_not_exist(self):
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
-            submethod_mock.side_effect = RequestException("Index does not exist", 404)
+            submethod_mock.side_effect = RequestException(
+                "Index does not exist", 404
+            )
 
             indexExists = self.index.exists()
 
             self.index.get_settings.assert_called_once()
             self.assertEqual(indexExists, False);
 
+    def test_index_exist_raises_non_4O4_exceptions(self):
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.side_effect = RequestException(
+                "Permissions error", 400
+            )
+
+            with self.assertRaises(RequestException) as _:
+                self.index.exists()
+
     def test_index_exists(self):
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
-            submethod_mock.return_value = {'hitsPerPage': 20, 'maxValuesPerFacet': 100}
+            submethod_mock.return_value = {
+                'hitsPerPage': 20,
+                'maxValuesPerFacet': 100
+            }
 
             indexExists = self.index.exists()
 
