@@ -353,6 +353,8 @@ class TestSearchIndex(unittest.TestCase):
              "model": "One"},
             {"objectID": "one_plus_two", "brand": "OnePlus",
              "model": "Two"},
+            {"objectID": "samsung_galaxy_s10", "brand": "Samsung",
+             "model": "S10"},
         ]))
 
         responses.push(self.index.set_settings({
@@ -383,8 +385,6 @@ class TestSearchIndex(unittest.TestCase):
             "description": "Automatic apply the faceting on `brand` if a"
         }
 
-        responses.push(self.index.save_rule(rule1))
-
         rule2 = {
             "objectID": "query_edits",
             "condition": {
@@ -405,16 +405,43 @@ class TestSearchIndex(unittest.TestCase):
             }
         }
 
-        responses.push(self.index.save_rules([rule2]))
+        responses.push(self.index.save_rules([rule1, rule2]))
 
         responses.wait()
+
+        self.assertNotEqual(
+            self.index.search('OnePlus')['hits'][0]['objectID'],
+            'samsung_galaxy_s10'
+        );
+
+        rule3 = {
+            "objectID": "query_promo",
+            "consequence": {
+                "promote": [
+                    {
+                        "objectID": "samsung_galaxy_s10",
+                        "position": 0
+                    }
+                ]
+            }
+        }
+
+        self.index.save_rule(rule3).wait()
+
+        self.assertTrue(
+            self.index.search('OnePlus')['hits'][0][
+                'objectID'] == 'samsung_galaxy_s10'
+        );
 
         self.assertEqual(self.index.get_rule(rule1['objectID']),
                          rule1)
         self.assertEqual(self.index.get_rule(rule2['objectID']),
                          rule2)
 
-        self.assertEqual(self.index.search_rules('')['nbHits'], 2)
+        self.assertEqual(self.index.get_rule(rule3['objectID']),
+                         rule2)
+
+        self.assertEqual(self.index.search_rules('')['nbHits'], 3)
 
         # Browse all records with browse_rules
         results = []
@@ -424,6 +451,7 @@ class TestSearchIndex(unittest.TestCase):
         rules = [
             rule1,
             rule2,
+            rule3
         ]
 
         for rule in rules:
