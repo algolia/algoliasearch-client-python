@@ -356,7 +356,7 @@ class TestSearchIndex(unittest.TestCase):
         ]))
 
         responses.push(self.index.set_settings({
-            'attributesForFaceting': ['brand']
+            'attributesForFaceting': ['brand', 'model']
         }))
 
         rule1 = {
@@ -383,6 +383,8 @@ class TestSearchIndex(unittest.TestCase):
             "description": "Automatic apply the faceting on `brand` if a"
         }
 
+        responses.push(self.index.save_rule(rule1))
+
         rule2 = {
             "objectID": "query_edits",
             "condition": {
@@ -403,12 +405,6 @@ class TestSearchIndex(unittest.TestCase):
             }
         }
 
-        responses.push(self.index.save_rules([rule1, rule2]))
-
-        responses.wait()
-
-        self.assertEqual(self.index.search('')['nbHits'], 5);
-
         rule3 = {
             "objectID": "query_promo",
             "consequence": {
@@ -418,9 +414,26 @@ class TestSearchIndex(unittest.TestCase):
             }
         }
 
-        self.index.save_rule(rule3).wait()
+        rule4 = {
+            "objectID": "query_promo_only_summer",
+            "condition": {
+                "context": "summer"
+            },
+            "consequence": {
+              "params": {
+                "filters": "model:One"
+              }
+            }
+        }
 
-        self.assertEqual(self.index.search('')['nbHits'], 2);
+        responses.push(self.index.save_rules([rule2, rule3, rule4]))
+
+        responses.wait()
+
+        # Should be only the One Plus model One
+        self.assertEqual(self.index.search('', {
+            'context': 'summer'
+        })['nbHits'], 1);
 
         self.assertEqual(self.index.get_rule(rule1['objectID']),
                          rule1)
@@ -430,7 +443,7 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(self.index.get_rule(rule3['objectID']),
                          rule2)
 
-        self.assertEqual(self.index.search_rules('')['nbHits'], 3)
+        self.assertEqual(self.index.search_rules('')['nbHits'], 4)
 
         # Browse all records with browse_rules
         results = []
