@@ -352,7 +352,7 @@ class TestSearchIndex(unittest.TestCase):
             {"objectID": "one_plus_one", "brand": "OnePlus",
              "model": "One"},
             {"objectID": "one_plus_two", "brand": "OnePlus",
-             "model": "Two"}
+             "model": "Two"},
         ]))
 
         responses.push(self.index.set_settings({
