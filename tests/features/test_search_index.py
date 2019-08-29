@@ -441,8 +441,11 @@ class TestSearchIndex(unittest.TestCase):
                          rule2)
 
         self.assertEqual(self.index.get_rule(rule3['objectID']),
-                         rule2)
+                         rule3)
 
+        self.assertEqual(self.index.get_rule(rule4['objectID']),
+                         rule4)
+        
         self.assertEqual(self.index.search_rules('')['nbHits'], 4)
 
         # Browse all records with browse_rules
