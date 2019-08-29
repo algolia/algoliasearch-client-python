@@ -456,7 +456,8 @@ class TestSearchIndex(unittest.TestCase):
         rules = [
             rule1,
             rule2,
-            rule3
+            rule3,
+            rule4
         ]
 
         for rule in rules:
