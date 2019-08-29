@@ -352,9 +352,7 @@ class TestSearchIndex(unittest.TestCase):
             {"objectID": "one_plus_one", "brand": "OnePlus",
              "model": "One"},
             {"objectID": "one_plus_two", "brand": "OnePlus",
-             "model": "Two"},
-            {"objectID": "samsung_galaxy_s10", "brand": "Samsung",
-             "model": "S10"},
+             "model": "Two"}
         ]))
 
         responses.push(self.index.set_settings({
@@ -409,29 +407,20 @@ class TestSearchIndex(unittest.TestCase):
 
         responses.wait()
 
-        self.assertNotEqual(
-            self.index.search('OnePlus')['hits'][0]['objectID'],
-            'samsung_galaxy_s10'
-        );
+        self.assertEqual(self.index.search('')['nbHits'], 5);
 
         rule3 = {
             "objectID": "query_promo",
             "consequence": {
-                "promote": [
-                    {
-                        "objectID": "samsung_galaxy_s10",
-                        "position": 0
-                    }
-                ]
+              "params": {
+                "filters": "brand:OnePlus"
+              }
             }
         }
 
         self.index.save_rule(rule3).wait()
 
-        self.assertTrue(
-            self.index.search('OnePlus')['hits'][0][
-                'objectID'] == 'samsung_galaxy_s10'
-        );
+        self.assertEqual(self.index.search('')['nbHits'], 2);
 
         self.assertEqual(self.index.get_rule(rule1['objectID']),
                          rule1)
