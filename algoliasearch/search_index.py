@@ -168,11 +168,12 @@ class SearchIndex(object):
             paginate = request_options.pop('paginate', paginate)
             query = request_options.pop('query', query)
 
+        request_options = RequestOptions.create(
+            self._config,
+            request_options
+        )
+
         while True:
-            request_options = RequestOptions.create(
-                self._config,
-                request_options
-            )
             request_options.data['page'] = page
 
             res = self.search(query, request_options)
