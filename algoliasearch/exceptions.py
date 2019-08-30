@@ -25,5 +25,5 @@ class AlgoliaUnreachableHostException(Exception):
     pass
 
 
-class ObjectNotFoundException(Exception):
+class ObjectNotFoundException(AlgoliaException):
     pass
