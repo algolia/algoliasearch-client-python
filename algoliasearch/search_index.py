@@ -156,42 +156,41 @@ class SearchIndex(object):
             request_options
         )
 
-    def find_first_object(self, filter_func, query, do_not_paginate=False, request_options=None):  # noqa: E501
-        # type: (Callable[[dict], bool], Optional[str], bool, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+    def find_object(self, callback, request_options=None):
+        # type: (Callable[[Dict[str, any]], bool], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
-        res = self.search(query, request_options)
+        paginate = True
+        query = ''
+        page = 0
 
-        hits = res['hits']
-        page = int(res['page'])
-        nb_pages = int(res['nbPages'])
-
-        for pos, hit in enumerate(hits):
-            if filter_func(hit):
-                return {
-                    'object': hit,
-                    'position': pos,
-                    'page': page,
-                }
-
-        has_next_page = page + 1 < nb_pages
-
-        if do_not_paginate or not has_next_page:
-            raise ObjectNotFoundException
-
-        if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self._config,
-                                                    request_options)
-        else:
+        if isinstance(request_options, dict):
             request_options = copy.copy(request_options)
+            paginate = request_options.pop('paginate', paginate)
+            query = request_options.pop('query', query)
 
-        request_options['page'] = page + 1
+        while True:
+            request_options = RequestOptions.create(
+                self._config,
+                request_options
+            )
+            request_options.data['page'] = page
 
-        return self.find_first_object(
-            filter_func,
-            query,
-            do_not_paginate,
-            request_options,
-        )
+            res = self.search(query, request_options)
+
+            for pos, hit in enumerate(res['hits']):
+                if callback(hit):
+                    return {
+                        'object': hit,
+                        'position': pos,
+                        'page': page,
+                    }
+
+            has_next_page = page + 1 < int(res['nbPages'])
+
+            if not paginate or not has_next_page:
+                raise ObjectNotFoundException
+
+            page += 1
 
     def browse_objects(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> ObjectIterator

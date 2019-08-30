@@ -177,8 +177,10 @@ class TestSearchIndex(unittest.TestCase):
         responses = MultipleResponse()
 
         responses.push(self.index.save_objects([
-            {"company": "Algolia", "name": "Julien Lemoine", "objectID": "julien-lemoine"},  # noqa: E501
-            {"company": "Algolia", "name": "Nicolas Dessaigne", "objectID": "nicolas-dessaigne"},  # noqa: E501
+            {"company": "Algolia", "name": "Julien Lemoine",
+             "objectID": "julien-lemoine"},  # noqa: E501
+            {"company": "Algolia", "name": "Nicolas Dessaigne",
+             "objectID": "nicolas-dessaigne"},  # noqa: E501
             {"company": "Amazon", "name": "Jeff Bezos"},
             {"company": "Apple", "name": "Steve Jobs"},
             {"company": "Apple", "name": "Steve Wozniak"},
@@ -207,39 +209,49 @@ class TestSearchIndex(unittest.TestCase):
         )
         self.assertEqual(SearchIndex.get_object_position(
             result, 'julien-lemoine'), 1
-        )`
+        )
+
         self.assertEqual(SearchIndex.get_object_position(result, ''), -1)
 
-        # Call find_first_object with the following parameters and check that
+        # Call find_object with the following parameters and check that
         # no object is found
         with self.assertRaises(ObjectNotFoundException):
-            self.index.find_first_object(lambda _: False, "")
+            self.index.find_object(lambda _: False)
 
-        # Call find_first_object with the following parameters and check that
+        # Call find_object with the following parameters and check that
         # the first object is returned with a `position=0` and `page=0`
-        found = self.index.find_first_object(lambda _: True, "")
+        found = self.index.find_object(lambda _: True)
         self.assertEqual(found['position'], 0)
         self.assertEqual(found['page'], 0)
 
-        def filter_func(obj):
+        def callback(obj):
             # type: (dict) -> bool
             return obj.get('company') == 'Apple'
 
-        # Call find_first_object with the following parameters and check that
+        # Call find_object with the following parameters and check that
         # no object is found
         with self.assertRaises(ObjectNotFoundException):
-            self.index.find_first_object(filter_func, "algolia")
+            self.index.find_object(callback, {
+                'query': 'algolia'
+            })
 
-        opts = {'hitsPerPage': 5}
-
-        # Call find_first_object with the following parameters and check that
+        # Call find_object with the following parameters and check that
         # no object is found
         with self.assertRaises(ObjectNotFoundException):
-            self.index.find_first_object(filter_func, "algolia", True, opts)
+            self.index.find_object(callback, {
+                'query': 'algolia',
+                'paginate': False,
+                'hitsPerPage': 5
+            })
 
-        # Call find_first_object with the following parameters and check that
+        # Call find_object with the following parameters and check that
         # the first object is returned with a `position=0` and `page=2`
-        found = self.index.find_first_object(filter_func, "", False, opts)
+        found = self.index.find_object(callback, {
+            'query': '',
+            'paginate': True,
+            'hitsPerPage': 5
+        })
+
         self.assertEqual(found['position'], 0)
         self.assertEqual(found['page'], 2)
 
@@ -270,6 +282,7 @@ class TestSearchIndex(unittest.TestCase):
 
         result = self.index.search_for_facet_values('company', 'a')[
             'facetHits']
+
         values = list(
             map(lambda facet: facet['value'], result))
 
