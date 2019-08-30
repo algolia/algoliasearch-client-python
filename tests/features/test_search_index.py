@@ -3,9 +3,8 @@ import sys
 import unittest
 
 from algoliasearch.exceptions import RequestException, ObjectNotFoundException
-from algoliasearch.helpers import get_object_id_position
-from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import MultipleResponse
+from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
 
 
@@ -203,9 +202,13 @@ class TestSearchIndex(unittest.TestCase):
         # parameter and check that the number of returned hits is equal to 2
         result = self.index.search('algolia')
         self.assertEqual(result['nbHits'], 2)
-        self.assertEqual(get_object_id_position(result, 'nicolas-dessaigne'), 0)  # noqa: E501
-        self.assertEqual(get_object_id_position(result, 'julien-lemoine'), 1)
-        self.assertEqual(get_object_id_position(result, ''), -1)
+        self.assertEqual(SearchIndex.get_object_position(
+            result, 'nicolas-dessaigne'), 0
+        )
+        self.assertEqual(SearchIndex.get_object_position(
+            result, 'julien-lemoine'), 1
+        )`
+        self.assertEqual(SearchIndex.get_object_position(result, ''), -1)
 
         # Call find_first_object with the following parameters and check that
         # no object is found

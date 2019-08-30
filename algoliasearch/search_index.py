@@ -600,6 +600,16 @@ class SearchIndex(object):
 
         return IndexingResponse(self, [raw_response])
 
+    @staticmethod
+    def get_object_position(res, object_id):
+        # type: (Dict[str, Any], str) -> int
+
+        for i, hit in enumerate(res['hits']):
+            if hit.get('objectID') == object_id:
+                return i
+
+        return -1
+
     def _create_temporary_name(self):
         # type: () -> str
 
