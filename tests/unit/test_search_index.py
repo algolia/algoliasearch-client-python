@@ -262,9 +262,11 @@ class TestSearchIndex(unittest.TestCase):
             'page': 0
         }).data)
 
-        self.index.find_object(lambda obj: True, RequestOptions.create(self.config, {
-            'User-Agent': 'blabla'
-        }))
+        self.index.find_object(lambda obj: True, RequestOptions.create(
+            self.config, {
+                'User-Agent': 'blabla'
+            }
+        ))
         args, _ = self.index.search.call_args
         self.assertEqual(args[0], '')
         self.assertEqual(args[1].data, RequestOptions.create(self.config, {

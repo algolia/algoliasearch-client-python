@@ -2,7 +2,7 @@ import copy
 
 import asyncio
 import math
-from typing import Optional, Union, List, Iterator, Callable
+from typing import Optional, Dict, Union, List, Iterator, Callable
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import ObjectNotFoundException
@@ -97,7 +97,7 @@ class SearchIndexAsync(SearchIndex):
 
         return SettingsDeserializer.deserialize(raw_response)
 
-    def find_objec_async(self, callback, request_options=None):
+    def find_object_async(self, callback, request_options=None):  # type: ignore # noqa: E501
         # type: (Callable[[Dict[str, any]], bool], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         paginate = True
@@ -117,7 +117,7 @@ class SearchIndexAsync(SearchIndex):
         while True:
             request_options.data['page'] = page
 
-            res = yield from self.search(query, request_options)
+            res = yield from self.search_async(query, request_options)   # type: ignore # noqa: E501
 
             for pos, hit in enumerate(res['hits']):
                 if callback(hit):

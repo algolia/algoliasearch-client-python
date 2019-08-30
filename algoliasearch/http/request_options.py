@@ -1,6 +1,6 @@
 import copy
 
-from typing import Optional, Any, Dict
+from typing import Optional, Any, Dict, Union
 
 from algoliasearch.configs import Config
 from algoliasearch.helpers import get_items
@@ -29,7 +29,7 @@ class RequestOptions(object):
 
     @staticmethod
     def create(config, options=None):
-        # type: (Config, Optional[RequestOptions, Dict[str, Any]]) -> RequestOptions  # noqa: E501
+        # type: (Config, Optional[Union[RequestOptions, Dict[str, Any]]]) -> RequestOptions  # noqa: E501
 
         if isinstance(options, RequestOptions):
             return copy.copy(options)

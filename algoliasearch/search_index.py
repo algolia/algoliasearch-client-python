@@ -4,7 +4,7 @@ import random
 import string
 import time
 
-from typing import Optional, List, Union, Iterator, Callable
+from typing import Any, Optional, Dict, List, Union, Iterator, Callable
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import (
@@ -157,7 +157,7 @@ class SearchIndex(object):
         )
 
     def find_object(self, callback, request_options=None):
-        # type: (Callable[[Dict[str, any]], bool], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+        # type: (Callable[[Dict[str, Any]], bool], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         paginate = True
         query = ''
