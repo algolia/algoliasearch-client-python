@@ -4,6 +4,7 @@ import types
 from typing import Optional, Union, List, Iterator
 
 from algoliasearch.configs import SearchConfig
+from algoliasearch.exceptions import RequestException
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
@@ -81,7 +82,7 @@ class SearchIndexAsync(SearchIndex):
         # type: () -> bool
 
         try:
-            yield from self.get_settings()
+            yield from self.get_settings_async()
         except RequestException as e:
             if e.status_code == 404:
                 return False
