@@ -238,6 +238,43 @@ class TestSearchIndex(unittest.TestCase):
         with self.assertRaises(MissingObjectIdException) as _:
             self.index.save_rules([{'foo': 'bar'}])
 
+    def test_find_object(self):
+        self.index.search = mock.Mock(name="search")
+        self.index.search.return_value = {
+            'hits': [{'foo': 'bar'}],
+            'nbPages': 1
+        }
+
+        self.index.find_object(lambda obj: True)
+        args, _ = self.index.search.call_args
+        self.assertEqual(args[0], '')
+        self.assertEqual(args[1].data,
+                         RequestOptions.create(self.config, {'page': 0}).data)
+
+        self.index.find_object(lambda obj: True, {
+            'query': 'foo',
+            'hitsPerPage': 5
+        })
+        args, _ = self.index.search.call_args
+        self.assertEqual(args[0], 'foo')
+        self.assertEqual(args[1].data, RequestOptions.create(self.config, {
+            'hitsPerPage': 5,
+            'page': 0
+        }).data)
+
+        self.index.find_object(lambda obj: True, RequestOptions.create(self.config, {
+            'User-Agent': 'blabla'
+        }))
+        args, _ = self.index.search.call_args
+        self.assertEqual(args[0], '')
+        self.assertEqual(args[1].data, RequestOptions.create(self.config, {
+            'page': 0
+        }).data)
+
+        self.assertEqual(args[1].headers, RequestOptions.create(self.config, {
+            'User-Agent': 'blabla'
+        }).headers)
+
     def test_replace_all_objects(self):
         self.index._create_temporary_name = mock.Mock(
             name="_create_temporary_name")
