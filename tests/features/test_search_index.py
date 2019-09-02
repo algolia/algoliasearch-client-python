@@ -2,8 +2,9 @@
 import sys
 import unittest
 
-from algoliasearch.exceptions import RequestException
+from algoliasearch.exceptions import RequestException, ObjectNotFoundException
 from algoliasearch.responses import MultipleResponse
+from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
 
 
@@ -176,8 +177,10 @@ class TestSearchIndex(unittest.TestCase):
         responses = MultipleResponse()
 
         responses.push(self.index.save_objects([
-            {"company": "Algolia", "name": "Julien Lemoine"},
-            {"company": "Algolia", "name": "Nicolas Dessaigne"},
+            {"company": "Algolia", "name": "Julien Lemoine",
+             "objectID": "julien-lemoine"},  # noqa: E501
+            {"company": "Algolia", "name": "Nicolas Dessaigne",
+             "objectID": "nicolas-dessaigne"},  # noqa: E501
             {"company": "Amazon", "name": "Jeff Bezos"},
             {"company": "Apple", "name": "Steve Jobs"},
             {"company": "Apple", "name": "Steve Wozniak"},
@@ -201,6 +204,56 @@ class TestSearchIndex(unittest.TestCase):
         # parameter and check that the number of returned hits is equal to 2
         result = self.index.search('algolia')
         self.assertEqual(result['nbHits'], 2)
+        self.assertEqual(SearchIndex.get_object_position(
+            result, 'nicolas-dessaigne'), 0
+        )
+        self.assertEqual(SearchIndex.get_object_position(
+            result, 'julien-lemoine'), 1
+        )
+
+        self.assertEqual(SearchIndex.get_object_position(result, ''), -1)
+
+        # Call find_object with the following parameters and check that
+        # no object is found
+        with self.assertRaises(ObjectNotFoundException):
+            self.index.find_object(lambda _: False)
+
+        # Call find_object with the following parameters and check that
+        # the first object is returned with a `position=0` and `page=0`
+        found = self.index.find_object(lambda _: True)
+        self.assertEqual(found['position'], 0)
+        self.assertEqual(found['page'], 0)
+
+        def callback(obj):
+            # type: (dict) -> bool
+            return obj.get('company') == 'Apple'
+
+        # Call find_object with the following parameters and check that
+        # no object is found
+        with self.assertRaises(ObjectNotFoundException):
+            self.index.find_object(callback, {
+                'query': 'algolia'
+            })
+
+        # Call find_object with the following parameters and check that
+        # no object is found
+        with self.assertRaises(ObjectNotFoundException):
+            self.index.find_object(callback, {
+                'query': '',
+                'paginate': False,
+                'hitsPerPage': 5
+            })
+
+        # Call find_object with the following parameters and check that
+        # the first object is returned with a `position=0` and `page=2`
+        found = self.index.find_object(callback, {
+            'query': '',
+            'paginate': True,
+            'hitsPerPage': 5
+        })
+
+        self.assertEqual(found['position'], 0)
+        self.assertEqual(found['page'], 2)
 
         # Perform a search using search with the query `elon` and the
         # following parameter and check that the queryID field from
@@ -229,6 +282,7 @@ class TestSearchIndex(unittest.TestCase):
 
         result = self.index.search_for_facet_values('company', 'a')[
             'facetHits']
+
         values = list(
             map(lambda facet: facet['value'], result))
 

@@ -23,3 +23,7 @@ class RequestException(AlgoliaException):
 
 class AlgoliaUnreachableHostException(AlgoliaException):
     pass
+
+
+class ObjectNotFoundException(AlgoliaException):
+    pass
