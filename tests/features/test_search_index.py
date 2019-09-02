@@ -239,7 +239,7 @@ class TestSearchIndex(unittest.TestCase):
         # no object is found
         with self.assertRaises(ObjectNotFoundException):
             self.index.find_object(callback, {
-                'query': 'algolia',
+                'query': '',
                 'paginate': False,
                 'hitsPerPage': 5
             })
