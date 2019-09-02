@@ -7,7 +7,7 @@ import time
 from typing import Optional, List, Union, Iterator
 
 from algoliasearch.configs import SearchConfig
-from algoliasearch.exceptions import MissingObjectIdException
+from algoliasearch.exceptions import RequestException, MissingObjectIdException
 from algoliasearch.helpers import (
     assert_object_id,
     build_raw_response_batch,
@@ -44,6 +44,18 @@ class SearchIndex(object):
         self._transporter = transporter
         self._config = config
         self._name = name
+
+    def exists(self):
+        # type: () -> bool
+
+        try:
+            self.get_settings()
+        except RequestException as e:
+            if e.status_code == 404:
+                return False
+            raise e
+
+        return True
 
     def save_object(self, obj, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501

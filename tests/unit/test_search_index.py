@@ -2,7 +2,7 @@ import unittest
 
 import mock
 
-from algoliasearch.exceptions import MissingObjectIdException
+from algoliasearch.exceptions import RequestException, MissingObjectIdException
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import Response
 from algoliasearch.search_index import SearchIndex
@@ -28,6 +28,38 @@ class TestSearchIndex(unittest.TestCase):
 
     def test_name_getter(self):
         self.assertEqual(self.index.name, 'index-name')
+
+    def test_index_does_not_exist(self):
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.side_effect = RequestException(
+                "Index does not exist", 404
+            )
+
+            indexExists = self.index.exists()
+
+            self.index.get_settings.assert_called_once()
+            self.assertEqual(indexExists, False);
+
+    def test_index_exist_raises_non_4O4_exceptions(self):
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.side_effect = RequestException(
+                "Permissions error", 400
+            )
+
+            with self.assertRaises(RequestException) as _:
+                self.index.exists()
+
+    def test_index_exists(self):
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.return_value = {
+                'hitsPerPage': 20,
+                'maxValuesPerFacet': 100
+            }
+
+            indexExists = self.index.exists()
+
+            self.index.get_settings.assert_called_once()
+            self.assertEqual(indexExists, True);
 
     def test_save_objects(self):
         # Saving an object without object id
