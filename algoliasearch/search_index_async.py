@@ -5,7 +5,7 @@ import math
 from typing import Optional, Dict, Union, List, Iterator, Callable
 
 from algoliasearch.configs import SearchConfig
-from algoliasearch.exceptions import ObjectNotFoundException
+from algoliasearch.exceptions import ObjectNotFoundException, RequestException
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
@@ -78,6 +78,18 @@ class SearchIndexAsync(SearchIndex):
 
         return RuleIteratorAsync(self._transporter_async, self._name,
                                  request_options)
+
+    def exists_async(self):
+        # type: () -> bool
+
+        try:
+            yield from self.get_settings_async()
+        except RequestException as e:
+            if e.status_code == 404:
+                return False
+            raise e
+
+        return True
 
     def get_settings_async(self, request_options=None):  # type: ignore
         # type: (Optional[Union[dict, RequestOptions]]) -> dict

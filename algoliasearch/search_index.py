@@ -9,7 +9,8 @@ from typing import Any, Optional, Dict, List, Union, Iterator, Callable
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import (
     MissingObjectIdException,
-    ObjectNotFoundException
+    ObjectNotFoundException,
+    RequestException
 )
 from algoliasearch.helpers import (
     assert_object_id,
@@ -47,6 +48,18 @@ class SearchIndex(object):
         self._transporter = transporter
         self._config = config
         self._name = name
+
+    def exists(self):
+        # type: () -> bool
+
+        try:
+            self.get_settings()
+        except RequestException as e:
+            if e.status_code == 404:
+                return False
+            raise e
+
+        return True
 
     def save_object(self, obj, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
