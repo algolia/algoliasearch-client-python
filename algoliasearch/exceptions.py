@@ -21,5 +21,5 @@ class RequestException(AlgoliaException):
         self.status_code = status_code
 
 
-class AlgoliaUnreachableHostException(Exception):
+class AlgoliaUnreachableHostException(AlgoliaException):
     pass
