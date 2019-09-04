@@ -49,11 +49,11 @@ class SearchIndex(object):
         self._config = config
         self._name = name
 
-    def exists(self):
-        # type: () -> bool
+    def exists(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> bool
 
         try:
-            self.get_settings()
+            self.get_settings(request_options)
         except RequestException as e:
             if e.status_code == 404:
                 return False
