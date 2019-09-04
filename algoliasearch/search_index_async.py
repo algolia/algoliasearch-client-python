@@ -79,11 +79,11 @@ class SearchIndexAsync(SearchIndex):
         return RuleIteratorAsync(self._transporter_async, self._name,
                                  request_options)
 
-    def exists_async(self):
-        # type: () -> bool
+    def exists_async(self, request_options=None):  # type: ignore # noqa: E501
+        # type: (Optional[Union[dict, RequestOptions]]) -> bool
 
         try:
-            yield from self.get_settings_async()
+            yield from self.get_settings_async(request_options)
         except RequestException as e:
             if e.status_code == 404:
                 return False

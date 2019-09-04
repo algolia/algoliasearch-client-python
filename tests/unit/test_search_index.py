@@ -29,7 +29,8 @@ class TestSearchIndex(unittest.TestCase):
     def test_name_getter(self):
         self.assertEqual(self.index.name, 'index-name')
 
-    def test_index_does_not_exist(self):
+    def test_exists(self):
+
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
             submethod_mock.side_effect = RequestException(
                 "Index does not exist", 404
@@ -38,9 +39,13 @@ class TestSearchIndex(unittest.TestCase):
             indexExists = self.index.exists()
 
             self.index.get_settings.assert_called_once()
-            self.assertEqual(indexExists, False);
 
-    def test_index_exist_raises_non_4O4_exceptions(self):
+            # No request options
+            args = self.index.get_settings.call_args[0]
+            self.assertEqual(args[0], None)
+
+            self.assertEqual(indexExists, False)
+
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
             submethod_mock.side_effect = RequestException(
                 "Permissions error", 400
@@ -49,7 +54,25 @@ class TestSearchIndex(unittest.TestCase):
             with self.assertRaises(RequestException) as _:
                 self.index.exists()
 
-    def test_index_exists(self):
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.return_value = {
+                'hitsPerPage': 20,
+                'maxValuesPerFacet': 100
+            }
+
+            request_options = {
+                'X-Algolia-User-ID': 'Foo'
+            }
+
+            indexExists = self.index.exists(request_options)
+
+            # With request options
+            args = self.index.get_settings.call_args[0]
+            self.assertEqual(args[0], request_options)
+
+            self.index.get_settings.assert_called_once()
+            self.assertEqual(indexExists, True)
+
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
             submethod_mock.return_value = {
                 'hitsPerPage': 20,
@@ -59,7 +82,7 @@ class TestSearchIndex(unittest.TestCase):
             indexExists = self.index.exists()
 
             self.index.get_settings.assert_called_once()
-            self.assertEqual(indexExists, True);
+            self.assertEqual(indexExists, True)
 
     def test_save_objects(self):
         # Saving an object without object id
