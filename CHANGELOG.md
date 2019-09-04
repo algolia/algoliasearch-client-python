@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
+## [v2.1.0](https://github.com/algolia/algoliasearch-client-python/compare/2.0.4...2.1.0)
+
+### Added
+- Method `SearchClient.get_secured_api_key_remaining_validity` ([#455](https://github.com/algolia/algoliasearch-client-python/pull/455))
+- Method `SearchIndex.exists` ([#444](https://github.com/algolia/algoliasearch-client-python/pull/444)) ([#454](https://github.com/algolia/algoliasearch-client-python/pull/454))
+- Method `SearchIndex.find_object` and `SearchIndex.get_object_position` ([#449](https://github.com/algolia/algoliasearch-client-python/pull/449))
+
 ## [v2.0.4](https://github.com/algolia/algoliasearch-client-python/compare/2.0.3...2.0.4)
 
 ### Fixed
