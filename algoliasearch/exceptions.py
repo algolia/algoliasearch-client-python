@@ -27,3 +27,7 @@ class AlgoliaUnreachableHostException(AlgoliaException):
 
 class ObjectNotFoundException(AlgoliaException):
     pass
+
+
+class ValidUntilNotFoundException(AlgoliaException):
+    pass

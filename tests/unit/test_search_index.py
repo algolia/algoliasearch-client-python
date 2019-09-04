@@ -40,6 +40,8 @@ class TestSearchIndex(unittest.TestCase):
 
             self.index.get_settings.assert_called_once()
 
+            self.assertEqual(indexExists, False)
+
             # No request options
             args = self.index.get_settings.call_args[0]
             self.assertEqual(args[0], None)
