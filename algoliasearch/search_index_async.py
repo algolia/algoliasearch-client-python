@@ -1,9 +1,11 @@
+import copy
+
 import asyncio
 import math
-import types
-from typing import Optional, Union, List, Iterator
+from typing import Optional, Dict, Union, List, Iterator, Callable
 
 from algoliasearch.configs import SearchConfig
+from algoliasearch.exceptions import ObjectNotFoundException, RequestException
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
@@ -77,6 +79,18 @@ class SearchIndexAsync(SearchIndex):
         return RuleIteratorAsync(self._transporter_async, self._name,
                                  request_options)
 
+    def exists_async(self, request_options=None):  # type: ignore # noqa: E501
+        # type: (Optional[Union[dict, RequestOptions]]) -> bool
+
+        try:
+            yield from self.get_settings_async(request_options)
+        except RequestException as e:
+            if e.status_code == 404:
+                return False
+            raise e
+
+        return True
+
     def get_settings_async(self, request_options=None):  # type: ignore
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
@@ -94,6 +108,43 @@ class SearchIndexAsync(SearchIndex):
         )
 
         return SettingsDeserializer.deserialize(raw_response)
+
+    def find_object_async(self, callback, request_options=None):  # type: ignore # noqa: E501
+        # type: (Callable[[Dict[str, any]], bool], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        paginate = True
+        query = ''
+        page = 0
+
+        if isinstance(request_options, dict):
+            request_options = copy.copy(request_options)
+            paginate = request_options.pop('paginate', paginate)
+            query = request_options.pop('query', query)
+
+        request_options = RequestOptions.create(
+            self._config,
+            request_options
+        )
+
+        while True:
+            request_options.data['page'] = page
+
+            res = yield from self.search_async(query, request_options)   # type: ignore # noqa: E501
+
+            for pos, hit in enumerate(res['hits']):
+                if callback(hit):
+                    return {
+                        'object': hit,
+                        'position': pos,
+                        'page': page,
+                    }
+
+            has_next_page = page + 1 < int(res['nbPages'])
+
+            if not paginate or not has_next_page:
+                raise ObjectNotFoundException
+
+            page += 1
 
     def replace_all_objects_async(self, objects,  # type: ignore
                                   request_options=None):

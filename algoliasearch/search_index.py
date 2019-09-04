@@ -4,10 +4,14 @@ import random
 import string
 import time
 
-from typing import Optional, List, Union, Iterator
+from typing import Any, Optional, Dict, List, Union, Iterator, Callable
 
 from algoliasearch.configs import SearchConfig
-from algoliasearch.exceptions import MissingObjectIdException
+from algoliasearch.exceptions import (
+    MissingObjectIdException,
+    ObjectNotFoundException,
+    RequestException
+)
 from algoliasearch.helpers import (
     assert_object_id,
     build_raw_response_batch,
@@ -44,6 +48,18 @@ class SearchIndex(object):
         self._transporter = transporter
         self._config = config
         self._name = name
+
+    def exists(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> bool
+
+        try:
+            self.get_settings(request_options)
+        except RequestException as e:
+            if e.status_code == 404:
+                return False
+            raise e
+
+        return True
 
     def save_object(self, obj, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
@@ -152,6 +168,43 @@ class SearchIndex(object):
             },
             request_options
         )
+
+    def find_object(self, callback, request_options=None):
+        # type: (Callable[[Dict[str, Any]], bool], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        paginate = True
+        query = ''
+        page = 0
+
+        if isinstance(request_options, dict):
+            request_options = copy.copy(request_options)
+            paginate = request_options.pop('paginate', paginate)
+            query = request_options.pop('query', query)
+
+        request_options = RequestOptions.create(
+            self._config,
+            request_options
+        )
+
+        while True:
+            request_options.data['page'] = page
+
+            res = self.search(query, request_options)
+
+            for pos, hit in enumerate(res['hits']):
+                if callback(hit):
+                    return {
+                        'object': hit,
+                        'position': pos,
+                        'page': page,
+                    }
+
+            has_next_page = page + 1 < int(res['nbPages'])
+
+            if not paginate or not has_next_page:
+                raise ObjectNotFoundException
+
+            page += 1
 
     def browse_objects(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> ObjectIterator
@@ -559,6 +612,16 @@ class SearchIndex(object):
         )
 
         return IndexingResponse(self, [raw_response])
+
+    @staticmethod
+    def get_object_position(res, object_id):
+        # type: (Dict[str, Any], str) -> int
+
+        for i, hit in enumerate(res['hits']):
+            if hit.get('objectID') == object_id:
+                return i
+
+        return -1
 
     def _create_temporary_name(self):
         # type: () -> str

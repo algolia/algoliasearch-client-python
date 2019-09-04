@@ -2,7 +2,7 @@ import unittest
 
 import mock
 
-from algoliasearch.exceptions import MissingObjectIdException
+from algoliasearch.exceptions import RequestException, MissingObjectIdException
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import Response
 from algoliasearch.search_index import SearchIndex
@@ -28,6 +28,63 @@ class TestSearchIndex(unittest.TestCase):
 
     def test_name_getter(self):
         self.assertEqual(self.index.name, 'index-name')
+
+    def test_exists(self):
+
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.side_effect = RequestException(
+                "Index does not exist", 404
+            )
+
+            indexExists = self.index.exists()
+
+            self.index.get_settings.assert_called_once()
+
+            self.assertEqual(indexExists, False)
+
+            # No request options
+            args = self.index.get_settings.call_args[0]
+            self.assertEqual(args[0], None)
+
+            self.assertEqual(indexExists, False)
+
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.side_effect = RequestException(
+                "Permissions error", 400
+            )
+
+            with self.assertRaises(RequestException) as _:
+                self.index.exists()
+
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.return_value = {
+                'hitsPerPage': 20,
+                'maxValuesPerFacet': 100
+            }
+
+            request_options = {
+                'X-Algolia-User-ID': 'Foo'
+            }
+
+            indexExists = self.index.exists(request_options)
+
+            # With request options
+            args = self.index.get_settings.call_args[0]
+            self.assertEqual(args[0], request_options)
+
+            self.index.get_settings.assert_called_once()
+            self.assertEqual(indexExists, True)
+
+        with mock.patch.object(self.index, 'get_settings') as submethod_mock:
+            submethod_mock.return_value = {
+                'hitsPerPage': 20,
+                'maxValuesPerFacet': 100
+            }
+
+            indexExists = self.index.exists()
+
+            self.index.get_settings.assert_called_once()
+            self.assertEqual(indexExists, True)
 
     def test_save_objects(self):
         # Saving an object without object id
@@ -237,6 +294,45 @@ class TestSearchIndex(unittest.TestCase):
         # Test object id validation
         with self.assertRaises(MissingObjectIdException) as _:
             self.index.save_rules([{'foo': 'bar'}])
+
+    def test_find_object(self):
+        self.index.search = mock.Mock(name="search")
+        self.index.search.return_value = {
+            'hits': [{'foo': 'bar'}],
+            'nbPages': 1
+        }
+
+        self.index.find_object(lambda obj: True)
+        args, _ = self.index.search.call_args
+        self.assertEqual(args[0], '')
+        self.assertEqual(args[1].data,
+                         RequestOptions.create(self.config, {'page': 0}).data)
+
+        self.index.find_object(lambda obj: True, {
+            'query': 'foo',
+            'hitsPerPage': 5
+        })
+        args, _ = self.index.search.call_args
+        self.assertEqual(args[0], 'foo')
+        self.assertEqual(args[1].data, RequestOptions.create(self.config, {
+            'hitsPerPage': 5,
+            'page': 0
+        }).data)
+
+        self.index.find_object(lambda obj: True, RequestOptions.create(
+            self.config, {
+                'User-Agent': 'blabla'
+            }
+        ))
+        args, _ = self.index.search.call_args
+        self.assertEqual(args[0], '')
+        self.assertEqual(args[1].data, RequestOptions.create(self.config, {
+            'page': 0
+        }).data)
+
+        self.assertEqual(args[1].headers, RequestOptions.create(self.config, {
+            'User-Agent': 'blabla'
+        }).headers)
 
     def test_replace_all_objects(self):
         self.index._create_temporary_name = mock.Mock(
