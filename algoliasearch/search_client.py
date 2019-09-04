@@ -1,9 +1,12 @@
 import base64
 import hashlib
 import hmac
+import re
+import time
 
 from typing import Optional, Union, List
 
+from algoliasearch.exceptions import ValidUntilNotFoundException
 from algoliasearch.helpers import endpoint, is_async_available
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer
@@ -301,6 +304,21 @@ class SearchClient(object):
         )
 
         return str(base64encoded.decode('utf-8'))
+
+    @staticmethod
+    def get_secured_api_key_remaining_validity(api_key):
+        # type: (str) -> int
+
+        decoded_string = base64.b64decode(api_key)
+
+        match = re.search(r'validUntil=(\d+)', str(decoded_string))
+
+        if match is None:
+            raise ValidUntilNotFoundException(
+                'ValidUntil not found in api key.'
+            )
+
+        return int(match.group(1)) - int(round(time.time()))
 
     def list_indices(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict

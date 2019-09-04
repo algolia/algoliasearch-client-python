@@ -5,7 +5,8 @@ import time
 import unittest
 
 from algoliasearch.configs import SearchConfig
-from algoliasearch.exceptions import RequestException
+from algoliasearch.exceptions import RequestException, \
+    ValidUntilNotFoundException
 from algoliasearch.http.hosts import HostsCollection, Host, CallType
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.responses import MultipleResponse
@@ -345,6 +346,34 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(RequestException) as _:
             F.search_client(api_key=api_key).init_index(
                 self.index2.name).search('')
+
+    def test_get_secured_api_key_remaining_validity(self):
+        import time
+
+        now = int(time.time())
+        api_key = SearchClient.generate_secured_api_key('foo', {
+            'validUntil': now - (60 * 10)
+        })
+
+        remaining = SearchClient.get_secured_api_key_remaining_validity(
+            api_key
+        )
+
+        self.assertTrue(remaining < 0)
+
+        api_key = SearchClient.generate_secured_api_key('foo', {
+            'validUntil': now + (60 * 10),
+        })
+
+        remaining = SearchClient.get_secured_api_key_remaining_validity(
+            api_key
+        )
+        self.assertTrue(remaining > 0)
+
+        api_key = SearchClient.generate_secured_api_key('foo', {})
+
+        with self.assertRaises(ValidUntilNotFoundException) as _:
+            SearchClient.get_secured_api_key_remaining_validity(api_key)
 
     @unittest.skipIf(Env.is_community(),
                      "Community can not test personalization operations")

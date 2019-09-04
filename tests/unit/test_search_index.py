@@ -38,7 +38,7 @@ class TestSearchIndex(unittest.TestCase):
             indexExists = self.index.exists()
 
             self.index.get_settings.assert_called_once()
-            self.assertEqual(indexExists, False);
+            self.assertEqual(indexExists, False)
 
     def test_index_exist_raises_non_4O4_exceptions(self):
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
@@ -59,7 +59,7 @@ class TestSearchIndex(unittest.TestCase):
             indexExists = self.index.exists()
 
             self.index.get_settings.assert_called_once()
-            self.assertEqual(indexExists, True);
+            self.assertEqual(indexExists, True)
 
     def test_save_objects(self):
         # Saving an object without object id
