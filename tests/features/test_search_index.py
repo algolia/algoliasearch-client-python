@@ -486,7 +486,7 @@ class TestSearchIndex(unittest.TestCase):
 
         # Should be only the One Plus model One
         self.assertEqual(self.index.search('', {
-            'rulesContexts': ['summer']
+            'ruleContexts': ['summer']
         })['nbHits'], 1);
 
         self.assertEqual(self.index.get_rule(rule1['objectID']),
