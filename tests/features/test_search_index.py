@@ -410,7 +410,7 @@ class TestSearchIndex(unittest.TestCase):
         ]))
 
         responses.push(self.index.set_settings({
-            'attributesForFaceting': ['brand']
+            'attributesForFaceting': ['brand', 'model']
         }))
 
         rule1 = {
@@ -459,16 +459,48 @@ class TestSearchIndex(unittest.TestCase):
             }
         }
 
-        responses.push(self.index.save_rules([rule2]))
+        rule3 = {
+            "objectID": "query_promo",
+            "consequence": {
+              "params": {
+                "filters": "brand:OnePlus"
+              }
+            }
+        }
+
+        rule4 = {
+            "objectID": "query_promo_only_summer",
+            "condition": {
+                "context": "summer"
+            },
+            "consequence": {
+              "params": {
+                "filters": "model:One"
+              }
+            }
+        }
+
+        responses.push(self.index.save_rules([rule2, rule3, rule4]))
 
         responses.wait()
+
+        # Should be only the One Plus model One
+        self.assertEqual(self.index.search('', {
+            'ruleContexts': ['summer']
+        })['nbHits'], 1);
 
         self.assertEqual(self.index.get_rule(rule1['objectID']),
                          rule1)
         self.assertEqual(self.index.get_rule(rule2['objectID']),
                          rule2)
 
-        self.assertEqual(self.index.search_rules('')['nbHits'], 2)
+        self.assertEqual(self.index.get_rule(rule3['objectID']),
+                         rule3)
+
+        self.assertEqual(self.index.get_rule(rule4['objectID']),
+                         rule4)
+        
+        self.assertEqual(self.index.search_rules('')['nbHits'], 4)
 
         # Browse all records with browse_rules
         results = []
@@ -478,6 +510,8 @@ class TestSearchIndex(unittest.TestCase):
         rules = [
             rule1,
             rule2,
+            rule3,
+            rule4
         ]
 
         for rule in rules:
