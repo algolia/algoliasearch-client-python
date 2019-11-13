@@ -215,6 +215,22 @@ class SearchClient(object):
             request_options
         )
 
+    def has_pending_mappings(self, retrieve_mappings, request_options=None):
+        # type: (bool, Optional[Union[dict, RequestOptions]]) -> dict
+
+        if request_options is None or isinstance(request_options, dict):
+            request_options = RequestOptions.create(self._config,
+                                                    request_options)
+
+        request_options.query_parameters['getClusters'] = retrieve_mappings
+
+        return self._transporter.read(
+            Verb.GET,
+            '1/clusters/mapping/pending',
+            None,
+            request_options
+        )
+
     def list_api_keys(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
