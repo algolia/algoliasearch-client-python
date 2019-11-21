@@ -178,12 +178,13 @@ class TestSearchClient(unittest.TestCase):
             if user_id.startswith(a) and not user_id.startswith(b):
                 mcm.remove_user_id(user['userID'])
 
-        has_pending_mappings = mcm.has_pending_mappings(False)
-        self.assertTrue(has_pending_mappings['pending'])
-
         has_pending_mappings = mcm.has_pending_mappings(True)
+        self.assertIsNotNone(has_pending_mappings)
         self.assertTrue(has_pending_mappings['pending'])
         self.assertTrue('clusters' in has_pending_mappings)
+
+        has_pending_mappings = mcm.has_pending_mappings(False)
+        self.assertTrue(has_pending_mappings['pending'])
 
     def test_api_keys(self):
         response = self.client.add_api_key(['search'], {
