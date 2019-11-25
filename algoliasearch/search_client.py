@@ -215,7 +215,7 @@ class SearchClient(object):
             request_options
         )
 
-    def has_pending_mappings(self, retrieve_mappings, request_options=None):
+    def has_pending_mappings(self, retrieve_mappings=False, request_options=None):
         # type: (bool, Optional[Union[dict, RequestOptions]]) -> dict
 
         if request_options is None or isinstance(request_options, dict):
