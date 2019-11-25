@@ -183,7 +183,7 @@ class TestSearchClient(unittest.TestCase):
         self.assertTrue(has_pending_mappings['pending'])
         self.assertTrue('clusters' in has_pending_mappings)
 
-        has_pending_mappings = mcm.has_pending_mappings(False)
+        has_pending_mappings = mcm.has_pending_mappings()
         self.assertTrue(has_pending_mappings['pending'])
         self.assertFalse('clusters' in has_pending_mappings)
 
