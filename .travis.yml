@@ -19,6 +19,9 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
+    - python: 3.8
+      dist: xenial
+      sudo: true
 
 before_script:
   - wget https://alg.li/algolia-keys && chmod +x algolia-keys
