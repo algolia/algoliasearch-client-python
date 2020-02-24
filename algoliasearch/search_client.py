@@ -215,14 +215,21 @@ class SearchClient(object):
             request_options
         )
 
-    def has_pending_mappings(self, retrieve_mappings=False, request_options=None):
-        # type: (bool, Optional[Union[dict, RequestOptions]]) -> dict
+    def has_pending_mappings(self, request_options=None):
+        # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self._config,
-                                                    request_options)
+        retrieve_mappings = None
+        if isinstance(request_options, dict):
+            retrieve_mappings = request_options.pop('retrieveMappings',
+                                                    retrieve_mappings)
 
-        request_options.query_parameters['getClusters'] = retrieve_mappings
+        if retrieve_mappings:
+
+            if request_options is None or isinstance(request_options, dict):
+                request_options = RequestOptions.create(self._config,
+                                                        request_options)
+
+            request_options.query_parameters['getClusters'] = retrieve_mappings
 
         return self._transporter.read(
             Verb.GET,
