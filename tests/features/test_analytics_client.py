@@ -14,13 +14,7 @@ class TestAnalyticsClient(unittest.TestCase):
         self.index = F.index(self._testMethodName)
         self.index2 = F.index('{}2'.format(self._testMethodName))
 
-    def tearDown(self):
-        self.index.delete()
-        self.index2.delete()
-
     def test_ab_testing(self):
-        self.clean_ab_tests()
-
         self.index.save_object({'objectID': 'one'}).wait()
         self.index2.save_object({'objectID': 'one'}).wait()
 
@@ -70,8 +64,6 @@ class TestAnalyticsClient(unittest.TestCase):
             self.client.get_ab_test(ab_test_id)
 
     def test_aa_testing(self):
-        self.clean_ab_tests()
-
         self.index.save_object({'objectID': 'one'}).wait()
 
         ab_test_name = str(self.index.name)
@@ -110,21 +102,5 @@ class TestAnalyticsClient(unittest.TestCase):
         response = self.client.delete_ab_test(response['abTestID'])
         self.index.wait_task(response['taskID'])
 
-    def clean_ab_tests(self):
-        python_version = 'python{}{}'.format(
-            platform.python_version().replace('.', '')[:2],
-            os.environ.get('TEST_TYPE', '')
-        )
-
-        ab_tests = self.client.get_ab_tests()
-
-        prefix_of_today_tests = '{}_{}'.format(
-            python_version,
-            datetime.datetime.now().strftime("%Y-%m-%d")
-        )
-
-        if ab_tests['total'] > 0:
-            for ab_test in self.client.get_ab_tests()['abtests']:
-                if ab_test['name'].startswith(python_version):
-                    if not ab_test['name'].startswith(prefix_of_today_tests):
-                        self.client.delete_ab_test(ab_test['abTestID'])
+        with self.assertRaises(RequestException) as _:
+            self.client.get_ab_test(response['abTestID'])

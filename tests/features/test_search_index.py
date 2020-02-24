@@ -12,9 +12,6 @@ class TestSearchIndex(unittest.TestCase):
     def setUp(self):
         self.index = F.index(self._testMethodName)
 
-    def tearDown(self):
-        self.index.delete()
-
     def test_tasks(self):
         task_id = self.index.save_object(F.obj()).raw_responses[0]['taskID']
 
@@ -643,6 +640,8 @@ class TestSearchIndex(unittest.TestCase):
         self.assertFalse(self.index.exists())
         self.index.save_object(F.obj()).wait()
         self.assertTrue(self.index.exists())
+        self.index.delete().wait()
+        self.assertFalse(self.index.exists())
 
     def test_url_encoding(self):
         objects = [

@@ -21,15 +21,6 @@ class TestSearchClient(unittest.TestCase):
         self.index = F.index(self._testMethodName)
         self.index2 = self.index3 = self.index4 = self.index5 = self.index5 = self.index6 = None  # noqa: E501
 
-    def tearDown(self):
-        self.index.delete()
-
-        indices = [self.index2, self.index3, self.index4, self.index5,
-                   self.index6]
-        indices_used = (index for index in indices if index is not None)
-        for index in indices_used:
-            index.delete()
-
     def test_copy_move_index(self):
         objects = [
             {'objectID': 'one', 'company': 'apple'},

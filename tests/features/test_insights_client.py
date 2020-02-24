@@ -10,9 +10,6 @@ class TestInsightsClient(unittest.TestCase):
         self.client = F.insights_client()
         self.index = F.index(self._testMethodName)
 
-    def tearDown(self):
-        self.index.delete()
-
     @unittest.skipIf(Env.is_community(),
                      "Community can not test insights operations")
     def test_send_event(self):
