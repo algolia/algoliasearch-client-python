@@ -213,7 +213,14 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(RequestException) as _:
             self.client.get_api_key(api_key['value'])
 
-        self.client.restore_api_key(api_key['value']).wait()
+        result = None
+        while result is None:
+            try:
+                result = self.client.restore_api_key(api_key['value']).wait()
+            except RequestException as e:
+                if e.message != 'Key already exists':
+                    raise e
+                pass
 
         api_key = self.client.get_api_key(api_key['value'])
         self.assertEqual(api_key['value'],
