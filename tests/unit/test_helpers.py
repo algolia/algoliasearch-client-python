@@ -2,7 +2,7 @@ import json
 import unittest
 
 from algoliasearch.exceptions import MissingObjectIdException
-from algoliasearch.helpers import assert_object_id
+from algoliasearch.helpers import assert_object_id, endpoint
 
 
 class TestHelpers(unittest.TestCase):
@@ -23,3 +23,30 @@ class TestHelpers(unittest.TestCase):
         obj['objectID'] = 1
 
         assert_object_id([obj])
+
+    def test_endpoint(self):
+
+        self.assertEqual(
+            '',
+            endpoint('')
+        )
+
+        self.assertEqual(
+            '/1/indexes/test/settings',
+            endpoint('/1/indexes/test/settings')
+        )
+
+        self.assertEqual(
+            '/1/indexes/test/task/123',
+            endpoint('/1/indexes/test/task/{}', 123)
+        )
+
+        self.assertEqual(
+            '/1/indexes/index%23name/task/1234',
+            endpoint('/1/indexes/{}/task/{}', 'index#name', 1234)
+        )
+
+        self.assertEqual(
+            '/1/indexes/%23index%20name_42%23%2523/batch',
+            endpoint('/1/indexes/{}/batch', '#index name_42#%23')
+        )

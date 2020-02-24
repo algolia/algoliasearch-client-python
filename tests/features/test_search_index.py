@@ -462,9 +462,9 @@ class TestSearchIndex(unittest.TestCase):
         rule3 = {
             "objectID": "query_promo",
             "consequence": {
-              "params": {
-                "filters": "brand:OnePlus"
-              }
+                "params": {
+                    "filters": "brand:OnePlus"
+                }
             }
         }
 
@@ -474,9 +474,9 @@ class TestSearchIndex(unittest.TestCase):
                 "context": "summer"
             },
             "consequence": {
-              "params": {
-                "filters": "model:One"
-              }
+                "params": {
+                    "filters": "model:One"
+                }
             }
         }
 
@@ -487,7 +487,7 @@ class TestSearchIndex(unittest.TestCase):
         # Should be only the One Plus model One
         self.assertEqual(self.index.search('', {
             'ruleContexts': ['summer']
-        })['nbHits'], 1);
+        })['nbHits'], 1)
 
         self.assertEqual(self.index.get_rule(rule1['objectID']),
                          rule1)
@@ -499,7 +499,7 @@ class TestSearchIndex(unittest.TestCase):
 
         self.assertEqual(self.index.get_rule(rule4['objectID']),
                          rule4)
-        
+
         self.assertEqual(self.index.search_rules('')['nbHits'], 4)
 
         # Browse all records with browse_rules
