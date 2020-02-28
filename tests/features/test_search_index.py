@@ -10,7 +10,8 @@ from tests.helpers.factory import Factory as F
 
 class TestSearchIndex(unittest.TestCase):
     def setUp(self):
-        self.index = F.index(self._testMethodName)
+        client = F.search_client()
+        self.index = F.index(client, self._testMethodName)
 
     def test_tasks(self):
         task_id = self.index.save_object(F.obj()).raw_responses[0]['taskID']
