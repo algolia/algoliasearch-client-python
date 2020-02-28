@@ -321,24 +321,36 @@ class TestSearchClient(unittest.TestCase):
         self.assertTrue(config.hosts.read()[3].up)
 
     def test_secured_api_keys(self):
-        index2 = F.index(self.client, '{}_dev'.format(self._testMethodName))
+        hosts = F.hosts(self.client.app_id)
 
-        self.index.save_object({'objectID': 'one'}).wait()
+        config1 = SearchConfig(F.get_app_id(), F.get_api_key())
+        config1.hosts = hosts
+        client1 = F.decide(SearchClient.create_with_config(config1))
+
+        index1 = F.index(client1, self._testMethodName)
+        index2 = F.index(client1, '{}_dev'.format(self._testMethodName))
+
+        index1.save_object({'objectID': 'one'}).wait()
         index2.save_object({'objectID': 'one'}).wait()
 
         api_key = self.client.generate_secured_api_key(
             os.environ['ALGOLIA_SEARCH_KEY_1'],
             {
                 "validUntil": int(round(time.time())) + (60 * 10),  # + 10 min
-                "restrictIndices": self.index.name
+                "restrictIndices": index1.name
             }
         )
 
-        F.search_client(api_key=api_key).init_index(self.index.name).search('')
+        config2 = SearchConfig(F.get_app_id(), api_key)
+        config2.hosts = hosts
+        client2 = F.decide(SearchClient.create_with_config(config2))
 
+        index1_search = client2.init_index(index1.name)
+        index2_search = client2.init_index(index2.name)
+
+        index1_search.search('')
         with self.assertRaises(RequestException) as _:
-            F.search_client(api_key=api_key).init_index(
-                index2.name).search('')
+            index2_search.search('')
 
     def test_get_secured_api_key_remaining_validity(self):
         import time
