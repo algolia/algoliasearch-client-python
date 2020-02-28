@@ -1,3 +1,4 @@
+import json
 import time
 
 from algoliasearch.exceptions import RequestException
@@ -24,3 +25,12 @@ class RetryableClient:
             return result
 
         return closure
+
+
+class Unicode:
+
+    @staticmethod
+    def convert_dict_to_unicode(d):
+        tmp = json.dumps(d)
+        tmp = json.loads(tmp)
+        return tmp
