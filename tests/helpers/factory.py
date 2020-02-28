@@ -23,15 +23,9 @@ class Factory(object):
 
         app_id = app_id if app_id is not None else Factory.get_app_id()
         api_key = api_key if api_key is not None else Factory.get_api_key()
-        hosts = [
-            Host('{}-1.algolianet.com'.format(app_id)),
-            Host('{}-2.algolianet.com'.format(app_id)),
-            Host('{}-3.algolianet.com'.format(app_id))
-        ]
-        shuffle(hosts)
 
         config = SearchConfig(app_id, api_key)
-        config.hosts = HostsCollection([hosts[0]])
+        config.hosts = Factory.hosts(app_id)
         return Factory.decide(SearchClient.create_with_config(config))
 
     @staticmethod
@@ -57,6 +51,19 @@ class Factory(object):
         # type: (SearchClient, str) -> SearchIndex
 
         return search_client.init_index(Factory.get_index_name(index_name))
+
+    @staticmethod
+    def hosts(app_id):
+        # type: (str) -> HostsCollection
+
+        hosts = [
+            Host('{}-1.algolianet.com'.format(app_id)),
+            Host('{}-2.algolianet.com'.format(app_id)),
+            Host('{}-3.algolianet.com'.format(app_id))
+        ]
+        shuffle(hosts)
+
+        return HostsCollection([hosts[0]])
 
     @staticmethod
     def analytics_client(app_id=None, api_key=None):
