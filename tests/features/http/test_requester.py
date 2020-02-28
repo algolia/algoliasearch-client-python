@@ -2,13 +2,14 @@ import unittest
 
 from algoliasearch.exceptions import AlgoliaUnreachableHostException, \
     RequestException
-from tests.helpers.factory import Factory
+from tests.helpers.factory import Factory as F
 
 
 class TestRequester(unittest.TestCase):
     def setUp(self):
-        self.index = Factory.index(self._testMethodName)
-        self.obj = Factory.obj()
+        client = F.search_client()
+        self.index = F.index(client, self._testMethodName)
+        self.obj = F.obj()
 
     def test_timeout_exception(self):
         with self.assertRaises(AlgoliaUnreachableHostException) as _:

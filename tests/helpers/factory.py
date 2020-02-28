@@ -3,12 +3,14 @@ import os
 import platform
 import sys
 from time import time
+from random import shuffle
 
 from typing import Optional
 
 from algoliasearch.analytics_client import AnalyticsClient
 from algoliasearch.insights_client import InsightsClient
-from algoliasearch.search_client import SearchClient
+from algoliasearch.search_client import SearchClient, SearchConfig
+from algoliasearch.http.hosts import HostsCollection, Host
 from faker import Faker
 
 from algoliasearch.search_index import SearchIndex
@@ -21,8 +23,40 @@ class Factory(object):
 
         app_id = app_id if app_id is not None else Factory.get_app_id()
         api_key = api_key if api_key is not None else Factory.get_api_key()
+        hosts = [
+            Host('{}-1.algolianet.com'.format(app_id)),
+            Host('{}-2.algolianet.com'.format(app_id)),
+            Host('{}-3.algolianet.com'.format(app_id))
+        ]
+        shuffle(hosts)
 
-        return Factory.decide(SearchClient.create(app_id, api_key))
+        config = SearchConfig(app_id, api_key)
+        config.hosts = HostsCollection([hosts[0]])
+        return Factory.decide(SearchClient.create_with_config(config))
+
+    @staticmethod
+    def search_client2():
+        # type: () -> SearchClient
+
+        app_id = os.environ['ALGOLIA_APPLICATION_ID_2']
+        api_key = os.environ['ALGOLIA_ADMIN_KEY_2']
+
+        return Factory.search_client(app_id, api_key)
+
+    @staticmethod
+    def search_client_mcm():
+        # type: () -> SearchClient
+
+        app_id = os.environ['ALGOLIA_APPLICATION_ID_MCM']
+        api_key = os.environ['ALGOLIA_ADMIN_KEY_MCM']
+
+        return Factory.search_client(app_id, api_key)
+
+    @staticmethod
+    def index(search_client, index_name):
+        # type: (SearchClient, str) -> SearchIndex
+
+        return search_client.init_index(Factory.get_index_name(index_name))
 
     @staticmethod
     def analytics_client(app_id=None, api_key=None):
@@ -71,32 +105,6 @@ class Factory(object):
 
         return 'python{}_{}_{}_{}'.format(
             python_version, date, instance, test_name)
-
-    @staticmethod
-    def index(name):
-        # type: (str) -> SearchIndex
-
-        return Factory.search_client().init_index(Factory.get_index_name(name))
-
-    @staticmethod
-    def index2(name):
-        # type: (str) -> SearchIndex
-
-        app_id = os.environ['ALGOLIA_APPLICATION_ID_2']
-
-        api_key = os.environ['ALGOLIA_ADMIN_KEY_2']
-
-        return Factory.search_client(app_id, api_key).init_index(
-            Factory.get_index_name(name))
-
-    @staticmethod
-    def mcm():
-        # type: () -> SearchClient
-
-        app_id = os.environ['ALGOLIA_APPLICATION_ID_MCM']
-        api_key = os.environ['ALGOLIA_ADMIN_KEY_MCM']
-
-        return Factory.search_client(app_id, api_key)
 
     @staticmethod
     def obj(data=None, object_id=True):

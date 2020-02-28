@@ -1,13 +1,14 @@
 import datetime
 import os
 import platform
-import time
 import unittest
+
+import time
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException, \
     ValidUntilNotFoundException
-from algoliasearch.http.hosts import HostsCollection, Host, CallType
+from algoliasearch.http.hosts import HostsCollection, Host
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
@@ -18,8 +19,7 @@ from tests.helpers.factory import Factory as F, Factory
 class TestSearchClient(unittest.TestCase):
     def setUp(self):
         self.client = F.search_client()
-        self.index = F.index(self._testMethodName)
-        self.index2 = self.index3 = self.index4 = self.index5 = self.index5 = self.index6 = None  # noqa: E501
+        self.index = F.index(self.client, self._testMethodName)
 
     def test_copy_move_index(self):
         objects = [
@@ -49,60 +49,60 @@ class TestSearchClient(unittest.TestCase):
             })
         ]).wait()
 
-        self.index2 = F.index('{}_settings'.format(self._testMethodName))
+        index2 = F.index(self.client, '{}_settings'.format(self._testMethodName))  # noqa: E501
         responses.push(self.client.copy_settings(
-            self.index.name, self.index2.name
+            self.index.name, index2.name
         ))
 
-        self.index3 = F.index('{}_rules'.format(self._testMethodName))
+        index3 = F.index(self.client, '{}_rules'.format(self._testMethodName))  # noqa: E501
         responses.push(self.client.copy_rules(
-            self.index.name, self.index3.name
+            self.index.name, index3.name
         ))
 
-        self.index4 = F.index('{}_synonyms'.format(self._testMethodName))
+        index4 = F.index(self.client, '{}_synonyms'.format(self._testMethodName))  # noqa: E501
         responses.push(self.client.copy_synonyms(
-            self.index.name, self.index4.name
+            self.index.name, index4.name
         ))
 
-        self.index5 = F.index('{}_full_copy'.format(self._testMethodName))
+        index5 = F.index(self.client, '{}_full_copy'.format(self._testMethodName))  # noqa: E501
         responses.push(self.client.copy_index(
-            self.index.name, self.index5.name
+            self.index.name, index5.name
         ))
 
         responses.wait()
 
         self.assertEqual(
-            self.index2.get_settings()['attributesForFaceting'], ['company']
+            index2.get_settings()['attributesForFaceting'], ['company']
         )
 
-        self.index3.get_rule('company_auto_faceting')
+        index3.get_rule('company_auto_faceting')
         with self.assertRaises(RequestException) as cm:
-            self.index3.get_synonym('google_placeholder')
+            index3.get_synonym('google_placeholder')
 
-        self.index4.get_synonym('google_placeholder')
+        index4.get_synonym('google_placeholder')
         with self.assertRaises(RequestException) as cm:
-            self.index4.get_rule('company_auto_faceting')
+            index4.get_rule('company_auto_faceting')
 
-        self.index5.get_synonym('google_placeholder')
-        self.index5.get_rule('company_auto_faceting')
+        index5.get_synonym('google_placeholder')
+        index5.get_rule('company_auto_faceting')
         self.assertEqual(
-            self.index5.get_settings()['attributesForFaceting'], ['company']
+            index5.get_settings()['attributesForFaceting'], ['company']
         )
-        for obj in self.index5.browse_objects():
+        for obj in index5.browse_objects():
             self.assertIn(obj, objects)
 
-        self.index6 = F.index('{}_after_move'.format(self._testMethodName))
+        index6 = F.index(self.client, '{}_after_move'.format(self._testMethodName))  # noqa: E501
         self.client.move_index(
             self.index.name,
-            self.index6.name
+            index6.name
         ).wait()
 
-        self.index6.get_synonym('google_placeholder')
-        self.index6.get_rule('company_auto_faceting')
+        index6.get_synonym('google_placeholder')
+        index6.get_rule('company_auto_faceting')
         self.assertEqual(
-            self.index6.get_settings()['attributesForFaceting'], ['company']
+            index6.get_settings()['attributesForFaceting'], ['company']
         )
-        for obj in self.index6.browse_objects():
+        for obj in index6.browse_objects():
             self.assertIn(obj, objects)
 
         with self.assertRaises(RequestException) as cm:
@@ -113,7 +113,7 @@ class TestSearchClient(unittest.TestCase):
     @unittest.skipIf(Env.is_community(),
                      "Community can not test mcm operations")
     def test_mcm(self):
-        mcm = F.mcm()
+        mcm = F.search_client_mcm()
 
         clusters = mcm.list_clusters()['clusters']
         self.assertEqual(len(clusters), 2)
@@ -241,20 +241,15 @@ class TestSearchClient(unittest.TestCase):
         self.assertEqual(len(logs), 2)
 
     def test_multiple_operations(self):
+        index2 = F.index(self.client, "{}2".format(self._testMethodName))
         index_name1 = self.index.name
-
-        index_2 = F.index(self._testMethodName)
-        index_name2 = index_2.name
+        index_name2 = index2.name
 
         raw_response = self.client.multiple_batch([
-            {"indexName": index_name1, "action": "addObject",
-             "body": {"firstname": "Jimmie"}},
-            {"indexName": index_name1, "action": "addObject",
-             "body": {"firstname": "Jimmie"}},
-            {"indexName": index_name2, "action": "addObject",
-             "body": {"firstname": "Jimmie"}},
-            {"indexName": index_name2, "action": "addObject",
-             "body": {"firstname": "Jimmie"}}
+            {"indexName": index_name1, "action": "addObject", "body": {"firstname": "Jimmie"}},  # noqa: E501
+            {"indexName": index_name1, "action": "addObject", "body": {"firstname": "Jimmie"}},  # noqa: E501
+            {"indexName": index_name2, "action": "addObject", "body": {"firstname": "Jimmie"}},  # noqa: E501
+            {"indexName": index_name2, "action": "addObject", "body": {"firstname": "Jimmie"}}  # noqa: E501
         ]).wait().raw_response
 
         object_ids = list(
@@ -273,40 +268,40 @@ class TestSearchClient(unittest.TestCase):
         self.assertEqual(objects[3]['objectID'], object_ids[3])
 
         results = self.client.multiple_queries([
-            {"indexName": index_name1,
-             "params": QueryParametersSerializer.serialize(
-                 {"query": "", "hitsPerPage": 2})},
-            {"indexName": index_name2,
-             "params": QueryParametersSerializer.serialize(
-                 {"query": "", "hitsPerPage": 2})},
+            {
+                "indexName": index_name1,
+                "params": QueryParametersSerializer.serialize({"query": "", "hitsPerPage": 2})  # noqa: E501
+            },
+            {
+                "indexName": index_name2,
+                "params": QueryParametersSerializer.serialize({"query": "", "hitsPerPage": 2})  # noqa: E501
+            }
         ], {'strategy': 'none'})['results']
 
         self.assertEqual(len(results), 2)
         self.assertEqual(len(results[0]['hits']), 2)
-        self.assertEqual(results[0]['nbHits'], 4)
+        self.assertEqual(results[0]['nbHits'], 2)
         self.assertEqual(len(results[1]['hits']), 2)
-        self.assertEqual(results[1]['nbHits'], 4)
+        self.assertEqual(results[1]['nbHits'], 2)
 
         results = self.client.multiple_queries([
-            {"indexName": index_name1,
-             "params": QueryParametersSerializer.serialize(
-                 {"query": "", "hitsPerPage": 2})},
-            {"indexName": index_name2,
-             "params": QueryParametersSerializer.serialize(
-                 {"query": "", "hitsPerPage": 2})}
-
+            {
+                "indexName": index_name1,
+                "params": QueryParametersSerializer.serialize({"query": "", "hitsPerPage": 2})  # noqa: E501
+            },
+            {
+                "indexName": index_name2,
+                "params": QueryParametersSerializer.serialize({"query": "", "hitsPerPage": 2})  # noqa: E501
+            }
         ], {'strategy': 'stopIfEnoughMatches'})['results']
 
         self.assertEqual(len(results), 2)
         self.assertEqual(len(results[0]['hits']), 2)
-        self.assertEqual(results[0]['nbHits'], 4)
+        self.assertEqual(results[0]['nbHits'], 2)
         self.assertEqual(len(results[1]['hits']), 0)
         self.assertEqual(results[1]['nbHits'], 0)
 
-        index_2.delete()
-
     def test_dns_timeout(self):
-
         config = SearchConfig(F.get_app_id(), F.get_api_key())
 
         config.hosts = HostsCollection([
@@ -326,10 +321,10 @@ class TestSearchClient(unittest.TestCase):
         self.assertTrue(config.hosts.read()[3].up)
 
     def test_secured_api_keys(self):
-        self.index2 = F.index('{}_dev'.format(self._testMethodName))
+        index2 = F.index(self.client, '{}_dev'.format(self._testMethodName))
 
         self.index.save_object({'objectID': 'one'}).wait()
-        self.index2.save_object({'objectID': 'one'}).wait()
+        index2.save_object({'objectID': 'one'}).wait()
 
         api_key = self.client.generate_secured_api_key(
             os.environ['ALGOLIA_SEARCH_KEY_1'],
@@ -343,7 +338,7 @@ class TestSearchClient(unittest.TestCase):
 
         with self.assertRaises(RequestException) as _:
             F.search_client(api_key=api_key).init_index(
-                self.index2.name).search('')
+                index2.name).search('')
 
     def test_get_secured_api_key_remaining_validity(self):
         import time

@@ -10,9 +10,10 @@ from tests.helpers.misc import RetryableClient
 
 class TestAnalyticsClient(unittest.TestCase):
     def setUp(self):
+        search_client = F.search_client()
         self.client = RetryableClient(F.analytics_client())
-        self.index = F.index(self._testMethodName)
-        self.index2 = F.index('{}2'.format(self._testMethodName))
+        self.index = F.index(search_client, self._testMethodName)
+        self.index2 = F.index(search_client, '{}2'.format(self._testMethodName))  # noqa: E501
 
     def test_ab_testing(self):
         self.index.save_object({'objectID': 'one'}).wait()
