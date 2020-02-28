@@ -6,6 +6,7 @@ from algoliasearch.exceptions import RequestException, ObjectNotFoundException
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
+from tests.helpers.misc import Unicode
 
 
 class TestSearchIndex(unittest.TestCase):
@@ -138,38 +139,163 @@ class TestSearchIndex(unittest.TestCase):
     def test_settings(self):
         self.index.save_object(F.obj()).wait()
 
-        self.index.set_settings({'searchableAttributes': ['name']}).wait()
+        settings = {
+            'searchableAttributes': [
+                'attribute1',
+                'attribute2',
+                'attribute3',
+                'ordered(attribute4)',
+                'unordered(attribute5)',
+            ],
+            'attributesForFaceting': [
+                'attribute1',
+                'filterOnly(attribute2)',
+                'searchable(attribute3)',
+            ],
+            'unretrievableAttributes': [
+                'attribute1',
+                'attribute2',
+            ],
+            'attributesToRetrieve': [
+                'attribute3',
+                'attribute4',
+            ],
+            'ranking': [
+                'asc(attribute1)',
+                'desc(attribute2)',
+                'attribute',
+                'custom',
+                'exact',
+                'filters',
+                'geo',
+                'proximity',
+                'typo',
+                'words',
+            ],
+            'customRanking': [
+                'asc(attribute1)',
+                'desc(attribute1)',
+            ],
+            'replicas': [
+                self.index.name + '_replica1',
+                self.index.name + '_replica2',
+            ],
+            'maxValuesPerFacet': 100,
+            'sortFacetValuesBy': 'count',
+            'attributesToHighlight': [
+                'attribute1',
+                'attribute2'
+            ],
+            'attributesToSnippet': [
+                'attribute1:10',
+                'attribute2:8',
+            ],
+            'highlightPreTag': '<strong>',
+            'highlightPostTag': '</strong>',
+            'snippetEllipsisText': ' and so on.',
+            'restrictHighlightAndSnippetArrays': True,
+            'hitsPerPage': 42,
+            'paginationLimitedTo': 43,
+            'minWordSizefor1Typo': 2,
+            'minWordSizefor2Typos': 6,
+            'typoTolerance': 'false',
+            'allowTyposOnNumericTokens': False,
+            'ignorePlurals': True,
+            'disableTypoToleranceOnAttributes': [
+                'attribute1',
+                'attribute2',
+            ],
+            'disableTypoToleranceOnWords': [
+                'word1',
+                'word2',
+            ],
+            'separatorsToIndex': '()[]',
+            'queryType': 'prefixNone',
+            'removeWordsIfNoResults': 'allOptional',
+            'advancedSyntax': True,
+            'optionalWords': [
+                'word1',
+                'word2',
+            ],
+            'removeStopWords': True,
+            'disablePrefixOnAttributes': [
+                'attribute1',
+                'attribute2',
+            ],
+            'disableExactOnAttributes': [
+                'attribute1',
+                'attribute2'
+            ],
+            'exactOnSingleWordQuery': 'word',
+            'enableRules': False,
+            'numericAttributesForFiltering': [
+                'attribute1',
+                'attribute2',
+            ],
+            'allowCompressionOfIntegerArray': True,
+            'attributeForDistinct': 'attribute1',
+            'distinct': 2,
+            'replaceSynonymsInHighlight': False,
+            'minProximity': 7,
+            'responseFields': [
+                'hits',
+                'hitsPerPage'
+            ],
+            'maxFacetHits': 100,
+            'camelCaseAttributes': [
+                'attribute1',
+                'attribute2',
+            ],
+            'decompoundedAttributes': {
+                'de': ['attribute1', 'attribute2'],
+                'fi': ['attribute3'],
+            },
+            'keepDiacriticsOnCharacters': 'øé',
+            'queryLanguages': [
+                'en',
+                'fr',
+            ],
+            'alternativesAsExact': ['ignorePlurals'],
+            'advancedSyntaxFeatures': ['exactPhrase'],
+            'userData': {
+                'customUserData': 42.0,
+            },
+            'indexLanguages': ['ja'],
+        }
+
+        self.index.set_settings(settings).wait()
+
+        # Because the response settings dict contains the extra version key, we
+        # also add it to the expected settings dict to prevent the test to fail
+        # for a missing key.
+        settings['version'] = 2
+
+        # In case something is wrong, we disable the maximum diff length to be
+        # able to see which setting is incorrect.
+        self.maxDiff = None
+
+        found = self.index.get_settings()
 
         self.assertEqual(
-            self.index.get_settings()['searchableAttributes'],
-            ['name']
+            self.index.get_settings(),
+            Unicode.convert_dict_to_unicode(settings),
         )
 
-        self.index.set_settings({'typoTolerance': 'min'}).wait()
+        settings['typoTolerance'] = 'min'
+        settings['ignorePlurals'] = ["en", "fr"]
+        settings['removeStopWords'] = ["en", "fr"]
+        settings['distinct'] = True
+
+        self.index.set_settings(settings).wait()
 
         self.assertEqual(
-            self.index.get_settings()['typoTolerance'],
-            'min'
+            self.index.get_settings(),
+            Unicode.convert_dict_to_unicode(settings),
         )
 
-        self.index.set_settings(self.index.get_settings()).wait()
-
-        self.assertEqual(
-            self.index.get_settings()['typoTolerance'],
-            'min'
-        )
-
-        self.assertEqual(
-            self.index.get_settings()['searchableAttributes'],
-            ['name']
-        )
-
-        self.index.set_settings({'indexLanguages': ['ja']}).wait()
-
-        self.assertEqual(
-            self.index.get_settings()['indexLanguages'],
-            ['ja']
-        )
+        # To prevent issues in other test, we reset the maximum diff length to
+        # its default value
+        self.maxDiff = 80 * 8
 
     def test_search(self):
         responses = MultipleResponse()
