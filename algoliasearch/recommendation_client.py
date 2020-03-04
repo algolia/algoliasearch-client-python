@@ -9,11 +9,11 @@ from algoliasearch.http.verb import Verb
 
 
 class RecommendationClient(object):
-    def __init__(self, transporter, search_config):
+    def __init__(self, transporter, config):
         # type: (Transporter, RecommendationConfig) -> None
 
         self._transporter = transporter
-        self._config = search_config
+        self._config = config
 
     @staticmethod
     def create(app_id=None, api_key=None, region=None):
