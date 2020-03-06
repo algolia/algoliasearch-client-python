@@ -118,6 +118,8 @@ class TestSearchClient(unittest.TestCase):
         clusters = mcm.list_clusters()['clusters']
         self.assertEqual(len(clusters), 2)
 
+        cluster_name = clusters[0]['clusterName']
+
         date = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
         if 'TRAVIS' in os.environ:
@@ -129,24 +131,41 @@ class TestSearchClient(unittest.TestCase):
 
         python_version += os.environ.get('TEST_TYPE', '')
 
-        user_id = 'python{}-{}-{}'.format(python_version, date, instance)
+        def user_id(number):
+            return 'python{}-{}-{}-{}'.format(
+                python_version,
+                date,
+                instance,
+                number
+            )
 
-        mcm.assign_user_id(user_id, clusters[0]['clusterName'])
+        mcm.assign_user_id(user_id(0), cluster_name)
 
-        result = None
-        while result is None:
-            try:
-                result = mcm.get_user_id(user_id)
-            except RequestException:
-                pass
+        mcm.assign_user_ids([user_id(1), user_id(2)], cluster_name)
 
-        users_ids = [user['userID'] for user in
-                     mcm.search_user_ids(user_id)['hits']]
+        def get_user_id(number):
+            while True:
+                try:
+                    return mcm.get_user_id(user_id(number))
+                except RequestException as exception:
+                    if exception.status_code != 404:
+                        raise exception
 
-        self.assertIn(
-            user_id,
-            users_ids
-        )
+        for number in range(3):
+            self.assertEqual(get_user_id(number), {
+                'userID': user_id(number),
+                'clusterName': cluster_name,
+                'nbRecords': 0,
+                'dataSize': 0,
+            })
+
+        for number in range(3):
+            users_ids = [user['userID'] for user in mcm.search_user_ids(user_id(number))['hits']]  # noqa: E501
+
+            self.assertIn(
+                user_id(number),
+                users_ids
+            )
 
         users = mcm.list_user_ids()
         self.assertIsInstance(users, dict)
@@ -159,24 +178,28 @@ class TestSearchClient(unittest.TestCase):
         self.assertTrue(len(users['topUsers']) > 0)
 
         result = None
-        while result is None:
-            try:
-                result = mcm.remove_user_id(user_id)
-            except RequestException:
-                pass
 
-        users = mcm.list_user_ids()
+        def remove_user_id(number):
+            while True:
+                try:
+                    return mcm.remove_user_id(user_id(number))
+                except RequestException as exception:
+                    if exception.status_code != 400:
+                        raise exception
 
-        date = datetime.datetime.now().strftime("%Y-%m-%d")
+        for number in range(3):
+            remove_user_id(number)
 
-        a = 'python{}'.format(python_version)
-        b = '{}-{}'.format(a, date)
+        def assert_remove(number):
+            while True:
+                try:
+                    mcm.get_user_id(user_id(number))
+                except RequestException as exception:
+                    if exception.status_code == 404:
+                        return
 
-        for user in users['userIDs']:
-            user_id = user['userID']
-
-            if user_id.startswith(a) and not user_id.startswith(b):
-                mcm.remove_user_id(user['userID'])
+        for number in range(3):
+            assert_remove(number)
 
         has_pending_mappings = mcm.has_pending_mappings({
             'retrieveMappings': True

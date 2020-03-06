@@ -5,7 +5,7 @@ import re
 import time
 import warnings
 
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Iterator
 
 from algoliasearch.exceptions import ValidUntilNotFoundException
 from algoliasearch.helpers import endpoint, is_async_available
@@ -148,6 +148,19 @@ class SearchClient(object):
             Verb.POST,
             '1/clusters/mapping',
             {'cluster': cluster},
+            request_options
+        )
+
+    def assign_user_ids(self, user_ids, cluster, request_options=None):
+        # type: (Union[List[dict], Iterator[dict]], str, Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
+
+        return self._transporter.write(
+            Verb.POST,
+            '1/clusters/mapping/batch',
+            {
+                'cluster': cluster,
+                'users': user_ids
+            },
             request_options
         )
 
