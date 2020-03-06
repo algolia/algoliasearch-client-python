@@ -10,6 +10,7 @@ from typing import Optional
 from algoliasearch.analytics_client import AnalyticsClient
 from algoliasearch.insights_client import InsightsClient
 from algoliasearch.search_client import SearchClient, SearchConfig
+from algoliasearch.recommendation_client import RecommendationClient
 from algoliasearch.http.hosts import HostsCollection, Host
 from faker import Faker
 
@@ -73,6 +74,15 @@ class Factory(object):
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
         return Factory.decide(AnalyticsClient.create(app_id, api_key))
+
+    @staticmethod
+    def recommendation_client(app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> RecommendationClient
+
+        app_id = app_id if app_id is not None else Factory.get_app_id()
+        api_key = api_key if api_key is not None else Factory.get_api_key()
+
+        return Factory.decide(RecommendationClient.create(app_id, api_key))
 
     @staticmethod
     def insights_client(app_id=None, api_key=None):

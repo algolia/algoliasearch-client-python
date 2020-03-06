@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import re
 import time
+import warnings
 
 from typing import Optional, Union, List
 
@@ -409,6 +410,15 @@ class SearchClient(object):
     def set_personalization_strategy(self, strategy, request_options=None):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead." %
+            (
+                'SearchClient', 'set_personalization_strategy',
+                'RecommendationClient', 'set_personalization_strategy'
+            ),
+            DeprecationWarning
+        )
+
         return self._transporter.write(
             Verb.POST,
             '1/recommendation/personalization/strategy',
@@ -418,6 +428,15 @@ class SearchClient(object):
 
     def get_personalization_strategy(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
+
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead." %
+            (
+                'SearchClient', 'get_personalization_strategy',
+                'RecommendationClient', 'get_personalization_strategy'
+            ),
+            DeprecationWarning
+        )
 
         return self._transporter.read(
             Verb.GET,
