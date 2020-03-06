@@ -14,7 +14,8 @@ class TestRecommendationClient(unittest.TestCase):
         personalization_strategy = {
             'eventsScoring': [
                 {
-                    'eventName': 'Add to cart', 'eventType': 'conversion',
+                    'eventName': 'Add to cart',
+                    'eventType': 'conversion',
                     'score': 50
                 },
                 {
