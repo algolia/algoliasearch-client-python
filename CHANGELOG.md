@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Method `RecommendationClient.set_personalization_strategy` and Method `RecommendationClient.get_personalization_strategy` ([#471](https://github.com/algolia/algoliasearch-client-python/pull/471))
 - Method `SearchClient.has_pending_mappings` ([#463](https://github.com/algolia/algoliasearch-client-python/pull/463))
+- Method `SearchClient.assign_user_ids` ([#473](https://github.com/algolia/algoliasearch-client-python/pull/473))
 
 ### Changed
 - Deprecates method `SearchClient.set_personalization_strategy` and method `SearchClient.get_personalization_strategy` ([#471](https://github.com/algolia/algoliasearch-client-python/pull/471))
