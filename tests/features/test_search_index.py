@@ -763,6 +763,25 @@ class TestSearchIndex(unittest.TestCase):
         # Check that synonym with objectID="two" does exist using getSynonym
         self.assertEqual(self.index.get_synonym('two')['objectID'], 'two')
 
+    def test_safe_replacing(self):
+
+        # Adds dummy object
+        self.index.save_object(F.obj()).wait()
+
+        # Calls replace all objects with an object without
+        # object id, and with the safe parameter
+        self.index.replace_all_objects([{'name': 'two'}], {
+            'autoGenerateObjectIDIfNotExist': True,
+            'safe': True
+        })
+
+        response = self.index.search('')
+        self.assertEqual(response['nbHits'], 1)
+        hit = response['hits'][0]
+        self.assertEqual(hit['name'], 'two')
+        self.assertIn('objectID', hit)
+        self.assertIn('_highlightResult', hit)
+
     def test_exists(self):
         self.assertFalse(self.index.exists())
         self.index.save_object(F.obj()).wait()
