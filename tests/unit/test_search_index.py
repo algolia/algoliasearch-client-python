@@ -17,9 +17,9 @@ class TestSearchIndex(unittest.TestCase):
         self.config = SearchConfig('foo', 'bar')
         requester = Requester()
         self.transporter = Transporter(requester, self.config)
-        self.transporter.read = mock.Mock(name="read")
+        self.transporter.read = mock.Mock(name='read')
         self.transporter.read.return_value = {}
-        self.transporter.write = mock.Mock(name="write")
+        self.transporter.write = mock.Mock(name='write')
         self.transporter.write.return_value = {}
         self.index = SearchIndex(self.transporter, self.config, 'index-name')
 
@@ -30,10 +30,9 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(self.index.name, 'index-name')
 
     def test_exists(self):
-
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
             submethod_mock.side_effect = RequestException(
-                "Index does not exist", 404
+                'Index does not exist', 404
             )
 
             indexExists = self.index.exists()
@@ -50,7 +49,7 @@ class TestSearchIndex(unittest.TestCase):
 
         with mock.patch.object(self.index, 'get_settings') as submethod_mock:
             submethod_mock.side_effect = RequestException(
-                "Permissions error", 400
+                'Permissions error', 400
             )
 
             with self.assertRaises(RequestException) as _:
@@ -105,7 +104,7 @@ class TestSearchIndex(unittest.TestCase):
             {},
         )
 
-        self.transporter.write = mock.Mock(name="write")
+        self.transporter.write = mock.Mock(name='write')
         self.index.save_objects([{'foo': 'bar', 'objectID': 'foo'}])
 
         self.transporter.write.assert_called_once_with(
@@ -139,7 +138,7 @@ class TestSearchIndex(unittest.TestCase):
             {},
         )
 
-        self.transporter.write = mock.Mock(name="write")
+        self.transporter.write = mock.Mock(name='write')
 
         self.index.partial_update_objects([{'foo': 'bar', 'objectID': 'foo'}])
 
@@ -296,7 +295,7 @@ class TestSearchIndex(unittest.TestCase):
             self.index.save_rules([{'foo': 'bar'}])
 
     def test_find_object(self):
-        self.index.search = mock.Mock(name="search")
+        self.index.search = mock.Mock(name='search')
         self.index.search.return_value = {
             'hits': [{'foo': 'bar'}],
             'nbPages': 1
@@ -336,7 +335,7 @@ class TestSearchIndex(unittest.TestCase):
 
     def test_replace_all_objects(self):
         self.index._create_temporary_name = mock.Mock(
-            name="_create_temporary_name")
+            name='_create_temporary_name')
         tmp_index_name = 'index-name_tmp_bar'
         self.index._create_temporary_name.return_value = tmp_index_name  # noqa: E501
 
@@ -357,28 +356,19 @@ class TestSearchIndex(unittest.TestCase):
                        None)]
         )
 
-        response = NullResponse()
-        response.wait = mock.Mock(name="wait")
-
-        self.index.copy_to = mock.Mock(
-            name="copy_to")
-        self.index.copy_to.return_value = response
-
-        self.index.move_to = mock.Mock(
-            name="move_to")
-        self.index.move_to.return_value = response
-
-        self.index.save_objects = mock.Mock(
-            name="save_objects")
-        self.index.save_objects.return_value = response
+        self.index._transporter.read = mock.Mock(
+            name='read')
+        self.index._transporter.read.return_value = {'status': 'published'}
+        self.index._transporter.write = mock.Mock(
+            name='write')
+        self.index._transporter.write.return_value = {'taskID': 1}
 
         self.index.replace_all_objects([obj])
-        self.assertEqual(response.wait.call_count, 0)
+        self.assertEqual(self.index._transporter.write.call_count, 3)
 
-        result = self.index.replace_all_objects([obj], {'safe': True})
-        self.assertEqual(response.wait.call_count, 3)
-        self.assertEqual(len(result.responses), 3)
-        self.assertEqual(len(result._waitable), 0)
+        self.index.replace_all_objects([obj], {'safe': True})
+        self.assertEqual(self.index._transporter.write.call_count, 6)  # 3+3
+        self.assertEqual(self.index._transporter.read.call_count, 3)  # 3 waits
 
     def test_get_task(self):
         with self.assertRaises(AssertionError) as _:
