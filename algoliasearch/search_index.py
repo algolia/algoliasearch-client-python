@@ -115,8 +115,7 @@ class SearchIndex(object):
         if safe:
             responses.wait()
 
-        tmp_index = copy.copy(self)
-        tmp_index._name = tmp_index_name
+        tmp_index = SearchIndex(self._transporter, self._config, tmp_index_name)
 
         responses.push(tmp_index.save_objects(objects, request_options))
 
