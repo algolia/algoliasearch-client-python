@@ -1,18 +1,72 @@
 version: 2.1
 
 jobs:
-  test:
+  test_unit:
     docker:
-      - image: circleci/python:latest
+      - image: circleci/python:<< parameters.version >>
     working_directory: ~/repo
     steps:
       - checkout
       - run:
           name: install dependencies
           command: |
-            pipenv install --system --dev
+            pip install -r requirements/requirements-testing.txt
       - run:
-          name: run tests
+          name: run sync tests
           command: |
-            tox
+            sh tests/run_tests_sync.sh
+      - run:
+          name: run async tests
+          command: |
+            sh tests/run_tests_async.sh
 
+  test_lint:
+    docker:
+      - image: circleci/python:<< parameters.version >>
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            pip install -r requirements/requirements-code-style-checker.txt
+      - run:
+          name: run lint tests
+          command: |
+            flake8 algoliasearch tests
+
+  test_types:
+    docker:
+      - image: circleci/python:<< parameters.version >>
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            pip install -r requirements/requirements-static-type-checker.txt
+      - run:
+          name: run type tests
+          command: |
+            mypy --config-file mypy.ini -p algoliasearch --disallow-untyped-calls
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - test_unit:
+          version: '2.7'
+      - test_unit:
+          version: '3.4'
+      - test_unit:
+          version: '3.5'
+      - test_unit:
+          version: '3.6'
+      - test_unit:
+          version: '3.7'
+      - test_unit:
+          version: '3.8'
+      - test_lint:
+          version: '3.8'
+      - test_types:
+          version: '3.8'
