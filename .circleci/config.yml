@@ -1,0 +1,17 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            pipenv install --system --dev
+      - run:
+          name: run tests
+          command: |
+            tox
