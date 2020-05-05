@@ -10,6 +10,7 @@ defaults: &defaults
 
 jobs:
   test_unit:
+    description: Runs unit tests
     <<: *defaults
     steps:
       - checkout
@@ -18,15 +19,16 @@ jobs:
           command: |
             pip install -r requirements/requirements-testing.txt
       - run:
-          name: run sync tests
+          name: run unit sync tests
           command: |
             sh tests/run_tests_sync.sh
       - run:
-          name: run async tests
+          name: run unit async tests
           command: |
             sh tests/run_tests_async.sh
 
   test_lint:
+    description: Runs lint tests
     <<: *defaults
     steps:
       - checkout
@@ -40,6 +42,7 @@ jobs:
             flake8 algoliasearch tests
 
   test_types:
+    description: Runs types tests
     <<: *defaults
     steps:
       - checkout
