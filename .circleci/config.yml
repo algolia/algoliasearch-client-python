@@ -1,10 +1,16 @@
 version: 2.1
 
-jobs:
-  test_unit:
+defaults: &defaults
+  working_directory: ~/algoliasearch-client-python
+  parameters:
+    version:
+      type: string
     docker:
       - image: circleci/python:<< parameters.version >>
-    working_directory: ~/repo
+
+jobs:
+  test_unit:
+    <<: *defaults
     steps:
       - checkout
       - run:
@@ -21,9 +27,7 @@ jobs:
             sh tests/run_tests_async.sh
 
   test_lint:
-    docker:
-      - image: circleci/python:<< parameters.version >>
-    working_directory: ~/repo
+    <<: *defaults
     steps:
       - checkout
       - run:
@@ -36,9 +40,7 @@ jobs:
             flake8 algoliasearch tests
 
   test_types:
-    docker:
-      - image: circleci/python:<< parameters.version >>
-    working_directory: ~/repo
+    <<: *defaults
     steps:
       - checkout
       - run:
