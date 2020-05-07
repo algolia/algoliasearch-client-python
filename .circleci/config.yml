@@ -17,7 +17,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            pip install --user -r requirements/requirements-testing.txt
+            pip install -r requirements/requirements-testing.txt
       - run:
           name: run unit sync tests
           command: |
