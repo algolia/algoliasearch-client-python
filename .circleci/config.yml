@@ -16,21 +16,21 @@ defaults: &defaults
 
 jobs:
   test_unit:
-    description: Runs unit tests
+    description: Runs unit tests against python << parameters.version >>
     <<: *defaults
     steps:
       - checkout
       - run: *upgrade_pip
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: |
             pip install --user -r requirements/requirements-testing.txt
       - run:
-          name: run unit sync tests
+          name: Run unit sync tests
           command: |
             sh tests/run_tests_sync.sh
       - run:
-          name: run unit async tests
+          name: Run unit async tests
           command: |
             [[ "$(python -V)" =~ "Python 3" ]] || sh tests/run_tests_async.sh
 
@@ -41,11 +41,11 @@ jobs:
       - checkout
       - run: *upgrade_pip
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: |
             pip install -r requirements/requirements-code-style-checker.txt
       - run:
-          name: run lint tests
+          name: Run lint tests
           command: |
             flake8 algoliasearch tests
 
@@ -56,11 +56,11 @@ jobs:
       - checkout
       - run: *upgrade_pip
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: |
             pip install -r requirements/requirements-static-type-checker.txt
       - run:
-          name: run type tests
+          name: Run type tests
           command: |
             mypy --config-file mypy.ini -p algoliasearch --disallow-untyped-calls
 
