@@ -1,5 +1,11 @@
 version: 2.1
 
+aliases:
+  - &upgrade_pip
+    name: Upgrades pip
+    command: |
+      pip install --upgrade pip
+
 defaults: &defaults
   working_directory: ~/algoliasearch-client-python
   parameters:
@@ -14,6 +20,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run: *upgrade_pip
       - run:
           name: install dependencies
           command: |
@@ -32,6 +39,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run: *upgrade_pip
       - run:
           name: install dependencies
           command: |
@@ -46,6 +54,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run: *upgrade_pip
       - run:
           name: install dependencies
           command: |
