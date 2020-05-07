@@ -17,6 +17,14 @@ from faker import Faker
 from algoliasearch.search_index import SearchIndex
 
 
+def MakeCloseableRequester(base):
+    class CloseableRequester(base.__class__):
+        def __del__(self):
+            self.close()
+
+    return CloseableRequester()
+
+
 class Factory(object):
     @staticmethod
     def search_client(app_id=None, api_key=None):
@@ -195,6 +203,10 @@ class Factory(object):
 
     @staticmethod
     def decide(client):
+
+        requester = MakeCloseableRequester(client._transporter._requester)
+
+        client._transporter._requester = requester
 
         if os.environ.get('TEST_TYPE', False) == 'async':
             from tests.helpers.misc_async import SyncDecorator

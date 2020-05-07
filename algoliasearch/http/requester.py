@@ -12,15 +12,18 @@ class Requester(object):
     def __init__(self):
         # type: () -> None
 
-        self.session = requests.Session()  # type: ignore
-
-        # Ask urllib not to make retries on its own.
-        self.session.mount(
-            'https://', HTTPAdapter(max_retries=Retry(connect=0))
-        )
+        self._session = None
 
     def send(self, request):
         # type: (Request) -> Response
+
+        if self._session is None:
+            self._session = requests.Session()  # type: ignore
+
+            # Ask urllib not to make retries on its own.
+            self._session.mount(
+                'https://', HTTPAdapter(max_retries=Retry(connect=0))
+            )
 
         req = requests.Request(method=request.verb, url=request.url,
                                headers=request.headers,
@@ -31,7 +34,7 @@ class Requester(object):
         requests_timeout = (request.connect_timeout, request.timeout)
 
         try:
-            response = self.session.send(  # type: ignore
+            response = self._session.send(  # type: ignore
                 r, timeout=requests_timeout
             )
         except Timeout as e:
@@ -44,3 +47,10 @@ class Requester(object):
             response.json(),
             response.reason
         )
+
+    def close(self):
+        # type: () -> None
+
+        if self._session is not None:
+            self._session.close()
+            self._session = None
