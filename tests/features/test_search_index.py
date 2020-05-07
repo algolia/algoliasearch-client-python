@@ -638,7 +638,8 @@ class TestSearchIndex(unittest.TestCase):
         # Browse all records with browse_rules
         results = []
         for obj in self.index.browse_rules():
-            results.append(rule_without_metadata(obj))
+            if isinstance(obj, dict):
+                results.append(rule_without_metadata(obj))
 
         rules = [
             rule1,
