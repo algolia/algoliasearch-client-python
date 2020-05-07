@@ -31,7 +31,7 @@ class AnalyticsClientAsync(AnalyticsClient):
         return self  # type: ignore
 
     @asyncio.coroutine  # type: ignore
-    def __aexit__(self, exc_type, exc, tb):
+    def __aexit__(self, exc_type, exc, tb):  # type: ignore
         # type: (Optional[Type[BaseException]], Optional[BaseException],Optional[types.TracebackType]) -> None # noqa: E501
 
         yield from self.close()

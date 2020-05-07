@@ -26,7 +26,7 @@ class PaginatorIteratorAsync(Iterator):
         return self  # pragma: no cover
 
     @asyncio.coroutine  # type: ignore
-    def __anext__(self):
+    def __anext__(self):  # type: ignore
         # type: () -> dict
 
         if self._raw_response:
@@ -71,7 +71,7 @@ class ObjectIteratorAsync(Iterator):
         return self  # pragma: no cover
 
     @asyncio.coroutine  # type: ignore
-    def __anext__(self):
+    def __anext__(self):  # type: ignore
         # type: () -> dict
 
         data = {}  # type: dict

@@ -47,7 +47,7 @@ class RequesterAsync(Requester):
         )
 
     @asyncio.coroutine  # type: ignore
-    def close(self):
+    def close(self):  # type: ignore
         # type: () -> None
 
         if self._session is not None and not self._session.closed:
