@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Run unit async tests
           command: |
-            [[ "$(python -V)" =~ "Python 3" ]] || sh tests/run_tests_async.sh
+            if [[ "$(python -V)" == "Python 3."* ]]; then sh tests/run_tests_async.sh; fi
 
   test_lint:
     description: Runs lint tests
