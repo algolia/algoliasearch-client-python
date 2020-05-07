@@ -421,12 +421,6 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(ValidUntilNotFoundException) as _:
             SearchClient.get_secured_api_key_remaining_validity(api_key)
 
-    @unittest.skipIf(Env.is_community(),
-                     "Community can not test personalization operations")
-    def test_personalization_strategy(self):
-        response = self.client.get_personalization_strategy()
-        self.assertIn('taskID', response)
-
     @unittest.skipIf(os.environ.get('TEST_TYPE', False) != 'async',
                      'Specific asnyc tests')
     def test_async_session(self):

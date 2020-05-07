@@ -6,7 +6,7 @@ from algoliasearch.exceptions import RequestException, ObjectNotFoundException
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
-from tests.helpers.misc import Unicode
+from tests.helpers.misc import Unicode, rule_without_metadata
 
 
 class TestSearchIndex(unittest.TestCase):
@@ -613,23 +613,32 @@ class TestSearchIndex(unittest.TestCase):
             'ruleContexts': ['summer']
         })['nbHits'], 1)
 
-        self.assertEqual(self.index.get_rule(rule1['objectID']),
-                         rule1)
-        self.assertEqual(self.index.get_rule(rule2['objectID']),
-                         rule2)
+        self.assertEqual(
+            rule_without_metadata(self.index.get_rule(rule1['objectID'])),
+            rule1
+        )
 
-        self.assertEqual(self.index.get_rule(rule3['objectID']),
-                         rule3)
+        self.assertEqual(
+            rule_without_metadata(self.index.get_rule(rule2['objectID'])),
+            rule2
+        )
 
-        self.assertEqual(self.index.get_rule(rule4['objectID']),
-                         rule4)
+        self.assertEqual(
+            rule_without_metadata(self.index.get_rule(rule3['objectID'])),
+            rule3
+        )
+
+        self.assertEqual(
+            rule_without_metadata(self.index.get_rule(rule4['objectID'])),
+            rule4
+        )
 
         self.assertEqual(self.index.search_rules('')['nbHits'], 4)
 
         # Browse all records with browse_rules
         results = []
         for obj in self.index.browse_rules():
-            results.append(obj)
+            results.append(rule_without_metadata(obj))
 
         rules = [
             rule1,
