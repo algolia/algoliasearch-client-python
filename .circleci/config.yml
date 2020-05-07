@@ -5,8 +5,8 @@ defaults: &defaults
   parameters:
     version:
       type: string
-    docker:
-      - image: circleci/python:<< parameters.version >>
+  docker:
+    - image: circleci/python:<< parameters.version >>
 
 jobs:
   test_unit:
