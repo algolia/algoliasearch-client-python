@@ -69,18 +69,18 @@ workflows:
   ci:
     jobs:
       - test_unit:
-          version: '2.7'
+          version: '2.7.18'
       - test_unit:
-          version: '3.4'
+          version: '3.4.10'
       - test_unit:
-          version: '3.5'
+          version: '3.5.9'
       - test_unit:
-          version: '3.6'
+          version: '3.6.9'
       - test_unit:
-          version: '3.7'
+          version: '3.7.7'
       - test_unit:
-          version: '3.8'
+          version: '3.8.2'
       - test_lint:
-          version: '3.8'
+          version: '3.8.2'
       - test_types:
-          version: '3.8'
+          version: '3.8.2'
