@@ -111,8 +111,8 @@ class Factory(object):
 
         date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
-        if 'TRAVIS' in os.environ:
-            instance = os.environ['TRAVIS_JOB_NUMBER']
+        if 'CIRCLE_BUILD_NUM' in os.environ:
+            instance = os.environ['CIRCLE_BUILD_NUM']
         else:
             instance = 'unknown'
 
