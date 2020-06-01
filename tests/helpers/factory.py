@@ -1,4 +1,3 @@
-import asyncio
 import datetime
 import os
 import platform
@@ -27,6 +26,7 @@ class Factory(object):
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
         config = SearchConfig(app_id, api_key)
+        config.hosts = Factory.hosts(app_id)
         return Factory.decide(SearchClient.create_with_config(config))
 
     @staticmethod
