@@ -6,3 +6,4 @@ PyYAML>=3.10.0, <4.0
 # Peer
 testtools==2.3.0
 readme-renderer==24.0.0
+wcwidth==0.1.9
