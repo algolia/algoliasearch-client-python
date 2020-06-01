@@ -197,10 +197,18 @@ class Factory(object):
     @staticmethod
     def decide(client):
 
+        client._transporter._requester = make_closeable_requester(
+            client._transporter._requester, False
+        )
+
         if os.environ.get('TEST_TYPE', False) == 'async':
             from tests.helpers.misc_async import SyncDecorator
 
-            return SyncDecorator(client)
+            client._transporter_async._requester = make_closeable_requester(
+                client._transporter_async._requester, True
+            )
+
+            client = SyncDecorator(client)
 
         return client
 
@@ -216,3 +224,19 @@ class Factory(object):
             timestamp = time()
 
         return int(timestamp) * 1000
+
+
+def make_closeable_requester(client, asynchronous):
+    class CloseableRequester(object):
+        def __getattr__(self, name):
+            return getattr(client, name)
+
+        def __del__(self):
+            if asynchronous:
+                asyncio.get_event_loop().run_until_complete(
+                    asyncio.gather(client.close())
+                )
+            else:
+                client.close()
+
+    return CloseableRequester()

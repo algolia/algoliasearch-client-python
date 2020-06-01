@@ -70,12 +70,3 @@ class SyncDecorator(object):
             return objects
 
         return asyncio.get_event_loop().run_until_complete(closure())
-
-    def __del__(self):
-
-        self._base._transporter.close()
-
-        if os.environ.get('TEST_TYPE', False) == 'async':
-            asyncio.get_event_loop().run_until_complete(
-                asyncio.gather(self._base._transporter_async.close())
-            )
