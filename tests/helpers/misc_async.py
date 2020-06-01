@@ -49,7 +49,7 @@ class SyncDecorator(object):
         user_insights_client = self._base.user(user_token)
         user_insights_client._transporter = self._base._transporter
         if os.environ.get('TEST_TYPE', False) == 'async':
-            user_insights_client._transporter_async = self._base._transporter_async
+            user_insights_client._transporter_async = self._base._transporter_async  # noqa: E501
 
         return SyncDecorator(user_insights_client)
 
