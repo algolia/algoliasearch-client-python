@@ -425,7 +425,7 @@ class TestSearchClient(unittest.TestCase):
         client = F.search_client()
         self.assertIsNone(client._transporter._requester._session)
         if os.environ.get('TEST_TYPE', False) == 'async':
-            self.assertIsNotNone(client._transporter_async._requester._session)
+            self.assertIsNone(client._transporter_async._requester._session)
 
         client.list_api_keys()
 
