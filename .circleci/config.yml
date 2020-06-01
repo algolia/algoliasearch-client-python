@@ -4,7 +4,7 @@ aliases:
   - &upgrade_pip
     name: Upgrades pip
     command: |
-      pip install --upgrade pip
+      pip install --user --upgrade pip
 
 defaults: &defaults
   working_directory: ~/algoliasearch-client-python
