@@ -27,7 +27,6 @@ class Factory(object):
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
         config = SearchConfig(app_id, api_key)
-        config.hosts = Factory.hosts(app_id)
         return Factory.decide(SearchClient.create_with_config(config))
 
     @staticmethod
@@ -233,9 +232,12 @@ def make_closeable_requester(client, asynchronous):
 
         def __del__(self):
             if asynchronous:
-                asyncio.get_event_loop().run_until_complete(
-                    asyncio.gather(client.close())
-                )
+                try:
+                    asyncio.get_event_loop().run_until_complete(
+                        asyncio.gather(client.close())
+                    )
+                except:  # noqa: E722
+                    pass
             else:
                 client.close()
 
