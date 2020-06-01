@@ -2,4 +2,5 @@
 
 export TEST_TYPE=sync
 pip uninstall asyncio aiohttp async_timeout
-python -m unittest -v
+stestr run --concurrency=20 -v
+
