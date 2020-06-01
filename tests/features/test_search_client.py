@@ -434,12 +434,15 @@ class TestSearchClient(unittest.TestCase):
             self.assertIsNotNone(client._transporter_async._requester._session)
             self.assertIsNone(client._transporter._requester._session)
             client._base.list_api_keys()  # Calls the sync version
-            self.assertIsNotNone(client._transporter._requester._session)
-        else:
-            self.assertIsNotNone(client._transporter._requester._session)
+
+        self.assertIsNotNone(client._transporter._requester._session)
 
         client.close()
 
-        self.assertIsNone(client._transporter._requester._session)
         if os.environ.get('TEST_TYPE', False) == 'async':
+            # The async version was already called.
             self.assertIsNone(client._transporter_async._requester._session)
+            self.assertIsNotNone(client._transporter._requester._session)
+            client._base.close()  # Calls the sync version
+
+        self.assertIsNone(client._transporter._requester._session)

@@ -1,6 +1,8 @@
+from typing import Union
+
 import requests
 
-from requests import Timeout, RequestException
+from requests import Timeout, RequestException, Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util import Retry
 
@@ -12,7 +14,7 @@ class Requester(object):
     def __init__(self):
         # type: () -> None
 
-        self._session = None
+        self._session = None  # type: Union[None, Session]
 
     def send(self, request):
         # type: (Request) -> Response

@@ -40,3 +40,9 @@ class TransporterAsync(Transporter):
                 raise RequestException(content, response.status_code)
 
         raise AlgoliaUnreachableHostException('Unreachable hosts')
+
+    @asyncio.coroutine  # type: ignore
+    def close(self):  # type: ignore
+        # type: () -> None
+
+        yield from self._requester.close()  # type: ignore

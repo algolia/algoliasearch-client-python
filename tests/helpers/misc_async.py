@@ -1,4 +1,5 @@
 import asyncio
+import os
 import types
 
 from algoliasearch.iterators import Iterator
@@ -13,10 +14,6 @@ class SyncDecorator(object):
     def __init__(self, base):
 
         self._base = base
-
-    def close(self):
-
-        return self._base.close()
 
     def __getattr__(self, name):
 
@@ -44,8 +41,6 @@ class SyncDecorator(object):
     def init_index(self, name):
 
         search_index = self._base.init_index(name)
-
-        search_index.__setattr__('close', self._base.close)
 
         return SyncDecorator(search_index)
 
@@ -76,6 +71,9 @@ class SyncDecorator(object):
 
     def __del__(self):
 
-        asyncio.get_event_loop().run_until_complete(
-            asyncio.gather(self._base.close())
-        )
+        self._base._transporter.close()
+
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            asyncio.get_event_loop().run_until_complete(
+                asyncio.gather(self._base._transporter_async.close())
+            )
