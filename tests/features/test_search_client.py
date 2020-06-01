@@ -421,25 +421,25 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(ValidUntilNotFoundException) as _:
             SearchClient.get_secured_api_key_remaining_validity(api_key)
 
-    @unittest.skipIf(os.environ.get('TEST_TYPE', False) != 'async',
-                     'Specific asnyc tests')
-    def test_async_session(self):
-        app_id = Factory.get_app_id()
-        api_key = Factory.get_api_key()
+    def test_close(self):
+        client = F.search_client()
+        self.assertIsNone(client._transporter._requester._session)
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            self.assertIsNotNone(client._transporter_async._requester._session)
 
-        client = SearchClient.create(app_id, api_key)
+        client.list_api_keys()
 
-        import asyncio
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            # The async version was already called.
+            self.assertIsNotNone(client._transporter_async._requester._session)
+            self.assertIsNone(client._transporter._requester._session)
+            client._base.list_api_keys()  # Calls the sync version
+            self.assertIsNotNone(client._transporter._requester._session)
+        else:
+            self.assertIsNotNone(client._transporter._requester._session)
 
-        result = asyncio.get_event_loop().run_until_complete(
-            asyncio.gather(client.list_api_keys_async())
-        )
-        self.assertIsInstance(result, list)
+        client.close()
 
-        asyncio.get_event_loop().run_until_complete(
-            asyncio.gather(client.close())
-        )
-
-        self.assertTrue(
-            client._transporter_async._requester._session.closed
-        )
+        self.assertIsNone(client._transporter._requester._session)
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            self.assertIsNone(client._transporter_async._requester._session)

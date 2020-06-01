@@ -39,6 +39,8 @@ class SearchClientAsync(SearchClient):
     def close(self):
         # type: () -> types.GeneratorType
 
+        super().close()
+
         return self._transporter_async._requester.close()  # type: ignore
 
     @asyncio.coroutine  # type: ignore
