@@ -51,5 +51,7 @@ class RequesterAsync(Requester):
         # type: () -> None
 
         if self._session is not None:
-            yield from self._session.close()  # type: ignore
+            session = self._session
             self._session = None
+
+            yield from session.close()  # type: ignore

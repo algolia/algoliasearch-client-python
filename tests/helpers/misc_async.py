@@ -47,7 +47,9 @@ class SyncDecorator(object):
     def user(self, user_token):
 
         user_insights_client = self._base.user(user_token)
-        user_insights_client.__setattr__('close', self._base.close)
+        user_insights_client._transporter = self._base._transporter
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            user_insights_client._transporter_async = self._base._transporter_async
 
         return SyncDecorator(user_insights_client)
 

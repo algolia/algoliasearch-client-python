@@ -13,6 +13,7 @@ from algoliasearch.http.serializer import SettingsDeserializer
 from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.http.verb import Verb
 from algoliasearch.responses import MultipleResponse
+from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.iterators_async import (
     ObjectIteratorAsync,
@@ -154,7 +155,6 @@ class SearchIndexAsync(SearchIndex):
         if isinstance(request_options, dict) \
                 and 'safe' in request_options:
             safe = request_options.pop('safe')
-
         tmp_index_name = self._create_temporary_name()
         responses = MultipleResponse()
         response = yield from self.copy_to_async(  # type: ignore
@@ -169,8 +169,9 @@ class SearchIndexAsync(SearchIndex):
         if safe:
             responses.wait()
 
+        tmp_client = SearchClient(self._transporter, self._config)
         tmp_index = SearchIndexAsync(
-            self._search_index,
+            tmp_client.init_index(tmp_index_name),
             self._transporter_async,
             self._config,
             tmp_index_name

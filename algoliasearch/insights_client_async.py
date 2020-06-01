@@ -36,7 +36,7 @@ class InsightsClientAsync(InsightsClient):
     def __aexit__(self, exc_type, exc, tb):  # type: ignore
         # type: (Optional[Type[BaseException]], Optional[BaseException],Optional[types.TracebackType]) -> None # noqa: E501
 
-        yield from self.async_close()
+        yield from self.async_close()  # type: ignore
 
     @asyncio.coroutine  # type: ignore
     def close_async(self):  # type: ignore
