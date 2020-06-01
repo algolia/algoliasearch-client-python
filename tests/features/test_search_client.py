@@ -342,25 +342,6 @@ class TestSearchClient(unittest.TestCase):
         self.assertEqual(len(results[1]['hits']), 0)
         self.assertEqual(results[1]['nbHits'], 0)
 
-    def test_dns_timeout(self):
-        config = SearchConfig(F.get_app_id(), F.get_api_key())
-
-        config.hosts = HostsCollection([
-            Host('algolia.biz', 10),
-            Host('{}-1.algolianet.com'.format(F.get_app_id())),
-            Host('{}-2.algolianet.com'.format(F.get_app_id())),
-            Host('{}-3.algolianet.com'.format(F.get_app_id()))
-        ])
-
-        client = SearchClient.create_with_config(config)
-
-        client.list_indices()
-        # We test that the first Host `algolia.biz` is down.
-        self.assertFalse(config.hosts.read()[0].up)
-        self.assertTrue(config.hosts.read()[1].up)
-        self.assertTrue(config.hosts.read()[2].up)
-        self.assertTrue(config.hosts.read()[3].up)
-
     def test_secured_api_keys(self):
         hosts = F.hosts(self.client.app_id)
 
