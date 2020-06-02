@@ -11,8 +11,11 @@ from tests.helpers.misc import Unicode, rule_without_metadata
 
 class TestSearchIndex(unittest.TestCase):
     def setUp(self):
-        client = F.search_client()
-        self.index = F.index(client, self._testMethodName)
+        self.client = F.search_client()
+        self.index = F.index(self.client, self._testMethodName)
+
+    def tearDown(self):
+        self.client.close()
 
     def test_tasks(self):
         task_id = self.index.save_object(F.obj()).raw_responses[0]['taskID']

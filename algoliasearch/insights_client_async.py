@@ -15,8 +15,10 @@ class InsightsClientAsync(InsightsClient):
 
         self._transporter_async = transporter
 
-        super(InsightsClientAsync, self).__init__(insights_client._transporter,
-                                                  insights_config)
+        super(InsightsClientAsync, self).__init__(
+            insights_client._transporter,
+            insights_config
+        )
 
         client = InsightsClient(transporter, insights_config)
         _create_async_methods_in(self, client)
@@ -36,11 +38,13 @@ class InsightsClientAsync(InsightsClient):
     def __aexit__(self, exc_type, exc, tb):  # type: ignore
         # type: (Optional[Type[BaseException]], Optional[BaseException],Optional[types.TracebackType]) -> None # noqa: E501
 
-        yield from self.async_close()  # type: ignore
+        yield from self.close_async()  # type: ignore
 
     @asyncio.coroutine  # type: ignore
     def close_async(self):  # type: ignore
         # type: () -> None
+
+        super().close()
 
         yield from self._transporter_async.close()  # type: ignore
 

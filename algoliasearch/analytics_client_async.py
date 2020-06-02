@@ -21,7 +21,6 @@ class AnalyticsClientAsync(AnalyticsClient):
         )
 
         client = AnalyticsClient(transporter, search_config)
-
         _create_async_methods_in(self, client)
 
     @asyncio.coroutine  # type: ignore
@@ -39,5 +38,7 @@ class AnalyticsClientAsync(AnalyticsClient):
     @asyncio.coroutine  # type: ignore
     def close_async(self):  # type: ignore
         # type: () -> None
+
+        super().close()
 
         yield from self._transporter_async.close()  # type: ignore

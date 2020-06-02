@@ -8,7 +8,6 @@ import time
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException, \
     ValidUntilNotFoundException
-from algoliasearch.http.hosts import HostsCollection, Host
 from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
@@ -20,6 +19,9 @@ class TestSearchClient(unittest.TestCase):
     def setUp(self):
         self.client = F.search_client()
         self.index = F.index(self.client, self._testMethodName)
+
+    def tearDown(self):
+        self.client.close()
 
     def test_copy_move_index(self):
         objects = [
@@ -177,8 +179,6 @@ class TestSearchClient(unittest.TestCase):
         self.assertIsInstance(users['topUsers'], dict)
         self.assertTrue(len(users['topUsers']) > 0)
 
-        result = None
-
         def remove_user_id(number):
             while True:
                 try:
@@ -218,6 +218,8 @@ class TestSearchClient(unittest.TestCase):
         has_pending_mappings = mcm.has_pending_mappings()
         self.assertIsInstance(has_pending_mappings['pending'], bool)
         self.assertFalse('clusters' in has_pending_mappings)
+
+        mcm.close()
 
     def test_api_keys(self):
         response = self.client.add_api_key(['search'], {
@@ -374,6 +376,9 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(RequestException) as _:
             index2_search.search('')
 
+        client1.close()
+        client2.close()
+
     def test_get_secured_api_key_remaining_validity(self):
         import time
 
@@ -423,7 +428,5 @@ class TestSearchClient(unittest.TestCase):
         if os.environ.get('TEST_TYPE', False) == 'async':
             # The async version was already called.
             self.assertIsNone(client._transporter_async._requester._session)
-            self.assertIsNotNone(client._transporter._requester._session)
-            client._base.close()  # Calls the sync version
 
         self.assertIsNone(client._transporter._requester._session)

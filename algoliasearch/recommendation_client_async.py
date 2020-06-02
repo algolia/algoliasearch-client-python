@@ -39,4 +39,6 @@ class RecommendationClientAsync(RecommendationClient):
     def close_async(self):  # type: ignore
         # type: () -> None
 
+        super().close()
+
         yield from self._transporter_async.close()  # type: ignore
