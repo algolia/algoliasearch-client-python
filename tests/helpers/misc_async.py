@@ -14,10 +14,6 @@ class SyncDecorator(object):
 
         self._base = base
 
-    def close(self):
-
-        return self._base.close()
-
     def __getattr__(self, name):
 
         method = getattr(self._base, name)
@@ -45,8 +41,6 @@ class SyncDecorator(object):
 
         search_index = self._base.init_index(name)
 
-        search_index.__setattr__('close', self._base.close)
-
         return SyncDecorator(search_index)
 
     def user(self, user_token):
@@ -73,9 +67,3 @@ class SyncDecorator(object):
             return objects
 
         return asyncio.get_event_loop().run_until_complete(closure())
-
-    def __del__(self):
-
-        asyncio.get_event_loop().run_until_complete(
-            asyncio.gather(self._base.close())
-        )

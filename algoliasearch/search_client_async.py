@@ -36,22 +36,25 @@ class SearchClientAsync(SearchClient):
         return SearchIndexAsync(
             index, self._transporter_async, self._config, name)
 
-    def close(self):
-        # type: () -> types.GeneratorType
-
-        return self._transporter_async._requester.close()  # type: ignore
-
-    @asyncio.coroutine  # type: ignore
+    @asyncio.coroutine
     def __aenter__(self):
-        # type: () -> SearchClientAsync
+        # type: () -> SearchClientAsync # type: ignore
 
         return self  # type: ignore
 
-    @asyncio.coroutine  # type: ignore
-    def __aexit__(self, exc_type, exc, tb):
+    @asyncio.coroutine
+    def __aexit__(self, exc_type, exc, tb):  # type: ignore
         # type: (Optional[Type[BaseException]], Optional[BaseException],Optional[types.TracebackType]) -> None # noqa: E501
 
-        yield from self.close()
+        yield from self.close_async()  # type: ignore
+
+    @asyncio.coroutine
+    def close_async(self):  # type: ignore
+        # type: () -> None
+
+        super().close()
+
+        yield from self._transporter_async.close()  # type: ignore
 
     def _sync(self):
         # type: () -> SearchClient

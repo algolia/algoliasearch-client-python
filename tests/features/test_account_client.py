@@ -9,10 +9,14 @@ from tests.helpers.factory import Factory as F
 
 class TestAccountClient(unittest.TestCase):
     def setUp(self):
-        client1 = F.search_client()
-        client2 = F.search_client2()
-        self.index = F.index(client1, self._testMethodName)
-        self.index2 = F.index(client2, self._testMethodName)
+        self.client1 = F.search_client()
+        self.client2 = F.search_client2()
+        self.index = F.index(self.client1, self._testMethodName)
+        self.index2 = F.index(self.client2, self._testMethodName)
+
+    def tearDown(self):
+        self.client1.close()
+        self.client2.close()
 
     @unittest.skipIf(os.environ.get('TEST_TYPE', False) == 'async',
                      'Cross App Copy Index is not available in async mode.')

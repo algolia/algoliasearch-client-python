@@ -16,7 +16,7 @@ from algoliasearch.http.transporter import (
 
 class TransporterAsync(Transporter):
 
-    @asyncio.coroutine  # type: ignore
+    @asyncio.coroutine
     def retry(self, hosts, request, relative_url):  # type: ignore
         # type: (list, Request, str) -> dict
 
@@ -40,3 +40,9 @@ class TransporterAsync(Transporter):
                 raise RequestException(content, response.status_code)
 
         raise AlgoliaUnreachableHostException('Unreachable hosts')
+
+    @asyncio.coroutine
+    def close(self):  # type: ignore
+        # type: () -> None
+
+        yield from self._requester.close()  # type: ignore

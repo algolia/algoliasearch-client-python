@@ -65,3 +65,8 @@ class RecommendationClient(object):
             None,
             request_options
         )
+
+    def close(self):
+        # type: () -> None
+
+        return self._transporter.close()  # type: ignore

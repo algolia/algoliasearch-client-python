@@ -21,6 +21,9 @@ class TestSearchClient(unittest.TestCase):
         self.client = F.search_client()
         self.index = F.index(self.client, self._testMethodName)
 
+    def tearDown(self):
+        self.client.close()
+
     def test_copy_move_index(self):
         objects = [
             {'objectID': 'one', 'company': 'apple'},
@@ -218,6 +221,7 @@ class TestSearchClient(unittest.TestCase):
         has_pending_mappings = mcm.has_pending_mappings()
         self.assertIsInstance(has_pending_mappings['pending'], bool)
         self.assertFalse('clusters' in has_pending_mappings)
+        mcm.close()
 
     def test_api_keys(self):
         response = self.client.add_api_key(['search'], {
@@ -393,6 +397,9 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(RequestException) as _:
             index2_search.search('')
 
+        client1.close()
+        client2.close()
+
     def test_get_secured_api_key_remaining_validity(self):
         import time
 
@@ -427,25 +434,26 @@ class TestSearchClient(unittest.TestCase):
         response = self.client.get_personalization_strategy()
         self.assertIn('taskID', response)
 
-    @unittest.skipIf(os.environ.get('TEST_TYPE', False) != 'async',
-                     'Specific asnyc tests')
-    def test_async_session(self):
-        app_id = Factory.get_app_id()
-        api_key = Factory.get_api_key()
+    def test_close(self):
+        client = F.search_client()
+        self.assertIsNone(client._transporter._requester._session)
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            self.assertIsNone(client._transporter_async._requester._session)
 
-        client = SearchClient.create(app_id, api_key)
+        client.list_api_keys()
 
-        import asyncio
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            # The async version was already called.
+            self.assertIsNotNone(client._transporter_async._requester._session)
+            self.assertIsNone(client._transporter._requester._session)
+            client._base.list_api_keys()  # Calls the sync version
 
-        result = asyncio.get_event_loop().run_until_complete(
-            asyncio.gather(client.list_api_keys_async())
-        )
-        self.assertIsInstance(result, list)
+        self.assertIsNotNone(client._transporter._requester._session)
 
-        asyncio.get_event_loop().run_until_complete(
-            asyncio.gather(client.close())
-        )
+        client.close()
 
-        self.assertTrue(
-            client._transporter_async._requester._session.closed
-        )
+        if os.environ.get('TEST_TYPE', False) == 'async':
+            # The async version was already called.
+            self.assertIsNone(client._transporter_async._requester._session)
+
+        self.assertIsNone(client._transporter._requester._session)
