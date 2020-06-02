@@ -40,8 +40,11 @@ class TestAccountClient(unittest.TestCase):
         settings = self.index2.get_settings()
         self.assertEqual(settings['searchableAttributes'], ['objectID'])
 
-        # Assert synonyms got copied
-        self.assertEqual(self.index2.get_rule('one'), rule)
+        # Assert rules got copied
+        self.assertEqual(
+            rule_without_metadata(self.index2.get_rule('one')),
+            rule
+        )
 
         # Assert synonyms got copied
         list_synonyms1 = [synonym for synonym in self.index.browse_synonyms()]
