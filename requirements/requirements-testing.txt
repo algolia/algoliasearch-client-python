@@ -1,9 +1,2 @@
-tox>=3.7,<4.0
 faker>=1.0,<2.0
 mock>=2.0,<3.0
-stestr==2.4.0
-PyYAML>=3.10.0, <4.0
-
-# Peer
-testtools==2.3.0
-readme-renderer==24.0.0

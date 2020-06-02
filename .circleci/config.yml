@@ -1,0 +1,86 @@
+version: 2.1
+
+aliases:
+  - &upgrade_pip
+    name: Upgrades pip
+    command: |
+      pip install --user --upgrade pip
+
+defaults: &defaults
+  working_directory: ~/algoliasearch-client-python
+  parameters:
+    version:
+      type: string
+  docker:
+    - image: circleci/python:<< parameters.version >>
+
+jobs:
+  test_unit:
+    description: Runs unit tests against python << parameters.version >>
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *upgrade_pip
+      - run:
+          name: Install dependencies
+          command: |
+            pip install --user -r requirements/requirements-testing.txt
+      - run:
+          name: Run unit sync tests
+          command: |
+            sh tests/run_tests_sync.sh
+      - run:
+          name: Run unit async tests
+          command: |
+            if [[ "$(python -V)" == "Python 3."* ]]; then sh tests/run_tests_async.sh; fi
+
+  test_lint:
+    description: Runs lint tests
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *upgrade_pip
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -r requirements/requirements-code-style-checker.txt
+      - run:
+          name: Run lint tests
+          command: |
+            flake8 algoliasearch tests
+
+  test_types:
+    description: Runs types tests
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *upgrade_pip
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -r requirements/requirements-static-type-checker.txt
+      - run:
+          name: Run type tests
+          command: |
+            mypy --config-file mypy.ini -p algoliasearch --disallow-untyped-calls
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - test_unit:
+          version: '2.7.18'
+      - test_unit:
+          version: '3.4.10'
+      - test_unit:
+          version: '3.5.9'
+      - test_unit:
+          version: '3.6.9'
+      - test_unit:
+          version: '3.7.7'
+      - test_unit:
+          version: '3.8.2'
+      - test_lint:
+          version: '3.8.2'
+      - test_types:
+          version: '3.8.2'
