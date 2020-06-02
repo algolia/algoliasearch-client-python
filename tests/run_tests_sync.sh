@@ -2,5 +2,4 @@
 
 export TEST_TYPE=sync
 pip uninstall asyncio aiohttp async_timeout
-python -m unittest
-
+python -m unittest -v
