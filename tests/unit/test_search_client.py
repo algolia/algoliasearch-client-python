@@ -42,24 +42,3 @@ class TestSearchClient(unittest.TestCase):
         client = SearchClient.create('foo', 'bar')
 
         self.assertEqual(client.app_id, 'foo')
-
-    def test_set_personalization_strategy(self):
-        strategy = {
-            'eventsScoring': {
-                'Add to cart': {'score': 50, 'type': 'conversion'},
-                'Purchase': {'score': 100, 'type': 'conversion'}
-            },
-            'facetsScoring': {
-                'brand': {'score': 100},
-                'categories': {'score': 10}
-            }
-        }
-
-        self.client.set_personalization_strategy(strategy)
-
-        self.transporter.write.assert_called_once_with(
-            'POST',
-            '1/recommendation/personalization/strategy',
-            strategy,
-            None,
-        )
