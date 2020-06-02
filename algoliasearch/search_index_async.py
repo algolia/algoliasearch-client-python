@@ -13,6 +13,7 @@ from algoliasearch.http.serializer import SettingsDeserializer
 from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.http.verb import Verb
 from algoliasearch.responses import MultipleResponse
+from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.iterators_async import (
     ObjectIteratorAsync,
