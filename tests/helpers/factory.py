@@ -26,6 +26,9 @@ class Factory(object):
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
         config = SearchConfig(app_id, api_key)
+        # To ensure `Consistency` during the Common Test Suite,
+        # we force the transporter to work with a single
+        # host in the { host-1, host-2, host-3 }
         config.hosts = Factory.hosts(app_id)
         return Factory.decide(SearchClient.create_with_config(config))
 
@@ -195,6 +198,13 @@ class Factory(object):
 
     @staticmethod
     def decide(client):
+
+        # Since we are targeting always the same host the server
+        # may take a litle more than expected to answer. To
+        # avoid timeouts we increase the timeouts duration.
+        client._transporter._config.read_timeout = 30
+        client._transporter._config.write_timeout = 30
+        client._transporter._config.connect_timeout = 30
 
         if os.environ.get('TEST_TYPE', False) == 'async':
             from tests.helpers.misc_async import SyncDecorator
