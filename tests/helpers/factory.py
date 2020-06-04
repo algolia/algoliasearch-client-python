@@ -26,6 +26,9 @@ class Factory(object):
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
         config = SearchConfig(app_id, api_key)
+        # To ensure `Consistency` during the Common Test Suite,
+        # we force the transporter to work with a single
+        # host in the { host-1, host-2, host-3 }
         config.hosts = Factory.hosts(app_id)
         return Factory.decide(SearchClient.create_with_config(config))
 
