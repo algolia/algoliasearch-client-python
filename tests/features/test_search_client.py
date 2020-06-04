@@ -408,7 +408,6 @@ class TestSearchClient(unittest.TestCase):
         with self.assertRaises(ValidUntilNotFoundException) as _:
             SearchClient.get_secured_api_key_remaining_validity(api_key)
 
-
     def test_close(self):
         client = F.search_client()
         self.assertIsNone(client._transporter._requester._session)

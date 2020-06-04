@@ -35,7 +35,6 @@ class Unicode:
         tmp = json.loads(tmp)
         return tmp
 
-
     def rule_without_metadata(rule):
         del rule['_metadata']
 

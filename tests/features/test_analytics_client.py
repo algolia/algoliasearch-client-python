@@ -11,7 +11,7 @@ from tests.helpers.misc import RetryableClient
 class TestAnalyticsClient(unittest.TestCase):
     def setUp(self):
         self.search_client = F.search_client()
-        self.analytics_client  = F.analytics_client()
+        self.analytics_client = F.analytics_client()
         self.client = RetryableClient(self.analytics_client, [
             'Too Many Requests',
             'Index does not exist'
