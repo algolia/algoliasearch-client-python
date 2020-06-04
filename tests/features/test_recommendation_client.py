@@ -8,6 +8,9 @@ class TestRecommendationClient(unittest.TestCase):
     def setUp(self):
         self.client = F.recommendation_client()
 
+    def tearDown(self):
+        self.client.close()
+
     @unittest.skipIf(Env.is_community(),
                      "Community can not test personalization operations")
     def test_recommendation(self):

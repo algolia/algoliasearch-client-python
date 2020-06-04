@@ -41,7 +41,7 @@ class SearchIndexAsync(SearchIndex):
 
         _create_async_methods_in(self, search_index)
 
-    @asyncio.coroutine  # type: ignore
+    @asyncio.coroutine
     def wait_task_async(self, task_id, request_options=None):  # type: ignore
         # type: (int, Optional[Union[dict, RequestOptions]]) -> None
 

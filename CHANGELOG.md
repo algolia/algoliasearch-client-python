@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.2.0...master)
 
+### Added
+- Closeable http sessions directly from the clients ([492](https://github.com/algolia/algoliasearch-client-python/pull/492))
+
 ### Fixed
 - Replace all objects could get blocked on the replace all objects method while using safe parameter with async dependencies. ([#479](https://github.com/algolia/algoliasearch-client-python/pull/479), [493](https://github.com/algolia/algoliasearch-client-python/pull/493))
 

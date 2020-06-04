@@ -8,8 +8,12 @@ from tests.helpers.factory import Factory as F
 class TestInsightsClient(unittest.TestCase):
     def setUp(self):
         self.client = F.insights_client()
-        search_client = F.search_client()
-        self.index = F.index(search_client, self._testMethodName)
+        self.client1 = F.search_client()
+        self.index = F.index(self.client1, self._testMethodName)
+
+    def tearDown(self):
+        self.client.close()
+        self.client1.close()
 
     @unittest.skipIf(Env.is_community(),
                      "Community can not test insights operations")

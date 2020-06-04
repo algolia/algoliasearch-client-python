@@ -458,6 +458,11 @@ class SearchClient(object):
             request_options
         )
 
+    def close(self):
+        # type: () -> None
+
+        return self._transporter.close()  # type: ignore
+
     def _sync(self):
         # type: () -> SearchClient
 

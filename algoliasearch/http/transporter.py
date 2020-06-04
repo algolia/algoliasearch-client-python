@@ -97,6 +97,11 @@ class Transporter(object):
 
         raise AlgoliaUnreachableHostException('Unreachable hosts')
 
+    def close(self):
+        # type: () -> None
+
+        self._requester.close()
+
 
 class Request(object):
     def __init__(self, verb, headers, data, connect_timeout, timeout):

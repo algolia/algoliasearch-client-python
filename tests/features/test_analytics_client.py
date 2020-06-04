@@ -10,13 +10,17 @@ from tests.helpers.misc import RetryableClient
 
 class TestAnalyticsClient(unittest.TestCase):
     def setUp(self):
-        search_client = F.search_client()
+        self.search_client = F.search_client()
         self.client = RetryableClient(F.analytics_client(), [
             'Too Many Requests',
             'Index does not exist'
         ])
-        self.index = F.index(search_client, self._testMethodName)
-        self.index2 = F.index(search_client, '{}2'.format(self._testMethodName))  # noqa: E501
+        self.index = F.index(self.search_client, self._testMethodName)
+        self.index2 = F.index(self.search_client, '{}2'.format(self._testMethodName))  # noqa: E501
+
+    def tearDown(self):
+        self.client.close()
+        self.search_client.close()
 
     def test_ab_testing(self):
         self.index.save_object({'objectID': 'one'}).wait()
