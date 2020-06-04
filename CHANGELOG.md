@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.2.0...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.0...master)
+
+## [v2.3.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.2.0...v2.3.0)
 
 ### Added
 - Closeable http sessions directly from the clients ([492](https://github.com/algolia/algoliasearch-client-python/pull/492))
