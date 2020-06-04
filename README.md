@@ -6,7 +6,6 @@
   <h4 align="center">The perfect starting point to integrate <a href="https://algolia.com" target="_blank">Algolia</a> within your Python project</h4>
 
   <p align="center">
-    <a href="https://travis-ci.org/algolia/algoliasearch-client-python"><img src="https://img.shields.io/travis/algolia/algoliasearch-client-python/master.svg" alt="Build Status"></img></a>
     <a href="https://pypi.org/project/algoliasearch"><img src="https://img.shields.io/pypi/v/algoliasearch.svg" alt="PyPI"></img></a>
     <a href="https://pypi.org/project/algoliasearch"><img src="https://img.shields.io/pypi/pyversions/ansicolortags.svg" alt="Python versions"></img></a>
     <a href="https://pypi.org/project/algoliasearch"><img src="https://img.shields.io/pypi/l/ansicolortags.svg" alt="License"></a>
