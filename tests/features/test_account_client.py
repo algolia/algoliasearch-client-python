@@ -5,6 +5,7 @@ from algoliasearch.account_client import AccountClient
 from algoliasearch.exceptions import AlgoliaException
 from algoliasearch.responses import MultipleResponse
 from tests.helpers.factory import Factory as F
+from tests.helpers.misc import rule_without_metadata
 
 
 class TestAccountClient(unittest.TestCase):
