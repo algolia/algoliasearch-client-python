@@ -2,5 +2,4 @@
 
 | Name             | Email                       |
 |------------------|-----------------------------|
-| Nuno Maduro      | enunomaduro@gmail.com       |
-| Julien Bourdeau  | julien.bourdeau@algolia.com |
+| Algolia          | support@algolia.com         |
