@@ -7,9 +7,12 @@ from tests.helpers.factory import Factory as F
 
 class TestRequester(unittest.TestCase):
     def setUp(self):
-        client = F.search_client()
-        self.index = F.index(client, self._testMethodName)
+        self.client = F.search_client()
+        self.index = F.index(self.client, self._testMethodName)
         self.obj = F.obj()
+
+    def tearDown(self):
+        self.client.close()
 
     def test_timeout_exception(self):
         with self.assertRaises(AlgoliaUnreachableHostException) as _:
