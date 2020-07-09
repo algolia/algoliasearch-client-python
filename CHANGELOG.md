@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.0...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.1...master)
+
+## [v2.3.1](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.0...v2.3.1)
+
+### Fixed
+- Invalid format in `setup.cfg` -> `python_requires`. ([#500](https://github.com/algolia/algoliasearch-client-python/pull/500))
 
 ## [v2.3.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.2.0...v2.3.0)
 
