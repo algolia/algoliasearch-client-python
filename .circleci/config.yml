@@ -64,23 +64,72 @@ jobs:
           command: |
             mypy --config-file mypy.ini -p algoliasearch --disallow-untyped-calls
 
+  release:
+    description: Release the Python client
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *upgrade_pip
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -r requirements.txt
+      - run:
+          name: Prepare the dist/ build for release
+          command: |
+            python setup.py sdist bdist_wheel
+      - run:
+          name: Check the dist/ build before release
+          command: |
+            twine check dist/*
+      - run:
+          name: Publish the release to PyPI
+          command: |
+            if [[ -z "$PYPI_USER" ]];     then echo '$PYPI_USER is not set';     exit 1; fi
+            if [[ -z "$PYPI_PASSWORD" ]]; then echo '$PYPI_PASSWORD is not set'; exit 1; fi
+            twine upload --username $PYPI_USER --password $PYPI_PASSWORD $dist/*
+
 workflows:
   version: 2
   ci:
     jobs:
       - test_unit:
+          name: 'test_unit_2.7.18'
           version: '2.7.18'
       - test_unit:
+          name: 'test_unit_3.4.10'
           version: '3.4.10'
       - test_unit:
+          name: 'test_unit_3.5.9'
           version: '3.5.9'
       - test_unit:
+          name: 'test_unit_3.6.9'
           version: '3.6.9'
       - test_unit:
+          name: 'test_unit_3.7.7'
           version: '3.7.7'
       - test_unit:
+          name: 'test_unit_3.8.2'
           version: '3.8.2'
       - test_lint:
+          name: 'test_lint'
           version: '3.8.2'
       - test_types:
+          name: 'test_types'
           version: '3.8.2'
+      - release:
+          version: '3.8.2'
+          requires:
+            - test_unit_2.7.18
+            - test_unit_3.4.10
+            - test_unit_3.5.9
+            - test_unit_3.6.9
+            - test_unit_3.7.7
+            - test_unit_3.8.2
+            - test_lint
+            - test_types
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /^[1-9]+.[0-9]+.[0-9]+.*/
