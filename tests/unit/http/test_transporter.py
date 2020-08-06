@@ -1,5 +1,6 @@
 import time
 import unittest
+import os
 import mock as mock
 
 from algoliasearch.configs import SearchConfig
@@ -122,6 +123,36 @@ class TestTransporter(unittest.TestCase):
             self.transporter.read('get', 'endpoint/bar', {},
                                   self.request_options)
         self.assertEqual(self.requester.send.call_count, 1)
+
+
+class TestProxiedTransporter(unittest.TestCase):
+    def setUp(self):
+        os.environ['HTTPS_PROXY'] = 'https://127.0.0.1:8080'
+
+    def tearDown(self):
+        del os.environ['HTTPS_PROXY']
+
+    def test_with_proxy(self):
+        config = SearchConfig('foo', 'bar')
+        requester = Requester()
+        requester.send = mock.Mock(name="send")
+        requester.send.return_value = Response(200, {'foo': 'bar'})
+        transporter = Transporter(requester, config)
+
+        headers = RequestOptions.create(config).headers
+        data = {}
+        transporter.write('post', 'endpoint/foo', data, None)
+
+        request = Request(
+            'POST',
+            headers,
+            {},
+            2,  # Default connect timeout
+            30,  # Default timeout
+            proxies={'https': 'https://127.0.0.1:8080'},
+        )
+        request.url = 'https://foo.algolia.net/endpoint/foo?'
+        requester.send.assert_called_once_with(request)
 
 
 class TestRetryStrategy(unittest.TestCase):
