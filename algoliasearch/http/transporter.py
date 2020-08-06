@@ -69,8 +69,14 @@ class Transporter(object):
                                           query_parameters
                                       ))
 
-        request = Request(verb.upper(), request_options.headers, data,
-                          self._config.connect_timeout, timeout)
+        request = Request(
+            verb.upper(),
+            request_options.headers,
+            data,
+            self._config.connect_timeout,
+            timeout,
+            self._config.proxies,
+        )
 
         return self.retry(hosts, request, relative_url)
 
@@ -104,8 +110,8 @@ class Transporter(object):
 
 
 class Request(object):
-    def __init__(self, verb, headers, data, connect_timeout, timeout):
-        # type: (str, dict, Optional[Union[dict, list]], int, int) -> None
+    def __init__(self, verb, headers, data, connect_timeout, timeout, proxies={}):  # noqa: E501
+        # type: (str, dict, Optional[Union[dict, list]], int, int, dict) -> None  # noqa: E501
 
         self.verb = verb
         self.data = data
@@ -115,6 +121,7 @@ class Request(object):
         self.headers = headers
         self.connect_timeout = connect_timeout
         self.timeout = timeout
+        self.proxies = proxies
         self.url = ''
 
     def __str__(self):
