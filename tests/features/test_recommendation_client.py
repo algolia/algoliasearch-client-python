@@ -2,6 +2,7 @@ import unittest
 
 from tests.helpers.env import Env
 from tests.helpers.factory import Factory as F
+from algoliasearch.exceptions import RequestException
 
 
 class TestRecommendationClient(unittest.TestCase):
@@ -34,14 +35,16 @@ class TestRecommendationClient(unittest.TestCase):
             'personalizationImpact': 0,
         }
 
-        response = self.client.set_personalization_strategy(
-            personalization_strategy
-        )
-
-        self.assertEqual(response, {
-            'status': 200,
-            'message': 'Strategy was successfully updated'
-        })
+        try:
+            response = self.client.set_personalization_strategy(
+                personalization_strategy
+            )
+            self.assertEqual(response, {
+                'status': 200,
+                'message': 'Strategy was successfully updated'
+            })
+        except RequestException as err:
+            self.assertEqual(err, RequestException('Number of strategy saves exceeded for the day', 429))  # noqa: E501
 
         response = self.client.get_personalization_strategy()
         self.assertEqual(response, personalization_strategy)
