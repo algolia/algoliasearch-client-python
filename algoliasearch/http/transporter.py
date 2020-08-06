@@ -117,6 +117,20 @@ class Request(object):
         self.timeout = timeout
         self.url = ''
 
+    def __str__(self):
+        return 'Request({}, {}, {}, {}, {}, {}, {})'.format(
+            self.verb,
+            self.url,
+            self.headers,
+            self.data_as_string,
+            self.connect_timeout,
+            self.timeout,
+            self.proxies,
+        )
+
+    def __repr__(self):
+        return self.__str__()
+
     def __eq__(self, other):
         # type: (object) -> bool
 
