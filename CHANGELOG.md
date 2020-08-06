@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.1...master)
 
+### Added
+- Bring support for HTTP_PROXY / HTTPS_PROXY ([#505](https://github.com/algolia/algoliasearch-client-python/pull/505))
+
 ## [v2.3.1](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.0...v2.3.1)
 
 ### Fixed
@@ -16,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v2.3.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.2.0...v2.3.0)
 
 ### Added
-- Closeable http sessions directly from the clients ([492](https://github.com/algolia/algoliasearch-client-python/pull/492))
+- Closeable http sessions directly from the clients ([#492](https://github.com/algolia/algoliasearch-client-python/pull/492))
 
 ### Fixed
 - Replace all objects could get blocked on the replace all objects method while using safe parameter with async dependencies. ([#479](https://github.com/algolia/algoliasearch-client-python/pull/479), [493](https://github.com/algolia/algoliasearch-client-python/pull/493))
