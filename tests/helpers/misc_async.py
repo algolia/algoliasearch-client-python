@@ -21,14 +21,15 @@ class SyncDecorator(object):
         if not callable(method):
             return method
 
-        method = getattr(self._base, '{}_async'.format(name))
+        method = getattr(self._base, "{}_async".format(name))
 
         def closure(*args, **kwargs):
             result = method(*args, **kwargs)
 
             if isinstance(result, types.GeneratorType):
                 return asyncio.get_event_loop().run_until_complete(
-                    asyncio.gather(result))[0]
+                    asyncio.gather(result)
+                )[0]
 
             if isinstance(result, Iterator):
                 return self.iterator_to_array(result)
@@ -46,12 +47,11 @@ class SyncDecorator(object):
     def user(self, user_token):
 
         user_insights_client = self._base.user(user_token)
-        user_insights_client.__setattr__('close', self._base.close)
+        user_insights_client.__setattr__("close", self._base.close)
 
         return SyncDecorator(user_insights_client)
 
     def iterator_to_array(self, iterator):
-
         def closure():
 
             objects = []

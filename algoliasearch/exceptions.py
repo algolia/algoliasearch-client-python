@@ -28,7 +28,9 @@ class RequestException(AlgoliaException):
     def __eq__(self, other):
         # type: (object) -> bool
         if isinstance(other, RequestException):
-            return (self.message == other.message and self.status_code == other.status_code)  # noqa: E501
+            return (
+                self.message == other.message and self.status_code == other.status_code
+            )  # noqa: E501
         return False
 
     def __ne__(self, other):

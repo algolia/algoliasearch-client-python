@@ -33,10 +33,10 @@ class RecommendationClient(object):
         client = RecommendationClient(transporter, config)
 
         if is_async_available():
-            from algoliasearch.recommendation_client_async import \
-                RecommendationClientAsync
-            from algoliasearch.http.transporter_async import \
-                TransporterAsync
+            from algoliasearch.recommendation_client_async import (
+                RecommendationClientAsync,
+            )
+            from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync
 
             return RecommendationClientAsync(
@@ -45,25 +45,23 @@ class RecommendationClient(object):
 
         return client
 
-    def set_personalization_strategy(self, personalization_strategy,
-                                     request_options=None):  # noqa: E501
+    def set_personalization_strategy(
+        self, personalization_strategy, request_options=None
+    ):  # noqa: E501
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.write(
             Verb.POST,
-            '1/strategies/personalization',
+            "1/strategies/personalization",
             personalization_strategy,
-            request_options
+            request_options,
         )
 
     def get_personalization_strategy(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.GET,
-            '1/strategies/personalization',
-            None,
-            request_options
+            Verb.GET, "1/strategies/personalization", None, request_options
         )
 
     def close(self):

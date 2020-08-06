@@ -3,8 +3,9 @@ from platform import python_version
 
 
 class UserAgent(object):
-    value = 'Algolia for Python ({}); Python ({})'.format(
-        VERSION, str(python_version()))
+    value = "Algolia for Python ({}); Python ({})".format(
+        VERSION, str(python_version())
+    )
 
     @staticmethod
     def get():
@@ -16,4 +17,4 @@ class UserAgent(object):
     def add(segment, version):
         # type: (str, str) -> None
 
-        UserAgent.value += '; {} ({})'.format(segment, version)
+        UserAgent.value += "; {} ({})".format(segment, version)

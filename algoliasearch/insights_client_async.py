@@ -16,8 +16,7 @@ class InsightsClientAsync(InsightsClient):
         self._transporter_async = transporter
 
         super(InsightsClientAsync, self).__init__(
-            insights_client._transporter,
-            insights_config
+            insights_client._transporter, insights_config
         )
 
         client = InsightsClient(transporter, insights_config)
@@ -50,14 +49,10 @@ class InsightsClientAsync(InsightsClient):
 
 
 class UserInsightsClientAsync(UserInsightsClient):
-
     def __init__(self, insights_client, user_token):
         # type: (InsightsClient, str) -> None
 
-        super(UserInsightsClientAsync, self).__init__(
-            insights_client,
-            user_token
-        )
+        super(UserInsightsClientAsync, self).__init__(insights_client, user_token)
 
         client = UserInsightsClient(insights_client, user_token)
 

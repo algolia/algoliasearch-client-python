@@ -34,8 +34,7 @@ class InsightsClient(object):
 
         if is_async_available():
             from algoliasearch.insights_client_async import InsightsClientAsync
-            from algoliasearch.http.transporter_async import \
-                TransporterAsync
+            from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync
 
             return InsightsClientAsync(
@@ -58,10 +57,7 @@ class InsightsClient(object):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.write(
-            Verb.POST,
-            '1/events',
-            {'events': events},
-            request_options
+            Verb.POST, "1/events", {"events": events}, request_options
         )
 
     def close(self):
@@ -77,103 +73,133 @@ class UserInsightsClient:
         self._insights_client = insights_client
         self._user_token = user_token
 
-    def clicked_object_ids(self, event_name, index_name, object_ids,
-                           request_options=None):
+    def clicked_object_ids(
+        self, event_name, index_name, object_ids, request_options=None
+    ):
         # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'click',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'objectIds': object_ids
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "click",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+            },
+            request_options,
+        )
 
-    def clicked_object_ids_after_search(self, event_name, index_name,
-                                        object_ids, positions, query_id,
-                                        request_options=None):
+    def clicked_object_ids_after_search(
+        self,
+        event_name,
+        index_name,
+        object_ids,
+        positions,
+        query_id,
+        request_options=None,
+    ):
         # type: (str, str, List[str], List[int], str, Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'click',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'objectIds': object_ids,
-            'positions': positions,
-            'queryId': query_id
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "click",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+                "positions": positions,
+                "queryId": query_id,
+            },
+            request_options,
+        )
 
-    def clicked_filters(self, event_name, index_name, filters,
-                        request_options=None):
+    def clicked_filters(self, event_name, index_name, filters, request_options=None):
         # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'click',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'filters': filters
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "click",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "filters": filters,
+            },
+            request_options,
+        )
 
-    def converted_object_ids(self, event_name, index_name, object_ids,
-                             request_options=None):
+    def converted_object_ids(
+        self, event_name, index_name, object_ids, request_options=None
+    ):
         # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'conversion',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'objectIds': object_ids
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "conversion",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+            },
+            request_options,
+        )
 
-    def converted_object_ids_after_search(self, event_name, index_name,
-                                          object_ids, query_id,
-                                          request_options=None):
+    def converted_object_ids_after_search(
+        self, event_name, index_name, object_ids, query_id, request_options=None
+    ):
         # type: (str, str, List[str], str, Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'conversion',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'objectIds': object_ids,
-            'queryId': query_id
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "conversion",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+                "queryId": query_id,
+            },
+            request_options,
+        )
 
-    def converted_filters(self, event_name, index_name, filters,
-                          request_options=None):
+    def converted_filters(self, event_name, index_name, filters, request_options=None):
         # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'conversion',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'filters': filters
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "conversion",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "filters": filters,
+            },
+            request_options,
+        )
 
-    def viewed_object_ids(self, event_name, index_name, object_ids,
-                          request_options=None):
+    def viewed_object_ids(
+        self, event_name, index_name, object_ids, request_options=None
+    ):
         # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'view',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'objectIds': object_ids
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "view",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+            },
+            request_options,
+        )
 
-    def viewed_filters(self, event_name, index_name, filters,
-                       request_options=None):
+    def viewed_filters(self, event_name, index_name, filters, request_options=None):
         # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
 
-        return self._insights_client.send_event({
-            'eventType': 'view',
-            'eventName': event_name,
-            'index': index_name,
-            'userToken': self._user_token,
-            'filters': filters
-        }, request_options)
+        return self._insights_client.send_event(
+            {
+                "eventType": "view",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "filters": filters,
+            },
+            request_options,
+        )

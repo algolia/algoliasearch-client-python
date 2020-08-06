@@ -24,13 +24,11 @@ class QueryParametersSerializer(object):
             if isinstance(value, (list, dict)):
                 value = json.dumps(value)
             elif isinstance(value, bool):
-                value = 'true' if value else 'false'
+                value = "true" if value else "false"
 
             query_parameters[key] = value
 
-        return urlencode(
-            sorted(get_items(query_parameters), key=lambda val: val[0])
-        )
+        return urlencode(sorted(get_items(query_parameters), key=lambda val: val[0]))
 
 
 class SettingsDeserializer(object):
@@ -39,9 +37,9 @@ class SettingsDeserializer(object):
         # type: (Dict[str, Any]) -> dict
 
         keys = {
-            'attributesToIndex': 'searchableAttributes',
-            'numericAttributesToIndex': 'numericAttributesForFiltering',
-            'slaves': 'replicas',
+            "attributesToIndex": "searchableAttributes",
+            "numericAttributesToIndex": "numericAttributesForFiltering",
+            "slaves": "replicas",
         }
 
         for deprecated_key, current_key in get_items(keys):
