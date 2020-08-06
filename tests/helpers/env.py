@@ -6,4 +6,4 @@ class Env(object):
     def is_community():
         # type: () -> bool
 
-        return 'IS_COMMUNITY' in os.environ
+        return "IS_COMMUNITY" in os.environ

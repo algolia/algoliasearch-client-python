@@ -19,13 +19,11 @@ def endpoint(path, *args):
     arguments = []
     for arg in args:
         if not sys.version_info >= (3, 0) and isinstance(arg, unicode):
-            arguments.append(
-                quote(arg.encode('utf-8'), safe='')
-            )  # pragma: no cover
+            arguments.append(quote(arg.encode("utf-8"), safe=""))  # pragma: no cover
         else:
-            arguments.append(quote(str(arg), safe=''))  # pragma: no cover
+            arguments.append(quote(str(arg), safe=""))  # pragma: no cover
 
-    return getattr(path, 'format')(*arguments)
+    return getattr(path, "format")(*arguments)
 
 
 def get_items(dictionary=None):
@@ -45,15 +43,16 @@ def assert_object_id(objects):
     # type: (Iterable[Dict[str, Any]]) -> None
 
     for obj in objects:
-        if 'objectID' not in obj:
+        if "objectID" not in obj:
             raise MissingObjectIdException(
-                'Missing `objectID` in: {}'.format(json.dumps(obj)), obj)
+                "Missing `objectID` in: {}".format(json.dumps(obj)), obj
+            )
 
 
 def build_raw_response_batch(action, objects):
     # type: (str, Union[List[dict], Iterator[dict]]) -> List[dict]
 
-    return [{'action': action, 'body': obj} for obj in objects]
+    return [{"action": action, "body": obj} for obj in objects]
 
 
 def is_async_available():

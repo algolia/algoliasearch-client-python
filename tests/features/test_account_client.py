@@ -19,16 +19,18 @@ class TestAccountClient(unittest.TestCase):
         self.client1.close()
         self.client2.close()
 
-    @unittest.skipIf(os.environ.get('TEST_TYPE', False) == 'async',
-                     'Cross App Copy Index is not available in async mode.')
+    @unittest.skipIf(
+        os.environ.get("TEST_TYPE", False) == "async",
+        "Cross App Copy Index is not available in async mode.",
+    )
     def test_cross_app_copy_index(self):
-        rule = F.rule(object_id='one')
-        synonym = F.synonym(object_id='one')
+        rule = F.rule(object_id="one")
+        synonym = F.synonym(object_id="one")
         responses = [
-            self.index.save_object({'objectID': 'one'}),
+            self.index.save_object({"objectID": "one"}),
             self.index.save_rule(rule),
             self.index.save_synonym(synonym),
-            self.index.set_settings({'searchableAttributes': ['objectID']})
+            self.index.set_settings({"searchableAttributes": ["objectID"]}),
         ]
 
         MultipleResponse(responses).wait()
@@ -36,20 +38,17 @@ class TestAccountClient(unittest.TestCase):
         AccountClient.copy_index(self.index, self.index2).wait()
 
         # Assert objects got copied
-        res = self.index2.search('')
+        res = self.index2.search("")
 
-        self.assertEqual(len(res['hits']), 1)
-        self.assertEqual(res['hits'][0], {'objectID': 'one'})
+        self.assertEqual(len(res["hits"]), 1)
+        self.assertEqual(res["hits"][0], {"objectID": "one"})
 
         # Assert settings got copied
         settings = self.index2.get_settings()
-        self.assertEqual(settings['searchableAttributes'], ['objectID'])
+        self.assertEqual(settings["searchableAttributes"], ["objectID"])
 
         # Assert rules got copied
-        self.assertEqual(
-            rule_without_metadata(self.index2.get_rule('one')),
-            rule
-        )
+        self.assertEqual(rule_without_metadata(self.index2.get_rule("one")), rule)
 
         # Assert synonyms got copied
         list_synonyms1 = [synonym for synonym in self.index.browse_synonyms()]
@@ -58,7 +57,7 @@ class TestAccountClient(unittest.TestCase):
         self.assertEqual(list_synonyms1, list_synonyms2)
 
         # Assert synomys are the same
-        self.assertEqual(self.index2.get_synonym('one'), synonym)
+        self.assertEqual(self.index2.get_synonym("one"), synonym)
 
         # Assert that copying again fails because index already exists
         with self.assertRaises(AlgoliaException) as _:

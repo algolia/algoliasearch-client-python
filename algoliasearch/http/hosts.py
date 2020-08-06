@@ -11,8 +11,7 @@ class Host(object):
 
         self.url = url
         self.priority = priority
-        self.accept = ((CallType.WRITE | CallType.READ) if accept is None
-                       else accept)
+        self.accept = (CallType.WRITE | CallType.READ) if accept is None else accept
 
         self.last_use = 0.0
         self.retry_count = 0
@@ -37,8 +36,7 @@ class HostsCollection(object):
 
         shuffle(self._hosts)
 
-        self._hosts = sorted(self._hosts, key=lambda x: x.priority,
-                             reverse=True)
+        self._hosts = sorted(self._hosts, key=lambda x: x.priority, reverse=True)
 
     def read(self):
         # type: () -> List[Host]

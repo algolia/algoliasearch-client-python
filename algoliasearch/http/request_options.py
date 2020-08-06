@@ -37,9 +37,9 @@ class RequestOptions(object):
         headers = dict(config.headers)
 
         timeouts = {
-            'readTimeout': int(config.read_timeout),
-            'writeTimeout': int(config.write_timeout),
-            'connectTimeout': int(config.connect_timeout),
+            "readTimeout": int(config.read_timeout),
+            "writeTimeout": int(config.write_timeout),
+            "connectTimeout": int(config.connect_timeout),
         }
 
         request_options = RequestOptions(headers, {}, timeouts, {})
@@ -51,23 +51,18 @@ class RequestOptions(object):
 
 
 class Params(object):
-    HEADERS = (
-        'Content-type',
-        'User-Agent',
-        'X-Algolia-User-ID',
-        'X-Forwarded-For'
-    )
+    HEADERS = ("Content-type", "User-Agent", "X-Algolia-User-ID", "X-Forwarded-For")
 
     QUERY_PARAMETERS = (
-        'createIfNotExists',
-        'forwardToReplicas',
-        'replaceExistingSynonyms',
-        'clearExistingRules',
-        'getVersion',
+        "createIfNotExists",
+        "forwardToReplicas",
+        "replaceExistingSynonyms",
+        "clearExistingRules",
+        "getVersion",
     )
 
     TIMEOUTS = (
-        'readTimeout',
-        'writeTimeout',
-        'connectTimeout',
+        "readTimeout",
+        "writeTimeout",
+        "connectTimeout",
     )

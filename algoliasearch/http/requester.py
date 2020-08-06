@@ -10,7 +10,6 @@ from algoliasearch.http.transporter import Response, Request
 
 
 class Requester(object):
-
     def __init__(self):
         # type: () -> None
 
@@ -23,13 +22,14 @@ class Requester(object):
             self._session = requests.Session()
 
             # Ask urllib not to make retries on its own.
-            self._session.mount(
-                'https://', HTTPAdapter(max_retries=Retry(connect=0))
-            )
+            self._session.mount("https://", HTTPAdapter(max_retries=Retry(connect=0)))
 
-        req = requests.Request(method=request.verb, url=request.url,
-                               headers=request.headers,
-                               data=request.data_as_string)
+        req = requests.Request(
+            method=request.verb,
+            url=request.url,
+            headers=request.headers,
+            data=request.data_as_string,
+        )
 
         r = req.prepare()  # type: ignore
 
@@ -44,11 +44,7 @@ class Requester(object):
         except RequestException as e:
             return Response(error_message=str(e), is_network_error=True)
 
-        return Response(
-            response.status_code,
-            response.json(),
-            response.reason
-        )
+        return Response(response.status_code, response.json(), response.reason)
 
     def close(self):
         # type: () -> None

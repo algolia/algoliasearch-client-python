@@ -18,26 +18,21 @@ from algoliasearch.search_index import SearchIndex
 from algoliasearch.iterators_async import (
     ObjectIteratorAsync,
     SynonymIteratorAsync,
-    RuleIteratorAsync
+    RuleIteratorAsync,
 )
 
 
 class SearchIndexAsync(SearchIndex):
-
     def __init__(self, search_index, transporter, config, name):
         # type: (SearchIndex, TransporterAsync, SearchConfig, str) -> None
 
         self._search_index = search_index
         self._transporter_async = transporter
 
-        super(SearchIndexAsync, self).__init__(
-            search_index._transporter,
-            config,
-            name
-        )
+        super(SearchIndexAsync, self).__init__(search_index._transporter, config, name)
 
         search_index = SearchIndex(transporter, config, name)
-        search_index.__setattr__('_sync', self._sync)
+        search_index.__setattr__("_sync", self._sync)
 
         _create_async_methods_in(self, search_index)
 
@@ -49,11 +44,10 @@ class SearchIndexAsync(SearchIndex):
 
         while True:
             task = yield from self.get_task_async(  # type: ignore
-                task_id,
-                request_options
+                task_id, request_options
             )
 
-            if task['status'] == 'published':
+            if task["status"] == "published":
                 break
 
             retries_count += 1
@@ -65,20 +59,19 @@ class SearchIndexAsync(SearchIndex):
     def browse_objects_async(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> ObjectIteratorAsync
 
-        return ObjectIteratorAsync(self._transporter_async, self._name,
-                                   request_options)
+        return ObjectIteratorAsync(self._transporter_async, self._name, request_options)
 
     def browse_synonyms_async(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> SynonymIteratorAsync
 
-        return SynonymIteratorAsync(self._transporter_async, self._name,
-                                    request_options)
+        return SynonymIteratorAsync(
+            self._transporter_async, self._name, request_options
+        )
 
     def browse_rules_async(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> RuleIteratorAsync
 
-        return RuleIteratorAsync(self._transporter_async, self._name,
-                                 request_options)
+        return RuleIteratorAsync(self._transporter_async, self._name, request_options)
 
     def exists_async(self, request_options=None):  # type: ignore # noqa: E501
         # type: (Optional[Union[dict, RequestOptions]]) -> bool
@@ -96,16 +89,15 @@ class SearchIndexAsync(SearchIndex):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self._config,
-                                                    request_options)
+            request_options = RequestOptions.create(self._config, request_options)
 
-        request_options.query_parameters['getVersion'] = 2
+        request_options.query_parameters["getVersion"] = 2
 
         raw_response = yield from self._transporter_async.read(
             Verb.GET,
-            endpoint('1/indexes/{}/settings', self._name),
+            endpoint("1/indexes/{}/settings", self._name),
             None,
-            request_options
+            request_options,
         )
 
         return SettingsDeserializer.deserialize(raw_response)
@@ -114,57 +106,50 @@ class SearchIndexAsync(SearchIndex):
         # type: (Callable[[Dict[str, any]], bool], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         paginate = True
-        query = ''
+        query = ""
         page = 0
 
         if isinstance(request_options, dict):
             request_options = copy.copy(request_options)
-            paginate = request_options.pop('paginate', paginate)
-            query = request_options.pop('query', query)
+            paginate = request_options.pop("paginate", paginate)
+            query = request_options.pop("query", query)
 
-        request_options = RequestOptions.create(
-            self._config,
-            request_options
-        )
+        request_options = RequestOptions.create(self._config, request_options)
 
         while True:
-            request_options.data['page'] = page
+            request_options.data["page"] = page
 
-            res = yield from self.search_async(query, request_options)   # type: ignore # noqa: E501
+            res = yield from self.search_async(query, request_options)  # type: ignore # noqa: E501
 
-            for pos, hit in enumerate(res['hits']):
+            for pos, hit in enumerate(res["hits"]):
                 if callback(hit):
                     return {
-                        'object': hit,
-                        'position': pos,
-                        'page': page,
+                        "object": hit,
+                        "position": pos,
+                        "page": page,
                     }
 
-            has_next_page = page + 1 < int(res['nbPages'])
+            has_next_page = page + 1 < int(res["nbPages"])
 
             if not paginate or not has_next_page:
                 raise ObjectNotFoundException
 
             page += 1
 
-    def replace_all_objects_async(self, objects,  # type: ignore
-                                  request_options=None):
+    def replace_all_objects_async(  # type: ignore
+        self, objects, request_options=None,
+    ):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> MultipleResponse # noqa: E501
 
         safe = False
-        if isinstance(request_options, dict) \
-                and 'safe' in request_options:
-            safe = request_options.pop('safe')
+        if isinstance(request_options, dict) and "safe" in request_options:
+            safe = request_options.pop("safe")
 
         tmp_index_name = self._create_temporary_name()
         responses = MultipleResponse()
         response = yield from self.copy_to_async(  # type: ignore
-            tmp_index_name,
-            {
-                'scope': ['settings',
-                          'synonyms',
-                          'rules']
-            })
+            tmp_index_name, {"scope": ["settings", "synonyms", "rules"]}
+        )
         responses.push(response)
 
         if safe:
@@ -175,12 +160,11 @@ class SearchIndexAsync(SearchIndex):
             tmp_client.init_index(tmp_index_name),
             self._transporter_async,
             self._config,
-            tmp_index_name
+            tmp_index_name,
         )
 
         response = yield from tmp_index.save_objects_async(  # type: ignore
-            objects,
-            request_options
+            objects, request_options
         )
         responses.push(response)
 
@@ -188,7 +172,8 @@ class SearchIndexAsync(SearchIndex):
             responses.wait()
 
         response = yield from tmp_index.move_to_async(  # type: ignore
-            self._name)
+            self._name
+        )
         responses.push(response)
 
         if safe:

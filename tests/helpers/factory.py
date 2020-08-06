@@ -36,8 +36,8 @@ class Factory(object):
     def search_client2():
         # type: () -> SearchClient
 
-        app_id = os.environ['ALGOLIA_APPLICATION_ID_2']
-        api_key = os.environ['ALGOLIA_ADMIN_KEY_2']
+        app_id = os.environ["ALGOLIA_APPLICATION_ID_2"]
+        api_key = os.environ["ALGOLIA_ADMIN_KEY_2"]
 
         return Factory.search_client(app_id, api_key)
 
@@ -45,8 +45,8 @@ class Factory(object):
     def search_client_mcm():
         # type: () -> SearchClient
 
-        app_id = os.environ['ALGOLIA_APPLICATION_ID_MCM']
-        api_key = os.environ['ALGOLIA_ADMIN_KEY_MCM']
+        app_id = os.environ["ALGOLIA_APPLICATION_ID_MCM"]
+        api_key = os.environ["ALGOLIA_ADMIN_KEY_MCM"]
 
         return Factory.search_client(app_id, api_key)
 
@@ -61,9 +61,9 @@ class Factory(object):
         # type: (str) -> HostsCollection
 
         hosts = [
-            Host('{}-1.algolianet.com'.format(app_id)),
-            Host('{}-2.algolianet.com'.format(app_id)),
-            Host('{}-3.algolianet.com'.format(app_id))
+            Host("{}-1.algolianet.com".format(app_id)),
+            Host("{}-2.algolianet.com".format(app_id)),
+            Host("{}-3.algolianet.com".format(app_id)),
         ]
         shuffle(hosts)
 
@@ -100,13 +100,13 @@ class Factory(object):
     def get_app_id():
         # type: () -> str
 
-        return os.environ['ALGOLIA_APPLICATION_ID_1']
+        return os.environ["ALGOLIA_APPLICATION_ID_1"]
 
     @staticmethod
     def get_api_key():
         # type: () -> str
 
-        return os.environ['ALGOLIA_ADMIN_KEY_1']
+        return os.environ["ALGOLIA_ADMIN_KEY_1"]
 
     @staticmethod
     def get_index_name(test_name):
@@ -114,17 +114,16 @@ class Factory(object):
 
         date = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
-        if 'CIRCLE_BUILD_NUM' in os.environ:
-            instance = os.environ['CIRCLE_BUILD_NUM']
+        if "CIRCLE_BUILD_NUM" in os.environ:
+            instance = os.environ["CIRCLE_BUILD_NUM"]
         else:
-            instance = 'unknown'
+            instance = "unknown"
 
-        python_version = platform.python_version().replace('.', '')[:2]
+        python_version = platform.python_version().replace(".", "")[:2]
 
-        python_version += os.environ.get('TEST_TYPE', 'sync')
+        python_version += os.environ.get("TEST_TYPE", "sync")
 
-        return 'python{}_{}_{}_{}'.format(
-            python_version, date, instance, test_name)
+        return "python{}_{}_{}_{}".format(python_version, date, instance, test_name)
 
     @staticmethod
     def obj(data=None, object_id=True):
@@ -134,13 +133,13 @@ class Factory(object):
 
         data = {} if data is None else data
 
-        data['name'] = fake.name()
+        data["name"] = fake.name()
 
         if isinstance(object_id, bool):
             if object_id:
-                data['objectID'] = fake.md5()
+                data["objectID"] = fake.md5()
         elif isinstance(object_id, (str, int)):
-            data['objectID'] = object_id
+            data["objectID"] = object_id
 
         return data
 
@@ -152,18 +151,18 @@ class Factory(object):
 
         data = {} if data is None else data
 
-        data['type'] = 'synonym'
-        if 'type' not in data:
-            data['type'] = 'synonym'
+        data["type"] = "synonym"
+        if "type" not in data:
+            data["type"] = "synonym"
 
-        if 'synonyms' not in data:
-            data['synonyms'] = fake.words(nb=3)
+        if "synonyms" not in data:
+            data["synonyms"] = fake.words(nb=3)
 
         if isinstance(object_id, bool):
             if object_id:
-                data['objectID'] = fake.md5()
+                data["objectID"] = fake.md5()
         elif isinstance(object_id, (str, int)):
-            data['objectID'] = object_id
+            data["objectID"] = object_id
 
         return data
 
@@ -175,31 +174,29 @@ class Factory(object):
 
         data = {} if data is None else data
 
-        data.update({
-            "condition": {"anchoring": "is", "pattern": "pattern"},
-            "consequence": {
-                "params": {
-                    "query": {
-                        "edits": [
-                            {"type": "remove", "delete": "pattern"}
-                        ]
+        data.update(
+            {
+                "condition": {"anchoring": "is", "pattern": "pattern"},
+                "consequence": {
+                    "params": {
+                        "query": {"edits": [{"type": "remove", "delete": "pattern"}]}
                     }
-                }
+                },
             }
-        })
+        )
 
         if isinstance(object_id, bool):
             if object_id:
-                data['objectID'] = fake.md5()
+                data["objectID"] = fake.md5()
         elif isinstance(object_id, (str, int)):
-            data['objectID'] = object_id
+            data["objectID"] = object_id
 
         return data
 
     @staticmethod
     def decide(client):
 
-        if os.environ.get('TEST_TYPE', False) == 'async':
+        if os.environ.get("TEST_TYPE", False) == "async":
             from tests.helpers.misc_async import SyncDecorator
 
             return SyncDecorator(client)
@@ -212,7 +209,7 @@ class Factory(object):
 
         if sys.version_info >= (3, 0):
             timestamp = (
-                    datetime.datetime.now() - datetime.timedelta(days=2)
+                datetime.datetime.now() - datetime.timedelta(days=2)
             ).timestamp()
         else:
             timestamp = time()

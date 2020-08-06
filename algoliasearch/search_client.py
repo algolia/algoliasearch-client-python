@@ -18,7 +18,7 @@ from algoliasearch.responses import (
     UpdateApiKeyResponse,
     DeleteApiKeyResponse,
     RestoreApiKeyResponse,
-    MultipleIndexBatchIndexingResponse
+    MultipleIndexBatchIndexingResponse,
 )
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
@@ -77,52 +77,42 @@ class SearchClient(object):
 
         raw_response = self._transporter.write(
             Verb.POST,
-            endpoint('1/indexes/{}/operation', src_index_name),
-            {
-                'operation': 'move',
-                'destination': dst_index_name
-            },
-            request_options
+            endpoint("1/indexes/{}/operation", src_index_name),
+            {"operation": "move", "destination": dst_index_name},
+            request_options,
         )
 
-        return IndexingResponse(self.init_index(src_index_name),
-                                [raw_response])
+        return IndexingResponse(self.init_index(src_index_name), [raw_response])
 
     def copy_index(self, src_index_name, dst_index_name, request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         raw_response = self._transporter.write(
             Verb.POST,
-            endpoint('1/indexes/{}/operation', src_index_name),
-            {
-                'operation': 'copy',
-                'destination': dst_index_name
-            },
-            request_options
+            endpoint("1/indexes/{}/operation", src_index_name),
+            {"operation": "copy", "destination": dst_index_name},
+            request_options,
         )
 
-        return IndexingResponse(self.init_index(src_index_name),
-                                [raw_response])
+        return IndexingResponse(self.init_index(src_index_name), [raw_response])
 
-    def copy_settings(self, src_index_name, dst_index_name,
-                      request_options=None):
+    def copy_settings(self, src_index_name, dst_index_name, request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if request_options is None:
             request_options = {}
 
-        request_options['scope'] = ['settings']
+        request_options["scope"] = ["settings"]
 
         return self.copy_index(src_index_name, dst_index_name, request_options)
 
-    def copy_synonyms(self, src_index_name, dst_index_name,
-                      request_options=None):
+    def copy_synonyms(self, src_index_name, dst_index_name, request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> IndexingResponse # noqa: E501
 
         if request_options is None:
             request_options = {}
 
-        request_options['scope'] = ['synonyms']
+        request_options["scope"] = ["synonyms"]
 
         return self.copy_index(src_index_name, dst_index_name, request_options)
 
@@ -132,7 +122,7 @@ class SearchClient(object):
         if request_options is None:
             request_options = {}
 
-        request_options['scope'] = ['rules']
+        request_options["scope"] = ["rules"]
 
         return self.copy_index(src_index_name, dst_index_name, request_options)
 
@@ -142,13 +132,10 @@ class SearchClient(object):
         if request_options is None:
             request_options = RequestOptions.create(self._config)
 
-        request_options['X-Algolia-User-ID'] = user_id
+        request_options["X-Algolia-User-ID"] = user_id
 
         return self._transporter.write(
-            Verb.POST,
-            '1/clusters/mapping',
-            {'cluster': cluster},
-            request_options
+            Verb.POST, "1/clusters/mapping", {"cluster": cluster}, request_options
         )
 
     def assign_user_ids(self, user_ids, cluster, request_options=None):
@@ -156,12 +143,9 @@ class SearchClient(object):
 
         return self._transporter.write(
             Verb.POST,
-            '1/clusters/mapping/batch',
-            {
-                'cluster': cluster,
-                'users': user_ids
-            },
-            request_options
+            "1/clusters/mapping/batch",
+            {"cluster": cluster, "users": user_ids},
+            request_options,
         )
 
     def remove_user_id(self, user_id, request_options=None):
@@ -170,63 +154,43 @@ class SearchClient(object):
         if request_options is None:
             request_options = RequestOptions.create(self._config)
 
-        request_options['X-Algolia-User-ID'] = user_id
+        request_options["X-Algolia-User-ID"] = user_id
 
         return self._transporter.write(
-            Verb.DELETE,
-            '1/clusters/mapping',
-            None,
-            request_options
+            Verb.DELETE, "1/clusters/mapping", None, request_options
         )
 
     def list_clusters(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self._transporter.read(
-            Verb.GET,
-            '1/clusters',
-            {},
-            request_options
-        )
+        return self._transporter.read(Verb.GET, "1/clusters", {}, request_options)
 
     def get_user_id(self, user_id, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.GET,
-            endpoint('1/clusters/mapping/{}', user_id),
-            None,
-            request_options
+            Verb.GET, endpoint("1/clusters/mapping/{}", user_id), None, request_options
         )
 
     def list_user_ids(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.GET,
-            '1/clusters/mapping',
-            None,
-            request_options
+            Verb.GET, "1/clusters/mapping", None, request_options
         )
 
     def get_top_user_ids(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.GET,
-            '1/clusters/mapping/top',
-            None,
-            request_options
+            Verb.GET, "1/clusters/mapping/top", None, request_options
         )
 
     def search_user_ids(self, query, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.POST,
-            '1/clusters/mapping/search',
-            {'query': query},
-            request_options
+            Verb.POST, "1/clusters/mapping/search", {"query": query}, request_options
         )
 
     def has_pending_mappings(self, request_options=None):
@@ -234,52 +198,38 @@ class SearchClient(object):
 
         retrieve_mappings = None
         if isinstance(request_options, dict):
-            retrieve_mappings = request_options.pop('retrieveMappings',
-                                                    retrieve_mappings)
+            retrieve_mappings = request_options.pop(
+                "retrieveMappings", retrieve_mappings
+            )
 
         if retrieve_mappings:
 
             if request_options is None or isinstance(request_options, dict):
-                request_options = RequestOptions.create(self._config,
-                                                        request_options)
+                request_options = RequestOptions.create(self._config, request_options)
 
-            request_options.query_parameters['getClusters'] = retrieve_mappings
+            request_options.query_parameters["getClusters"] = retrieve_mappings
 
         return self._transporter.read(
-            Verb.GET,
-            '1/clusters/mapping/pending',
-            None,
-            request_options
+            Verb.GET, "1/clusters/mapping/pending", None, request_options
         )
 
     def list_api_keys(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self._transporter.read(
-            Verb.GET,
-            '1/keys',
-            None,
-            request_options
-        )
+        return self._transporter.read(Verb.GET, "1/keys", None, request_options)
 
     def get_api_key(self, key, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.GET,
-            endpoint('1/keys/{}', key),
-            None,
-            request_options
+            Verb.GET, endpoint("1/keys/{}", key), None, request_options
         )
 
     def delete_api_key(self, key, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> DeleteApiKeyResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verb.DELETE,
-            endpoint('1/keys/{}', key),
-            None,
-            request_options
+            Verb.DELETE, endpoint("1/keys/{}", key), None, request_options
         )
         return DeleteApiKeyResponse(self, raw_response, key)
 
@@ -287,12 +237,7 @@ class SearchClient(object):
         # type: (list, Optional[Union[dict, RequestOptions]]) -> AddApiKeyResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verb.POST,
-            '1/keys',
-            {
-                'acl': acl
-            },
-            request_options
+            Verb.POST, "1/keys", {"acl": acl}, request_options
         )
 
         return AddApiKeyResponse(self, raw_response)
@@ -301,14 +246,10 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> UpdateApiKeyResponse # noqa: E501
 
         if not isinstance(request_options, RequestOptions):
-            request_options = RequestOptions.create(self._config,
-                                                    request_options)
+            request_options = RequestOptions.create(self._config, request_options)
 
         raw_response = self._transporter.write(
-            Verb.PUT,
-            endpoint('1/keys/{}', key),
-            {},
-            request_options
+            Verb.PUT, endpoint("1/keys/{}", key), {}, request_options
         )
 
         return UpdateApiKeyResponse(self, raw_response, request_options)
@@ -317,10 +258,7 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> RestoreApiKeyResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verb.POST,
-            endpoint('1/keys/{}/restore', key),
-            None,
-            request_options
+            Verb.POST, endpoint("1/keys/{}/restore", key), None, request_options
         )
 
         return RestoreApiKeyResponse(self, raw_response, key)
@@ -329,18 +267,19 @@ class SearchClient(object):
     def generate_secured_api_key(parent_api_key, restrictions):
         # type: (str, dict) -> str
 
-        query_parameters = QueryParametersSerializer.serialize(
-            restrictions)
+        query_parameters = QueryParametersSerializer.serialize(restrictions)
 
-        secured_key = hmac.new(parent_api_key.encode('utf-8'),
-                               query_parameters.encode('utf-8'),
-                               hashlib.sha256).hexdigest()
+        secured_key = hmac.new(
+            parent_api_key.encode("utf-8"),
+            query_parameters.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
 
         base64encoded = base64.b64encode(
-            ("{}{}".format(secured_key, query_parameters)).encode('utf-8')
+            ("{}{}".format(secured_key, query_parameters)).encode("utf-8")
         )
 
-        return str(base64encoded.decode('utf-8'))
+        return str(base64encoded.decode("utf-8"))
 
     @staticmethod
     def get_secured_api_key_remaining_validity(api_key):
@@ -348,69 +287,42 @@ class SearchClient(object):
 
         decoded_string = base64.b64decode(api_key)
 
-        match = re.search(r'validUntil=(\d+)', str(decoded_string))
+        match = re.search(r"validUntil=(\d+)", str(decoded_string))
 
         if match is None:
-            raise ValidUntilNotFoundException(
-                'ValidUntil not found in api key.'
-            )
+            raise ValidUntilNotFoundException("ValidUntil not found in api key.")
 
         return int(match.group(1)) - int(round(time.time()))
 
     def list_indices(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self._transporter.read(
-            Verb.GET,
-            '1/indexes',
-            None,
-            request_options
-        )
+        return self._transporter.read(Verb.GET, "1/indexes", None, request_options)
 
     def get_logs(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
-        return self._transporter.read(
-            Verb.GET,
-            '1/logs',
-            None,
-            request_options
-        )
+        return self._transporter.read(Verb.GET, "1/logs", None, request_options)
 
     def multiple_queries(self, queries, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.POST,
-            '1/indexes/*/queries',
-            {
-                'requests': queries
-            },
-            request_options
+            Verb.POST, "1/indexes/*/queries", {"requests": queries}, request_options
         )
 
     def multiple_get_objects(self, requests, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.POST,
-            '1/indexes/*/objects',
-            {
-                'requests': requests
-            },
-            request_options
+            Verb.POST, "1/indexes/*/objects", {"requests": requests}, request_options
         )
 
     def multiple_batch(self, operations, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> MultipleIndexBatchIndexingResponse # noqa: E501
 
         raw_response = self._transporter.write(
-            Verb.POST,
-            '1/indexes/*/batch',
-            {
-                'requests': operations
-            },
-            request_options
+            Verb.POST, "1/indexes/*/batch", {"requests": operations}, request_options
         )
 
         return MultipleIndexBatchIndexingResponse(self, raw_response)
@@ -424,38 +336,39 @@ class SearchClient(object):
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
         warnings.warn(
-            "`%s.%s` is deprecated, use `%s.%s` instead." %
-            (
-                'SearchClient', 'set_personalization_strategy',
-                'RecommendationClient', 'set_personalization_strategy'
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % (
+                "SearchClient",
+                "set_personalization_strategy",
+                "RecommendationClient",
+                "set_personalization_strategy",
             ),
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self._transporter.write(
             Verb.POST,
-            '1/recommendation/personalization/strategy',
+            "1/recommendation/personalization/strategy",
             strategy,
-            request_options
+            request_options,
         )
 
     def get_personalization_strategy(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         warnings.warn(
-            "`%s.%s` is deprecated, use `%s.%s` instead." %
-            (
-                'SearchClient', 'get_personalization_strategy',
-                'RecommendationClient', 'get_personalization_strategy'
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % (
+                "SearchClient",
+                "get_personalization_strategy",
+                "RecommendationClient",
+                "get_personalization_strategy",
             ),
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self._transporter.read(
-            Verb.GET,
-            '1/recommendation/personalization/strategy',
-            None,
-            request_options
+            Verb.GET, "1/recommendation/personalization/strategy", None, request_options
         )
 
     def close(self):

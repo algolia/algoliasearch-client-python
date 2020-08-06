@@ -1,17 +1,11 @@
 import time
 
 from typing import Optional, Union, Dict, Any, List
-from algoliasearch.exceptions import (
-    AlgoliaUnreachableHostException,
-    RequestException
-)
+from algoliasearch.exceptions import AlgoliaUnreachableHostException, RequestException
 from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.configs import Config
-from algoliasearch.http.serializer import (
-    QueryParametersSerializer,
-    DataSerializer
-)
+from algoliasearch.http.serializer import QueryParametersSerializer, DataSerializer
 from algoliasearch.http.verb import Verb
 
 try:
@@ -32,10 +26,9 @@ class Transporter(object):
         # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self._config,
-                                                    request_options)
+            request_options = RequestOptions.create(self._config, request_options)
 
-        timeout = request_options.timeouts['writeTimeout']
+        timeout = request_options.timeouts["writeTimeout"]
 
         hosts = self._config.hosts.write()
 
@@ -45,10 +38,9 @@ class Transporter(object):
         # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
 
         if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self._config,
-                                                    request_options)
+            request_options = RequestOptions.create(self._config, request_options)
 
-        timeout = request_options.timeouts['readTimeout']
+        timeout = request_options.timeouts["readTimeout"]
 
         hosts = self._config.hosts.read()
 
@@ -64,10 +56,9 @@ class Transporter(object):
         if verb == Verb.GET:
             query_parameters.update(request_options.data)
 
-        relative_url = '{}?{}'.format(path,
-                                      QueryParametersSerializer.serialize(
-                                          query_parameters
-                                      ))
+        relative_url = "{}?{}".format(
+            path, QueryParametersSerializer.serialize(query_parameters)
+        )
 
         request = Request(
             verb.upper(),
@@ -85,8 +76,7 @@ class Transporter(object):
 
         for host in self._retry_strategy.valid_hosts(hosts):
 
-            request.url = 'https://{}/{}'.format(
-                host.url, relative_url)
+            request.url = "https://{}/{}".format(host.url, relative_url)
 
             response = self._requester.send(request)
 
@@ -96,12 +86,12 @@ class Transporter(object):
                 return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
                 content = response.error_message
-                if response.content and 'message' in response.content:
-                    content = response.content['message']
+                if response.content and "message" in response.content:
+                    content = response.content["message"]
 
                 raise RequestException(content, response.status_code)
 
-        raise AlgoliaUnreachableHostException('Unreachable hosts')
+        raise AlgoliaUnreachableHostException("Unreachable hosts")
 
     def close(self):
         # type: () -> None
@@ -110,22 +100,22 @@ class Transporter(object):
 
 
 class Request(object):
-    def __init__(self, verb, headers, data, connect_timeout, timeout, proxies={}):  # noqa: E501
+    def __init__(
+        self, verb, headers, data, connect_timeout, timeout, proxies={}
+    ):  # noqa: E501
         # type: (str, dict, Optional[Union[dict, list]], int, int, dict) -> None  # noqa: E501
 
         self.verb = verb
         self.data = data
-        self.data_as_string = '' if data is None else DataSerializer.serialize(
-            data
-        )
+        self.data_as_string = "" if data is None else DataSerializer.serialize(data)
         self.headers = headers
         self.connect_timeout = connect_timeout
         self.timeout = timeout
         self.proxies = proxies
-        self.url = ''
+        self.url = ""
 
     def __str__(self):
-        return 'Request({}, {}, {}, {}, {}, {}, {})'.format(
+        return "Request({}, {}, {}, {}, {}, {}, {})".format(
             self.verb,
             self.url,
             self.headers,
@@ -145,9 +135,14 @@ class Request(object):
 
 
 class Response(object):
-    def __init__(self, status_code=None, content=None,
-                 error_message='', is_timed_out_error=False,
-                 is_network_error=False):
+    def __init__(
+        self,
+        status_code=None,
+        content=None,
+        error_message="",
+        is_timed_out_error=False,
+        is_network_error=False,
+    ):
         # type: (int, Optional[Dict[str, Any]], str, bool, bool) -> None
 
         self.status_code = status_code
@@ -158,7 +153,6 @@ class Response(object):
 
 
 class RetryStrategy(object):
-
     def valid_hosts(self, hosts):
         # type: (list) -> list
 
@@ -195,8 +189,7 @@ class RetryStrategy(object):
     def _is_success(self, response):
         # type: (Response) -> bool
 
-        return response.status_code is not None and (
-                response.status_code // 100) == 2
+        return response.status_code is not None and (response.status_code // 100) == 2
 
     def _is_retryable(self, response):
         # type: (Response) -> bool
@@ -204,12 +197,14 @@ class RetryStrategy(object):
         if response.is_network_error:
             return True
 
-        return response.status_code is not None and (
-                response.status_code // 100) != 2 and (
-                       response.status_code // 100) != 4
+        return (
+            response.status_code is not None
+            and (response.status_code // 100) != 2
+            and (response.status_code // 100) != 4
+        )
 
 
 class RetryOutcome(object):
-    SUCCESS = 'SUCCESS'
-    RETRY = 'RETRY'
-    FAIL = 'FAIL'
+    SUCCESS = "SUCCESS"
+    RETRY = "RETRY"
+    FAIL = "FAIL"

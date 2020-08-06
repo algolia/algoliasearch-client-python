@@ -11,7 +11,7 @@ from algoliasearch.http.requester import Requester
 
 class TestSearchClient(unittest.TestCase):
     def setUp(self):
-        self.config = SearchConfig('foo', 'bar')
+        self.config = SearchConfig("foo", "bar")
         self.transporter = Transporter(Requester(), self.config)
         self.transporter.read = mock.Mock(name="read")
         self.transporter.read.return_value = {}
@@ -23,22 +23,19 @@ class TestSearchClient(unittest.TestCase):
     def test_create(self):
         self.assertIsInstance(self.client, SearchClient)
         with self.assertRaises(AssertionError) as _:
-            SearchClient.create('', '')
+            SearchClient.create("", "")
 
     def test_create_with_config(self):
-        config = SearchConfig('foo', 'bar')
+        config = SearchConfig("foo", "bar")
 
-        self.assertIsInstance(
-            SearchClient.create_with_config(config),
-            SearchClient
-        )
+        self.assertIsInstance(SearchClient.create_with_config(config), SearchClient)
 
     def test_init_index(self):
-        index = self.client.init_index('foo')
+        index = self.client.init_index("foo")
 
         self.assertIsInstance(index, SearchIndex)
 
     def test_app_id_getter(self):
-        client = SearchClient.create('foo', 'bar')
+        client = SearchClient.create("foo", "bar")
 
-        self.assertEqual(client.app_id, 'foo')
+        self.assertEqual(client.app_id, "foo")

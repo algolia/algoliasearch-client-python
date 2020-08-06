@@ -5,7 +5,6 @@ from algoliasearch.exceptions import RequestException
 
 
 class RetryableClient:
-
     def __init__(self, base, retryable_messages):
         self._base = base
         self.retryable_messages = retryable_messages
@@ -28,7 +27,6 @@ class RetryableClient:
 
 
 class Unicode:
-
     @staticmethod
     def convert_dict_to_unicode(d):
         tmp = json.dumps(d)
@@ -37,6 +35,6 @@ class Unicode:
 
 
 def rule_without_metadata(rule):
-    del rule['_metadata']
+    del rule["_metadata"]
 
     return rule
