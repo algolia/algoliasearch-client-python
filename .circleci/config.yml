@@ -15,7 +15,7 @@ defaults: &defaults
     - image: circleci/python:<< parameters.version >>
 
 jobs:
-  test_unit:
+  test:
     description: Runs unit tests against python << parameters.version >>
     <<: *defaults
     steps:
@@ -34,8 +34,8 @@ jobs:
           command: |
             if [[ "$(python -V)" == "Python 3."* ]]; then sh tests/run_tests_async.sh; fi
 
-  test_lint:
-    description: Runs lint tests
+  format:
+    description: Run formatter and linter checks
     <<: *defaults
     steps:
       - checkout
@@ -45,11 +45,15 @@ jobs:
           command: |
             pip install -r requirements/requirements-code-style-checker.txt
       - run:
-          name: Run lint tests
+          name: Run formatter check
+          command: |
+            black algoliasearch tests
+      - run:
+          name: Run linter check
           command: |
             flake8 algoliasearch tests
 
-  test_types:
+  types:
     description: Runs types tests
     <<: *defaults
     steps:
@@ -93,41 +97,41 @@ workflows:
   version: 2
   ci:
     jobs:
-      - test_unit:
-          name: 'test_unit_2.7.18'
+      - test:
+          name: 'test_27'
           version: '2.7.18'
-      - test_unit:
-          name: 'test_unit_3.4.10'
+      - test:
+          name: 'test_34'
           version: '3.4.10'
-      - test_unit:
-          name: 'test_unit_3.5.9'
+      - test:
+          name: 'test_35'
           version: '3.5.9'
-      - test_unit:
-          name: 'test_unit_3.6.9'
+      - test:
+          name: 'test_36'
           version: '3.6.9'
-      - test_unit:
-          name: 'test_unit_3.7.7'
+      - test:
+          name: 'test_37'
           version: '3.7.7'
-      - test_unit:
-          name: 'test_unit_3.8.2'
+      - test:
+          name: 'test_38'
           version: '3.8.2'
-      - test_lint:
-          name: 'test_lint'
+      - format:
+          name: 'format'
           version: '3.8.2'
-      - test_types:
-          name: 'test_types'
+      - types:
+          name: 'types'
           version: '3.8.2'
       - release:
           version: '3.8.2'
           requires:
-            - test_unit_2.7.18
-            - test_unit_3.4.10
-            - test_unit_3.5.9
-            - test_unit_3.6.9
-            - test_unit_3.7.7
-            - test_unit_3.8.2
-            - test_lint
-            - test_types
+            - test_27
+            - test_34
+            - test_35
+            - test_36
+            - test_37
+            - test_38
+            - format
+            - types
           filters:
             branches:
               only: master
