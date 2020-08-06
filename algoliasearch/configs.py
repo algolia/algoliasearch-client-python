@@ -40,6 +40,15 @@ class Config(object):
             'Content-Type': 'application/json',
         }
 
+        self.proxies = {
+            'http': os.environ.get("HTTP_PROXY"),
+            'https': os.environ.get("HTTPS_PROXY"),
+        }
+        if self.proxies['http'] is None:
+            del self.proxies['http']
+        if self.proxies['https'] is None:
+            del self.proxies['https']
+
     @abc.abstractmethod
     def build_hosts(self):
         # type: () -> HostsCollection

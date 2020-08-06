@@ -37,7 +37,7 @@ class Requester(object):
 
         try:
             response = self._session.send(  # type: ignore
-                r, timeout=requests_timeout
+                r, timeout=requests_timeout, proxies=request.proxies,
             )
         except Timeout as e:
             return Response(error_message=str(e), is_timed_out_error=True)

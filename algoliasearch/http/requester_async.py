@@ -23,12 +23,19 @@ class RequesterAsync(Requester):
             self._session = aiohttp.ClientSession(  # type: ignore
                 connector=connector)
 
+        proxy = None
+        if request.url.startswith('https'):
+            proxy = request.proxies.get('https')
+        elif request.url.startswith('http'):
+            proxy = request.proxies.get('http')
+
         try:
             with async_timeout.timeout(request.timeout):
                 response = yield from (self._session.request(  # type: ignore
                     method=request.verb, url=request.url,
                     headers=request.headers,
-                    data=request.data_as_string
+                    data=request.data_as_string,
+                    proxy=proxy
                 ))
 
                 json = yield from response.json()
