@@ -1,128 +1,99 @@
 version: 2.1
 
-aliases:
-  - &upgrade_pip
-    name: Upgrades pip
-    command: |
-      pip install --user --upgrade pip
-
-defaults: &defaults
-  working_directory: ~/algoliasearch-client-python
-  parameters:
-    version:
-      type: string
-  docker:
-    - image: circleci/python:<< parameters.version >>
-
 jobs:
   test:
-    description: Runs unit tests against python << parameters.version >>
-    <<: *defaults
+    docker:
+      - image: circleci/python:<< parameters.docker_version >>
+    description: Run tests for Python << parameters.tox_version >>
+    parameters:
+      docker_version:
+        type: string
+      tox_version:
+        type: string
     steps:
       - checkout
-      - run: *upgrade_pip
       - run:
-          name: Install dependencies
-          command: |
-            pip install --user -r requirements/requirements-testing.txt
+          command: sudo pip install --upgrade pip
       - run:
-          name: Run unit sync tests
-          command: |
-            sh tests/run_tests_sync.sh
+          command: sudo pip install tox
       - run:
-          name: Run unit async tests
-          command: |
-            if [[ "$(python -V)" == "Python 3."* ]]; then sh tests/run_tests_async.sh; fi
+          command: tox -e py<< parameters.tox_version >>-sync,py<< parameters.tox_version >>-async
 
   format:
-    description: Run formatter and linter checks
-    <<: *defaults
+    docker:
+      - image: circleci/python:3.8.2
+    description: Run formatting and linting checks
     steps:
       - checkout
-      - run: *upgrade_pip
       - run:
-          name: Install dependencies
-          command: |
-            pip install -r requirements/requirements-code-style-checker.txt
+          command: sudo pip install --upgrade pip
       - run:
-          name: Run formatter check
-          command: |
-            black algoliasearch tests
+          command: sudo pip install tox
       - run:
-          name: Run linter check
-          command: |
-            flake8 algoliasearch tests
+          command: tox -e format
 
   types:
-    description: Runs types tests
-    <<: *defaults
+    docker:
+      - image: circleci/python:3.8.2
+    description: Run optional type checking with MyPy
     steps:
       - checkout
-      - run: *upgrade_pip
       - run:
-          name: Install dependencies
-          command: |
-            pip install -r requirements/requirements-static-type-checker.txt
+          command: sudo pip install --upgrade pip
       - run:
-          name: Run type tests
-          command: |
-            mypy --config-file mypy.ini -p algoliasearch --disallow-untyped-calls
+          command: sudo pip install tox
+      - run:
+          command: tox -e types
 
   release:
-    description: Release the Python client
-    <<: *defaults
+    docker:
+      - image: circleci/python:3.8.2
+    description: Perform a new release of the Python client
     steps:
       - checkout
-      - run: *upgrade_pip
       - run:
-          name: Install dependencies
-          command: |
-            pip install -r requirements.txt
+          command: sudo pip install --upgrade pip
       - run:
-          name: Prepare the dist/ build for release
-          command: |
-            python setup.py sdist bdist_wheel
+          command: sudo pip install tox
       - run:
-          name: Check the dist/ build before release
-          command: |
-            twine check dist/*
-      - run:
-          name: Publish the release to PyPI
           command: |
             if [[ -z "$PYPI_USER" ]];     then echo '$PYPI_USER is not set';     exit 1; fi
             if [[ -z "$PYPI_PASSWORD" ]]; then echo '$PYPI_PASSWORD is not set'; exit 1; fi
-            twine upload --username $PYPI_USER --password $PYPI_PASSWORD $dist/*
+            tox -e release
 
 workflows:
   version: 2
-  ci:
+  build:
     jobs:
       - test:
           name: 'test_27'
-          version: '2.7.18'
+          docker_version: '2.7'
+          tox_version: '27'
       - test:
           name: 'test_34'
-          version: '3.4.10'
+          docker_version: '3.4'
+          tox_version: '34'
       - test:
           name: 'test_35'
-          version: '3.5.9'
+          docker_version: '3.5'
+          tox_version: '35'
       - test:
           name: 'test_36'
-          version: '3.6.9'
+          docker_version: '3.6'
+          tox_version: '36'
       - test:
           name: 'test_37'
-          version: '3.7.7'
+          docker_version: '3.7'
+          tox_version: '37'
       - test:
           name: 'test_38'
-          version: '3.8.2'
+          docker_version: '3.8'
+          tox_version: '38'
       - format:
           name: 'format'
-          version: '3.8.2'
       - types:
           name: 'types'
-          version: '3.8.2'
       - release:
-          version: '3.8.2'
           requires:
             - test_27
             - test_34

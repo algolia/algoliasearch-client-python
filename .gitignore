@@ -1,33 +1,26 @@
-build/
-dist/
-__pycache__
-*.py[cod]
-*~
-@*
-/build
-/env
-*.iml
-/out/
-venv/
-.venv/
-.mypy_cache/
-.cache
-.stestr
-
-# Packages
 *.egg
 *.egg-info
 *.eggs
-
-# IDEs
-.idea
+*.iml
+*.py[cod]
 *.swp
-.vscode
-
-# Operating Systems
+*~
 .DS_Store
-
-# Tests
-.pytest_cache/
+.cache
 .coverage*
+.idea
+.mypy_cache/
+.pytest_cache/
+.stestr
+.tox/
+.venv/
+.vscode
+/build
+/env
+/out/
+@*
+__pycache__
+build/
+dist/
 htmlcov
+venv/
