@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.1...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.4.0...master)
+
+## [v2.4.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.1...v2.4.0)
 
 ### Added
 - Bring support for HTTP_PROXY / HTTPS_PROXY ([#505](https://github.com/algolia/algoliasearch-client-python/pull/505))
