@@ -69,30 +69,54 @@ workflows:
           name: 'test_27'
           docker_version: '2.7'
           tox_version: '27'
+          filters:
+            tags:
+              only: /.*/
       - test:
           name: 'test_34'
           docker_version: '3.4'
           tox_version: '34'
+          filters:
+            tags:
+              only: /.*/
       - test:
           name: 'test_35'
           docker_version: '3.5'
           tox_version: '35'
+          filters:
+            tags:
+              only: /.*/
       - test:
           name: 'test_36'
           docker_version: '3.6'
           tox_version: '36'
+          filters:
+            tags:
+              only: /.*/
       - test:
           name: 'test_37'
           docker_version: '3.7'
           tox_version: '37'
+          filters:
+            tags:
+              only: /.*/
       - test:
           name: 'test_38'
           docker_version: '3.8'
           tox_version: '38'
+          filters:
+            tags:
+              only: /.*/
       - format:
           name: 'format'
+          filters:
+            tags:
+              only: /.*/
       - types:
           name: 'types'
+          filters:
+            tags:
+              only: /.*/
       - release:
           requires:
             - test_27
@@ -104,7 +128,7 @@ workflows:
             - format
             - types
           filters:
-            branches:
-              only: master
             tags:
               only: /^[1-9]+.[0-9]+.[0-9]+.*/
+            branches:
+              ignore: /.*/
