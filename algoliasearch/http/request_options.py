@@ -51,7 +51,13 @@ class RequestOptions(object):
 
 
 class Params(object):
-    HEADERS = ("Content-type", "User-Agent", "X-Algolia-User-ID", "X-Forwarded-For")
+    HEADERS = (
+        "Content-type",
+        "User-Agent",
+        "X-Algolia-User-ID",
+        "X-Algolia-UserToken",
+        "X-Forwarded-For",
+    )
 
     QUERY_PARAMETERS = (
         "createIfNotExists",
