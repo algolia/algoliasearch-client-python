@@ -274,6 +274,7 @@ class MultipleIndexBatchIndexingResponse(Response):
 
         return self.raw_response[key]
 
+
 class DictionaryResponse(Response):
     def __init__(self, client, raw_response):
         # type: (SearchClient, dict) -> None
@@ -283,14 +284,14 @@ class DictionaryResponse(Response):
         self._done = False
 
     def wait(self, request_options=None):
-        # type: (Optional[Union[RequestOptions, dict]]) -> MultipleIndexBatchIndexingResponse # noqa: E501
+        # type: (Optional[Union[RequestOptions, dict]]) -> DictionaryResponse # noqa: E501
 
         while not self._done:
             res = self._client.custom_request(
                 {},
                 endpoint("1/task/{}", self.raw_response["taskID"]),
                 Verb.GET,
-                CallType.READ
+                CallType.READ,
             )
 
             if res is not None and res.get("status") == "published":

@@ -1,6 +1,6 @@
 from random import shuffle
 
-from typing import List, Optional
+from typing import List, Optional, cast
 
 
 class Host(object):
@@ -10,7 +10,7 @@ class Host(object):
         # type: (str, Optional[int], Optional[int]) -> None
 
         self.url = url
-        self.priority = priority
+        self.priority = cast(int, priority)
         self.accept = (CallType.WRITE | CallType.READ) if accept is None else accept
 
         self.last_use = 0.0

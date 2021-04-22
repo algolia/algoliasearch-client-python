@@ -137,7 +137,9 @@ class SearchIndexAsync(SearchIndex):
             page += 1
 
     def replace_all_objects_async(  # type: ignore
-        self, objects, request_options=None,
+        self,
+        objects,
+        request_options=None,
     ):
         # type: (Union[List[dict], Iterator[dict]], Optional[Union[dict, RequestOptions]]) -> MultipleResponse # noqa: E501
 
@@ -171,9 +173,7 @@ class SearchIndexAsync(SearchIndex):
         if safe:
             responses.wait()
 
-        response = yield from tmp_index.move_to_async(  # type: ignore
-            self._name
-        )
+        response = yield from tmp_index.move_to_async(self._name)  # type: ignore
         responses.push(response)
 
         if safe:

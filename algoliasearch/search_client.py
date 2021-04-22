@@ -19,7 +19,7 @@ from algoliasearch.responses import (
     DeleteApiKeyResponse,
     RestoreApiKeyResponse,
     MultipleIndexBatchIndexingResponse,
-    DictionaryResponse
+    DictionaryResponse,
 )
 from algoliasearch.search_index import SearchIndex
 from algoliasearch.configs import SearchConfig
@@ -379,33 +379,41 @@ class SearchClient(object):
 
     # Save entries for a given dictionary
     #
-    def save_dictionary_entries(self, dictionary, dictionary_entries, request_options=None):
+    def save_dictionary_entries(
+        self, dictionary, dictionary_entries, request_options=None
+    ):
         # type: (str, List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
 
         raw_response = self._transporter.write(
             Verb.POST,
             endpoint("1/dictionaries/{}/batch", dictionary),
-            {"clearExistingDictionaryEntries": False, "requests": build_raw_response_batch('addEntry', dictionary_entries)},
-            request_options
+            {
+                "clearExistingDictionaryEntries": False,
+                "requests": build_raw_response_batch("addEntry", dictionary_entries),
+            },
+            request_options,
         )
 
         return DictionaryResponse(self, raw_response)
 
     # Replace entries for a given dictionary
     #
-    def replace_dictionary_entries(self, dictionary, dictionary_entries, request_options=None):
+    def replace_dictionary_entries(
+        self, dictionary, dictionary_entries, request_options=None
+    ):
         # type: (str, List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
 
         raw_response = self._transporter.write(
             Verb.POST,
             endpoint("1/dictionaries/{}/batch", dictionary),
-            {"clearExistingDictionaryEntries": True,
-             "requests": build_raw_response_batch('addEntry', dictionary_entries)},
-            request_options
+            {
+                "clearExistingDictionaryEntries": True,
+                "requests": build_raw_response_batch("addEntry", dictionary_entries),
+            },
+            request_options,
         )
 
         return DictionaryResponse(self, raw_response)
-
 
     # Delete entries for a given dictionary
     #
@@ -417,13 +425,14 @@ class SearchClient(object):
         raw_response = self._transporter.write(
             Verb.POST,
             endpoint("1/dictionaries/{}/batch", dictionary),
-            {"clearExistingDictionaryEntries": False,
-             "requests": build_raw_response_batch('deleteEntry', request)},
-            request_options
+            {
+                "clearExistingDictionaryEntries": False,
+                "requests": build_raw_response_batch("deleteEntry", request),
+            },
+            request_options,
         )
 
         return DictionaryResponse(self, raw_response)
-
 
     # Clear all entries for a given dictionary
     #
@@ -431,8 +440,6 @@ class SearchClient(object):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
 
         return self.replace_dictionary_entries(dictionary, [], request_options)
-
-
 
     # Search entries for a given dictionary
     #
@@ -443,24 +450,19 @@ class SearchClient(object):
             Verb.POST,
             endpoint("1/dictionaries/{}/search", dictionary),
             {"query": query},
-            request_options
+            request_options,
         )
 
     # Set settings for all the dictionaries
     #
     def set_dictionary_settings(self, dictionary_settings, request_options=None):
-        # type: (str, List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
+        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
 
         raw_response = self._transporter.write(
-            Verb.PUT,
-            "1/dictionaries/*/settings",
-            dictionary_settings,
-            request_options
+            Verb.PUT, "1/dictionaries/*/settings", dictionary_settings, request_options
         )
 
         return DictionaryResponse(self, raw_response)
-
-
 
     # Retrieve settings for all the dictionaries
     #
@@ -468,10 +470,7 @@ class SearchClient(object):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.read(
-            Verb.GET,
-            "1/dictionaries/*/settings",
-            {},
-            request_options
+            Verb.GET, "1/dictionaries/*/settings", {}, request_options
         )
 
     def close(self):
@@ -485,9 +484,9 @@ class SearchClient(object):
         return self
 
     def custom_request(self, data, uri, method, call_type, request_options=None):
-        # type: (List[dict], str, str, str, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (dict, str, str, int, Optional[Union[dict, RequestOptions]]) -> dict
 
         if call_type == CallType.WRITE:
-          return self._transporter.write(method, uri, data, request_options)
-        elif call_type == CallType.READ:
-          return self._transporter.read(method, uri, data, request_options)
+            return self._transporter.write(method, uri, data, request_options)
+        else:
+            return self._transporter.read(method, uri, data, request_options)
