@@ -4,6 +4,8 @@ import platform
 import unittest
 
 import time
+import random
+import string
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException, ValidUntilNotFoundException
@@ -449,3 +451,96 @@ class TestSearchClient(unittest.TestCase):
             self.assertIsNone(client._transporter_async._requester._session)
 
         self.assertIsNone(client._transporter._requester._session)
+
+    def test_stopwords_dictionaries(self):
+        client = F.search_client2()
+        entry_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+        self.assertEqual(client.search_dictionary_entries('stopwords', entry_id)["nbHits"], 0)
+
+        entry = {
+            "objectID": entry_id,
+            "language": 'en',
+            "word": 'down'
+        }
+
+        client.save_dictionary_entries('stopwords', [entry]).wait()
+
+        stopwords = client.search_dictionary_entries('stopwords', entry_id)
+        self.assertEqual(stopwords["nbHits"], 1)
+        self.assertEqual(stopwords["hits"][0]["objectID"], entry_id)
+        self.assertEqual(stopwords["hits"][0]["word"], 'down')
+
+        client.delete_dictionary_entries('stopwords', [entry_id]).wait()
+        self.assertEqual(client.search_dictionary_entries('stopwords', entry_id)["nbHits"], 0)
+
+        old_dictionary_state = client.search_dictionary_entries('stopwords', '')
+        old_dictionary_entries = []
+        for hit in old_dictionary_state["hits"]:
+            del hit['type']
+            old_dictionary_entries.append(hit)
+
+        client.save_dictionary_entries('stopwords', [entry]).wait()
+        self.assertEqual(stopwords["nbHits"], 1)
+
+
+        client.save_dictionary_entries('stopwords', [entry]).wait()
+        self.assertEqual(client.search_dictionary_entries('stopwords', entry_id)["nbHits"], 1)
+
+        client.replace_dictionary_entries('stopwords', old_dictionary_entries).wait()
+        self.assertEqual(client.search_dictionary_entries('stopwords', entry_id)["nbHits"], 0)
+
+        stopwords_settings = {
+            "disableStandardEntries": {
+                "stopwords": {
+                    "en": True,
+                    "fr": True
+                }
+            }
+        }
+
+        client.set_dictionary_settings(stopwords_settings).wait()
+        self.assertEqual(client.get_dictionary_settings(), stopwords_settings)
+
+    def test_plurals_dictionaries(self):
+        client = F.search_client2()
+        entry_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+        self.assertEqual(client.search_dictionary_entries('plurals', entry_id)["nbHits"], 0)
+
+        entry = {
+          "objectID": entry_id,
+          "language": 'fr',
+          "words": ["cheval", "chevaux"]
+        }
+
+        client.save_dictionary_entries('plurals', [entry]).wait()
+
+        plurals = client.search_dictionary_entries('plurals', entry_id)
+        self.assertEqual(plurals["nbHits"], 1)
+        self.assertEqual(plurals["hits"][0]["objectID"], entry["objectID"])
+        self.assertEqual(plurals["hits"][0]["words"], entry["words"])
+
+        client.delete_dictionary_entries('plurals', [entry_id]).wait()
+        self.assertEqual(client.search_dictionary_entries('plurals', entry_id)["nbHits"], 0)
+
+    def test_compounds_dictionaries(self):
+        client = F.search_client2()
+        entry_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+        self.assertEqual(client.search_dictionary_entries('compounds', entry_id)["nbHits"], 0)
+
+        entry = {
+          "objectID": entry_id,
+          "language": 'de',
+          "word": 'kopfschmerztablette',
+          "decomposition": ["kopf", "schmerz", "tablette"]
+        }
+
+        client.save_dictionary_entries('compounds', [entry]).wait()
+
+        compounds = client.search_dictionary_entries('compounds', entry_id)
+        self.assertEqual(compounds["nbHits"], 1)
+        self.assertEqual(compounds["hits"][0]["objectID"], entry["objectID"])
+        self.assertEqual(compounds["hits"][0]["word"], entry["word"])
+        self.assertEqual(compounds["hits"][0]["decomposition"], entry["decomposition"])
+
+        client.delete_dictionary_entries('compounds', [entry_id]).wait()
+        self.assertEqual(client.search_dictionary_entries('compounds', entry_id)["nbHits"], 0)
