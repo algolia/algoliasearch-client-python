@@ -382,7 +382,7 @@ class SearchClient(object):
     def save_dictionary_entries(
         self, dictionary, dictionary_entries, request_options=None
     ):
-        # type: (str, List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
+        # type: (str, List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse # noqa: E501
 
         raw_response = self._transporter.write(
             Verb.POST,
@@ -401,7 +401,7 @@ class SearchClient(object):
     def replace_dictionary_entries(
         self, dictionary, dictionary_entries, request_options=None
     ):
-        # type: (str, List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
+        # type: (str, List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse # noqa: E501
 
         raw_response = self._transporter.write(
             Verb.POST,
@@ -418,7 +418,7 @@ class SearchClient(object):
     # Delete entries for a given dictionary
     #
     def delete_dictionary_entries(self, dictionary, object_ids, request_options=None):
-        # type: (str, Iterator[str], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
+        # type: (str, Iterator[str], Optional[Union[dict, RequestOptions]])-> DictionaryResponse # noqa: E501
 
         request = [{"objectID": object_id} for object_id in object_ids]
 
@@ -437,7 +437,7 @@ class SearchClient(object):
     # Clear all entries for a given dictionary
     #
     def clear_dictionary_entries(self, dictionary, request_options=None):
-        # type: (str, Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
+        # type: (str, Optional[Union[dict, RequestOptions]]) -> DictionaryResponse # noqa: E501
 
         return self.replace_dictionary_entries(dictionary, [], request_options)
 
@@ -456,7 +456,7 @@ class SearchClient(object):
     # Set settings for all the dictionaries
     #
     def set_dictionary_settings(self, dictionary_settings, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]]) -> DictionaryResponse
+        # type: (List[dict], Optional[Union[dict, RequestOptions]])-> DictionaryResponse # noqa: E501
 
         raw_response = self._transporter.write(
             Verb.PUT, "1/dictionaries/*/settings", dictionary_settings, request_options

@@ -34,10 +34,7 @@ def _gen_async(client, method):
 
         # We make sure we resolve the promise from the raw_responses
         if hasattr(result, "raw_responses"):
-            for (
-                i,
-                raw_response,
-            ) in enumerate(result.raw_responses):
+            for (i, raw_response,) in enumerate(result.raw_responses):
                 result.raw_responses[i] = yield from raw_response
 
         # We make sure we resolve the promise from the raw_response

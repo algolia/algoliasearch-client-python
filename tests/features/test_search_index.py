@@ -222,8 +222,7 @@ class TestSearchIndex(unittest.TestCase):
         found = self.index.get_settings()
 
         self.assertEqual(
-            self.index.get_settings(),
-            Unicode.convert_dict_to_unicode(settings),
+            self.index.get_settings(), Unicode.convert_dict_to_unicode(settings),
         )
 
         settings["typoTolerance"] = "min"
@@ -234,8 +233,7 @@ class TestSearchIndex(unittest.TestCase):
         self.index.set_settings(settings).wait()
 
         self.assertEqual(
-            self.index.get_settings(),
-            Unicode.convert_dict_to_unicode(settings),
+            self.index.get_settings(), Unicode.convert_dict_to_unicode(settings),
         )
 
         # To prevent issues in other test, we reset the maximum diff length to
