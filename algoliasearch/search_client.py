@@ -373,12 +373,7 @@ class SearchClient(object):
             Verb.GET, "1/recommendation/personalization/strategy", None, request_options
         )
 
-    # # # # # # # # # # # # # # # # # # # # #
-    # CUSTOM DICTIONARIES METHODS
-    # # # # # # # # # # # # # # # # # # # # #
 
-    # Save entries for a given dictionary
-    #
     def save_dictionary_entries(
         self, dictionary, dictionary_entries, request_options=None
     ):
@@ -396,8 +391,6 @@ class SearchClient(object):
 
         return DictionaryResponse(self, raw_response)
 
-    # Replace entries for a given dictionary
-    #
     def replace_dictionary_entries(
         self, dictionary, dictionary_entries, request_options=None
     ):
@@ -415,8 +408,6 @@ class SearchClient(object):
 
         return DictionaryResponse(self, raw_response)
 
-    # Delete entries for a given dictionary
-    #
     def delete_dictionary_entries(self, dictionary, object_ids, request_options=None):
         # type: (str, Iterator[str], Optional[Union[dict, RequestOptions]])-> DictionaryResponse # noqa: E501
 
@@ -434,15 +425,11 @@ class SearchClient(object):
 
         return DictionaryResponse(self, raw_response)
 
-    # Clear all entries for a given dictionary
-    #
     def clear_dictionary_entries(self, dictionary, request_options=None):
         # type: (str, Optional[Union[dict, RequestOptions]]) -> DictionaryResponse # noqa: E501
 
         return self.replace_dictionary_entries(dictionary, [], request_options)
 
-    # Search entries for a given dictionary
-    #
     def search_dictionary_entries(self, dictionary, query, request_options=None):
         # type: (str, str, Optional[Union[dict, RequestOptions]]) -> dict
 
@@ -453,8 +440,6 @@ class SearchClient(object):
             request_options,
         )
 
-    # Set settings for all the dictionaries
-    #
     def set_dictionary_settings(self, dictionary_settings, request_options=None):
         # type: (List[dict], Optional[Union[dict, RequestOptions]])-> DictionaryResponse # noqa: E501
 
@@ -464,8 +449,6 @@ class SearchClient(object):
 
         return DictionaryResponse(self, raw_response)
 
-    # Retrieve settings for all the dictionaries
-    #
     def get_dictionary_settings(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
