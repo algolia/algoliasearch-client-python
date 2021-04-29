@@ -373,7 +373,6 @@ class SearchClient(object):
             Verb.GET, "1/recommendation/personalization/strategy", None, request_options
         )
 
-
     def save_dictionary_entries(
         self, dictionary, dictionary_entries, request_options=None
     ):
