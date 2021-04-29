@@ -441,7 +441,7 @@ class SearchClient(object):
         )
 
     def set_dictionary_settings(self, dictionary_settings, request_options=None):
-        # type: (List[dict], Optional[Union[dict, RequestOptions]])-> DictionaryResponse # noqa: E501
+        # type: (dict, Optional[Union[dict, RequestOptions]])-> DictionaryResponse # noqa: E501
 
         raw_response = self._transporter.write(
             Verb.PUT, "1/dictionaries/*/settings", dictionary_settings, request_options
