@@ -19,9 +19,7 @@ class RequesterAsync(Requester):
 
         if self._session is None:
             connector = aiohttp.TCPConnector(use_dns_cache=False)
-            self._session = aiohttp.ClientSession(  # type: ignore
-                connector=connector
-            )
+            self._session = aiohttp.ClientSession(connector=connector)  # type: ignore
 
         proxy = None
         if request.url.startswith("https"):

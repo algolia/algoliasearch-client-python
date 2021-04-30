@@ -171,9 +171,7 @@ class SearchIndexAsync(SearchIndex):
         if safe:
             responses.wait()
 
-        response = yield from tmp_index.move_to_async(  # type: ignore
-            self._name
-        )
+        response = yield from tmp_index.move_to_async(self._name)  # type: ignore
         responses.push(response)
 
         if safe:

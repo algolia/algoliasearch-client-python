@@ -1,10 +1,14 @@
+import time
+
 import abc
 
 from typing import List, Union, Optional
 
 from algoliasearch.exceptions import RequestException
-from algoliasearch.helpers import get_items, sleep_for
+from algoliasearch.helpers import get_items, sleep_for, endpoint
 from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.verb import Verb
+from algoliasearch.http.hosts import CallType
 
 try:
     from algoliasearch.search_index import SearchIndex
@@ -262,6 +266,38 @@ class MultipleIndexBatchIndexingResponse(Response):
             for index_name, task_id in get_items(self.raw_response["taskID"]):
                 self._client._sync().wait_task(index_name, task_id, request_options)
             self._done = True
+
+        return self
+
+    def __getitem__(self, key):
+        # type:(str) -> Union[int, str, dict, list]
+
+        return self.raw_response[key]
+
+
+class DictionaryResponse(Response):
+    def __init__(self, client, raw_response):
+        # type: (SearchClient, dict) -> None
+
+        self.raw_response = raw_response
+        self._client = client
+        self._done = False
+
+    def wait(self, request_options=None):
+        # type: (Optional[Union[RequestOptions, dict]]) -> DictionaryResponse # noqa: E501
+
+        while not self._done:
+            res = self._client.custom_request(
+                {},
+                endpoint("1/task/{}", self.raw_response["taskID"]),
+                Verb.GET,
+                CallType.READ,
+            )
+
+            if res is not None and res.get("status") == "published":
+                self._done = True
+
+            time.sleep(self._client._config.wait_task_time_before_retry / 1000000.0)
 
         return self
 
