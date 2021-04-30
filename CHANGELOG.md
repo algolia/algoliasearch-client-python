@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.4.0...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.5.0...master)
+
+## [v2.5.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.4.0...v2.5.0)
+
+### Added
+- Bring support custom dictionaries [#522](https://github.com/algolia/algoliasearch-client-python/pull/522)
 
 ## [v2.4.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.3.1...v2.4.0)
 
