@@ -1,5 +1,6 @@
 import time
 import logging
+import os
 
 from typing import Optional, Union, Dict, Any, List
 from algoliasearch.exceptions import AlgoliaUnreachableHostException, RequestException
@@ -22,8 +23,24 @@ class Transporter(object):
         self._requester = requester
         self._config = config
         self._retry_strategy = RetryStrategy()
-        self._logger = logging.getLogger('algolia')
-        self._logger.setLevel(logging.DEBUG)
+        if os.getenv("DEBUG"):
+            self._logger = logging.getLogger("algolia")
+            self._logger.setLevel(logging.DEBUG)
+            # create file handler which logs even debug messages
+            fh = logging.FileHandler("debug.log")
+            fh.setLevel(logging.DEBUG)
+            # create console handler with a higher log level
+            ch = logging.StreamHandler()
+            ch.setLevel(logging.ERROR)
+            # create formatter and add it to the handlers
+            formatter = logging.Formatter(
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            )
+            fh.setFormatter(formatter)
+            ch.setFormatter(formatter)
+            # add the handlers to the logger
+            self._logger.addHandler(fh)
+            self._logger.addHandler(ch)
 
     def write(self, verb, path, data, request_options):
         # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
@@ -72,7 +89,8 @@ class Transporter(object):
             self._config.proxies,
         )
 
-        self._logger.info('Sending request:' + str(request))
+        if os.getenv("DEBUG"):
+            self._logger.info("Sending request:" + str(request))
 
         return self.retry(hosts, request, relative_url)
 
@@ -88,10 +106,12 @@ class Transporter(object):
             decision = self._retry_strategy.decide(host, response)
 
             if decision == RetryOutcome.SUCCESS:
-                self._logger.info('Response received: ' + str(response))
+                if os.getenv("DEBUG"):
+                    self._logger.info("Response received: " + str(response))
                 return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
-                self._logger.info('Host failed: ' + str(response))
+                if os.getenv("DEBUG"):
+                    self._logger.info("Host failed: " + str(response))
                 content = response.error_message
                 if response.content and "message" in response.content:
                     content = response.content["message"]
@@ -157,6 +177,15 @@ class Response(object):
         self.error_message = error_message
         self.is_timed_out_error = is_timed_out_error
         self.is_network_error = is_network_error
+
+    def __str__(self):
+        return "Response({}, {}, {}, {}, {})".format(
+            self.status_code,
+            self.content,
+            self.error_message,
+            self.is_timed_out_error,
+            self.is_network_error,
+        )
 
 
 class RetryStrategy(object):
