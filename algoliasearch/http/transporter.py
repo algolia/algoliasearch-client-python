@@ -1,4 +1,5 @@
 import time
+import logging
 
 from typing import Optional, Union, Dict, Any, List
 from algoliasearch.exceptions import AlgoliaUnreachableHostException, RequestException
@@ -21,6 +22,8 @@ class Transporter(object):
         self._requester = requester
         self._config = config
         self._retry_strategy = RetryStrategy()
+        self._logger = logging.getLogger('algolia')
+        self._logger.setLevel(logging.DEBUG)
 
     def write(self, verb, path, data, request_options):
         # type: (str, str, Optional[Union[dict, list]], Optional[Union[dict, RequestOptions]]) -> dict # noqa: E501
@@ -69,6 +72,8 @@ class Transporter(object):
             self._config.proxies,
         )
 
+        self._logger.info('Sending request:' + str(request))
+
         return self.retry(hosts, request, relative_url)
 
     def retry(self, hosts, request, relative_url):
@@ -83,8 +88,10 @@ class Transporter(object):
             decision = self._retry_strategy.decide(host, response)
 
             if decision == RetryOutcome.SUCCESS:
+                self._logger.info('Response received: ' + str(response))
                 return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
+                self._logger.info('Host failed: ' + str(response))
                 content = response.error_message
                 if response.content and "message" in response.content:
                     content = response.content["message"]
