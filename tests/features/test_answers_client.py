@@ -9,17 +9,20 @@ class TestAnswersClient(unittest.TestCase):
         self.search_client = F.search_client()
         self.client = F.answers_client()
         self.index = F.index(self.search_client, self._testMethodName)
-        self.index.save_objects([
-            {
-                "name": "Something",
-                "description": "Your usage of demo datasets is usually more creative :')",
-                "objectID": 0,
-            }, {
-                "name": "Another thing",
-                "description": "This is creative, but unused. ;)",
-                "objectID": 1,
-            },
-        ]).wait()
+        self.index.save_objects(
+            [
+                {
+                    "name": "Something",
+                    "description": "Your usage of demo datasets is usually more creative :')",
+                    "objectID": 0,
+                },
+                {
+                    "name": "Another thing",
+                    "description": "This is creative, but unused. ;)",
+                    "objectID": 1,
+                },
+            ]
+        ).wait()
 
     def tearDown(self):
         self.client.close()
@@ -29,7 +32,7 @@ class TestAnswersClient(unittest.TestCase):
             "query": "Any usage?",
             "queryLanguages": ["en"],
             "attributesForPrediction": ["title", "description"],
-            "nbHits": 2
+            "nbHits": 2,
         }
 
         try:
