@@ -124,3 +124,9 @@ class RecommendationConfig(Config):
         return HostsCollection(
             [Host("{}.{}.{}".format("recommendation", self._region, "algolia.com"))]
         )
+
+class AnswersConfig(SearchConfig):
+    def __init__(self, app_id=None, api_key=None):
+        # type: (Optional[str], Optional[str]) -> None
+
+        super(AnswersConfig, self).__init__(app_id, api_key)
