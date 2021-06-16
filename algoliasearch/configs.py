@@ -103,7 +103,9 @@ class InsightsConfig(Config):
     def build_hosts(self):
         # type: () -> HostsCollection
 
-        return HostsCollection([Host("{}.{}.{}".format("insights", self._region, "algolia.io"))])
+        return HostsCollection(
+            [Host("{}.{}.{}".format("insights", self._region, "algolia.io"))]
+        )
 
 
 class RecommendationConfig(Config):
@@ -117,7 +119,9 @@ class RecommendationConfig(Config):
     def build_hosts(self):
         # type: () -> HostsCollection
 
-        return HostsCollection([Host("{}.{}.{}".format("recommendation", self._region, "algolia.com"))])
+        return HostsCollection(
+            [Host("{}.{}.{}".format("recommendation", self._region, "algolia.com"))]
+        )
 
 
 class AnswersConfig(SearchConfig):

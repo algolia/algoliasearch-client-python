@@ -13,7 +13,7 @@ class TestAnswersClient(unittest.TestCase):
             [
                 {
                     "name": "Something",
-                    "description": "Your usage of demo datasets is usually more creative :')",
+                    "description": "The usage is strong in that one",
                     "objectID": 0,
                 },
                 {

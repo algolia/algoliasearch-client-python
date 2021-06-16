@@ -33,17 +33,18 @@ class AnswersClient(object):
         client = AnswersClient(transporter, config)
 
         if is_async_available():
-            from algoliasearch.answers_client_async import (
-                AnswersClientAsync,
-            )
+            from algoliasearch.answers_client_async import AnswersClientAsync
             from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync
 
-            return AnswersClientAsync(client, TransporterAsync(RequesterAsync(), config), config)
-
+           return AnswersClientAsync(
+               client, TransporterAsync(RequesterAsync(), config), config
+           )
         return client
 
-    def predict(self, index_name, answers_parameters, request_options=None):  # noqa: E501
+    def predict(
+        self, index_name, answers_parameters, request_options=None
+    ):
         # type: (str, dict, Optional[Union[dict, RequestOptions]]) -> dict
 
         return self._transporter.write(
