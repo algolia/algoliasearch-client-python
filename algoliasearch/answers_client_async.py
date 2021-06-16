@@ -14,7 +14,9 @@ class AnswersClientAsync(AnswersClient):
 
         self._transporter_async = transporter
 
-        super(AnswersClientAsync, self).__init__(answers_client._transporter, search_config)
+        super(AnswersClientAsync, self).__init__(
+            answers_client._transporter, search_config
+        )
 
         client = AnswersClient(transporter, search_config)
 

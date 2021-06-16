@@ -89,7 +89,9 @@ class AnalyticsConfig(Config):
     def build_hosts(self):
         # type: () -> HostsCollection
 
-        return HostsCollection([Host("{}.{}.{}".format("analytics", self._region, "algolia.com"))])
+        return HostsCollection(
+            [Host("{}.{}.{}".format("analytics", self._region, "algolia.com"))]
+        )
 
 
 class InsightsConfig(Config):
