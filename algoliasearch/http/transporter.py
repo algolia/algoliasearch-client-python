@@ -90,8 +90,11 @@ class Transporter(object):
                     content = response.content["message"]
 
                 raise RequestException(content, response.status_code)
+            print (decision, response)
 
-        raise AlgoliaUnreachableHostException("Unreachable hosts")
+        raise AlgoliaUnreachableHostException("Unreachable hosts: %s", " ".join([
+            h.url for h in hosts
+        ]))
 
     def close(self):
         # type: () -> None
@@ -150,6 +153,14 @@ class Response(object):
         self.error_message = error_message
         self.is_timed_out_error = is_timed_out_error
         self.is_network_error = is_network_error
+
+
+    def __str__(self):
+        return """Response({}, {}, "{}")""".format(
+            self.status_code,
+            self.error_message,
+            self.content,
+        )
 
 
 class RetryStrategy(object):
