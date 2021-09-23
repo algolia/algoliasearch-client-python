@@ -342,7 +342,7 @@ class SearchClient(object):
             % (
                 "SearchClient",
                 "set_personalization_strategy",
-                "RecommendationClient",
+                "PersonalizationClient",
                 "set_personalization_strategy",
             ),
             DeprecationWarning,
@@ -363,7 +363,7 @@ class SearchClient(object):
             % (
                 "SearchClient",
                 "get_personalization_strategy",
-                "RecommendationClient",
+                "PersonalizationClient",
                 "get_personalization_strategy",
             ),
             DeprecationWarning,

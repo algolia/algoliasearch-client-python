@@ -1,4 +1,5 @@
-from typing import Optional, Union, Dict, Any
+import warnings
+from typing import Optional, Union
 
 from algoliasearch.configs import RecommendationConfig
 from algoliasearch.helpers import is_async_available
@@ -12,12 +13,24 @@ class RecommendationClient(object):
     def __init__(self, transporter, config):
         # type: (Transporter, RecommendationConfig) -> None
 
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % ("RecommendationClient", "init", "PersonalizationClient", "init",),
+            DeprecationWarning,
+        )
+
         self._transporter = transporter
         self._config = config
 
     @staticmethod
     def create(app_id=None, api_key=None, region=None):
         # type: (Optional[str], Optional[str], Optional[str]) -> RecommendationClient  # noqa: E501
+
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % ("RecommendationClient", "create", "PersonalizationClient", "create",),
+            DeprecationWarning,
+        )
 
         config = RecommendationConfig(app_id, api_key, region)
 
@@ -26,6 +39,17 @@ class RecommendationClient(object):
     @staticmethod
     def create_with_config(config):
         # type: (RecommendationConfig) -> RecommendationClient
+
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % (
+                "RecommendationClient",
+                "create_with_config",
+                "PersonalizationClient",
+                "create_with_config",
+            ),
+            DeprecationWarning,
+        )
 
         requester = Requester()
         transporter = Transporter(requester, config)
@@ -50,6 +74,17 @@ class RecommendationClient(object):
     ):  # noqa: E501
         # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
 
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % (
+                "RecommendationClient",
+                "set_personalization_strategy",
+                "PersonalizationClient",
+                "set_personalization_strategy",
+            ),
+            DeprecationWarning,
+        )
+
         return self._transporter.write(
             Verb.POST,
             "1/strategies/personalization",
@@ -60,11 +95,28 @@ class RecommendationClient(object):
     def get_personalization_strategy(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> dict
 
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % (
+                "RecommendationClient",
+                "get_personalization_strategy",
+                "PersonalizationClient",
+                "get_personalization_strategy",
+            ),
+            DeprecationWarning,
+        )
+
         return self._transporter.read(
             Verb.GET, "1/strategies/personalization", None, request_options
         )
 
     def close(self):
         # type: () -> None
+
+        warnings.warn(
+            "`%s.%s` is deprecated, use `%s.%s` instead."
+            % ("RecommendationClient", "close", "PersonalizationClient", "close",),
+            DeprecationWarning,
+        )
 
         return self._transporter.close()  # type: ignore
