@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 # Release Notes
 
 ## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.5.0...master)
+- Add support for Answers API [#528](https://github.com/algolia/algoliasearch-client-python/pull/528)
 
 ## [v2.5.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.4.0...v2.5.0)
 
