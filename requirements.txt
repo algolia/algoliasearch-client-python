@@ -1,0 +1,5 @@
+setuptools
+tox
+mypy
+requests
+types-requests

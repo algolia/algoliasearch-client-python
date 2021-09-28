@@ -31,11 +31,13 @@
 ## 💡 Getting Started
 
 First, install Algolia Python API Client via the [pip](https://pip.pypa.io/en/stable/installing) package manager:
+
 ```bash
 pip install --upgrade 'algoliasearch>=2.0,<3.0'
 ```
 
 Then, create objects on your index:
+
 ```py
 from algoliasearch.search_client import SearchClient
 
@@ -46,6 +48,7 @@ index.save_objects([{'objectID': 1, 'name': 'Foo'}])
 ```
 
 Finally, you may begin searching a object using the `search` method:
+
 ```py
 objects = index.search('Fo')
 ```
@@ -55,6 +58,10 @@ For full documentation, visit the **[Algolia Python API Client](https://www.algo
 ## ❓ Troubleshooting
 
 Encountering an issue? Before reaching out to support, we recommend heading to our [FAQ](https://www.algolia.com/doc/api-client/troubleshooting/faq/python/) where you will find answers for the most common issues and gotchas with the client.
+
+## Use the Dockerfile
+
+If you want to contribute to this project without installing all its dependencies, you can use our Docker image. Please check our [dedicated guide](DOCKER_README.MD) to learn more.
 
 ## 📄 License
 
