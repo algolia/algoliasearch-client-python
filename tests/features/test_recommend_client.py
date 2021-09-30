@@ -3,10 +3,10 @@ from algoliasearch.recommend_client import RecommendClient
 import unittest
 import mock
 
-from tests.helpers.factory import Factory as F
-
 
 class TestRecommendClient(unittest.TestCase):
+    host = "1/indexes/*/recommendations?"
+
     def setUp(self):
         self.client = RecommendClient.create("foo", "bar")
 
@@ -19,7 +19,7 @@ class TestRecommendClient(unittest.TestCase):
             {
                 "X-Algolia-Application-Id": "foo",
                 "X-Algolia-API-Key": "bar",
-                "User-Agent": "Algolia for Python (2.5.0); Python (3.8.2)",
+                "User-Agent": mock.ANY,
                 "Content-Type": "application/json",
             },
             {"requests": requests},
@@ -55,7 +55,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
         # Test method with 'related-products' mode
@@ -82,7 +82,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
         # Test method with multiple requests and specified thresholds
@@ -122,7 +122,7 @@ class TestRecommendClient(unittest.TestCase):
                     },
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
         # Test overrides undefined threshold with default value
@@ -150,7 +150,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
         # Test threshold is overriden by specified value
@@ -178,7 +178,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
     def test_get_related_products(self):
@@ -204,7 +204,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
         # Test if it overrides wrong given model
@@ -231,7 +231,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
     def test_get_frequently_bought_together(self):
@@ -257,7 +257,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
         # Test if it overrides wrong given model
@@ -284,7 +284,7 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
 
         # Check if `fallbackParameters` param is not passed for 'bought-together' method
@@ -311,5 +311,5 @@ class TestRecommendClient(unittest.TestCase):
                     }
                 ]
             ),
-            "1/indexes/*/recommendations?",
+            self.host,
         )
