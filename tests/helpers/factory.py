@@ -96,7 +96,10 @@ class Factory(object):
 
         warnings.warn(
             "`%s` is deprecated, use `%s` instead."
-            % ("RecommendationClient", "PersonalizationClient",),
+            % (
+                "RecommendationClient",
+                "PersonalizationClient",
+            ),
             DeprecationWarning,
         )
 

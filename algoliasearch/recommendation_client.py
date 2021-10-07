@@ -15,7 +15,12 @@ class RecommendationClient(object):
 
         warnings.warn(
             "`%s.%s` is deprecated, use `%s.%s` instead."
-            % ("RecommendationClient", "init", "PersonalizationClient", "init",),
+            % (
+                "RecommendationClient",
+                "init",
+                "PersonalizationClient",
+                "init",
+            ),
             DeprecationWarning,
         )
 
@@ -28,7 +33,12 @@ class RecommendationClient(object):
 
         warnings.warn(
             "`%s.%s` is deprecated, use `%s.%s` instead."
-            % ("RecommendationClient", "create", "PersonalizationClient", "create",),
+            % (
+                "RecommendationClient",
+                "create",
+                "PersonalizationClient",
+                "create",
+            ),
             DeprecationWarning,
         )
 
@@ -115,7 +125,12 @@ class RecommendationClient(object):
 
         warnings.warn(
             "`%s.%s` is deprecated, use `%s.%s` instead."
-            % ("RecommendationClient", "close", "PersonalizationClient", "close",),
+            % (
+                "RecommendationClient",
+                "close",
+                "PersonalizationClient",
+                "close",
+            ),
             DeprecationWarning,
         )
 
