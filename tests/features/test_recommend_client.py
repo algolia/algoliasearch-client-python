@@ -15,6 +15,7 @@ class TestRecommendClient(unittest.TestCase):
         # here to mock it.
         self.client._transporter._requester._session = requests.Session()
         self.client._transporter._requester._session.send = mock.Mock(name="send")
+        self.client._transporter._requester._session.send.return_value.status_code = 200
 
     def tearDown(self):
         self.client.close()
@@ -32,83 +33,68 @@ class TestRecommendClient(unittest.TestCase):
 
     def test_get_recommendations(self):
         # Test method with 'bought-together' model
-        try:
-            self.client.get_recommendations(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                        "model": "bought-together",
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_recommendations(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                    "model": "bought-together",
+                },
+            ]
+        )
 
         # Test method with 'related-products' mode
-        try:
-            self.client.get_recommendations(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                        "model": "related-products",
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_recommendations(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                    "model": "related-products",
+                },
+            ]
+        )
 
         # Test method with multiple requests and specified thresholds
-        try:
-            self.client.get_recommendations(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE-1",
-                        "model": "related-products",
-                        "threshold": 0,
-                    },
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE-2",
-                        "model": "related-products",
-                        "threshold": 0,
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_recommendations(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE-1",
+                    "model": "related-products",
+                    "threshold": 0,
+                },
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE-2",
+                    "model": "related-products",
+                    "threshold": 0,
+                },
+            ]
+        )
 
         # Test overrides undefined threshold with default value
-        try:
-            self.client.get_recommendations(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                        "model": "related-products",
-                        "threshold": None,
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_recommendations(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                    "model": "related-products",
+                    "threshold": None,
+                },
+            ]
+        )
 
         # Test threshold is overriden by specified value
-        try:
-            self.client.get_recommendations(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                        "model": "related-products",
-                        "threshold": 42,
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_recommendations(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                    "model": "related-products",
+                    "threshold": 42,
+                },
+            ]
+        )
 
         self.assert_requests(
             [
@@ -142,31 +128,25 @@ class TestRecommendClient(unittest.TestCase):
 
     def test_get_related_products(self):
         # Test method
-        try:
-            self.client.get_related_products(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_related_products(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                },
+            ]
+        )
 
         # Test if it overrides wrong given model
-        try:
-            self.client.get_related_products(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                        "model": "bought-together",
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_related_products(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                    "model": "bought-together",
+                },
+            ]
+        )
 
         self.assert_requests(
             [
@@ -185,44 +165,35 @@ class TestRecommendClient(unittest.TestCase):
 
     def test_get_frequently_bought_together(self):
         # Test method
-        try:
-            self.client.get_frequently_bought_together(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_frequently_bought_together(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                },
+            ]
+        )
 
         # Test if it overrides wrong given model
-        try:
-            self.client.get_frequently_bought_together(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_frequently_bought_together(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                },
+            ]
+        )
 
         # Test if `fallbackParameters` param is not passed for 'bought-together' method
-        try:
-            self.client.get_frequently_bought_together(
-                [
-                    {
-                        "indexName": "products",
-                        "objectID": "B018APC4LE",
-                        "fallbackParameters": {"facetFilters": []},
-                    },
-                ]
-            )
-        except Exception:
-            pass
+        self.client.get_frequently_bought_together(
+            [
+                {
+                    "indexName": "products",
+                    "objectID": "B018APC4LE",
+                    "fallbackParameters": {"facetFilters": []},
+                },
+            ]
+        )
 
         self.assert_requests(
             [
