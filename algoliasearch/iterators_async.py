@@ -10,6 +10,8 @@ from algoliasearch.iterators import Iterator
 
 
 class PaginatorIteratorAsync(Iterator):
+    nbHits = 0
+
     def __init__(self, transporter, index_name, request_options=None):
         # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
 
@@ -38,7 +40,7 @@ class PaginatorIteratorAsync(Iterator):
 
                 return hit
 
-            if self._raw_response["nbHits"] < self._data["hitsPerPage"]:
+            if self.nbHits < self._data["hitsPerPage"]:
                 self._raw_response = {}
                 self._data = {
                     "hitsPerPage": 1000,
@@ -49,6 +51,7 @@ class PaginatorIteratorAsync(Iterator):
         self._raw_response = yield from self._transporter.read(
             Verb.POST, self.get_endpoint(), self._data, self._request_options
         )
+        self.nbHits = len(self._raw_response["hits"])
 
         self._data["page"] += 1
 
