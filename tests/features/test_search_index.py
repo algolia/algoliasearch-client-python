@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 import sys
 import unittest
+import json
+import requests
+
+from requests.models import Response
 
 from algoliasearch.exceptions import RequestException, ObjectNotFoundException
 from algoliasearch.responses import MultipleResponse
+from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
 from tests.helpers.misc import Unicode, rule_without_metadata
-
+from unittest.mock import MagicMock
 
 class TestSearchIndex(unittest.TestCase):
     def setUp(self):
@@ -449,6 +454,40 @@ class TestSearchIndex(unittest.TestCase):
         # Perform a synonym search using searchSynonyms with an empty query
         # and check that the number of returned synonyms is equal to 0
         self.assertEqual(self.index.search_synonyms("")["nbHits"], 0)
+
+    def test_browse_rules(self):
+
+        def side_effect(req, **kwargs):
+            hits = [{"objectID": i, "_highlightResult": None} for i in range(0, 1000)]
+            page = json.loads(req.body)["page"]
+
+            if page == 3:
+                hits = hits[0:800]
+
+            response = Response()
+            response.status_code = 200
+            response._content = str.encode(
+                json.dumps({
+                    "hits": hits,
+                    "nbHits": 3800,
+                    "page": page,
+                    "nbPages": 3,
+                })
+            )
+
+            return response
+
+        client = SearchClient.create("foo", "bar")
+        client._transporter._requester._session = requests.Session()
+        client._transporter._requester._session.send = MagicMock(name="send")
+        client._transporter._requester._session.send.side_effect = side_effect
+        index = F.index(client, "test")
+
+        rules = index.browse_rules()
+
+        len_rules = len(list(rules))
+
+        self.assertEqual(len_rules, 3800)
 
     def test_rules(self):
         responses = MultipleResponse()
