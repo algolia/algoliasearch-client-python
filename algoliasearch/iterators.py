@@ -50,8 +50,8 @@ class PaginatorIterator(Iterator):
 
     def __next__(self):
         # type: () -> dict
-
         if self._raw_response:
+
             if len(self._raw_response["hits"]):
                 hit = self._raw_response["hits"].pop(0)
 
