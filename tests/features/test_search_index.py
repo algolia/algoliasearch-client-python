@@ -14,6 +14,7 @@ from tests.helpers.factory import Factory as F
 from tests.helpers.misc import Unicode, rule_without_metadata
 from unittest.mock import MagicMock
 
+
 class TestSearchIndex(unittest.TestCase):
     def setUp(self):
         self.client = F.search_client()
@@ -456,7 +457,6 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(self.index.search_synonyms("")["nbHits"], 0)
 
     def test_browse_rules(self):
-
         def side_effect(req, **kwargs):
             hits = [{"objectID": i, "_highlightResult": None} for i in range(0, 1000)]
             page = json.loads(req.body)["page"]
@@ -467,12 +467,14 @@ class TestSearchIndex(unittest.TestCase):
             response = Response()
             response.status_code = 200
             response._content = str.encode(
-                json.dumps({
-                    "hits": hits,
-                    "nbHits": 3800,
-                    "page": page,
-                    "nbPages": 3,
-                })
+                json.dumps(
+                    {
+                        "hits": hits,
+                        "nbHits": 3800,
+                        "page": page,
+                        "nbPages": 3,
+                    }
+                )
             )
 
             return response
