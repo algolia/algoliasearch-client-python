@@ -35,6 +35,8 @@ class Iterator(object):
 
 
 class PaginatorIterator(Iterator):
+    nbHits = 0
+
     def __init__(self, transporter, index_name, request_options=None):
         # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
 
@@ -48,8 +50,8 @@ class PaginatorIterator(Iterator):
 
     def __next__(self):
         # type: () -> dict
-
         if self._raw_response:
+
             if len(self._raw_response["hits"]):
                 hit = self._raw_response["hits"].pop(0)
 
@@ -57,7 +59,7 @@ class PaginatorIterator(Iterator):
 
                 return hit
 
-            if self._raw_response["nbHits"] < self._data["hitsPerPage"]:
+            if self.nbHits < self._data["hitsPerPage"]:
                 self._raw_response = {}
                 self._data = {
                     "hitsPerPage": 1000,
@@ -68,6 +70,7 @@ class PaginatorIterator(Iterator):
         self._raw_response = self._transporter.read(
             Verb.POST, self.get_endpoint(), self._data, self._request_options
         )
+        self.nbHits = len(self._raw_response["hits"])
 
         self._data["page"] += 1
 
