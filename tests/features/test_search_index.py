@@ -3,6 +3,7 @@ import sys
 import unittest
 import json
 import requests
+import mock
 
 from requests.models import Response
 
@@ -12,7 +13,6 @@ from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
 from tests.helpers.factory import Factory as F
 from tests.helpers.misc import Unicode, rule_without_metadata
-from unittest.mock import MagicMock
 
 
 class TestSearchIndex(unittest.TestCase):
@@ -481,7 +481,7 @@ class TestSearchIndex(unittest.TestCase):
 
         client = SearchClient.create("foo", "bar")
         client._transporter._requester._session = requests.Session()
-        client._transporter._requester._session.send = MagicMock(name="send")
+        client._transporter._requester._session.send = mock.MagicMock(name="send")
         client._transporter._requester._session.send.side_effect = side_effect
         index = F.index(client, "test")
 

@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.0...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.1...master)
+
+## [v2.6.1](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.0...v2.6.1)
+
+### Fixed
+
+- Prevent recursion issue with `browse_rules` method ([#542](https://github.com/algolia/algoliasearch-client-python/pull/542))
 
 ## [v2.6.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.5.0...v2.6.0)
 
