@@ -1,6 +1,7 @@
 import abc
 
 from typing import Optional, Union
+from algoliasearch.helpers import endpoint
 
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
@@ -101,7 +102,7 @@ class ObjectIterator(Iterator):
 
         self._raw_response = self._transporter.read(
             Verb.POST,
-            "1/indexes/{}/browse".format(self._index_name),
+            endpoint("1/indexes/{}/browse", self._index_name),
             data,
             self._request_options,
         )
@@ -113,11 +114,11 @@ class SynonymIterator(PaginatorIterator):
     def get_endpoint(self):
         # type: () -> str
 
-        return "1/indexes/{}/synonyms/search".format(self._index_name)
+        return endpoint("1/indexes/{}/synonyms/search", self._index_name)
 
 
 class RuleIterator(PaginatorIterator):
     def get_endpoint(self):
         # type: () -> str
 
-        return "1/indexes/{}/rules/search".format(self._index_name)
+        return endpoint("1/indexes/{}/rules/search", self._index_name)

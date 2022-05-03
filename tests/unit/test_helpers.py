@@ -41,3 +41,8 @@ class TestHelpers(unittest.TestCase):
             "/1/indexes/%23index%20name_42%23%2523/batch",
             endpoint("/1/indexes/{}/batch", "#index name_42#%23"),
         )
+
+        self.assertEqual(
+            "/1/indexes/space%20bar/browse",
+            endpoint("/1/indexes/{}/browse", "space bar"),
+        )
