@@ -4,7 +4,7 @@ import requests
 
 from requests import Timeout, RequestException, Session
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util import Retry
+from urllib3.util import Retry
 
 from algoliasearch.http.transporter import Response, Request
 

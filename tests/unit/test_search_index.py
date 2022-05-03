@@ -371,6 +371,51 @@ class TestSearchIndex(unittest.TestCase):
         with self.assertRaises(AssertionError) as _:
             self.index.get_task("")
 
+    def test_browse_objects_encode_path(self):
+        index = SearchIndex(self.transporter, self.config, "#index name_42#%23")
+        self.transporter.read.return_value = {"hits": [{"foo": "bar"}], "nbPages": 1}
+
+        index.browse_objects().next()
+
+        self.transporter.read.assert_called_once_with(
+            "POST",
+            "1/indexes/%23index%20name_42%23%2523/browse",
+            {},
+            None,
+        )
+
+    def test_browse_rules_encode_path(self):
+        index = SearchIndex(self.transporter, self.config, "#index name_42#%23")
+        self.transporter.read.return_value = {
+            "hits": [{"foo": "bar", "_highlightResult": "algolia"}],
+            "nbPages": 1,
+        }
+
+        index.browse_rules().next()
+
+        self.transporter.read.assert_called_once_with(
+            "POST",
+            "1/indexes/%23index%20name_42%23%2523/rules/search",
+            {"hitsPerPage": 1000, "page": 1},
+            None,
+        )
+
+    def test_browse_synonyms_encode_path(self):
+        index = SearchIndex(self.transporter, self.config, "#index name_42#%23")
+        self.transporter.read.return_value = {
+            "hits": [{"foo": "bar", "_highlightResult": "algolia"}],
+            "nbPages": 1,
+        }
+
+        index.browse_synonyms().next()
+
+        self.transporter.read.assert_called_once_with(
+            "POST",
+            "1/indexes/%23index%20name_42%23%2523/synonyms/search",
+            {"hitsPerPage": 1000, "page": 1},
+            None,
+        )
+
 
 class NullResponse(Response):
     def wait(self):
