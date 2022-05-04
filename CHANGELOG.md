@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.1...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...master)
+
+## [v2.6.2](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.1...v2.6.2)
+
+### Fixed
+
+- Encode path parameters ([#546](https://github.com/algolia/algoliasearch-client-python/pull/546))
 
 ## [v2.6.1](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.0...v2.6.1)
 
