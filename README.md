@@ -25,7 +25,7 @@
 ## ✨ Features
 
 - Thin & minimal low-level HTTP client to interact with Algolia's API
-- Supports Python: `2.7`, `3.4`, `3.5`, `3.6`, `3.7`, and `3.8`
+- Supports Python: `2.7`, [`3.7`-`3.10`]
 - Contains blazing-fast asynchronous methods built on top of the [Asyncio](https://docs.python.org/3/library/asyncio.html)
 
 ## 💡 Getting Started
@@ -59,7 +59,7 @@ For full documentation, visit the **[Algolia Python API Client](https://www.algo
 
 Encountering an issue? Before reaching out to support, we recommend heading to our [FAQ](https://www.algolia.com/doc/api-client/troubleshooting/faq/python/) where you will find answers for the most common issues and gotchas with the client.
 
-## Use the Dockerfile
+## ⚙️ Use the Dockerfile
 
 If you want to contribute to this project without installing all its dependencies, you can use our Docker image. Please check our [dedicated guide](DOCKER_README.MD) to learn more.
 
