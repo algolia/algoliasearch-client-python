@@ -6,7 +6,7 @@ from algoliasearch.configs import Config
 from algoliasearch.helpers import get_items
 
 
-class RequestOptions(object):
+class RequestOptions:
     def __init__(self, headers, query_parameters, timeouts, data):
         # type: (Dict[str, str], Dict[str, Any], Dict[str, int], Dict[str, Any]) -> None  # noqa: E501
 
@@ -50,7 +50,7 @@ class RequestOptions(object):
         return request_options
 
 
-class Params(object):
+class Params:
     HEADERS = (
         "Content-type",
         "User-Agent",

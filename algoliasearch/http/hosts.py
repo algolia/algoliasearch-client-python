@@ -3,7 +3,7 @@ from random import shuffle
 from typing import List, Optional, cast
 
 
-class Host(object):
+class Host:
     TTL = 300.0
 
     def __init__(self, url, priority=0, accept=None):
@@ -25,7 +25,7 @@ class Host(object):
         self.up = True
 
 
-class HostsCollection(object):
+class HostsCollection:
     def __init__(self, hosts):
         # type: (List[Host]) -> None
 
@@ -49,6 +49,6 @@ class HostsCollection(object):
         return [host for host in self._hosts if host.accept & CallType.WRITE]
 
 
-class CallType(object):
+class CallType:
     READ = 1
     WRITE = 2

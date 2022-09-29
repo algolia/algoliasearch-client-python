@@ -14,7 +14,7 @@ class RecommendationClientAsync(RecommendationClient):
 
         self._transporter_async = transporter
 
-        super(RecommendationClientAsync, self).__init__(
+        super().__init__(
             recommendation_client._transporter, search_config
         )
 

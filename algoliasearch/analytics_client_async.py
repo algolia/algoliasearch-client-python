@@ -15,7 +15,7 @@ class AnalyticsClientAsync(AnalyticsClient):
 
         self._transporter_async = transporter
 
-        super(AnalyticsClientAsync, self).__init__(
+        super().__init__(
             analytics_client._transporter, search_config
         )
 

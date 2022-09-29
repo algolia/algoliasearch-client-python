@@ -9,13 +9,10 @@ from typing import Union, Any, Dict
 from algoliasearch.helpers import get_items
 
 # Python 3
-if sys.version_info >= (3, 0):
-    from urllib.parse import urlencode
-else:
-    from urllib import urlencode  # pragma: no cover
+from urllib.parse import urlencode
 
 
-class QueryParametersSerializer(object):
+class QueryParametersSerializer:
     @staticmethod
     def serialize(query_parameters):
         # type: (Dict[str, Any]) -> str
@@ -31,7 +28,7 @@ class QueryParametersSerializer(object):
         return urlencode(sorted(get_items(query_parameters), key=lambda val: val[0]))
 
 
-class SettingsDeserializer(object):
+class SettingsDeserializer:
     @staticmethod
     def deserialize(data):
         # type: (Dict[str, Any]) -> dict
@@ -49,7 +46,7 @@ class SettingsDeserializer(object):
         return data
 
 
-class DataSerializer(object):
+class DataSerializer:
     @staticmethod
     def serialize(data):
         # type: (Union[Dict[str, Any], list]) -> str

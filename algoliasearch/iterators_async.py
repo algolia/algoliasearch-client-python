@@ -16,7 +16,7 @@ class PaginatorIteratorAsync(Iterator):
     def __init__(self, transporter, index_name, request_options=None):
         # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
 
-        super(PaginatorIteratorAsync, self).__init__(
+        super().__init__(
             transporter, index_name, request_options
         )
         self._data = {

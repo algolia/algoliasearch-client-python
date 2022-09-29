@@ -9,7 +9,7 @@ from urllib3.util import Retry
 from algoliasearch.http.transporter import Response, Request
 
 
-class Requester(object):
+class Requester:
     def __init__(self):
         # type: () -> None
 

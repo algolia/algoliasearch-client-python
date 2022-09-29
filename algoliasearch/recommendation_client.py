@@ -9,7 +9,7 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 
 
-class RecommendationClient(object):
+class RecommendationClient:
     def __init__(self, transporter, config):
         # type: (Transporter, RecommendationConfig) -> None
 

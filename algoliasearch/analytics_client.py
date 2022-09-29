@@ -8,7 +8,7 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 
 
-class AnalyticsClient(object):
+class AnalyticsClient:
     def __init__(self, transporter, search_config):
         # type: (Transporter, AnalyticsConfig) -> None
 

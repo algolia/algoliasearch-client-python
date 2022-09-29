@@ -8,7 +8,7 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 
 
-class Iterator(object):
+class Iterator:
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, transporter, index_name, request_options=None):
@@ -41,7 +41,7 @@ class PaginatorIterator(Iterator):
     def __init__(self, transporter, index_name, request_options=None):
         # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
 
-        super(PaginatorIterator, self).__init__(
+        super().__init__(
             transporter, index_name, request_options
         )
         self._data = {

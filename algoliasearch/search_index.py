@@ -21,7 +21,7 @@ from algoliasearch.iterators import ObjectIterator, SynonymIterator, RuleIterato
 from algoliasearch.responses import Response, IndexingResponse, MultipleResponse
 
 
-class SearchIndex(object):
+class SearchIndex:
     @property
     def app_id(self):
         return self._config.app_id
@@ -577,7 +577,7 @@ class SearchIndex(object):
 
         letters = string.ascii_letters
         random_string = "".join(random.choice(letters) for i in range(10))
-        tmp_index_name = "{}_tmp_{}".format(self._name, random_string)
+        tmp_index_name = f"{self._name}_tmp_{random_string}"
 
         return tmp_index_name
 

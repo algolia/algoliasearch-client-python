@@ -8,7 +8,7 @@ from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
 
 
-class RecommendClient(object):
+class RecommendClient:
     @property
     def app_id(self):
         # type: () -> str

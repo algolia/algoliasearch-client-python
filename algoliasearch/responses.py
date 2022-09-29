@@ -21,7 +21,7 @@ except ImportError:  # Already imported.
     pass
 
 
-class Response(object):
+class Response:
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod

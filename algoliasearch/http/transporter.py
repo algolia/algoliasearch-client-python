@@ -14,7 +14,7 @@ except ImportError:  # Already imported.
     pass
 
 
-class Transporter(object):
+class Transporter:
     def __init__(self, requester, config):
         # type: (Requester, Config) -> None
 
@@ -76,7 +76,7 @@ class Transporter(object):
 
         for host in self._retry_strategy.valid_hosts(hosts):
 
-            request.url = "https://{}/{}".format(host.url, relative_url)
+            request.url = f"https://{host.url}/{relative_url}"
 
             response = self._requester.send(request)
 
@@ -99,7 +99,7 @@ class Transporter(object):
         self._requester.close()
 
 
-class Request(object):
+class Request:
     def __init__(
         self, verb, headers, data, connect_timeout, timeout, proxies={}
     ):  # noqa: E501
@@ -134,7 +134,7 @@ class Request(object):
         return self.__dict__ == other.__dict__
 
 
-class Response(object):
+class Response:
     def __init__(
         self,
         status_code=None,
@@ -152,7 +152,7 @@ class Response(object):
         self.is_network_error = is_network_error
 
 
-class RetryStrategy(object):
+class RetryStrategy:
     def valid_hosts(self, hosts):
         # type: (list) -> list
 
@@ -204,7 +204,7 @@ class RetryStrategy(object):
         )
 
 
-class RetryOutcome(object):
+class RetryOutcome:
     SUCCESS = "SUCCESS"
     RETRY = "RETRY"
     FAIL = "FAIL"

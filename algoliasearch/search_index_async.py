@@ -29,7 +29,7 @@ class SearchIndexAsync(SearchIndex):
         self._search_index = search_index
         self._transporter_async = transporter
 
-        super(SearchIndexAsync, self).__init__(search_index._transporter, config, name)
+        super().__init__(search_index._transporter, config, name)
 
         search_index = SearchIndex(transporter, config, name)
         search_index.__setattr__("_sync", self._sync)

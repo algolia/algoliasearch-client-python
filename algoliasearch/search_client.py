@@ -28,7 +28,7 @@ from algoliasearch.http.requester import Requester
 from algoliasearch.http.hosts import CallType
 
 
-class SearchClient(object):
+class SearchClient:
     @property
     def app_id(self):
         # type: () -> str
@@ -278,7 +278,7 @@ class SearchClient(object):
         ).hexdigest()
 
         base64encoded = base64.b64encode(
-            ("{}{}".format(secured_key, query_parameters)).encode("utf-8")
+            (f"{secured_key}{query_parameters}").encode("utf-8")
         )
 
         return str(base64encoded.decode("utf-8"))

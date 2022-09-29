@@ -19,7 +19,7 @@ class TransporterAsync(Transporter):
 
         for host in self._retry_strategy.valid_hosts(hosts):
 
-            request.url = "https://{}/{}".format(host.url, relative_url)
+            request.url = f"https://{host.url}/{relative_url}"
 
             response = yield from self._requester.send(request)  # type: ignore
 

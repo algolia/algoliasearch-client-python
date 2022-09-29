@@ -8,7 +8,7 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 
 
-class PersonalizationClient(object):
+class PersonalizationClient:
     def __init__(self, transporter, config):
         # type: (Transporter, PersonalizationConfig) -> None
 

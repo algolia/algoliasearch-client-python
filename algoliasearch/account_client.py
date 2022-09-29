@@ -6,7 +6,7 @@ from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_index import SearchIndex
 
 
-class AccountClient(object):
+class AccountClient:
     @staticmethod
     def copy_index(source_index, destination_index, request_options=None):
         # type: (SearchIndex, SearchIndex, Optional[Union[Dict[str, Any], RequestOptions]]) -> MultipleResponse  # noqa: E501

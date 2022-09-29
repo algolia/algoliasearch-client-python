@@ -7,10 +7,7 @@ from typing import Optional, Iterable, List, Union, Iterator, Dict, Any
 
 from algoliasearch.exceptions import MissingObjectIdException
 
-if sys.version_info >= (3, 0):
-    from urllib.parse import quote
-else:
-    from urllib import quote  # pragma: no cover
+from urllib.parse import quote
 
 
 def endpoint(path, *args):
@@ -31,10 +28,8 @@ def get_items(dictionary=None):
 
     if dictionary is None:
         items = []  # type: Iterable
-    elif sys.version_info >= (3, 0):
-        items = dictionary.items()
     else:
-        items = dictionary.iteritems()  # pragma: no cover
+        items = dictionary.items()
 
     return items
 
@@ -45,7 +40,7 @@ def assert_object_id(objects):
     for obj in objects:
         if "objectID" not in obj:
             raise MissingObjectIdException(
-                "Missing `objectID` in: {}".format(json.dumps(obj)), obj
+                f"Missing `objectID` in: {json.dumps(obj)}", obj
             )
 
 
@@ -58,15 +53,14 @@ def build_raw_response_batch(action, objects):
 def is_async_available():
     # type: () -> bool
 
-    if sys.version_info >= (3, 0):
-        try:
-            import asyncio
-            import aiohttp
-            import async_timeout
+    try:
+        import asyncio
+        import aiohttp
+        import async_timeout
 
-            return True
-        except ImportError:
-            pass
+        return True
+    except ImportError:
+        pass
 
     return False
 

@@ -14,7 +14,7 @@ class PersonalizationClientAsync(PersonalizationClient):
 
         self._transporter_async = transporter
 
-        super(PersonalizationClientAsync, self).__init__(
+        super().__init__(
             personalization_client._transporter, search_config
         )
 

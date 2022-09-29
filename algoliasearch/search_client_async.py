@@ -17,7 +17,7 @@ class SearchClientAsync(SearchClient):
         self._search_client = search_client
         self._transporter_async = transporter
 
-        super(SearchClientAsync, self).__init__(
+        super().__init__(
             search_client._transporter, search_config
         )
 

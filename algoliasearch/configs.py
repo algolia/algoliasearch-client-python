@@ -8,7 +8,7 @@ from algoliasearch.http.hosts import Host, HostsCollection, CallType
 from algoliasearch.user_agent import UserAgent
 
 
-class Config(object):
+class Config:
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, app_id=None, api_key=None):
@@ -60,7 +60,7 @@ class SearchConfig(Config):
     def __init__(self, app_id=None, api_key=None):
         # type: (Optional[str], Optional[str]) -> None
 
-        super(SearchConfig, self).__init__(app_id, api_key)
+        super().__init__(app_id, api_key)
 
         self.batch_size = 1000
 
@@ -69,11 +69,11 @@ class SearchConfig(Config):
 
         return HostsCollection(
             [
-                Host("{}-dsn.algolia.net".format(self.app_id), 10, CallType.READ),
-                Host("{}.algolia.net".format(self.app_id), 10, CallType.WRITE),
-                Host("{}-1.algolianet.com".format(self.app_id)),
-                Host("{}-2.algolianet.com".format(self.app_id)),
-                Host("{}-3.algolianet.com".format(self.app_id)),
+                Host(f"{self.app_id}-dsn.algolia.net", 10, CallType.READ),
+                Host(f"{self.app_id}.algolia.net", 10, CallType.WRITE),
+                Host(f"{self.app_id}-1.algolianet.com"),
+                Host(f"{self.app_id}-2.algolianet.com"),
+                Host(f"{self.app_id}-3.algolianet.com"),
             ]
         )
 
@@ -84,7 +84,7 @@ class AnalyticsConfig(Config):
 
         self._region = "us" if region is None else region
 
-        super(AnalyticsConfig, self).__init__(app_id, api_key)
+        super().__init__(app_id, api_key)
 
     def build_hosts(self):
         # type: () -> HostsCollection
@@ -100,7 +100,7 @@ class InsightsConfig(Config):
 
         self._region = "us" if region is None else region
 
-        super(InsightsConfig, self).__init__(app_id, api_key)
+        super().__init__(app_id, api_key)
 
     def build_hosts(self):
         # type: () -> HostsCollection
@@ -116,7 +116,7 @@ class RecommendationConfig(Config):
 
         self._region = "us" if region is None else region
 
-        super(RecommendationConfig, self).__init__(app_id, api_key)
+        super().__init__(app_id, api_key)
 
     def build_hosts(self):
         # type: () -> HostsCollection
@@ -132,7 +132,7 @@ class PersonalizationConfig(Config):
 
         self._region = "us" if region is None else region
 
-        super(PersonalizationConfig, self).__init__(app_id, api_key)
+        super().__init__(app_id, api_key)
 
     def build_hosts(self):
         # type: () -> HostsCollection
