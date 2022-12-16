@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
+## [v3.0.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.1...v3.0.0)
+
+### Fixed
+
+- Python 3.11 compatibility [#551](https://github.com/algolia/algoliasearch-client-python/pull/551)
+
+### Changed
+
+- Python 2.7 is no longer supported
+
 ## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...master)
 
 ## [v2.6.2](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.1...v2.6.2)
