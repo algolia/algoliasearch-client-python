@@ -13,8 +13,8 @@ class RequesterAsync(Requester):
 
         self._session = None
 
-    @asyncio.coroutine  # type: ignore
-    def send(self, request):  # type: ignore
+    # type: ignore
+    async def send(self, request):  # type: ignore
         # type: (Request) -> Response
 
         if self._session is None:
@@ -29,7 +29,7 @@ class RequesterAsync(Requester):
 
         try:
             with async_timeout.timeout(request.timeout):
-                response = yield from (
+                response = await (
                     self._session.request(  # type: ignore
                         method=request.verb,
                         url=request.url,
@@ -39,7 +39,7 @@ class RequesterAsync(Requester):
                     )
                 )
 
-                json = yield from response.json()
+                json = await response.json()
 
         except asyncio.TimeoutError as e:
 
@@ -47,12 +47,11 @@ class RequesterAsync(Requester):
 
         return Response(response.status, json, str(response.reason))
 
-    @asyncio.coroutine
-    def close(self):  # type: ignore
+    async def close(self):  # type: ignore
         # type: () -> None
 
         if self._session is not None:
             session = self._session
             self._session = None
 
-            yield from session.close()  # type: ignore
+            return session.close()  # type: ignore
