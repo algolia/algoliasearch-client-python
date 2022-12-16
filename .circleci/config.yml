@@ -66,13 +66,6 @@ workflows:
   build:
     jobs:
       - test:
-          name: 'test_27'
-          docker_version: '2.7'
-          tox_version: '27'
-          filters:
-            tags:
-              only: /.*/
-      - test:
           name: 'test_34'
           docker_version: '3.4'
           tox_version: '34'
@@ -119,7 +112,6 @@ workflows:
               only: /.*/
       - release:
           requires:
-            - test_27
             - test_34
             - test_35
             - test_36

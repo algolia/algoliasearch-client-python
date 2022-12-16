@@ -25,7 +25,7 @@
 ## ✨ Features
 
 - Thin & minimal low-level HTTP client to interact with Algolia's API
-- Supports Python: `2.7`, `3.4`, `3.5`, `3.6`, `3.7`, and `3.8`
+- Supports Python: `3.4`, `3.5`, `3.6`, `3.7`, and `3.8`
 - Contains blazing-fast asynchronous methods built on top of the [Asyncio](https://docs.python.org/3/library/asyncio.html)
 
 ## 💡 Getting Started
