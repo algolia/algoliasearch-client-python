@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.3...master)
+
+## [v2.6.3](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...v2.6.3)
+
+### Fixed
+
+- prevent KeyError when popping an unknown property ([#552](https://github.com/algolia/algoliasearch-client-python/pull/552))
 
 ## [v2.6.2](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.1...v2.6.2)
 
