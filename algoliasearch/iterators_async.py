@@ -37,7 +37,8 @@ class PaginatorIteratorAsync(Iterator):
             if len(self._raw_response["hits"]):
                 hit = self._raw_response["hits"].pop(0)
 
-                hit.pop("_highlightResult")
+                if "_highlightResult" in hit:
+                    hit.pop("_highlightResult")
 
                 return hit
 
