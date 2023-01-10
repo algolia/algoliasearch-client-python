@@ -22,7 +22,7 @@ class PersonalizationClientAsync(PersonalizationClient):
 
         _create_async_methods_in(self, client)
 
-    async ef __aenter__(self):
+    async def __aenter__(self):
         # type: () -> PersonalizationClientAsync # type: ignore
 
         return self  # type: ignore
