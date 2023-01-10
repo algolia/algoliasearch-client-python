@@ -36,14 +36,13 @@ class SearchIndexAsync(SearchIndex):
 
         _create_async_methods_in(self, search_index)
 
-    @asyncio.coroutine
-    def wait_task_async(self, task_id, request_options=None):  # type: ignore
+    async def wait_task_async(self, task_id, request_options=None):  # type: ignore
         # type: (int, Optional[Union[dict, RequestOptions]]) -> None
 
         retries_count = 1
 
         while True:
-            task = yield from self.get_task_async(  # type: ignore
+            task = await self.get_task_async(  # type: ignore
                 task_id, request_options
             )
 
@@ -54,7 +53,7 @@ class SearchIndexAsync(SearchIndex):
             factor = math.ceil(retries_count / 10)
             sleep_for = factor * self._config.wait_task_time_before_retry
 
-            yield from asyncio.sleep(sleep_for / 1000000.0)
+            return asyncio.sleep(sleep_for / 1000000.0)
 
     def browse_objects_async(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> ObjectIteratorAsync

@@ -100,6 +100,27 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test:
+          name: 'test_39'
+          docker_version: '3.9'
+          tox_version: '39'
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          name: 'test_310'
+          docker_version: '3.10'
+          tox_version: '310'
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          name: 'test_311'
+          docker_version: '3.11'
+          tox_version: '311'
+          filters:
+            tags:
+              only: /.*/
       - format:
           name: 'format'
           filters:
@@ -117,6 +138,9 @@ workflows:
             - test_36
             - test_37
             - test_38
+            - test_39
+            - test_310
+            - test_311
             - format
             - types
           filters:
