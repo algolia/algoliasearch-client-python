@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.3...master)
 
+## [v3.0.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...v3.0.0)
+
+### Changed
+
+- Major version: Python 2.7 is no longer supported
+
+### Fixed
+ - Unable to initialize SearchClient on Python 3.11 ([#549](https://github.com/algolia/algoliasearch-client-python/issues/549))
+
 ## [v2.6.3](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...v2.6.3)
 
 ### Fixed
