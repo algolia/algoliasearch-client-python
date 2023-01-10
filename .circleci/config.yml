@@ -116,7 +116,7 @@ workflows:
               only: /.*/
       - test:
           name: 'test_311'
-          docker_version: '3.11'
+          docker_version: '3.11.1'
           tox_version: '311'
           filters:
             tags:
