@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/python:<< parameters.docker_version >>
+      - image: cimg/python:<< parameters.docker_version >>
     description: Run tests for Python << parameters.tox_version >>
     parameters:
       docker_version:
@@ -21,7 +21,7 @@ jobs:
 
   format:
     docker:
-      - image: circleci/python:3.8.2
+      - image: cimg/python:3.8.2
     description: Run formatting and linting checks
     steps:
       - checkout
@@ -34,7 +34,7 @@ jobs:
 
   types:
     docker:
-      - image: circleci/python:3.8.2
+      - image: cimg/python:3.8.2
     description: Run optional type checking with MyPy
     steps:
       - checkout
@@ -47,7 +47,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/python:3.8.2
+      - image: cimg/python:3.8.2
     description: Perform a new release of the Python client
     steps:
       - checkout
