@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Major version: Python 2.7 is no longer supported
+- Major version: Python 2.7 is no longer supported, adds support until Python 3.11
 
 ### Fixed
  - Unable to initialize SearchClient on Python 3.11 ([#549](https://github.com/algolia/algoliasearch-client-python/issues/549))
