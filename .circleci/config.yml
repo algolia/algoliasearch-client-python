@@ -12,10 +12,26 @@ jobs:
         type: string
     steps:
       - checkout
-      - run:
-          command: pip install --upgrade pip
-      - run:
-          command: pip install tox mock
+      - when:
+          condition:
+            matches:
+              pattern: ".*circleci.*"
+              value: << parameters.docker_version >>
+          steps:
+            - run:
+                command: sudo pip install --upgrade pip
+            - run:
+                command: sudo pip install tox mock
+      - when:
+          condition:
+            matches:
+              pattern: ".*cimg.*"
+              value: << parameters.docker_version >>
+          steps:
+            - run:
+                command: pip install --upgrade pip
+            - run:
+                command: pip install tox mock
       - run:
           command: tox -e py<< parameters.tox_version >>-sync,py<< parameters.tox_version >>-async
 
