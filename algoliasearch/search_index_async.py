@@ -51,7 +51,8 @@ class SearchIndexAsync(SearchIndex):
             factor = math.ceil(retries_count / 10)
             sleep_for = factor * self._config.wait_task_time_before_retry
 
-            return asyncio.sleep(sleep_for / 1000000.0)
+            asyncio.sleep(sleep_for / 1000000.0)
+            return
 
     def browse_objects_async(self, request_options=None):
         # type: (Optional[Union[dict, RequestOptions]]) -> ObjectIteratorAsync

@@ -49,7 +49,7 @@ class PaginatorIteratorAsync(Iterator):
                 }
                 raise StopAsyncIteration
 
-        self._raw_response = await self._transporter.read(
+        self._raw_response = self._transporter.read(
             Verb.POST, self.get_endpoint(), self._data, self._request_options
         )
         self.nbHits = len(self._raw_response["hits"])
@@ -78,10 +78,7 @@ class ObjectIteratorAsync(Iterator):
 
         if self._raw_response:
             if len(self._raw_response["hits"]):
-                result = self._raw_response["hits"].pop(0)
-
-                yield result
-                return
+                return self._raw_response["hits"].pop(0)
 
             if "cursor" not in self._raw_response:
                 self._raw_response = {}
@@ -89,15 +86,14 @@ class ObjectIteratorAsync(Iterator):
             else:
                 data["cursor"] = self._raw_response["cursor"]
 
-        self._raw_response = await self._transporter.read(
+        self._raw_response = self._transporter.read(
             Verb.POST,
             endpoint("1/indexes/{}/browse", self._index_name),
             data,
             self._request_options,
         )
 
-        yield self.__anext__()
-        return
+        return await self.__anext__()
 
 
 class SynonymIteratorAsync(PaginatorIteratorAsync):
