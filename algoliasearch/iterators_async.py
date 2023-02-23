@@ -1,11 +1,11 @@
 import abc
 import asyncio
 
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 from algoliasearch.helpers import endpoint
 
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.http.verb import Verb
 from algoliasearch.iterators import Iterator
 
@@ -14,7 +14,7 @@ class PaginatorIteratorAsync(Iterator):
     nbHits = 0
 
     def __init__(self, transporter, index_name, request_options=None):
-        # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
+        # type: (TransporterAsync, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
 
         super(PaginatorIteratorAsync, self).__init__(
             transporter, index_name, request_options
@@ -49,7 +49,7 @@ class PaginatorIteratorAsync(Iterator):
                 }
                 raise StopAsyncIteration
 
-        self._raw_response = self._transporter.read(
+        self._raw_response = await self._transporter.read(  # type: ignore
             Verb.POST, self.get_endpoint(), self._data, self._request_options
         )
         self.nbHits = len(self._raw_response["hits"])
@@ -86,7 +86,7 @@ class ObjectIteratorAsync(Iterator):
             else:
                 data["cursor"] = self._raw_response["cursor"]
 
-        self._raw_response = self._transporter.read(
+        self._raw_response = await self._transporter.read(  # type: ignore
             Verb.POST,
             endpoint("1/indexes/{}/browse", self._index_name),
             data,

@@ -22,19 +22,23 @@ class AnalyticsClientAsync(AnalyticsClient):
 
         _create_async_methods_in(self, client)
 
-    def __aenter__(self):
-        # type: () -> AnalyticsClientAsync # type: ignore
+    async def __aenter__(self):
+        # type: () -> AnalyticsClientAsync
 
-        return self  # type: ignore
+        return self
 
-    def __aexit__(self, exc_type, exc, tb):  # type: ignore
+    async def __aexit__(self, exc_type, exc, tb):  # type: ignore
         # type: (Optional[Type[BaseException]], Optional[BaseException],Optional[types.TracebackType]) -> None # noqa: E501
 
-        return self.close_async()  # type: ignore
+        self.close_async()
 
-    def close_async(self):  # type: ignore
+        return
+
+    async def close_async(self):
         # type: () -> None
 
         super().close()
 
-        return self._transporter_async.close()  # type: ignore
+        self._transporter_async.close()
+
+        return
