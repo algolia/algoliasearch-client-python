@@ -334,45 +334,6 @@ class SearchClient(object):
 
         self.init_index(index_name).wait_task(task_id, request_options)
 
-    def set_personalization_strategy(self, strategy, request_options=None):
-        # type: (dict, Optional[Union[dict, RequestOptions]]) -> dict
-
-        warnings.warn(
-            "`%s.%s` is deprecated, use `%s.%s` instead."
-            % (
-                "SearchClient",
-                "set_personalization_strategy",
-                "PersonalizationClient",
-                "set_personalization_strategy",
-            ),
-            DeprecationWarning,
-        )
-
-        return self._transporter.write(
-            Verb.POST,
-            "1/recommendation/personalization/strategy",
-            strategy,
-            request_options,
-        )
-
-    def get_personalization_strategy(self, request_options=None):
-        # type: (Optional[Union[dict, RequestOptions]]) -> dict
-
-        warnings.warn(
-            "`%s.%s` is deprecated, use `%s.%s` instead."
-            % (
-                "SearchClient",
-                "get_personalization_strategy",
-                "PersonalizationClient",
-                "get_personalization_strategy",
-            ),
-            DeprecationWarning,
-        )
-
-        return self._transporter.read(
-            Verb.GET, "1/recommendation/personalization/strategy", None, request_options
-        )
-
     def save_dictionary_entries(
         self, dictionary, dictionary_entries, request_options=None
     ):
