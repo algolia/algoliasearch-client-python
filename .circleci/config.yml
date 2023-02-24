@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/python:<< parameters.docker_version >>
+      - image: << parameters.docker_version >>
     description: Run tests for Python << parameters.tox_version >>
     parameters:
       docker_version:
@@ -12,49 +12,65 @@ jobs:
         type: string
     steps:
       - checkout
-      - run:
-          command: sudo pip install --upgrade pip
-      - run:
-          command: sudo pip install tox mock
+      - when:
+          condition:
+            matches:
+              pattern: ".*circleci.*"
+              value: << parameters.docker_version >>
+          steps:
+            - run:
+                command: sudo pip install --upgrade pip
+            - run:
+                command: sudo pip install tox mock
+      - when:
+          condition:
+            matches:
+              pattern: ".*cimg.*"
+              value: << parameters.docker_version >>
+          steps:
+            - run:
+                command: pip install --upgrade pip
+            - run:
+                command: pip install tox mock
       - run:
           command: tox -e py<< parameters.tox_version >>-sync,py<< parameters.tox_version >>-async
 
   format:
     docker:
-      - image: circleci/python:3.8.2
+      - image: cimg/python:3.8.2
     description: Run formatting and linting checks
     steps:
       - checkout
       - run:
-          command: sudo pip install --upgrade pip
+          command: pip install --upgrade pip
       - run:
-          command: sudo pip install tox
+          command: pip install tox
       - run:
           command: tox -e format
 
   types:
     docker:
-      - image: circleci/python:3.8.2
+      - image: cimg/python:3.8.2
     description: Run optional type checking with MyPy
     steps:
       - checkout
       - run:
-          command: sudo pip install --upgrade pip
+          command: pip install --upgrade pip
       - run:
-          command: sudo pip install tox
+          command: pip install tox
       - run:
           command: tox -e types
 
   release:
     docker:
-      - image: circleci/python:3.8.2
+      - image: cimg/python:3.8.2
     description: Perform a new release of the Python client
     steps:
       - checkout
       - run:
-          command: sudo pip install --upgrade pip
+          command: pip install --upgrade pip
       - run:
-          command: sudo pip install tox
+          command: pip install tox
       - run:
           command: |
             if [[ -z "$PYPI_USER" ]];     then echo '$PYPI_USER is not set';     exit 1; fi
@@ -66,44 +82,58 @@ workflows:
   build:
     jobs:
       - test:
-          name: 'test_27'
-          docker_version: '2.7'
-          tox_version: '27'
-          filters:
-            tags:
-              only: /.*/
-      - test:
           name: 'test_34'
-          docker_version: '3.4'
+          docker_version: 'circleci/python:3.4'
           tox_version: '34'
           filters:
             tags:
               only: /.*/
       - test:
           name: 'test_35'
-          docker_version: '3.5'
+          docker_version: 'cimg/python:3.5'
           tox_version: '35'
           filters:
             tags:
               only: /.*/
       - test:
           name: 'test_36'
-          docker_version: '3.6'
+          docker_version: 'cimg/python:3.6'
           tox_version: '36'
           filters:
             tags:
               only: /.*/
       - test:
           name: 'test_37'
-          docker_version: '3.7'
+          docker_version: 'cimg/python:3.7'
           tox_version: '37'
           filters:
             tags:
               only: /.*/
       - test:
           name: 'test_38'
-          docker_version: '3.8'
+          docker_version: 'cimg/python:3.8'
           tox_version: '38'
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          name: 'test_39'
+          docker_version: 'cimg/python:3.9'
+          tox_version: '39'
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          name: 'test_310'
+          docker_version: 'cimg/python:3.10'
+          tox_version: '310'
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          name: 'test_311'
+          docker_version: 'cimg/python:3.11.1'
+          tox_version: '311'
           filters:
             tags:
               only: /.*/
@@ -119,12 +149,14 @@ workflows:
               only: /.*/
       - release:
           requires:
-            - test_27
             - test_34
             - test_35
             - test_36
             - test_37
             - test_38
+            - test_39
+            - test_310
+            - test_311
             - format
             - types
           filters:

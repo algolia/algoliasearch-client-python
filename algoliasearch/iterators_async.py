@@ -1,11 +1,11 @@
 import abc
 import asyncio
 
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 from algoliasearch.helpers import endpoint
 
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.http.verb import Verb
 from algoliasearch.iterators import Iterator
 
@@ -14,7 +14,7 @@ class PaginatorIteratorAsync(Iterator):
     nbHits = 0
 
     def __init__(self, transporter, index_name, request_options=None):
-        # type: (Transporter, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
+        # type: (TransporterAsync, str, Optional[Union[dict, RequestOptions]]) -> None  # noqa: E501
 
         super(PaginatorIteratorAsync, self).__init__(
             transporter, index_name, request_options
@@ -24,13 +24,12 @@ class PaginatorIteratorAsync(Iterator):
             "page": 0,
         }
 
-    def __aiter__(self):
+    async def __aiter__(self):
         # type: () -> PaginatorIteratorAsync
 
         return self  # pragma: no cover
 
-    @asyncio.coroutine
-    def __anext__(self):  # type: ignore
+    async def __anext__(self):  # type: ignore
         # type: () -> dict
 
         if self._raw_response:
@@ -50,14 +49,14 @@ class PaginatorIteratorAsync(Iterator):
                 }
                 raise StopAsyncIteration
 
-        self._raw_response = yield from self._transporter.read(
+        self._raw_response = await self._transporter.read(  # type: ignore
             Verb.POST, self.get_endpoint(), self._data, self._request_options
         )
         self.nbHits = len(self._raw_response["hits"])
 
         self._data["page"] += 1
 
-        return self.__anext__()
+        return await self.__anext__()
 
     @abc.abstractmethod
     def get_endpoint(self):
@@ -67,22 +66,19 @@ class PaginatorIteratorAsync(Iterator):
 
 
 class ObjectIteratorAsync(Iterator):
-    def __aiter__(self):
+    async def __aiter__(self):
         # type: () -> ObjectIteratorAsync
 
         return self  # pragma: no cover
 
-    @asyncio.coroutine
-    def __anext__(self):  # type: ignore
+    async def __anext__(self):  # type: ignore
         # type: () -> dict
 
         data = {}  # type: dict
 
         if self._raw_response:
             if len(self._raw_response["hits"]):
-                result = self._raw_response["hits"].pop(0)
-
-                return result
+                return self._raw_response["hits"].pop(0)
 
             if "cursor" not in self._raw_response:
                 self._raw_response = {}
@@ -90,14 +86,14 @@ class ObjectIteratorAsync(Iterator):
             else:
                 data["cursor"] = self._raw_response["cursor"]
 
-        self._raw_response = yield from self._transporter.read(
+        self._raw_response = await self._transporter.read(  # type: ignore
             Verb.POST,
             endpoint("1/indexes/{}/browse", self._index_name),
             data,
             self._request_options,
         )
 
-        return (yield from self.__anext__())
+        return await self.__anext__()
 
 
 class SynonymIteratorAsync(PaginatorIteratorAsync):

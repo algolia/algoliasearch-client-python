@@ -1,6 +1,5 @@
 import types
 
-import asyncio
 from typing import Optional, Type
 
 from algoliasearch.analytics_client import AnalyticsClient
@@ -23,22 +22,23 @@ class AnalyticsClientAsync(AnalyticsClient):
 
         _create_async_methods_in(self, client)
 
-    @asyncio.coroutine
-    def __aenter__(self):
-        # type: () -> AnalyticsClientAsync # type: ignore
+    async def __aenter__(self):
+        # type: () -> AnalyticsClientAsync
 
-        return self  # type: ignore
+        return self
 
-    @asyncio.coroutine
-    def __aexit__(self, exc_type, exc, tb):  # type: ignore
+    async def __aexit__(self, exc_type, exc, tb):  # type: ignore
         # type: (Optional[Type[BaseException]], Optional[BaseException],Optional[types.TracebackType]) -> None # noqa: E501
 
-        yield from self.close_async()  # type: ignore
+        self.close_async()
 
-    @asyncio.coroutine
-    def close_async(self):  # type: ignore
+        return
+
+    async def close_async(self):
         # type: () -> None
 
         super().close()
 
-        yield from self._transporter_async.close()  # type: ignore
+        self._transporter_async.close()
+
+        return

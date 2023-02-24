@@ -1,4 +1,3 @@
-import asyncio
 import types
 
 from typing import Callable
@@ -29,7 +28,7 @@ def _gen_async(client, method):
 
     m = getattr(client, method)
 
-    def closure(*args, **kwargs):
+    async def closure(*args, **kwargs):
         result = m(*args, **kwargs)
 
         # We make sure we resolve the promise from the raw_responses
@@ -38,16 +37,16 @@ def _gen_async(client, method):
                 i,
                 raw_response,
             ) in enumerate(result.raw_responses):
-                result.raw_responses[i] = yield from raw_response
+                result.raw_responses[i] = await raw_response
 
         # We make sure we resolve the promise from the raw_response
         if hasattr(result, "raw_response"):
-            result.raw_response = yield from result.raw_response
+            result.raw_response = await result.raw_response
 
         # We make sure we resolve the promise
         if isinstance(result, types.GeneratorType):
-            result = yield from result
+            result = await result
 
         return result
 
-    return asyncio.coroutine(closure)
+    return closure

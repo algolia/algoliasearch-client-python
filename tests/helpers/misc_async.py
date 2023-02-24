@@ -51,14 +51,14 @@ class SyncDecorator(object):
 
         return SyncDecorator(user_insights_client)
 
-    def iterator_to_array(self, iterator):
+    async def iterator_to_array(self, iterator):
         def closure():
 
             objects = []
 
             while True:
                 try:
-                    obj = yield from iterator.__anext__()
+                    obj = await iterator.__anext__()
                 except Exception:
                     break
                 else:
