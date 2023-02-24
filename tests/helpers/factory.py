@@ -12,7 +12,6 @@ from algoliasearch.analytics_client import AnalyticsClient
 from algoliasearch.insights_client import InsightsClient
 from algoliasearch.search_client import SearchClient, SearchConfig
 from algoliasearch.recommend_client import RecommendClient
-from algoliasearch.recommendation_client import RecommendationClient
 from algoliasearch.personalization_client import PersonalizationClient
 from algoliasearch.http.hosts import HostsCollection, Host
 from faker import Faker
@@ -89,24 +88,6 @@ class Factory(object):
         api_key = api_key if api_key is not None else Factory.get_api_key()
 
         return Factory.decide(RecommendClient.create(app_id, api_key))
-
-    @staticmethod
-    def recommendation_client(app_id=None, api_key=None):
-        # type: (Optional[str], Optional[str]) -> RecommendationClient
-
-        warnings.warn(
-            "`%s` is deprecated, use `%s` instead."
-            % (
-                "RecommendationClient",
-                "PersonalizationClient",
-            ),
-            DeprecationWarning,
-        )
-
-        app_id = app_id if app_id is not None else Factory.get_app_id()
-        api_key = api_key if api_key is not None else Factory.get_api_key()
-
-        return Factory.decide(RecommendationClient.create(app_id, api_key))
 
     @staticmethod
     def personalization_client(app_id=None, api_key=None):
