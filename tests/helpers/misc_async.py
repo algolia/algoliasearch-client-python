@@ -7,15 +7,12 @@ from algoliasearch.iterators import Iterator
 class SyncDecorator(object):
     @property
     def name(self):
-
         return self._base.name
 
     def __init__(self, base):
-
         self._base = base
 
     def __getattr__(self, name):
-
         method = getattr(self._base, name)
 
         if not callable(method):
@@ -39,13 +36,11 @@ class SyncDecorator(object):
         return closure
 
     def init_index(self, name):
-
         search_index = self._base.init_index(name)
 
         return SyncDecorator(search_index)
 
     def user(self, user_token):
-
         user_insights_client = self._base.user(user_token)
         user_insights_client.__setattr__("close", self._base.close)
 
@@ -53,7 +48,6 @@ class SyncDecorator(object):
 
     async def iterator_to_array(self, iterator):
         def closure():
-
             objects = []
 
             while True:

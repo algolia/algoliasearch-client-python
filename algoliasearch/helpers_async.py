@@ -1,5 +1,4 @@
 import types
-
 from typing import Callable
 
 

@@ -1,4 +1,4 @@
-from typing import Optional, Union, Dict, Any
+from typing import Any, Dict, Optional, Union
 
 from algoliasearch.configs import AnalyticsConfig
 from algoliasearch.helpers import endpoint, is_async_available
@@ -34,8 +34,8 @@ class AnalyticsClient(object):
 
         if is_async_available():
             from algoliasearch.analytics_client_async import AnalyticsClientAsync
-            from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync
+            from algoliasearch.http.transporter_async import TransporterAsync
 
             return AnalyticsClientAsync(
                 client, TransporterAsync(RequesterAsync(), config), config

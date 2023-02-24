@@ -1,8 +1,7 @@
 import abc
-
 from typing import Optional, Union
-from algoliasearch.helpers import endpoint
 
+from algoliasearch.helpers import endpoint
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
@@ -52,7 +51,6 @@ class PaginatorIterator(Iterator):
     def __next__(self):
         # type: () -> dict
         if self._raw_response:
-
             if len(self._raw_response["hits"]):
                 hit = self._raw_response["hits"].pop(0)
 

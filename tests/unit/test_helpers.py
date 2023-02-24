@@ -21,7 +21,6 @@ class TestHelpers(unittest.TestCase):
         assert_object_id([obj])
 
     def test_endpoint(self):
-
         self.assertEqual("", endpoint(""))
 
         self.assertEqual(

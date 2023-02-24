@@ -2,8 +2,7 @@ import json
 import math
 import sys
 import time
-
-from typing import Optional, Iterable, List, Union, Iterator, Dict, Any
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Union
 
 from algoliasearch.exceptions import MissingObjectIdException
 
@@ -61,6 +60,7 @@ def is_async_available():
     if sys.version_info >= (3, 0):
         try:
             import asyncio
+
             import aiohttp
             import async_timeout
 

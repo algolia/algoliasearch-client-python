@@ -1,11 +1,10 @@
 import types
-import asyncio
 from typing import Optional, Type
 
-from algoliasearch.personalization_client import PersonalizationClient
 from algoliasearch.configs import PersonalizationConfig
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.http.transporter_async import TransporterAsync
+from algoliasearch.personalization_client import PersonalizationClient
 
 
 class PersonalizationClientAsync(PersonalizationClient):

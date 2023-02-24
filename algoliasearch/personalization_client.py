@@ -33,11 +33,11 @@ class PersonalizationClient(object):
         client = PersonalizationClient(transporter, config)
 
         if is_async_available():
+            from algoliasearch.http.requester_async import RequesterAsync
+            from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.personalization_client_async import (
                 PersonalizationClientAsync,
             )
-            from algoliasearch.http.transporter_async import TransporterAsync
-            from algoliasearch.http.requester_async import RequesterAsync
 
             return PersonalizationClientAsync(
                 client, TransporterAsync(RequesterAsync(), config), config

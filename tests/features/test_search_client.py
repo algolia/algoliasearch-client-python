@@ -1,11 +1,10 @@
 import datetime
 import os
 import platform
-import unittest
-
-import time
 import random
 import string
+import time
+import unittest
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException, ValidUntilNotFoundException
@@ -13,7 +12,8 @@ from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
 from tests.helpers.env import Env
-from tests.helpers.factory import Factory as F, Factory
+from tests.helpers.factory import Factory
+from tests.helpers.factory import Factory as F
 
 
 class TestSearchClient(unittest.TestCase):
@@ -263,7 +263,6 @@ class TestSearchClient(unittest.TestCase):
         self.client.delete_api_key(api_key["value"])
 
     def test_get_logs(self):
-
         self.assertIsInstance(self.client.list_indices(), dict)
         self.assertIsInstance(self.client.list_indices()["items"], list)
 

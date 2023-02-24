@@ -1,6 +1,4 @@
 import types
-
-import asyncio
 from typing import Optional, Type
 
 from algoliasearch.configs import InsightsConfig

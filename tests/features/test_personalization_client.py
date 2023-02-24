@@ -1,8 +1,8 @@
 import unittest
 
+from algoliasearch.exceptions import RequestException
 from tests.helpers.env import Env
 from tests.helpers.factory import Factory as F
-from algoliasearch.exceptions import RequestException
 
 
 class TestPersonalizationClient(unittest.TestCase):

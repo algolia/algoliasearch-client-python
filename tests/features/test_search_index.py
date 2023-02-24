@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+import json
 import sys
 import unittest
-import json
-import requests
-import mock
 
+import mock
+import requests
 from requests.models import Response
 
-from algoliasearch.exceptions import RequestException, ObjectNotFoundException
+from algoliasearch.exceptions import ObjectNotFoundException, RequestException
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
@@ -728,7 +728,6 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(self.index.get_synonym("two")["objectID"], "two")
 
     def test_safe_replacing(self):
-
         # Adds dummy object
         self.index.save_object(F.obj()).wait()
 

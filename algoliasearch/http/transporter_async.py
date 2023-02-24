@@ -1,12 +1,12 @@
 from algoliasearch.configs import Config
-from algoliasearch.exceptions import RequestException, AlgoliaUnreachableHostException
+from algoliasearch.exceptions import AlgoliaUnreachableHostException, RequestException
 from algoliasearch.http.hosts import HostsCollection
 from algoliasearch.http.requester_async import RequesterAsync
 from algoliasearch.http.transporter import (
-    Transporter,
-    RetryOutcome,
     Request,
+    RetryOutcome,
     RetryStrategy,
+    Transporter,
 )
 
 
@@ -15,7 +15,6 @@ class TransporterAsync(Transporter):
         # type: (list, Request, str) -> dict
 
         for host in self._retry_strategy.valid_hosts(hosts):
-
             request.url = "https://{}/{}".format(host.url, relative_url)
 
             response = await self._requester.send(request)  # type: ignore
@@ -23,7 +22,6 @@ class TransporterAsync(Transporter):
             decision = self._retry_strategy.decide(host, response)
 
             if decision == RetryOutcome.SUCCESS:
-
                 return response.content if response.content is not None else {}
             elif decision == RetryOutcome.FAIL:
                 content = response.error_message

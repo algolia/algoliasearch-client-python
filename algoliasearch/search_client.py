@@ -3,29 +3,27 @@ import hashlib
 import hmac
 import re
 import time
-import warnings
+from typing import Iterator, List, Optional, Union
 
-from typing import Optional, Union, List, Iterator
-
+from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import ValidUntilNotFoundException
-from algoliasearch.helpers import endpoint, is_async_available, build_raw_response_batch
+from algoliasearch.helpers import build_raw_response_batch, endpoint, is_async_available
+from algoliasearch.http.hosts import CallType
 from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.requester import Requester
 from algoliasearch.http.serializer import QueryParametersSerializer
+from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 from algoliasearch.responses import (
-    IndexingResponse,
     AddApiKeyResponse,
-    UpdateApiKeyResponse,
     DeleteApiKeyResponse,
-    RestoreApiKeyResponse,
-    MultipleIndexBatchIndexingResponse,
     DictionaryResponse,
+    IndexingResponse,
+    MultipleIndexBatchIndexingResponse,
+    RestoreApiKeyResponse,
+    UpdateApiKeyResponse,
 )
 from algoliasearch.search_index import SearchIndex
-from algoliasearch.configs import SearchConfig
-from algoliasearch.http.transporter import Transporter
-from algoliasearch.http.requester import Requester
-from algoliasearch.http.hosts import CallType
 
 
 class SearchClient(object):
@@ -64,9 +62,9 @@ class SearchClient(object):
         client = SearchClient(transporter, config)
 
         if is_async_available():
-            from algoliasearch.search_client_async import SearchClientAsync
-            from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync
+            from algoliasearch.http.transporter_async import TransporterAsync
+            from algoliasearch.search_client_async import SearchClientAsync
 
             return SearchClientAsync(
                 client, TransporterAsync(RequesterAsync(), config), config
@@ -205,7 +203,6 @@ class SearchClient(object):
             )
 
         if retrieve_mappings:
-
             if request_options is None or isinstance(request_options, dict):
                 request_options = RequestOptions.create(self._config, request_options)
 
@@ -427,7 +424,8 @@ class SearchClient(object):
         return self
 
     def custom_request(self, data, uri, method, call_type, request_options=None):
-        # type: (dict, str, str, int, Optional[Union[dict, RequestOptions]]) -> dict
+        # type: (dict, str, str, int, Optional[Union[dict, RequestOptions]]) ->
+        # dict
 
         if call_type == CallType.WRITE:
             return self._transporter.write(method, uri, data, request_options)

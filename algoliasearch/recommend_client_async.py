@@ -1,12 +1,10 @@
-from algoliasearch.recommend_client import RecommendClient
-from typing import Optional, Type
-
 import types
-import asyncio
+from typing import Optional, Type
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.http.transporter_async import TransporterAsync
+from algoliasearch.recommend_client import RecommendClient
 
 
 class RecommendClientAsync(RecommendClient):

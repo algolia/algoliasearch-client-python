@@ -1,21 +1,20 @@
-import warnings
 import datetime
 import os
 import platform
 import sys
-from time import time
+import warnings
 from random import shuffle
-
+from time import time
 from typing import Optional
 
-from algoliasearch.analytics_client import AnalyticsClient
-from algoliasearch.insights_client import InsightsClient
-from algoliasearch.search_client import SearchClient, SearchConfig
-from algoliasearch.recommend_client import RecommendClient
-from algoliasearch.personalization_client import PersonalizationClient
-from algoliasearch.http.hosts import HostsCollection, Host
 from faker import Faker
 
+from algoliasearch.analytics_client import AnalyticsClient
+from algoliasearch.http.hosts import Host, HostsCollection
+from algoliasearch.insights_client import InsightsClient
+from algoliasearch.personalization_client import PersonalizationClient
+from algoliasearch.recommend_client import RecommendClient
+from algoliasearch.search_client import SearchClient, SearchConfig
 from algoliasearch.search_index import SearchIndex
 
 
@@ -206,7 +205,6 @@ class Factory(object):
 
     @staticmethod
     def decide(client):
-
         if os.environ.get("TEST_TYPE", False) == "async":
             from tests.helpers.misc_async import SyncDecorator
 

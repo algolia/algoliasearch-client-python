@@ -1,11 +1,11 @@
 import time
+from typing import Any, Dict, List, Optional, Union
 
-from typing import Optional, Union, Dict, Any, List
+from algoliasearch.configs import Config
 from algoliasearch.exceptions import AlgoliaUnreachableHostException, RequestException
 from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.configs import Config
-from algoliasearch.http.serializer import QueryParametersSerializer, DataSerializer
+from algoliasearch.http.serializer import DataSerializer, QueryParametersSerializer
 from algoliasearch.http.verb import Verb
 
 try:
@@ -75,7 +75,6 @@ class Transporter(object):
         # type: (List[Host], Request, str) -> dict
 
         for host in self._retry_strategy.valid_hosts(hosts):
-
             request.url = "https://{}/{}".format(host.url, relative_url)
 
             response = self._requester.send(request)
@@ -181,7 +180,6 @@ class RetryStrategy(object):
 
             return RetryOutcome.RETRY
         elif response.status_code is not None and self._is_success(response):
-
             return RetryOutcome.SUCCESS
 
         return RetryOutcome.FAIL

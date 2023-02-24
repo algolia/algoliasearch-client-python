@@ -2,11 +2,11 @@ import unittest
 
 import mock
 
+from algoliasearch.configs import SearchConfig
+from algoliasearch.http.requester import Requester
+from algoliasearch.http.transporter import Transporter
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
-from algoliasearch.configs import SearchConfig
-from algoliasearch.http.transporter import Transporter
-from algoliasearch.http.requester import Requester
 
 
 class TestSearchClient(unittest.TestCase):

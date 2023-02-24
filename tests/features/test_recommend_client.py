@@ -1,8 +1,10 @@
 import json
-import requests
-from algoliasearch.recommend_client import RecommendClient
 import unittest
+
 import mock
+import requests
+
+from algoliasearch.recommend_client import RecommendClient
 
 # we ignore the `line-too-long` lint errors for the file
 # flake8: noqa E501
@@ -184,7 +186,8 @@ class TestRecommendClient(unittest.TestCase):
             ]
         )
 
-        # Test if `fallbackParameters` param is not passed for 'bought-together' method
+        # Test if `fallbackParameters` param is not passed for
+        # 'bought-together' method
         self.client.get_frequently_bought_together(
             [
                 {

@@ -1,10 +1,9 @@
 import abc
 import os
-
 from typing import Dict, Optional
 
 from algoliasearch.exceptions import AlgoliaException
-from algoliasearch.http.hosts import Host, HostsCollection, CallType
+from algoliasearch.http.hosts import CallType, Host, HostsCollection
 from algoliasearch.user_agent import UserAgent
 
 

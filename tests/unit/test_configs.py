@@ -2,7 +2,7 @@ import os
 import unittest
 from platform import python_version
 
-from algoliasearch.configs import SearchConfig, Config
+from algoliasearch.configs import Config, SearchConfig
 from algoliasearch.http.hosts import HostsCollection
 from algoliasearch.version import VERSION
 
