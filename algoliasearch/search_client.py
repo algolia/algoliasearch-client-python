@@ -424,8 +424,7 @@ class SearchClient(object):
         return self
 
     def custom_request(self, data, uri, method, call_type, request_options=None):
-        # type: (dict, str, str, int, Optional[Union[dict, RequestOptions]]) ->
-        # dict
+        # type: (dict, str, str, int, Optional[Union[dict, RequestOptions]]) -> dict
 
         if call_type == CallType.WRITE:
             return self._transporter.write(method, uri, data, request_options)
