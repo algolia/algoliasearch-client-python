@@ -41,8 +41,7 @@ class SearchIndexAsync(SearchIndex):
         retries_count = 1
 
         while True:
-            # type: ignore
-            task = await self.get_task_async(task_id, request_options)
+            task = await self.get_task_async(task_id, request_options)  # type: ignore
 
             if task["status"] == "published":
                 break
@@ -171,8 +170,7 @@ class SearchIndexAsync(SearchIndex):
         if safe:
             responses.wait()
 
-        # type: ignore
-        response = yield from tmp_index.move_to_async(self._name)
+        response = yield from tmp_index.move_to_async(self._name)  # type: ignore
         responses.push(response)
 
         if safe:
