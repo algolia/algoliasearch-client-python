@@ -110,22 +110,6 @@ class InsightsConfig(Config):
         )
 
 
-class RecommendationConfig(Config):
-    def __init__(self, app_id=None, api_key=None, region=None):
-        # type: (Optional[str], Optional[str], Optional[str]) -> None
-
-        self._region = "us" if region is None else region
-
-        super(RecommendationConfig, self).__init__(app_id, api_key)
-
-    def build_hosts(self):
-        # type: () -> HostsCollection
-
-        return HostsCollection(
-            [Host("{}.{}.{}".format("recommendation", self._region, "algolia.com"))]
-        )
-
-
 class PersonalizationConfig(Config):
     def __init__(self, app_id=None, api_key=None, region=None):
         # type: (Optional[str], Optional[str], Optional[str]) -> None
