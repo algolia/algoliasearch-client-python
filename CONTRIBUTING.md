@@ -16,7 +16,21 @@ please consider submitting them as separate pull requests unless they are relate
 
 Here are a few tips to increase the likelihood of being merged:
 
-- [ ] Write tests.
+- [ ] Write tests & run them
+  ```sh
+  $ python3 -m venv venv
+  $ source venv/bin/activate
+  $ pip install tox
+  $ tox -e py{PYTHON_VERSION}-{sync|async}
+  ```
+- [ ] Check types
+  ```sh
+  $ tox -e types
+  ```
+- [ ] Check format
+  ```sh
+  $ tox -e format
+  ```
 - [ ] Write a [good commit message](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
 - [ ] Allow [edits from maintainers](https://blog.github.com/2016-09-07-improving-collaboration-with-forks/).
 
