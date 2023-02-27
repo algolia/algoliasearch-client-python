@@ -1,10 +1,9 @@
-import json
 import calendar
 import datetime
 import decimal
+import json
 import sys
-
-from typing import Union, Any, Dict
+from typing import Any, Dict, Union
 
 from algoliasearch.helpers import get_items
 

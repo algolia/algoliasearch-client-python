@@ -1,5 +1,4 @@
 import types
-
 from typing import Optional, Type
 
 from algoliasearch.analytics_client import AnalyticsClient

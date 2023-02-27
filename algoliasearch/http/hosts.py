@@ -1,5 +1,4 @@
 from random import shuffle
-
 from typing import List, Optional, cast
 
 

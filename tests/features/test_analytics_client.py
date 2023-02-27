@@ -1,7 +1,7 @@
+import datetime
 import os
 import platform
 import unittest
-import datetime
 
 from algoliasearch.exceptions import RequestException
 from tests.helpers.factory import Factory as F

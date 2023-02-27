@@ -1,11 +1,11 @@
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
+from algoliasearch.configs import SearchConfig
 from algoliasearch.helpers import is_async_available
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.verb import Verb
-from algoliasearch.configs import SearchConfig
 from algoliasearch.http.requester import Requester
 from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 
 
 class RecommendClient(object):
@@ -39,9 +39,9 @@ class RecommendClient(object):
         client = RecommendClient(transporter, config)
 
         if is_async_available():
-            from algoliasearch.recommend_client_async import RecommendClientAsync
-            from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync
+            from algoliasearch.http.transporter_async import TransporterAsync
+            from algoliasearch.recommend_client_async import RecommendClientAsync
 
             return RecommendClientAsync(
                 client, TransporterAsync(RequesterAsync(), config), config

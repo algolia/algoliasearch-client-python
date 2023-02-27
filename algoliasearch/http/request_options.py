@@ -1,6 +1,5 @@
 import copy
-
-from typing import Optional, Any, Dict, Union
+from typing import Any, Dict, Optional, Union
 
 from algoliasearch.configs import Config
 from algoliasearch.helpers import get_items

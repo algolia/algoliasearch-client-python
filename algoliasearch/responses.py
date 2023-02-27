@@ -1,14 +1,12 @@
-import time
-
 import abc
-
-from typing import List, Union, Optional
+import time
+from typing import List, Optional, Union
 
 from algoliasearch.exceptions import RequestException
-from algoliasearch.helpers import get_items, sleep_for, endpoint
+from algoliasearch.helpers import endpoint, get_items, sleep_for
+from algoliasearch.http.hosts import CallType
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.verb import Verb
-from algoliasearch.http.hosts import CallType
 
 try:
     from algoliasearch.search_index import SearchIndex

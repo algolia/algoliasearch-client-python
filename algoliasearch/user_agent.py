@@ -1,5 +1,6 @@
-from algoliasearch.version import VERSION
 from platform import python_version
+
+from algoliasearch.version import VERSION
 
 
 class UserAgent(object):

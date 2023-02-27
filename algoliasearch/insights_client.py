@@ -1,4 +1,4 @@
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
 from algoliasearch.configs import InsightsConfig
 from algoliasearch.helpers import is_async_available
@@ -33,9 +33,9 @@ class InsightsClient(object):
         client = InsightsClient(transporter, config)
 
         if is_async_available():
-            from algoliasearch.insights_client_async import InsightsClientAsync
-            from algoliasearch.http.transporter_async import TransporterAsync
             from algoliasearch.http.requester_async import RequesterAsync
+            from algoliasearch.http.transporter_async import TransporterAsync
+            from algoliasearch.insights_client_async import InsightsClientAsync
 
             return InsightsClientAsync(
                 client, TransporterAsync(RequesterAsync(), config), config

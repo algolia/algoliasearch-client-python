@@ -1,25 +1,24 @@
-import copy
-
 import asyncio
+import copy
 import math
-from typing import Optional, Dict, Union, List, Iterator, Callable
+from typing import Callable, Dict, Iterator, List, Optional, Union
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import ObjectNotFoundException, RequestException
-from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.helpers import endpoint
+from algoliasearch.helpers_async import _create_async_methods_in
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import SettingsDeserializer
 from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.http.verb import Verb
+from algoliasearch.iterators_async import (
+    ObjectIteratorAsync,
+    RuleIteratorAsync,
+    SynonymIteratorAsync,
+)
 from algoliasearch.responses import MultipleResponse
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_index import SearchIndex
-from algoliasearch.iterators_async import (
-    ObjectIteratorAsync,
-    SynonymIteratorAsync,
-    RuleIteratorAsync,
-)
 
 
 class SearchIndexAsync(SearchIndex):

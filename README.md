@@ -33,7 +33,7 @@
 First, install Algolia Python API Client via the [pip](https://pip.pypa.io/en/stable/installing) package manager:
 
 ```bash
-pip install --upgrade 'algoliasearch>=2.0,<3.0'
+pip install --upgrade 'algoliasearch>=3.0,<4.0'
 ```
 
 Then, create objects on your index:

@@ -4,7 +4,7 @@ import aiohttp
 import async_timeout
 
 from algoliasearch.http.requester import Requester
-from algoliasearch.http.transporter import Response, Request
+from algoliasearch.http.transporter import Request, Response
 
 
 class RequesterAsync(Requester):
@@ -28,20 +28,17 @@ class RequesterAsync(Requester):
 
         try:
             with async_timeout.timeout(request.timeout):
-                response = await (
-                    self._session.request(  # type: ignore
-                        method=request.verb,
-                        url=request.url,
-                        headers=request.headers,
-                        data=request.data_as_string,
-                        proxy=proxy,
-                    )
+                response = await self._session.request(  # type: ignore
+                    method=request.verb,
+                    url=request.url,
+                    headers=request.headers,
+                    data=request.data_as_string,
+                    proxy=proxy,
                 )
 
                 json = await response.json()
 
         except asyncio.TimeoutError as e:
-
             return Response(error_message=str(e), is_timed_out_error=True)
 
         return Response(response.status, json, str(response.reason))

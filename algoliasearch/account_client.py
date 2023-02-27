@@ -1,4 +1,4 @@
-from typing import Optional, Union, Dict, Any
+from typing import Any, Dict, Optional, Union
 
 from algoliasearch.exceptions import AlgoliaException, RequestException
 from algoliasearch.http.request_options import RequestOptions

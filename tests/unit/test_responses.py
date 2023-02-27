@@ -6,12 +6,12 @@ from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import RequestException
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.responses import (
-    IndexingResponse,
-    MultipleResponse,
     AddApiKeyResponse,
-    UpdateApiKeyResponse,
     DeleteApiKeyResponse,
+    IndexingResponse,
     MultipleIndexBatchIndexingResponse,
+    MultipleResponse,
+    UpdateApiKeyResponse,
 )
 from algoliasearch.search_client import SearchClient
 

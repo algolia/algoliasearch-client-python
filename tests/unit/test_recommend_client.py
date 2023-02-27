@@ -2,10 +2,10 @@ import unittest
 
 import mock
 
-from algoliasearch.recommend_client import RecommendClient
 from algoliasearch.configs import SearchConfig
-from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.requester import Requester
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.recommend_client import RecommendClient
 
 
 class TestRecommendClient(unittest.TestCase):

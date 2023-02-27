@@ -1,9 +1,7 @@
 import abc
-import asyncio
+from typing import Any, Dict, Optional, Union
 
-from typing import Optional, Union, Dict, Any
 from algoliasearch.helpers import endpoint
-
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.http.verb import Verb

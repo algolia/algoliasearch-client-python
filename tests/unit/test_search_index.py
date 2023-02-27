@@ -2,13 +2,13 @@ import unittest
 
 import mock
 
-from algoliasearch.exceptions import RequestException, MissingObjectIdException
+from algoliasearch.configs import SearchConfig
+from algoliasearch.exceptions import MissingObjectIdException, RequestException
 from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.requester import Requester
+from algoliasearch.http.transporter import Transporter
 from algoliasearch.responses import Response
 from algoliasearch.search_index import SearchIndex
-from algoliasearch.configs import SearchConfig
-from algoliasearch.http.transporter import Transporter
-from algoliasearch.http.requester import Requester
 from tests.helpers.factory import Factory as F
 
 

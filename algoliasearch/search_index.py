@@ -3,8 +3,7 @@ import math
 import random
 import string
 import time
-
-from typing import Any, Optional, Dict, List, Union, Iterator, Callable
+from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
 from algoliasearch.configs import SearchConfig
 from algoliasearch.exceptions import (
@@ -17,8 +16,8 @@ from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import SettingsDeserializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
-from algoliasearch.iterators import ObjectIterator, SynonymIterator, RuleIterator
-from algoliasearch.responses import Response, IndexingResponse, MultipleResponse
+from algoliasearch.iterators import ObjectIterator, RuleIterator, SynonymIterator
+from algoliasearch.responses import IndexingResponse, MultipleResponse, Response
 
 
 class SearchIndex(object):
