@@ -7,16 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.3...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v3.0.0...master)
 
-## [v3.0.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...v3.0.0)
+## [v3.0.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.3...v3.0.0)
 
 ### Changed
 
-- Major version: Python 2.7 is no longer supported, adds support until Python 3.11
+- Major version!: drop support for Python 2.7, add support for Python 3.9, 3.10 and 3.11 ([#553](https://github.com/algolia/algoliasearch-client-python/pull/553))
+- Major version!: remove recommendation client in favor of personalization ([#554](https://github.com/algolia/algoliasearch-client-python/pull/554))
 
 ### Fixed
- - Unable to initialize SearchClient on Python 3.11 ([#549](https://github.com/algolia/algoliasearch-client-python/issues/549))
+
+- Unable to initialize SearchClient on Python 3.11 ([#549](https://github.com/algolia/algoliasearch-client-python/issues/549))
 
 ## [v2.6.3](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.2...v2.6.3)
 
