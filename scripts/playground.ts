@@ -29,6 +29,9 @@ export async function playground({
        php ${client}.php`
       );
       break;
+    case 'go':
+      await run(`cd playground/go && /usr/local/go/bin/go run main.go`);
+      break;
     default:
   }
 }

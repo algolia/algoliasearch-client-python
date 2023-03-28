@@ -53,6 +53,7 @@ describe('createReleasePR', () => {
       },
       javascript: { current: expect.any(String) },
       php: { current: expect.any(String) },
+      go: { current: expect.any(String) },
     });
   });
 
@@ -147,11 +148,18 @@ describe('createReleasePR', () => {
             releaseType: 'patch',
             next: getNextVersion('0.0.1', 'patch'),
           },
+
+          go: {
+            current: '0.0.1',
+            releaseType: 'patch',
+            next: getNextVersion('0.0.1', 'patch'),
+          },
         })
       ).toMatchInlineSnapshot(`
               "- javascript: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**
               - java: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**
-              - php: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**"
+              - php: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**
+              - go: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**"
           `);
     });
 
@@ -176,11 +184,18 @@ describe('createReleasePR', () => {
             releaseType: 'patch',
             next: getNextVersion('0.0.1', 'patch'),
           },
+
+          go: {
+            current: '0.0.1',
+            releaseType: 'patch',
+            next: getNextVersion('0.0.1', 'patch'),
+          },
         })
       ).toMatchInlineSnapshot(`
               "- javascript: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**
               - java: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**
-              - ~php: 0.0.1 (no commit)~"
+              - ~php: 0.0.1 (no commit)~
+              - go: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**"
           `);
     });
 
@@ -205,12 +220,21 @@ describe('createReleasePR', () => {
             skipRelease: true,
             next: getNextVersion('0.0.1', null),
           },
+
+          go: {
+            current: '0.0.1',
+            releaseType: null,
+            skipRelease: true,
+            next: getNextVersion('0.0.1', null),
+          },
         })
       ).toMatchInlineSnapshot(`
               "- javascript: 0.0.1 -> **\`patch\` _(e.g. 0.0.2)_**
               - ~java: 0.0.1 -> **\`null\` _(e.g. 0.0.1)_**~
                 - No \`feat\` or \`fix\` commit, thus unchecked by default.
-              - php: 0.0.1 -> **\`minor\` _(e.g. 0.1.0)_**"
+              - php: 0.0.1 -> **\`minor\` _(e.g. 0.1.0)_**
+              - ~go: 0.0.1 -> **\`null\` _(e.g. 0.0.1)_**~
+                - No \`feat\` or \`fix\` commit, thus unchecked by default."
           `);
     });
   });

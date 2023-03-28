@@ -1,0 +1,232 @@
+// {{{generationBanner}}}
+package {{packageName}}
+
+{{#operations}}
+import (
+	"bytes"
+	"context"
+	"io"
+	"net/http"
+	"net/url"
+  "strings"
+)
+
+type Option struct {
+	Type string
+	Name string
+	Value string
+}
+
+func WithPage(page int32) Option {
+	return Option{
+		Type: "query",
+		Name: "page",
+		Value: parameterToString(page),
+	}
+}
+
+func WithItemsPerPage(itemsPerPage int32) Option {
+	return Option{
+		Type: "query",
+		Name: "itemsPerPage",
+		Value: parameterToString(itemsPerPage),
+	}
+}
+
+func WithBody(body any) Option {
+  return Option{
+    Type: "body",
+    Name: "body",
+    Value: parameterToString(body),
+  }
+}
+
+{{#operation}}
+
+// {{{description}}}{{#returnType}}
+//  @return {{{.}}}{{/returnType}}
+{{#isDeprecated}}
+// Deprecated
+{{/isDeprecated}}
+func (c *APIClient) {{nickname}}({{#requiredParams}}{{paramName}} {{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{{dataType}}}{{^-last}},{{/-last}}{{/requiredParams}}{{#hasOptionalParams}}{{#hasRequiredParams}}, {{/hasRequiredParams}}opts ...Option{{/hasOptionalParams}}) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
+	var (
+    localVarPostBody     any
+    {{#hasBodyParam}}body                 any{{/hasBodyParam}}
+		{{#returnType}}
+		returnValue  {{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}
+		{{/returnType}}
+	)
+
+  requestPath := "{{{path}}}"{{#pathParams}}
+  requestPath = strings.Replace(requestPath, "{"+"{{baseName}}"+"}", url.PathEscape(parameterToString({{paramName}})), -1){{/pathParams}}
+
+	headers := make(map[string]string)
+	queryParams := url.Values{}
+	{{#allParams}}
+	{{#required}}
+	{{^isPathParam}}
+  {{^isPrimitiveType}}
+	if {{paramName}} == nil {
+	  return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} is required and must be specified")
+	}
+  {{/isPrimitiveType}}
+  {{#isString}}
+	if {{paramName}} == "" {
+	  return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} is required and must be specified")
+	}
+  {{/isString}}
+	{{/isPathParam}}
+	{{#minItems}}
+	if len({{^isPathParam}}*{{/isPathParam}}{{paramName}}) < {{minItems}} {
+		return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} must have at least {{minItems}} elements")
+	}
+	{{/minItems}}
+	{{#maxItems}}
+	if len({{^isPathParam}}*{{/isPathParam}}{{paramName}}) > {{maxItems}} {
+		return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} must have less than {{maxItems}} elements")
+	}
+	{{/maxItems}}
+	{{#minLength}}
+	if strlen({{^isPathParam}}*{{/isPathParam}}{{paramName}}) < {{minLength}} {
+		return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} must have at least {{minLength}} elements")
+	}
+	{{/minLength}}
+	{{#maxLength}}
+	if strlen({{^isPathParam}}*{{/isPathParam}}{{paramName}}) > {{maxLength}} {
+		return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} must have less than {{maxLength}} elements")
+	}
+	{{/maxLength}}
+	{{#minimum}}
+	{{#isString}}
+	{{paramName}}Txt, err := atoi({{^isPathParam}}*{{/isPathParam}}{{paramName}})
+	if {{paramName}}Txt < {{minimum}} {
+	{{/isString}}
+	{{^isString}}
+	if {{^isPathParam}}*{{/isPathParam}}{{paramName}} < {{minimum}} {
+	{{/isString}}
+		return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} must be greater than {{minimum}}")
+	}
+	{{/minimum}}
+	{{#maximum}}
+	{{#isString}}
+	{{paramName}}Txt, err := atoi({{^isPathParam}}*{{/isPathParam}}{{paramName}})
+	if {{paramName}}Txt > {{maximum}} {
+	{{/isString}}
+	{{^isString}}
+	if {{^isPathParam}}*{{/isPathParam}}{{paramName}} > {{maximum}} {
+	{{/isString}}
+		return {{#returnType}}returnValue, {{/returnType}}reportError("{{paramName}} must be less than {{maximum}}")
+	}
+	{{/maximum}}
+	{{/required}}
+	{{/allParams}}
+
+	{{#queryParams}}
+	{{#required}}
+	queryParams.Add("{{baseName}}", parameterToString({{^isPrimitiveType}}*{{/isPrimitiveType}}{{paramName}}))
+	{{/required}}
+	{{/queryParams}}
+  {{#hasOptionalParams}}
+  // optional params
+  for _, opt := range opts {
+    switch opt.Type {
+      case "query":
+        queryParams.Add(opt.Name, opt.Value)
+      case "header":
+        headers[opt.Name] = opt.Value
+      {{#hasBodyParam}}
+      case "body":
+        body = opt.Value
+      {{/hasBodyParam}}
+    }
+  }
+  {{/hasOptionalParams}}
+  {{#headerParams}}
+	{{#required}}
+	headers["{{baseName}}"] = parameterToString({{^isPrimitiveType}}*{{/isPrimitiveType}}{{paramName}})
+	{{/required}}
+
+{{/headerParams}}
+{{#bodyParams}}
+  // body params
+  if {{paramName}} != nil {
+  localVarPostBody = {{paramName}}
+  } else {
+  localVarPostBody = body
+  }
+{{/bodyParams}}
+	req, err := c.prepareRequest(context.Background(), requestPath, http.Method{{httpMethod}}, localVarPostBody, headers, queryParams)
+	if err != nil {
+		return {{#returnType}}returnValue, {{/returnType}}err
+	}
+
+	res, err := c.callAPI(req)
+	if err != nil {
+		return {{#returnType}}returnValue, {{/returnType}}err
+	}
+  if res == nil {
+    return {{#returnType}}returnValue, {{/returnType}}reportError("res is nil")
+  }
+
+	resBody, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
+	if err != nil {
+		return {{#returnType}}returnValue, {{/returnType}}err
+	}
+
+	if res.StatusCode >= 300 {
+		newErr := &APIError{
+      Message: string(resBody),
+			Status: res.StatusCode,
+		}
+		{{#responses}}
+		{{#dataType}}
+		{{^is1xx}}
+		{{^is2xx}}
+		{{#range}}
+		{{#is3xx}}
+		if res.StatusCode >= 300 && res.StatusCode < 400 {
+		{{/is3xx}}
+		{{#is4xx}}
+		if res.StatusCode >= 400 && res.StatusCode < 500 {
+		{{/is4xx}}
+		{{#is5xx}}
+		if res.StatusCode >= 500
+		{{/is5xx}}
+		{{/range}}
+		{{^range}}
+		{{^wildcard}}
+		if res.StatusCode == {{{code}}} {
+		{{/wildcard}}
+		{{/range}}
+			var v {{{dataType}}}
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return {{#returnType}}returnValue, {{/returnType}}newErr
+			}
+			{{^-last}}
+			return {{#returnType}}returnValue, {{/returnType}}newErr
+			{{/-last}}
+		{{^wildcard}}
+		}
+		{{/wildcard}}
+		{{/is2xx}}
+		{{/is1xx}}
+		{{/dataType}}
+		{{/responses}}
+		return {{#returnType}}returnValue, {{/returnType}}newErr
+	}
+
+	{{#returnType}}
+	err = c.decode(&returnValue, resBody, res.Header.Get("Content-Type"))
+	if err != nil {
+		return {{#returnType}}returnValue, {{/returnType}}reportError("cannot decode result: %w", err)
+	}
+
+	{{/returnType}}
+	return {{#returnType}}returnValue, {{/returnType}}nil
+}
+{{/operation}}
+{{/operations}}

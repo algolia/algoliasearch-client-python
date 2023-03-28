@@ -18,6 +18,9 @@ inputs:
   javascript:
     description: Whether this job ran or not
     required: false
+  go:
+    description: Whether this job ran or not
+    required: false
 
 runs:
   using: composite
@@ -71,3 +74,16 @@ runs:
       run: |
         rm -rf clients/algoliasearch-client-java-2
         unzip -q -o clients-java.zip && rm clients-java.zip
+    # Go
+    - name: Download clients-go artifact
+      if: ${{ inputs.go == 'true' && inputs.type == 'all' }}
+      uses: actions/download-artifact@v3
+      with:
+        name: clients-go
+
+    - name: Unzip clients-go artifact
+      if: ${{ inputs.go == 'true' && inputs.type == 'all' }}
+      shell: bash
+      run: |
+        rm -rf clients/algoliasearch-client-go
+        unzip -q -o clients-go.zip && rm clients-go.zip

@@ -67,6 +67,7 @@ jobs:
       RUN_GEN_JAVASCRIPT: ${{ steps.setup.outputs.RUN_GEN_JAVASCRIPT }}
       RUN_GEN_JAVA: ${{ steps.setup.outputs.RUN_GEN_JAVA }}
       RUN_GEN_PHP: ${{ steps.setup.outputs.RUN_GEN_PHP }}
+      RUN_GEN_GO: ${{ steps.setup.outputs.RUN_GEN_GO }}
 
       RUN_JS_UTILS: ${{ steps.setup.outputs.RUN_JS_UTILS }}
 
@@ -304,6 +305,7 @@ jobs:
           javascript: ${{ needs.setup.outputs.RUN_GEN_JAVASCRIPT }}
           php: ${{ needs.setup.outputs.RUN_GEN_PHP }}
           java: ${{ needs.setup.outputs.RUN_GEN_JAVA }}
+          go: ${{ needs.setup.outputs.RUN_GEN_GO }}
 
       - name: Setup
         uses: ./.github/actions/setup

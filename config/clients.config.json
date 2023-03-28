@@ -35,5 +35,17 @@
       "extension": "Test.php",
       "outputFolder": "src"
     }
+  },
+  "go": {
+    "folder": "clients/algoliasearch-client-go",
+    "gitRepoId": "algoliasearch-client-go",
+    "packageVersion": "4.0.0-alpha.1",
+    "modelFolder": "algolia/models",
+    "apiFolder": "algolia/api",
+    "customGenerator": "algolia-go",
+    "tests": {
+      "extension": "_test.go",
+      "outputFolder": ""
+    }
   }
 }

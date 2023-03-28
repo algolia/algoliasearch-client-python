@@ -7,7 +7,8 @@
   "targetBranch": {
     "javascript": "next",
     "php": "next",
-    "java": "next"
+    "java": "next",
+    "go": "next"
   },
   "defaultTargetBranch": "next",
   "gitAuthor": {

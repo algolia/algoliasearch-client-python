@@ -3,6 +3,7 @@ import { writeFile } from 'fs/promises';
 import clientsConfig from '../../config/clients.config.json';
 import openapiConfig from '../../config/openapitools.json';
 import { toAbsolutePath } from '../common';
+import { getClientsConfigField } from '../config';
 import type { Generator } from '../types';
 
 const AVAILABLE_CUSTOM_GEN = Object.values(clientsConfig)
@@ -33,8 +34,9 @@ export async function generateOpenapitools(
 
     result[key] = {
       config: '#{cwd}/openapitools.json',
-      gitHost: 'algolia',
+      gitHost: 'github.com',
       gitUserId: 'algolia',
+      gitRepoId: getClientsConfigField(language, 'gitRepoId'),
       glob: `specs/bundled/${client}.yml`,
       templateDir,
       generatorName: AVAILABLE_CUSTOM_GEN.includes(`algolia-${language}`)

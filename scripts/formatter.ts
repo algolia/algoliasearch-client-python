@@ -1,4 +1,4 @@
-import { run, runComposerUpdate } from './common';
+import { DOCKER, run, runComposerUpdate } from './common';
 import { createSpinner } from './spinners';
 
 export async function formatter(
@@ -24,6 +24,12 @@ export async function formatter(
       await runComposerUpdate();
       cmd = `yarn run prettier ${folder} --write \
             && PHP_CS_FIXER_IGNORE_ENV=1 php clients/algoliasearch-client-php/vendor/bin/php-cs-fixer fix ${folder} --using-cache=no --allow-risky=yes`;
+      break;
+    case 'go':
+      cmd = `cd ${folder} && go fmt ./...`;
+      if (DOCKER) {
+        cmd = `cd ${folder} && /usr/local/go/bin/go fmt ./...`;
+      }
       break;
     default:
       return;

@@ -37,5 +37,9 @@ module.exports = {
     'clients/algoliasearch-client-php/lib/ApiException.php',
     'clients/algoliasearch-client-php/lib/ObjectSerializer.php',
     'clients/algoliasearch-client-php/composer.json',
+
+    // GO
+    '!clients/algoliasearch-client-go/*',
+    'clients/algoliasearch-client-go/algolia/**',
   ],
 };

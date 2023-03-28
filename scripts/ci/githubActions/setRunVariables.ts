@@ -9,6 +9,7 @@ import { isBaseChanged } from './utils';
 const JS_CLIENT_FOLDER = getLanguageFolder('javascript');
 const JAVA_CLIENT_FOLDER = getLanguageFolder('java');
 const PHP_CLIENT_FOLDER = getLanguageFolder('php');
+const GO_CLIENT_FOLDER = getLanguageFolder('go');
 
 // Files that are common to every clients
 const CLIENTS_COMMON_FILES = [
@@ -70,6 +71,12 @@ export const DEPENDENCIES = {
     PHP_CLIENT_FOLDER,
     'templates/php',
     'generators/src/main/java/com/algolia/codegen/AlgoliaPhpGenerator.java',
+  ],
+  GO_CLIENT_CHANDED: [
+    ...CLIENTS_COMMON_FILES,
+    GO_CLIENT_FOLDER,
+    'templates/go',
+    'generators/src/main/java/com/algolia/codegen/AlgoliaGoGenerator.java',
   ],
 };
 

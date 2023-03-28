@@ -106,6 +106,54 @@
       },
       "php-query-suggestions": {
         "output": "#{cwd}/clients/algoliasearch-client-php"
+      },
+      "go-analytics": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "analytics"
+        }
+      },
+      "go-ingestion": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "ingestion"
+        }
+      },
+      "go-insights": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "insights"
+        }
+      },
+      "go-query-suggestions": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "suggestions"
+        }
+      },
+      "go-personalization": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "personalization"
+        }
+      },
+      "go-recommend": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "recommend"
+        }
+      },
+      "go-search": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "search"
+        }
+      },
+      "go-predict": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "predict"
+        }
       }
     }
   }

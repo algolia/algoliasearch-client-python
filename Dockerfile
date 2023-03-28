@@ -1,6 +1,9 @@
 ARG NODE_VERSION=18.14.2
 ARG JAVA_VERSION=11.0.18
 ARG PHP_VERSION=8.1.16
+ARG GO_VERSION=1.19.7
+
+FROM golang:${GO_VERSION}-bullseye as go-builder
 
 # PHP is so complicated (and long) to install that we use the docker image directly
 FROM php:${PHP_VERSION}-bullseye
@@ -23,6 +26,10 @@ RUN apt-get update && apt-get install -y \
     # python is used by nvm to install some packages
     python3 \
     && rm -rf /var/lib/apt/lists/*
+
+# Go
+COPY --from=go-builder /usr/local/go/ /usr/local/go/
+ENV PATH /usr/local/go/bin:$PATH
 
 # Javascript (node)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
