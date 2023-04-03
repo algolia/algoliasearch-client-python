@@ -70,6 +70,7 @@ segment:
     - conditions
     - segmentStatus
     - type
+    - lastUpdatedAt
   properties:
     segmentID:
       $ref: '#/segmentID'
@@ -81,6 +82,8 @@ segment:
       $ref: '#/segmentStatus'
     type:
       $ref: '#/segmentType'
+    lastUpdatedAt:
+      $ref: '#/lastUpdatedAt'
     errorMessage:
       type: string
 
@@ -108,6 +111,11 @@ segmentName:
   description: The name of the segment.
 
 updatedAt:
+  type: string
+  description: The date and time at which the segment was updated (RFC3339).
+  example: 2021-07-22T12:30:00Z
+
+lastUpdatedAt:
   type: string
   description: The date and time at which the segment was last updated (RFC3339).
   example: 2021-07-22T12:30:00Z
