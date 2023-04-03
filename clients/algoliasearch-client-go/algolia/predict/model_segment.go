@@ -15,7 +15,9 @@ type Segment struct {
 	Conditions    SegmentParentConditions `json:"conditions"`
 	SegmentStatus SegmentStatus           `json:"segmentStatus"`
 	Type          SegmentType             `json:"type"`
-	ErrorMessage  *string                 `json:"errorMessage,omitempty"`
+	// The date and time at which the segment was last updated (RFC3339).
+	LastUpdatedAt string  `json:"lastUpdatedAt"`
+	ErrorMessage  *string `json:"errorMessage,omitempty"`
 }
 
 type SegmentOption func(f *Segment)
@@ -30,13 +32,14 @@ func WithSegmentErrorMessage(val string) SegmentOption {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSegment(segmentID string, name string, conditions SegmentParentConditions, segmentStatus SegmentStatus, type_ SegmentType, opts ...SegmentOption) *Segment {
+func NewSegment(segmentID string, name string, conditions SegmentParentConditions, segmentStatus SegmentStatus, type_ SegmentType, lastUpdatedAt string, opts ...SegmentOption) *Segment {
 	this := &Segment{}
 	this.SegmentID = segmentID
 	this.Name = name
 	this.Conditions = conditions
 	this.SegmentStatus = segmentStatus
 	this.Type = type_
+	this.LastUpdatedAt = lastUpdatedAt
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -171,6 +174,30 @@ func (o *Segment) SetType(v SegmentType) {
 	o.Type = v
 }
 
+// GetLastUpdatedAt returns the LastUpdatedAt field value
+func (o *Segment) GetLastUpdatedAt() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LastUpdatedAt
+}
+
+// GetLastUpdatedAtOk returns a tuple with the LastUpdatedAt field value
+// and a boolean to check if the value has been set.
+func (o *Segment) GetLastUpdatedAtOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LastUpdatedAt, true
+}
+
+// SetLastUpdatedAt sets field value
+func (o *Segment) SetLastUpdatedAt(v string) {
+	o.LastUpdatedAt = v
+}
+
 // GetErrorMessage returns the ErrorMessage field value if set, zero value otherwise.
 func (o *Segment) GetErrorMessage() string {
 	if o == nil || o.ErrorMessage == nil {
@@ -220,6 +247,9 @@ func (o Segment) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["type"] = o.Type
 	}
+	if true {
+		toSerialize["lastUpdatedAt"] = o.LastUpdatedAt
+	}
 	if o.ErrorMessage != nil {
 		toSerialize["errorMessage"] = o.ErrorMessage
 	}
@@ -233,6 +263,7 @@ func (o Segment) String() string {
 	out += fmt.Sprintf("  conditions=%v\n", o.Conditions)
 	out += fmt.Sprintf("  segmentStatus=%v\n", o.SegmentStatus)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
+	out += fmt.Sprintf("  lastUpdatedAt=%v\n", o.LastUpdatedAt)
 	out += fmt.Sprintf("  errorMessage=%v\n", o.ErrorMessage)
 	out += "}"
 	return out

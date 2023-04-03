@@ -685,6 +685,10 @@ components:
       enum:
         - computed
         - custom
+    lastUpdatedAt:
+      type: string
+      description: The date and time at which the segment was last updated (RFC3339).
+      example: '2021-07-22T12:30:00Z'
     segment:
       type: object
       required:
@@ -693,6 +697,7 @@ components:
         - conditions
         - segmentStatus
         - type
+        - lastUpdatedAt
       properties:
         segmentID:
           $ref: '#/components/schemas/segmentID'
@@ -704,6 +709,8 @@ components:
           $ref: '#/components/schemas/segmentStatus'
         type:
           $ref: '#/components/schemas/segmentType'
+        lastUpdatedAt:
+          $ref: '#/components/schemas/lastUpdatedAt'
         errorMessage:
           type: string
     SegmentsParams_name:
@@ -730,7 +737,7 @@ components:
         - $ref: '#/components/schemas/allUpdateSegmentParams'
     Segment_updatedAt:
       type: string
-      description: The date and time at which the segment was last updated (RFC3339).
+      description: The date and time at which the segment was updated (RFC3339).
       example: '2021-07-22T12:30:00Z'
     updateSegmentResponse:
       title: updateSegmentResponse

@@ -10,7 +10,7 @@ import (
 type CreateSegmentResponse struct {
 	// The ID of the segment.
 	SegmentID string `json:"segmentID"`
-	// The date and time at which the segment was last updated (RFC3339).
+	// The date and time at which the segment was updated (RFC3339).
 	UpdatedAt string `json:"updatedAt"`
 }
 
