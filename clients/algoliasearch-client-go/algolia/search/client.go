@@ -77,7 +77,7 @@ func getDefaultHost() string {
 }
 
 func getUserAgent() string {
-	return fmt.Sprintf("Algolia for Go (4.0.0-alpha.1); Go (%s); Search (4.0.0-alpha.1)", runtime.Version())
+	return fmt.Sprintf("Algolia for Go (4.0.0-alpha.2); Go (%s); Search (4.0.0-alpha.2)", runtime.Version())
 }
 
 func atoi(in string) (int, error) {
