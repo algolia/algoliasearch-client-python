@@ -5232,14 +5232,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docusaurus-preset-shiki-twoslash@npm:1.1.39":
-  version: 1.1.39
-  resolution: "docusaurus-preset-shiki-twoslash@npm:1.1.39"
+"docusaurus-preset-shiki-twoslash@npm:1.1.40":
+  version: 1.1.40
+  resolution: "docusaurus-preset-shiki-twoslash@npm:1.1.40"
   dependencies:
     copy-text-to-clipboard: ^3.0.1
-    remark-shiki-twoslash: 3.1.1
+    remark-shiki-twoslash: 3.1.2
     typescript: ">3"
-  checksum: c67ae7cff75c425dd88be5efd2cca7d874d716556cabb0670e24613d9a2faca32dd402c5326ec2f39c2768ff1329912f04bc0fbb4bee746427056da595fa4a4b
+  checksum: 6581c79a1d7b3f0ffc4a26255b8f8127cb31f58f1baa0f1ab0cb6679829007d630a1260594a34c58f8cdba16c71e4cd66c86aa9d3120d34af9e983454b5b3581
   languageName: node
   linkType: hard
 
@@ -9909,9 +9909,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-shiki-twoslash@npm:3.1.1":
-  version: 3.1.1
-  resolution: "remark-shiki-twoslash@npm:3.1.1"
+"remark-shiki-twoslash@npm:3.1.2":
+  version: 3.1.2
+  resolution: "remark-shiki-twoslash@npm:3.1.2"
   dependencies:
     "@types/unist": ^2.0.0
     "@typescript/twoslash": 3.1.0
@@ -9924,7 +9924,7 @@ __metadata:
     unist-util-visit: ^2.0.0
   peerDependencies:
     typescript: ">3"
-  checksum: 84b232e8ed3cb24d26bce6c59b04d950494c01d5a561e5163dbbe62aa972b5e36c821dc9c0a4a4dec32a7be372a501e78f8e71c22cc275e00a133ff1e08c3f34
+  checksum: 8eb31c99e73b9cb1bfc8d21180e5f6e7455caf2febeb6c59159455ed318f2293bb038f22e5d5857b5e62d594aba3e4d7e19b01c82a2ded83b3fe30d07f156f6d
   languageName: node
   linkType: hard
 
@@ -11872,7 +11872,7 @@ __metadata:
     "@docusaurus/types": 2.4.0
     "@mdx-js/react": 1.6.22
     clsx: 1.2.1
-    docusaurus-preset-shiki-twoslash: 1.1.39
+    docusaurus-preset-shiki-twoslash: 1.1.40
     react: 18.2.0
     react-dom: 18.2.0
     redocusaurus: 1.6.1
