@@ -191,6 +191,12 @@ SourceCSV:
         $ref: '#/MappingTypeCSV'
     method:
       $ref: '#/MethodType'
+    delimiter:
+      type: string
+      minLength: 1
+      maxLength: 1
+      default: ','
+      description: The character used to split the value on each line, default to a comma (\r, \n, 0xFFFD, and space are forbidden).
   required:
     - url
 
