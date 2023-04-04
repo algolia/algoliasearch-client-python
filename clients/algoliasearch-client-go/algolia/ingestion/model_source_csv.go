@@ -15,6 +15,8 @@ type SourceCSV struct {
 	// Mapping of type for every column. For example {\"myColumn\": \"boolean\", \"myOtherColumn\": \"json\"}.
 	Mapping *map[string]MappingTypeCSV `json:"mapping,omitempty"`
 	Method  *MethodType                `json:"method,omitempty"`
+	// The character used to split the value on each line, default to a comma (\\r, \\n, 0xFFFD, and space are forbidden).
+	Delimiter *string `json:"delimiter,omitempty"`
 }
 
 type SourceCSVOption func(f *SourceCSV)
@@ -37,6 +39,12 @@ func WithSourceCSVMethod(val MethodType) SourceCSVOption {
 	}
 }
 
+func WithSourceCSVDelimiter(val string) SourceCSVOption {
+	return func(f *SourceCSV) {
+		f.Delimiter = &val
+	}
+}
+
 // NewSourceCSV instantiates a new SourceCSV object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
@@ -44,6 +52,8 @@ func WithSourceCSVMethod(val MethodType) SourceCSVOption {
 func NewSourceCSV(url string, opts ...SourceCSVOption) *SourceCSV {
 	this := &SourceCSV{}
 	this.Url = url
+	var delimiter string = ","
+	this.Delimiter = &delimiter
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -55,6 +65,8 @@ func NewSourceCSV(url string, opts ...SourceCSVOption) *SourceCSV {
 // but it doesn't guarantee that properties required by API are set
 func NewSourceCSVWithDefaults() *SourceCSV {
 	this := &SourceCSV{}
+	var delimiter string = ","
+	this.Delimiter = &delimiter
 	return this
 }
 
@@ -178,6 +190,38 @@ func (o *SourceCSV) SetMethod(v MethodType) {
 	o.Method = &v
 }
 
+// GetDelimiter returns the Delimiter field value if set, zero value otherwise.
+func (o *SourceCSV) GetDelimiter() string {
+	if o == nil || o.Delimiter == nil {
+		var ret string
+		return ret
+	}
+	return *o.Delimiter
+}
+
+// GetDelimiterOk returns a tuple with the Delimiter field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceCSV) GetDelimiterOk() (*string, bool) {
+	if o == nil || o.Delimiter == nil {
+		return nil, false
+	}
+	return o.Delimiter, true
+}
+
+// HasDelimiter returns a boolean if a field has been set.
+func (o *SourceCSV) HasDelimiter() bool {
+	if o != nil && o.Delimiter != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDelimiter gets a reference to the given string and assigns it to the Delimiter field.
+func (o *SourceCSV) SetDelimiter(v string) {
+	o.Delimiter = &v
+}
+
 func (o SourceCSV) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -192,6 +236,9 @@ func (o SourceCSV) MarshalJSON() ([]byte, error) {
 	if o.Method != nil {
 		toSerialize["method"] = o.Method
 	}
+	if o.Delimiter != nil {
+		toSerialize["delimiter"] = o.Delimiter
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -201,6 +248,7 @@ func (o SourceCSV) String() string {
 	out += fmt.Sprintf("  uniqueIDColumn=%v\n", o.UniqueIDColumn)
 	out += fmt.Sprintf("  mapping=%v\n", o.Mapping)
 	out += fmt.Sprintf("  method=%v\n", o.Method)
+	out += fmt.Sprintf("  delimiter=%v\n", o.Delimiter)
 	out += "}"
 	return out
 }
