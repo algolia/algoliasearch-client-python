@@ -123,12 +123,11 @@ func (o AverageClickEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o AverageClickEvent) String() string {
-	out := "AverageClickEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  average=%v\n", o.Average)
 	out += fmt.Sprintf("  clickCount=%v\n", o.ClickCount)
 	out += fmt.Sprintf("  date=%v\n", o.Date)
-	out += "}"
-	return out
+	return fmt.Sprintf("AverageClickEvent {\n%s}", out)
 }
 
 type NullableAverageClickEvent struct {

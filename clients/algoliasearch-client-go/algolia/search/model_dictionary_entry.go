@@ -58,8 +58,6 @@ func NewDictionaryEntry(objectID string, language string, opts ...DictionaryEntr
 	this := &DictionaryEntry{}
 	this.ObjectID = objectID
 	this.Language = language
-	var state DictionaryEntryState = DICTIONARYENTRYSTATE_ENABLED
-	this.State = &state
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -303,7 +301,7 @@ func (o *DictionaryEntry) UnmarshalJSON(bytes []byte) (err error) {
 }
 
 func (o DictionaryEntry) String() string {
-	out := "DictionaryEntry {\n"
+	out := ""
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  language=%v\n", o.Language)
 	out += fmt.Sprintf("  word=%v\n", o.Word)
@@ -313,9 +311,7 @@ func (o DictionaryEntry) String() string {
 	for key, value := range o.AdditionalProperties {
 		out += fmt.Sprintf("  %s=%v\n", key, value)
 	}
-
-	out += "}"
-	return out
+	return fmt.Sprintf("DictionaryEntry {\n%s}", out)
 }
 
 type NullableDictionaryEntry struct {

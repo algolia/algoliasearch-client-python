@@ -123,12 +123,11 @@ func (o GetUserTokenResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetUserTokenResponse) String() string {
-	out := "GetUserTokenResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  userToken=%v\n", o.UserToken)
 	out += fmt.Sprintf("  lastEventAt=%v\n", o.LastEventAt)
 	out += fmt.Sprintf("  scores=%v\n", o.Scores)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetUserTokenResponse {\n%s}", out)
 }
 
 type NullableGetUserTokenResponse struct {

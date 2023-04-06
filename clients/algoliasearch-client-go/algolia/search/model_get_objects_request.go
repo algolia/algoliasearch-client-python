@@ -141,12 +141,11 @@ func (o GetObjectsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetObjectsRequest) String() string {
-	out := "GetObjectsRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  attributesToRetrieve=%v\n", o.AttributesToRetrieve)
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetObjectsRequest {\n%s}", out)
 }
 
 type NullableGetObjectsRequest struct {

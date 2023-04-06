@@ -37,10 +37,6 @@ func WithAutomaticFacetFilterDisjunctive(val bool) AutomaticFacetFilterOption {
 func NewAutomaticFacetFilter(facet string, opts ...AutomaticFacetFilterOption) *AutomaticFacetFilter {
 	this := &AutomaticFacetFilter{}
 	this.Facet = facet
-	var score int32 = 1
-	this.Score = &score
-	var disjunctive bool = false
-	this.Disjunctive = &disjunctive
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -162,12 +158,11 @@ func (o AutomaticFacetFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (o AutomaticFacetFilter) String() string {
-	out := "AutomaticFacetFilter {\n"
+	out := ""
 	out += fmt.Sprintf("  facet=%v\n", o.Facet)
 	out += fmt.Sprintf("  score=%v\n", o.Score)
 	out += fmt.Sprintf("  disjunctive=%v\n", o.Disjunctive)
-	out += "}"
-	return out
+	return fmt.Sprintf("AutomaticFacetFilter {\n%s}", out)
 }
 
 type NullableAutomaticFacetFilter struct {

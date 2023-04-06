@@ -1086,7 +1086,7 @@ func (o BrowseResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o BrowseResponse) String() string {
-	out := "BrowseResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  abTestID=%v\n", o.AbTestID)
 	out += fmt.Sprintf("  abTestVariantID=%v\n", o.AbTestVariantID)
 	out += fmt.Sprintf("  aroundLatLng=%v\n", o.AroundLatLng)
@@ -1114,8 +1114,7 @@ func (o BrowseResponse) String() string {
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
 	out += fmt.Sprintf("  cursor=%v\n", o.Cursor)
-	out += "}"
-	return out
+	return fmt.Sprintf("BrowseResponse {\n%s}", out)
 }
 
 type NullableBrowseResponse struct {

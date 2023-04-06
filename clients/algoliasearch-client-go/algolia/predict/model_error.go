@@ -62,10 +62,9 @@ func (o ModelError) MarshalJSON() ([]byte, error) {
 }
 
 func (o ModelError) String() string {
-	out := "ModelError {\n"
+	out := ""
 	out += fmt.Sprintf("  error=%v\n", o.Error)
-	out += "}"
-	return out
+	return fmt.Sprintf("ModelError {\n%s}", out)
 }
 
 type NullableModelError struct {

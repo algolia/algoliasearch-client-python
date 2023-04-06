@@ -63,10 +63,9 @@ func (o DestinationIndexName) MarshalJSON() ([]byte, error) {
 }
 
 func (o DestinationIndexName) String() string {
-	out := "DestinationIndexName {\n"
+	out := ""
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
-	out += "}"
-	return out
+	return fmt.Sprintf("DestinationIndexName {\n%s}", out)
 }
 
 type NullableDestinationIndexName struct {

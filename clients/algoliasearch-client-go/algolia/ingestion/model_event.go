@@ -271,7 +271,7 @@ func (o Event) MarshalJSON() ([]byte, error) {
 }
 
 func (o Event) String() string {
-	out := "Event {\n"
+	out := ""
 	out += fmt.Sprintf("  eventID=%v\n", o.EventID)
 	out += fmt.Sprintf("  runID=%v\n", o.RunID)
 	out += fmt.Sprintf("  parentID=%v\n", o.ParentID)
@@ -279,8 +279,7 @@ func (o Event) String() string {
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  data=%v\n", o.Data)
 	out += fmt.Sprintf("  publishedAt=%v\n", o.PublishedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("Event {\n%s}", out)
 }
 
 type NullableEvent struct {

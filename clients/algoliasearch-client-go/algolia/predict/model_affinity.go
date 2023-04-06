@@ -120,12 +120,11 @@ func (o Affinity) MarshalJSON() ([]byte, error) {
 }
 
 func (o Affinity) String() string {
-	out := "Affinity {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  probability=%v\n", o.Probability)
-	out += "}"
-	return out
+	return fmt.Sprintf("Affinity {\n%s}", out)
 }
 
 type NullableAffinity struct {

@@ -62,10 +62,9 @@ func (o GetDictionarySettingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetDictionarySettingsResponse) String() string {
-	out := "GetDictionarySettingsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  disableStandardEntries=%v\n", o.DisableStandardEntries)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetDictionarySettingsResponse {\n%s}", out)
 }
 
 type NullableGetDictionarySettingsResponse struct {

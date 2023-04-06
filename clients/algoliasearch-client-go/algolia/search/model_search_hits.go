@@ -62,10 +62,9 @@ func (o SearchHits) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchHits) String() string {
-	out := "SearchHits {\n"
+	out := ""
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchHits {\n%s}", out)
 }
 
 type NullableSearchHits struct {

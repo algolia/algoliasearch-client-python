@@ -88,16 +88,6 @@ func NewGetApiKeyResponse(createdAt int64, acl []Acl, opts ...GetApiKeyResponseO
 	this := &GetApiKeyResponse{}
 	this.CreatedAt = createdAt
 	this.Acl = acl
-	var description string = ""
-	this.Description = &description
-	var maxHitsPerQuery int32 = 0
-	this.MaxHitsPerQuery = &maxHitsPerQuery
-	var maxQueriesPerIPPerHour int32 = 0
-	this.MaxQueriesPerIPPerHour = &maxQueriesPerIPPerHour
-	var queryParameters string = ""
-	this.QueryParameters = &queryParameters
-	var validity int32 = 0
-	this.Validity = &validity
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -462,7 +452,7 @@ func (o GetApiKeyResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetApiKeyResponse) String() string {
-	out := "GetApiKeyResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  acl=%v\n", o.Acl)
@@ -473,8 +463,7 @@ func (o GetApiKeyResponse) String() string {
 	out += fmt.Sprintf("  queryParameters=%v\n", o.QueryParameters)
 	out += fmt.Sprintf("  referers=%v\n", o.Referers)
 	out += fmt.Sprintf("  validity=%v\n", o.Validity)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetApiKeyResponse {\n%s}", out)
 }
 
 type NullableGetApiKeyResponse struct {

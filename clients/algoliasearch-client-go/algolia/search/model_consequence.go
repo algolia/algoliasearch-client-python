@@ -57,8 +57,6 @@ func WithConsequenceUserData(val map[string]interface{}) ConsequenceOption {
 // will change when the set of required properties is changed
 func NewConsequence(opts ...ConsequenceOption) *Consequence {
 	this := &Consequence{}
-	var filterPromotes bool = false
-	this.FilterPromotes = &filterPromotes
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -256,14 +254,13 @@ func (o Consequence) MarshalJSON() ([]byte, error) {
 }
 
 func (o Consequence) String() string {
-	out := "Consequence {\n"
+	out := ""
 	out += fmt.Sprintf("  params=%v\n", o.Params)
 	out += fmt.Sprintf("  promote=%v\n", o.Promote)
 	out += fmt.Sprintf("  filterPromotes=%v\n", o.FilterPromotes)
 	out += fmt.Sprintf("  hide=%v\n", o.Hide)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
-	out += "}"
-	return out
+	return fmt.Sprintf("Consequence {\n%s}", out)
 }
 
 type NullableConsequence struct {

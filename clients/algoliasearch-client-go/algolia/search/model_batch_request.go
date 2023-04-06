@@ -92,11 +92,10 @@ func (o BatchRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o BatchRequest) String() string {
-	out := "BatchRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  body=%v\n", o.Body)
-	out += "}"
-	return out
+	return fmt.Sprintf("BatchRequest {\n%s}", out)
 }
 
 type NullableBatchRequest struct {

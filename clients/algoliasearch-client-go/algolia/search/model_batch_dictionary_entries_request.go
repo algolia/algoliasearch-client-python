@@ -91,11 +91,10 @@ func (o BatchDictionaryEntriesRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o BatchDictionaryEntriesRequest) String() string {
-	out := "BatchDictionaryEntriesRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  body=%v\n", o.Body)
-	out += "}"
-	return out
+	return fmt.Sprintf("BatchDictionaryEntriesRequest {\n%s}", out)
 }
 
 type NullableBatchDictionaryEntriesRequest struct {

@@ -93,11 +93,10 @@ func (o TopCountry) MarshalJSON() ([]byte, error) {
 }
 
 func (o TopCountry) String() string {
-	out := "TopCountry {\n"
+	out := ""
 	out += fmt.Sprintf("  country=%v\n", o.Country)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
-	out += "}"
-	return out
+	return fmt.Sprintf("TopCountry {\n%s}", out)
 }
 
 type NullableTopCountry struct {

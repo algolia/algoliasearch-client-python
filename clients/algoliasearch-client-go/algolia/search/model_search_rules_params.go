@@ -73,12 +73,6 @@ func WithSearchRulesParamsRequestOptions(val []map[string]interface{}) SearchRul
 // will change when the set of required properties is changed
 func NewSearchRulesParams(opts ...SearchRulesParamsOption) *SearchRulesParams {
 	this := &SearchRulesParams{}
-	var query string = ""
-	this.Query = &query
-	var page int32 = 0
-	this.Page = &page
-	var hitsPerPage int32 = 20
-	this.HitsPerPage = &hitsPerPage
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -361,7 +355,7 @@ func (o SearchRulesParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchRulesParams) String() string {
-	out := "SearchRulesParams {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  anchoring=%v\n", o.Anchoring)
 	out += fmt.Sprintf("  context=%v\n", o.Context)
@@ -369,8 +363,7 @@ func (o SearchRulesParams) String() string {
 	out += fmt.Sprintf("  hitsPerPage=%v\n", o.HitsPerPage)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
 	out += fmt.Sprintf("  requestOptions=%v\n", o.RequestOptions)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchRulesParams {\n%s}", out)
 }
 
 type NullableSearchRulesParams struct {

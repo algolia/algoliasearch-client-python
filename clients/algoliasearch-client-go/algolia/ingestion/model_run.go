@@ -458,7 +458,7 @@ func (o Run) MarshalJSON() ([]byte, error) {
 }
 
 func (o Run) String() string {
-	out := "Run {\n"
+	out := ""
 	out += fmt.Sprintf("  runID=%v\n", o.RunID)
 	out += fmt.Sprintf("  appID=%v\n", o.AppID)
 	out += fmt.Sprintf("  taskID=%v\n", o.TaskID)
@@ -471,8 +471,7 @@ func (o Run) String() string {
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
 	out += fmt.Sprintf("  startedAt=%v\n", o.StartedAt)
 	out += fmt.Sprintf("  finishedAt=%v\n", o.FinishedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("Run {\n%s}", out)
 }
 
 type NullableRun struct {

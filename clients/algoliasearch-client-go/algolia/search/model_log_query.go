@@ -167,12 +167,11 @@ func (o LogQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (o LogQuery) String() string {
-	out := "LogQuery {\n"
+	out := ""
 	out += fmt.Sprintf("  index_name=%v\n", o.IndexName)
 	out += fmt.Sprintf("  user_token=%v\n", o.UserToken)
 	out += fmt.Sprintf("  query_id=%v\n", o.QueryId)
-	out += "}"
-	return out
+	return fmt.Sprintf("LogQuery {\n%s}", out)
 }
 
 type NullableLogQuery struct {

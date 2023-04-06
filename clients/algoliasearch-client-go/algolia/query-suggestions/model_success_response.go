@@ -93,11 +93,10 @@ func (o SuccessResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o SuccessResponse) String() string {
-	out := "SuccessResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  status=%v\n", o.Status)
 	out += fmt.Sprintf("  message=%v\n", o.Message)
-	out += "}"
-	return out
+	return fmt.Sprintf("SuccessResponse {\n%s}", out)
 }
 
 type NullableSuccessResponse struct {

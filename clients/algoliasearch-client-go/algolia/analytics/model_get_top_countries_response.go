@@ -63,10 +63,9 @@ func (o GetTopCountriesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetTopCountriesResponse) String() string {
-	out := "GetTopCountriesResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  countries=%v\n", o.Countries)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetTopCountriesResponse {\n%s}", out)
 }
 
 type NullableGetTopCountriesResponse struct {

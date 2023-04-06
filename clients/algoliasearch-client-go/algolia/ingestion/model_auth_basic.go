@@ -91,11 +91,10 @@ func (o AuthBasic) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthBasic) String() string {
-	out := "AuthBasic {\n"
+	out := ""
 	out += fmt.Sprintf("  username=%v\n", o.Username)
 	out += fmt.Sprintf("  password=%v\n", o.Password)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthBasic {\n%s}", out)
 }
 
 type NullableAuthBasic struct {

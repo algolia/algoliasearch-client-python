@@ -93,11 +93,10 @@ func (o AuthGoogleServiceAccount) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthGoogleServiceAccount) String() string {
-	out := "AuthGoogleServiceAccount {\n"
+	out := ""
 	out += fmt.Sprintf("  clientEmail=%v\n", o.ClientEmail)
 	out += fmt.Sprintf("  privateKey=%v\n", o.PrivateKey)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthGoogleServiceAccount {\n%s}", out)
 }
 
 type NullableAuthGoogleServiceAccount struct {

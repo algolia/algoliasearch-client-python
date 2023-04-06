@@ -165,12 +165,11 @@ func (o UpdateModelParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o UpdateModelParams) String() string {
-	out := "UpdateModelParams {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  modelAttributes=%v\n", o.ModelAttributes)
 	out += fmt.Sprintf("  modelStatus=%v\n", o.ModelStatus)
-	out += "}"
-	return out
+	return fmt.Sprintf("UpdateModelParams {\n%s}", out)
 }
 
 type NullableUpdateModelParams struct {

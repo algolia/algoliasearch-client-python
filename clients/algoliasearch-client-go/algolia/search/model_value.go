@@ -123,11 +123,10 @@ func (o Value) MarshalJSON() ([]byte, error) {
 }
 
 func (o Value) String() string {
-	out := "Value {\n"
+	out := ""
 	out += fmt.Sprintf("  order=%v\n", o.Order)
 	out += fmt.Sprintf("  sortRemainingBy=%v\n", o.SortRemainingBy)
-	out += "}"
-	return out
+	return fmt.Sprintf("Value {\n%s}", out)
 }
 
 type NullableValue struct {

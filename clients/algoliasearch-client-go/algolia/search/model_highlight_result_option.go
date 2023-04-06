@@ -170,13 +170,12 @@ func (o HighlightResultOption) MarshalJSON() ([]byte, error) {
 }
 
 func (o HighlightResultOption) String() string {
-	out := "HighlightResultOption {\n"
+	out := ""
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  matchLevel=%v\n", o.MatchLevel)
 	out += fmt.Sprintf("  matchedWords=%v\n", o.MatchedWords)
 	out += fmt.Sprintf("  fullyHighlighted=%v\n", o.FullyHighlighted)
-	out += "}"
-	return out
+	return fmt.Sprintf("HighlightResultOption {\n%s}", out)
 }
 
 type NullableHighlightResultOption struct {

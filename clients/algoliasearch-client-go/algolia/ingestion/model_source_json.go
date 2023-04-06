@@ -153,12 +153,11 @@ func (o SourceJSON) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceJSON) String() string {
-	out := "SourceJSON {\n"
+	out := ""
 	out += fmt.Sprintf("  url=%v\n", o.Url)
 	out += fmt.Sprintf("  uniqueIDColumn=%v\n", o.UniqueIDColumn)
 	out += fmt.Sprintf("  method=%v\n", o.Method)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceJSON {\n%s}", out)
 }
 
 type NullableSourceJSON struct {

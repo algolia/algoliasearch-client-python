@@ -358,7 +358,7 @@ func (o ModelInstance) MarshalJSON() ([]byte, error) {
 }
 
 func (o ModelInstance) String() string {
-	out := "ModelInstance {\n"
+	out := ""
 	out += fmt.Sprintf("  modelID=%v\n", o.ModelID)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
@@ -369,8 +369,7 @@ func (o ModelInstance) String() string {
 	out += fmt.Sprintf("  lastInference=%v\n", o.LastInference)
 	out += fmt.Sprintf("  errorMessage=%v\n", o.ErrorMessage)
 	out += fmt.Sprintf("  modelStatus=%v\n", o.ModelStatus)
-	out += "}"
-	return out
+	return fmt.Sprintf("ModelInstance {\n%s}", out)
 }
 
 type NullableModelInstance struct {

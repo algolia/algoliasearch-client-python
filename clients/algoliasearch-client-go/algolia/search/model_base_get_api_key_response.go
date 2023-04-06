@@ -111,11 +111,10 @@ func (o BaseGetApiKeyResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseGetApiKeyResponse) String() string {
-	out := "BaseGetApiKeyResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseGetApiKeyResponse {\n%s}", out)
 }
 
 type NullableBaseGetApiKeyResponse struct {

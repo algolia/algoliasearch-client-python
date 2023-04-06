@@ -63,10 +63,9 @@ func (o CreatedAtResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o CreatedAtResponse) String() string {
-	out := "CreatedAtResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("CreatedAtResponse {\n%s}", out)
 }
 
 type NullableCreatedAtResponse struct {

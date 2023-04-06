@@ -93,11 +93,10 @@ func (o GetSearchesCountResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetSearchesCountResponse) String() string {
-	out := "GetSearchesCountResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  count=%v\n", o.Count)
 	out += fmt.Sprintf("  dates=%v\n", o.Dates)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetSearchesCountResponse {\n%s}", out)
 }
 
 type NullableGetSearchesCountResponse struct {

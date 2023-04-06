@@ -91,11 +91,10 @@ func (o FunnelStage) MarshalJSON() ([]byte, error) {
 }
 
 func (o FunnelStage) String() string {
-	out := "FunnelStage {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  probability=%v\n", o.Probability)
-	out += "}"
-	return out
+	return fmt.Sprintf("FunnelStage {\n%s}", out)
 }
 
 type NullableFunnelStage struct {

@@ -92,11 +92,10 @@ func (o GetModelMetricsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetModelMetricsResponse) String() string {
-	out := "GetModelMetricsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  modelID=%v\n", o.ModelID)
 	out += fmt.Sprintf("  metrics=%v\n", o.Metrics)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetModelMetricsResponse {\n%s}", out)
 }
 
 type NullableGetModelMetricsResponse struct {

@@ -153,12 +153,11 @@ func (o FetchAllUserProfilesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o FetchAllUserProfilesResponse) String() string {
-	out := "FetchAllUserProfilesResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  users=%v\n", o.Users)
 	out += fmt.Sprintf("  previousPageToken=%v\n", o.PreviousPageToken)
 	out += fmt.Sprintf("  nextPageToken=%v\n", o.NextPageToken)
-	out += "}"
-	return out
+	return fmt.Sprintf("FetchAllUserProfilesResponse {\n%s}", out)
 }
 
 type NullableFetchAllUserProfilesResponse struct {

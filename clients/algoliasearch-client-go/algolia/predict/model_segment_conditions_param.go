@@ -80,10 +80,9 @@ func (o SegmentConditionsParam) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentConditionsParam) String() string {
-	out := "SegmentConditionsParam {\n"
+	out := ""
 	out += fmt.Sprintf("  conditions=%v\n", o.Conditions)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentConditionsParam {\n%s}", out)
 }
 
 type NullableSegmentConditionsParam struct {

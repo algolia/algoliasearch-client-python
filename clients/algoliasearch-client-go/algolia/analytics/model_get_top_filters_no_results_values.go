@@ -93,11 +93,10 @@ func (o GetTopFiltersNoResultsValues) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetTopFiltersNoResultsValues) String() string {
-	out := "GetTopFiltersNoResultsValues {\n"
+	out := ""
 	out += fmt.Sprintf("  count=%v\n", o.Count)
 	out += fmt.Sprintf("  values=%v\n", o.Values)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetTopFiltersNoResultsValues {\n%s}", out)
 }
 
 type NullableGetTopFiltersNoResultsValues struct {

@@ -105,14 +105,12 @@ func (o *ErrorBase) UnmarshalJSON(bytes []byte) (err error) {
 }
 
 func (o ErrorBase) String() string {
-	out := "ErrorBase {\n"
+	out := ""
 	out += fmt.Sprintf("  message=%v\n", o.Message)
 	for key, value := range o.AdditionalProperties {
 		out += fmt.Sprintf("  %s=%v\n", key, value)
 	}
-
-	out += "}"
-	return out
+	return fmt.Sprintf("ErrorBase {\n%s}", out)
 }
 
 type NullableErrorBase struct {

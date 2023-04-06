@@ -80,10 +80,9 @@ func (o GetRecommendationsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetRecommendationsResponse) String() string {
-	out := "GetRecommendationsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  results=%v\n", o.Results)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetRecommendationsResponse {\n%s}", out)
 }
 
 type NullableGetRecommendationsResponse struct {

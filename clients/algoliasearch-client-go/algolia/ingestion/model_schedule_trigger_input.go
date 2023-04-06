@@ -92,11 +92,10 @@ func (o ScheduleTriggerInput) MarshalJSON() ([]byte, error) {
 }
 
 func (o ScheduleTriggerInput) String() string {
-	out := "ScheduleTriggerInput {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  cron=%v\n", o.Cron)
-	out += "}"
-	return out
+	return fmt.Sprintf("ScheduleTriggerInput {\n%s}", out)
 }
 
 type NullableScheduleTriggerInput struct {

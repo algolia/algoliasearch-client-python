@@ -111,11 +111,10 @@ func (o BigCommerceChannel) MarshalJSON() ([]byte, error) {
 }
 
 func (o BigCommerceChannel) String() string {
-	out := "BigCommerceChannel {\n"
+	out := ""
 	out += fmt.Sprintf("  id=%v\n", o.Id)
 	out += fmt.Sprintf("  currencies=%v\n", o.Currencies)
-	out += "}"
-	return out
+	return fmt.Sprintf("BigCommerceChannel {\n%s}", out)
 }
 
 type NullableBigCommerceChannel struct {

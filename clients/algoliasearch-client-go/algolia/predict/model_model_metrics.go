@@ -291,15 +291,14 @@ func (o ModelMetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (o ModelMetrics) String() string {
-	out := "ModelMetrics {\n"
+	out := ""
 	out += fmt.Sprintf("  precision=%v\n", o.Precision)
 	out += fmt.Sprintf("  recall=%v\n", o.Recall)
 	out += fmt.Sprintf("  mrr=%v\n", o.Mrr)
 	out += fmt.Sprintf("  coverage=%v\n", o.Coverage)
 	out += fmt.Sprintf("  f1_score=%v\n", o.F1Score)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("ModelMetrics {\n%s}", out)
 }
 
 type NullableModelMetrics struct {

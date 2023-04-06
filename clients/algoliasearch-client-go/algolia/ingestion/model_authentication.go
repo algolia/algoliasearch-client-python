@@ -242,15 +242,14 @@ func (o Authentication) MarshalJSON() ([]byte, error) {
 }
 
 func (o Authentication) String() string {
-	out := "Authentication {\n"
+	out := ""
 	out += fmt.Sprintf("  authenticationID=%v\n", o.AuthenticationID)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  platform=%v\n", o.Platform)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("Authentication {\n%s}", out)
 }
 
 type NullableAuthentication struct {

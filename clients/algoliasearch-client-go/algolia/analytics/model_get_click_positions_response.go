@@ -63,10 +63,9 @@ func (o GetClickPositionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetClickPositionsResponse) String() string {
-	out := "GetClickPositionsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  positions=%v\n", o.Positions)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetClickPositionsResponse {\n%s}", out)
 }
 
 type NullableGetClickPositionsResponse struct {

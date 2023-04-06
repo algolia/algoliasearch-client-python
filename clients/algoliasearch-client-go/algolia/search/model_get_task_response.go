@@ -62,10 +62,9 @@ func (o GetTaskResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetTaskResponse) String() string {
-	out := "GetTaskResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  status=%v\n", o.Status)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetTaskResponse {\n%s}", out)
 }
 
 type NullableGetTaskResponse struct {

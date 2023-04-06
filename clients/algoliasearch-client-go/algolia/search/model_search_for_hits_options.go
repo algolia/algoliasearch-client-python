@@ -28,8 +28,6 @@ func WithSearchForHitsOptionsType(val SearchTypeDefault) SearchForHitsOptionsOpt
 func NewSearchForHitsOptions(indexName string, opts ...SearchForHitsOptionsOption) *SearchForHitsOptions {
 	this := &SearchForHitsOptions{}
 	this.IndexName = indexName
-	var type_ SearchTypeDefault = SEARCHTYPEDEFAULT_DEFAULT
-	this.Type = &type_
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -114,11 +112,10 @@ func (o SearchForHitsOptions) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchForHitsOptions) String() string {
-	out := "SearchForHitsOptions {\n"
+	out := ""
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchForHitsOptions {\n%s}", out)
 }
 
 type NullableSearchForHitsOptions struct {

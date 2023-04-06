@@ -92,11 +92,10 @@ func (o BuiltInOperation) MarshalJSON() ([]byte, error) {
 }
 
 func (o BuiltInOperation) String() string {
-	out := "BuiltInOperation {\n"
+	out := ""
 	out += fmt.Sprintf("  _operation=%v\n", o.Operation)
 	out += fmt.Sprintf("  value=%v\n", o.Value)
-	out += "}"
-	return out
+	return fmt.Sprintf("BuiltInOperation {\n%s}", out)
 }
 
 type NullableBuiltInOperation struct {

@@ -284,42 +284,6 @@ func WithBaseSearchParamsReRankingApplyFilter(val NullableReRankingApplyFilter) 
 // will change when the set of required properties is changed
 func NewBaseSearchParams(opts ...BaseSearchParamsOption) *BaseSearchParams {
 	this := &BaseSearchParams{}
-	var query string = ""
-	this.Query = &query
-	var similarQuery string = ""
-	this.SimilarQuery = &similarQuery
-	var filters string = ""
-	this.Filters = &filters
-	var sumOrFiltersScores bool = false
-	this.SumOrFiltersScores = &sumOrFiltersScores
-	var maxValuesPerFacet int32 = 100
-	this.MaxValuesPerFacet = &maxValuesPerFacet
-	var facetingAfterDistinct bool = false
-	this.FacetingAfterDistinct = &facetingAfterDistinct
-	var sortFacetValuesBy string = "count"
-	this.SortFacetValuesBy = &sortFacetValuesBy
-	var page int32 = 0
-	this.Page = &page
-	var aroundLatLng string = ""
-	this.AroundLatLng = &aroundLatLng
-	var aroundLatLngViaIP bool = false
-	this.AroundLatLngViaIP = &aroundLatLngViaIP
-	var aroundPrecision int32 = 10
-	this.AroundPrecision = &aroundPrecision
-	var personalizationImpact int32 = 100
-	this.PersonalizationImpact = &personalizationImpact
-	var getRankingInfo bool = false
-	this.GetRankingInfo = &getRankingInfo
-	var clickAnalytics bool = false
-	this.ClickAnalytics = &clickAnalytics
-	var analytics bool = true
-	this.Analytics = &analytics
-	var percentileComputation bool = true
-	this.PercentileComputation = &percentileComputation
-	var enableABTest bool = true
-	this.EnableABTest = &enableABTest
-	var enableReRanking bool = true
-	this.EnableReRanking = &enableReRanking
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -1577,7 +1541,7 @@ func (o BaseSearchParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseSearchParams) String() string {
-	out := "BaseSearchParams {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  similarQuery=%v\n", o.SimilarQuery)
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
@@ -1612,8 +1576,7 @@ func (o BaseSearchParams) String() string {
 	out += fmt.Sprintf("  enableABTest=%v\n", o.EnableABTest)
 	out += fmt.Sprintf("  enableReRanking=%v\n", o.EnableReRanking)
 	out += fmt.Sprintf("  reRankingApplyFilter=%v\n", o.ReRankingApplyFilter)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseSearchParams {\n%s}", out)
 }
 
 type NullableBaseSearchParams struct {

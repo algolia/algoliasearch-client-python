@@ -62,10 +62,9 @@ func (o SearchForFacetValuesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchForFacetValuesResponse) String() string {
-	out := "SearchForFacetValuesResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  facetHits=%v\n", o.FacetHits)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchForFacetValuesResponse {\n%s}", out)
 }
 
 type NullableSearchForFacetValuesResponse struct {

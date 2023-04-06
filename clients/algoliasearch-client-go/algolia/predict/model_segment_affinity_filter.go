@@ -27,8 +27,6 @@ func WithSegmentAffinityFilterOperator(val SegmentFilterOperatorNumerical) Segme
 // will change when the set of required properties is changed
 func NewSegmentAffinityFilter(value SegmentAffinityFilterValue, probability SegmentFilterProbability, opts ...SegmentAffinityFilterOption) *SegmentAffinityFilter {
 	this := &SegmentAffinityFilter{}
-	var operator SegmentFilterOperatorNumerical = SEGMENTFILTEROPERATORNUMERICAL_EQ
-	this.Operator = &operator
 	this.Value = value
 	this.Probability = probability
 	for _, opt := range opts {
@@ -142,12 +140,11 @@ func (o SegmentAffinityFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentAffinityFilter) String() string {
-	out := "SegmentAffinityFilter {\n"
+	out := ""
 	out += fmt.Sprintf("  operator=%v\n", o.Operator)
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  probability=%v\n", o.Probability)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentAffinityFilter {\n%s}", out)
 }
 
 type NullableSegmentAffinityFilter struct {

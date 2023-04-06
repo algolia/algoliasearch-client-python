@@ -110,11 +110,10 @@ func (o OnDemandTrigger) MarshalJSON() ([]byte, error) {
 }
 
 func (o OnDemandTrigger) String() string {
-	out := "OnDemandTrigger {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  lastRun=%v\n", o.LastRun)
-	out += "}"
-	return out
+	return fmt.Sprintf("OnDemandTrigger {\n%s}", out)
 }
 
 type NullableOnDemandTrigger struct {

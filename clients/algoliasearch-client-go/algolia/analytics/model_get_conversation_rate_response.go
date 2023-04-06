@@ -153,13 +153,12 @@ func (o GetConversationRateResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetConversationRateResponse) String() string {
-	out := "GetConversationRateResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  rate=%v\n", o.Rate)
 	out += fmt.Sprintf("  trackedSearchCount=%v\n", o.TrackedSearchCount)
 	out += fmt.Sprintf("  conversionCount=%v\n", o.ConversionCount)
 	out += fmt.Sprintf("  dates=%v\n", o.Dates)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetConversationRateResponse {\n%s}", out)
 }
 
 type NullableGetConversationRateResponse struct {

@@ -123,12 +123,11 @@ func (o AuthOAuth) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthOAuth) String() string {
-	out := "AuthOAuth {\n"
+	out := ""
 	out += fmt.Sprintf("  url=%v\n", o.Url)
 	out += fmt.Sprintf("  client_id=%v\n", o.ClientId)
 	out += fmt.Sprintf("  client_secret=%v\n", o.ClientSecret)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthOAuth {\n%s}", out)
 }
 
 type NullableAuthOAuth struct {

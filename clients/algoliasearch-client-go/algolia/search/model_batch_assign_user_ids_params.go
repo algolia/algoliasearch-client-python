@@ -93,11 +93,10 @@ func (o BatchAssignUserIdsParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o BatchAssignUserIdsParams) String() string {
-	out := "BatchAssignUserIdsParams {\n"
+	out := ""
 	out += fmt.Sprintf("  cluster=%v\n", o.Cluster)
 	out += fmt.Sprintf("  users=%v\n", o.Users)
-	out += "}"
-	return out
+	return fmt.Sprintf("BatchAssignUserIdsParams {\n%s}", out)
 }
 
 type NullableBatchAssignUserIdsParams struct {

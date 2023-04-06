@@ -466,56 +466,6 @@ func WithIndexSettingsRenderingContent(val RenderingContent) IndexSettingsOption
 // will change when the set of required properties is changed
 func NewIndexSettings(opts ...IndexSettingsOption) *IndexSettings {
 	this := &IndexSettings{}
-	var paginationLimitedTo int32 = 1000
-	this.PaginationLimitedTo = &paginationLimitedTo
-	var allowCompressionOfIntegerArray bool = false
-	this.AllowCompressionOfIntegerArray = &allowCompressionOfIntegerArray
-	var separatorsToIndex string = ""
-	this.SeparatorsToIndex = &separatorsToIndex
-	var relevancyStrictness int32 = 100
-	this.RelevancyStrictness = &relevancyStrictness
-	var highlightPreTag string = "<em>"
-	this.HighlightPreTag = &highlightPreTag
-	var highlightPostTag string = "</em>"
-	this.HighlightPostTag = &highlightPostTag
-	var snippetEllipsisText string = "…"
-	this.SnippetEllipsisText = &snippetEllipsisText
-	var restrictHighlightAndSnippetArrays bool = false
-	this.RestrictHighlightAndSnippetArrays = &restrictHighlightAndSnippetArrays
-	var hitsPerPage int32 = 20
-	this.HitsPerPage = &hitsPerPage
-	var minWordSizefor1Typo int32 = 4
-	this.MinWordSizefor1Typo = &minWordSizefor1Typo
-	var minWordSizefor2Typos int32 = 8
-	this.MinWordSizefor2Typos = &minWordSizefor2Typos
-	var allowTyposOnNumericTokens bool = true
-	this.AllowTyposOnNumericTokens = &allowTyposOnNumericTokens
-	var keepDiacriticsOnCharacters string = ""
-	this.KeepDiacriticsOnCharacters = &keepDiacriticsOnCharacters
-	var decompoundQuery bool = true
-	this.DecompoundQuery = &decompoundQuery
-	var enableRules bool = true
-	this.EnableRules = &enableRules
-	var enablePersonalization bool = false
-	this.EnablePersonalization = &enablePersonalization
-	var queryType QueryType = QUERYTYPE_PREFIX_LAST
-	this.QueryType = &queryType
-	var removeWordsIfNoResults RemoveWordsIfNoResults = REMOVEWORDSIFNORESULTS_NONE
-	this.RemoveWordsIfNoResults = &removeWordsIfNoResults
-	var advancedSyntax bool = false
-	this.AdvancedSyntax = &advancedSyntax
-	var exactOnSingleWordQuery ExactOnSingleWordQuery = EXACTONSINGLEWORDQUERY_ATTRIBUTE
-	this.ExactOnSingleWordQuery = &exactOnSingleWordQuery
-	var synonyms bool = true
-	this.Synonyms = &synonyms
-	var replaceSynonymsInHighlight bool = false
-	this.ReplaceSynonymsInHighlight = &replaceSynonymsInHighlight
-	var minProximity int32 = 1
-	this.MinProximity = &minProximity
-	var maxFacetHits int32 = 10
-	this.MaxFacetHits = &maxFacetHits
-	var attributeCriteriaComputedByMinProximity bool = false
-	this.AttributeCriteriaComputedByMinProximity = &attributeCriteriaComputedByMinProximity
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -2581,7 +2531,7 @@ func (o IndexSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o IndexSettings) String() string {
-	out := "IndexSettings {\n"
+	out := ""
 	out += fmt.Sprintf("  replicas=%v\n", o.Replicas)
 	out += fmt.Sprintf("  paginationLimitedTo=%v\n", o.PaginationLimitedTo)
 	out += fmt.Sprintf("  unretrievableAttributes=%v\n", o.UnretrievableAttributes)
@@ -2639,8 +2589,7 @@ func (o IndexSettings) String() string {
 	out += fmt.Sprintf("  maxFacetHits=%v\n", o.MaxFacetHits)
 	out += fmt.Sprintf("  attributeCriteriaComputedByMinProximity=%v\n", o.AttributeCriteriaComputedByMinProximity)
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
-	out += "}"
-	return out
+	return fmt.Sprintf("IndexSettings {\n%s}", out)
 }
 
 type NullableIndexSettings struct {

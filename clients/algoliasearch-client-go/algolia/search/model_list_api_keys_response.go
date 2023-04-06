@@ -63,10 +63,9 @@ func (o ListApiKeysResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o ListApiKeysResponse) String() string {
-	out := "ListApiKeysResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  keys=%v\n", o.Keys)
-	out += "}"
-	return out
+	return fmt.Sprintf("ListApiKeysResponse {\n%s}", out)
 }
 
 type NullableListApiKeysResponse struct {

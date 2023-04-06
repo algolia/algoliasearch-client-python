@@ -63,10 +63,9 @@ func (o GetRecommendationsParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetRecommendationsParams) String() string {
-	out := "GetRecommendationsParams {\n"
+	out := ""
 	out += fmt.Sprintf("  requests=%v\n", o.Requests)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetRecommendationsParams {\n%s}", out)
 }
 
 type NullableGetRecommendationsParams struct {

@@ -63,10 +63,9 @@ func (o SetPersonalizationStrategyResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o SetPersonalizationStrategyResponse) String() string {
-	out := "SetPersonalizationStrategyResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  message=%v\n", o.Message)
-	out += "}"
-	return out
+	return fmt.Sprintf("SetPersonalizationStrategyResponse {\n%s}", out)
 }
 
 type NullableSetPersonalizationStrategyResponse struct {

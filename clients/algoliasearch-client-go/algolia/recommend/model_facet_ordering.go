@@ -123,11 +123,10 @@ func (o FacetOrdering) MarshalJSON() ([]byte, error) {
 }
 
 func (o FacetOrdering) String() string {
-	out := "FacetOrdering {\n"
+	out := ""
 	out += fmt.Sprintf("  facets=%v\n", o.Facets)
 	out += fmt.Sprintf("  values=%v\n", o.Values)
-	out += "}"
-	return out
+	return fmt.Sprintf("FacetOrdering {\n%s}", out)
 }
 
 type NullableFacetOrdering struct {

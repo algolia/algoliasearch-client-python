@@ -491,7 +491,7 @@ func (o RankingInfo) MarshalJSON() ([]byte, error) {
 }
 
 func (o RankingInfo) String() string {
-	out := "RankingInfo {\n"
+	out := ""
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
 	out += fmt.Sprintf("  firstMatchedWord=%v\n", o.FirstMatchedWord)
 	out += fmt.Sprintf("  geoDistance=%v\n", o.GeoDistance)
@@ -505,8 +505,7 @@ func (o RankingInfo) String() string {
 	out += fmt.Sprintf("  userScore=%v\n", o.UserScore)
 	out += fmt.Sprintf("  words=%v\n", o.Words)
 	out += fmt.Sprintf("  promotedByReRanking=%v\n", o.PromotedByReRanking)
-	out += "}"
-	return out
+	return fmt.Sprintf("RankingInfo {\n%s}", out)
 }
 
 type NullableRankingInfo struct {

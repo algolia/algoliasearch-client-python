@@ -122,12 +122,11 @@ func (o MultipleBatchRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o MultipleBatchRequest) String() string {
-	out := "MultipleBatchRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  body=%v\n", o.Body)
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
-	out += "}"
-	return out
+	return fmt.Sprintf("MultipleBatchRequest {\n%s}", out)
 }
 
 type NullableMultipleBatchRequest struct {

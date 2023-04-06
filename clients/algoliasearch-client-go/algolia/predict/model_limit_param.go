@@ -80,10 +80,9 @@ func (o LimitParam) MarshalJSON() ([]byte, error) {
 }
 
 func (o LimitParam) String() string {
-	out := "LimitParam {\n"
+	out := ""
 	out += fmt.Sprintf("  limit=%v\n", o.Limit)
-	out += "}"
-	return out
+	return fmt.Sprintf("LimitParam {\n%s}", out)
 }
 
 type NullableLimitParam struct {

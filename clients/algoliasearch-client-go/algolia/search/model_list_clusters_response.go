@@ -63,10 +63,9 @@ func (o ListClustersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o ListClustersResponse) String() string {
-	out := "ListClustersResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  topUsers=%v\n", o.TopUsers)
-	out += "}"
-	return out
+	return fmt.Sprintf("ListClustersResponse {\n%s}", out)
 }
 
 type NullableListClustersResponse struct {

@@ -123,12 +123,11 @@ func (o Status) MarshalJSON() ([]byte, error) {
 }
 
 func (o Status) String() string {
-	out := "Status {\n"
+	out := ""
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
 	out += fmt.Sprintf("  isRunning=%v\n", o.IsRunning)
 	out += fmt.Sprintf("  lastBuiltAt=%v\n", o.LastBuiltAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("Status {\n%s}", out)
 }
 
 type NullableStatus struct {

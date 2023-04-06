@@ -199,14 +199,13 @@ func (o TaskCreate) MarshalJSON() ([]byte, error) {
 }
 
 func (o TaskCreate) String() string {
-	out := "TaskCreate {\n"
+	out := ""
 	out += fmt.Sprintf("  sourceID=%v\n", o.SourceID)
 	out += fmt.Sprintf("  destinationID=%v\n", o.DestinationID)
 	out += fmt.Sprintf("  trigger=%v\n", o.Trigger)
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
-	out += "}"
-	return out
+	return fmt.Sprintf("TaskCreate {\n%s}", out)
 }
 
 type NullableTaskCreate struct {

@@ -111,11 +111,10 @@ func (o ListIndicesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o ListIndicesResponse) String() string {
-	out := "ListIndicesResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  items=%v\n", o.Items)
 	out += fmt.Sprintf("  nbPages=%v\n", o.NbPages)
-	out += "}"
-	return out
+	return fmt.Sprintf("ListIndicesResponse {\n%s}", out)
 }
 
 type NullableListIndicesResponse struct {

@@ -184,13 +184,12 @@ func (o QuerySuggestionsIndexWithIndexParam) MarshalJSON() ([]byte, error) {
 }
 
 func (o QuerySuggestionsIndexWithIndexParam) String() string {
-	out := "QuerySuggestionsIndexWithIndexParam {\n"
+	out := ""
 	out += fmt.Sprintf("  sourceIndices=%v\n", o.SourceIndices)
 	out += fmt.Sprintf("  languages=%v\n", o.Languages)
 	out += fmt.Sprintf("  exclude=%v\n", o.Exclude)
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
-	out += "}"
-	return out
+	return fmt.Sprintf("QuerySuggestionsIndexWithIndexParam {\n%s}", out)
 }
 
 type NullableQuerySuggestionsIndexWithIndexParam struct {

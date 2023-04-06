@@ -170,12 +170,11 @@ func (o StandardEntries) MarshalJSON() ([]byte, error) {
 }
 
 func (o StandardEntries) String() string {
-	out := "StandardEntries {\n"
+	out := ""
 	out += fmt.Sprintf("  plurals=%v\n", o.Plurals)
 	out += fmt.Sprintf("  stopwords=%v\n", o.Stopwords)
 	out += fmt.Sprintf("  compounds=%v\n", o.Compounds)
-	out += "}"
-	return out
+	return fmt.Sprintf("StandardEntries {\n%s}", out)
 }
 
 type NullableStandardEntries struct {

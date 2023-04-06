@@ -45,10 +45,6 @@ func WithSearchDictionaryEntriesParamsLanguage(val string) SearchDictionaryEntri
 func NewSearchDictionaryEntriesParams(query string, opts ...SearchDictionaryEntriesParamsOption) *SearchDictionaryEntriesParams {
 	this := &SearchDictionaryEntriesParams{}
 	this.Query = query
-	var page int32 = 0
-	this.Page = &page
-	var hitsPerPage int32 = 20
-	this.HitsPerPage = &hitsPerPage
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -207,13 +203,12 @@ func (o SearchDictionaryEntriesParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchDictionaryEntriesParams) String() string {
-	out := "SearchDictionaryEntriesParams {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
 	out += fmt.Sprintf("  hitsPerPage=%v\n", o.HitsPerPage)
 	out += fmt.Sprintf("  language=%v\n", o.Language)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchDictionaryEntriesParams {\n%s}", out)
 }
 
 type NullableSearchDictionaryEntriesParams struct {

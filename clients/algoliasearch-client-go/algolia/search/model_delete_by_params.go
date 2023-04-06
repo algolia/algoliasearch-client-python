@@ -78,10 +78,6 @@ func WithDeleteByParamsInsidePolygon(val []float64) DeleteByParamsOption {
 // will change when the set of required properties is changed
 func NewDeleteByParams(opts ...DeleteByParamsOption) *DeleteByParams {
 	this := &DeleteByParams{}
-	var filters string = ""
-	this.Filters = &filters
-	var aroundLatLng string = ""
-	this.AroundLatLng = &aroundLatLng
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -386,7 +382,7 @@ func (o DeleteByParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o DeleteByParams) String() string {
-	out := "DeleteByParams {\n"
+	out := ""
 	out += fmt.Sprintf("  facetFilters=%v\n", o.FacetFilters)
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
 	out += fmt.Sprintf("  numericFilters=%v\n", o.NumericFilters)
@@ -395,8 +391,7 @@ func (o DeleteByParams) String() string {
 	out += fmt.Sprintf("  aroundRadius=%v\n", o.AroundRadius)
 	out += fmt.Sprintf("  insideBoundingBox=%v\n", o.InsideBoundingBox)
 	out += fmt.Sprintf("  insidePolygon=%v\n", o.InsidePolygon)
-	out += "}"
-	return out
+	return fmt.Sprintf("DeleteByParams {\n%s}", out)
 }
 
 type NullableDeleteByParams struct {

@@ -123,12 +123,11 @@ func (o EventScoring) MarshalJSON() ([]byte, error) {
 }
 
 func (o EventScoring) String() string {
-	out := "EventScoring {\n"
+	out := ""
 	out += fmt.Sprintf("  score=%v\n", o.Score)
 	out += fmt.Sprintf("  eventName=%v\n", o.EventName)
 	out += fmt.Sprintf("  eventType=%v\n", o.EventType)
-	out += "}"
-	return out
+	return fmt.Sprintf("EventScoring {\n%s}", out)
 }
 
 type NullableEventScoring struct {

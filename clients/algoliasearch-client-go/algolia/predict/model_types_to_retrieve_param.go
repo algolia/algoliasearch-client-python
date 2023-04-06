@@ -80,10 +80,9 @@ func (o TypesToRetrieveParam) MarshalJSON() ([]byte, error) {
 }
 
 func (o TypesToRetrieveParam) String() string {
-	out := "TypesToRetrieveParam {\n"
+	out := ""
 	out += fmt.Sprintf("  typesToRetrieve=%v\n", o.TypesToRetrieve)
-	out += "}"
-	return out
+	return fmt.Sprintf("TypesToRetrieveParam {\n%s}", out)
 }
 
 type NullableTypesToRetrieveParam struct {

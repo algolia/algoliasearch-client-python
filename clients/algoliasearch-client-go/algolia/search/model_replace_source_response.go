@@ -63,10 +63,9 @@ func (o ReplaceSourceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o ReplaceSourceResponse) String() string {
-	out := "ReplaceSourceResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("ReplaceSourceResponse {\n%s}", out)
 }
 
 type NullableReplaceSourceResponse struct {

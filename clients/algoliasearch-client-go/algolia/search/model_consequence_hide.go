@@ -63,10 +63,9 @@ func (o ConsequenceHide) MarshalJSON() ([]byte, error) {
 }
 
 func (o ConsequenceHide) String() string {
-	out := "ConsequenceHide {\n"
+	out := ""
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
-	out += "}"
-	return out
+	return fmt.Sprintf("ConsequenceHide {\n%s}", out)
 }
 
 type NullableConsequenceHide struct {

@@ -91,11 +91,10 @@ func (o SegmentOperandOrderValue) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentOperandOrderValue) String() string {
-	out := "SegmentOperandOrderValue {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentOperandOrderValue {\n%s}", out)
 }
 
 type NullableSegmentOperandOrderValue struct {

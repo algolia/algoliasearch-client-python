@@ -93,11 +93,10 @@ func (o RunResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o RunResponse) String() string {
-	out := "RunResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  runID=%v\n", o.RunID)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("RunResponse {\n%s}", out)
 }
 
 type NullableRunResponse struct {

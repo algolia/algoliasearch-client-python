@@ -93,11 +93,10 @@ func (o TimeRange) MarshalJSON() ([]byte, error) {
 }
 
 func (o TimeRange) String() string {
-	out := "TimeRange {\n"
+	out := ""
 	out += fmt.Sprintf("  from=%v\n", o.From)
 	out += fmt.Sprintf("  until=%v\n", o.Until)
-	out += "}"
-	return out
+	return fmt.Sprintf("TimeRange {\n%s}", out)
 }
 
 type NullableTimeRange struct {

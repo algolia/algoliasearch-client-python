@@ -49,8 +49,6 @@ func WithConditionContext(val string) ConditionOption {
 // will change when the set of required properties is changed
 func NewCondition(opts ...ConditionOption) *Condition {
 	this := &Condition{}
-	var alternatives bool = false
-	this.Alternatives = &alternatives
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -213,13 +211,12 @@ func (o Condition) MarshalJSON() ([]byte, error) {
 }
 
 func (o Condition) String() string {
-	out := "Condition {\n"
+	out := ""
 	out += fmt.Sprintf("  pattern=%v\n", o.Pattern)
 	out += fmt.Sprintf("  anchoring=%v\n", o.Anchoring)
 	out += fmt.Sprintf("  alternatives=%v\n", o.Alternatives)
 	out += fmt.Sprintf("  context=%v\n", o.Context)
-	out += "}"
-	return out
+	return fmt.Sprintf("Condition {\n%s}", out)
 }
 
 type NullableCondition struct {

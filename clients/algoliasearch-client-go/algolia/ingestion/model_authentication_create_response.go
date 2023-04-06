@@ -123,12 +123,11 @@ func (o AuthenticationCreateResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthenticationCreateResponse) String() string {
-	out := "AuthenticationCreateResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  authenticationID=%v\n", o.AuthenticationID)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthenticationCreateResponse {\n%s}", out)
 }
 
 type NullableAuthenticationCreateResponse struct {

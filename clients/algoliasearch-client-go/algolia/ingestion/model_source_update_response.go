@@ -122,12 +122,11 @@ func (o SourceUpdateResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceUpdateResponse) String() string {
-	out := "SourceUpdateResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  sourceID=%v\n", o.SourceID)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceUpdateResponse {\n%s}", out)
 }
 
 type NullableSourceUpdateResponse struct {

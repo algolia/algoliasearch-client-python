@@ -93,11 +93,10 @@ func (o SourceIndexExternal) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceIndexExternal) String() string {
-	out := "SourceIndexExternal {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceIndexExternal {\n%s}", out)
 }
 
 type NullableSourceIndexExternal struct {

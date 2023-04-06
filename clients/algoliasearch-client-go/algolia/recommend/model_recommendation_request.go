@@ -51,8 +51,6 @@ func NewRecommendationRequest(model RecommendationModels, objectID string, index
 	this.ObjectID = objectID
 	this.IndexName = indexName
 	this.Threshold = threshold
-	var maxRecommendations int32 = 0
-	this.MaxRecommendations = &maxRecommendations
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -288,7 +286,7 @@ func (o RecommendationRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o RecommendationRequest) String() string {
-	out := "RecommendationRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  model=%v\n", o.Model)
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
@@ -296,8 +294,7 @@ func (o RecommendationRequest) String() string {
 	out += fmt.Sprintf("  maxRecommendations=%v\n", o.MaxRecommendations)
 	out += fmt.Sprintf("  queryParameters=%v\n", o.QueryParameters)
 	out += fmt.Sprintf("  fallbackParameters=%v\n", o.FallbackParameters)
-	out += "}"
-	return out
+	return fmt.Sprintf("RecommendationRequest {\n%s}", out)
 }
 
 type NullableRecommendationRequest struct {

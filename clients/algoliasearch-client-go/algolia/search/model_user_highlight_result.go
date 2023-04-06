@@ -93,11 +93,10 @@ func (o UserHighlightResult) MarshalJSON() ([]byte, error) {
 }
 
 func (o UserHighlightResult) String() string {
-	out := "UserHighlightResult {\n"
+	out := ""
 	out += fmt.Sprintf("  userID=%v\n", o.UserID)
 	out += fmt.Sprintf("  clusterName=%v\n", o.ClusterName)
-	out += "}"
-	return out
+	return fmt.Sprintf("UserHighlightResult {\n%s}", out)
 }
 
 type NullableUserHighlightResult struct {

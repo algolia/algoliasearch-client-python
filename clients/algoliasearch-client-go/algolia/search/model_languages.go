@@ -126,12 +126,11 @@ func (o Languages) MarshalJSON() ([]byte, error) {
 }
 
 func (o Languages) String() string {
-	out := "Languages {\n"
+	out := ""
 	out += fmt.Sprintf("  plurals=%v\n", o.Plurals)
 	out += fmt.Sprintf("  stopwords=%v\n", o.Stopwords)
 	out += fmt.Sprintf("  compounds=%v\n", o.Compounds)
-	out += "}"
-	return out
+	return fmt.Sprintf("Languages {\n%s}", out)
 }
 
 type NullableLanguages struct {

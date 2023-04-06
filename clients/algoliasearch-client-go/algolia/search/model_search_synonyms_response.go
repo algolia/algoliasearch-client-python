@@ -119,15 +119,13 @@ func (o *SearchSynonymsResponse) UnmarshalJSON(bytes []byte) (err error) {
 }
 
 func (o SearchSynonymsResponse) String() string {
-	out := "SearchSynonymsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
 	out += fmt.Sprintf("  nbHits=%v\n", o.NbHits)
 	for key, value := range o.AdditionalProperties {
 		out += fmt.Sprintf("  %s=%v\n", key, value)
 	}
-
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchSynonymsResponse {\n%s}", out)
 }
 
 type NullableSearchSynonymsResponse struct {

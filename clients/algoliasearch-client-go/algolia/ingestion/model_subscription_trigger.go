@@ -62,10 +62,9 @@ func (o SubscriptionTrigger) MarshalJSON() ([]byte, error) {
 }
 
 func (o SubscriptionTrigger) String() string {
-	out := "SubscriptionTrigger {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
-	out += "}"
-	return out
+	return fmt.Sprintf("SubscriptionTrigger {\n%s}", out)
 }
 
 type NullableSubscriptionTrigger struct {

@@ -64,8 +64,6 @@ func NewTrendingRequest(model TrendingModels, indexName string, threshold int32,
 	this.Model = model
 	this.IndexName = indexName
 	this.Threshold = threshold
-	var maxRecommendations int32 = 0
-	this.MaxRecommendations = &maxRecommendations
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -344,7 +342,7 @@ func (o TrendingRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o TrendingRequest) String() string {
-	out := "TrendingRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  model=%v\n", o.Model)
 	out += fmt.Sprintf("  facetName=%v\n", o.FacetName)
 	out += fmt.Sprintf("  facetValue=%v\n", o.FacetValue)
@@ -353,8 +351,7 @@ func (o TrendingRequest) String() string {
 	out += fmt.Sprintf("  maxRecommendations=%v\n", o.MaxRecommendations)
 	out += fmt.Sprintf("  queryParameters=%v\n", o.QueryParameters)
 	out += fmt.Sprintf("  fallbackParameters=%v\n", o.FallbackParameters)
-	out += "}"
-	return out
+	return fmt.Sprintf("TrendingRequest {\n%s}", out)
 }
 
 type NullableTrendingRequest struct {

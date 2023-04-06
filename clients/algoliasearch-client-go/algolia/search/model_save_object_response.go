@@ -140,12 +140,11 @@ func (o SaveObjectResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o SaveObjectResponse) String() string {
-	out := "SaveObjectResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  taskID=%v\n", o.TaskID)
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
-	out += "}"
-	return out
+	return fmt.Sprintf("SaveObjectResponse {\n%s}", out)
 }
 
 type NullableSaveObjectResponse struct {

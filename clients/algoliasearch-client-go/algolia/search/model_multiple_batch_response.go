@@ -93,11 +93,10 @@ func (o MultipleBatchResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o MultipleBatchResponse) String() string {
-	out := "MultipleBatchResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  taskID=%v\n", o.TaskID)
 	out += fmt.Sprintf("  objectIDs=%v\n", o.ObjectIDs)
-	out += "}"
-	return out
+	return fmt.Sprintf("MultipleBatchResponse {\n%s}", out)
 }
 
 type NullableMultipleBatchResponse struct {

@@ -81,10 +81,9 @@ func (o NextPageTokenParam) MarshalJSON() ([]byte, error) {
 }
 
 func (o NextPageTokenParam) String() string {
-	out := "NextPageTokenParam {\n"
+	out := ""
 	out += fmt.Sprintf("  nextPageToken=%v\n", o.NextPageToken)
-	out += "}"
-	return out
+	return fmt.Sprintf("NextPageTokenParam {\n%s}", out)
 }
 
 type NullableNextPageTokenParam struct {

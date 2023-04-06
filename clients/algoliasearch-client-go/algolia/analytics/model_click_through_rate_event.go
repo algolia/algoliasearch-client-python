@@ -153,13 +153,12 @@ func (o ClickThroughRateEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o ClickThroughRateEvent) String() string {
-	out := "ClickThroughRateEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  rate=%v\n", o.Rate)
 	out += fmt.Sprintf("  clickCount=%v\n", o.ClickCount)
 	out += fmt.Sprintf("  trackedSearchCount=%v\n", o.TrackedSearchCount)
 	out += fmt.Sprintf("  date=%v\n", o.Date)
-	out += "}"
-	return out
+	return fmt.Sprintf("ClickThroughRateEvent {\n%s}", out)
 }
 
 type NullableClickThroughRateEvent struct {

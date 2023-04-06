@@ -81,10 +81,9 @@ func (o DictionaryLanguage) MarshalJSON() ([]byte, error) {
 }
 
 func (o DictionaryLanguage) String() string {
-	out := "DictionaryLanguage {\n"
+	out := ""
 	out += fmt.Sprintf("  nbCustomEntires=%v\n", o.NbCustomEntires)
-	out += "}"
-	return out
+	return fmt.Sprintf("DictionaryLanguage {\n%s}", out)
 }
 
 type NullableDictionaryLanguage struct {

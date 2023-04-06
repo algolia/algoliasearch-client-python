@@ -93,11 +93,10 @@ func (o FacetScoring) MarshalJSON() ([]byte, error) {
 }
 
 func (o FacetScoring) String() string {
-	out := "FacetScoring {\n"
+	out := ""
 	out += fmt.Sprintf("  score=%v\n", o.Score)
 	out += fmt.Sprintf("  facetName=%v\n", o.FacetName)
-	out += "}"
-	return out
+	return fmt.Sprintf("FacetScoring {\n%s}", out)
 }
 
 type NullableFacetScoring struct {

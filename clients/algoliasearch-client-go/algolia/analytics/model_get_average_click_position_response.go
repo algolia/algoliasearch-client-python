@@ -123,12 +123,11 @@ func (o GetAverageClickPositionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetAverageClickPositionResponse) String() string {
-	out := "GetAverageClickPositionResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  average=%v\n", o.Average)
 	out += fmt.Sprintf("  clickCount=%v\n", o.ClickCount)
 	out += fmt.Sprintf("  dates=%v\n", o.Dates)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetAverageClickPositionResponse {\n%s}", out)
 }
 
 type NullableGetAverageClickPositionResponse struct {

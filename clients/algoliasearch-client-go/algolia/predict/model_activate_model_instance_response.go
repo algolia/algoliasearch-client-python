@@ -93,11 +93,10 @@ func (o ActivateModelInstanceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o ActivateModelInstanceResponse) String() string {
-	out := "ActivateModelInstanceResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  modelID=%v\n", o.ModelID)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("ActivateModelInstanceResponse {\n%s}", out)
 }
 
 type NullableActivateModelInstanceResponse struct {

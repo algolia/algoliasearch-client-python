@@ -151,13 +151,12 @@ func (o GetAvailableModelTypesResponseInner) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetAvailableModelTypesResponseInner) String() string {
-	out := "GetAvailableModelTypesResponseInner {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  compatibleSources=%v\n", o.CompatibleSources)
 	out += fmt.Sprintf("  dataRequirements=%v\n", o.DataRequirements)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetAvailableModelTypesResponseInner {\n%s}", out)
 }
 
 type NullableGetAvailableModelTypesResponseInner struct {

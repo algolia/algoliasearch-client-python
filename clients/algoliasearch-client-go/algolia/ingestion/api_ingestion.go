@@ -8,66 +8,79 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/call"
 )
 
 type Option struct {
-	Type  string
-	Name  string
-	Value string
+	optionType string
+	name       string
+	value      string
 }
 
-func WithPage(page int32) Option {
+func QueryParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "page",
-		Value: parameterToString(page),
+		optionType: "query",
+		name:       name,
+		value:      parameterToString(val),
 	}
 }
 
-func WithItemsPerPage(itemsPerPage int32) Option {
+func HeaderParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "itemsPerPage",
-		Value: parameterToString(itemsPerPage),
+		optionType: "header",
+		name:       "itemsPerPage",
+		value:      parameterToString(val),
 	}
 }
 
-func WithBody(body any) Option {
-	return Option{
-		Type:  "body",
-		Name:  "body",
-		Value: parameterToString(body),
-	}
+type ApiCreateAuthenticationRequest struct {
+	authenticationCreate *AuthenticationCreate
+}
+
+func (r ApiCreateAuthenticationRequest) WithAuthenticationCreate(authenticationCreate AuthenticationCreate) ApiCreateAuthenticationRequest {
+	r.authenticationCreate = &authenticationCreate
+	return r
+}
+
+// @return ApiCreateAuthenticationRequest
+func (c *APIClient) NewApiCreateAuthenticationRequest() ApiCreateAuthenticationRequest {
+	return ApiCreateAuthenticationRequest{}
 }
 
 // @return AuthenticationCreateResponse
-func (c *APIClient) CreateAuthentication(authenticationCreate *AuthenticationCreate) (*AuthenticationCreateResponse, error) {
+func (c *APIClient) CreateAuthentication(r ApiCreateAuthenticationRequest, opts ...Option) (*AuthenticationCreateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *AuthenticationCreateResponse
+		postBody    any
+		returnValue *AuthenticationCreateResponse
 	)
 
 	requestPath := "/1/authentications"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if authenticationCreate == nil {
+	if r.authenticationCreate == nil {
 		return returnValue, reportError("authenticationCreate is required and must be specified")
 	}
 
-	// body params
-	if authenticationCreate != nil {
-		localVarPostBody = authenticationCreate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.authenticationCreate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -106,34 +119,53 @@ func (c *APIClient) CreateAuthentication(authenticationCreate *AuthenticationCre
 	return returnValue, nil
 }
 
+type ApiCreateDestinationRequest struct {
+	destinationCreate *DestinationCreate
+}
+
+func (r ApiCreateDestinationRequest) WithDestinationCreate(destinationCreate DestinationCreate) ApiCreateDestinationRequest {
+	r.destinationCreate = &destinationCreate
+	return r
+}
+
+// @return ApiCreateDestinationRequest
+func (c *APIClient) NewApiCreateDestinationRequest() ApiCreateDestinationRequest {
+	return ApiCreateDestinationRequest{}
+}
+
 // @return DestinationCreateResponse
-func (c *APIClient) CreateDestination(destinationCreate *DestinationCreate) (*DestinationCreateResponse, error) {
+func (c *APIClient) CreateDestination(r ApiCreateDestinationRequest, opts ...Option) (*DestinationCreateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *DestinationCreateResponse
+		postBody    any
+		returnValue *DestinationCreateResponse
 	)
 
 	requestPath := "/1/destinations"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if destinationCreate == nil {
+	if r.destinationCreate == nil {
 		return returnValue, reportError("destinationCreate is required and must be specified")
 	}
 
-	// body params
-	if destinationCreate != nil {
-		localVarPostBody = destinationCreate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.destinationCreate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -172,34 +204,53 @@ func (c *APIClient) CreateDestination(destinationCreate *DestinationCreate) (*De
 	return returnValue, nil
 }
 
+type ApiCreateSourceRequest struct {
+	sourceCreate *SourceCreate
+}
+
+func (r ApiCreateSourceRequest) WithSourceCreate(sourceCreate SourceCreate) ApiCreateSourceRequest {
+	r.sourceCreate = &sourceCreate
+	return r
+}
+
+// @return ApiCreateSourceRequest
+func (c *APIClient) NewApiCreateSourceRequest() ApiCreateSourceRequest {
+	return ApiCreateSourceRequest{}
+}
+
 // @return SourceCreateResponse
-func (c *APIClient) CreateSource(sourceCreate *SourceCreate) (*SourceCreateResponse, error) {
+func (c *APIClient) CreateSource(r ApiCreateSourceRequest, opts ...Option) (*SourceCreateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SourceCreateResponse
+		postBody    any
+		returnValue *SourceCreateResponse
 	)
 
 	requestPath := "/1/sources"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if sourceCreate == nil {
+	if r.sourceCreate == nil {
 		return returnValue, reportError("sourceCreate is required and must be specified")
 	}
 
-	// body params
-	if sourceCreate != nil {
-		localVarPostBody = sourceCreate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.sourceCreate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -238,34 +289,53 @@ func (c *APIClient) CreateSource(sourceCreate *SourceCreate) (*SourceCreateRespo
 	return returnValue, nil
 }
 
+type ApiCreateTaskRequest struct {
+	taskCreate *TaskCreate
+}
+
+func (r ApiCreateTaskRequest) WithTaskCreate(taskCreate TaskCreate) ApiCreateTaskRequest {
+	r.taskCreate = &taskCreate
+	return r
+}
+
+// @return ApiCreateTaskRequest
+func (c *APIClient) NewApiCreateTaskRequest() ApiCreateTaskRequest {
+	return ApiCreateTaskRequest{}
+}
+
 // @return TaskCreateResponse
-func (c *APIClient) CreateTask(taskCreate *TaskCreate) (*TaskCreateResponse, error) {
+func (c *APIClient) CreateTask(r ApiCreateTaskRequest, opts ...Option) (*TaskCreateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *TaskCreateResponse
+		postBody    any
+		returnValue *TaskCreateResponse
 	)
 
 	requestPath := "/1/tasks"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if taskCreate == nil {
+	if r.taskCreate == nil {
 		return returnValue, reportError("taskCreate is required and must be specified")
 	}
 
-	// body params
-	if taskCreate != nil {
-		localVarPostBody = taskCreate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.taskCreate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -304,35 +374,57 @@ func (c *APIClient) CreateTask(taskCreate *TaskCreate) (*TaskCreateResponse, err
 	return returnValue, nil
 }
 
-// @return map[string]interface{}
-func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, error) {
-	var (
-		localVarPostBody any
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
 
+// Query parameters to be applied to the current query.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiDelRequest
+func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
+	return ApiDelRequest{
+		path: path,
+	}
+}
+
+// @return map[string]interface{}
+func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	var (
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -398,26 +490,46 @@ func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, er
 	return returnValue, nil
 }
 
-// @return DeleteResponse
-func (c *APIClient) DeleteAuthentication(authenticationID string) (*DeleteResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteAuthenticationRequest struct {
+	authenticationID string
+}
 
+// @return ApiDeleteAuthenticationRequest
+func (c *APIClient) NewApiDeleteAuthenticationRequest(authenticationID string) ApiDeleteAuthenticationRequest {
+	return ApiDeleteAuthenticationRequest{
+		authenticationID: authenticationID,
+	}
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteAuthentication(r ApiDeleteAuthenticationRequest, opts ...Option) (*DeleteResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteResponse
 	)
 
 	requestPath := "/1/authentications/{authenticationID}"
-	requestPath = strings.Replace(requestPath, "{"+"authenticationID"+"}", url.PathEscape(parameterToString(authenticationID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"authenticationID"+"}", url.PathEscape(parameterToString(r.authenticationID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -456,26 +568,46 @@ func (c *APIClient) DeleteAuthentication(authenticationID string) (*DeleteRespon
 	return returnValue, nil
 }
 
-// @return DeleteResponse
-func (c *APIClient) DeleteDestination(destinationID string) (*DeleteResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteDestinationRequest struct {
+	destinationID string
+}
 
+// @return ApiDeleteDestinationRequest
+func (c *APIClient) NewApiDeleteDestinationRequest(destinationID string) ApiDeleteDestinationRequest {
+	return ApiDeleteDestinationRequest{
+		destinationID: destinationID,
+	}
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteDestination(r ApiDeleteDestinationRequest, opts ...Option) (*DeleteResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteResponse
 	)
 
 	requestPath := "/1/destinations/{destinationID}"
-	requestPath = strings.Replace(requestPath, "{"+"destinationID"+"}", url.PathEscape(parameterToString(destinationID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"destinationID"+"}", url.PathEscape(parameterToString(r.destinationID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -514,26 +646,46 @@ func (c *APIClient) DeleteDestination(destinationID string) (*DeleteResponse, er
 	return returnValue, nil
 }
 
-// @return DeleteResponse
-func (c *APIClient) DeleteSource(sourceID string) (*DeleteResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteSourceRequest struct {
+	sourceID string
+}
 
+// @return ApiDeleteSourceRequest
+func (c *APIClient) NewApiDeleteSourceRequest(sourceID string) ApiDeleteSourceRequest {
+	return ApiDeleteSourceRequest{
+		sourceID: sourceID,
+	}
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*DeleteResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteResponse
 	)
 
 	requestPath := "/1/sources/{sourceID}"
-	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(sourceID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(r.sourceID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -572,26 +724,46 @@ func (c *APIClient) DeleteSource(sourceID string) (*DeleteResponse, error) {
 	return returnValue, nil
 }
 
-// @return DeleteResponse
-func (c *APIClient) DeleteTask(taskID string) (*DeleteResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteTaskRequest struct {
+	taskID string
+}
 
+// @return ApiDeleteTaskRequest
+func (c *APIClient) NewApiDeleteTaskRequest(taskID string) ApiDeleteTaskRequest {
+	return ApiDeleteTaskRequest{
+		taskID: taskID,
+	}
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteTask(r ApiDeleteTaskRequest, opts ...Option) (*DeleteResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteResponse
 	)
 
 	requestPath := "/1/tasks/{taskID}"
-	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(taskID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -630,26 +802,46 @@ func (c *APIClient) DeleteTask(taskID string) (*DeleteResponse, error) {
 	return returnValue, nil
 }
 
-// @return TaskUpdateResponse
-func (c *APIClient) DisableTask(taskID string) (*TaskUpdateResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDisableTaskRequest struct {
+	taskID string
+}
 
+// @return ApiDisableTaskRequest
+func (c *APIClient) NewApiDisableTaskRequest(taskID string) ApiDisableTaskRequest {
+	return ApiDisableTaskRequest{
+		taskID: taskID,
+	}
+}
+
+// @return TaskUpdateResponse
+func (c *APIClient) DisableTask(r ApiDisableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
+	var (
+		postBody    any
 		returnValue *TaskUpdateResponse
 	)
 
 	requestPath := "/1/tasks/{taskID}/disable"
-	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(taskID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -688,26 +880,46 @@ func (c *APIClient) DisableTask(taskID string) (*TaskUpdateResponse, error) {
 	return returnValue, nil
 }
 
-// @return TaskUpdateResponse
-func (c *APIClient) EnableTask(taskID string) (*TaskUpdateResponse, error) {
-	var (
-		localVarPostBody any
+type ApiEnableTaskRequest struct {
+	taskID string
+}
 
+// @return ApiEnableTaskRequest
+func (c *APIClient) NewApiEnableTaskRequest(taskID string) ApiEnableTaskRequest {
+	return ApiEnableTaskRequest{
+		taskID: taskID,
+	}
+}
+
+// @return TaskUpdateResponse
+func (c *APIClient) EnableTask(r ApiEnableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
+	var (
+		postBody    any
 		returnValue *TaskUpdateResponse
 	)
 
 	requestPath := "/1/tasks/{taskID}/enable"
-	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(taskID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -746,35 +958,57 @@ func (c *APIClient) EnableTask(taskID string) (*TaskUpdateResponse, error) {
 	return returnValue, nil
 }
 
-// @return map[string]interface{}
-func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, error) {
-	var (
-		localVarPostBody any
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
 
+// Query parameters to be applied to the current query.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiGetRequest
+func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
+	return ApiGetRequest{
+		path: path,
+	}
+}
+
+// @return map[string]interface{}
+func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	var (
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -840,26 +1074,46 @@ func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, er
 	return returnValue, nil
 }
 
-// @return AuthenticationWithInput
-func (c *APIClient) GetAuthentication(authenticationID string) (*AuthenticationWithInput, error) {
-	var (
-		localVarPostBody any
+type ApiGetAuthenticationRequest struct {
+	authenticationID string
+}
 
+// @return ApiGetAuthenticationRequest
+func (c *APIClient) NewApiGetAuthenticationRequest(authenticationID string) ApiGetAuthenticationRequest {
+	return ApiGetAuthenticationRequest{
+		authenticationID: authenticationID,
+	}
+}
+
+// @return AuthenticationWithInput
+func (c *APIClient) GetAuthentication(r ApiGetAuthenticationRequest, opts ...Option) (*AuthenticationWithInput, error) {
+	var (
+		postBody    any
 		returnValue *AuthenticationWithInput
 	)
 
 	requestPath := "/1/authentications/{authenticationID}"
-	requestPath = strings.Replace(requestPath, "{"+"authenticationID"+"}", url.PathEscape(parameterToString(authenticationID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"authenticationID"+"}", url.PathEscape(parameterToString(r.authenticationID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -898,11 +1152,60 @@ func (c *APIClient) GetAuthentication(authenticationID string) (*AuthenticationW
 	return returnValue, nil
 }
 
-// @return ListAuthenticationsResponse
-func (c *APIClient) GetAuthentications(opts ...Option) (*ListAuthenticationsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetAuthenticationsRequest struct {
+	itemsPerPage int32
+	page         int32
+	type_        *[]AuthenticationType
+	platform     *[]PlatformWithNone
+	sort         *AuthenticationSortKeys
+	order        *OrderKeys
+}
 
+// The number of items per page to return.
+func (r ApiGetAuthenticationsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetAuthenticationsRequest {
+	r.itemsPerPage = itemsPerPage
+	return r
+}
+
+// The page number to fetch, starting at 1.
+func (r ApiGetAuthenticationsRequest) WithPage(page int32) ApiGetAuthenticationsRequest {
+	r.page = page
+	return r
+}
+
+// The type of the authentications to retrieve.
+func (r ApiGetAuthenticationsRequest) WithType_(type_ []AuthenticationType) ApiGetAuthenticationsRequest {
+	r.type_ = &type_
+	return r
+}
+
+// The platform of the authentications to retrieve.
+func (r ApiGetAuthenticationsRequest) WithPlatform(platform []PlatformWithNone) ApiGetAuthenticationsRequest {
+	r.platform = &platform
+	return r
+}
+
+// The key by which the list should be sorted.
+func (r ApiGetAuthenticationsRequest) WithSort(sort AuthenticationSortKeys) ApiGetAuthenticationsRequest {
+	r.sort = &sort
+	return r
+}
+
+// The order of the returned list.
+func (r ApiGetAuthenticationsRequest) WithOrder(order OrderKeys) ApiGetAuthenticationsRequest {
+	r.order = &order
+	return r
+}
+
+// @return ApiGetAuthenticationsRequest
+func (c *APIClient) NewApiGetAuthenticationsRequest() ApiGetAuthenticationsRequest {
+	return ApiGetAuthenticationsRequest{}
+}
+
+// @return ListAuthenticationsResponse
+func (c *APIClient) GetAuthentications(r ApiGetAuthenticationsRequest, opts ...Option) (*ListAuthenticationsResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListAuthenticationsResponse
 	)
 
@@ -911,21 +1214,41 @@ func (c *APIClient) GetAuthentications(opts ...Option) (*ListAuthenticationsResp
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.itemsPerPage) {
+		queryParams.Add("itemsPerPage", parameterToString(r.itemsPerPage))
+	}
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.type_) {
+		queryParams.Add("type", parameterToString(*r.type_))
+	}
+	if !isNilorEmpty(r.platform) {
+		queryParams.Add("platform", parameterToString(*r.platform))
+	}
+	if !isNilorEmpty(r.sort) {
+		queryParams.Add("sort", parameterToString(*r.sort))
+	}
+	if !isNilorEmpty(r.order) {
+		queryParams.Add("order", parameterToString(*r.order))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -964,26 +1287,46 @@ func (c *APIClient) GetAuthentications(opts ...Option) (*ListAuthenticationsResp
 	return returnValue, nil
 }
 
-// @return Destination
-func (c *APIClient) GetDestination(destinationID string) (*Destination, error) {
-	var (
-		localVarPostBody any
+type ApiGetDestinationRequest struct {
+	destinationID string
+}
 
+// @return ApiGetDestinationRequest
+func (c *APIClient) NewApiGetDestinationRequest(destinationID string) ApiGetDestinationRequest {
+	return ApiGetDestinationRequest{
+		destinationID: destinationID,
+	}
+}
+
+// @return Destination
+func (c *APIClient) GetDestination(r ApiGetDestinationRequest, opts ...Option) (*Destination, error) {
+	var (
+		postBody    any
 		returnValue *Destination
 	)
 
 	requestPath := "/1/destinations/{destinationID}"
-	requestPath = strings.Replace(requestPath, "{"+"destinationID"+"}", url.PathEscape(parameterToString(destinationID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"destinationID"+"}", url.PathEscape(parameterToString(r.destinationID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1022,11 +1365,60 @@ func (c *APIClient) GetDestination(destinationID string) (*Destination, error) {
 	return returnValue, nil
 }
 
-// @return ListDestinationsResponse
-func (c *APIClient) GetDestinations(opts ...Option) (*ListDestinationsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetDestinationsRequest struct {
+	itemsPerPage     int32
+	page             int32
+	type_            *[]DestinationType
+	authenticationID *[]string
+	sort             *DestinationSortKeys
+	order            *OrderKeys
+}
 
+// The number of items per page to return.
+func (r ApiGetDestinationsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetDestinationsRequest {
+	r.itemsPerPage = itemsPerPage
+	return r
+}
+
+// The page number to fetch, starting at 1.
+func (r ApiGetDestinationsRequest) WithPage(page int32) ApiGetDestinationsRequest {
+	r.page = page
+	return r
+}
+
+// The type of the destinations to retrive.
+func (r ApiGetDestinationsRequest) WithType_(type_ []DestinationType) ApiGetDestinationsRequest {
+	r.type_ = &type_
+	return r
+}
+
+// The authenticationIDs of the destinations to retrive.
+func (r ApiGetDestinationsRequest) WithAuthenticationID(authenticationID []string) ApiGetDestinationsRequest {
+	r.authenticationID = &authenticationID
+	return r
+}
+
+// The key by which the list should be sorted.
+func (r ApiGetDestinationsRequest) WithSort(sort DestinationSortKeys) ApiGetDestinationsRequest {
+	r.sort = &sort
+	return r
+}
+
+// The order of the returned list.
+func (r ApiGetDestinationsRequest) WithOrder(order OrderKeys) ApiGetDestinationsRequest {
+	r.order = &order
+	return r
+}
+
+// @return ApiGetDestinationsRequest
+func (c *APIClient) NewApiGetDestinationsRequest() ApiGetDestinationsRequest {
+	return ApiGetDestinationsRequest{}
+}
+
+// @return ListDestinationsResponse
+func (c *APIClient) GetDestinations(r ApiGetDestinationsRequest, opts ...Option) (*ListDestinationsResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListDestinationsResponse
 	)
 
@@ -1035,21 +1427,41 @@ func (c *APIClient) GetDestinations(opts ...Option) (*ListDestinationsResponse, 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.itemsPerPage) {
+		queryParams.Add("itemsPerPage", parameterToString(r.itemsPerPage))
+	}
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.type_) {
+		queryParams.Add("type", parameterToString(*r.type_))
+	}
+	if !isNilorEmpty(r.authenticationID) {
+		queryParams.Add("authenticationID", parameterToString(*r.authenticationID))
+	}
+	if !isNilorEmpty(r.sort) {
+		queryParams.Add("sort", parameterToString(*r.sort))
+	}
+	if !isNilorEmpty(r.order) {
+		queryParams.Add("order", parameterToString(*r.order))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1088,27 +1500,49 @@ func (c *APIClient) GetDestinations(opts ...Option) (*ListDestinationsResponse, 
 	return returnValue, nil
 }
 
-// @return Event
-func (c *APIClient) GetEvent(runID string, eventID string) (*Event, error) {
-	var (
-		localVarPostBody any
+type ApiGetEventRequest struct {
+	runID   string
+	eventID string
+}
 
+// @return ApiGetEventRequest
+func (c *APIClient) NewApiGetEventRequest(runID string, eventID string) ApiGetEventRequest {
+	return ApiGetEventRequest{
+		runID:   runID,
+		eventID: eventID,
+	}
+}
+
+// @return Event
+func (c *APIClient) GetEvent(r ApiGetEventRequest, opts ...Option) (*Event, error) {
+	var (
+		postBody    any
 		returnValue *Event
 	)
 
 	requestPath := "/1/runs/{runID}/events/{eventID}"
-	requestPath = strings.Replace(requestPath, "{"+"runID"+"}", url.PathEscape(parameterToString(runID)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"eventID"+"}", url.PathEscape(parameterToString(eventID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"runID"+"}", url.PathEscape(parameterToString(r.runID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"eventID"+"}", url.PathEscape(parameterToString(r.eventID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1147,35 +1581,107 @@ func (c *APIClient) GetEvent(runID string, eventID string) (*Event, error) {
 	return returnValue, nil
 }
 
-// @return ListEventsResponse
-func (c *APIClient) GetEvents(runID string, opts ...Option) (*ListEventsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetEventsRequest struct {
+	runID        string
+	itemsPerPage int32
+	page         int32
+	status       *[]EventStatus
+	type_        *[]EventType
+	sort         *EventSortKeys
+	order        *OrderKeys
+}
 
+// The number of items per page to return.
+func (r ApiGetEventsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetEventsRequest {
+	r.itemsPerPage = itemsPerPage
+	return r
+}
+
+// The page number to fetch, starting at 1.
+func (r ApiGetEventsRequest) WithPage(page int32) ApiGetEventsRequest {
+	r.page = page
+	return r
+}
+
+// Filter the status of the events.
+func (r ApiGetEventsRequest) WithStatus(status []EventStatus) ApiGetEventsRequest {
+	r.status = &status
+	return r
+}
+
+// Filter the type of the events.
+func (r ApiGetEventsRequest) WithType_(type_ []EventType) ApiGetEventsRequest {
+	r.type_ = &type_
+	return r
+}
+
+// The key by which the list should be sorted.
+func (r ApiGetEventsRequest) WithSort(sort EventSortKeys) ApiGetEventsRequest {
+	r.sort = &sort
+	return r
+}
+
+// The order of the returned list.
+func (r ApiGetEventsRequest) WithOrder(order OrderKeys) ApiGetEventsRequest {
+	r.order = &order
+	return r
+}
+
+// @return ApiGetEventsRequest
+func (c *APIClient) NewApiGetEventsRequest(runID string) ApiGetEventsRequest {
+	return ApiGetEventsRequest{
+		runID: runID,
+	}
+}
+
+// @return ListEventsResponse
+func (c *APIClient) GetEvents(r ApiGetEventsRequest, opts ...Option) (*ListEventsResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListEventsResponse
 	)
 
 	requestPath := "/1/runs/{runID}/events"
-	requestPath = strings.Replace(requestPath, "{"+"runID"+"}", url.PathEscape(parameterToString(runID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"runID"+"}", url.PathEscape(parameterToString(r.runID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.itemsPerPage) {
+		queryParams.Add("itemsPerPage", parameterToString(r.itemsPerPage))
+	}
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.status) {
+		queryParams.Add("status", parameterToString(*r.status))
+	}
+	if !isNilorEmpty(r.type_) {
+		queryParams.Add("type", parameterToString(*r.type_))
+	}
+	if !isNilorEmpty(r.sort) {
+		queryParams.Add("sort", parameterToString(*r.sort))
+	}
+	if !isNilorEmpty(r.order) {
+		queryParams.Add("order", parameterToString(*r.order))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1214,26 +1720,46 @@ func (c *APIClient) GetEvents(runID string, opts ...Option) (*ListEventsResponse
 	return returnValue, nil
 }
 
-// @return Run
-func (c *APIClient) GetRun(runID string) (*Run, error) {
-	var (
-		localVarPostBody any
+type ApiGetRunRequest struct {
+	runID string
+}
 
+// @return ApiGetRunRequest
+func (c *APIClient) NewApiGetRunRequest(runID string) ApiGetRunRequest {
+	return ApiGetRunRequest{
+		runID: runID,
+	}
+}
+
+// @return Run
+func (c *APIClient) GetRun(r ApiGetRunRequest, opts ...Option) (*Run, error) {
+	var (
+		postBody    any
 		returnValue *Run
 	)
 
 	requestPath := "/1/runs/{runID}"
-	requestPath = strings.Replace(requestPath, "{"+"runID"+"}", url.PathEscape(parameterToString(runID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"runID"+"}", url.PathEscape(parameterToString(r.runID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1272,11 +1798,60 @@ func (c *APIClient) GetRun(runID string) (*Run, error) {
 	return returnValue, nil
 }
 
-// @return RunListResponse
-func (c *APIClient) GetRuns(opts ...Option) (*RunListResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetRunsRequest struct {
+	itemsPerPage int32
+	page         int32
+	status       *[]RunStatus
+	taskID       string
+	sort         *RunSortKeys
+	order        *OrderKeys
+}
 
+// The number of items per page to return.
+func (r ApiGetRunsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetRunsRequest {
+	r.itemsPerPage = itemsPerPage
+	return r
+}
+
+// The page number to fetch, starting at 1.
+func (r ApiGetRunsRequest) WithPage(page int32) ApiGetRunsRequest {
+	r.page = page
+	return r
+}
+
+// Filter the status of the runs.
+func (r ApiGetRunsRequest) WithStatus(status []RunStatus) ApiGetRunsRequest {
+	r.status = &status
+	return r
+}
+
+// Filter by taskID.
+func (r ApiGetRunsRequest) WithTaskID(taskID string) ApiGetRunsRequest {
+	r.taskID = taskID
+	return r
+}
+
+// The key by which the list should be sorted.
+func (r ApiGetRunsRequest) WithSort(sort RunSortKeys) ApiGetRunsRequest {
+	r.sort = &sort
+	return r
+}
+
+// The order of the returned list.
+func (r ApiGetRunsRequest) WithOrder(order OrderKeys) ApiGetRunsRequest {
+	r.order = &order
+	return r
+}
+
+// @return ApiGetRunsRequest
+func (c *APIClient) NewApiGetRunsRequest() ApiGetRunsRequest {
+	return ApiGetRunsRequest{}
+}
+
+// @return RunListResponse
+func (c *APIClient) GetRuns(r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
+	var (
+		postBody    any
 		returnValue *RunListResponse
 	)
 
@@ -1285,21 +1860,41 @@ func (c *APIClient) GetRuns(opts ...Option) (*RunListResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.itemsPerPage) {
+		queryParams.Add("itemsPerPage", parameterToString(r.itemsPerPage))
+	}
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.status) {
+		queryParams.Add("status", parameterToString(*r.status))
+	}
+	if !isNilorEmpty(r.taskID) {
+		queryParams.Add("taskID", parameterToString(r.taskID))
+	}
+	if !isNilorEmpty(r.sort) {
+		queryParams.Add("sort", parameterToString(*r.sort))
+	}
+	if !isNilorEmpty(r.order) {
+		queryParams.Add("order", parameterToString(*r.order))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1338,26 +1933,46 @@ func (c *APIClient) GetRuns(opts ...Option) (*RunListResponse, error) {
 	return returnValue, nil
 }
 
-// @return Source
-func (c *APIClient) GetSource(sourceID string) (*Source, error) {
-	var (
-		localVarPostBody any
+type ApiGetSourceRequest struct {
+	sourceID string
+}
 
+// @return ApiGetSourceRequest
+func (c *APIClient) NewApiGetSourceRequest(sourceID string) ApiGetSourceRequest {
+	return ApiGetSourceRequest{
+		sourceID: sourceID,
+	}
+}
+
+// @return Source
+func (c *APIClient) GetSource(r ApiGetSourceRequest, opts ...Option) (*Source, error) {
+	var (
+		postBody    any
 		returnValue *Source
 	)
 
 	requestPath := "/1/sources/{sourceID}"
-	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(sourceID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(r.sourceID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1396,11 +2011,60 @@ func (c *APIClient) GetSource(sourceID string) (*Source, error) {
 	return returnValue, nil
 }
 
-// @return ListSourcesResponse
-func (c *APIClient) GetSources(opts ...Option) (*ListSourcesResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetSourcesRequest struct {
+	itemsPerPage     int32
+	page             int32
+	type_            *[]SourceType
+	authenticationID *[]string
+	sort             *SourceSortKeys
+	order            *OrderKeys
+}
 
+// The number of items per page to return.
+func (r ApiGetSourcesRequest) WithItemsPerPage(itemsPerPage int32) ApiGetSourcesRequest {
+	r.itemsPerPage = itemsPerPage
+	return r
+}
+
+// The page number to fetch, starting at 1.
+func (r ApiGetSourcesRequest) WithPage(page int32) ApiGetSourcesRequest {
+	r.page = page
+	return r
+}
+
+// The type of the sources to retrieve.
+func (r ApiGetSourcesRequest) WithType_(type_ []SourceType) ApiGetSourcesRequest {
+	r.type_ = &type_
+	return r
+}
+
+// The authenticationIDs of the sources to retrieve. &#39;none&#39; returns sources that doesn&#39;t have an authentication.
+func (r ApiGetSourcesRequest) WithAuthenticationID(authenticationID []string) ApiGetSourcesRequest {
+	r.authenticationID = &authenticationID
+	return r
+}
+
+// The key by which the list should be sorted.
+func (r ApiGetSourcesRequest) WithSort(sort SourceSortKeys) ApiGetSourcesRequest {
+	r.sort = &sort
+	return r
+}
+
+// The order of the returned list.
+func (r ApiGetSourcesRequest) WithOrder(order OrderKeys) ApiGetSourcesRequest {
+	r.order = &order
+	return r
+}
+
+// @return ApiGetSourcesRequest
+func (c *APIClient) NewApiGetSourcesRequest() ApiGetSourcesRequest {
+	return ApiGetSourcesRequest{}
+}
+
+// @return ListSourcesResponse
+func (c *APIClient) GetSources(r ApiGetSourcesRequest, opts ...Option) (*ListSourcesResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListSourcesResponse
 	)
 
@@ -1409,21 +2073,41 @@ func (c *APIClient) GetSources(opts ...Option) (*ListSourcesResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.itemsPerPage) {
+		queryParams.Add("itemsPerPage", parameterToString(r.itemsPerPage))
+	}
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.type_) {
+		queryParams.Add("type", parameterToString(*r.type_))
+	}
+	if !isNilorEmpty(r.authenticationID) {
+		queryParams.Add("authenticationID", parameterToString(*r.authenticationID))
+	}
+	if !isNilorEmpty(r.sort) {
+		queryParams.Add("sort", parameterToString(*r.sort))
+	}
+	if !isNilorEmpty(r.order) {
+		queryParams.Add("order", parameterToString(*r.order))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1462,26 +2146,46 @@ func (c *APIClient) GetSources(opts ...Option) (*ListSourcesResponse, error) {
 	return returnValue, nil
 }
 
-// @return Task
-func (c *APIClient) GetTask(taskID string) (*Task, error) {
-	var (
-		localVarPostBody any
+type ApiGetTaskRequest struct {
+	taskID string
+}
 
+// @return ApiGetTaskRequest
+func (c *APIClient) NewApiGetTaskRequest(taskID string) ApiGetTaskRequest {
+	return ApiGetTaskRequest{
+		taskID: taskID,
+	}
+}
+
+// @return Task
+func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*Task, error) {
+	var (
+		postBody    any
 		returnValue *Task
 	)
 
 	requestPath := "/1/tasks/{taskID}"
-	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(taskID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1520,11 +2224,81 @@ func (c *APIClient) GetTask(taskID string) (*Task, error) {
 	return returnValue, nil
 }
 
-// @return ListTasksResponse
-func (c *APIClient) GetTasks(opts ...Option) (*ListTasksResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTasksRequest struct {
+	itemsPerPage  int32
+	page          int32
+	action        *[]ActionType
+	enabled       bool
+	sourceID      *[]string
+	destinationID *[]string
+	triggerType   *[]TriggerType
+	sort          *TaskSortKeys
+	order         *OrderKeys
+}
 
+// The number of items per page to return.
+func (r ApiGetTasksRequest) WithItemsPerPage(itemsPerPage int32) ApiGetTasksRequest {
+	r.itemsPerPage = itemsPerPage
+	return r
+}
+
+// The page number to fetch, starting at 1.
+func (r ApiGetTasksRequest) WithPage(page int32) ApiGetTasksRequest {
+	r.page = page
+	return r
+}
+
+// The action of the tasks to retrieve.
+func (r ApiGetTasksRequest) WithAction(action []ActionType) ApiGetTasksRequest {
+	r.action = &action
+	return r
+}
+
+// Whether the task is enabled or not.
+func (r ApiGetTasksRequest) WithEnabled(enabled bool) ApiGetTasksRequest {
+	r.enabled = enabled
+	return r
+}
+
+// The sourceIDs of the tasks to retrive.
+func (r ApiGetTasksRequest) WithSourceID(sourceID []string) ApiGetTasksRequest {
+	r.sourceID = &sourceID
+	return r
+}
+
+// The destinationIDs of the tasks to retrive.
+func (r ApiGetTasksRequest) WithDestinationID(destinationID []string) ApiGetTasksRequest {
+	r.destinationID = &destinationID
+	return r
+}
+
+// The trigger type of the task.
+func (r ApiGetTasksRequest) WithTriggerType(triggerType []TriggerType) ApiGetTasksRequest {
+	r.triggerType = &triggerType
+	return r
+}
+
+// The key by which the list should be sorted.
+func (r ApiGetTasksRequest) WithSort(sort TaskSortKeys) ApiGetTasksRequest {
+	r.sort = &sort
+	return r
+}
+
+// The order of the returned list.
+func (r ApiGetTasksRequest) WithOrder(order OrderKeys) ApiGetTasksRequest {
+	r.order = &order
+	return r
+}
+
+// @return ApiGetTasksRequest
+func (c *APIClient) NewApiGetTasksRequest() ApiGetTasksRequest {
+	return ApiGetTasksRequest{}
+}
+
+// @return ListTasksResponse
+func (c *APIClient) GetTasks(r ApiGetTasksRequest, opts ...Option) (*ListTasksResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListTasksResponse
 	)
 
@@ -1533,21 +2307,50 @@ func (c *APIClient) GetTasks(opts ...Option) (*ListTasksResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.itemsPerPage) {
+		queryParams.Add("itemsPerPage", parameterToString(r.itemsPerPage))
+	}
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.action) {
+		queryParams.Add("action", parameterToString(*r.action))
+	}
+	if !isNilorEmpty(r.enabled) {
+		queryParams.Add("enabled", parameterToString(r.enabled))
+	}
+	if !isNilorEmpty(r.sourceID) {
+		queryParams.Add("sourceID", parameterToString(*r.sourceID))
+	}
+	if !isNilorEmpty(r.destinationID) {
+		queryParams.Add("destinationID", parameterToString(*r.destinationID))
+	}
+	if !isNilorEmpty(r.triggerType) {
+		queryParams.Add("triggerType", parameterToString(*r.triggerType))
+	}
+	if !isNilorEmpty(r.sort) {
+		queryParams.Add("sort", parameterToString(*r.sort))
+	}
+	if !isNilorEmpty(r.order) {
+		queryParams.Add("order", parameterToString(*r.order))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1586,43 +2389,66 @@ func (c *APIClient) GetTasks(opts ...Option) (*ListTasksResponse, error) {
 	return returnValue, nil
 }
 
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPostRequest
+func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
+	return ApiPostRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1688,43 +2514,66 @@ func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, e
 	return returnValue, nil
 }
 
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPutRequest
+func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
+	return ApiPutRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Put(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1788,28 +2637,48 @@ func (c *APIClient) Put(path string, opts ...Option) (map[string]interface{}, er
 	}
 
 	return returnValue, nil
+}
+
+type ApiRunTaskRequest struct {
+	taskID string
+}
+
+// @return ApiRunTaskRequest
+func (c *APIClient) NewApiRunTaskRequest(taskID string) ApiRunTaskRequest {
+	return ApiRunTaskRequest{
+		taskID: taskID,
+	}
 }
 
 // @return RunResponse
-func (c *APIClient) RunTask(taskID string) (*RunResponse, error) {
+func (c *APIClient) RunTask(r ApiRunTaskRequest, opts ...Option) (*RunResponse, error) {
 	var (
-		localVarPostBody any
-
+		postBody    any
 		returnValue *RunResponse
 	)
 
 	requestPath := "/1/tasks/{taskID}/run"
-	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(taskID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1848,34 +2717,53 @@ func (c *APIClient) RunTask(taskID string) (*RunResponse, error) {
 	return returnValue, nil
 }
 
+type ApiSearchAuthenticationsRequest struct {
+	authenticationSearch *AuthenticationSearch
+}
+
+func (r ApiSearchAuthenticationsRequest) WithAuthenticationSearch(authenticationSearch AuthenticationSearch) ApiSearchAuthenticationsRequest {
+	r.authenticationSearch = &authenticationSearch
+	return r
+}
+
+// @return ApiSearchAuthenticationsRequest
+func (c *APIClient) NewApiSearchAuthenticationsRequest() ApiSearchAuthenticationsRequest {
+	return ApiSearchAuthenticationsRequest{}
+}
+
 // @return []Authentication
-func (c *APIClient) SearchAuthentications(authenticationSearch *AuthenticationSearch) ([]Authentication, error) {
+func (c *APIClient) SearchAuthentications(r ApiSearchAuthenticationsRequest, opts ...Option) ([]Authentication, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      []Authentication
+		postBody    any
+		returnValue []Authentication
 	)
 
 	requestPath := "/1/authentications/search"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if authenticationSearch == nil {
+	if r.authenticationSearch == nil {
 		return returnValue, reportError("authenticationSearch is required and must be specified")
 	}
 
-	// body params
-	if authenticationSearch != nil {
-		localVarPostBody = authenticationSearch
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.authenticationSearch
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1914,34 +2802,53 @@ func (c *APIClient) SearchAuthentications(authenticationSearch *AuthenticationSe
 	return returnValue, nil
 }
 
+type ApiSearchDestinationsRequest struct {
+	destinationSearch *DestinationSearch
+}
+
+func (r ApiSearchDestinationsRequest) WithDestinationSearch(destinationSearch DestinationSearch) ApiSearchDestinationsRequest {
+	r.destinationSearch = &destinationSearch
+	return r
+}
+
+// @return ApiSearchDestinationsRequest
+func (c *APIClient) NewApiSearchDestinationsRequest() ApiSearchDestinationsRequest {
+	return ApiSearchDestinationsRequest{}
+}
+
 // @return []Destination
-func (c *APIClient) SearchDestinations(destinationSearch *DestinationSearch) ([]Destination, error) {
+func (c *APIClient) SearchDestinations(r ApiSearchDestinationsRequest, opts ...Option) ([]Destination, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      []Destination
+		postBody    any
+		returnValue []Destination
 	)
 
 	requestPath := "/1/destinations/search"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if destinationSearch == nil {
+	if r.destinationSearch == nil {
 		return returnValue, reportError("destinationSearch is required and must be specified")
 	}
 
-	// body params
-	if destinationSearch != nil {
-		localVarPostBody = destinationSearch
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.destinationSearch
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1980,34 +2887,53 @@ func (c *APIClient) SearchDestinations(destinationSearch *DestinationSearch) ([]
 	return returnValue, nil
 }
 
+type ApiSearchSourcesRequest struct {
+	sourceSearch *SourceSearch
+}
+
+func (r ApiSearchSourcesRequest) WithSourceSearch(sourceSearch SourceSearch) ApiSearchSourcesRequest {
+	r.sourceSearch = &sourceSearch
+	return r
+}
+
+// @return ApiSearchSourcesRequest
+func (c *APIClient) NewApiSearchSourcesRequest() ApiSearchSourcesRequest {
+	return ApiSearchSourcesRequest{}
+}
+
 // @return []Source
-func (c *APIClient) SearchSources(sourceSearch *SourceSearch) ([]Source, error) {
+func (c *APIClient) SearchSources(r ApiSearchSourcesRequest, opts ...Option) ([]Source, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      []Source
+		postBody    any
+		returnValue []Source
 	)
 
 	requestPath := "/1/sources/search"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if sourceSearch == nil {
+	if r.sourceSearch == nil {
 		return returnValue, reportError("sourceSearch is required and must be specified")
 	}
 
-	// body params
-	if sourceSearch != nil {
-		localVarPostBody = sourceSearch
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.sourceSearch
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2046,34 +2972,53 @@ func (c *APIClient) SearchSources(sourceSearch *SourceSearch) ([]Source, error) 
 	return returnValue, nil
 }
 
+type ApiSearchTasksRequest struct {
+	taskSearch *TaskSearch
+}
+
+func (r ApiSearchTasksRequest) WithTaskSearch(taskSearch TaskSearch) ApiSearchTasksRequest {
+	r.taskSearch = &taskSearch
+	return r
+}
+
+// @return ApiSearchTasksRequest
+func (c *APIClient) NewApiSearchTasksRequest() ApiSearchTasksRequest {
+	return ApiSearchTasksRequest{}
+}
+
 // @return []Task
-func (c *APIClient) SearchTasks(taskSearch *TaskSearch) ([]Task, error) {
+func (c *APIClient) SearchTasks(r ApiSearchTasksRequest, opts ...Option) ([]Task, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      []Task
+		postBody    any
+		returnValue []Task
 	)
 
 	requestPath := "/1/tasks/search"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if taskSearch == nil {
+	if r.taskSearch == nil {
 		return returnValue, reportError("taskSearch is required and must be specified")
 	}
 
-	// body params
-	if taskSearch != nil {
-		localVarPostBody = taskSearch
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.taskSearch
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2110,37 +3055,59 @@ func (c *APIClient) SearchTasks(taskSearch *TaskSearch) ([]Task, error) {
 	}
 
 	return returnValue, nil
+}
+
+type ApiUpdateAuthenticationRequest struct {
+	authenticationID     string
+	authenticationUpdate *AuthenticationUpdate
+}
+
+func (r ApiUpdateAuthenticationRequest) WithAuthenticationUpdate(authenticationUpdate AuthenticationUpdate) ApiUpdateAuthenticationRequest {
+	r.authenticationUpdate = &authenticationUpdate
+	return r
+}
+
+// @return ApiUpdateAuthenticationRequest
+func (c *APIClient) NewApiUpdateAuthenticationRequest(authenticationID string) ApiUpdateAuthenticationRequest {
+	return ApiUpdateAuthenticationRequest{
+		authenticationID: authenticationID,
+	}
 }
 
 // @return AuthenticationUpdateResponse
-func (c *APIClient) UpdateAuthentication(authenticationID string, authenticationUpdate *AuthenticationUpdate) (*AuthenticationUpdateResponse, error) {
+func (c *APIClient) UpdateAuthentication(r ApiUpdateAuthenticationRequest, opts ...Option) (*AuthenticationUpdateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *AuthenticationUpdateResponse
+		postBody    any
+		returnValue *AuthenticationUpdateResponse
 	)
 
 	requestPath := "/1/authentications/{authenticationID}"
-	requestPath = strings.Replace(requestPath, "{"+"authenticationID"+"}", url.PathEscape(parameterToString(authenticationID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"authenticationID"+"}", url.PathEscape(parameterToString(r.authenticationID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if authenticationUpdate == nil {
+	if r.authenticationUpdate == nil {
 		return returnValue, reportError("authenticationUpdate is required and must be specified")
 	}
 
-	// body params
-	if authenticationUpdate != nil {
-		localVarPostBody = authenticationUpdate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.authenticationUpdate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2177,37 +3144,59 @@ func (c *APIClient) UpdateAuthentication(authenticationID string, authentication
 	}
 
 	return returnValue, nil
+}
+
+type ApiUpdateDestinationRequest struct {
+	destinationID     string
+	destinationUpdate *DestinationUpdate
+}
+
+func (r ApiUpdateDestinationRequest) WithDestinationUpdate(destinationUpdate DestinationUpdate) ApiUpdateDestinationRequest {
+	r.destinationUpdate = &destinationUpdate
+	return r
+}
+
+// @return ApiUpdateDestinationRequest
+func (c *APIClient) NewApiUpdateDestinationRequest(destinationID string) ApiUpdateDestinationRequest {
+	return ApiUpdateDestinationRequest{
+		destinationID: destinationID,
+	}
 }
 
 // @return DestinationUpdateResponse
-func (c *APIClient) UpdateDestination(destinationID string, destinationUpdate *DestinationUpdate) (*DestinationUpdateResponse, error) {
+func (c *APIClient) UpdateDestination(r ApiUpdateDestinationRequest, opts ...Option) (*DestinationUpdateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *DestinationUpdateResponse
+		postBody    any
+		returnValue *DestinationUpdateResponse
 	)
 
 	requestPath := "/1/destinations/{destinationID}"
-	requestPath = strings.Replace(requestPath, "{"+"destinationID"+"}", url.PathEscape(parameterToString(destinationID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"destinationID"+"}", url.PathEscape(parameterToString(r.destinationID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if destinationUpdate == nil {
+	if r.destinationUpdate == nil {
 		return returnValue, reportError("destinationUpdate is required and must be specified")
 	}
 
-	// body params
-	if destinationUpdate != nil {
-		localVarPostBody = destinationUpdate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.destinationUpdate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2244,37 +3233,59 @@ func (c *APIClient) UpdateDestination(destinationID string, destinationUpdate *D
 	}
 
 	return returnValue, nil
+}
+
+type ApiUpdateSourceRequest struct {
+	sourceID     string
+	sourceUpdate *SourceUpdate
+}
+
+func (r ApiUpdateSourceRequest) WithSourceUpdate(sourceUpdate SourceUpdate) ApiUpdateSourceRequest {
+	r.sourceUpdate = &sourceUpdate
+	return r
+}
+
+// @return ApiUpdateSourceRequest
+func (c *APIClient) NewApiUpdateSourceRequest(sourceID string) ApiUpdateSourceRequest {
+	return ApiUpdateSourceRequest{
+		sourceID: sourceID,
+	}
 }
 
 // @return SourceUpdateResponse
-func (c *APIClient) UpdateSource(sourceID string, sourceUpdate *SourceUpdate) (*SourceUpdateResponse, error) {
+func (c *APIClient) UpdateSource(r ApiUpdateSourceRequest, opts ...Option) (*SourceUpdateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SourceUpdateResponse
+		postBody    any
+		returnValue *SourceUpdateResponse
 	)
 
 	requestPath := "/1/sources/{sourceID}"
-	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(sourceID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(r.sourceID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if sourceUpdate == nil {
+	if r.sourceUpdate == nil {
 		return returnValue, reportError("sourceUpdate is required and must be specified")
 	}
 
-	// body params
-	if sourceUpdate != nil {
-		localVarPostBody = sourceUpdate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.sourceUpdate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2313,35 +3324,57 @@ func (c *APIClient) UpdateSource(sourceID string, sourceUpdate *SourceUpdate) (*
 	return returnValue, nil
 }
 
+type ApiUpdateTaskRequest struct {
+	taskID     string
+	taskUpdate *TaskUpdate
+}
+
+func (r ApiUpdateTaskRequest) WithTaskUpdate(taskUpdate TaskUpdate) ApiUpdateTaskRequest {
+	r.taskUpdate = &taskUpdate
+	return r
+}
+
+// @return ApiUpdateTaskRequest
+func (c *APIClient) NewApiUpdateTaskRequest(taskID string) ApiUpdateTaskRequest {
+	return ApiUpdateTaskRequest{
+		taskID: taskID,
+	}
+}
+
 // @return TaskUpdateResponse
-func (c *APIClient) UpdateTask(taskID string, taskUpdate *TaskUpdate) (*TaskUpdateResponse, error) {
+func (c *APIClient) UpdateTask(r ApiUpdateTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *TaskUpdateResponse
+		postBody    any
+		returnValue *TaskUpdateResponse
 	)
 
 	requestPath := "/1/tasks/{taskID}"
-	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(taskID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if taskUpdate == nil {
+	if r.taskUpdate == nil {
 		return returnValue, reportError("taskUpdate is required and must be specified")
 	}
 
-	// body params
-	if taskUpdate != nil {
-		localVarPostBody = taskUpdate
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.taskUpdate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}

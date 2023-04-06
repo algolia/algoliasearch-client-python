@@ -123,12 +123,11 @@ func (o SearchNoClickEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchNoClickEvent) String() string {
-	out := "SearchNoClickEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  search=%v\n", o.Search)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
 	out += fmt.Sprintf("  withFilterCount=%v\n", o.WithFilterCount)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchNoClickEvent {\n%s}", out)
 }
 
 type NullableSearchNoClickEvent struct {

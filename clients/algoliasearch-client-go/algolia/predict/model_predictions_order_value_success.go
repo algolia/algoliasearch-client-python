@@ -91,11 +91,10 @@ func (o PredictionsOrderValueSuccess) MarshalJSON() ([]byte, error) {
 }
 
 func (o PredictionsOrderValueSuccess) String() string {
-	out := "PredictionsOrderValueSuccess {\n"
+	out := ""
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  lastUpdatedAt=%v\n", o.LastUpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("PredictionsOrderValueSuccess {\n%s}", out)
 }
 
 type NullablePredictionsOrderValueSuccess struct {

@@ -124,11 +124,10 @@ func (o SourceUpdateCommercetools) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceUpdateCommercetools) String() string {
-	out := "SourceUpdateCommercetools {\n"
+	out := ""
 	out += fmt.Sprintf("  storeKeys=%v\n", o.StoreKeys)
 	out += fmt.Sprintf("  locales=%v\n", o.Locales)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceUpdateCommercetools {\n%s}", out)
 }
 
 type NullableSourceUpdateCommercetools struct {

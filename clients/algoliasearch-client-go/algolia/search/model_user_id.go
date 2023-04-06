@@ -153,13 +153,12 @@ func (o UserId) MarshalJSON() ([]byte, error) {
 }
 
 func (o UserId) String() string {
-	out := "UserId {\n"
+	out := ""
 	out += fmt.Sprintf("  userID=%v\n", o.UserID)
 	out += fmt.Sprintf("  clusterName=%v\n", o.ClusterName)
 	out += fmt.Sprintf("  nbRecords=%v\n", o.NbRecords)
 	out += fmt.Sprintf("  dataSize=%v\n", o.DataSize)
-	out += "}"
-	return out
+	return fmt.Sprintf("UserId {\n%s}", out)
 }
 
 type NullableUserId struct {

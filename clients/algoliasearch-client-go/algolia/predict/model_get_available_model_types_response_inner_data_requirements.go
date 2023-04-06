@@ -93,11 +93,10 @@ func (o GetAvailableModelTypesResponseInnerDataRequirements) MarshalJSON() ([]by
 }
 
 func (o GetAvailableModelTypesResponseInnerDataRequirements) String() string {
-	out := "GetAvailableModelTypesResponseInnerDataRequirements {\n"
+	out := ""
 	out += fmt.Sprintf("  minUsers=%v\n", o.MinUsers)
 	out += fmt.Sprintf("  minDays=%v\n", o.MinDays)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetAvailableModelTypesResponseInnerDataRequirements {\n%s}", out)
 }
 
 type NullableGetAvailableModelTypesResponseInnerDataRequirements struct {

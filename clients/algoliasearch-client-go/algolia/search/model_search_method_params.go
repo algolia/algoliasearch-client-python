@@ -109,11 +109,10 @@ func (o SearchMethodParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchMethodParams) String() string {
-	out := "SearchMethodParams {\n"
+	out := ""
 	out += fmt.Sprintf("  requests=%v\n", o.Requests)
 	out += fmt.Sprintf("  strategy=%v\n", o.Strategy)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchMethodParams {\n%s}", out)
 }
 
 type NullableSearchMethodParams struct {

@@ -91,11 +91,10 @@ func (o SegmentParentConditions) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentParentConditions) String() string {
-	out := "SegmentParentConditions {\n"
+	out := ""
 	out += fmt.Sprintf("  operator=%v\n", o.Operator)
 	out += fmt.Sprintf("  operands=%v\n", o.Operands)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentParentConditions {\n%s}", out)
 }
 
 type NullableSegmentParentConditions struct {

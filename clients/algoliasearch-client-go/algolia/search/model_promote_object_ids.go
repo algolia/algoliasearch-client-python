@@ -93,11 +93,10 @@ func (o PromoteObjectIDs) MarshalJSON() ([]byte, error) {
 }
 
 func (o PromoteObjectIDs) String() string {
-	out := "PromoteObjectIDs {\n"
+	out := ""
 	out += fmt.Sprintf("  objectIDs=%v\n", o.ObjectIDs)
 	out += fmt.Sprintf("  position=%v\n", o.Position)
-	out += "}"
-	return out
+	return fmt.Sprintf("PromoteObjectIDs {\n%s}", out)
 }
 
 type NullablePromoteObjectIDs struct {

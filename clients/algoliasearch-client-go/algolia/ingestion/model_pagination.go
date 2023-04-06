@@ -149,13 +149,12 @@ func (o Pagination) MarshalJSON() ([]byte, error) {
 }
 
 func (o Pagination) String() string {
-	out := "Pagination {\n"
+	out := ""
 	out += fmt.Sprintf("  nbPages=%v\n", o.NbPages)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
 	out += fmt.Sprintf("  nbItems=%v\n", o.NbItems)
 	out += fmt.Sprintf("  itemsPerPage=%v\n", o.ItemsPerPage)
-	out += "}"
-	return out
+	return fmt.Sprintf("Pagination {\n%s}", out)
 }
 
 type NullablePagination struct {

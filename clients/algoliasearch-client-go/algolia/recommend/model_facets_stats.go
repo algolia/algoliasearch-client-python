@@ -210,13 +210,12 @@ func (o FacetsStats) MarshalJSON() ([]byte, error) {
 }
 
 func (o FacetsStats) String() string {
-	out := "FacetsStats {\n"
+	out := ""
 	out += fmt.Sprintf("  min=%v\n", o.Min)
 	out += fmt.Sprintf("  max=%v\n", o.Max)
 	out += fmt.Sprintf("  avg=%v\n", o.Avg)
 	out += fmt.Sprintf("  sum=%v\n", o.Sum)
-	out += "}"
-	return out
+	return fmt.Sprintf("FacetsStats {\n%s}", out)
 }
 
 type NullableFacetsStats struct {

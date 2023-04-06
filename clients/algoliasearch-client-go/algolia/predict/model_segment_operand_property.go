@@ -91,11 +91,10 @@ func (o SegmentOperandProperty) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentOperandProperty) String() string {
-	out := "SegmentOperandProperty {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentOperandProperty {\n%s}", out)
 }
 
 type NullableSegmentOperandProperty struct {

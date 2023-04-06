@@ -63,10 +63,9 @@ func (o PushEventsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o PushEventsResponse) String() string {
-	out := "PushEventsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  message=%v\n", o.Message)
-	out += "}"
-	return out
+	return fmt.Sprintf("PushEventsResponse {\n%s}", out)
 }
 
 type NullablePushEventsResponse struct {

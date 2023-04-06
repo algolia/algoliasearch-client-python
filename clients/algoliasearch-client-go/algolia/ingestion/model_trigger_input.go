@@ -62,10 +62,9 @@ func (o TriggerInput) MarshalJSON() ([]byte, error) {
 }
 
 func (o TriggerInput) String() string {
-	out := "TriggerInput {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
-	out += "}"
-	return out
+	return fmt.Sprintf("TriggerInput {\n%s}", out)
 }
 
 type NullableTriggerInput struct {

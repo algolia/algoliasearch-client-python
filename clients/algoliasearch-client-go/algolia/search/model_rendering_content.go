@@ -80,10 +80,9 @@ func (o RenderingContent) MarshalJSON() ([]byte, error) {
 }
 
 func (o RenderingContent) String() string {
-	out := "RenderingContent {\n"
+	out := ""
 	out += fmt.Sprintf("  facetOrdering=%v\n", o.FacetOrdering)
-	out += "}"
-	return out
+	return fmt.Sprintf("RenderingContent {\n%s}", out)
 }
 
 type NullableRenderingContent struct {

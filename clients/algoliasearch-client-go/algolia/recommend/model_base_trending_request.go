@@ -153,12 +153,11 @@ func (o BaseTrendingRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseTrendingRequest) String() string {
-	out := "BaseTrendingRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  model=%v\n", o.Model)
 	out += fmt.Sprintf("  facetName=%v\n", o.FacetName)
 	out += fmt.Sprintf("  facetValue=%v\n", o.FacetValue)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseTrendingRequest {\n%s}", out)
 }
 
 type NullableBaseTrendingRequest struct {

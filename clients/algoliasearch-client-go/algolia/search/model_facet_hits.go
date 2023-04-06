@@ -123,12 +123,11 @@ func (o FacetHits) MarshalJSON() ([]byte, error) {
 }
 
 func (o FacetHits) String() string {
-	out := "FacetHits {\n"
+	out := ""
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  highlighted=%v\n", o.Highlighted)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
-	out += "}"
-	return out
+	return fmt.Sprintf("FacetHits {\n%s}", out)
 }
 
 type NullableFacetHits struct {

@@ -91,11 +91,10 @@ func (o PredictionsFunnelStageSuccess) MarshalJSON() ([]byte, error) {
 }
 
 func (o PredictionsFunnelStageSuccess) String() string {
-	out := "PredictionsFunnelStageSuccess {\n"
+	out := ""
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  lastUpdatedAt=%v\n", o.LastUpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("PredictionsFunnelStageSuccess {\n%s}", out)
 }
 
 type NullablePredictionsFunnelStageSuccess struct {

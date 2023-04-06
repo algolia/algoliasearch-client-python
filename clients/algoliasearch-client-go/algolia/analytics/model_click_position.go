@@ -93,11 +93,10 @@ func (o ClickPosition) MarshalJSON() ([]byte, error) {
 }
 
 func (o ClickPosition) String() string {
-	out := "ClickPosition {\n"
+	out := ""
 	out += fmt.Sprintf("  position=%v\n", o.Position)
 	out += fmt.Sprintf("  clickCount=%v\n", o.ClickCount)
-	out += "}"
-	return out
+	return fmt.Sprintf("ClickPosition {\n%s}", out)
 }
 
 type NullableClickPosition struct {

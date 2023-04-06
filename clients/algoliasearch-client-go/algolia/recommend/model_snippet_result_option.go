@@ -92,11 +92,10 @@ func (o SnippetResultOption) MarshalJSON() ([]byte, error) {
 }
 
 func (o SnippetResultOption) String() string {
-	out := "SnippetResultOption {\n"
+	out := ""
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  matchLevel=%v\n", o.MatchLevel)
-	out += "}"
-	return out
+	return fmt.Sprintf("SnippetResultOption {\n%s}", out)
 }
 
 type NullableSnippetResultOption struct {

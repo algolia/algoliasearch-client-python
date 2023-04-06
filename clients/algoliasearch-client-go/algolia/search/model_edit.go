@@ -166,12 +166,11 @@ func (o Edit) MarshalJSON() ([]byte, error) {
 }
 
 func (o Edit) String() string {
-	out := "Edit {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  delete=%v\n", o.Delete)
 	out += fmt.Sprintf("  insert=%v\n", o.Insert)
-	out += "}"
-	return out
+	return fmt.Sprintf("Edit {\n%s}", out)
 }
 
 type NullableEdit struct {

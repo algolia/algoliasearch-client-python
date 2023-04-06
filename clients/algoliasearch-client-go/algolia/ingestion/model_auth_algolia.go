@@ -93,11 +93,10 @@ func (o AuthAlgolia) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthAlgolia) String() string {
-	out := "AuthAlgolia {\n"
+	out := ""
 	out += fmt.Sprintf("  appID=%v\n", o.AppID)
 	out += fmt.Sprintf("  apiKey=%v\n", o.ApiKey)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthAlgolia {\n%s}", out)
 }
 
 type NullableAuthAlgolia struct {

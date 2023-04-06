@@ -93,11 +93,10 @@ func (o AddApiKeyResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o AddApiKeyResponse) String() string {
-	out := "AddApiKeyResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  key=%v\n", o.Key)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("AddApiKeyResponse {\n%s}", out)
 }
 
 type NullableAddApiKeyResponse struct {

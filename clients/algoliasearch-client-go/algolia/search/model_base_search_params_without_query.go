@@ -276,40 +276,6 @@ func WithBaseSearchParamsWithoutQueryReRankingApplyFilter(val NullableReRankingA
 // will change when the set of required properties is changed
 func NewBaseSearchParamsWithoutQuery(opts ...BaseSearchParamsWithoutQueryOption) *BaseSearchParamsWithoutQuery {
 	this := &BaseSearchParamsWithoutQuery{}
-	var similarQuery string = ""
-	this.SimilarQuery = &similarQuery
-	var filters string = ""
-	this.Filters = &filters
-	var sumOrFiltersScores bool = false
-	this.SumOrFiltersScores = &sumOrFiltersScores
-	var maxValuesPerFacet int32 = 100
-	this.MaxValuesPerFacet = &maxValuesPerFacet
-	var facetingAfterDistinct bool = false
-	this.FacetingAfterDistinct = &facetingAfterDistinct
-	var sortFacetValuesBy string = "count"
-	this.SortFacetValuesBy = &sortFacetValuesBy
-	var page int32 = 0
-	this.Page = &page
-	var aroundLatLng string = ""
-	this.AroundLatLng = &aroundLatLng
-	var aroundLatLngViaIP bool = false
-	this.AroundLatLngViaIP = &aroundLatLngViaIP
-	var aroundPrecision int32 = 10
-	this.AroundPrecision = &aroundPrecision
-	var personalizationImpact int32 = 100
-	this.PersonalizationImpact = &personalizationImpact
-	var getRankingInfo bool = false
-	this.GetRankingInfo = &getRankingInfo
-	var clickAnalytics bool = false
-	this.ClickAnalytics = &clickAnalytics
-	var analytics bool = true
-	this.Analytics = &analytics
-	var percentileComputation bool = true
-	this.PercentileComputation = &percentileComputation
-	var enableABTest bool = true
-	this.EnableABTest = &enableABTest
-	var enableReRanking bool = true
-	this.EnableReRanking = &enableReRanking
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -1530,7 +1496,7 @@ func (o BaseSearchParamsWithoutQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseSearchParamsWithoutQuery) String() string {
-	out := "BaseSearchParamsWithoutQuery {\n"
+	out := ""
 	out += fmt.Sprintf("  similarQuery=%v\n", o.SimilarQuery)
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
 	out += fmt.Sprintf("  facetFilters=%v\n", o.FacetFilters)
@@ -1564,8 +1530,7 @@ func (o BaseSearchParamsWithoutQuery) String() string {
 	out += fmt.Sprintf("  enableABTest=%v\n", o.EnableABTest)
 	out += fmt.Sprintf("  enableReRanking=%v\n", o.EnableReRanking)
 	out += fmt.Sprintf("  reRankingApplyFilter=%v\n", o.ReRankingApplyFilter)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseSearchParamsWithoutQuery {\n%s}", out)
 }
 
 type NullableBaseSearchParamsWithoutQuery struct {

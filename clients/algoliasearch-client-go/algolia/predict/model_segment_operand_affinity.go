@@ -91,11 +91,10 @@ func (o SegmentOperandAffinity) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentOperandAffinity) String() string {
-	out := "SegmentOperandAffinity {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentOperandAffinity {\n%s}", out)
 }
 
 type NullableSegmentOperandAffinity struct {

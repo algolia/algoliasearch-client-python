@@ -153,13 +153,12 @@ func (o ConversionRateEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o ConversionRateEvent) String() string {
-	out := "ConversionRateEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  rate=%v\n", o.Rate)
 	out += fmt.Sprintf("  trackedSearchCount=%v\n", o.TrackedSearchCount)
 	out += fmt.Sprintf("  conversionCount=%v\n", o.ConversionCount)
 	out += fmt.Sprintf("  date=%v\n", o.Date)
-	out += "}"
-	return out
+	return fmt.Sprintf("ConversionRateEvent {\n%s}", out)
 }
 
 type NullableConversionRateEvent struct {

@@ -91,11 +91,10 @@ func (o ListSourcesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o ListSourcesResponse) String() string {
-	out := "ListSourcesResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  sources=%v\n", o.Sources)
 	out += fmt.Sprintf("  pagination=%v\n", o.Pagination)
-	out += "}"
-	return out
+	return fmt.Sprintf("ListSourcesResponse {\n%s}", out)
 }
 
 type NullableListSourcesResponse struct {

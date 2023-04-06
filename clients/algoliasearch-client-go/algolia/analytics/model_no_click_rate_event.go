@@ -153,13 +153,12 @@ func (o NoClickRateEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o NoClickRateEvent) String() string {
-	out := "NoClickRateEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  rate=%v\n", o.Rate)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
 	out += fmt.Sprintf("  noClickCount=%v\n", o.NoClickCount)
 	out += fmt.Sprintf("  date=%v\n", o.Date)
-	out += "}"
-	return out
+	return fmt.Sprintf("NoClickRateEvent {\n%s}", out)
 }
 
 type NullableNoClickRateEvent struct {

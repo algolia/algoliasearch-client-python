@@ -26,8 +26,6 @@ func WithSearchSynonymsParamsQuery(val string) SearchSynonymsParamsOption {
 // will change when the set of required properties is changed
 func NewSearchSynonymsParams(opts ...SearchSynonymsParamsOption) *SearchSynonymsParams {
 	this := &SearchSynonymsParams{}
-	var query string = ""
-	this.Query = &query
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -85,10 +83,9 @@ func (o SearchSynonymsParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchSynonymsParams) String() string {
-	out := "SearchSynonymsParams {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchSynonymsParams {\n%s}", out)
 }
 
 type NullableSearchSynonymsParams struct {

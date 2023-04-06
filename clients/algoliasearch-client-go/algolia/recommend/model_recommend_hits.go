@@ -62,10 +62,9 @@ func (o RecommendHits) MarshalJSON() ([]byte, error) {
 }
 
 func (o RecommendHits) String() string {
-	out := "RecommendHits {\n"
+	out := ""
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
-	out += "}"
-	return out
+	return fmt.Sprintf("RecommendHits {\n%s}", out)
 }
 
 type NullableRecommendHits struct {

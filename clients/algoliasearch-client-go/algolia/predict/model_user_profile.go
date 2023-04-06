@@ -193,13 +193,12 @@ func (o UserProfile) MarshalJSON() ([]byte, error) {
 }
 
 func (o UserProfile) String() string {
-	out := "UserProfile {\n"
+	out := ""
 	out += fmt.Sprintf("  user=%v\n", o.User)
 	out += fmt.Sprintf("  predictions=%v\n", o.Predictions)
 	out += fmt.Sprintf("  properties=%v\n", o.Properties)
 	out += fmt.Sprintf("  segments=%v\n", o.Segments)
-	out += "}"
-	return out
+	return fmt.Sprintf("UserProfile {\n%s}", out)
 }
 
 type NullableUserProfile struct {

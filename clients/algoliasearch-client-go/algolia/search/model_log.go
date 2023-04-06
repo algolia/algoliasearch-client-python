@@ -540,7 +540,7 @@ func (o Log) MarshalJSON() ([]byte, error) {
 }
 
 func (o Log) String() string {
-	out := "Log {\n"
+	out := ""
 	out += fmt.Sprintf("  timestamp=%v\n", o.Timestamp)
 	out += fmt.Sprintf("  method=%v\n", o.Method)
 	out += fmt.Sprintf("  answer_code=%v\n", o.AnswerCode)
@@ -556,8 +556,7 @@ func (o Log) String() string {
 	out += fmt.Sprintf("  query_params=%v\n", o.QueryParams)
 	out += fmt.Sprintf("  query_nb_hits=%v\n", o.QueryNbHits)
 	out += fmt.Sprintf("  inner_queries=%v\n", o.InnerQueries)
-	out += "}"
-	return out
+	return fmt.Sprintf("Log {\n%s}", out)
 }
 
 type NullableLog struct {

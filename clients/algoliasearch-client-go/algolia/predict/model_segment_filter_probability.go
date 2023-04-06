@@ -206,13 +206,12 @@ func (o SegmentFilterProbability) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentFilterProbability) String() string {
-	out := "SegmentFilterProbability {\n"
+	out := ""
 	out += fmt.Sprintf("  LT=%v\n", o.LT)
 	out += fmt.Sprintf("  LTE=%v\n", o.LTE)
 	out += fmt.Sprintf("  GT=%v\n", o.GT)
 	out += fmt.Sprintf("  GTE=%v\n", o.GTE)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentFilterProbability {\n%s}", out)
 }
 
 type NullableSegmentFilterProbability struct {

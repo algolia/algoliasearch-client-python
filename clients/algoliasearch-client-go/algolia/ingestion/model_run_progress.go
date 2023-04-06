@@ -122,11 +122,10 @@ func (o RunProgress) MarshalJSON() ([]byte, error) {
 }
 
 func (o RunProgress) String() string {
-	out := "RunProgress {\n"
+	out := ""
 	out += fmt.Sprintf("  expectedNbOfEvents=%v\n", o.ExpectedNbOfEvents)
 	out += fmt.Sprintf("  receivedNbOfEvents=%v\n", o.ReceivedNbOfEvents)
-	out += "}"
-	return out
+	return fmt.Sprintf("RunProgress {\n%s}", out)
 }
 
 type NullableRunProgress struct {

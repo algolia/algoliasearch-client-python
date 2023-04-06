@@ -81,10 +81,9 @@ func (o Cursor) MarshalJSON() ([]byte, error) {
 }
 
 func (o Cursor) String() string {
-	out := "Cursor {\n"
+	out := ""
 	out += fmt.Sprintf("  cursor=%v\n", o.Cursor)
-	out += "}"
-	return out
+	return fmt.Sprintf("Cursor {\n%s}", out)
 }
 
 type NullableCursor struct {

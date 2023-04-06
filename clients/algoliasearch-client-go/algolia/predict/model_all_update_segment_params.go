@@ -123,11 +123,10 @@ func (o AllUpdateSegmentParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o AllUpdateSegmentParams) String() string {
-	out := "AllUpdateSegmentParams {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  conditions=%v\n", o.Conditions)
-	out += "}"
-	return out
+	return fmt.Sprintf("AllUpdateSegmentParams {\n%s}", out)
 }
 
 type NullableAllUpdateSegmentParams struct {

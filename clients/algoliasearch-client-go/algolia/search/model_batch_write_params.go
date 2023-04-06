@@ -62,10 +62,9 @@ func (o BatchWriteParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o BatchWriteParams) String() string {
-	out := "BatchWriteParams {\n"
+	out := ""
 	out += fmt.Sprintf("  requests=%v\n", o.Requests)
-	out += "}"
-	return out
+	return fmt.Sprintf("BatchWriteParams {\n%s}", out)
 }
 
 type NullableBatchWriteParams struct {

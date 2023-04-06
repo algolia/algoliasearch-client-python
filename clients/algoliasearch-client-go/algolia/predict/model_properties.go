@@ -167,12 +167,11 @@ func (o Properties) MarshalJSON() ([]byte, error) {
 }
 
 func (o Properties) String() string {
-	out := "Properties {\n"
+	out := ""
 	out += fmt.Sprintf("  raw=%v\n", o.Raw)
 	out += fmt.Sprintf("  computed=%v\n", o.Computed)
 	out += fmt.Sprintf("  custom=%v\n", o.Custom)
-	out += "}"
-	return out
+	return fmt.Sprintf("Properties {\n%s}", out)
 }
 
 type NullableProperties struct {

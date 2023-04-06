@@ -109,11 +109,10 @@ func (o ModelAttributes) MarshalJSON() ([]byte, error) {
 }
 
 func (o ModelAttributes) String() string {
-	out := "ModelAttributes {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  values=%v\n", o.Values)
-	out += "}"
-	return out
+	return fmt.Sprintf("ModelAttributes {\n%s}", out)
 }
 
 type NullableModelAttributes struct {

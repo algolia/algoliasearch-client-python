@@ -273,7 +273,7 @@ func (o SourceIndexWithReplicas) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceIndexWithReplicas) String() string {
-	out := "SourceIndexWithReplicas {\n"
+	out := ""
 	out += fmt.Sprintf("  replicas=%v\n", o.Replicas)
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
 	out += fmt.Sprintf("  analyticsTags=%v\n", o.AnalyticsTags)
@@ -282,8 +282,7 @@ func (o SourceIndexWithReplicas) String() string {
 	out += fmt.Sprintf("  minLetters=%v\n", o.MinLetters)
 	out += fmt.Sprintf("  generate=%v\n", o.Generate)
 	out += fmt.Sprintf("  external=%v\n", o.External)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceIndexWithReplicas {\n%s}", out)
 }
 
 type NullableSourceIndexWithReplicas struct {

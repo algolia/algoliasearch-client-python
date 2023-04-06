@@ -26,8 +26,6 @@ func WithSearchParamsQueryQuery(val string) SearchParamsQueryOption {
 // will change when the set of required properties is changed
 func NewSearchParamsQuery(opts ...SearchParamsQueryOption) *SearchParamsQuery {
 	this := &SearchParamsQuery{}
-	var query string = ""
-	this.Query = &query
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -85,10 +83,9 @@ func (o SearchParamsQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchParamsQuery) String() string {
-	out := "SearchParamsQuery {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchParamsQuery {\n%s}", out)
 }
 
 type NullableSearchParamsQuery struct {

@@ -123,12 +123,11 @@ func (o GetTopFiltersNoResultsValue) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetTopFiltersNoResultsValue) String() string {
-	out := "GetTopFiltersNoResultsValue {\n"
+	out := ""
 	out += fmt.Sprintf("  attribute=%v\n", o.Attribute)
 	out += fmt.Sprintf("  operator=%v\n", o.Operator)
 	out += fmt.Sprintf("  value=%v\n", o.Value)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetTopFiltersNoResultsValue {\n%s}", out)
 }
 
 type NullableGetTopFiltersNoResultsValue struct {

@@ -93,11 +93,10 @@ func (o Segments) MarshalJSON() ([]byte, error) {
 }
 
 func (o Segments) String() string {
-	out := "Segments {\n"
+	out := ""
 	out += fmt.Sprintf("  computed=%v\n", o.Computed)
 	out += fmt.Sprintf("  custom=%v\n", o.Custom)
-	out += "}"
-	return out
+	return fmt.Sprintf("Segments {\n%s}", out)
 }
 
 type NullableSegments struct {

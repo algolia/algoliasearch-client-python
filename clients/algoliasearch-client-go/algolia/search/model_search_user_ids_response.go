@@ -187,14 +187,13 @@ func (o SearchUserIdsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchUserIdsResponse) String() string {
-	out := "SearchUserIdsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
 	out += fmt.Sprintf("  nbHits=%v\n", o.NbHits)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
 	out += fmt.Sprintf("  hitsPerPage=%v\n", o.HitsPerPage)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchUserIdsResponse {\n%s}", out)
 }
 
 type NullableSearchUserIdsResponse struct {

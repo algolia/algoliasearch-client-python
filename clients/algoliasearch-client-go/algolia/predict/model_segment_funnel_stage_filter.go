@@ -27,8 +27,6 @@ func WithSegmentFunnelStageFilterOperator(val SegmentFilterOperatorBoolean) Segm
 // will change when the set of required properties is changed
 func NewSegmentFunnelStageFilter(value string, probability SegmentFilterProbability, opts ...SegmentFunnelStageFilterOption) *SegmentFunnelStageFilter {
 	this := &SegmentFunnelStageFilter{}
-	var operator SegmentFilterOperatorBoolean = SEGMENTFILTEROPERATORBOOLEAN_EQ
-	this.Operator = &operator
 	this.Value = value
 	this.Probability = probability
 	for _, opt := range opts {
@@ -142,12 +140,11 @@ func (o SegmentFunnelStageFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentFunnelStageFilter) String() string {
-	out := "SegmentFunnelStageFilter {\n"
+	out := ""
 	out += fmt.Sprintf("  operator=%v\n", o.Operator)
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  probability=%v\n", o.Probability)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentFunnelStageFilter {\n%s}", out)
 }
 
 type NullableSegmentFunnelStageFilter struct {

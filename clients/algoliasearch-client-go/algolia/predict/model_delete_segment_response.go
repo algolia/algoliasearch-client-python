@@ -93,11 +93,10 @@ func (o DeleteSegmentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o DeleteSegmentResponse) String() string {
-	out := "DeleteSegmentResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  segmentID=%v\n", o.SegmentID)
 	out += fmt.Sprintf("  deletedUntil=%v\n", o.DeletedUntil)
-	out += "}"
-	return out
+	return fmt.Sprintf("DeleteSegmentResponse {\n%s}", out)
 }
 
 type NullableDeleteSegmentResponse struct {

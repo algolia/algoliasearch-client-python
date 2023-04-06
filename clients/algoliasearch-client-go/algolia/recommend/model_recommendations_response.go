@@ -1043,7 +1043,7 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o RecommendationsResponse) String() string {
-	out := "RecommendationsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  abTestID=%v\n", o.AbTestID)
 	out += fmt.Sprintf("  abTestVariantID=%v\n", o.AbTestVariantID)
 	out += fmt.Sprintf("  aroundLatLng=%v\n", o.AroundLatLng)
@@ -1070,8 +1070,7 @@ func (o RecommendationsResponse) String() string {
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
-	out += "}"
-	return out
+	return fmt.Sprintf("RecommendationsResponse {\n%s}", out)
 }
 
 type NullableRecommendationsResponse struct {

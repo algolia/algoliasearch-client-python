@@ -62,10 +62,9 @@ func (o DictionarySettingsParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o DictionarySettingsParams) String() string {
-	out := "DictionarySettingsParams {\n"
+	out := ""
 	out += fmt.Sprintf("  disableStandardEntries=%v\n", o.DisableStandardEntries)
-	out += "}"
-	return out
+	return fmt.Sprintf("DictionarySettingsParams {\n%s}", out)
 }
 
 type NullableDictionarySettingsParams struct {

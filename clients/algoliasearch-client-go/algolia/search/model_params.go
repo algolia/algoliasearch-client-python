@@ -206,13 +206,12 @@ func (o Params) MarshalJSON() ([]byte, error) {
 }
 
 func (o Params) String() string {
-	out := "Params {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  automaticFacetFilters=%v\n", o.AutomaticFacetFilters)
 	out += fmt.Sprintf("  automaticOptionalFacetFilters=%v\n", o.AutomaticOptionalFacetFilters)
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
-	out += "}"
-	return out
+	return fmt.Sprintf("Params {\n%s}", out)
 }
 
 type NullableParams struct {

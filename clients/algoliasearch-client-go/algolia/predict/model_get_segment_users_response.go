@@ -183,13 +183,12 @@ func (o GetSegmentUsersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetSegmentUsersResponse) String() string {
-	out := "GetSegmentUsersResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  segmentID=%v\n", o.SegmentID)
 	out += fmt.Sprintf("  users=%v\n", o.Users)
 	out += fmt.Sprintf("  previousPageToken=%v\n", o.PreviousPageToken)
 	out += fmt.Sprintf("  nextPageToken=%v\n", o.NextPageToken)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetSegmentUsersResponse {\n%s}", out)
 }
 
 type NullableGetSegmentUsersResponse struct {

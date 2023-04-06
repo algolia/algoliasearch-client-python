@@ -140,12 +140,11 @@ func (o OperationIndexParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o OperationIndexParams) String() string {
-	out := "OperationIndexParams {\n"
+	out := ""
 	out += fmt.Sprintf("  operation=%v\n", o.Operation)
 	out += fmt.Sprintf("  destination=%v\n", o.Destination)
 	out += fmt.Sprintf("  scope=%v\n", o.Scope)
-	out += "}"
-	return out
+	return fmt.Sprintf("OperationIndexParams {\n%s}", out)
 }
 
 type NullableOperationIndexParams struct {

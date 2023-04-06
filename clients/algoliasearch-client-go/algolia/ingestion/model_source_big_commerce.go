@@ -123,11 +123,10 @@ func (o SourceBigCommerce) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceBigCommerce) String() string {
-	out := "SourceBigCommerce {\n"
+	out := ""
 	out += fmt.Sprintf("  storeHash=%v\n", o.StoreHash)
 	out += fmt.Sprintf("  channel=%v\n", o.Channel)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceBigCommerce {\n%s}", out)
 }
 
 type NullableSourceBigCommerce struct {

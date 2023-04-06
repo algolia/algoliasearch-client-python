@@ -124,11 +124,10 @@ func (o ConsequenceQueryObject) MarshalJSON() ([]byte, error) {
 }
 
 func (o ConsequenceQueryObject) String() string {
-	out := "ConsequenceQueryObject {\n"
+	out := ""
 	out += fmt.Sprintf("  remove=%v\n", o.Remove)
 	out += fmt.Sprintf("  edits=%v\n", o.Edits)
-	out += "}"
-	return out
+	return fmt.Sprintf("ConsequenceQueryObject {\n%s}", out)
 }
 
 type NullableConsequenceQueryObject struct {

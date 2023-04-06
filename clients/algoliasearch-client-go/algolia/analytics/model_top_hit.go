@@ -93,11 +93,10 @@ func (o TopHit) MarshalJSON() ([]byte, error) {
 }
 
 func (o TopHit) String() string {
-	out := "TopHit {\n"
+	out := ""
 	out += fmt.Sprintf("  hit=%v\n", o.Hit)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
-	out += "}"
-	return out
+	return fmt.Sprintf("TopHit {\n%s}", out)
 }
 
 type NullableTopHit struct {

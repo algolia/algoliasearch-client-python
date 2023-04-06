@@ -167,12 +167,11 @@ func (o MatchedGeoLocation) MarshalJSON() ([]byte, error) {
 }
 
 func (o MatchedGeoLocation) String() string {
-	out := "MatchedGeoLocation {\n"
+	out := ""
 	out += fmt.Sprintf("  lat=%v\n", o.Lat)
 	out += fmt.Sprintf("  lng=%v\n", o.Lng)
 	out += fmt.Sprintf("  distance=%v\n", o.Distance)
-	out += "}"
-	return out
+	return fmt.Sprintf("MatchedGeoLocation {\n%s}", out)
 }
 
 type NullableMatchedGeoLocation struct {

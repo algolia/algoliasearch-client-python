@@ -93,11 +93,10 @@ func (o UserWithDate) MarshalJSON() ([]byte, error) {
 }
 
 func (o UserWithDate) String() string {
-	out := "UserWithDate {\n"
+	out := ""
 	out += fmt.Sprintf("  date=%v\n", o.Date)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
-	out += "}"
-	return out
+	return fmt.Sprintf("UserWithDate {\n%s}", out)
 }
 
 type NullableUserWithDate struct {

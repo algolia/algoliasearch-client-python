@@ -152,13 +152,12 @@ func (o LogFile) MarshalJSON() ([]byte, error) {
 }
 
 func (o LogFile) String() string {
-	out := "LogFile {\n"
+	out := ""
 	out += fmt.Sprintf("  timestamp=%v\n", o.Timestamp)
 	out += fmt.Sprintf("  level=%v\n", o.Level)
 	out += fmt.Sprintf("  message=%v\n", o.Message)
 	out += fmt.Sprintf("  contextLevel=%v\n", o.ContextLevel)
-	out += "}"
-	return out
+	return fmt.Sprintf("LogFile {\n%s}", out)
 }
 
 type NullableLogFile struct {

@@ -33,9 +33,8 @@ func (o SegmentPropertyFilterValue) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentPropertyFilterValue) String() string {
-	out := "SegmentPropertyFilterValue {\n"
-	out += "}"
-	return out
+	out := ""
+	return fmt.Sprintf("SegmentPropertyFilterValue {\n%s}", out)
 }
 
 type NullableSegmentPropertyFilterValue struct {

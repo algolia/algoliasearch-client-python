@@ -122,11 +122,10 @@ func (o AllParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o AllParams) String() string {
-	out := "AllParams {\n"
+	out := ""
 	out += fmt.Sprintf("  modelsToRetrieve=%v\n", o.ModelsToRetrieve)
 	out += fmt.Sprintf("  typesToRetrieve=%v\n", o.TypesToRetrieve)
-	out += "}"
-	return out
+	return fmt.Sprintf("AllParams {\n%s}", out)
 }
 
 type NullableAllParams struct {

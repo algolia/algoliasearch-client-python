@@ -199,14 +199,13 @@ func (o ActivateModelParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o ActivateModelParams) String() string {
-	out := "ActivateModelParams {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  sourceID=%v\n", o.SourceID)
 	out += fmt.Sprintf("  index=%v\n", o.Index)
 	out += fmt.Sprintf("  modelAttributes=%v\n", o.ModelAttributes)
-	out += "}"
-	return out
+	return fmt.Sprintf("ActivateModelParams {\n%s}", out)
 }
 
 type NullableActivateModelParams struct {

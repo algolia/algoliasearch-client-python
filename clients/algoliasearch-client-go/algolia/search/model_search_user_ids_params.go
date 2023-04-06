@@ -45,10 +45,6 @@ func WithSearchUserIdsParamsHitsPerPage(val int32) SearchUserIdsParamsOption {
 func NewSearchUserIdsParams(query string, opts ...SearchUserIdsParamsOption) *SearchUserIdsParams {
 	this := &SearchUserIdsParams{}
 	this.Query = query
-	var page int32 = 0
-	this.Page = &page
-	var hitsPerPage int32 = 20
-	this.HitsPerPage = &hitsPerPage
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -205,13 +201,12 @@ func (o SearchUserIdsParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchUserIdsParams) String() string {
-	out := "SearchUserIdsParams {\n"
+	out := ""
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  clusterName=%v\n", o.ClusterName)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
 	out += fmt.Sprintf("  hitsPerPage=%v\n", o.HitsPerPage)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchUserIdsParams {\n%s}", out)
 }
 
 type NullableSearchUserIdsParams struct {

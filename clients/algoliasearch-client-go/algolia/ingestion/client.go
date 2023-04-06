@@ -3,6 +3,7 @@ package ingestion
 
 import (
 	"bytes"
+	"compress/gzip"
 	"context"
 	"encoding/json"
 	"errors"
@@ -18,6 +19,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/call"
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/compression"
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/internal/transport"
 )
 
 var jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:vnd\.[^;]+\+)?json)`)
@@ -25,40 +30,42 @@ var jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:vnd\.[^;]+\+)?js
 // APIClient manages communication with the Ingestion API API v1.0
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
-	appID string
-	cfg   *Configuration
+	appID     string
+	cfg       *Configuration
+	transport *transport.Transport
 }
 
-// NewAPIClient creates a new API client with appID, apiKey and region.
+// NewClient creates a new API client with appID, apiKey and region.
 func NewClient(appID, apiKey string, region Region) *APIClient {
-	cfg := &Configuration{
+	return NewClientWithConfig(Configuration{
 		AppID:         appID,
 		ApiKey:        apiKey,
-		Host:          getDefaultHost(region),
+		Region:        region,
 		DefaultHeader: make(map[string]string),
 		UserAgent:     getUserAgent(),
 		Debug:         false,
 		Requester:     newDefaultRequester(),
-	}
-
-	return &APIClient{
-		appID: appID,
-		cfg:   cfg,
-	}
+	})
 }
 
 func NewClientWithConfig(cfg Configuration) *APIClient {
+	var hosts []*transport.StatefulHost
+
 	if cfg.AppID == "" {
 		panic("appID is required")
 	}
 	if cfg.ApiKey == "" {
 		panic("apiKey is required")
 	}
-	if cfg.Host == "" {
+	if len(cfg.Hosts) == 0 {
 		if cfg.Region == "" {
 			panic("region is required")
 		}
-		cfg.Host = getDefaultHost(cfg.Region)
+		hosts = getDefaultHosts(cfg.Region)
+	} else {
+		for _, h := range cfg.Hosts {
+			hosts = append(hosts, transport.NewStatefulHost(h, call.IsReadWrite))
+		}
 	}
 	if cfg.Requester == nil {
 		cfg.Requester = newDefaultRequester()
@@ -70,14 +77,24 @@ func NewClientWithConfig(cfg Configuration) *APIClient {
 	return &APIClient{
 		appID: cfg.AppID,
 		cfg:   &cfg,
+		transport: transport.New(
+			hosts,
+			cfg.Requester,
+			cfg.ReadTimeout,
+			cfg.WriteTimeout,
+			cfg.Compression,
+		),
 	}
 }
 
-func getDefaultHost(region Region) string {
-	return strings.Replace("https://data.us.algolia.com", "{region}", string(region), -1)
-
+func getDefaultHosts(r Region) []*transport.StatefulHost {
+	hosts := []*transport.StatefulHost{}
+	switch r {
+	case EU, US:
+		hosts = append(hosts, transport.NewStatefulHost(strings.Replace("data.{region}.algolia.com", "{region}", string(r), -1), call.IsReadWrite))
+	}
+	return hosts
 }
-
 func getUserAgent() string {
 	return fmt.Sprintf("Algolia for Go (4.0.0-alpha.2); Go (%s); Ingestion (4.0.0-alpha.2)", runtime.Version())
 }
@@ -136,7 +153,7 @@ func (c *APIClient) AddDefaultHeader(key string, value string) {
 }
 
 // callAPI do the request.
-func (c *APIClient) callAPI(request *http.Request) (*http.Response, error) {
+func (c *APIClient) callAPI(request *http.Request, kind call.Kind) (*http.Response, error) {
 	if c.cfg.Debug {
 		dump, err := httputil.DumpRequestOut(request, true)
 		if err != nil {
@@ -145,7 +162,7 @@ func (c *APIClient) callAPI(request *http.Request) (*http.Response, error) {
 		log.Printf("\n%s\n", string(dump))
 	}
 
-	resp, err := c.cfg.Requester.Request(request)
+	resp, err := c.transport.Request(request.Context(), request, kind)
 	if err != nil {
 		return nil, err
 	}
@@ -176,13 +193,13 @@ func (c *APIClient) prepareRequest(
 
 	contentType := "application/json"
 
-	body, err := setBody(postBody, contentType)
+	body, err := setBody(postBody, contentType, c.cfg.Compression)
 	if err != nil {
 		return nil, err
 	}
 
 	// Setup path and query parameters
-	url, err := url.Parse(fmt.Sprintf("%s%s", c.cfg.Host, path))
+	url, err := url.Parse(path)
 	if err != nil {
 		return nil, err
 	}
@@ -276,23 +293,30 @@ func newStrictDecoder(data []byte) *json.Decoder {
 }
 
 // Set request body from an any
-func setBody(body any, contentType string) (bodyBuf *bytes.Buffer, err error) {
+func setBody(body any, contentType string, c compression.Compression) (bodyBuf *bytes.Buffer, err error) {
 	if body == nil {
 		return nil, nil
 	}
 
 	bodyBuf = &bytes.Buffer{}
 
-	if reader, ok := body.(io.Reader); ok {
-		_, err = bodyBuf.ReadFrom(reader)
-	} else if b, ok := body.([]byte); ok {
-		_, err = bodyBuf.Write(b)
-	} else if s, ok := body.(string); ok {
-		_, err = bodyBuf.WriteString(s)
-	} else if s, ok := body.(*string); ok {
-		_, err = bodyBuf.WriteString(*s)
-	} else if jsonCheck.MatchString(contentType) {
-		err = json.NewEncoder(bodyBuf).Encode(body)
+	switch c {
+	case compression.GZIP:
+		gzipWriter := gzip.NewWriter(bodyBuf)
+		defer gzipWriter.Close()
+		err = json.NewEncoder(gzipWriter).Encode(body)
+	default:
+		if reader, ok := body.(io.Reader); ok {
+			_, err = bodyBuf.ReadFrom(reader)
+		} else if b, ok := body.([]byte); ok {
+			_, err = bodyBuf.Write(b)
+		} else if s, ok := body.(string); ok {
+			_, err = bodyBuf.WriteString(s)
+		} else if s, ok := body.(*string); ok {
+			_, err = bodyBuf.WriteString(*s)
+		} else if jsonCheck.MatchString(contentType) {
+			err = json.NewEncoder(bodyBuf).Encode(body)
+		}
 	}
 
 	if err != nil {

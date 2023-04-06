@@ -8,66 +8,79 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/call"
 )
 
 type Option struct {
-	Type  string
-	Name  string
-	Value string
+	optionType string
+	name       string
+	value      string
 }
 
-func WithPage(page int32) Option {
+func QueryParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "page",
-		Value: parameterToString(page),
+		optionType: "query",
+		name:       name,
+		value:      parameterToString(val),
 	}
 }
 
-func WithItemsPerPage(itemsPerPage int32) Option {
+func HeaderParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "itemsPerPage",
-		Value: parameterToString(itemsPerPage),
+		optionType: "header",
+		name:       "itemsPerPage",
+		value:      parameterToString(val),
 	}
 }
 
-func WithBody(body any) Option {
-	return Option{
-		Type:  "body",
-		Name:  "body",
-		Value: parameterToString(body),
-	}
+type ApiActivateModelInstanceRequest struct {
+	activateModelParams *ActivateModelParams
+}
+
+func (r ApiActivateModelInstanceRequest) WithActivateModelParams(activateModelParams ActivateModelParams) ApiActivateModelInstanceRequest {
+	r.activateModelParams = &activateModelParams
+	return r
+}
+
+// @return ApiActivateModelInstanceRequest
+func (c *APIClient) NewApiActivateModelInstanceRequest() ApiActivateModelInstanceRequest {
+	return ApiActivateModelInstanceRequest{}
 }
 
 // @return ActivateModelInstanceResponse
-func (c *APIClient) ActivateModelInstance(activateModelParams *ActivateModelParams) (*ActivateModelInstanceResponse, error) {
+func (c *APIClient) ActivateModelInstance(r ApiActivateModelInstanceRequest, opts ...Option) (*ActivateModelInstanceResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *ActivateModelInstanceResponse
+		postBody    any
+		returnValue *ActivateModelInstanceResponse
 	)
 
 	requestPath := "/1/predict/models"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if activateModelParams == nil {
+	if r.activateModelParams == nil {
 		return returnValue, reportError("activateModelParams is required and must be specified")
 	}
 
-	// body params
-	if activateModelParams != nil {
-		localVarPostBody = activateModelParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.activateModelParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -124,34 +137,53 @@ func (c *APIClient) ActivateModelInstance(activateModelParams *ActivateModelPara
 	return returnValue, nil
 }
 
+type ApiCreateSegmentRequest struct {
+	createSegmentParams *CreateSegmentParams
+}
+
+func (r ApiCreateSegmentRequest) WithCreateSegmentParams(createSegmentParams CreateSegmentParams) ApiCreateSegmentRequest {
+	r.createSegmentParams = &createSegmentParams
+	return r
+}
+
+// @return ApiCreateSegmentRequest
+func (c *APIClient) NewApiCreateSegmentRequest() ApiCreateSegmentRequest {
+	return ApiCreateSegmentRequest{}
+}
+
 // @return CreateSegmentResponse
-func (c *APIClient) CreateSegment(createSegmentParams *CreateSegmentParams) (*CreateSegmentResponse, error) {
+func (c *APIClient) CreateSegment(r ApiCreateSegmentRequest, opts ...Option) (*CreateSegmentResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *CreateSegmentResponse
+		postBody    any
+		returnValue *CreateSegmentResponse
 	)
 
 	requestPath := "/1/segments"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if createSegmentParams == nil {
+	if r.createSegmentParams == nil {
 		return returnValue, reportError("createSegmentParams is required and must be specified")
 	}
 
-	// body params
-	if createSegmentParams != nil {
-		localVarPostBody = createSegmentParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.createSegmentParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -217,35 +249,57 @@ func (c *APIClient) CreateSegment(createSegmentParams *CreateSegmentParams) (*Cr
 	return returnValue, nil
 }
 
-// @return map[string]interface{}
-func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, error) {
-	var (
-		localVarPostBody any
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
 
+// Query parameters to be applied to the current query.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiDelRequest
+func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
+	return ApiDelRequest{
+		path: path,
+	}
+}
+
+// @return map[string]interface{}
+func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	var (
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -311,26 +365,46 @@ func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, er
 	return returnValue, nil
 }
 
-// @return DeleteModelInstanceResponse
-func (c *APIClient) DeleteModelInstance(modelID string) (*DeleteModelInstanceResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteModelInstanceRequest struct {
+	modelID string
+}
 
+// @return ApiDeleteModelInstanceRequest
+func (c *APIClient) NewApiDeleteModelInstanceRequest(modelID string) ApiDeleteModelInstanceRequest {
+	return ApiDeleteModelInstanceRequest{
+		modelID: modelID,
+	}
+}
+
+// @return DeleteModelInstanceResponse
+func (c *APIClient) DeleteModelInstance(r ApiDeleteModelInstanceRequest, opts ...Option) (*DeleteModelInstanceResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteModelInstanceResponse
 	)
 
 	requestPath := "/1/predict/models/{modelID}"
-	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(modelID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(r.modelID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -396,26 +470,46 @@ func (c *APIClient) DeleteModelInstance(modelID string) (*DeleteModelInstanceRes
 	return returnValue, nil
 }
 
-// @return DeleteSegmentResponse
-func (c *APIClient) DeleteSegment(segmentID string) (*DeleteSegmentResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteSegmentRequest struct {
+	segmentID string
+}
 
+// @return ApiDeleteSegmentRequest
+func (c *APIClient) NewApiDeleteSegmentRequest(segmentID string) ApiDeleteSegmentRequest {
+	return ApiDeleteSegmentRequest{
+		segmentID: segmentID,
+	}
+}
+
+// @return DeleteSegmentResponse
+func (c *APIClient) DeleteSegment(r ApiDeleteSegmentRequest, opts ...Option) (*DeleteSegmentResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteSegmentResponse
 	)
 
 	requestPath := "/1/segments/{segmentID}"
-	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(segmentID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(r.segmentID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -481,26 +575,46 @@ func (c *APIClient) DeleteSegment(segmentID string) (*DeleteSegmentResponse, err
 	return returnValue, nil
 }
 
-// @return DeleteUserProfileResponse
-func (c *APIClient) DeleteUserProfile(userID string) (*DeleteUserProfileResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteUserProfileRequest struct {
+	userID string
+}
 
+// @return ApiDeleteUserProfileRequest
+func (c *APIClient) NewApiDeleteUserProfileRequest(userID string) ApiDeleteUserProfileRequest {
+	return ApiDeleteUserProfileRequest{
+		userID: userID,
+	}
+}
+
+// @return DeleteUserProfileResponse
+func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteUserProfileResponse
 	)
 
 	requestPath := "/1/users/{userID}"
-	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(userID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(r.userID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -566,11 +680,25 @@ func (c *APIClient) DeleteUserProfile(userID string) (*DeleteUserProfileResponse
 	return returnValue, nil
 }
 
-// @return []Segment
-func (c *APIClient) FetchAllSegments(opts ...Option) ([]Segment, error) {
-	var (
-		localVarPostBody any
+type ApiFetchAllSegmentsRequest struct {
+	type_ *SegmentType
+}
 
+// The type of segments to fetch.
+func (r ApiFetchAllSegmentsRequest) WithType_(type_ SegmentType) ApiFetchAllSegmentsRequest {
+	r.type_ = &type_
+	return r
+}
+
+// @return ApiFetchAllSegmentsRequest
+func (c *APIClient) NewApiFetchAllSegmentsRequest() ApiFetchAllSegmentsRequest {
+	return ApiFetchAllSegmentsRequest{}
+}
+
+// @return []Segment
+func (c *APIClient) FetchAllSegments(r ApiFetchAllSegmentsRequest, opts ...Option) ([]Segment, error) {
+	var (
+		postBody    any
 		returnValue []Segment
 	)
 
@@ -579,21 +707,26 @@ func (c *APIClient) FetchAllSegments(opts ...Option) ([]Segment, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.type_) {
+		queryParams.Add("type", parameterToString(*r.type_))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -650,34 +783,53 @@ func (c *APIClient) FetchAllSegments(opts ...Option) ([]Segment, error) {
 	return returnValue, nil
 }
 
+type ApiFetchAllUserProfilesRequest struct {
+	fetchAllUserProfilesParams *FetchAllUserProfilesParams
+}
+
+func (r ApiFetchAllUserProfilesRequest) WithFetchAllUserProfilesParams(fetchAllUserProfilesParams FetchAllUserProfilesParams) ApiFetchAllUserProfilesRequest {
+	r.fetchAllUserProfilesParams = &fetchAllUserProfilesParams
+	return r
+}
+
+// @return ApiFetchAllUserProfilesRequest
+func (c *APIClient) NewApiFetchAllUserProfilesRequest() ApiFetchAllUserProfilesRequest {
+	return ApiFetchAllUserProfilesRequest{}
+}
+
 // @return FetchAllUserProfilesResponse
-func (c *APIClient) FetchAllUserProfiles(fetchAllUserProfilesParams *FetchAllUserProfilesParams) (*FetchAllUserProfilesResponse, error) {
+func (c *APIClient) FetchAllUserProfiles(r ApiFetchAllUserProfilesRequest, opts ...Option) (*FetchAllUserProfilesResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *FetchAllUserProfilesResponse
+		postBody    any
+		returnValue *FetchAllUserProfilesResponse
 	)
 
 	requestPath := "/1/users"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if fetchAllUserProfilesParams == nil {
+	if r.fetchAllUserProfilesParams == nil {
 		return returnValue, reportError("fetchAllUserProfilesParams is required and must be specified")
 	}
 
-	// body params
-	if fetchAllUserProfilesParams != nil {
-		localVarPostBody = fetchAllUserProfilesParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.fetchAllUserProfilesParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -743,26 +895,46 @@ func (c *APIClient) FetchAllUserProfiles(fetchAllUserProfilesParams *FetchAllUse
 	return returnValue, nil
 }
 
-// @return Segment
-func (c *APIClient) FetchSegment(segmentID string) (*Segment, error) {
-	var (
-		localVarPostBody any
+type ApiFetchSegmentRequest struct {
+	segmentID string
+}
 
+// @return ApiFetchSegmentRequest
+func (c *APIClient) NewApiFetchSegmentRequest(segmentID string) ApiFetchSegmentRequest {
+	return ApiFetchSegmentRequest{
+		segmentID: segmentID,
+	}
+}
+
+// @return Segment
+func (c *APIClient) FetchSegment(r ApiFetchSegmentRequest, opts ...Option) (*Segment, error) {
+	var (
+		postBody    any
 		returnValue *Segment
 	)
 
 	requestPath := "/1/segments/{segmentID}"
-	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(segmentID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(r.segmentID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -819,35 +991,57 @@ func (c *APIClient) FetchSegment(segmentID string) (*Segment, error) {
 	return returnValue, nil
 }
 
+type ApiFetchUserProfileRequest struct {
+	userID string
+	params *Params
+}
+
+func (r ApiFetchUserProfileRequest) WithParams(params Params) ApiFetchUserProfileRequest {
+	r.params = &params
+	return r
+}
+
+// @return ApiFetchUserProfileRequest
+func (c *APIClient) NewApiFetchUserProfileRequest(userID string) ApiFetchUserProfileRequest {
+	return ApiFetchUserProfileRequest{
+		userID: userID,
+	}
+}
+
 // @return UserProfile
-func (c *APIClient) FetchUserProfile(userID string, params *Params) (*UserProfile, error) {
+func (c *APIClient) FetchUserProfile(r ApiFetchUserProfileRequest, opts ...Option) (*UserProfile, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UserProfile
+		postBody    any
+		returnValue *UserProfile
 	)
 
 	requestPath := "/1/users/{userID}/fetch"
-	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(userID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(r.userID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if params == nil {
+	if r.params == nil {
 		return returnValue, reportError("params is required and must be specified")
 	}
 
-	// body params
-	if params != nil {
-		localVarPostBody = params
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.params
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -904,35 +1098,57 @@ func (c *APIClient) FetchUserProfile(userID string, params *Params) (*UserProfil
 	return returnValue, nil
 }
 
-// @return map[string]interface{}
-func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, error) {
-	var (
-		localVarPostBody any
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
 
+// Query parameters to be applied to the current query.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiGetRequest
+func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
+	return ApiGetRequest{
+		path: path,
+	}
+}
+
+// @return map[string]interface{}
+func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	var (
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -998,11 +1214,18 @@ func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, er
 	return returnValue, nil
 }
 
-// @return []GetAvailableModelTypesResponseInner
-func (c *APIClient) GetAvailableModelTypes() ([]GetAvailableModelTypesResponseInner, error) {
-	var (
-		localVarPostBody any
+type ApiGetAvailableModelTypesRequest struct {
+}
 
+// @return ApiGetAvailableModelTypesRequest
+func (c *APIClient) NewApiGetAvailableModelTypesRequest() ApiGetAvailableModelTypesRequest {
+	return ApiGetAvailableModelTypesRequest{}
+}
+
+// @return []GetAvailableModelTypesResponseInner
+func (c *APIClient) GetAvailableModelTypes(r ApiGetAvailableModelTypesRequest, opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
+	var (
+		postBody    any
 		returnValue []GetAvailableModelTypesResponseInner
 	)
 
@@ -1011,12 +1234,22 @@ func (c *APIClient) GetAvailableModelTypes() ([]GetAvailableModelTypesResponseIn
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1073,26 +1306,46 @@ func (c *APIClient) GetAvailableModelTypes() ([]GetAvailableModelTypesResponseIn
 	return returnValue, nil
 }
 
-// @return ModelInstance
-func (c *APIClient) GetModelInstanceConfig(modelID string) (*ModelInstance, error) {
-	var (
-		localVarPostBody any
+type ApiGetModelInstanceConfigRequest struct {
+	modelID string
+}
 
+// @return ApiGetModelInstanceConfigRequest
+func (c *APIClient) NewApiGetModelInstanceConfigRequest(modelID string) ApiGetModelInstanceConfigRequest {
+	return ApiGetModelInstanceConfigRequest{
+		modelID: modelID,
+	}
+}
+
+// @return ModelInstance
+func (c *APIClient) GetModelInstanceConfig(r ApiGetModelInstanceConfigRequest, opts ...Option) (*ModelInstance, error) {
+	var (
+		postBody    any
 		returnValue *ModelInstance
 	)
 
 	requestPath := "/1/predict/models/{modelID}"
-	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(modelID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(r.modelID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1158,11 +1411,18 @@ func (c *APIClient) GetModelInstanceConfig(modelID string) (*ModelInstance, erro
 	return returnValue, nil
 }
 
-// @return []ModelInstance
-func (c *APIClient) GetModelInstances() ([]ModelInstance, error) {
-	var (
-		localVarPostBody any
+type ApiGetModelInstancesRequest struct {
+}
 
+// @return ApiGetModelInstancesRequest
+func (c *APIClient) NewApiGetModelInstancesRequest() ApiGetModelInstancesRequest {
+	return ApiGetModelInstancesRequest{}
+}
+
+// @return []ModelInstance
+func (c *APIClient) GetModelInstances(r ApiGetModelInstancesRequest, opts ...Option) ([]ModelInstance, error) {
+	var (
+		postBody    any
 		returnValue []ModelInstance
 	)
 
@@ -1171,12 +1431,22 @@ func (c *APIClient) GetModelInstances() ([]ModelInstance, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1233,26 +1503,46 @@ func (c *APIClient) GetModelInstances() ([]ModelInstance, error) {
 	return returnValue, nil
 }
 
-// @return GetModelMetricsResponse
-func (c *APIClient) GetModelMetrics(modelID string) (*GetModelMetricsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetModelMetricsRequest struct {
+	modelID string
+}
 
+// @return ApiGetModelMetricsRequest
+func (c *APIClient) NewApiGetModelMetricsRequest(modelID string) ApiGetModelMetricsRequest {
+	return ApiGetModelMetricsRequest{
+		modelID: modelID,
+	}
+}
+
+// @return GetModelMetricsResponse
+func (c *APIClient) GetModelMetrics(r ApiGetModelMetricsRequest, opts ...Option) (*GetModelMetricsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetModelMetricsResponse
 	)
 
 	requestPath := "/1/predict/models/{modelID}/metrics"
-	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(modelID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(r.modelID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1316,37 +1606,59 @@ func (c *APIClient) GetModelMetrics(modelID string) (*GetModelMetricsResponse, e
 	}
 
 	return returnValue, nil
+}
+
+type ApiGetSegmentUsersRequest struct {
+	segmentID                  string
+	fetchAllUserProfilesParams *FetchAllUserProfilesParams
+}
+
+func (r ApiGetSegmentUsersRequest) WithFetchAllUserProfilesParams(fetchAllUserProfilesParams FetchAllUserProfilesParams) ApiGetSegmentUsersRequest {
+	r.fetchAllUserProfilesParams = &fetchAllUserProfilesParams
+	return r
+}
+
+// @return ApiGetSegmentUsersRequest
+func (c *APIClient) NewApiGetSegmentUsersRequest(segmentID string) ApiGetSegmentUsersRequest {
+	return ApiGetSegmentUsersRequest{
+		segmentID: segmentID,
+	}
 }
 
 // @return GetSegmentUsersResponse
-func (c *APIClient) GetSegmentUsers(segmentID string, fetchAllUserProfilesParams *FetchAllUserProfilesParams) (*GetSegmentUsersResponse, error) {
+func (c *APIClient) GetSegmentUsers(r ApiGetSegmentUsersRequest, opts ...Option) (*GetSegmentUsersResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *GetSegmentUsersResponse
+		postBody    any
+		returnValue *GetSegmentUsersResponse
 	)
 
 	requestPath := "/1/segments/{segmentID}/users"
-	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(segmentID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(r.segmentID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if fetchAllUserProfilesParams == nil {
+	if r.fetchAllUserProfilesParams == nil {
 		return returnValue, reportError("fetchAllUserProfilesParams is required and must be specified")
 	}
 
-	// body params
-	if fetchAllUserProfilesParams != nil {
-		localVarPostBody = fetchAllUserProfilesParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.fetchAllUserProfilesParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1421,43 +1733,66 @@ func (c *APIClient) GetSegmentUsers(segmentID string, fetchAllUserProfilesParams
 	return returnValue, nil
 }
 
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPostRequest
+func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
+	return ApiPostRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1523,43 +1858,66 @@ func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, e
 	return returnValue, nil
 }
 
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPutRequest
+func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
+	return ApiPutRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Put(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1623,37 +1981,59 @@ func (c *APIClient) Put(path string, opts ...Option) (map[string]interface{}, er
 	}
 
 	return returnValue, nil
+}
+
+type ApiUpdateModelInstanceRequest struct {
+	modelID           string
+	updateModelParams *UpdateModelParams
+}
+
+func (r ApiUpdateModelInstanceRequest) WithUpdateModelParams(updateModelParams UpdateModelParams) ApiUpdateModelInstanceRequest {
+	r.updateModelParams = &updateModelParams
+	return r
+}
+
+// @return ApiUpdateModelInstanceRequest
+func (c *APIClient) NewApiUpdateModelInstanceRequest(modelID string) ApiUpdateModelInstanceRequest {
+	return ApiUpdateModelInstanceRequest{
+		modelID: modelID,
+	}
 }
 
 // @return UpdateModelInstanceResponse
-func (c *APIClient) UpdateModelInstance(modelID string, updateModelParams *UpdateModelParams) (*UpdateModelInstanceResponse, error) {
+func (c *APIClient) UpdateModelInstance(r ApiUpdateModelInstanceRequest, opts ...Option) (*UpdateModelInstanceResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdateModelInstanceResponse
+		postBody    any
+		returnValue *UpdateModelInstanceResponse
 	)
 
 	requestPath := "/1/predict/models/{modelID}"
-	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(modelID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"modelID"+"}", url.PathEscape(parameterToString(r.modelID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if updateModelParams == nil {
+	if r.updateModelParams == nil {
 		return returnValue, reportError("updateModelParams is required and must be specified")
 	}
 
-	// body params
-	if updateModelParams != nil {
-		localVarPostBody = updateModelParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.updateModelParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1719,35 +2099,57 @@ func (c *APIClient) UpdateModelInstance(modelID string, updateModelParams *Updat
 	return returnValue, nil
 }
 
+type ApiUpdateSegmentRequest struct {
+	segmentID           string
+	updateSegmentParams *UpdateSegmentParams
+}
+
+func (r ApiUpdateSegmentRequest) WithUpdateSegmentParams(updateSegmentParams UpdateSegmentParams) ApiUpdateSegmentRequest {
+	r.updateSegmentParams = &updateSegmentParams
+	return r
+}
+
+// @return ApiUpdateSegmentRequest
+func (c *APIClient) NewApiUpdateSegmentRequest(segmentID string) ApiUpdateSegmentRequest {
+	return ApiUpdateSegmentRequest{
+		segmentID: segmentID,
+	}
+}
+
 // @return UpdateSegmentResponse
-func (c *APIClient) UpdateSegment(segmentID string, updateSegmentParams *UpdateSegmentParams) (*UpdateSegmentResponse, error) {
+func (c *APIClient) UpdateSegment(r ApiUpdateSegmentRequest, opts ...Option) (*UpdateSegmentResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdateSegmentResponse
+		postBody    any
+		returnValue *UpdateSegmentResponse
 	)
 
 	requestPath := "/1/segments/{segmentID}"
-	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(segmentID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"segmentID"+"}", url.PathEscape(parameterToString(r.segmentID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if updateSegmentParams == nil {
+	if r.updateSegmentParams == nil {
 		return returnValue, reportError("updateSegmentParams is required and must be specified")
 	}
 
-	// body params
-	if updateSegmentParams != nil {
-		localVarPostBody = updateSegmentParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.updateSegmentParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}

@@ -123,12 +123,11 @@ func (o SearchNoResultEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchNoResultEvent) String() string {
-	out := "SearchNoResultEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  search=%v\n", o.Search)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
 	out += fmt.Sprintf("  nbHits=%v\n", o.NbHits)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchNoResultEvent {\n%s}", out)
 }
 
 type NullableSearchNoResultEvent struct {

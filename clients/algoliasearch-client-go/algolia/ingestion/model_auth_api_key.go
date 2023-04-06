@@ -62,10 +62,9 @@ func (o AuthAPIKey) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthAPIKey) String() string {
-	out := "AuthAPIKey {\n"
+	out := ""
 	out += fmt.Sprintf("  key=%v\n", o.Key)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthAPIKey {\n%s}", out)
 }
 
 type NullableAuthAPIKey struct {

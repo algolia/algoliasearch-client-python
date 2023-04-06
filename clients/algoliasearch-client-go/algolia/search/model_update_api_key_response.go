@@ -93,11 +93,10 @@ func (o UpdateApiKeyResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o UpdateApiKeyResponse) String() string {
-	out := "UpdateApiKeyResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  key=%v\n", o.Key)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("UpdateApiKeyResponse {\n%s}", out)
 }
 
 type NullableUpdateApiKeyResponse struct {

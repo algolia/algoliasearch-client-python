@@ -181,13 +181,12 @@ func (o SourceCommercetools) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceCommercetools) String() string {
-	out := "SourceCommercetools {\n"
+	out := ""
 	out += fmt.Sprintf("  storeKeys=%v\n", o.StoreKeys)
 	out += fmt.Sprintf("  locales=%v\n", o.Locales)
 	out += fmt.Sprintf("  url=%v\n", o.Url)
 	out += fmt.Sprintf("  projectKey=%v\n", o.ProjectKey)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceCommercetools {\n%s}", out)
 }
 
 type NullableSourceCommercetools struct {

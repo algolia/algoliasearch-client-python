@@ -28,8 +28,6 @@ func WithBatchDictionaryEntriesParamsClearExistingDictionaryEntries(val bool) Ba
 // will change when the set of required properties is changed
 func NewBatchDictionaryEntriesParams(requests []BatchDictionaryEntriesRequest, opts ...BatchDictionaryEntriesParamsOption) *BatchDictionaryEntriesParams {
 	this := &BatchDictionaryEntriesParams{}
-	var clearExistingDictionaryEntries bool = false
-	this.ClearExistingDictionaryEntries = &clearExistingDictionaryEntries
 	this.Requests = requests
 	for _, opt := range opts {
 		opt(this)
@@ -115,11 +113,10 @@ func (o BatchDictionaryEntriesParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o BatchDictionaryEntriesParams) String() string {
-	out := "BatchDictionaryEntriesParams {\n"
+	out := ""
 	out += fmt.Sprintf("  clearExistingDictionaryEntries=%v\n", o.ClearExistingDictionaryEntries)
 	out += fmt.Sprintf("  requests=%v\n", o.Requests)
-	out += "}"
-	return out
+	return fmt.Sprintf("BatchDictionaryEntriesParams {\n%s}", out)
 }
 
 type NullableBatchDictionaryEntriesParams struct {

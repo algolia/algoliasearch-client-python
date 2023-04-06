@@ -170,13 +170,12 @@ func (o ScheduleTrigger) MarshalJSON() ([]byte, error) {
 }
 
 func (o ScheduleTrigger) String() string {
-	out := "ScheduleTrigger {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  cron=%v\n", o.Cron)
 	out += fmt.Sprintf("  lastRun=%v\n", o.LastRun)
 	out += fmt.Sprintf("  nextRun=%v\n", o.NextRun)
-	out += "}"
-	return out
+	return fmt.Sprintf("ScheduleTrigger {\n%s}", out)
 }
 
 type NullableScheduleTrigger struct {

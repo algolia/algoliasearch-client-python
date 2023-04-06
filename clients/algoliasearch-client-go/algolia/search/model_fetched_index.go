@@ -398,7 +398,7 @@ func (o FetchedIndex) MarshalJSON() ([]byte, error) {
 }
 
 func (o FetchedIndex) String() string {
-	out := "FetchedIndex {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
@@ -410,8 +410,7 @@ func (o FetchedIndex) String() string {
 	out += fmt.Sprintf("  pendingTask=%v\n", o.PendingTask)
 	out += fmt.Sprintf("  primary=%v\n", o.Primary)
 	out += fmt.Sprintf("  replicas=%v\n", o.Replicas)
-	out += "}"
-	return out
+	return fmt.Sprintf("FetchedIndex {\n%s}", out)
 }
 
 type NullableFetchedIndex struct {

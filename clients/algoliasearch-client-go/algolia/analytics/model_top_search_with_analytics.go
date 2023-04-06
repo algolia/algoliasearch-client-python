@@ -303,7 +303,7 @@ func (o TopSearchWithAnalytics) MarshalJSON() ([]byte, error) {
 }
 
 func (o TopSearchWithAnalytics) String() string {
-	out := "TopSearchWithAnalytics {\n"
+	out := ""
 	out += fmt.Sprintf("  search=%v\n", o.Search)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
 	out += fmt.Sprintf("  clickThroughRate=%v\n", o.ClickThroughRate)
@@ -313,8 +313,7 @@ func (o TopSearchWithAnalytics) String() string {
 	out += fmt.Sprintf("  clickCount=%v\n", o.ClickCount)
 	out += fmt.Sprintf("  conversionCount=%v\n", o.ConversionCount)
 	out += fmt.Sprintf("  nbHits=%v\n", o.NbHits)
-	out += "}"
-	return out
+	return fmt.Sprintf("TopSearchWithAnalytics {\n%s}", out)
 }
 
 type NullableTopSearchWithAnalytics struct {

@@ -1014,7 +1014,7 @@ func (o BaseSearchResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseSearchResponse) String() string {
-	out := "BaseSearchResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  abTestID=%v\n", o.AbTestID)
 	out += fmt.Sprintf("  abTestVariantID=%v\n", o.AbTestVariantID)
 	out += fmt.Sprintf("  aroundLatLng=%v\n", o.AroundLatLng)
@@ -1040,8 +1040,7 @@ func (o BaseSearchResponse) String() string {
 	out += fmt.Sprintf("  serverUsed=%v\n", o.ServerUsed)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseSearchResponse {\n%s}", out)
 }
 
 type NullableBaseSearchResponse struct {

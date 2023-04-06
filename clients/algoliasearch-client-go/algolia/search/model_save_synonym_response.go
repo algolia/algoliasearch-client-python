@@ -123,12 +123,11 @@ func (o SaveSynonymResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o SaveSynonymResponse) String() string {
-	out := "SaveSynonymResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  taskID=%v\n", o.TaskID)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
 	out += fmt.Sprintf("  id=%v\n", o.Id)
-	out += "}"
-	return out
+	return fmt.Sprintf("SaveSynonymResponse {\n%s}", out)
 }
 
 type NullableSaveSynonymResponse struct {

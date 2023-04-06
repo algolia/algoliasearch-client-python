@@ -42,12 +42,6 @@ func WithSearchForFacetValuesRequestMaxFacetHits(val int32) SearchForFacetValues
 // will change when the set of required properties is changed
 func NewSearchForFacetValuesRequest(opts ...SearchForFacetValuesRequestOption) *SearchForFacetValuesRequest {
 	this := &SearchForFacetValuesRequest{}
-	var params string = ""
-	this.Params = &params
-	var facetQuery string = ""
-	this.FacetQuery = &facetQuery
-	var maxFacetHits int32 = 10
-	this.MaxFacetHits = &maxFacetHits
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -179,12 +173,11 @@ func (o SearchForFacetValuesRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchForFacetValuesRequest) String() string {
-	out := "SearchForFacetValuesRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  params=%v\n", o.Params)
 	out += fmt.Sprintf("  facetQuery=%v\n", o.FacetQuery)
 	out += fmt.Sprintf("  maxFacetHits=%v\n", o.MaxFacetHits)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchForFacetValuesRequest {\n%s}", out)
 }
 
 type NullableSearchForFacetValuesRequest struct {

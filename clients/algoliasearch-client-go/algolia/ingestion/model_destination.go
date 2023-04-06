@@ -271,7 +271,7 @@ func (o Destination) MarshalJSON() ([]byte, error) {
 }
 
 func (o Destination) String() string {
-	out := "Destination {\n"
+	out := ""
 	out += fmt.Sprintf("  destinationID=%v\n", o.DestinationID)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
@@ -279,8 +279,7 @@ func (o Destination) String() string {
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
 	out += fmt.Sprintf("  authenticationID=%v\n", o.AuthenticationID)
-	out += "}"
-	return out
+	return fmt.Sprintf("Destination {\n%s}", out)
 }
 
 type NullableDestination struct {

@@ -52,8 +52,6 @@ func WithSourceCSVDelimiter(val string) SourceCSVOption {
 func NewSourceCSV(url string, opts ...SourceCSVOption) *SourceCSV {
 	this := &SourceCSV{}
 	this.Url = url
-	var delimiter string = ","
-	this.Delimiter = &delimiter
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -243,14 +241,13 @@ func (o SourceCSV) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceCSV) String() string {
-	out := "SourceCSV {\n"
+	out := ""
 	out += fmt.Sprintf("  url=%v\n", o.Url)
 	out += fmt.Sprintf("  uniqueIDColumn=%v\n", o.UniqueIDColumn)
 	out += fmt.Sprintf("  mapping=%v\n", o.Mapping)
 	out += fmt.Sprintf("  method=%v\n", o.Method)
 	out += fmt.Sprintf("  delimiter=%v\n", o.Delimiter)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceCSV {\n%s}", out)
 }
 
 type NullableSourceCSV struct {

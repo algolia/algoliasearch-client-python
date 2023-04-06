@@ -164,12 +164,11 @@ func (o Predictions) MarshalJSON() ([]byte, error) {
 }
 
 func (o Predictions) String() string {
-	out := "Predictions {\n"
+	out := ""
 	out += fmt.Sprintf("  funnel_stage=%v\n", o.FunnelStage)
 	out += fmt.Sprintf("  order_value=%v\n", o.OrderValue)
 	out += fmt.Sprintf("  affinities=%v\n", o.Affinities)
-	out += "}"
-	return out
+	return fmt.Sprintf("Predictions {\n%s}", out)
 }
 
 type NullablePredictions struct {

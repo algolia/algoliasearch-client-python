@@ -212,15 +212,14 @@ func (o UserHit) MarshalJSON() ([]byte, error) {
 }
 
 func (o UserHit) String() string {
-	out := "UserHit {\n"
+	out := ""
 	out += fmt.Sprintf("  userID=%v\n", o.UserID)
 	out += fmt.Sprintf("  clusterName=%v\n", o.ClusterName)
 	out += fmt.Sprintf("  nbRecords=%v\n", o.NbRecords)
 	out += fmt.Sprintf("  dataSize=%v\n", o.DataSize)
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  _highlightResult=%v\n", o.HighlightResult)
-	out += "}"
-	return out
+	return fmt.Sprintf("UserHit {\n%s}", out)
 }
 
 type NullableUserHit struct {

@@ -63,10 +63,9 @@ func (o DeleteApiKeyResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o DeleteApiKeyResponse) String() string {
-	out := "DeleteApiKeyResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  deletedAt=%v\n", o.DeletedAt)
-	out += "}"
-	return out
+	return fmt.Sprintf("DeleteApiKeyResponse {\n%s}", out)
 }
 
 type NullableDeleteApiKeyResponse struct {

@@ -46,8 +46,6 @@ func NewBaseRecommendRequest(indexName string, threshold int32, opts ...BaseReco
 	this := &BaseRecommendRequest{}
 	this.IndexName = indexName
 	this.Threshold = threshold
-	var maxRecommendations int32 = 0
-	this.MaxRecommendations = &maxRecommendations
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -229,14 +227,13 @@ func (o BaseRecommendRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseRecommendRequest) String() string {
-	out := "BaseRecommendRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
 	out += fmt.Sprintf("  threshold=%v\n", o.Threshold)
 	out += fmt.Sprintf("  maxRecommendations=%v\n", o.MaxRecommendations)
 	out += fmt.Sprintf("  queryParameters=%v\n", o.QueryParameters)
 	out += fmt.Sprintf("  fallbackParameters=%v\n", o.FallbackParameters)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseRecommendRequest {\n%s}", out)
 }
 
 type NullableBaseRecommendRequest struct {

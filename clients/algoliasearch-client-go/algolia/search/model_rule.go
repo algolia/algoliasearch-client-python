@@ -60,8 +60,6 @@ func WithRuleValidity(val []TimeRange) RuleOption {
 func NewRule(objectID string, opts ...RuleOption) *Rule {
 	this := &Rule{}
 	this.ObjectID = objectID
-	var enabled bool = true
-	this.Enabled = &enabled
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -286,15 +284,14 @@ func (o Rule) MarshalJSON() ([]byte, error) {
 }
 
 func (o Rule) String() string {
-	out := "Rule {\n"
+	out := ""
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  conditions=%v\n", o.Conditions)
 	out += fmt.Sprintf("  consequence=%v\n", o.Consequence)
 	out += fmt.Sprintf("  description=%v\n", o.Description)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
 	out += fmt.Sprintf("  validity=%v\n", o.Validity)
-	out += "}"
-	return out
+	return fmt.Sprintf("Rule {\n%s}", out)
 }
 
 type NullableRule struct {

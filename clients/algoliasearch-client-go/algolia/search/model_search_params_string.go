@@ -26,8 +26,6 @@ func WithSearchParamsStringParams(val string) SearchParamsStringOption {
 // will change when the set of required properties is changed
 func NewSearchParamsString(opts ...SearchParamsStringOption) *SearchParamsString {
 	this := &SearchParamsString{}
-	var params string = ""
-	this.Params = &params
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -85,10 +83,9 @@ func (o SearchParamsString) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchParamsString) String() string {
-	out := "SearchParamsString {\n"
+	out := ""
 	out += fmt.Sprintf("  params=%v\n", o.Params)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchParamsString {\n%s}", out)
 }
 
 type NullableSearchParamsString struct {

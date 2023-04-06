@@ -63,10 +63,9 @@ func (o AssignUserIdParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o AssignUserIdParams) String() string {
-	out := "AssignUserIdParams {\n"
+	out := ""
 	out += fmt.Sprintf("  cluster=%v\n", o.Cluster)
-	out += "}"
-	return out
+	return fmt.Sprintf("AssignUserIdParams {\n%s}", out)
 }
 
 type NullableAssignUserIdParams struct {

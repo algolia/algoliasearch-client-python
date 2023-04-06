@@ -167,12 +167,11 @@ func (o Personalization) MarshalJSON() ([]byte, error) {
 }
 
 func (o Personalization) String() string {
-	out := "Personalization {\n"
+	out := ""
 	out += fmt.Sprintf("  filtersScore=%v\n", o.FiltersScore)
 	out += fmt.Sprintf("  rankingScore=%v\n", o.RankingScore)
 	out += fmt.Sprintf("  score=%v\n", o.Score)
-	out += "}"
-	return out
+	return fmt.Sprintf("Personalization {\n%s}", out)
 }
 
 type NullablePersonalization struct {

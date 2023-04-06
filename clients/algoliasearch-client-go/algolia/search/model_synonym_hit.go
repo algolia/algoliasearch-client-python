@@ -355,7 +355,7 @@ func (o SynonymHit) MarshalJSON() ([]byte, error) {
 }
 
 func (o SynonymHit) String() string {
-	out := "SynonymHit {\n"
+	out := ""
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  synonyms=%v\n", o.Synonyms)
@@ -364,8 +364,7 @@ func (o SynonymHit) String() string {
 	out += fmt.Sprintf("  corrections=%v\n", o.Corrections)
 	out += fmt.Sprintf("  placeholder=%v\n", o.Placeholder)
 	out += fmt.Sprintf("  replacements=%v\n", o.Replacements)
-	out += "}"
-	return out
+	return fmt.Sprintf("SynonymHit {\n%s}", out)
 }
 
 type NullableSynonymHit struct {

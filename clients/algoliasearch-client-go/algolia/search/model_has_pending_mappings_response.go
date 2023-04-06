@@ -111,11 +111,10 @@ func (o HasPendingMappingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o HasPendingMappingsResponse) String() string {
-	out := "HasPendingMappingsResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  pending=%v\n", o.Pending)
 	out += fmt.Sprintf("  clusters=%v\n", o.Clusters)
-	out += "}"
-	return out
+	return fmt.Sprintf("HasPendingMappingsResponse {\n%s}", out)
 }
 
 type NullableHasPendingMappingsResponse struct {

@@ -298,7 +298,7 @@ func (o *RecommendHit) UnmarshalJSON(bytes []byte) (err error) {
 }
 
 func (o RecommendHit) String() string {
-	out := "RecommendHit {\n"
+	out := ""
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  _highlightResult=%v\n", o.HighlightResult)
 	out += fmt.Sprintf("  _snippetResult=%v\n", o.SnippetResult)
@@ -308,9 +308,7 @@ func (o RecommendHit) String() string {
 	for key, value := range o.AdditionalProperties {
 		out += fmt.Sprintf("  %s=%v\n", key, value)
 	}
-
-	out += "}"
-	return out
+	return fmt.Sprintf("RecommendHit {\n%s}", out)
 }
 
 type NullableRecommendHit struct {

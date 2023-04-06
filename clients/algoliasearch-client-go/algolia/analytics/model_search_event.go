@@ -93,11 +93,10 @@ func (o SearchEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchEvent) String() string {
-	out := "SearchEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  date=%v\n", o.Date)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchEvent {\n%s}", out)
 }
 
 type NullableSearchEvent struct {

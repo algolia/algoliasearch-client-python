@@ -153,13 +153,12 @@ func (o GetTopFilterForAttribute) MarshalJSON() ([]byte, error) {
 }
 
 func (o GetTopFilterForAttribute) String() string {
-	out := "GetTopFilterForAttribute {\n"
+	out := ""
 	out += fmt.Sprintf("  attribute=%v\n", o.Attribute)
 	out += fmt.Sprintf("  operator=%v\n", o.Operator)
 	out += fmt.Sprintf("  value=%v\n", o.Value)
 	out += fmt.Sprintf("  count=%v\n", o.Count)
-	out += "}"
-	return out
+	return fmt.Sprintf("GetTopFilterForAttribute {\n%s}", out)
 }
 
 type NullableGetTopFilterForAttribute struct {

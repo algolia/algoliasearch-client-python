@@ -62,10 +62,9 @@ func (o AuthenticationSearch) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthenticationSearch) String() string {
-	out := "AuthenticationSearch {\n"
+	out := ""
 	out += fmt.Sprintf("  authenticationIDs=%v\n", o.AuthenticationIDs)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthenticationSearch {\n%s}", out)
 }
 
 type NullableAuthenticationSearch struct {

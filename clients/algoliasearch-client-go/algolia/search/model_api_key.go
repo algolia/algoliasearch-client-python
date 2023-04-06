@@ -77,16 +77,6 @@ func WithApiKeyValidity(val int32) ApiKeyOption {
 func NewApiKey(acl []Acl, opts ...ApiKeyOption) *ApiKey {
 	this := &ApiKey{}
 	this.Acl = acl
-	var description string = ""
-	this.Description = &description
-	var maxHitsPerQuery int32 = 0
-	this.MaxHitsPerQuery = &maxHitsPerQuery
-	var maxQueriesPerIPPerHour int32 = 0
-	this.MaxQueriesPerIPPerHour = &maxQueriesPerIPPerHour
-	var queryParameters string = ""
-	this.QueryParameters = &queryParameters
-	var validity int32 = 0
-	this.Validity = &validity
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -389,7 +379,7 @@ func (o ApiKey) MarshalJSON() ([]byte, error) {
 }
 
 func (o ApiKey) String() string {
-	out := "ApiKey {\n"
+	out := ""
 	out += fmt.Sprintf("  acl=%v\n", o.Acl)
 	out += fmt.Sprintf("  description=%v\n", o.Description)
 	out += fmt.Sprintf("  indexes=%v\n", o.Indexes)
@@ -398,8 +388,7 @@ func (o ApiKey) String() string {
 	out += fmt.Sprintf("  queryParameters=%v\n", o.QueryParameters)
 	out += fmt.Sprintf("  referers=%v\n", o.Referers)
 	out += fmt.Sprintf("  validity=%v\n", o.Validity)
-	out += "}"
-	return out
+	return fmt.Sprintf("ApiKey {\n%s}", out)
 }
 
 type NullableApiKey struct {

@@ -138,12 +138,6 @@ func WithBaseIndexSettingsCustomNormalization(val map[string]map[string]string) 
 // will change when the set of required properties is changed
 func NewBaseIndexSettings(opts ...BaseIndexSettingsOption) *BaseIndexSettings {
 	this := &BaseIndexSettings{}
-	var paginationLimitedTo int32 = 1000
-	this.PaginationLimitedTo = &paginationLimitedTo
-	var allowCompressionOfIntegerArray bool = false
-	this.AllowCompressionOfIntegerArray = &allowCompressionOfIntegerArray
-	var separatorsToIndex string = ""
-	this.SeparatorsToIndex = &separatorsToIndex
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -695,7 +689,7 @@ func (o BaseIndexSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseIndexSettings) String() string {
-	out := "BaseIndexSettings {\n"
+	out := ""
 	out += fmt.Sprintf("  replicas=%v\n", o.Replicas)
 	out += fmt.Sprintf("  paginationLimitedTo=%v\n", o.PaginationLimitedTo)
 	out += fmt.Sprintf("  unretrievableAttributes=%v\n", o.UnretrievableAttributes)
@@ -711,8 +705,7 @@ func (o BaseIndexSettings) String() string {
 	out += fmt.Sprintf("  searchableAttributes=%v\n", o.SearchableAttributes)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
 	out += fmt.Sprintf("  customNormalization=%v\n", o.CustomNormalization)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseIndexSettings {\n%s}", out)
 }
 
 type NullableBaseIndexSettings struct {

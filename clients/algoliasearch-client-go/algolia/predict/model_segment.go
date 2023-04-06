@@ -257,7 +257,7 @@ func (o Segment) MarshalJSON() ([]byte, error) {
 }
 
 func (o Segment) String() string {
-	out := "Segment {\n"
+	out := ""
 	out += fmt.Sprintf("  segmentID=%v\n", o.SegmentID)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  conditions=%v\n", o.Conditions)
@@ -265,8 +265,7 @@ func (o Segment) String() string {
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  lastUpdatedAt=%v\n", o.LastUpdatedAt)
 	out += fmt.Sprintf("  errorMessage=%v\n", o.ErrorMessage)
-	out += "}"
-	return out
+	return fmt.Sprintf("Segment {\n%s}", out)
 }
 
 type NullableSegment struct {

@@ -372,7 +372,7 @@ func (o InsightEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (o InsightEvent) String() string {
-	out := "InsightEvent {\n"
+	out := ""
 	out += fmt.Sprintf("  eventType=%v\n", o.EventType)
 	out += fmt.Sprintf("  eventName=%v\n", o.EventName)
 	out += fmt.Sprintf("  index=%v\n", o.Index)
@@ -382,8 +382,7 @@ func (o InsightEvent) String() string {
 	out += fmt.Sprintf("  objectIDs=%v\n", o.ObjectIDs)
 	out += fmt.Sprintf("  filters=%v\n", o.Filters)
 	out += fmt.Sprintf("  positions=%v\n", o.Positions)
-	out += "}"
-	return out
+	return fmt.Sprintf("InsightEvent {\n%s}", out)
 }
 
 type NullableInsightEvent struct {

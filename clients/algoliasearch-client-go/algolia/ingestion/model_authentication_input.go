@@ -62,10 +62,9 @@ func (o AuthenticationInput) MarshalJSON() ([]byte, error) {
 }
 
 func (o AuthenticationInput) String() string {
-	out := "AuthenticationInput {\n"
+	out := ""
 	out += fmt.Sprintf("  input=%v\n", o.Input)
-	out += "}"
-	return out
+	return fmt.Sprintf("AuthenticationInput {\n%s}", out)
 }
 
 type NullableAuthenticationInput struct {

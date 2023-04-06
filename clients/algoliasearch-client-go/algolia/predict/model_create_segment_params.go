@@ -92,11 +92,10 @@ func (o CreateSegmentParams) MarshalJSON() ([]byte, error) {
 }
 
 func (o CreateSegmentParams) String() string {
-	out := "CreateSegmentParams {\n"
+	out := ""
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  conditions=%v\n", o.Conditions)
-	out += "}"
-	return out
+	return fmt.Sprintf("CreateSegmentParams {\n%s}", out)
 }
 
 type NullableCreateSegmentParams struct {

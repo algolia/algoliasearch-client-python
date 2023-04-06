@@ -168,13 +168,12 @@ func (o SourceCreate) MarshalJSON() ([]byte, error) {
 }
 
 func (o SourceCreate) String() string {
-	out := "SourceCreate {\n"
+	out := ""
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  input=%v\n", o.Input)
 	out += fmt.Sprintf("  authenticationID=%v\n", o.AuthenticationID)
-	out += "}"
-	return out
+	return fmt.Sprintf("SourceCreate {\n%s}", out)
 }
 
 type NullableSourceCreate struct {

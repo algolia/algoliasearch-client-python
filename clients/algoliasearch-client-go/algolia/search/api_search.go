@@ -8,66 +8,79 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/call"
 )
 
 type Option struct {
-	Type  string
-	Name  string
-	Value string
+	optionType string
+	name       string
+	value      string
 }
 
-func WithPage(page int32) Option {
+func QueryParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "page",
-		Value: parameterToString(page),
+		optionType: "query",
+		name:       name,
+		value:      parameterToString(val),
 	}
 }
 
-func WithItemsPerPage(itemsPerPage int32) Option {
+func HeaderParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "itemsPerPage",
-		Value: parameterToString(itemsPerPage),
+		optionType: "header",
+		name:       "itemsPerPage",
+		value:      parameterToString(val),
 	}
 }
 
-func WithBody(body any) Option {
-	return Option{
-		Type:  "body",
-		Name:  "body",
-		Value: parameterToString(body),
-	}
+type ApiAddApiKeyRequest struct {
+	apiKey *ApiKey
+}
+
+func (r ApiAddApiKeyRequest) WithApiKey(apiKey ApiKey) ApiAddApiKeyRequest {
+	r.apiKey = &apiKey
+	return r
+}
+
+// @return ApiAddApiKeyRequest
+func (c *APIClient) NewApiAddApiKeyRequest() ApiAddApiKeyRequest {
+	return ApiAddApiKeyRequest{}
 }
 
 // @return AddApiKeyResponse
-func (c *APIClient) AddApiKey(apiKey *ApiKey) (*AddApiKeyResponse, error) {
+func (c *APIClient) AddApiKey(r ApiAddApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *AddApiKeyResponse
+		postBody    any
+		returnValue *AddApiKeyResponse
 	)
 
 	requestPath := "/1/keys"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if apiKey == nil {
+	if r.apiKey == nil {
 		return returnValue, reportError("apiKey is required and must be specified")
 	}
 
-	// body params
-	if apiKey != nil {
-		localVarPostBody = apiKey
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.apiKey
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -133,33 +146,58 @@ func (c *APIClient) AddApiKey(apiKey *ApiKey) (*AddApiKeyResponse, error) {
 	return returnValue, nil
 }
 
+type ApiAddOrUpdateObjectRequest struct {
+	indexName string
+	objectID  string
+	body      map[string]interface{}
+}
+
+// The Algolia object.
+func (r ApiAddOrUpdateObjectRequest) WithBody(body map[string]interface{}) ApiAddOrUpdateObjectRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiAddOrUpdateObjectRequest
+func (c *APIClient) NewApiAddOrUpdateObjectRequest(indexName string, objectID string) ApiAddOrUpdateObjectRequest {
+	return ApiAddOrUpdateObjectRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
+}
+
 // @return UpdatedAtWithObjectIdResponse
-func (c *APIClient) AddOrUpdateObject(indexName string, objectID string, body map[string]interface{}) (*UpdatedAtWithObjectIdResponse, error) {
+func (c *APIClient) AddOrUpdateObject(r ApiAddOrUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtWithObjectIdResponse
+		postBody    any
+		returnValue *UpdatedAtWithObjectIdResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -225,34 +263,54 @@ func (c *APIClient) AddOrUpdateObject(indexName string, objectID string, body ma
 	return returnValue, nil
 }
 
+type ApiAppendSourceRequest struct {
+	source *Source
+}
+
+// The source to add.
+func (r ApiAppendSourceRequest) WithSource(source Source) ApiAppendSourceRequest {
+	r.source = &source
+	return r
+}
+
+// @return ApiAppendSourceRequest
+func (c *APIClient) NewApiAppendSourceRequest() ApiAppendSourceRequest {
+	return ApiAppendSourceRequest{}
+}
+
 // @return CreatedAtResponse
-func (c *APIClient) AppendSource(source *Source) (*CreatedAtResponse, error) {
+func (c *APIClient) AppendSource(r ApiAppendSourceRequest, opts ...Option) (*CreatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *CreatedAtResponse
+		postBody    any
+		returnValue *CreatedAtResponse
 	)
 
 	requestPath := "/1/security/sources/append"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if source == nil {
+	if r.source == nil {
 		return returnValue, reportError("source is required and must be specified")
 	}
 
-	// body params
-	if source != nil {
-		localVarPostBody = source
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.source
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -318,39 +376,65 @@ func (c *APIClient) AppendSource(source *Source) (*CreatedAtResponse, error) {
 	return returnValue, nil
 }
 
+type ApiAssignUserIdRequest struct {
+	xAlgoliaUserID     string
+	assignUserIdParams *AssignUserIdParams
+}
+
+// userID to assign.
+func (r ApiAssignUserIdRequest) WithXAlgoliaUserID(xAlgoliaUserID string) ApiAssignUserIdRequest {
+	r.xAlgoliaUserID = xAlgoliaUserID
+	return r
+}
+
+func (r ApiAssignUserIdRequest) WithAssignUserIdParams(assignUserIdParams AssignUserIdParams) ApiAssignUserIdRequest {
+	r.assignUserIdParams = &assignUserIdParams
+	return r
+}
+
+// @return ApiAssignUserIdRequest
+func (c *APIClient) NewApiAssignUserIdRequest() ApiAssignUserIdRequest {
+	return ApiAssignUserIdRequest{}
+}
+
 // @return CreatedAtResponse
-func (c *APIClient) AssignUserId(xAlgoliaUserID string, assignUserIdParams *AssignUserIdParams) (*CreatedAtResponse, error) {
+func (c *APIClient) AssignUserId(r ApiAssignUserIdRequest, opts ...Option) (*CreatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *CreatedAtResponse
+		postBody    any
+		returnValue *CreatedAtResponse
 	)
 
 	requestPath := "/1/clusters/mapping"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if xAlgoliaUserID == "" {
+	if r.xAlgoliaUserID == "" {
 		return returnValue, reportError("xAlgoliaUserID is required and must be specified")
 	}
-	if assignUserIdParams == nil {
+	if r.assignUserIdParams == nil {
 		return returnValue, reportError("assignUserIdParams is required and must be specified")
 	}
 
-	headers["X-Algolia-User-ID"] = parameterToString(xAlgoliaUserID)
+	headers["X-Algolia-User-ID"] = parameterToString(r.xAlgoliaUserID)
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
 
 	// body params
-	if assignUserIdParams != nil {
-		localVarPostBody = assignUserIdParams
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.assignUserIdParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -414,37 +498,59 @@ func (c *APIClient) AssignUserId(xAlgoliaUserID string, assignUserIdParams *Assi
 	}
 
 	return returnValue, nil
+}
+
+type ApiBatchRequest struct {
+	indexName        string
+	batchWriteParams *BatchWriteParams
+}
+
+func (r ApiBatchRequest) WithBatchWriteParams(batchWriteParams BatchWriteParams) ApiBatchRequest {
+	r.batchWriteParams = &batchWriteParams
+	return r
+}
+
+// @return ApiBatchRequest
+func (c *APIClient) NewApiBatchRequest(indexName string) ApiBatchRequest {
+	return ApiBatchRequest{
+		indexName: indexName,
+	}
 }
 
 // @return BatchResponse
-func (c *APIClient) Batch(indexName string, batchWriteParams *BatchWriteParams) (*BatchResponse, error) {
+func (c *APIClient) Batch(r ApiBatchRequest, opts ...Option) (*BatchResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *BatchResponse
+		postBody    any
+		returnValue *BatchResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/batch"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if batchWriteParams == nil {
+	if r.batchWriteParams == nil {
 		return returnValue, reportError("batchWriteParams is required and must be specified")
 	}
 
-	// body params
-	if batchWriteParams != nil {
-		localVarPostBody = batchWriteParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.batchWriteParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -510,39 +616,65 @@ func (c *APIClient) Batch(indexName string, batchWriteParams *BatchWriteParams) 
 	return returnValue, nil
 }
 
+type ApiBatchAssignUserIdsRequest struct {
+	xAlgoliaUserID           string
+	batchAssignUserIdsParams *BatchAssignUserIdsParams
+}
+
+// userID to assign.
+func (r ApiBatchAssignUserIdsRequest) WithXAlgoliaUserID(xAlgoliaUserID string) ApiBatchAssignUserIdsRequest {
+	r.xAlgoliaUserID = xAlgoliaUserID
+	return r
+}
+
+func (r ApiBatchAssignUserIdsRequest) WithBatchAssignUserIdsParams(batchAssignUserIdsParams BatchAssignUserIdsParams) ApiBatchAssignUserIdsRequest {
+	r.batchAssignUserIdsParams = &batchAssignUserIdsParams
+	return r
+}
+
+// @return ApiBatchAssignUserIdsRequest
+func (c *APIClient) NewApiBatchAssignUserIdsRequest() ApiBatchAssignUserIdsRequest {
+	return ApiBatchAssignUserIdsRequest{}
+}
+
 // @return CreatedAtResponse
-func (c *APIClient) BatchAssignUserIds(xAlgoliaUserID string, batchAssignUserIdsParams *BatchAssignUserIdsParams) (*CreatedAtResponse, error) {
+func (c *APIClient) BatchAssignUserIds(r ApiBatchAssignUserIdsRequest, opts ...Option) (*CreatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *CreatedAtResponse
+		postBody    any
+		returnValue *CreatedAtResponse
 	)
 
 	requestPath := "/1/clusters/mapping/batch"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if xAlgoliaUserID == "" {
+	if r.xAlgoliaUserID == "" {
 		return returnValue, reportError("xAlgoliaUserID is required and must be specified")
 	}
-	if batchAssignUserIdsParams == nil {
+	if r.batchAssignUserIdsParams == nil {
 		return returnValue, reportError("batchAssignUserIdsParams is required and must be specified")
 	}
 
-	headers["X-Algolia-User-ID"] = parameterToString(xAlgoliaUserID)
+	headers["X-Algolia-User-ID"] = parameterToString(r.xAlgoliaUserID)
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
 
 	// body params
-	if batchAssignUserIdsParams != nil {
-		localVarPostBody = batchAssignUserIdsParams
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.batchAssignUserIdsParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -608,35 +740,57 @@ func (c *APIClient) BatchAssignUserIds(xAlgoliaUserID string, batchAssignUserIds
 	return returnValue, nil
 }
 
+type ApiBatchDictionaryEntriesRequest struct {
+	dictionaryName               DictionaryType
+	batchDictionaryEntriesParams *BatchDictionaryEntriesParams
+}
+
+func (r ApiBatchDictionaryEntriesRequest) WithBatchDictionaryEntriesParams(batchDictionaryEntriesParams BatchDictionaryEntriesParams) ApiBatchDictionaryEntriesRequest {
+	r.batchDictionaryEntriesParams = &batchDictionaryEntriesParams
+	return r
+}
+
+// @return ApiBatchDictionaryEntriesRequest
+func (c *APIClient) NewApiBatchDictionaryEntriesRequest(dictionaryName DictionaryType) ApiBatchDictionaryEntriesRequest {
+	return ApiBatchDictionaryEntriesRequest{
+		dictionaryName: dictionaryName,
+	}
+}
+
 // @return UpdatedAtResponse
-func (c *APIClient) BatchDictionaryEntries(dictionaryName *DictionaryType, batchDictionaryEntriesParams *BatchDictionaryEntriesParams) (*UpdatedAtResponse, error) {
+func (c *APIClient) BatchDictionaryEntries(r ApiBatchDictionaryEntriesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtResponse
+		postBody    any
+		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/dictionaries/{dictionaryName}/batch"
-	requestPath = strings.Replace(requestPath, "{"+"dictionaryName"+"}", url.PathEscape(parameterToString(dictionaryName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"dictionaryName"+"}", url.PathEscape(parameterToString(r.dictionaryName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if batchDictionaryEntriesParams == nil {
+	if r.batchDictionaryEntriesParams == nil {
 		return returnValue, reportError("batchDictionaryEntriesParams is required and must be specified")
 	}
 
-	// body params
-	if batchDictionaryEntriesParams != nil {
-		localVarPostBody = batchDictionaryEntriesParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.batchDictionaryEntriesParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -702,43 +856,54 @@ func (c *APIClient) BatchDictionaryEntries(dictionaryName *DictionaryType, batch
 	return returnValue, nil
 }
 
+type ApiBrowseRequest struct {
+	indexName    string
+	browseParams *BrowseParams
+}
+
+func (r ApiBrowseRequest) WithBrowseParams(browseParams BrowseParams) ApiBrowseRequest {
+	r.browseParams = &browseParams
+	return r
+}
+
+// @return ApiBrowseRequest
+func (c *APIClient) NewApiBrowseRequest(indexName string) ApiBrowseRequest {
+	return ApiBrowseRequest{
+		indexName: indexName,
+	}
+}
+
 // @return BrowseResponse
-func (c *APIClient) Browse(indexName string, opts ...Option) (*BrowseResponse, error) {
+func (c *APIClient) Browse(r ApiBrowseRequest, opts ...Option) (*BrowseResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *BrowseResponse
+		postBody    any
+		returnValue *BrowseResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/browse"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if browseParams != nil {
-		localVarPostBody = browseParams
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.browseParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -804,35 +969,57 @@ func (c *APIClient) Browse(indexName string, opts ...Option) (*BrowseResponse, e
 	return returnValue, nil
 }
 
-// @return UpdatedAtResponse
-func (c *APIClient) ClearAllSynonyms(indexName string, opts ...Option) (*UpdatedAtResponse, error) {
-	var (
-		localVarPostBody any
+type ApiClearAllSynonymsRequest struct {
+	indexName         string
+	forwardToReplicas bool
+}
 
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiClearAllSynonymsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiClearAllSynonymsRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// @return ApiClearAllSynonymsRequest
+func (c *APIClient) NewApiClearAllSynonymsRequest(indexName string) ApiClearAllSynonymsRequest {
+	return ApiClearAllSynonymsRequest{
+		indexName: indexName,
+	}
+}
+
+// @return UpdatedAtResponse
+func (c *APIClient) ClearAllSynonyms(r ApiClearAllSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
+	var (
+		postBody    any
 		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/synonyms/clear"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -898,26 +1085,46 @@ func (c *APIClient) ClearAllSynonyms(indexName string, opts ...Option) (*Updated
 	return returnValue, nil
 }
 
-// @return UpdatedAtResponse
-func (c *APIClient) ClearObjects(indexName string) (*UpdatedAtResponse, error) {
-	var (
-		localVarPostBody any
+type ApiClearObjectsRequest struct {
+	indexName string
+}
 
+// @return ApiClearObjectsRequest
+func (c *APIClient) NewApiClearObjectsRequest(indexName string) ApiClearObjectsRequest {
+	return ApiClearObjectsRequest{
+		indexName: indexName,
+	}
+}
+
+// @return UpdatedAtResponse
+func (c *APIClient) ClearObjects(r ApiClearObjectsRequest, opts ...Option) (*UpdatedAtResponse, error) {
+	var (
+		postBody    any
 		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/clear"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -983,35 +1190,57 @@ func (c *APIClient) ClearObjects(indexName string) (*UpdatedAtResponse, error) {
 	return returnValue, nil
 }
 
-// @return UpdatedAtResponse
-func (c *APIClient) ClearRules(indexName string, opts ...Option) (*UpdatedAtResponse, error) {
-	var (
-		localVarPostBody any
+type ApiClearRulesRequest struct {
+	indexName         string
+	forwardToReplicas bool
+}
 
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiClearRulesRequest) WithForwardToReplicas(forwardToReplicas bool) ApiClearRulesRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// @return ApiClearRulesRequest
+func (c *APIClient) NewApiClearRulesRequest(indexName string) ApiClearRulesRequest {
+	return ApiClearRulesRequest{
+		indexName: indexName,
+	}
+}
+
+// @return UpdatedAtResponse
+func (c *APIClient) ClearRules(r ApiClearRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
+	var (
+		postBody    any
 		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/rules/clear"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1077,35 +1306,57 @@ func (c *APIClient) ClearRules(indexName string, opts ...Option) (*UpdatedAtResp
 	return returnValue, nil
 }
 
-// @return map[string]interface{}
-func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, error) {
-	var (
-		localVarPostBody any
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
 
+// Query parameters to be applied to the current query.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiDelRequest
+func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
+	return ApiDelRequest{
+		path: path,
+	}
+}
+
+// @return map[string]interface{}
+func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	var (
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1171,26 +1422,46 @@ func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, er
 	return returnValue, nil
 }
 
-// @return DeleteApiKeyResponse
-func (c *APIClient) DeleteApiKey(key string) (*DeleteApiKeyResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteApiKeyRequest struct {
+	key string
+}
 
+// @return ApiDeleteApiKeyRequest
+func (c *APIClient) NewApiDeleteApiKeyRequest(key string) ApiDeleteApiKeyRequest {
+	return ApiDeleteApiKeyRequest{
+		key: key,
+	}
+}
+
+// @return DeleteApiKeyResponse
+func (c *APIClient) DeleteApiKey(r ApiDeleteApiKeyRequest, opts ...Option) (*DeleteApiKeyResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteApiKeyResponse
 	)
 
 	requestPath := "/1/keys/{key}"
-	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(key)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(r.key)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1256,35 +1527,57 @@ func (c *APIClient) DeleteApiKey(key string) (*DeleteApiKeyResponse, error) {
 	return returnValue, nil
 }
 
+type ApiDeleteByRequest struct {
+	indexName      string
+	deleteByParams *DeleteByParams
+}
+
+func (r ApiDeleteByRequest) WithDeleteByParams(deleteByParams DeleteByParams) ApiDeleteByRequest {
+	r.deleteByParams = &deleteByParams
+	return r
+}
+
+// @return ApiDeleteByRequest
+func (c *APIClient) NewApiDeleteByRequest(indexName string) ApiDeleteByRequest {
+	return ApiDeleteByRequest{
+		indexName: indexName,
+	}
+}
+
 // @return DeletedAtResponse
-func (c *APIClient) DeleteBy(indexName string, deleteByParams *DeleteByParams) (*DeletedAtResponse, error) {
+func (c *APIClient) DeleteBy(r ApiDeleteByRequest, opts ...Option) (*DeletedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *DeletedAtResponse
+		postBody    any
+		returnValue *DeletedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/deleteByQuery"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if deleteByParams == nil {
+	if r.deleteByParams == nil {
 		return returnValue, reportError("deleteByParams is required and must be specified")
 	}
 
-	// body params
-	if deleteByParams != nil {
-		localVarPostBody = deleteByParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.deleteByParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1350,26 +1643,46 @@ func (c *APIClient) DeleteBy(indexName string, deleteByParams *DeleteByParams) (
 	return returnValue, nil
 }
 
-// @return DeletedAtResponse
-func (c *APIClient) DeleteIndex(indexName string) (*DeletedAtResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteIndexRequest struct {
+	indexName string
+}
 
+// @return ApiDeleteIndexRequest
+func (c *APIClient) NewApiDeleteIndexRequest(indexName string) ApiDeleteIndexRequest {
+	return ApiDeleteIndexRequest{
+		indexName: indexName,
+	}
+}
+
+// @return DeletedAtResponse
+func (c *APIClient) DeleteIndex(r ApiDeleteIndexRequest, opts ...Option) (*DeletedAtResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeletedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1435,27 +1748,49 @@ func (c *APIClient) DeleteIndex(indexName string) (*DeletedAtResponse, error) {
 	return returnValue, nil
 }
 
-// @return DeletedAtResponse
-func (c *APIClient) DeleteObject(indexName string, objectID string) (*DeletedAtResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteObjectRequest struct {
+	indexName string
+	objectID  string
+}
 
+// @return ApiDeleteObjectRequest
+func (c *APIClient) NewApiDeleteObjectRequest(indexName string, objectID string) ApiDeleteObjectRequest {
+	return ApiDeleteObjectRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
+}
+
+// @return DeletedAtResponse
+func (c *APIClient) DeleteObject(r ApiDeleteObjectRequest, opts ...Option) (*DeletedAtResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeletedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1521,36 +1856,60 @@ func (c *APIClient) DeleteObject(indexName string, objectID string) (*DeletedAtR
 	return returnValue, nil
 }
 
-// @return UpdatedAtResponse
-func (c *APIClient) DeleteRule(indexName string, objectID string, opts ...Option) (*UpdatedAtResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteRuleRequest struct {
+	indexName         string
+	objectID          string
+	forwardToReplicas bool
+}
 
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiDeleteRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiDeleteRuleRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// @return ApiDeleteRuleRequest
+func (c *APIClient) NewApiDeleteRuleRequest(indexName string, objectID string) ApiDeleteRuleRequest {
+	return ApiDeleteRuleRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
+}
+
+// @return UpdatedAtResponse
+func (c *APIClient) DeleteRule(r ApiDeleteRuleRequest, opts ...Option) (*UpdatedAtResponse, error) {
+	var (
+		postBody    any
 		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/rules/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1616,26 +1975,46 @@ func (c *APIClient) DeleteRule(indexName string, objectID string, opts ...Option
 	return returnValue, nil
 }
 
-// @return DeleteSourceResponse
-func (c *APIClient) DeleteSource(source string) (*DeleteSourceResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteSourceRequest struct {
+	source string
+}
 
+// @return ApiDeleteSourceRequest
+func (c *APIClient) NewApiDeleteSourceRequest(source string) ApiDeleteSourceRequest {
+	return ApiDeleteSourceRequest{
+		source: source,
+	}
+}
+
+// @return DeleteSourceResponse
+func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*DeleteSourceResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeleteSourceResponse
 	)
 
 	requestPath := "/1/security/sources/{source}"
-	requestPath = strings.Replace(requestPath, "{"+"source"+"}", url.PathEscape(parameterToString(source)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"source"+"}", url.PathEscape(parameterToString(r.source)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1701,36 +2080,60 @@ func (c *APIClient) DeleteSource(source string) (*DeleteSourceResponse, error) {
 	return returnValue, nil
 }
 
-// @return DeletedAtResponse
-func (c *APIClient) DeleteSynonym(indexName string, objectID string, opts ...Option) (*DeletedAtResponse, error) {
-	var (
-		localVarPostBody any
+type ApiDeleteSynonymRequest struct {
+	indexName         string
+	objectID          string
+	forwardToReplicas bool
+}
 
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiDeleteSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) ApiDeleteSynonymRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// @return ApiDeleteSynonymRequest
+func (c *APIClient) NewApiDeleteSynonymRequest(indexName string, objectID string) ApiDeleteSynonymRequest {
+	return ApiDeleteSynonymRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
+}
+
+// @return DeletedAtResponse
+func (c *APIClient) DeleteSynonym(r ApiDeleteSynonymRequest, opts ...Option) (*DeletedAtResponse, error) {
+	var (
+		postBody    any
 		returnValue *DeletedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/synonyms/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1796,35 +2199,57 @@ func (c *APIClient) DeleteSynonym(indexName string, objectID string, opts ...Opt
 	return returnValue, nil
 }
 
-// @return map[string]interface{}
-func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, error) {
-	var (
-		localVarPostBody any
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
 
+// Query parameters to be applied to the current query.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiGetRequest
+func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
+	return ApiGetRequest{
+		path: path,
+	}
+}
+
+// @return map[string]interface{}
+func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	var (
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1890,26 +2315,46 @@ func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, er
 	return returnValue, nil
 }
 
-// @return GetApiKeyResponse
-func (c *APIClient) GetApiKey(key string) (*GetApiKeyResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetApiKeyRequest struct {
+	key string
+}
 
+// @return ApiGetApiKeyRequest
+func (c *APIClient) NewApiGetApiKeyRequest(key string) ApiGetApiKeyRequest {
+	return ApiGetApiKeyRequest{
+		key: key,
+	}
+}
+
+// @return GetApiKeyResponse
+func (c *APIClient) GetApiKey(r ApiGetApiKeyRequest, opts ...Option) (*GetApiKeyResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetApiKeyResponse
 	)
 
 	requestPath := "/1/keys/{key}"
-	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(key)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(r.key)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1975,11 +2420,18 @@ func (c *APIClient) GetApiKey(key string) (*GetApiKeyResponse, error) {
 	return returnValue, nil
 }
 
-// @return map[string]Languages
-func (c *APIClient) GetDictionaryLanguages() (*map[string]Languages, error) {
-	var (
-		localVarPostBody any
+type ApiGetDictionaryLanguagesRequest struct {
+}
 
+// @return ApiGetDictionaryLanguagesRequest
+func (c *APIClient) NewApiGetDictionaryLanguagesRequest() ApiGetDictionaryLanguagesRequest {
+	return ApiGetDictionaryLanguagesRequest{}
+}
+
+// @return map[string]Languages
+func (c *APIClient) GetDictionaryLanguages(r ApiGetDictionaryLanguagesRequest, opts ...Option) (*map[string]Languages, error) {
+	var (
+		postBody    any
 		returnValue *map[string]Languages
 	)
 
@@ -1988,12 +2440,22 @@ func (c *APIClient) GetDictionaryLanguages() (*map[string]Languages, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2059,11 +2521,18 @@ func (c *APIClient) GetDictionaryLanguages() (*map[string]Languages, error) {
 	return returnValue, nil
 }
 
-// @return GetDictionarySettingsResponse
-func (c *APIClient) GetDictionarySettings() (*GetDictionarySettingsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetDictionarySettingsRequest struct {
+}
 
+// @return ApiGetDictionarySettingsRequest
+func (c *APIClient) NewApiGetDictionarySettingsRequest() ApiGetDictionarySettingsRequest {
+	return ApiGetDictionarySettingsRequest{}
+}
+
+// @return GetDictionarySettingsResponse
+func (c *APIClient) GetDictionarySettings(r ApiGetDictionarySettingsRequest, opts ...Option) (*GetDictionarySettingsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetDictionarySettingsResponse
 	)
 
@@ -2072,12 +2541,22 @@ func (c *APIClient) GetDictionarySettings() (*GetDictionarySettingsResponse, err
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2143,11 +2622,46 @@ func (c *APIClient) GetDictionarySettings() (*GetDictionarySettingsResponse, err
 	return returnValue, nil
 }
 
-// @return GetLogsResponse
-func (c *APIClient) GetLogs(opts ...Option) (*GetLogsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetLogsRequest struct {
+	offset    int32
+	length    int32
+	indexName string
+	type_     *LogType
+}
 
+// First entry to retrieve (zero-based). Log entries are sorted by decreasing date, therefore 0 designates the most recent log entry.
+func (r ApiGetLogsRequest) WithOffset(offset int32) ApiGetLogsRequest {
+	r.offset = offset
+	return r
+}
+
+// Maximum number of entries to retrieve. The maximum allowed value is 1000.
+func (r ApiGetLogsRequest) WithLength(length int32) ApiGetLogsRequest {
+	r.length = length
+	return r
+}
+
+// Index for which log entries should be retrieved. When omitted, log entries are retrieved across all indices.
+func (r ApiGetLogsRequest) WithIndexName(indexName string) ApiGetLogsRequest {
+	r.indexName = indexName
+	return r
+}
+
+// Type of log entries to retrieve. When omitted, all log entries are retrieved.
+func (r ApiGetLogsRequest) WithType_(type_ LogType) ApiGetLogsRequest {
+	r.type_ = &type_
+	return r
+}
+
+// @return ApiGetLogsRequest
+func (c *APIClient) NewApiGetLogsRequest() ApiGetLogsRequest {
+	return ApiGetLogsRequest{}
+}
+
+// @return GetLogsResponse
+func (c *APIClient) GetLogs(r ApiGetLogsRequest, opts ...Option) (*GetLogsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetLogsResponse
 	)
 
@@ -2156,21 +2670,35 @@ func (c *APIClient) GetLogs(opts ...Option) (*GetLogsResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.length) {
+		queryParams.Add("length", parameterToString(r.length))
+	}
+	if !isNilorEmpty(r.indexName) {
+		queryParams.Add("indexName", parameterToString(r.indexName))
+	}
+	if !isNilorEmpty(r.type_) {
+		queryParams.Add("type", parameterToString(*r.type_))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2236,36 +2764,60 @@ func (c *APIClient) GetLogs(opts ...Option) (*GetLogsResponse, error) {
 	return returnValue, nil
 }
 
-// @return map[string]string
-func (c *APIClient) GetObject(indexName string, objectID string, opts ...Option) (map[string]string, error) {
-	var (
-		localVarPostBody any
+type ApiGetObjectRequest struct {
+	indexName            string
+	objectID             string
+	attributesToRetrieve *[]string
+}
 
+// List of attributes to retrieve. If not specified, all retrievable attributes are returned.
+func (r ApiGetObjectRequest) WithAttributesToRetrieve(attributesToRetrieve []string) ApiGetObjectRequest {
+	r.attributesToRetrieve = &attributesToRetrieve
+	return r
+}
+
+// @return ApiGetObjectRequest
+func (c *APIClient) NewApiGetObjectRequest(indexName string, objectID string) ApiGetObjectRequest {
+	return ApiGetObjectRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
+}
+
+// @return map[string]string
+func (c *APIClient) GetObject(r ApiGetObjectRequest, opts ...Option) (map[string]string, error) {
+	var (
+		postBody    any
 		returnValue map[string]string
 	)
 
 	requestPath := "/1/indexes/{indexName}/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.attributesToRetrieve) {
+		queryParams.Add("attributesToRetrieve", parameterToString(*r.attributesToRetrieve))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2331,34 +2883,54 @@ func (c *APIClient) GetObject(indexName string, objectID string, opts ...Option)
 	return returnValue, nil
 }
 
+type ApiGetObjectsRequest struct {
+	getObjectsParams *GetObjectsParams
+}
+
+// The Algolia object.
+func (r ApiGetObjectsRequest) WithGetObjectsParams(getObjectsParams GetObjectsParams) ApiGetObjectsRequest {
+	r.getObjectsParams = &getObjectsParams
+	return r
+}
+
+// @return ApiGetObjectsRequest
+func (c *APIClient) NewApiGetObjectsRequest() ApiGetObjectsRequest {
+	return ApiGetObjectsRequest{}
+}
+
 // @return GetObjectsResponse
-func (c *APIClient) GetObjects(getObjectsParams *GetObjectsParams) (*GetObjectsResponse, error) {
+func (c *APIClient) GetObjects(r ApiGetObjectsRequest, opts ...Option) (*GetObjectsResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *GetObjectsResponse
+		postBody    any
+		returnValue *GetObjectsResponse
 	)
 
 	requestPath := "/1/indexes/*/objects"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if getObjectsParams == nil {
+	if r.getObjectsParams == nil {
 		return returnValue, reportError("getObjectsParams is required and must be specified")
 	}
 
-	// body params
-	if getObjectsParams != nil {
-		localVarPostBody = getObjectsParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.getObjectsParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2424,27 +2996,49 @@ func (c *APIClient) GetObjects(getObjectsParams *GetObjectsParams) (*GetObjectsR
 	return returnValue, nil
 }
 
-// @return Rule
-func (c *APIClient) GetRule(indexName string, objectID string) (*Rule, error) {
-	var (
-		localVarPostBody any
+type ApiGetRuleRequest struct {
+	indexName string
+	objectID  string
+}
 
+// @return ApiGetRuleRequest
+func (c *APIClient) NewApiGetRuleRequest(indexName string, objectID string) ApiGetRuleRequest {
+	return ApiGetRuleRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
+}
+
+// @return Rule
+func (c *APIClient) GetRule(r ApiGetRuleRequest, opts ...Option) (*Rule, error) {
+	var (
+		postBody    any
 		returnValue *Rule
 	)
 
 	requestPath := "/1/indexes/{indexName}/rules/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2510,26 +3104,46 @@ func (c *APIClient) GetRule(indexName string, objectID string) (*Rule, error) {
 	return returnValue, nil
 }
 
-// @return IndexSettings
-func (c *APIClient) GetSettings(indexName string) (*IndexSettings, error) {
-	var (
-		localVarPostBody any
+type ApiGetSettingsRequest struct {
+	indexName string
+}
 
+// @return ApiGetSettingsRequest
+func (c *APIClient) NewApiGetSettingsRequest(indexName string) ApiGetSettingsRequest {
+	return ApiGetSettingsRequest{
+		indexName: indexName,
+	}
+}
+
+// @return IndexSettings
+func (c *APIClient) GetSettings(r ApiGetSettingsRequest, opts ...Option) (*IndexSettings, error) {
+	var (
+		postBody    any
 		returnValue *IndexSettings
 	)
 
 	requestPath := "/1/indexes/{indexName}/settings"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2595,11 +3209,18 @@ func (c *APIClient) GetSettings(indexName string) (*IndexSettings, error) {
 	return returnValue, nil
 }
 
-// @return []Source
-func (c *APIClient) GetSources() ([]Source, error) {
-	var (
-		localVarPostBody any
+type ApiGetSourcesRequest struct {
+}
 
+// @return ApiGetSourcesRequest
+func (c *APIClient) NewApiGetSourcesRequest() ApiGetSourcesRequest {
+	return ApiGetSourcesRequest{}
+}
+
+// @return []Source
+func (c *APIClient) GetSources(r ApiGetSourcesRequest, opts ...Option) ([]Source, error) {
+	var (
+		postBody    any
 		returnValue []Source
 	)
 
@@ -2608,12 +3229,22 @@ func (c *APIClient) GetSources() ([]Source, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2679,27 +3310,49 @@ func (c *APIClient) GetSources() ([]Source, error) {
 	return returnValue, nil
 }
 
-// @return SynonymHit
-func (c *APIClient) GetSynonym(indexName string, objectID string) (*SynonymHit, error) {
-	var (
-		localVarPostBody any
+type ApiGetSynonymRequest struct {
+	indexName string
+	objectID  string
+}
 
+// @return ApiGetSynonymRequest
+func (c *APIClient) NewApiGetSynonymRequest(indexName string, objectID string) ApiGetSynonymRequest {
+	return ApiGetSynonymRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
+}
+
+// @return SynonymHit
+func (c *APIClient) GetSynonym(r ApiGetSynonymRequest, opts ...Option) (*SynonymHit, error) {
+	var (
+		postBody    any
 		returnValue *SynonymHit
 	)
 
 	requestPath := "/1/indexes/{indexName}/synonyms/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2765,27 +3418,49 @@ func (c *APIClient) GetSynonym(indexName string, objectID string) (*SynonymHit, 
 	return returnValue, nil
 }
 
-// @return GetTaskResponse
-func (c *APIClient) GetTask(indexName string, taskID int64) (*GetTaskResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTaskRequest struct {
+	indexName string
+	taskID    int64
+}
 
+// @return ApiGetTaskRequest
+func (c *APIClient) NewApiGetTaskRequest(indexName string, taskID int64) ApiGetTaskRequest {
+	return ApiGetTaskRequest{
+		indexName: indexName,
+		taskID:    taskID,
+	}
+}
+
+// @return GetTaskResponse
+func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*GetTaskResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTaskResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/task/{taskID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(taskID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2851,11 +3526,18 @@ func (c *APIClient) GetTask(indexName string, taskID int64) (*GetTaskResponse, e
 	return returnValue, nil
 }
 
-// @return GetTopUserIdsResponse
-func (c *APIClient) GetTopUserIds() (*GetTopUserIdsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTopUserIdsRequest struct {
+}
 
+// @return ApiGetTopUserIdsRequest
+func (c *APIClient) NewApiGetTopUserIdsRequest() ApiGetTopUserIdsRequest {
+	return ApiGetTopUserIdsRequest{}
+}
+
+// @return GetTopUserIdsResponse
+func (c *APIClient) GetTopUserIds(r ApiGetTopUserIdsRequest, opts ...Option) (*GetTopUserIdsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTopUserIdsResponse
 	)
 
@@ -2864,12 +3546,22 @@ func (c *APIClient) GetTopUserIds() (*GetTopUserIdsResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2935,26 +3627,46 @@ func (c *APIClient) GetTopUserIds() (*GetTopUserIdsResponse, error) {
 	return returnValue, nil
 }
 
-// @return UserId
-func (c *APIClient) GetUserId(userID string) (*UserId, error) {
-	var (
-		localVarPostBody any
+type ApiGetUserIdRequest struct {
+	userID string
+}
 
+// @return ApiGetUserIdRequest
+func (c *APIClient) NewApiGetUserIdRequest(userID string) ApiGetUserIdRequest {
+	return ApiGetUserIdRequest{
+		userID: userID,
+	}
+}
+
+// @return UserId
+func (c *APIClient) GetUserId(r ApiGetUserIdRequest, opts ...Option) (*UserId, error) {
+	var (
+		postBody    any
 		returnValue *UserId
 	)
 
 	requestPath := "/1/clusters/mapping/{userID}"
-	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(userID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(r.userID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3020,11 +3732,25 @@ func (c *APIClient) GetUserId(userID string) (*UserId, error) {
 	return returnValue, nil
 }
 
-// @return HasPendingMappingsResponse
-func (c *APIClient) HasPendingMappings(opts ...Option) (*HasPendingMappingsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiHasPendingMappingsRequest struct {
+	getClusters bool
+}
 
+// If the clusters pending mapping state should be on the response.
+func (r ApiHasPendingMappingsRequest) WithGetClusters(getClusters bool) ApiHasPendingMappingsRequest {
+	r.getClusters = getClusters
+	return r
+}
+
+// @return ApiHasPendingMappingsRequest
+func (c *APIClient) NewApiHasPendingMappingsRequest() ApiHasPendingMappingsRequest {
+	return ApiHasPendingMappingsRequest{}
+}
+
+// @return HasPendingMappingsResponse
+func (c *APIClient) HasPendingMappings(r ApiHasPendingMappingsRequest, opts ...Option) (*HasPendingMappingsResponse, error) {
+	var (
+		postBody    any
 		returnValue *HasPendingMappingsResponse
 	)
 
@@ -3033,21 +3759,26 @@ func (c *APIClient) HasPendingMappings(opts ...Option) (*HasPendingMappingsRespo
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.getClusters) {
+		queryParams.Add("getClusters", parameterToString(r.getClusters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3113,11 +3844,18 @@ func (c *APIClient) HasPendingMappings(opts ...Option) (*HasPendingMappingsRespo
 	return returnValue, nil
 }
 
-// @return ListApiKeysResponse
-func (c *APIClient) ListApiKeys() (*ListApiKeysResponse, error) {
-	var (
-		localVarPostBody any
+type ApiListApiKeysRequest struct {
+}
 
+// @return ApiListApiKeysRequest
+func (c *APIClient) NewApiListApiKeysRequest() ApiListApiKeysRequest {
+	return ApiListApiKeysRequest{}
+}
+
+// @return ListApiKeysResponse
+func (c *APIClient) ListApiKeys(r ApiListApiKeysRequest, opts ...Option) (*ListApiKeysResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListApiKeysResponse
 	)
 
@@ -3126,12 +3864,22 @@ func (c *APIClient) ListApiKeys() (*ListApiKeysResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3197,11 +3945,18 @@ func (c *APIClient) ListApiKeys() (*ListApiKeysResponse, error) {
 	return returnValue, nil
 }
 
-// @return ListClustersResponse
-func (c *APIClient) ListClusters() (*ListClustersResponse, error) {
-	var (
-		localVarPostBody any
+type ApiListClustersRequest struct {
+}
 
+// @return ApiListClustersRequest
+func (c *APIClient) NewApiListClustersRequest() ApiListClustersRequest {
+	return ApiListClustersRequest{}
+}
+
+// @return ListClustersResponse
+func (c *APIClient) ListClusters(r ApiListClustersRequest, opts ...Option) (*ListClustersResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListClustersResponse
 	)
 
@@ -3210,12 +3965,22 @@ func (c *APIClient) ListClusters() (*ListClustersResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3281,11 +4046,25 @@ func (c *APIClient) ListClusters() (*ListClustersResponse, error) {
 	return returnValue, nil
 }
 
-// @return ListIndicesResponse
-func (c *APIClient) ListIndices(opts ...Option) (*ListIndicesResponse, error) {
-	var (
-		localVarPostBody any
+type ApiListIndicesRequest struct {
+	page int32
+}
 
+// Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+func (r ApiListIndicesRequest) WithPage(page int32) ApiListIndicesRequest {
+	r.page = page
+	return r
+}
+
+// @return ApiListIndicesRequest
+func (c *APIClient) NewApiListIndicesRequest() ApiListIndicesRequest {
+	return ApiListIndicesRequest{}
+}
+
+// @return ListIndicesResponse
+func (c *APIClient) ListIndices(r ApiListIndicesRequest, opts ...Option) (*ListIndicesResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListIndicesResponse
 	)
 
@@ -3294,21 +4073,26 @@ func (c *APIClient) ListIndices(opts ...Option) (*ListIndicesResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3374,11 +4158,32 @@ func (c *APIClient) ListIndices(opts ...Option) (*ListIndicesResponse, error) {
 	return returnValue, nil
 }
 
-// @return ListUserIdsResponse
-func (c *APIClient) ListUserIds(opts ...Option) (*ListUserIdsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiListUserIdsRequest struct {
+	page        int32
+	hitsPerPage int32
+}
 
+// Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+func (r ApiListUserIdsRequest) WithPage(page int32) ApiListUserIdsRequest {
+	r.page = page
+	return r
+}
+
+// Maximum number of objects to retrieve.
+func (r ApiListUserIdsRequest) WithHitsPerPage(hitsPerPage int32) ApiListUserIdsRequest {
+	r.hitsPerPage = hitsPerPage
+	return r
+}
+
+// @return ApiListUserIdsRequest
+func (c *APIClient) NewApiListUserIdsRequest() ApiListUserIdsRequest {
+	return ApiListUserIdsRequest{}
+}
+
+// @return ListUserIdsResponse
+func (c *APIClient) ListUserIds(r ApiListUserIdsRequest, opts ...Option) (*ListUserIdsResponse, error) {
+	var (
+		postBody    any
 		returnValue *ListUserIdsResponse
 	)
 
@@ -3387,21 +4192,29 @@ func (c *APIClient) ListUserIds(opts ...Option) (*ListUserIdsResponse, error) {
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.hitsPerPage) {
+		queryParams.Add("hitsPerPage", parameterToString(r.hitsPerPage))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3467,34 +4280,53 @@ func (c *APIClient) ListUserIds(opts ...Option) (*ListUserIdsResponse, error) {
 	return returnValue, nil
 }
 
+type ApiMultipleBatchRequest struct {
+	batchParams *BatchParams
+}
+
+func (r ApiMultipleBatchRequest) WithBatchParams(batchParams BatchParams) ApiMultipleBatchRequest {
+	r.batchParams = &batchParams
+	return r
+}
+
+// @return ApiMultipleBatchRequest
+func (c *APIClient) NewApiMultipleBatchRequest() ApiMultipleBatchRequest {
+	return ApiMultipleBatchRequest{}
+}
+
 // @return MultipleBatchResponse
-func (c *APIClient) MultipleBatch(batchParams *BatchParams) (*MultipleBatchResponse, error) {
+func (c *APIClient) MultipleBatch(r ApiMultipleBatchRequest, opts ...Option) (*MultipleBatchResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *MultipleBatchResponse
+		postBody    any
+		returnValue *MultipleBatchResponse
 	)
 
 	requestPath := "/1/indexes/*/batch"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if batchParams == nil {
+	if r.batchParams == nil {
 		return returnValue, reportError("batchParams is required and must be specified")
 	}
 
-	// body params
-	if batchParams != nil {
-		localVarPostBody = batchParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.batchParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3558,37 +4390,59 @@ func (c *APIClient) MultipleBatch(batchParams *BatchParams) (*MultipleBatchRespo
 	}
 
 	return returnValue, nil
+}
+
+type ApiOperationIndexRequest struct {
+	indexName            string
+	operationIndexParams *OperationIndexParams
+}
+
+func (r ApiOperationIndexRequest) WithOperationIndexParams(operationIndexParams OperationIndexParams) ApiOperationIndexRequest {
+	r.operationIndexParams = &operationIndexParams
+	return r
+}
+
+// @return ApiOperationIndexRequest
+func (c *APIClient) NewApiOperationIndexRequest(indexName string) ApiOperationIndexRequest {
+	return ApiOperationIndexRequest{
+		indexName: indexName,
+	}
 }
 
 // @return UpdatedAtResponse
-func (c *APIClient) OperationIndex(indexName string, operationIndexParams *OperationIndexParams) (*UpdatedAtResponse, error) {
+func (c *APIClient) OperationIndex(r ApiOperationIndexRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtResponse
+		postBody    any
+		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/operation"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if operationIndexParams == nil {
+	if r.operationIndexParams == nil {
 		return returnValue, reportError("operationIndexParams is required and must be specified")
 	}
 
-	// body params
-	if operationIndexParams != nil {
-		localVarPostBody = operationIndexParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.operationIndexParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3652,49 +4506,74 @@ func (c *APIClient) OperationIndex(indexName string, operationIndexParams *Opera
 	}
 
 	return returnValue, nil
+}
+
+type ApiPartialUpdateObjectRequest struct {
+	indexName          string
+	objectID           string
+	attributesToUpdate *map[string]AttributeToUpdate
+	createIfNotExists  bool
+}
+
+// Map of attribute(s) to update.
+func (r ApiPartialUpdateObjectRequest) WithAttributesToUpdate(attributesToUpdate map[string]AttributeToUpdate) ApiPartialUpdateObjectRequest {
+	r.attributesToUpdate = &attributesToUpdate
+	return r
+}
+
+// Creates the record if it does not exist yet.
+func (r ApiPartialUpdateObjectRequest) WithCreateIfNotExists(createIfNotExists bool) ApiPartialUpdateObjectRequest {
+	r.createIfNotExists = createIfNotExists
+	return r
+}
+
+// @return ApiPartialUpdateObjectRequest
+func (c *APIClient) NewApiPartialUpdateObjectRequest(indexName string, objectID string) ApiPartialUpdateObjectRequest {
+	return ApiPartialUpdateObjectRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
 }
 
 // @return UpdatedAtWithObjectIdResponse
-func (c *APIClient) PartialUpdateObject(indexName string, objectID string, attributesToUpdate *map[string]AttributeToUpdate, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
+func (c *APIClient) PartialUpdateObject(r ApiPartialUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtWithObjectIdResponse
+		postBody    any
+		returnValue *UpdatedAtWithObjectIdResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/{objectID}/partial"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if attributesToUpdate == nil {
+	if r.attributesToUpdate == nil {
 		return returnValue, reportError("attributesToUpdate is required and must be specified")
 	}
 
-	// optional params
+	if !isNilorEmpty(r.createIfNotExists) {
+		queryParams.Add("createIfNotExists", parameterToString(r.createIfNotExists))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if attributesToUpdate != nil {
-		localVarPostBody = attributesToUpdate
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.attributesToUpdate
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3760,43 +4639,66 @@ func (c *APIClient) PartialUpdateObject(indexName string, objectID string, attri
 	return returnValue, nil
 }
 
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPostRequest
+func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
+	return ApiPostRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3862,43 +4764,66 @@ func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, e
 	return returnValue, nil
 }
 
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPutRequest
+func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
+	return ApiPutRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Put(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3962,28 +4887,48 @@ func (c *APIClient) Put(path string, opts ...Option) (map[string]interface{}, er
 	}
 
 	return returnValue, nil
+}
+
+type ApiRemoveUserIdRequest struct {
+	userID string
+}
+
+// @return ApiRemoveUserIdRequest
+func (c *APIClient) NewApiRemoveUserIdRequest(userID string) ApiRemoveUserIdRequest {
+	return ApiRemoveUserIdRequest{
+		userID: userID,
+	}
 }
 
 // @return RemoveUserIdResponse
-func (c *APIClient) RemoveUserId(userID string) (*RemoveUserIdResponse, error) {
+func (c *APIClient) RemoveUserId(r ApiRemoveUserIdRequest, opts ...Option) (*RemoveUserIdResponse, error) {
 	var (
-		localVarPostBody any
-
+		postBody    any
 		returnValue *RemoveUserIdResponse
 	)
 
 	requestPath := "/1/clusters/mapping/{userID}"
-	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(userID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"userID"+"}", url.PathEscape(parameterToString(r.userID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4049,34 +4994,54 @@ func (c *APIClient) RemoveUserId(userID string) (*RemoveUserIdResponse, error) {
 	return returnValue, nil
 }
 
+type ApiReplaceSourcesRequest struct {
+	source *[]Source
+}
+
+// The sources to allow.
+func (r ApiReplaceSourcesRequest) WithSource(source []Source) ApiReplaceSourcesRequest {
+	r.source = &source
+	return r
+}
+
+// @return ApiReplaceSourcesRequest
+func (c *APIClient) NewApiReplaceSourcesRequest() ApiReplaceSourcesRequest {
+	return ApiReplaceSourcesRequest{}
+}
+
 // @return ReplaceSourceResponse
-func (c *APIClient) ReplaceSources(source []Source) (*ReplaceSourceResponse, error) {
+func (c *APIClient) ReplaceSources(r ApiReplaceSourcesRequest, opts ...Option) (*ReplaceSourceResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *ReplaceSourceResponse
+		postBody    any
+		returnValue *ReplaceSourceResponse
 	)
 
 	requestPath := "/1/security/sources"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if source == nil {
+	if r.source == nil {
 		return returnValue, reportError("source is required and must be specified")
 	}
 
-	// body params
-	if source != nil {
-		localVarPostBody = source
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.source
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4142,26 +5107,46 @@ func (c *APIClient) ReplaceSources(source []Source) (*ReplaceSourceResponse, err
 	return returnValue, nil
 }
 
-// @return AddApiKeyResponse
-func (c *APIClient) RestoreApiKey(key string) (*AddApiKeyResponse, error) {
-	var (
-		localVarPostBody any
+type ApiRestoreApiKeyRequest struct {
+	key string
+}
 
+// @return ApiRestoreApiKeyRequest
+func (c *APIClient) NewApiRestoreApiKeyRequest(key string) ApiRestoreApiKeyRequest {
+	return ApiRestoreApiKeyRequest{
+		key: key,
+	}
+}
+
+// @return AddApiKeyResponse
+func (c *APIClient) RestoreApiKey(r ApiRestoreApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
+	var (
+		postBody    any
 		returnValue *AddApiKeyResponse
 	)
 
 	requestPath := "/1/keys/{key}/restore"
-	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(key)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(r.key)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4225,34 +5210,57 @@ func (c *APIClient) RestoreApiKey(key string) (*AddApiKeyResponse, error) {
 	}
 
 	return returnValue, nil
+}
+
+type ApiSaveObjectRequest struct {
+	indexName string
+	body      map[string]interface{}
+}
+
+// The Algolia record.
+func (r ApiSaveObjectRequest) WithBody(body map[string]interface{}) ApiSaveObjectRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiSaveObjectRequest
+func (c *APIClient) NewApiSaveObjectRequest(indexName string) ApiSaveObjectRequest {
+	return ApiSaveObjectRequest{
+		indexName: indexName,
+	}
 }
 
 // @return SaveObjectResponse
-func (c *APIClient) SaveObject(indexName string, body map[string]interface{}) (*SaveObjectResponse, error) {
+func (c *APIClient) SaveObject(r ApiSaveObjectRequest, opts ...Option) (*SaveObjectResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SaveObjectResponse
+		postBody    any
+		returnValue *SaveObjectResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4316,49 +5324,73 @@ func (c *APIClient) SaveObject(indexName string, body map[string]interface{}) (*
 	}
 
 	return returnValue, nil
+}
+
+type ApiSaveRuleRequest struct {
+	indexName         string
+	objectID          string
+	rule              *Rule
+	forwardToReplicas bool
+}
+
+func (r ApiSaveRuleRequest) WithRule(rule Rule) ApiSaveRuleRequest {
+	r.rule = &rule
+	return r
+}
+
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiSaveRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveRuleRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// @return ApiSaveRuleRequest
+func (c *APIClient) NewApiSaveRuleRequest(indexName string, objectID string) ApiSaveRuleRequest {
+	return ApiSaveRuleRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
 }
 
 // @return UpdatedRuleResponse
-func (c *APIClient) SaveRule(indexName string, objectID string, rule *Rule, opts ...Option) (*UpdatedRuleResponse, error) {
+func (c *APIClient) SaveRule(r ApiSaveRuleRequest, opts ...Option) (*UpdatedRuleResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedRuleResponse
+		postBody    any
+		returnValue *UpdatedRuleResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/rules/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if rule == nil {
+	if r.rule == nil {
 		return returnValue, reportError("rule is required and must be specified")
 	}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if rule != nil {
-		localVarPostBody = rule
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	postBody = r.rule
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4424,46 +5456,78 @@ func (c *APIClient) SaveRule(indexName string, objectID string, rule *Rule, opts
 	return returnValue, nil
 }
 
+type ApiSaveRulesRequest struct {
+	indexName          string
+	rules              *[]Rule
+	forwardToReplicas  bool
+	clearExistingRules bool
+}
+
+func (r ApiSaveRulesRequest) WithRules(rules []Rule) ApiSaveRulesRequest {
+	r.rules = &rules
+	return r
+}
+
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiSaveRulesRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveRulesRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// When true, existing Rules are cleared before adding this batch. When false, existing Rules are kept.
+func (r ApiSaveRulesRequest) WithClearExistingRules(clearExistingRules bool) ApiSaveRulesRequest {
+	r.clearExistingRules = clearExistingRules
+	return r
+}
+
+// @return ApiSaveRulesRequest
+func (c *APIClient) NewApiSaveRulesRequest(indexName string) ApiSaveRulesRequest {
+	return ApiSaveRulesRequest{
+		indexName: indexName,
+	}
+}
+
 // @return UpdatedAtResponse
-func (c *APIClient) SaveRules(indexName string, rules []Rule, opts ...Option) (*UpdatedAtResponse, error) {
+func (c *APIClient) SaveRules(r ApiSaveRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtResponse
+		postBody    any
+		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/rules/batch"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if rules == nil {
+	if r.rules == nil {
 		return returnValue, reportError("rules is required and must be specified")
 	}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+	if !isNilorEmpty(r.clearExistingRules) {
+		queryParams.Add("clearExistingRules", parameterToString(r.clearExistingRules))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if rules != nil {
-		localVarPostBody = rules
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.rules
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4527,49 +5591,73 @@ func (c *APIClient) SaveRules(indexName string, rules []Rule, opts ...Option) (*
 	}
 
 	return returnValue, nil
+}
+
+type ApiSaveSynonymRequest struct {
+	indexName         string
+	objectID          string
+	synonymHit        *SynonymHit
+	forwardToReplicas bool
+}
+
+func (r ApiSaveSynonymRequest) WithSynonymHit(synonymHit SynonymHit) ApiSaveSynonymRequest {
+	r.synonymHit = &synonymHit
+	return r
+}
+
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiSaveSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveSynonymRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// @return ApiSaveSynonymRequest
+func (c *APIClient) NewApiSaveSynonymRequest(indexName string, objectID string) ApiSaveSynonymRequest {
+	return ApiSaveSynonymRequest{
+		indexName: indexName,
+		objectID:  objectID,
+	}
 }
 
 // @return SaveSynonymResponse
-func (c *APIClient) SaveSynonym(indexName string, objectID string, synonymHit *SynonymHit, opts ...Option) (*SaveSynonymResponse, error) {
+func (c *APIClient) SaveSynonym(r ApiSaveSynonymRequest, opts ...Option) (*SaveSynonymResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SaveSynonymResponse
+		postBody    any
+		returnValue *SaveSynonymResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/synonyms/{objectID}"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(objectID)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if synonymHit == nil {
+	if r.synonymHit == nil {
 		return returnValue, reportError("synonymHit is required and must be specified")
 	}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if synonymHit != nil {
-		localVarPostBody = synonymHit
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	postBody = r.synonymHit
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4633,48 +5721,80 @@ func (c *APIClient) SaveSynonym(indexName string, objectID string, synonymHit *S
 	}
 
 	return returnValue, nil
+}
+
+type ApiSaveSynonymsRequest struct {
+	indexName               string
+	synonymHit              *[]SynonymHit
+	forwardToReplicas       bool
+	replaceExistingSynonyms bool
+}
+
+func (r ApiSaveSynonymsRequest) WithSynonymHit(synonymHit []SynonymHit) ApiSaveSynonymsRequest {
+	r.synonymHit = &synonymHit
+	return r
+}
+
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiSaveSynonymsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveSynonymsRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// Replace all synonyms of the index with the ones sent with this request.
+func (r ApiSaveSynonymsRequest) WithReplaceExistingSynonyms(replaceExistingSynonyms bool) ApiSaveSynonymsRequest {
+	r.replaceExistingSynonyms = replaceExistingSynonyms
+	return r
+}
+
+// @return ApiSaveSynonymsRequest
+func (c *APIClient) NewApiSaveSynonymsRequest(indexName string) ApiSaveSynonymsRequest {
+	return ApiSaveSynonymsRequest{
+		indexName: indexName,
+	}
 }
 
 // @return UpdatedAtResponse
-func (c *APIClient) SaveSynonyms(indexName string, synonymHit []SynonymHit, opts ...Option) (*UpdatedAtResponse, error) {
+func (c *APIClient) SaveSynonyms(r ApiSaveSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtResponse
+		postBody    any
+		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/synonyms/batch"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if synonymHit == nil {
+	if r.synonymHit == nil {
 		return returnValue, reportError("synonymHit is required and must be specified")
 	}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+	if !isNilorEmpty(r.replaceExistingSynonyms) {
+		queryParams.Add("replaceExistingSynonyms", parameterToString(r.replaceExistingSynonyms))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if synonymHit != nil {
-		localVarPostBody = synonymHit
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.synonymHit
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4740,34 +5860,54 @@ func (c *APIClient) SaveSynonyms(indexName string, synonymHit []SynonymHit, opts
 	return returnValue, nil
 }
 
+type ApiSearchRequest struct {
+	searchMethodParams *SearchMethodParams
+}
+
+// The &#x60;search&#x60; requests and strategy.
+func (r ApiSearchRequest) WithSearchMethodParams(searchMethodParams SearchMethodParams) ApiSearchRequest {
+	r.searchMethodParams = &searchMethodParams
+	return r
+}
+
+// @return ApiSearchRequest
+func (c *APIClient) NewApiSearchRequest() ApiSearchRequest {
+	return ApiSearchRequest{}
+}
+
 // @return SearchResponses
-func (c *APIClient) Search(searchMethodParams *SearchMethodParams) (*SearchResponses, error) {
+func (c *APIClient) Search(r ApiSearchRequest, opts ...Option) (*SearchResponses, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SearchResponses
+		postBody    any
+		returnValue *SearchResponses
 	)
 
 	requestPath := "/1/indexes/*/queries"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if searchMethodParams == nil {
+	if r.searchMethodParams == nil {
 		return returnValue, reportError("searchMethodParams is required and must be specified")
 	}
 
-	// body params
-	if searchMethodParams != nil {
-		localVarPostBody = searchMethodParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.searchMethodParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4831,37 +5971,59 @@ func (c *APIClient) Search(searchMethodParams *SearchMethodParams) (*SearchRespo
 	}
 
 	return returnValue, nil
+}
+
+type ApiSearchDictionaryEntriesRequest struct {
+	dictionaryName                DictionaryType
+	searchDictionaryEntriesParams *SearchDictionaryEntriesParams
+}
+
+func (r ApiSearchDictionaryEntriesRequest) WithSearchDictionaryEntriesParams(searchDictionaryEntriesParams SearchDictionaryEntriesParams) ApiSearchDictionaryEntriesRequest {
+	r.searchDictionaryEntriesParams = &searchDictionaryEntriesParams
+	return r
+}
+
+// @return ApiSearchDictionaryEntriesRequest
+func (c *APIClient) NewApiSearchDictionaryEntriesRequest(dictionaryName DictionaryType) ApiSearchDictionaryEntriesRequest {
+	return ApiSearchDictionaryEntriesRequest{
+		dictionaryName: dictionaryName,
+	}
 }
 
 // @return UpdatedAtResponse
-func (c *APIClient) SearchDictionaryEntries(dictionaryName *DictionaryType, searchDictionaryEntriesParams *SearchDictionaryEntriesParams) (*UpdatedAtResponse, error) {
+func (c *APIClient) SearchDictionaryEntries(r ApiSearchDictionaryEntriesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtResponse
+		postBody    any
+		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/dictionaries/{dictionaryName}/search"
-	requestPath = strings.Replace(requestPath, "{"+"dictionaryName"+"}", url.PathEscape(parameterToString(dictionaryName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"dictionaryName"+"}", url.PathEscape(parameterToString(r.dictionaryName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if searchDictionaryEntriesParams == nil {
+	if r.searchDictionaryEntriesParams == nil {
 		return returnValue, reportError("searchDictionaryEntriesParams is required and must be specified")
 	}
 
-	// body params
-	if searchDictionaryEntriesParams != nil {
-		localVarPostBody = searchDictionaryEntriesParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.searchDictionaryEntriesParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4925,46 +6087,59 @@ func (c *APIClient) SearchDictionaryEntries(dictionaryName *DictionaryType, sear
 	}
 
 	return returnValue, nil
+}
+
+type ApiSearchForFacetValuesRequest struct {
+	indexName                   string
+	facetName                   string
+	searchForFacetValuesRequest *SearchForFacetValuesRequest
+}
+
+func (r ApiSearchForFacetValuesRequest) WithSearchForFacetValuesRequest(searchForFacetValuesRequest SearchForFacetValuesRequest) ApiSearchForFacetValuesRequest {
+	r.searchForFacetValuesRequest = &searchForFacetValuesRequest
+	return r
+}
+
+// @return ApiSearchForFacetValuesRequest
+func (c *APIClient) NewApiSearchForFacetValuesRequest(indexName string, facetName string) ApiSearchForFacetValuesRequest {
+	return ApiSearchForFacetValuesRequest{
+		indexName: indexName,
+		facetName: facetName,
+	}
 }
 
 // @return SearchForFacetValuesResponse
-func (c *APIClient) SearchForFacetValues(indexName string, facetName string, opts ...Option) (*SearchForFacetValuesResponse, error) {
+func (c *APIClient) SearchForFacetValues(r ApiSearchForFacetValuesRequest, opts ...Option) (*SearchForFacetValuesResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SearchForFacetValuesResponse
+		postBody    any
+		returnValue *SearchForFacetValuesResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/facets/{facetName}/query"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
-	requestPath = strings.Replace(requestPath, "{"+"facetName"+"}", url.PathEscape(parameterToString(facetName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"facetName"+"}", url.PathEscape(parameterToString(r.facetName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if searchForFacetValuesRequest != nil {
-		localVarPostBody = searchForFacetValuesRequest
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.searchForFacetValuesRequest
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5028,45 +6203,56 @@ func (c *APIClient) SearchForFacetValues(indexName string, facetName string, opt
 	}
 
 	return returnValue, nil
+}
+
+type ApiSearchRulesRequest struct {
+	indexName         string
+	searchRulesParams *SearchRulesParams
+}
+
+func (r ApiSearchRulesRequest) WithSearchRulesParams(searchRulesParams SearchRulesParams) ApiSearchRulesRequest {
+	r.searchRulesParams = &searchRulesParams
+	return r
+}
+
+// @return ApiSearchRulesRequest
+func (c *APIClient) NewApiSearchRulesRequest(indexName string) ApiSearchRulesRequest {
+	return ApiSearchRulesRequest{
+		indexName: indexName,
+	}
 }
 
 // @return SearchRulesResponse
-func (c *APIClient) SearchRules(indexName string, opts ...Option) (*SearchRulesResponse, error) {
+func (c *APIClient) SearchRules(r ApiSearchRulesRequest, opts ...Option) (*SearchRulesResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SearchRulesResponse
+		postBody    any
+		returnValue *SearchRulesResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/rules/search"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if searchRulesParams != nil {
-		localVarPostBody = searchRulesParams
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.searchRulesParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5130,45 +6316,56 @@ func (c *APIClient) SearchRules(indexName string, opts ...Option) (*SearchRulesR
 	}
 
 	return returnValue, nil
+}
+
+type ApiSearchSingleIndexRequest struct {
+	indexName    string
+	searchParams *SearchParams
+}
+
+func (r ApiSearchSingleIndexRequest) WithSearchParams(searchParams SearchParams) ApiSearchSingleIndexRequest {
+	r.searchParams = &searchParams
+	return r
+}
+
+// @return ApiSearchSingleIndexRequest
+func (c *APIClient) NewApiSearchSingleIndexRequest(indexName string) ApiSearchSingleIndexRequest {
+	return ApiSearchSingleIndexRequest{
+		indexName: indexName,
+	}
 }
 
 // @return SearchResponse
-func (c *APIClient) SearchSingleIndex(indexName string, opts ...Option) (*SearchResponse, error) {
+func (c *APIClient) SearchSingleIndex(r ApiSearchSingleIndexRequest, opts ...Option) (*SearchResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SearchResponse
+		postBody    any
+		returnValue *SearchResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/query"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if searchParams != nil {
-		localVarPostBody = searchParams
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.searchParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5232,45 +6429,88 @@ func (c *APIClient) SearchSingleIndex(indexName string, opts ...Option) (*Search
 	}
 
 	return returnValue, nil
+}
+
+type ApiSearchSynonymsRequest struct {
+	indexName            string
+	type_                *SynonymType
+	page                 int32
+	hitsPerPage          int32
+	searchSynonymsParams *SearchSynonymsParams
+}
+
+// Only search for specific types of synonyms.
+func (r ApiSearchSynonymsRequest) WithType_(type_ SynonymType) ApiSearchSynonymsRequest {
+	r.type_ = &type_
+	return r
+}
+
+// Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+func (r ApiSearchSynonymsRequest) WithPage(page int32) ApiSearchSynonymsRequest {
+	r.page = page
+	return r
+}
+
+// Maximum number of objects to retrieve.
+func (r ApiSearchSynonymsRequest) WithHitsPerPage(hitsPerPage int32) ApiSearchSynonymsRequest {
+	r.hitsPerPage = hitsPerPage
+	return r
+}
+
+// The body of the the &#x60;searchSynonyms&#x60; method.
+func (r ApiSearchSynonymsRequest) WithSearchSynonymsParams(searchSynonymsParams SearchSynonymsParams) ApiSearchSynonymsRequest {
+	r.searchSynonymsParams = &searchSynonymsParams
+	return r
+}
+
+// @return ApiSearchSynonymsRequest
+func (c *APIClient) NewApiSearchSynonymsRequest(indexName string) ApiSearchSynonymsRequest {
+	return ApiSearchSynonymsRequest{
+		indexName: indexName,
+	}
 }
 
 // @return SearchSynonymsResponse
-func (c *APIClient) SearchSynonyms(indexName string, opts ...Option) (*SearchSynonymsResponse, error) {
+func (c *APIClient) SearchSynonyms(r ApiSearchSynonymsRequest, opts ...Option) (*SearchSynonymsResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SearchSynonymsResponse
+		postBody    any
+		returnValue *SearchSynonymsResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/synonyms/search"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.type_) {
+		queryParams.Add("type", parameterToString(*r.type_))
+	}
+	if !isNilorEmpty(r.page) {
+		queryParams.Add("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.hitsPerPage) {
+		queryParams.Add("hitsPerPage", parameterToString(r.hitsPerPage))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if searchSynonymsParams != nil {
-		localVarPostBody = searchSynonymsParams
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.searchSynonymsParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5336,34 +6576,53 @@ func (c *APIClient) SearchSynonyms(indexName string, opts ...Option) (*SearchSyn
 	return returnValue, nil
 }
 
+type ApiSearchUserIdsRequest struct {
+	searchUserIdsParams *SearchUserIdsParams
+}
+
+func (r ApiSearchUserIdsRequest) WithSearchUserIdsParams(searchUserIdsParams SearchUserIdsParams) ApiSearchUserIdsRequest {
+	r.searchUserIdsParams = &searchUserIdsParams
+	return r
+}
+
+// @return ApiSearchUserIdsRequest
+func (c *APIClient) NewApiSearchUserIdsRequest() ApiSearchUserIdsRequest {
+	return ApiSearchUserIdsRequest{}
+}
+
 // @return SearchUserIdsResponse
-func (c *APIClient) SearchUserIds(searchUserIdsParams *SearchUserIdsParams) (*SearchUserIdsResponse, error) {
+func (c *APIClient) SearchUserIds(r ApiSearchUserIdsRequest, opts ...Option) (*SearchUserIdsResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *SearchUserIdsResponse
+		postBody    any
+		returnValue *SearchUserIdsResponse
 	)
 
 	requestPath := "/1/clusters/mapping/search"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if searchUserIdsParams == nil {
+	if r.searchUserIdsParams == nil {
 		return returnValue, reportError("searchUserIdsParams is required and must be specified")
 	}
 
-	// body params
-	if searchUserIdsParams != nil {
-		localVarPostBody = searchUserIdsParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.searchUserIdsParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5429,34 +6688,53 @@ func (c *APIClient) SearchUserIds(searchUserIdsParams *SearchUserIdsParams) (*Se
 	return returnValue, nil
 }
 
+type ApiSetDictionarySettingsRequest struct {
+	dictionarySettingsParams *DictionarySettingsParams
+}
+
+func (r ApiSetDictionarySettingsRequest) WithDictionarySettingsParams(dictionarySettingsParams DictionarySettingsParams) ApiSetDictionarySettingsRequest {
+	r.dictionarySettingsParams = &dictionarySettingsParams
+	return r
+}
+
+// @return ApiSetDictionarySettingsRequest
+func (c *APIClient) NewApiSetDictionarySettingsRequest() ApiSetDictionarySettingsRequest {
+	return ApiSetDictionarySettingsRequest{}
+}
+
 // @return UpdatedAtResponse
-func (c *APIClient) SetDictionarySettings(dictionarySettingsParams *DictionarySettingsParams) (*UpdatedAtResponse, error) {
+func (c *APIClient) SetDictionarySettings(r ApiSetDictionarySettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtResponse
+		postBody    any
+		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/dictionaries/*/settings"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if dictionarySettingsParams == nil {
+	if r.dictionarySettingsParams == nil {
 		return returnValue, reportError("dictionarySettingsParams is required and must be specified")
 	}
 
-	// body params
-	if dictionarySettingsParams != nil {
-		localVarPostBody = dictionarySettingsParams
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.dictionarySettingsParams
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5520,48 +6798,70 @@ func (c *APIClient) SetDictionarySettings(dictionarySettingsParams *DictionarySe
 	}
 
 	return returnValue, nil
+}
+
+type ApiSetSettingsRequest struct {
+	indexName         string
+	indexSettings     *IndexSettings
+	forwardToReplicas bool
+}
+
+func (r ApiSetSettingsRequest) WithIndexSettings(indexSettings IndexSettings) ApiSetSettingsRequest {
+	r.indexSettings = &indexSettings
+	return r
+}
+
+// When true, changes are also propagated to replicas of the given indexName.
+func (r ApiSetSettingsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSetSettingsRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// @return ApiSetSettingsRequest
+func (c *APIClient) NewApiSetSettingsRequest(indexName string) ApiSetSettingsRequest {
+	return ApiSetSettingsRequest{
+		indexName: indexName,
+	}
 }
 
 // @return UpdatedAtResponse
-func (c *APIClient) SetSettings(indexName string, indexSettings *IndexSettings, opts ...Option) (*UpdatedAtResponse, error) {
+func (c *APIClient) SetSettings(r ApiSetSettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdatedAtResponse
+		postBody    any
+		returnValue *UpdatedAtResponse
 	)
 
 	requestPath := "/1/indexes/{indexName}/settings"
-	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if indexSettings == nil {
+	if r.indexSettings == nil {
 		return returnValue, reportError("indexSettings is required and must be specified")
 	}
 
-	// optional params
+	if !isNilorEmpty(r.forwardToReplicas) {
+		queryParams.Add("forwardToReplicas", parameterToString(r.forwardToReplicas))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if indexSettings != nil {
-		localVarPostBody = indexSettings
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	postBody = r.indexSettings
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5627,35 +6927,57 @@ func (c *APIClient) SetSettings(indexName string, indexSettings *IndexSettings, 
 	return returnValue, nil
 }
 
+type ApiUpdateApiKeyRequest struct {
+	key    string
+	apiKey *ApiKey
+}
+
+func (r ApiUpdateApiKeyRequest) WithApiKey(apiKey ApiKey) ApiUpdateApiKeyRequest {
+	r.apiKey = &apiKey
+	return r
+}
+
+// @return ApiUpdateApiKeyRequest
+func (c *APIClient) NewApiUpdateApiKeyRequest(key string) ApiUpdateApiKeyRequest {
+	return ApiUpdateApiKeyRequest{
+		key: key,
+	}
+}
+
 // @return UpdateApiKeyResponse
-func (c *APIClient) UpdateApiKey(key string, apiKey *ApiKey) (*UpdateApiKeyResponse, error) {
+func (c *APIClient) UpdateApiKey(r ApiUpdateApiKeyRequest, opts ...Option) (*UpdateApiKeyResponse, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      *UpdateApiKeyResponse
+		postBody    any
+		returnValue *UpdateApiKeyResponse
 	)
 
 	requestPath := "/1/keys/{key}"
-	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(key)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"key"+"}", url.PathEscape(parameterToString(r.key)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if apiKey == nil {
+	if r.apiKey == nil {
 		return returnValue, reportError("apiKey is required and must be specified")
 	}
 
-	// body params
-	if apiKey != nil {
-		localVarPostBody = apiKey
-	} else {
-		localVarPostBody = body
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+
+	// body params
+	postBody = r.apiKey
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}

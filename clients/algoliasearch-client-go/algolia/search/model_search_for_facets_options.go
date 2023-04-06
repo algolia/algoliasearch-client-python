@@ -41,10 +41,6 @@ func NewSearchForFacetsOptions(facet string, indexName string, type_ SearchTypeF
 	this := &SearchForFacetsOptions{}
 	this.Facet = facet
 	this.IndexName = indexName
-	var facetQuery string = ""
-	this.FacetQuery = &facetQuery
-	var maxFacetHits int32 = 10
-	this.MaxFacetHits = &maxFacetHits
 	this.Type = type_
 	for _, opt := range opts {
 		opt(this)
@@ -223,14 +219,13 @@ func (o SearchForFacetsOptions) MarshalJSON() ([]byte, error) {
 }
 
 func (o SearchForFacetsOptions) String() string {
-	out := "SearchForFacetsOptions {\n"
+	out := ""
 	out += fmt.Sprintf("  facet=%v\n", o.Facet)
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
 	out += fmt.Sprintf("  facetQuery=%v\n", o.FacetQuery)
 	out += fmt.Sprintf("  maxFacetHits=%v\n", o.MaxFacetHits)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
-	out += "}"
-	return out
+	return fmt.Sprintf("SearchForFacetsOptions {\n%s}", out)
 }
 
 type NullableSearchForFacetsOptions struct {

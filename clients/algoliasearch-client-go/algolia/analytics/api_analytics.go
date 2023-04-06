@@ -8,67 +8,83 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/call"
 )
 
 type Option struct {
-	Type  string
-	Name  string
-	Value string
+	optionType string
+	name       string
+	value      string
 }
 
-func WithPage(page int32) Option {
+func QueryParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "page",
-		Value: parameterToString(page),
+		optionType: "query",
+		name:       name,
+		value:      parameterToString(val),
 	}
 }
 
-func WithItemsPerPage(itemsPerPage int32) Option {
+func HeaderParamOption(name string, val any) Option {
 	return Option{
-		Type:  "query",
-		Name:  "itemsPerPage",
-		Value: parameterToString(itemsPerPage),
+		optionType: "header",
+		name:       "itemsPerPage",
+		value:      parameterToString(val),
 	}
 }
 
-func WithBody(body any) Option {
-	return Option{
-		Type:  "body",
-		Name:  "body",
-		Value: parameterToString(body),
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiDelRequest
+func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
+	return ApiDelRequest{
+		path: path,
 	}
 }
 
 // @return map[string]interface{}
-func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -134,35 +150,57 @@ func (c *APIClient) Del(path string, opts ...Option) (map[string]interface{}, er
 	return returnValue, nil
 }
 
-// @return map[string]interface{}
-func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, error) {
-	var (
-		localVarPostBody any
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
+}
 
+// Query parameters to be applied to the current query.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+// @return ApiGetRequest
+func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
+	return ApiGetRequest{
+		path: path,
+	}
+}
+
+// @return map[string]interface{}
+func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	var (
+		postBody    any
 		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -226,13 +264,48 @@ func (c *APIClient) Get(path string, opts ...Option) (map[string]interface{}, er
 	}
 
 	return returnValue, nil
+}
+
+type ApiGetAverageClickPositionRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
+
+// The index name to target.
+func (r ApiGetAverageClickPositionRequest) WithIndex(index string) ApiGetAverageClickPositionRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetAverageClickPositionRequest) WithStartDate(startDate string) ApiGetAverageClickPositionRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetAverageClickPositionRequest) WithEndDate(endDate string) ApiGetAverageClickPositionRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetAverageClickPositionRequest) WithTags(tags string) ApiGetAverageClickPositionRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetAverageClickPositionRequest
+func (c *APIClient) NewApiGetAverageClickPositionRequest() ApiGetAverageClickPositionRequest {
+	return ApiGetAverageClickPositionRequest{}
 }
 
 // @return GetAverageClickPositionResponse
-func (c *APIClient) GetAverageClickPosition(index string, opts ...Option) (*GetAverageClickPositionResponse, error) {
+func (c *APIClient) GetAverageClickPosition(r ApiGetAverageClickPositionRequest, opts ...Option) (*GetAverageClickPositionResponse, error) {
 	var (
-		localVarPostBody any
-
+		postBody    any
 		returnValue *GetAverageClickPositionResponse
 	)
 
@@ -240,26 +313,37 @@ func (c *APIClient) GetAverageClickPosition(index string, opts ...Option) (*GetA
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -325,11 +409,46 @@ func (c *APIClient) GetAverageClickPosition(index string, opts ...Option) (*GetA
 	return returnValue, nil
 }
 
-// @return GetClickPositionsResponse
-func (c *APIClient) GetClickPositions(index string, opts ...Option) (*GetClickPositionsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetClickPositionsRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetClickPositionsRequest) WithIndex(index string) ApiGetClickPositionsRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetClickPositionsRequest) WithStartDate(startDate string) ApiGetClickPositionsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetClickPositionsRequest) WithEndDate(endDate string) ApiGetClickPositionsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetClickPositionsRequest) WithTags(tags string) ApiGetClickPositionsRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetClickPositionsRequest
+func (c *APIClient) NewApiGetClickPositionsRequest() ApiGetClickPositionsRequest {
+	return ApiGetClickPositionsRequest{}
+}
+
+// @return GetClickPositionsResponse
+func (c *APIClient) GetClickPositions(r ApiGetClickPositionsRequest, opts ...Option) (*GetClickPositionsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetClickPositionsResponse
 	)
 
@@ -337,26 +456,37 @@ func (c *APIClient) GetClickPositions(index string, opts ...Option) (*GetClickPo
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -422,11 +552,46 @@ func (c *APIClient) GetClickPositions(index string, opts ...Option) (*GetClickPo
 	return returnValue, nil
 }
 
-// @return GetClickThroughRateResponse
-func (c *APIClient) GetClickThroughRate(index string, opts ...Option) (*GetClickThroughRateResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetClickThroughRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetClickThroughRateRequest) WithIndex(index string) ApiGetClickThroughRateRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetClickThroughRateRequest) WithStartDate(startDate string) ApiGetClickThroughRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetClickThroughRateRequest) WithEndDate(endDate string) ApiGetClickThroughRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetClickThroughRateRequest) WithTags(tags string) ApiGetClickThroughRateRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetClickThroughRateRequest
+func (c *APIClient) NewApiGetClickThroughRateRequest() ApiGetClickThroughRateRequest {
+	return ApiGetClickThroughRateRequest{}
+}
+
+// @return GetClickThroughRateResponse
+func (c *APIClient) GetClickThroughRate(r ApiGetClickThroughRateRequest, opts ...Option) (*GetClickThroughRateResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetClickThroughRateResponse
 	)
 
@@ -434,26 +599,37 @@ func (c *APIClient) GetClickThroughRate(index string, opts ...Option) (*GetClick
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -519,11 +695,46 @@ func (c *APIClient) GetClickThroughRate(index string, opts ...Option) (*GetClick
 	return returnValue, nil
 }
 
-// @return GetConversationRateResponse
-func (c *APIClient) GetConversationRate(index string, opts ...Option) (*GetConversationRateResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetConversationRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetConversationRateRequest) WithIndex(index string) ApiGetConversationRateRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetConversationRateRequest) WithStartDate(startDate string) ApiGetConversationRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetConversationRateRequest) WithEndDate(endDate string) ApiGetConversationRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetConversationRateRequest) WithTags(tags string) ApiGetConversationRateRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetConversationRateRequest
+func (c *APIClient) NewApiGetConversationRateRequest() ApiGetConversationRateRequest {
+	return ApiGetConversationRateRequest{}
+}
+
+// @return GetConversationRateResponse
+func (c *APIClient) GetConversationRate(r ApiGetConversationRateRequest, opts ...Option) (*GetConversationRateResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetConversationRateResponse
 	)
 
@@ -531,26 +742,37 @@ func (c *APIClient) GetConversationRate(index string, opts ...Option) (*GetConve
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -616,11 +838,46 @@ func (c *APIClient) GetConversationRate(index string, opts ...Option) (*GetConve
 	return returnValue, nil
 }
 
-// @return GetNoClickRateResponse
-func (c *APIClient) GetNoClickRate(index string, opts ...Option) (*GetNoClickRateResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetNoClickRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetNoClickRateRequest) WithIndex(index string) ApiGetNoClickRateRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetNoClickRateRequest) WithStartDate(startDate string) ApiGetNoClickRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetNoClickRateRequest) WithEndDate(endDate string) ApiGetNoClickRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetNoClickRateRequest) WithTags(tags string) ApiGetNoClickRateRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetNoClickRateRequest
+func (c *APIClient) NewApiGetNoClickRateRequest() ApiGetNoClickRateRequest {
+	return ApiGetNoClickRateRequest{}
+}
+
+// @return GetNoClickRateResponse
+func (c *APIClient) GetNoClickRate(r ApiGetNoClickRateRequest, opts ...Option) (*GetNoClickRateResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetNoClickRateResponse
 	)
 
@@ -628,26 +885,37 @@ func (c *APIClient) GetNoClickRate(index string, opts ...Option) (*GetNoClickRat
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -713,11 +981,46 @@ func (c *APIClient) GetNoClickRate(index string, opts ...Option) (*GetNoClickRat
 	return returnValue, nil
 }
 
-// @return GetNoResultsRateResponse
-func (c *APIClient) GetNoResultsRate(index string, opts ...Option) (*GetNoResultsRateResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetNoResultsRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetNoResultsRateRequest) WithIndex(index string) ApiGetNoResultsRateRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetNoResultsRateRequest) WithStartDate(startDate string) ApiGetNoResultsRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetNoResultsRateRequest) WithEndDate(endDate string) ApiGetNoResultsRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetNoResultsRateRequest) WithTags(tags string) ApiGetNoResultsRateRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetNoResultsRateRequest
+func (c *APIClient) NewApiGetNoResultsRateRequest() ApiGetNoResultsRateRequest {
+	return ApiGetNoResultsRateRequest{}
+}
+
+// @return GetNoResultsRateResponse
+func (c *APIClient) GetNoResultsRate(r ApiGetNoResultsRateRequest, opts ...Option) (*GetNoResultsRateResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetNoResultsRateResponse
 	)
 
@@ -725,26 +1028,37 @@ func (c *APIClient) GetNoResultsRate(index string, opts ...Option) (*GetNoResult
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -810,11 +1124,46 @@ func (c *APIClient) GetNoResultsRate(index string, opts ...Option) (*GetNoResult
 	return returnValue, nil
 }
 
-// @return GetSearchesCountResponse
-func (c *APIClient) GetSearchesCount(index string, opts ...Option) (*GetSearchesCountResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetSearchesCountRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetSearchesCountRequest) WithIndex(index string) ApiGetSearchesCountRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetSearchesCountRequest) WithStartDate(startDate string) ApiGetSearchesCountRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetSearchesCountRequest) WithEndDate(endDate string) ApiGetSearchesCountRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetSearchesCountRequest) WithTags(tags string) ApiGetSearchesCountRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetSearchesCountRequest
+func (c *APIClient) NewApiGetSearchesCountRequest() ApiGetSearchesCountRequest {
+	return ApiGetSearchesCountRequest{}
+}
+
+// @return GetSearchesCountResponse
+func (c *APIClient) GetSearchesCount(r ApiGetSearchesCountRequest, opts ...Option) (*GetSearchesCountResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetSearchesCountResponse
 	)
 
@@ -822,26 +1171,37 @@ func (c *APIClient) GetSearchesCount(index string, opts ...Option) (*GetSearches
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -907,11 +1267,60 @@ func (c *APIClient) GetSearchesCount(index string, opts ...Option) (*GetSearches
 	return returnValue, nil
 }
 
-// @return GetSearchesNoClicksResponse
-func (c *APIClient) GetSearchesNoClicks(index string, opts ...Option) (*GetSearchesNoClicksResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetSearchesNoClicksRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetSearchesNoClicksRequest) WithIndex(index string) ApiGetSearchesNoClicksRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetSearchesNoClicksRequest) WithStartDate(startDate string) ApiGetSearchesNoClicksRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetSearchesNoClicksRequest) WithEndDate(endDate string) ApiGetSearchesNoClicksRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetSearchesNoClicksRequest) WithLimit(limit int32) ApiGetSearchesNoClicksRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetSearchesNoClicksRequest) WithOffset(offset int32) ApiGetSearchesNoClicksRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetSearchesNoClicksRequest) WithTags(tags string) ApiGetSearchesNoClicksRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetSearchesNoClicksRequest
+func (c *APIClient) NewApiGetSearchesNoClicksRequest() ApiGetSearchesNoClicksRequest {
+	return ApiGetSearchesNoClicksRequest{}
+}
+
+// @return GetSearchesNoClicksResponse
+func (c *APIClient) GetSearchesNoClicks(r ApiGetSearchesNoClicksRequest, opts ...Option) (*GetSearchesNoClicksResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetSearchesNoClicksResponse
 	)
 
@@ -919,26 +1328,43 @@ func (c *APIClient) GetSearchesNoClicks(index string, opts ...Option) (*GetSearc
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1004,11 +1430,60 @@ func (c *APIClient) GetSearchesNoClicks(index string, opts ...Option) (*GetSearc
 	return returnValue, nil
 }
 
-// @return GetSearchesNoResultsResponse
-func (c *APIClient) GetSearchesNoResults(index string, opts ...Option) (*GetSearchesNoResultsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetSearchesNoResultsRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetSearchesNoResultsRequest) WithIndex(index string) ApiGetSearchesNoResultsRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetSearchesNoResultsRequest) WithStartDate(startDate string) ApiGetSearchesNoResultsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetSearchesNoResultsRequest) WithEndDate(endDate string) ApiGetSearchesNoResultsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetSearchesNoResultsRequest) WithLimit(limit int32) ApiGetSearchesNoResultsRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetSearchesNoResultsRequest) WithOffset(offset int32) ApiGetSearchesNoResultsRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetSearchesNoResultsRequest) WithTags(tags string) ApiGetSearchesNoResultsRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetSearchesNoResultsRequest
+func (c *APIClient) NewApiGetSearchesNoResultsRequest() ApiGetSearchesNoResultsRequest {
+	return ApiGetSearchesNoResultsRequest{}
+}
+
+// @return GetSearchesNoResultsResponse
+func (c *APIClient) GetSearchesNoResults(r ApiGetSearchesNoResultsRequest, opts ...Option) (*GetSearchesNoResultsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetSearchesNoResultsResponse
 	)
 
@@ -1016,26 +1491,43 @@ func (c *APIClient) GetSearchesNoResults(index string, opts ...Option) (*GetSear
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1101,11 +1593,25 @@ func (c *APIClient) GetSearchesNoResults(index string, opts ...Option) (*GetSear
 	return returnValue, nil
 }
 
-// @return GetStatusResponse
-func (c *APIClient) GetStatus(index string) (*GetStatusResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetStatusRequest struct {
+	index string
+}
 
+// The index name to target.
+func (r ApiGetStatusRequest) WithIndex(index string) ApiGetStatusRequest {
+	r.index = index
+	return r
+}
+
+// @return ApiGetStatusRequest
+func (c *APIClient) NewApiGetStatusRequest() ApiGetStatusRequest {
+	return ApiGetStatusRequest{}
+}
+
+// @return GetStatusResponse
+func (c *APIClient) GetStatus(r ApiGetStatusRequest, opts ...Option) (*GetStatusResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetStatusResponse
 	)
 
@@ -1113,17 +1619,28 @@ func (c *APIClient) GetStatus(index string) (*GetStatusResponse, error) {
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+	queryParams.Add("index", parameterToString(r.index))
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Add(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1189,11 +1706,60 @@ func (c *APIClient) GetStatus(index string) (*GetStatusResponse, error) {
 	return returnValue, nil
 }
 
-// @return GetTopCountriesResponse
-func (c *APIClient) GetTopCountries(index string, opts ...Option) (*GetTopCountriesResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTopCountriesRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetTopCountriesRequest) WithIndex(index string) ApiGetTopCountriesRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopCountriesRequest) WithStartDate(startDate string) ApiGetTopCountriesRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopCountriesRequest) WithEndDate(endDate string) ApiGetTopCountriesRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetTopCountriesRequest) WithLimit(limit int32) ApiGetTopCountriesRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetTopCountriesRequest) WithOffset(offset int32) ApiGetTopCountriesRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetTopCountriesRequest) WithTags(tags string) ApiGetTopCountriesRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetTopCountriesRequest
+func (c *APIClient) NewApiGetTopCountriesRequest() ApiGetTopCountriesRequest {
+	return ApiGetTopCountriesRequest{}
+}
+
+// @return GetTopCountriesResponse
+func (c *APIClient) GetTopCountries(r ApiGetTopCountriesRequest, opts ...Option) (*GetTopCountriesResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTopCountriesResponse
 	)
 
@@ -1201,26 +1767,43 @@ func (c *APIClient) GetTopCountries(index string, opts ...Option) (*GetTopCountr
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1286,11 +1869,67 @@ func (c *APIClient) GetTopCountries(index string, opts ...Option) (*GetTopCountr
 	return returnValue, nil
 }
 
-// @return GetTopFilterAttributesResponse
-func (c *APIClient) GetTopFilterAttributes(index string, opts ...Option) (*GetTopFilterAttributesResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTopFilterAttributesRequest struct {
+	index     string
+	search    string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetTopFilterAttributesRequest) WithIndex(index string) ApiGetTopFilterAttributesRequest {
+	r.index = index
+	return r
+}
+
+// The query term to search for. Must match the exact user input.
+func (r ApiGetTopFilterAttributesRequest) WithSearch(search string) ApiGetTopFilterAttributesRequest {
+	r.search = search
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopFilterAttributesRequest) WithStartDate(startDate string) ApiGetTopFilterAttributesRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopFilterAttributesRequest) WithEndDate(endDate string) ApiGetTopFilterAttributesRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetTopFilterAttributesRequest) WithLimit(limit int32) ApiGetTopFilterAttributesRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetTopFilterAttributesRequest) WithOffset(offset int32) ApiGetTopFilterAttributesRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetTopFilterAttributesRequest) WithTags(tags string) ApiGetTopFilterAttributesRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetTopFilterAttributesRequest
+func (c *APIClient) NewApiGetTopFilterAttributesRequest() ApiGetTopFilterAttributesRequest {
+	return ApiGetTopFilterAttributesRequest{}
+}
+
+// @return GetTopFilterAttributesResponse
+func (c *APIClient) GetTopFilterAttributes(r ApiGetTopFilterAttributesRequest, opts ...Option) (*GetTopFilterAttributesResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTopFilterAttributesResponse
 	)
 
@@ -1298,26 +1937,46 @@ func (c *APIClient) GetTopFilterAttributes(index string, opts ...Option) (*GetTo
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.search) {
+		queryParams.Add("search", parameterToString(r.search))
+	}
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1383,39 +2042,118 @@ func (c *APIClient) GetTopFilterAttributes(index string, opts ...Option) (*GetTo
 	return returnValue, nil
 }
 
-// @return GetTopFilterForAttributeResponse
-func (c *APIClient) GetTopFilterForAttribute(attribute string, index string, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTopFilterForAttributeRequest struct {
+	attribute string
+	index     string
+	search    string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetTopFilterForAttributeRequest) WithIndex(index string) ApiGetTopFilterForAttributeRequest {
+	r.index = index
+	return r
+}
+
+// The query term to search for. Must match the exact user input.
+func (r ApiGetTopFilterForAttributeRequest) WithSearch(search string) ApiGetTopFilterForAttributeRequest {
+	r.search = search
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopFilterForAttributeRequest) WithStartDate(startDate string) ApiGetTopFilterForAttributeRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopFilterForAttributeRequest) WithEndDate(endDate string) ApiGetTopFilterForAttributeRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetTopFilterForAttributeRequest) WithLimit(limit int32) ApiGetTopFilterForAttributeRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetTopFilterForAttributeRequest) WithOffset(offset int32) ApiGetTopFilterForAttributeRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetTopFilterForAttributeRequest) WithTags(tags string) ApiGetTopFilterForAttributeRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetTopFilterForAttributeRequest
+func (c *APIClient) NewApiGetTopFilterForAttributeRequest(attribute string) ApiGetTopFilterForAttributeRequest {
+	return ApiGetTopFilterForAttributeRequest{
+		attribute: attribute,
+	}
+}
+
+// @return GetTopFilterForAttributeResponse
+func (c *APIClient) GetTopFilterForAttribute(r ApiGetTopFilterForAttributeRequest, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTopFilterForAttributeResponse
 	)
 
 	requestPath := "/2/filters/{attribute}"
-	requestPath = strings.Replace(requestPath, "{"+"attribute"+"}", url.PathEscape(parameterToString(attribute)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"attribute"+"}", url.PathEscape(parameterToString(r.attribute)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.search) {
+		queryParams.Add("search", parameterToString(r.search))
+	}
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1481,11 +2219,67 @@ func (c *APIClient) GetTopFilterForAttribute(attribute string, index string, opt
 	return returnValue, nil
 }
 
-// @return GetTopFiltersNoResultsResponse
-func (c *APIClient) GetTopFiltersNoResults(index string, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTopFiltersNoResultsRequest struct {
+	index     string
+	search    string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetTopFiltersNoResultsRequest) WithIndex(index string) ApiGetTopFiltersNoResultsRequest {
+	r.index = index
+	return r
+}
+
+// The query term to search for. Must match the exact user input.
+func (r ApiGetTopFiltersNoResultsRequest) WithSearch(search string) ApiGetTopFiltersNoResultsRequest {
+	r.search = search
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopFiltersNoResultsRequest) WithStartDate(startDate string) ApiGetTopFiltersNoResultsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopFiltersNoResultsRequest) WithEndDate(endDate string) ApiGetTopFiltersNoResultsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetTopFiltersNoResultsRequest) WithLimit(limit int32) ApiGetTopFiltersNoResultsRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetTopFiltersNoResultsRequest) WithOffset(offset int32) ApiGetTopFiltersNoResultsRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetTopFiltersNoResultsRequest) WithTags(tags string) ApiGetTopFiltersNoResultsRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetTopFiltersNoResultsRequest
+func (c *APIClient) NewApiGetTopFiltersNoResultsRequest() ApiGetTopFiltersNoResultsRequest {
+	return ApiGetTopFiltersNoResultsRequest{}
+}
+
+// @return GetTopFiltersNoResultsResponse
+func (c *APIClient) GetTopFiltersNoResults(r ApiGetTopFiltersNoResultsRequest, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTopFiltersNoResultsResponse
 	)
 
@@ -1493,26 +2287,46 @@ func (c *APIClient) GetTopFiltersNoResults(index string, opts ...Option) (*GetTo
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.search) {
+		queryParams.Add("search", parameterToString(r.search))
+	}
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1578,11 +2392,74 @@ func (c *APIClient) GetTopFiltersNoResults(index string, opts ...Option) (*GetTo
 	return returnValue, nil
 }
 
-// @return GetTopHitsResponse
-func (c *APIClient) GetTopHits(index string, opts ...Option) (*GetTopHitsResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTopHitsRequest struct {
+	index          string
+	search         string
+	clickAnalytics bool
+	startDate      string
+	endDate        string
+	limit          int32
+	offset         int32
+	tags           string
+}
 
+// The index name to target.
+func (r ApiGetTopHitsRequest) WithIndex(index string) ApiGetTopHitsRequest {
+	r.index = index
+	return r
+}
+
+// The query term to search for. Must match the exact user input.
+func (r ApiGetTopHitsRequest) WithSearch(search string) ApiGetTopHitsRequest {
+	r.search = search
+	return r
+}
+
+// Whether to include the click-through and conversion rates for a search.
+func (r ApiGetTopHitsRequest) WithClickAnalytics(clickAnalytics bool) ApiGetTopHitsRequest {
+	r.clickAnalytics = clickAnalytics
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopHitsRequest) WithStartDate(startDate string) ApiGetTopHitsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopHitsRequest) WithEndDate(endDate string) ApiGetTopHitsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetTopHitsRequest) WithLimit(limit int32) ApiGetTopHitsRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetTopHitsRequest) WithOffset(offset int32) ApiGetTopHitsRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetTopHitsRequest) WithTags(tags string) ApiGetTopHitsRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetTopHitsRequest
+func (c *APIClient) NewApiGetTopHitsRequest() ApiGetTopHitsRequest {
+	return ApiGetTopHitsRequest{}
+}
+
+// @return GetTopHitsResponse
+func (c *APIClient) GetTopHits(r ApiGetTopHitsRequest, opts ...Option) (*GetTopHitsResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTopHitsResponse
 	)
 
@@ -1590,26 +2467,49 @@ func (c *APIClient) GetTopHits(index string, opts ...Option) (*GetTopHitsRespons
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.search) {
+		queryParams.Add("search", parameterToString(r.search))
+	}
+	if !isNilorEmpty(r.clickAnalytics) {
+		queryParams.Add("clickAnalytics", parameterToString(r.clickAnalytics))
+	}
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1675,11 +2575,81 @@ func (c *APIClient) GetTopHits(index string, opts ...Option) (*GetTopHitsRespons
 	return returnValue, nil
 }
 
-// @return GetTopSearchesResponse
-func (c *APIClient) GetTopSearches(index string, opts ...Option) (*GetTopSearchesResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetTopSearchesRequest struct {
+	index          string
+	clickAnalytics bool
+	startDate      string
+	endDate        string
+	orderBy        *OrderBy
+	direction      *Direction
+	limit          int32
+	offset         int32
+	tags           string
+}
 
+// The index name to target.
+func (r ApiGetTopSearchesRequest) WithIndex(index string) ApiGetTopSearchesRequest {
+	r.index = index
+	return r
+}
+
+// Whether to include the click-through and conversion rates for a search.
+func (r ApiGetTopSearchesRequest) WithClickAnalytics(clickAnalytics bool) ApiGetTopSearchesRequest {
+	r.clickAnalytics = clickAnalytics
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopSearchesRequest) WithStartDate(startDate string) ApiGetTopSearchesRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetTopSearchesRequest) WithEndDate(endDate string) ApiGetTopSearchesRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Reorder the results.
+func (r ApiGetTopSearchesRequest) WithOrderBy(orderBy OrderBy) ApiGetTopSearchesRequest {
+	r.orderBy = &orderBy
+	return r
+}
+
+// The sorting of the result.
+func (r ApiGetTopSearchesRequest) WithDirection(direction Direction) ApiGetTopSearchesRequest {
+	r.direction = &direction
+	return r
+}
+
+// Number of records to return. Limit is the size of the page.
+func (r ApiGetTopSearchesRequest) WithLimit(limit int32) ApiGetTopSearchesRequest {
+	r.limit = limit
+	return r
+}
+
+// Position of the starting record. Used for paging. 0 is the first record.
+func (r ApiGetTopSearchesRequest) WithOffset(offset int32) ApiGetTopSearchesRequest {
+	r.offset = offset
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetTopSearchesRequest) WithTags(tags string) ApiGetTopSearchesRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetTopSearchesRequest
+func (c *APIClient) NewApiGetTopSearchesRequest() ApiGetTopSearchesRequest {
+	return ApiGetTopSearchesRequest{}
+}
+
+// @return GetTopSearchesResponse
+func (c *APIClient) GetTopSearches(r ApiGetTopSearchesRequest, opts ...Option) (*GetTopSearchesResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetTopSearchesResponse
 	)
 
@@ -1687,26 +2657,52 @@ func (c *APIClient) GetTopSearches(index string, opts ...Option) (*GetTopSearche
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.clickAnalytics) {
+		queryParams.Add("clickAnalytics", parameterToString(r.clickAnalytics))
+	}
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.orderBy) {
+		queryParams.Add("orderBy", parameterToString(*r.orderBy))
+	}
+	if !isNilorEmpty(r.direction) {
+		queryParams.Add("direction", parameterToString(*r.direction))
+	}
+	if !isNilorEmpty(r.limit) {
+		queryParams.Add("limit", parameterToString(r.limit))
+	}
+	if !isNilorEmpty(r.offset) {
+		queryParams.Add("offset", parameterToString(r.offset))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1772,11 +2768,46 @@ func (c *APIClient) GetTopSearches(index string, opts ...Option) (*GetTopSearche
 	return returnValue, nil
 }
 
-// @return GetUsersCountResponse
-func (c *APIClient) GetUsersCount(index string, opts ...Option) (*GetUsersCountResponse, error) {
-	var (
-		localVarPostBody any
+type ApiGetUsersCountRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
+}
 
+// The index name to target.
+func (r ApiGetUsersCountRequest) WithIndex(index string) ApiGetUsersCountRequest {
+	r.index = index
+	return r
+}
+
+// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetUsersCountRequest) WithStartDate(startDate string) ApiGetUsersCountRequest {
+	r.startDate = startDate
+	return r
+}
+
+// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
+func (r ApiGetUsersCountRequest) WithEndDate(endDate string) ApiGetUsersCountRequest {
+	r.endDate = endDate
+	return r
+}
+
+// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+func (r ApiGetUsersCountRequest) WithTags(tags string) ApiGetUsersCountRequest {
+	r.tags = tags
+	return r
+}
+
+// @return ApiGetUsersCountRequest
+func (c *APIClient) NewApiGetUsersCountRequest() ApiGetUsersCountRequest {
+	return ApiGetUsersCountRequest{}
+}
+
+// @return GetUsersCountResponse
+func (c *APIClient) GetUsersCount(r ApiGetUsersCountRequest, opts ...Option) (*GetUsersCountResponse, error) {
+	var (
+		postBody    any
 		returnValue *GetUsersCountResponse
 	)
 
@@ -1784,26 +2815,37 @@ func (c *APIClient) GetUsersCount(index string, opts ...Option) (*GetUsersCountR
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if index == "" {
+	if r.index == "" {
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(index))
-	// optional params
+	queryParams.Add("index", parameterToString(r.index))
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Add("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Add("endDate", parameterToString(r.endDate))
+	}
+	if !isNilorEmpty(r.tags) {
+		queryParams.Add("tags", parameterToString(r.tags))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, localVarPostBody, headers, queryParams)
+
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1869,43 +2911,66 @@ func (c *APIClient) GetUsersCount(index string, opts ...Option) (*GetUsersCountR
 	return returnValue, nil
 }
 
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPostRequest
+func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
+	return ApiPostRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1971,43 +3036,66 @@ func (c *APIClient) Post(path string, opts ...Option) (map[string]interface{}, e
 	return returnValue, nil
 }
 
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
+}
+
+// Query parameters to be applied to the current query.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// The parameters to send with the custom request.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+// @return ApiPutRequest
+func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
+	return ApiPutRequest{
+		path: path,
+	}
+}
+
 // @return map[string]interface{}
-func (c *APIClient) Put(path string, opts ...Option) (map[string]interface{}, error) {
+func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
-		localVarPostBody any
-		body             any
-		returnValue      map[string]interface{}
+		postBody    any
+		returnValue map[string]interface{}
 	)
 
 	requestPath := "/1{path}"
-	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(path)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"path"+"}", url.PathEscape(parameterToString(r.path)), -1)
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
 
-	// optional params
+	if !isNilorEmpty(r.parameters) {
+		queryParams.Add("parameters", parameterToString(r.parameters))
+	}
+
+	// optional params if any
 	for _, opt := range opts {
-		switch opt.Type {
+		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.Name, opt.Value)
+			queryParams.Add(opt.name, opt.value)
 		case "header":
-			headers[opt.Name] = opt.Value
-		case "body":
-			body = opt.Value
+			headers[opt.name] = opt.value
 		}
 	}
+
 	// body params
-	if body != nil {
-		localVarPostBody = body
-	} else {
-		localVarPostBody = body
-	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, localVarPostBody, headers, queryParams)
+	postBody = r.body
+	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
 
-	res, err := c.callAPI(req)
+	res, err := c.callAPI(req, call.Write)
 	if err != nil {
 		return returnValue, err
 	}

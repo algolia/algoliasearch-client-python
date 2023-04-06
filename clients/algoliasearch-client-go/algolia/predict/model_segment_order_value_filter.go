@@ -26,8 +26,6 @@ func WithSegmentOrderValueFilterOperator(val SegmentFilterOperatorNumerical) Seg
 // will change when the set of required properties is changed
 func NewSegmentOrderValueFilter(value float32, opts ...SegmentOrderValueFilterOption) *SegmentOrderValueFilter {
 	this := &SegmentOrderValueFilter{}
-	var operator SegmentFilterOperatorNumerical = SEGMENTFILTEROPERATORNUMERICAL_EQ
-	this.Operator = &operator
 	this.Value = value
 	for _, opt := range opts {
 		opt(this)
@@ -113,11 +111,10 @@ func (o SegmentOrderValueFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (o SegmentOrderValueFilter) String() string {
-	out := "SegmentOrderValueFilter {\n"
+	out := ""
 	out += fmt.Sprintf("  operator=%v\n", o.Operator)
 	out += fmt.Sprintf("  value=%v\n", o.Value)
-	out += "}"
-	return out
+	return fmt.Sprintf("SegmentOrderValueFilter {\n%s}", out)
 }
 
 type NullableSegmentOrderValueFilter struct {

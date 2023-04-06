@@ -123,12 +123,11 @@ func (o UpdatedRuleResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o UpdatedRuleResponse) String() string {
-	out := "UpdatedRuleResponse {\n"
+	out := ""
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
 	out += fmt.Sprintf("  taskID=%v\n", o.TaskID)
-	out += "}"
-	return out
+	return fmt.Sprintf("UpdatedRuleResponse {\n%s}", out)
 }
 
 type NullableUpdatedRuleResponse struct {

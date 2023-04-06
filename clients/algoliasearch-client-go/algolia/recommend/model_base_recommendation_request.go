@@ -92,11 +92,10 @@ func (o BaseRecommendationRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (o BaseRecommendationRequest) String() string {
-	out := "BaseRecommendationRequest {\n"
+	out := ""
 	out += fmt.Sprintf("  model=%v\n", o.Model)
 	out += fmt.Sprintf("  objectID=%v\n", o.ObjectID)
-	out += "}"
-	return out
+	return fmt.Sprintf("BaseRecommendationRequest {\n%s}", out)
 }
 
 type NullableBaseRecommendationRequest struct {

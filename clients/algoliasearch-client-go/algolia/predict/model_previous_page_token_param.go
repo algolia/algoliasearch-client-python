@@ -81,10 +81,9 @@ func (o PreviousPageTokenParam) MarshalJSON() ([]byte, error) {
 }
 
 func (o PreviousPageTokenParam) String() string {
-	out := "PreviousPageTokenParam {\n"
+	out := ""
 	out += fmt.Sprintf("  previousPageToken=%v\n", o.PreviousPageToken)
-	out += "}"
-	return out
+	return fmt.Sprintf("PreviousPageTokenParam {\n%s}", out)
 }
 
 type NullablePreviousPageTokenParam struct {
