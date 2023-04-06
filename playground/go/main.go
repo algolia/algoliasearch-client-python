@@ -1,13 +1,11 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
-
-	"github.com/algolia/algoliasearch-client-go/v4/algolia/ingestion"
-	"github.com/algolia/algoliasearch-client-go/v4/algolia/search"
 )
 
 func main() {
@@ -16,23 +14,40 @@ func main() {
 	appID := os.Getenv("ALGOLIA_APPLICATION_ID")
 	apiKey := os.Getenv("ALGOLIA_ADMIN_KEY")
 
+	var client string
+	var returnCode int
+
+	flag.StringVar(&client, "client", "", "client name")
+	flag.Parse()
+
+	if client == "" {
+		fmt.Println("Please specify a client name")
+		os.Exit(1)
+	}
+
 	//debug.Enable()
 
-	// ingestion
-	ingestionClient := ingestion.NewClient(appID, apiKey, ingestion.US)
+	switch client {
+	case "ingestion":
+		returnCode = testIngestion(appID, apiKey)
+	case "search":
+		returnCode = testSearch(appID, apiKey)
+	case "analytics":
+		returnCode = testAnalytics(appID, apiKey)
+	case "insights":
+		returnCode = testInsights(appID, apiKey)
+	case "personalization":
+		returnCode = testPersonalization(appID, apiKey)
+	case "predict":
+		returnCode = testPredict(appID, apiKey)
+	case "query-suggestions":
+		returnCode = testQuerySuggestions(appID, apiKey)
+	case "recommend":
+		returnCode = testRecommend(appID, apiKey)
+	default:
+		fmt.Println("Please specify a valid client name")
+		os.Exit(1)
+	}
 
-	auths, err := ingestionClient.GetAuthentications(
-		ingestionClient.NewApiGetAuthenticationsRequest().WithItemsPerPage(2),
-		ingestion.QueryParamOption("myQueryParam1", "myQueryParamValue1"),
-		ingestion.HeaderParamOption("myHeaderParam1", "myHeaderParamValue2"),
-	)
-	fmt.Println(auths, err)
-
-	// search
-	indexName := "test_index"
-	searchClient := search.NewClient(appID, apiKey)
-
-	searchParams := search.SearchParamsStringAsSearchParams(search.NewSearchParamsString(search.WithSearchParamsStringParams("query=jeans&hitsPerPage=2")))
-	searchRes, err := searchClient.SearchSingleIndex(searchClient.NewApiSearchSingleIndexRequest(indexName).WithSearchParams(searchParams))
-	fmt.Println(searchRes, err)
+	os.Exit(returnCode)
 }

@@ -30,7 +30,12 @@ export async function playground({
       );
       break;
     case 'go':
-      await run(`cd playground/go && /usr/local/go/bin/go run main.go`);
+      // eslint-disable-next-line no-console
+      console.log(
+        await run(
+          `cd playground/go && /usr/local/go/bin/go run . --client ${client}`
+        )
+      );
       break;
     default:
   }
