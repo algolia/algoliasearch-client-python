@@ -67,7 +67,7 @@ public class Utils {
 
       boolean hasRegionalHost = false;
       boolean fallbackToAliasHost = false;
-      String host = "";
+      String regionalHost = "";
       String hostWithFallback = "";
       Set<String> allowedRegions = new HashSet<>();
       for (Map<String, Object> server : servers) {
@@ -108,12 +108,12 @@ public class Utils {
 
         // This is used for hosts like `insights` that uses `.io`
         URL url = new URL((String) server.get("url"));
-        host = url.getHost();
+        regionalHost = url.getHost();
       }
       additionalProperties.put("hostWithFallback", hostWithFallback);
       additionalProperties.put("hasRegionalHost", hasRegionalHost);
       additionalProperties.put("fallbackToAliasHost", fallbackToAliasHost);
-      additionalProperties.put("host", host);
+      additionalProperties.put("regionalHost", regionalHost);
       additionalProperties.put("allowedRegions", allowedRegions.toArray(new String[0]));
     } catch (Exception e) {
       throw new ConfigException("Couldn't generate servers", e);

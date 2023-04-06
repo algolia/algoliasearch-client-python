@@ -39,7 +39,11 @@ module.exports = {
     'clients/algoliasearch-client-php/composer.json',
 
     // GO
-    '!clients/algoliasearch-client-go/*',
     'clients/algoliasearch-client-go/algolia/**',
+    '!clients/algoliasearch-client-go/*',
+    '!clients/algoliasearch-client-go/algolia/internal/**',
+    '!clients/algoliasearch-client-go/algolia/call/*',
+    '!clients/algoliasearch-client-go/algolia/compression/*',
+    '!clients/algoliasearch-client-go/algolia/debug/*',
   ],
 };

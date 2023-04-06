@@ -112,7 +112,7 @@ public class {{classname}} extends ApiClient {
         throw new AlgoliaRuntimeException("`region` {{^fallbackToAliasHost}}is required and {{/fallbackToAliasHost}}must be one of the following: {{#allowedRegions}}{{.}}{{^-last}}, {{/-last}}{{/allowedRegions}}");
       }
 
-      String url = {{#fallbackToAliasHost}}region == null ? "{{{hostWithFallback}}}" : {{/fallbackToAliasHost}} "{{{host}}}".replace("{region}", region);
+      String url = {{#fallbackToAliasHost}}region == null ? "{{{hostWithFallback}}}" : {{/fallbackToAliasHost}} "{{{regionalHost}}}".replace("{region}", region);
 
       hosts.add(new StatefulHost(url, "https", EnumSet.of(CallType.READ, CallType.WRITE)));
       return hosts;

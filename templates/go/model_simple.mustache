@@ -51,20 +51,6 @@ func New{{classname}}({{#requiredVars}}{{nameInCamelCase}} {{dataType}}{{^-last}
 	this.{{name}} = {{nameInCamelCase}}
 {{/required}}
 {{^required}}
-{{#defaultValue}}
-{{^vendorExtensions.x-golang-is-container}}
-{{^isReadOnly}}
-{{#isNullable}}
-	var {{nameInCamelCase}} {{{datatypeWithEnum}}} = {{{.}}}
-	this.{{name}} = *New{{{dataType}}}(&{{nameInCamelCase}})
-{{/isNullable}}
-{{^isNullable}}
-	var {{nameInCamelCase}} {{{dataType}}} = {{{.}}}
-	this.{{name}} = &{{nameInCamelCase}}
-{{/isNullable}}
-{{/isReadOnly}}
-{{/vendorExtensions.x-golang-is-container}}
-{{/defaultValue}}
 {{/required}}
 {{/allVars}}
 {{#hasOptional}}
@@ -432,7 +418,7 @@ func (o *{{{classname}}}) UnmarshalJSON(bytes []byte) (err error) {
 
 {{/isArray}}
 func (o {{classname}}) String() string {
-  out := "{{classname}} {\n"
+  out := ""
 	{{#vars}}
   out += fmt.Sprintf("  {{baseName}}=%v\n", o.{{name}})
 	{{/vars}}
@@ -440,9 +426,7 @@ func (o {{classname}}) String() string {
 	for key, value := range o.AdditionalProperties {
 		out += fmt.Sprintf("  %s=%v\n", key, value)
 	}
-
 	{{/isAdditionalPropertiesTrue}}
-  out += "}"
-	return out
+  return fmt.Sprintf("{{classname}} {\n%s}", out)
 }
 {{>nullable_model}}

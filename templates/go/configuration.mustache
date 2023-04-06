@@ -1,7 +1,12 @@
 // {{{generationBanner}}}
 package {{packageName}}
 
-import "net/http"
+import (
+	"net/http"
+	"time"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/compression"
+)
 
 type Requester interface {
   Request(*http.Request) (*http.Response, error)
@@ -37,9 +42,12 @@ type Configuration struct {
   ApiKey string{{#hasRegionalHost}}
   Region Region{{/hasRegionalHost}}
 
-	Host             string            `json:"host,omitempty"`
+	Hosts            []string           `json:"host,omitempty"`
 	DefaultHeader    map[string]string `json:"defaultHeader,omitempty"`
 	UserAgent        string            `json:"userAgent,omitempty"`
 	Debug            bool              `json:"debug,omitempty"`
 	Requester        Requester
+	ReadTimeout      time.Duration
+	WriteTimeout     time.Duration
+	Compression      compression.Compression
 }

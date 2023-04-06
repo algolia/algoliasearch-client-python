@@ -132,7 +132,7 @@ use {{invokerPackage}}\Support\Helpers;
             $clusterHosts = ClusterHosts::create($hosts);
         } else {
             $url = $config->getRegion() !== null && $config->getRegion() !== '' ?
-                str_replace('{region}', $config->getRegion(), '{{{host}}}') :
+                str_replace('{region}', $config->getRegion(), '{{{regionalHost}}}') :
                 '{{{hostWithFallback}}}';
             $clusterHosts = ClusterHosts::create($url);
         }

@@ -42,7 +42,7 @@ function getDefaultHosts(appId: string): Host[] {
 
 {{#hasRegionalHost}}
 function getDefaultHosts(region{{#fallbackToAliasHost}}?{{/fallbackToAliasHost}}: Region): Host[] {
-  const url = {{#fallbackToAliasHost}}!region ? '{{{hostWithFallback}}}' : {{/fallbackToAliasHost}} '{{{host}}}'.replace('{region}', region);
+  const url = {{#fallbackToAliasHost}}!region ? '{{{hostWithFallback}}}' : {{/fallbackToAliasHost}} '{{{regionalHost}}}'.replace('{region}', region);
 
   return [{ url, accept: 'readWrite', protocol: 'https' }];
 }
