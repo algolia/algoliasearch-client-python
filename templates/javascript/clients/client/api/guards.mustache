@@ -5,7 +5,7 @@
  * @param trigger - The given Task Trigger.
  */
 export function isOnDemandTrigger(
-  trigger: Trigger
+  trigger: Trigger | TaskCreateTrigger
 ): trigger is OnDemandTrigger {
   return trigger.type === 'onDemand';
 }
@@ -17,7 +17,7 @@ export function isOnDemandTrigger(
  * @param trigger - The given Task Trigger.
  */
 export function isScheduleTrigger(
-  trigger: Trigger
+  trigger: Trigger | TaskCreateTrigger
 ): trigger is ScheduleTrigger {
   return trigger.type === 'schedule';
 }
@@ -29,7 +29,7 @@ export function isScheduleTrigger(
  * @param trigger - The given Task Trigger.
  */
 export function isSubscriptionTrigger(
-  trigger: Trigger
+  trigger: Trigger | TaskCreateTrigger
 ): trigger is SubscriptionTrigger {
   return trigger.type === 'subscription';
 }
