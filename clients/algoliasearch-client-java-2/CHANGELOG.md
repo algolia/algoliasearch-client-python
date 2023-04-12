@@ -1,5 +1,10 @@
 ## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
 
+- [a0d96721](https://github.com/algolia/api-clients-automation/commit/a0d96721) fix(specs): task trigger guard import ([#1458](https://github.com/algolia/api-clients-automation/pull/1458)) by [@Fluf22](https://github.com/Fluf22/)
+- [d3f107d4](https://github.com/algolia/api-clients-automation/commit/d3f107d4) fix(specs): task trigger guard update ([#1457](https://github.com/algolia/api-clients-automation/pull/1457)) by [@Fluf22](https://github.com/Fluf22/)
+
+## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
+
 - [619e2ad7](https://github.com/algolia/api-clients-automation/commit/619e2ad7) feat(specs): add delimiter option for csv source ([#1445](https://github.com/algolia/api-clients-automation/pull/1445)) by [@millotp](https://github.com/millotp/)
 
 ## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
