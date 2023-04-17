@@ -33,4 +33,4 @@ EventStatus:
 
 EventType:
   type: string
-  enum: ['fetch', 'record', 'log']
+  enum: ['fetch', 'record', 'log', 'transform']
