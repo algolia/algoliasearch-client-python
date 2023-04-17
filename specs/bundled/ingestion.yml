@@ -1305,6 +1305,7 @@ components:
         - fetch
         - record
         - log
+        - transform
     eventSortKeys:
       type: string
       description: Used to sort the Event list endpoint.

@@ -11,9 +11,10 @@ type EventType string
 
 // List of EventType
 const (
-	EVENTTYPE_FETCH  EventType = "fetch"
-	EVENTTYPE_RECORD EventType = "record"
-	EVENTTYPE_LOG    EventType = "log"
+	EVENTTYPE_FETCH     EventType = "fetch"
+	EVENTTYPE_RECORD    EventType = "record"
+	EVENTTYPE_LOG       EventType = "log"
+	EVENTTYPE_TRANSFORM EventType = "transform"
 )
 
 // All allowed values of EventType enum
@@ -21,6 +22,7 @@ var AllowedEventTypeEnumValues = []EventType{
 	"fetch",
 	"record",
 	"log",
+	"transform",
 }
 
 func (v *EventType) UnmarshalJSON(src []byte) error {
