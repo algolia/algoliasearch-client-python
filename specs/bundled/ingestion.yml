@@ -1066,6 +1066,9 @@ components:
           $ref: '#/components/schemas/destinationID'
         trigger:
           $ref: '#/components/schemas/Trigger'
+        input:
+          description: The input that holds information specific to the task.
+          type: object
         enabled:
           type: boolean
           default: true

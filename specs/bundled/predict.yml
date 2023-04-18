@@ -672,6 +672,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/segmentParentConditionOperands'
+    segmentSize:
+      type: number
+      format: int64
+      description: >-
+        The approximate number of users that matched the segment conditions when
+        it was created, last updated, or when model inference last ran.
     segmentStatus:
       type: string
       description: The status of the segment.
@@ -695,6 +701,7 @@ components:
         - segmentID
         - name
         - conditions
+        - size
         - segmentStatus
         - type
         - lastUpdatedAt
@@ -705,6 +712,8 @@ components:
           $ref: '#/components/schemas/segmentName'
         conditions:
           $ref: '#/components/schemas/segmentParentConditions'
+        size:
+          $ref: '#/components/schemas/segmentSize'
         segmentStatus:
           $ref: '#/components/schemas/segmentStatus'
         type:

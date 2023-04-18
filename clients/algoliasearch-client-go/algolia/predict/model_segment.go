@@ -11,10 +11,12 @@ type Segment struct {
 	// The ID of the segment.
 	SegmentID string `json:"segmentID"`
 	// The name of the segment.
-	Name          string                  `json:"name"`
-	Conditions    SegmentParentConditions `json:"conditions"`
-	SegmentStatus SegmentStatus           `json:"segmentStatus"`
-	Type          SegmentType             `json:"type"`
+	Name       string                  `json:"name"`
+	Conditions SegmentParentConditions `json:"conditions"`
+	// The approximate number of users that matched the segment conditions when it was created, last updated, or when model inference last ran.
+	Size          float32       `json:"size"`
+	SegmentStatus SegmentStatus `json:"segmentStatus"`
+	Type          SegmentType   `json:"type"`
 	// The date and time at which the segment was last updated (RFC3339).
 	LastUpdatedAt string  `json:"lastUpdatedAt"`
 	ErrorMessage  *string `json:"errorMessage,omitempty"`
@@ -32,11 +34,12 @@ func WithSegmentErrorMessage(val string) SegmentOption {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSegment(segmentID string, name string, conditions SegmentParentConditions, segmentStatus SegmentStatus, type_ SegmentType, lastUpdatedAt string, opts ...SegmentOption) *Segment {
+func NewSegment(segmentID string, name string, conditions SegmentParentConditions, size float32, segmentStatus SegmentStatus, type_ SegmentType, lastUpdatedAt string, opts ...SegmentOption) *Segment {
 	this := &Segment{}
 	this.SegmentID = segmentID
 	this.Name = name
 	this.Conditions = conditions
+	this.Size = size
 	this.SegmentStatus = segmentStatus
 	this.Type = type_
 	this.LastUpdatedAt = lastUpdatedAt
@@ -124,6 +127,30 @@ func (o *Segment) GetConditionsOk() (*SegmentParentConditions, bool) {
 // SetConditions sets field value
 func (o *Segment) SetConditions(v SegmentParentConditions) {
 	o.Conditions = v
+}
+
+// GetSize returns the Size field value
+func (o *Segment) GetSize() float32 {
+	if o == nil {
+		var ret float32
+		return ret
+	}
+
+	return o.Size
+}
+
+// GetSizeOk returns a tuple with the Size field value
+// and a boolean to check if the value has been set.
+func (o *Segment) GetSizeOk() (*float32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Size, true
+}
+
+// SetSize sets field value
+func (o *Segment) SetSize(v float32) {
+	o.Size = v
 }
 
 // GetSegmentStatus returns the SegmentStatus field value
@@ -242,6 +269,9 @@ func (o Segment) MarshalJSON() ([]byte, error) {
 		toSerialize["conditions"] = o.Conditions
 	}
 	if true {
+		toSerialize["size"] = o.Size
+	}
+	if true {
 		toSerialize["segmentStatus"] = o.SegmentStatus
 	}
 	if true {
@@ -261,6 +291,7 @@ func (o Segment) String() string {
 	out += fmt.Sprintf("  segmentID=%v\n", o.SegmentID)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  conditions=%v\n", o.Conditions)
+	out += fmt.Sprintf("  size=%v\n", o.Size)
 	out += fmt.Sprintf("  segmentStatus=%v\n", o.SegmentStatus)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  lastUpdatedAt=%v\n", o.LastUpdatedAt)
