@@ -68,6 +68,7 @@ segment:
     - segmentID
     - name
     - conditions
+    - size
     - segmentStatus
     - type
     - lastUpdatedAt
@@ -78,6 +79,8 @@ segment:
       $ref: '#/segmentName'
     conditions:
       $ref: '#/segmentParentConditions'
+    size:
+      $ref: '#/segmentSize'
     segmentStatus:
       $ref: '#/segmentStatus'
     type:
@@ -109,6 +112,11 @@ segmentID:
 segmentName:
   type: string
   description: The name of the segment.
+
+segmentSize:
+  type: number
+  format: int64
+  description: The approximate number of users that matched the segment conditions when it was created, last updated, or when model inference last ran.
 
 updatedAt:
   type: string
