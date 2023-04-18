@@ -15,6 +15,8 @@ type Task struct {
 	// The destination UUID.
 	DestinationID string  `json:"destinationID"`
 	Trigger       Trigger `json:"trigger"`
+	// The input that holds information specific to the task.
+	Input map[string]interface{} `json:"input,omitempty"`
 	// Whether the task is enabled or not.
 	Enabled bool       `json:"enabled"`
 	Action  ActionType `json:"action"`
@@ -25,6 +27,12 @@ type Task struct {
 }
 
 type TaskOption func(f *Task)
+
+func WithTaskInput(val map[string]interface{}) TaskOption {
+	return func(f *Task) {
+		f.Input = val
+	}
+}
 
 func WithTaskUpdatedAt(val string) TaskOption {
 	return func(f *Task) {
@@ -157,6 +165,38 @@ func (o *Task) SetTrigger(v Trigger) {
 	o.Trigger = v
 }
 
+// GetInput returns the Input field value if set, zero value otherwise.
+func (o *Task) GetInput() map[string]interface{} {
+	if o == nil || o.Input == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.Input
+}
+
+// GetInputOk returns a tuple with the Input field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Task) GetInputOk() (map[string]interface{}, bool) {
+	if o == nil || o.Input == nil {
+		return nil, false
+	}
+	return o.Input, true
+}
+
+// HasInput returns a boolean if a field has been set.
+func (o *Task) HasInput() bool {
+	if o != nil && o.Input != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetInput gets a reference to the given map[string]interface{} and assigns it to the Input field.
+func (o *Task) SetInput(v map[string]interface{}) {
+	o.Input = v
+}
+
 // GetEnabled returns the Enabled field value
 func (o *Task) GetEnabled() bool {
 	if o == nil {
@@ -275,6 +315,9 @@ func (o Task) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["trigger"] = o.Trigger
 	}
+	if o.Input != nil {
+		toSerialize["input"] = o.Input
+	}
 	if true {
 		toSerialize["enabled"] = o.Enabled
 	}
@@ -296,6 +339,7 @@ func (o Task) String() string {
 	out += fmt.Sprintf("  sourceID=%v\n", o.SourceID)
 	out += fmt.Sprintf("  destinationID=%v\n", o.DestinationID)
 	out += fmt.Sprintf("  trigger=%v\n", o.Trigger)
+	out += fmt.Sprintf("  input=%v\n", o.Input)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
