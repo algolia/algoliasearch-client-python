@@ -10,6 +10,9 @@ Task:
       $ref: './common.yml#/destinationID'
     trigger:
       $ref: '#/Trigger'
+    input:
+      description: The input that holds information specific to the task.
+      type: object
     enabled:
       type: boolean
       default: true
