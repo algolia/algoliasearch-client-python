@@ -229,9 +229,11 @@ class AbtestingClientRequestsTests {
   void listABTestsTest1() {
     int offset0 = 42;
     int limit0 = 21;
+    String indexPrefix0 = "foo";
+    String indexSuffix0 = "bar";
 
     assertDoesNotThrow(() -> {
-      client.listABTests(offset0, limit0);
+      client.listABTests(offset0, limit0, indexPrefix0, indexSuffix0);
     });
     EchoResponse req = echo.getLastResponse();
 
@@ -241,7 +243,7 @@ class AbtestingClientRequestsTests {
 
     try {
       Map<String, String> expectedQuery = json.readValue(
-        "{\"offset\":\"42\",\"limit\":\"21\"}",
+        "{\"offset\":\"42\",\"limit\":\"21\",\"indexPrefix\":\"foo\",\"indexSuffix\":\"bar\"}",
         new TypeReference<HashMap<String, String>>() {}
       );
       Map<String, Object> actualQuery = req.queryParameters;

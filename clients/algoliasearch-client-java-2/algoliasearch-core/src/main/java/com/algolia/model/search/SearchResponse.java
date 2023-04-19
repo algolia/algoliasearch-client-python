@@ -67,6 +67,9 @@ public class SearchResponse<T> {
   @JsonProperty("params")
   private String params;
 
+  @JsonProperty("redirect")
+  private BaseSearchResponseRedirect redirect;
+
   @JsonProperty("parsedQuery")
   private String parsedQuery;
 
@@ -382,6 +385,21 @@ public class SearchResponse<T> {
     return params;
   }
 
+  public SearchResponse setRedirect(BaseSearchResponseRedirect redirect) {
+    this.redirect = redirect;
+    return this;
+  }
+
+  /**
+   * Get redirect
+   *
+   * @return redirect
+   */
+  @javax.annotation.Nullable
+  public BaseSearchResponseRedirect getRedirect() {
+    return redirect;
+  }
+
   public SearchResponse setParsedQuery(String parsedQuery) {
     this.parsedQuery = parsedQuery;
     return this;
@@ -536,6 +554,7 @@ public class SearchResponse<T> {
       Objects.equals(this.nbSortedHits, searchResponse.nbSortedHits) &&
       Objects.equals(this.page, searchResponse.page) &&
       Objects.equals(this.params, searchResponse.params) &&
+      Objects.equals(this.redirect, searchResponse.redirect) &&
       Objects.equals(this.parsedQuery, searchResponse.parsedQuery) &&
       Objects.equals(this.processingTimeMS, searchResponse.processingTimeMS) &&
       Objects.equals(this.query, searchResponse.query) &&
@@ -568,6 +587,7 @@ public class SearchResponse<T> {
       nbSortedHits,
       page,
       params,
+      redirect,
       parsedQuery,
       processingTimeMS,
       query,
@@ -601,6 +621,7 @@ public class SearchResponse<T> {
     sb.append("    nbSortedHits: ").append(toIndentedString(nbSortedHits)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    params: ").append(toIndentedString(params)).append("\n");
+    sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
     sb.append("    parsedQuery: ").append(toIndentedString(parsedQuery)).append("\n");
     sb.append("    processingTimeMS: ").append(toIndentedString(processingTimeMS)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");

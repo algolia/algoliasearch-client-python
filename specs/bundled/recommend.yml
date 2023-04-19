@@ -442,6 +442,15 @@ components:
       default: none
       x-categories:
         - Query strategy
+    mode:
+      type: string
+      enum:
+        - neuralSearch
+        - keywordSearch
+      description: The search mode that the index will use to query for results.
+      default: keywordSearch
+      x-categories:
+        - Query strategy
     exactOnSingleWordQuery:
       type: string
       enum:
@@ -738,6 +747,23 @@ components:
           $ref: '#/components/schemas/queryType'
         removeWordsIfNoResults:
           $ref: '#/components/schemas/removeWordsIfNoResults'
+        mode:
+          $ref: '#/components/schemas/mode'
+        semanticSearch:
+          type: object
+          description: >
+            The settings relevant for configuration of the semantic search
+            engine. These settings are only used when the mode is set to
+            'neuralSearch'.
+          properties:
+            eventSources:
+              description: >-
+                When null, the current index / replica group will be used as the
+                event source.
+              nullable: true
+              type: array
+              items:
+                type: string
         advancedSyntax:
           type: boolean
           description: Enables the advanced query syntax.
@@ -788,6 +814,16 @@ components:
           default:
             - exactPhrase
             - excludeWords
+          x-categories:
+            - Query strategy
+        explain:
+          type: array
+          items:
+            type: string
+          description: >-
+            Enriches the API’s response with meta-information as to how the
+            query was processed.
+          default: []
           x-categories:
             - Query strategy
         distinct:
@@ -924,6 +960,35 @@ components:
       type: integer
       description: Number of pages available for the current query.
       example: 1
+    RedirectRuleIndexMetadata:
+      type: object
+      properties:
+        source:
+          type: string
+          description: Source index for the redirect rule.
+        dest:
+          type: string
+          description: Destination index for the redirect rule.
+        reason:
+          type: string
+          description: Reason for the redirect rule.
+        succeed:
+          type: boolean
+          description: Status for the redirect rule.
+        data:
+          type: object
+          description: Data for the redirect rule.
+          required:
+            - ruleObjectID
+          properties:
+            ruleObjectID:
+              type: string
+      required:
+        - data
+        - succeed
+        - reason
+        - dest
+        - source
     userData:
       type: object
       description: Lets you store custom data in your indices.
@@ -1037,6 +1102,14 @@ components:
           type: string
           description: A url-encoded string of all search parameters.
           example: query=a&hitsPerPage=20
+        redirect:
+          type: object
+          description: This parameter is for internal use only.
+          properties:
+            index:
+              type: array
+              items:
+                $ref: '#/components/schemas/RedirectRuleIndexMetadata'
         parsedQuery:
           type: string
           description: The query string that will be searched, after normalization.

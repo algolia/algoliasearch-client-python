@@ -122,12 +122,19 @@ describe('listABTests', () => {
     const req = (await client.listABTests({
       offset: 42,
       limit: 21,
+      indexPrefix: 'foo',
+      indexSuffix: 'bar',
     })) as unknown as EchoResponse;
 
     expect(req.path).toEqual('/2/abtests');
     expect(req.method).toEqual('GET');
     expect(req.data).toEqual(undefined);
-    expect(req.searchParams).toStrictEqual({ offset: '42', limit: '21' });
+    expect(req.searchParams).toStrictEqual({
+      offset: '42',
+      limit: '21',
+      indexPrefix: 'foo',
+      indexSuffix: 'bar',
+    });
   });
 });
 

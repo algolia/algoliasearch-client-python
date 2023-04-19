@@ -139,6 +139,12 @@ public class IndexSettings {
   @JsonProperty("removeWordsIfNoResults")
   private RemoveWordsIfNoResults removeWordsIfNoResults;
 
+  @JsonProperty("mode")
+  private Mode mode;
+
+  @JsonProperty("semanticSearch")
+  private IndexSettingsAsSearchParamsSemanticSearch semanticSearch;
+
   @JsonProperty("advancedSyntax")
   private Boolean advancedSyntax;
 
@@ -156,6 +162,9 @@ public class IndexSettings {
 
   @JsonProperty("advancedSyntaxFeatures")
   private List<AdvancedSyntaxFeatures> advancedSyntaxFeatures;
+
+  @JsonProperty("explain")
+  private List<String> explain;
 
   @JsonProperty("distinct")
   private Distinct distinct;
@@ -973,6 +982,36 @@ public class IndexSettings {
     return removeWordsIfNoResults;
   }
 
+  public IndexSettings setMode(Mode mode) {
+    this.mode = mode;
+    return this;
+  }
+
+  /**
+   * Get mode
+   *
+   * @return mode
+   */
+  @javax.annotation.Nullable
+  public Mode getMode() {
+    return mode;
+  }
+
+  public IndexSettings setSemanticSearch(IndexSettingsAsSearchParamsSemanticSearch semanticSearch) {
+    this.semanticSearch = semanticSearch;
+    return this;
+  }
+
+  /**
+   * Get semanticSearch
+   *
+   * @return semanticSearch
+   */
+  @javax.annotation.Nullable
+  public IndexSettingsAsSearchParamsSemanticSearch getSemanticSearch() {
+    return semanticSearch;
+  }
+
   public IndexSettings setAdvancedSyntax(Boolean advancedSyntax) {
     this.advancedSyntax = advancedSyntax;
     return this;
@@ -1094,6 +1133,29 @@ public class IndexSettings {
   @javax.annotation.Nullable
   public List<AdvancedSyntaxFeatures> getAdvancedSyntaxFeatures() {
     return advancedSyntaxFeatures;
+  }
+
+  public IndexSettings setExplain(List<String> explain) {
+    this.explain = explain;
+    return this;
+  }
+
+  public IndexSettings addExplain(String explainItem) {
+    if (this.explain == null) {
+      this.explain = new ArrayList<>();
+    }
+    this.explain.add(explainItem);
+    return this;
+  }
+
+  /**
+   * Enriches the API’s response with meta-information as to how the query was processed.
+   *
+   * @return explain
+   */
+  @javax.annotation.Nullable
+  public List<String> getExplain() {
+    return explain;
   }
 
   public IndexSettings setDistinct(Distinct distinct) {
@@ -1295,12 +1357,15 @@ public class IndexSettings {
       Objects.equals(this.enablePersonalization, indexSettings.enablePersonalization) &&
       Objects.equals(this.queryType, indexSettings.queryType) &&
       Objects.equals(this.removeWordsIfNoResults, indexSettings.removeWordsIfNoResults) &&
+      Objects.equals(this.mode, indexSettings.mode) &&
+      Objects.equals(this.semanticSearch, indexSettings.semanticSearch) &&
       Objects.equals(this.advancedSyntax, indexSettings.advancedSyntax) &&
       Objects.equals(this.optionalWords, indexSettings.optionalWords) &&
       Objects.equals(this.disableExactOnAttributes, indexSettings.disableExactOnAttributes) &&
       Objects.equals(this.exactOnSingleWordQuery, indexSettings.exactOnSingleWordQuery) &&
       Objects.equals(this.alternativesAsExact, indexSettings.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, indexSettings.advancedSyntaxFeatures) &&
+      Objects.equals(this.explain, indexSettings.explain) &&
       Objects.equals(this.distinct, indexSettings.distinct) &&
       Objects.equals(this.attributeForDistinct, indexSettings.attributeForDistinct) &&
       Objects.equals(this.synonyms, indexSettings.synonyms) &&
@@ -1358,12 +1423,15 @@ public class IndexSettings {
       enablePersonalization,
       queryType,
       removeWordsIfNoResults,
+      mode,
+      semanticSearch,
       advancedSyntax,
       optionalWords,
       disableExactOnAttributes,
       exactOnSingleWordQuery,
       alternativesAsExact,
       advancedSyntaxFeatures,
+      explain,
       distinct,
       attributeForDistinct,
       synonyms,
@@ -1422,12 +1490,15 @@ public class IndexSettings {
     sb.append("    enablePersonalization: ").append(toIndentedString(enablePersonalization)).append("\n");
     sb.append("    queryType: ").append(toIndentedString(queryType)).append("\n");
     sb.append("    removeWordsIfNoResults: ").append(toIndentedString(removeWordsIfNoResults)).append("\n");
+    sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
+    sb.append("    semanticSearch: ").append(toIndentedString(semanticSearch)).append("\n");
     sb.append("    advancedSyntax: ").append(toIndentedString(advancedSyntax)).append("\n");
     sb.append("    optionalWords: ").append(toIndentedString(optionalWords)).append("\n");
     sb.append("    disableExactOnAttributes: ").append(toIndentedString(disableExactOnAttributes)).append("\n");
     sb.append("    exactOnSingleWordQuery: ").append(toIndentedString(exactOnSingleWordQuery)).append("\n");
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
+    sb.append("    explain: ").append(toIndentedString(explain)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
     sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    synonyms: ").append(toIndentedString(synonyms)).append("\n");

@@ -525,13 +525,23 @@ public class AbtestingClient extends ApiClient {
    *     (optional, default to 0)
    * @param limit Number of records to return. Limit is the size of the page. (optional, default to
    *     10)
+   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
+   *     prefix that are assigned to either variant of an ab test. (optional)
+   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
+   *     that are assigned to either variant of an ab test. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return ListABTestsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public ListABTestsResponse listABTests(Integer offset, Integer limit, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    return LaunderThrowable.await(listABTestsAsync(offset, limit, requestOptions));
+  public ListABTestsResponse listABTests(
+    Integer offset,
+    Integer limit,
+    String indexPrefix,
+    String indexSuffix,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    return LaunderThrowable.await(listABTestsAsync(offset, limit, indexPrefix, indexSuffix, requestOptions));
   }
 
   /**
@@ -542,11 +552,16 @@ public class AbtestingClient extends ApiClient {
    *     (optional, default to 0)
    * @param limit Number of records to return. Limit is the size of the page. (optional, default to
    *     10)
+   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
+   *     prefix that are assigned to either variant of an ab test. (optional)
+   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
+   *     that are assigned to either variant of an ab test. (optional)
    * @return ListABTestsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public ListABTestsResponse listABTests(Integer offset, Integer limit) throws AlgoliaRuntimeException {
-    return this.listABTests(offset, limit, null);
+  public ListABTestsResponse listABTests(Integer offset, Integer limit, String indexPrefix, String indexSuffix)
+    throws AlgoliaRuntimeException {
+    return this.listABTests(offset, limit, indexPrefix, indexSuffix, null);
   }
 
   /**
@@ -559,7 +574,7 @@ public class AbtestingClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public ListABTestsResponse listABTests(RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    return this.listABTests(null, null, requestOptions);
+    return this.listABTests(null, null, null, null, requestOptions);
   }
 
   /**
@@ -570,7 +585,7 @@ public class AbtestingClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public ListABTestsResponse listABTests() throws AlgoliaRuntimeException {
-    return this.listABTests(null, null, null);
+    return this.listABTests(null, null, null, null, null);
   }
 
   /**
@@ -581,13 +596,22 @@ public class AbtestingClient extends ApiClient {
    *     (optional, default to 0)
    * @param limit Number of records to return. Limit is the size of the page. (optional, default to
    *     10)
+   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
+   *     prefix that are assigned to either variant of an ab test. (optional)
+   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
+   *     that are assigned to either variant of an ab test. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<ListABTestsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<ListABTestsResponse> listABTestsAsync(Integer offset, Integer limit, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<ListABTestsResponse> listABTestsAsync(
+    Integer offset,
+    Integer limit,
+    String indexPrefix,
+    String indexSuffix,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     Object bodyObj = null;
 
     // create path and map variables
@@ -604,6 +628,14 @@ public class AbtestingClient extends ApiClient {
       queryParameters.put("limit", parameterToString(limit));
     }
 
+    if (indexPrefix != null) {
+      queryParameters.put("indexPrefix", parameterToString(indexPrefix));
+    }
+
+    if (indexSuffix != null) {
+      queryParameters.put("indexSuffix", parameterToString(indexSuffix));
+    }
+
     Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
     return this.executeAsync(call, new TypeReference<ListABTestsResponse>() {});
   }
@@ -616,11 +648,16 @@ public class AbtestingClient extends ApiClient {
    *     (optional, default to 0)
    * @param limit Number of records to return. Limit is the size of the page. (optional, default to
    *     10)
+   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
+   *     prefix that are assigned to either variant of an ab test. (optional)
+   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
+   *     that are assigned to either variant of an ab test. (optional)
    * @return CompletableFuture<ListABTestsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<ListABTestsResponse> listABTestsAsync(Integer offset, Integer limit) throws AlgoliaRuntimeException {
-    return this.listABTestsAsync(offset, limit, null);
+  public CompletableFuture<ListABTestsResponse> listABTestsAsync(Integer offset, Integer limit, String indexPrefix, String indexSuffix)
+    throws AlgoliaRuntimeException {
+    return this.listABTestsAsync(offset, limit, indexPrefix, indexSuffix, null);
   }
 
   /**
@@ -633,7 +670,7 @@ public class AbtestingClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<ListABTestsResponse> listABTestsAsync(RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    return this.listABTestsAsync(null, null, requestOptions);
+    return this.listABTestsAsync(null, null, null, null, requestOptions);
   }
 
   /**
@@ -644,7 +681,7 @@ public class AbtestingClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<ListABTestsResponse> listABTestsAsync() throws AlgoliaRuntimeException {
-    return this.listABTestsAsync(null, null, null);
+    return this.listABTestsAsync(null, null, null, null, null);
   }
 
   /**

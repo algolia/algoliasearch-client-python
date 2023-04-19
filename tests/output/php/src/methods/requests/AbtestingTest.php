@@ -274,7 +274,9 @@ class AbtestingTest extends TestCase implements HttpClientInterface
         $client = $this->getClient();
         $client->listABTests(
             42,
-            21
+            21,
+            'foo',
+            'bar'
         );
 
         $this->assertRequests([
@@ -283,7 +285,7 @@ class AbtestingTest extends TestCase implements HttpClientInterface
                 'method' => 'GET',
                 'body' => null,
                 'queryParameters' => json_decode(
-                    "{\"offset\":\"42\",\"limit\":\"21\"}",
+                    "{\"offset\":\"42\",\"limit\":\"21\",\"indexPrefix\":\"foo\",\"indexSuffix\":\"bar\"}",
                     true
                 ),
             ],

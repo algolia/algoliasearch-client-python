@@ -43,7 +43,8 @@ type RecommendationsResponse struct {
 	// Specify the page to retrieve.
 	Page int32 `json:"page"`
 	// A url-encoded string of all search parameters.
-	Params string `json:"params"`
+	Params   string                      `json:"params"`
+	Redirect *BaseSearchResponseRedirect `json:"redirect,omitempty"`
 	// The query string that will be searched, after normalization.
 	ParsedQuery *string `json:"parsedQuery,omitempty"`
 	// Time the server took to process the request, in milliseconds.
@@ -131,6 +132,12 @@ func WithRecommendationsResponseMessage(val string) RecommendationsResponseOptio
 func WithRecommendationsResponseNbSortedHits(val int32) RecommendationsResponseOption {
 	return func(f *RecommendationsResponse) {
 		f.NbSortedHits = &val
+	}
+}
+
+func WithRecommendationsResponseRedirect(val BaseSearchResponseRedirect) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.Redirect = &val
 	}
 }
 
@@ -727,6 +734,38 @@ func (o *RecommendationsResponse) SetParams(v string) {
 	o.Params = v
 }
 
+// GetRedirect returns the Redirect field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetRedirect() BaseSearchResponseRedirect {
+	if o == nil || o.Redirect == nil {
+		var ret BaseSearchResponseRedirect
+		return ret
+	}
+	return *o.Redirect
+}
+
+// GetRedirectOk returns a tuple with the Redirect field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetRedirectOk() (*BaseSearchResponseRedirect, bool) {
+	if o == nil || o.Redirect == nil {
+		return nil, false
+	}
+	return o.Redirect, true
+}
+
+// HasRedirect returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasRedirect() bool {
+	if o != nil && o.Redirect != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRedirect gets a reference to the given BaseSearchResponseRedirect and assigns it to the Redirect field.
+func (o *RecommendationsResponse) SetRedirect(v BaseSearchResponseRedirect) {
+	o.Redirect = &v
+}
+
 // GetParsedQuery returns the ParsedQuery field value if set, zero value otherwise.
 func (o *RecommendationsResponse) GetParsedQuery() string {
 	if o == nil || o.ParsedQuery == nil {
@@ -1015,6 +1054,9 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["params"] = o.Params
 	}
+	if o.Redirect != nil {
+		toSerialize["redirect"] = o.Redirect
+	}
 	if o.ParsedQuery != nil {
 		toSerialize["parsedQuery"] = o.ParsedQuery
 	}
@@ -1062,6 +1104,7 @@ func (o RecommendationsResponse) String() string {
 	out += fmt.Sprintf("  nbSortedHits=%v\n", o.NbSortedHits)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
 	out += fmt.Sprintf("  params=%v\n", o.Params)
+	out += fmt.Sprintf("  redirect=%v\n", o.Redirect)
 	out += fmt.Sprintf("  parsedQuery=%v\n", o.ParsedQuery)
 	out += fmt.Sprintf("  processingTimeMS=%v\n", o.ProcessingTimeMS)
 	out += fmt.Sprintf("  query=%v\n", o.Query)

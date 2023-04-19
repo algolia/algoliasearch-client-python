@@ -194,6 +194,12 @@ public class SearchParamsObject {
   @JsonProperty("removeWordsIfNoResults")
   private RemoveWordsIfNoResults removeWordsIfNoResults;
 
+  @JsonProperty("mode")
+  private Mode mode;
+
+  @JsonProperty("semanticSearch")
+  private IndexSettingsAsSearchParamsSemanticSearch semanticSearch;
+
   @JsonProperty("advancedSyntax")
   private Boolean advancedSyntax;
 
@@ -211,6 +217,9 @@ public class SearchParamsObject {
 
   @JsonProperty("advancedSyntaxFeatures")
   private List<AdvancedSyntaxFeatures> advancedSyntaxFeatures;
+
+  @JsonProperty("explain")
+  private List<String> explain;
 
   @JsonProperty("distinct")
   private Distinct distinct;
@@ -1284,6 +1293,36 @@ public class SearchParamsObject {
     return removeWordsIfNoResults;
   }
 
+  public SearchParamsObject setMode(Mode mode) {
+    this.mode = mode;
+    return this;
+  }
+
+  /**
+   * Get mode
+   *
+   * @return mode
+   */
+  @javax.annotation.Nullable
+  public Mode getMode() {
+    return mode;
+  }
+
+  public SearchParamsObject setSemanticSearch(IndexSettingsAsSearchParamsSemanticSearch semanticSearch) {
+    this.semanticSearch = semanticSearch;
+    return this;
+  }
+
+  /**
+   * Get semanticSearch
+   *
+   * @return semanticSearch
+   */
+  @javax.annotation.Nullable
+  public IndexSettingsAsSearchParamsSemanticSearch getSemanticSearch() {
+    return semanticSearch;
+  }
+
   public SearchParamsObject setAdvancedSyntax(Boolean advancedSyntax) {
     this.advancedSyntax = advancedSyntax;
     return this;
@@ -1405,6 +1444,29 @@ public class SearchParamsObject {
   @javax.annotation.Nullable
   public List<AdvancedSyntaxFeatures> getAdvancedSyntaxFeatures() {
     return advancedSyntaxFeatures;
+  }
+
+  public SearchParamsObject setExplain(List<String> explain) {
+    this.explain = explain;
+    return this;
+  }
+
+  public SearchParamsObject addExplain(String explainItem) {
+    if (this.explain == null) {
+      this.explain = new ArrayList<>();
+    }
+    this.explain.add(explainItem);
+    return this;
+  }
+
+  /**
+   * Enriches the API’s response with meta-information as to how the query was processed.
+   *
+   * @return explain
+   */
+  @javax.annotation.Nullable
+  public List<String> getExplain() {
+    return explain;
   }
 
   public SearchParamsObject setDistinct(Distinct distinct) {
@@ -1625,12 +1687,15 @@ public class SearchParamsObject {
       Objects.equals(this.enablePersonalization, searchParamsObject.enablePersonalization) &&
       Objects.equals(this.queryType, searchParamsObject.queryType) &&
       Objects.equals(this.removeWordsIfNoResults, searchParamsObject.removeWordsIfNoResults) &&
+      Objects.equals(this.mode, searchParamsObject.mode) &&
+      Objects.equals(this.semanticSearch, searchParamsObject.semanticSearch) &&
       Objects.equals(this.advancedSyntax, searchParamsObject.advancedSyntax) &&
       Objects.equals(this.optionalWords, searchParamsObject.optionalWords) &&
       Objects.equals(this.disableExactOnAttributes, searchParamsObject.disableExactOnAttributes) &&
       Objects.equals(this.exactOnSingleWordQuery, searchParamsObject.exactOnSingleWordQuery) &&
       Objects.equals(this.alternativesAsExact, searchParamsObject.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, searchParamsObject.advancedSyntaxFeatures) &&
+      Objects.equals(this.explain, searchParamsObject.explain) &&
       Objects.equals(this.distinct, searchParamsObject.distinct) &&
       Objects.equals(this.attributeForDistinct, searchParamsObject.attributeForDistinct) &&
       Objects.equals(this.synonyms, searchParamsObject.synonyms) &&
@@ -1707,12 +1772,15 @@ public class SearchParamsObject {
       enablePersonalization,
       queryType,
       removeWordsIfNoResults,
+      mode,
+      semanticSearch,
       advancedSyntax,
       optionalWords,
       disableExactOnAttributes,
       exactOnSingleWordQuery,
       alternativesAsExact,
       advancedSyntaxFeatures,
+      explain,
       distinct,
       attributeForDistinct,
       synonyms,
@@ -1790,12 +1858,15 @@ public class SearchParamsObject {
     sb.append("    enablePersonalization: ").append(toIndentedString(enablePersonalization)).append("\n");
     sb.append("    queryType: ").append(toIndentedString(queryType)).append("\n");
     sb.append("    removeWordsIfNoResults: ").append(toIndentedString(removeWordsIfNoResults)).append("\n");
+    sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
+    sb.append("    semanticSearch: ").append(toIndentedString(semanticSearch)).append("\n");
     sb.append("    advancedSyntax: ").append(toIndentedString(advancedSyntax)).append("\n");
     sb.append("    optionalWords: ").append(toIndentedString(optionalWords)).append("\n");
     sb.append("    disableExactOnAttributes: ").append(toIndentedString(disableExactOnAttributes)).append("\n");
     sb.append("    exactOnSingleWordQuery: ").append(toIndentedString(exactOnSingleWordQuery)).append("\n");
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
+    sb.append("    explain: ").append(toIndentedString(explain)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
     sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    synonyms: ").append(toIndentedString(synonyms)).append("\n");

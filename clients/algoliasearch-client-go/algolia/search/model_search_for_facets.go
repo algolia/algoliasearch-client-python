@@ -118,9 +118,11 @@ type SearchForFacets struct {
 	// Whether Rules should be globally enabled.
 	EnableRules *bool `json:"enableRules,omitempty"`
 	// Enable the Personalization feature.
-	EnablePersonalization  *bool                   `json:"enablePersonalization,omitempty"`
-	QueryType              *QueryType              `json:"queryType,omitempty"`
-	RemoveWordsIfNoResults *RemoveWordsIfNoResults `json:"removeWordsIfNoResults,omitempty"`
+	EnablePersonalization  *bool                                      `json:"enablePersonalization,omitempty"`
+	QueryType              *QueryType                                 `json:"queryType,omitempty"`
+	RemoveWordsIfNoResults *RemoveWordsIfNoResults                    `json:"removeWordsIfNoResults,omitempty"`
+	Mode                   *Mode                                      `json:"mode,omitempty"`
+	SemanticSearch         *IndexSettingsAsSearchParamsSemanticSearch `json:"semanticSearch,omitempty"`
 	// Enables the advanced query syntax.
 	AdvancedSyntax *bool `json:"advancedSyntax,omitempty"`
 	// A list of words that should be considered as optional when found in the query.
@@ -132,7 +134,9 @@ type SearchForFacets struct {
 	AlternativesAsExact []AlternativesAsExact `json:"alternativesAsExact,omitempty"`
 	// Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is enabled.
 	AdvancedSyntaxFeatures []AdvancedSyntaxFeatures `json:"advancedSyntaxFeatures,omitempty"`
-	Distinct               *Distinct                `json:"distinct,omitempty"`
+	// Enriches the API’s response with meta-information as to how the query was processed.
+	Explain  []string  `json:"explain,omitempty"`
+	Distinct *Distinct `json:"distinct,omitempty"`
 	// Name of the de-duplication attribute to be used with the distinct feature.
 	AttributeForDistinct *string `json:"attributeForDistinct,omitempty"`
 	// Whether to take into account an index's synonyms for a particular search.
@@ -531,6 +535,18 @@ func WithSearchForFacetsRemoveWordsIfNoResults(val RemoveWordsIfNoResults) Searc
 	}
 }
 
+func WithSearchForFacetsMode(val Mode) SearchForFacetsOption {
+	return func(f *SearchForFacets) {
+		f.Mode = &val
+	}
+}
+
+func WithSearchForFacetsSemanticSearch(val IndexSettingsAsSearchParamsSemanticSearch) SearchForFacetsOption {
+	return func(f *SearchForFacets) {
+		f.SemanticSearch = &val
+	}
+}
+
 func WithSearchForFacetsAdvancedSyntax(val bool) SearchForFacetsOption {
 	return func(f *SearchForFacets) {
 		f.AdvancedSyntax = &val
@@ -564,6 +580,12 @@ func WithSearchForFacetsAlternativesAsExact(val []AlternativesAsExact) SearchFor
 func WithSearchForFacetsAdvancedSyntaxFeatures(val []AdvancedSyntaxFeatures) SearchForFacetsOption {
 	return func(f *SearchForFacets) {
 		f.AdvancedSyntaxFeatures = val
+	}
+}
+
+func WithSearchForFacetsExplain(val []string) SearchForFacetsOption {
+	return func(f *SearchForFacets) {
+		f.Explain = val
 	}
 }
 
@@ -715,6 +737,8 @@ func NewSearchForFacetsWithDefaults() *SearchForFacets {
 	this.QueryType = &queryType
 	var removeWordsIfNoResults RemoveWordsIfNoResults = REMOVEWORDSIFNORESULTS_NONE
 	this.RemoveWordsIfNoResults = &removeWordsIfNoResults
+	var mode Mode = MODE_KEYWORD_SEARCH
+	this.Mode = &mode
 	var advancedSyntax bool = false
 	this.AdvancedSyntax = &advancedSyntax
 	var exactOnSingleWordQuery ExactOnSingleWordQuery = EXACTONSINGLEWORDQUERY_ATTRIBUTE
@@ -2731,6 +2755,70 @@ func (o *SearchForFacets) SetRemoveWordsIfNoResults(v RemoveWordsIfNoResults) {
 	o.RemoveWordsIfNoResults = &v
 }
 
+// GetMode returns the Mode field value if set, zero value otherwise.
+func (o *SearchForFacets) GetMode() Mode {
+	if o == nil || o.Mode == nil {
+		var ret Mode
+		return ret
+	}
+	return *o.Mode
+}
+
+// GetModeOk returns a tuple with the Mode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SearchForFacets) GetModeOk() (*Mode, bool) {
+	if o == nil || o.Mode == nil {
+		return nil, false
+	}
+	return o.Mode, true
+}
+
+// HasMode returns a boolean if a field has been set.
+func (o *SearchForFacets) HasMode() bool {
+	if o != nil && o.Mode != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetMode gets a reference to the given Mode and assigns it to the Mode field.
+func (o *SearchForFacets) SetMode(v Mode) {
+	o.Mode = &v
+}
+
+// GetSemanticSearch returns the SemanticSearch field value if set, zero value otherwise.
+func (o *SearchForFacets) GetSemanticSearch() IndexSettingsAsSearchParamsSemanticSearch {
+	if o == nil || o.SemanticSearch == nil {
+		var ret IndexSettingsAsSearchParamsSemanticSearch
+		return ret
+	}
+	return *o.SemanticSearch
+}
+
+// GetSemanticSearchOk returns a tuple with the SemanticSearch field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SearchForFacets) GetSemanticSearchOk() (*IndexSettingsAsSearchParamsSemanticSearch, bool) {
+	if o == nil || o.SemanticSearch == nil {
+		return nil, false
+	}
+	return o.SemanticSearch, true
+}
+
+// HasSemanticSearch returns a boolean if a field has been set.
+func (o *SearchForFacets) HasSemanticSearch() bool {
+	if o != nil && o.SemanticSearch != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSemanticSearch gets a reference to the given IndexSettingsAsSearchParamsSemanticSearch and assigns it to the SemanticSearch field.
+func (o *SearchForFacets) SetSemanticSearch(v IndexSettingsAsSearchParamsSemanticSearch) {
+	o.SemanticSearch = &v
+}
+
 // GetAdvancedSyntax returns the AdvancedSyntax field value if set, zero value otherwise.
 func (o *SearchForFacets) GetAdvancedSyntax() bool {
 	if o == nil || o.AdvancedSyntax == nil {
@@ -2921,6 +3009,38 @@ func (o *SearchForFacets) HasAdvancedSyntaxFeatures() bool {
 // SetAdvancedSyntaxFeatures gets a reference to the given []AdvancedSyntaxFeatures and assigns it to the AdvancedSyntaxFeatures field.
 func (o *SearchForFacets) SetAdvancedSyntaxFeatures(v []AdvancedSyntaxFeatures) {
 	o.AdvancedSyntaxFeatures = v
+}
+
+// GetExplain returns the Explain field value if set, zero value otherwise.
+func (o *SearchForFacets) GetExplain() []string {
+	if o == nil || o.Explain == nil {
+		var ret []string
+		return ret
+	}
+	return o.Explain
+}
+
+// GetExplainOk returns a tuple with the Explain field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SearchForFacets) GetExplainOk() ([]string, bool) {
+	if o == nil || o.Explain == nil {
+		return nil, false
+	}
+	return o.Explain, true
+}
+
+// HasExplain returns a boolean if a field has been set.
+func (o *SearchForFacets) HasExplain() bool {
+	if o != nil && o.Explain != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExplain gets a reference to the given []string and assigns it to the Explain field.
+func (o *SearchForFacets) SetExplain(v []string) {
+	o.Explain = v
 }
 
 // GetDistinct returns the Distinct field value if set, zero value otherwise.
@@ -3503,6 +3623,12 @@ func (o SearchForFacets) MarshalJSON() ([]byte, error) {
 	if o.RemoveWordsIfNoResults != nil {
 		toSerialize["removeWordsIfNoResults"] = o.RemoveWordsIfNoResults
 	}
+	if o.Mode != nil {
+		toSerialize["mode"] = o.Mode
+	}
+	if o.SemanticSearch != nil {
+		toSerialize["semanticSearch"] = o.SemanticSearch
+	}
 	if o.AdvancedSyntax != nil {
 		toSerialize["advancedSyntax"] = o.AdvancedSyntax
 	}
@@ -3520,6 +3646,9 @@ func (o SearchForFacets) MarshalJSON() ([]byte, error) {
 	}
 	if o.AdvancedSyntaxFeatures != nil {
 		toSerialize["advancedSyntaxFeatures"] = o.AdvancedSyntaxFeatures
+	}
+	if o.Explain != nil {
+		toSerialize["explain"] = o.Explain
 	}
 	if o.Distinct != nil {
 		toSerialize["distinct"] = o.Distinct
@@ -3627,12 +3756,15 @@ func (o SearchForFacets) String() string {
 	out += fmt.Sprintf("  enablePersonalization=%v\n", o.EnablePersonalization)
 	out += fmt.Sprintf("  queryType=%v\n", o.QueryType)
 	out += fmt.Sprintf("  removeWordsIfNoResults=%v\n", o.RemoveWordsIfNoResults)
+	out += fmt.Sprintf("  mode=%v\n", o.Mode)
+	out += fmt.Sprintf("  semanticSearch=%v\n", o.SemanticSearch)
 	out += fmt.Sprintf("  advancedSyntax=%v\n", o.AdvancedSyntax)
 	out += fmt.Sprintf("  optionalWords=%v\n", o.OptionalWords)
 	out += fmt.Sprintf("  disableExactOnAttributes=%v\n", o.DisableExactOnAttributes)
 	out += fmt.Sprintf("  exactOnSingleWordQuery=%v\n", o.ExactOnSingleWordQuery)
 	out += fmt.Sprintf("  alternativesAsExact=%v\n", o.AlternativesAsExact)
 	out += fmt.Sprintf("  advancedSyntaxFeatures=%v\n", o.AdvancedSyntaxFeatures)
+	out += fmt.Sprintf("  explain=%v\n", o.Explain)
 	out += fmt.Sprintf("  distinct=%v\n", o.Distinct)
 	out += fmt.Sprintf("  attributeForDistinct=%v\n", o.AttributeForDistinct)
 	out += fmt.Sprintf("  synonyms=%v\n", o.Synonyms)
