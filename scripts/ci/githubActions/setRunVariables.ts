@@ -11,7 +11,7 @@ const JAVA_CLIENT_FOLDER = getLanguageFolder('java');
 const PHP_CLIENT_FOLDER = getLanguageFolder('php');
 const GO_CLIENT_FOLDER = getLanguageFolder('go');
 
-// Files that are common to every clients
+// Files that are common to every clients, this is used to determine if we should generate the matrix for this job.
 const CLIENTS_COMMON_FILES = [
   'config/openapitools.json',
   'config/clients.config.json',
@@ -63,18 +63,21 @@ export const DEPENDENCIES = {
   JAVA_CLIENT_CHANGED: [
     ...CLIENTS_COMMON_FILES,
     JAVA_CLIENT_FOLDER,
+    'config/.java-version',
     'templates/java',
     'generators/src/main/java/com/algolia/codegen/AlgoliaJavaGenerator.java',
   ],
   PHP_CLIENT_CHANGED: [
     ...CLIENTS_COMMON_FILES,
     PHP_CLIENT_FOLDER,
+    'config/.php-version',
     'templates/php',
     'generators/src/main/java/com/algolia/codegen/AlgoliaPhpGenerator.java',
   ],
   GO_CLIENT_CHANDED: [
     ...CLIENTS_COMMON_FILES,
     GO_CLIENT_FOLDER,
+    'config/.go-version',
     'templates/go',
     'generators/src/main/java/com/algolia/codegen/AlgoliaGoGenerator.java',
   ],

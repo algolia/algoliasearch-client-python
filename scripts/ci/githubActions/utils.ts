@@ -18,18 +18,30 @@ const commonCacheKey = (async function (): Promise<string> {
   const scriptsHash = await hashElement(toAbsolutePath('scripts'), {
     encoding: 'hex',
     folders: { exclude: ['docker', '__tests__'] },
+    files: { include: ['**'] },
   });
   const configHash = await hashElement(toAbsolutePath('.'), {
     encoding: 'hex',
     folders: { include: ['config'] },
-    files: { include: ['openapitools.json', 'clients.config.json'] },
+    files: {
+      include: [
+        'openapitools.json',
+        'clients.config.json',
+        'base.tsconfig.json',
+      ],
+    },
+  });
+  const ctsHash = await hashElement(toAbsolutePath('tests'), {
+    encoding: 'hex',
+    folders: { include: ['CTS'] },
+    files: { include: ['**'] },
   });
   const depsHash = await hashElement(toAbsolutePath('.'), {
     encoding: 'hex',
     files: { include: ['yarn.lock'] },
   });
 
-  return `${ghHash.hash}-${scriptsHash.hash}-${configHash.hash}-${depsHash}`;
+  return `${ghHash.hash}-${scriptsHash.hash}-${configHash.hash}-${depsHash.hash}-${ctsHash.hash}`;
 })();
 
 /**
