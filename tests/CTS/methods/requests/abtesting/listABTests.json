@@ -11,14 +11,18 @@
     "testName": "listABTests with parameters",
     "parameters": {
       "offset": 42,
-      "limit": 21
+      "limit": 21,
+      "indexPrefix": "foo",
+      "indexSuffix": "bar"
     },
     "request": {
       "path": "/2/abtests",
       "method": "GET",
       "queryParameters": {
         "offset": "42",
-        "limit": "21"
+        "limit": "21",
+        "indexPrefix": "foo",
+        "indexSuffix": "bar"
       }
     }
   }

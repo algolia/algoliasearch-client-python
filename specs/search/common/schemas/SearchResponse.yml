@@ -108,6 +108,14 @@ baseSearchResponse:
       type: string
       description: A url-encoded string of all search parameters.
       example: query=a&hitsPerPage=20
+    redirect:
+      type: object
+      description: This parameter is for internal use only.
+      properties:
+        index:
+          type: array
+          items:
+            $ref: '#/RedirectRuleIndexMetadata'
     parsedQuery:
       type: string
       description: The query string that will be searched, after normalization.
@@ -137,3 +145,33 @@ nbPages:
   type: integer
   description: Number of pages available for the current query.
   example: 1
+
+RedirectRuleIndexMetadata:
+  type: object
+  properties:
+    source:
+      type: string
+      description: Source index for the redirect rule.
+    dest:
+      type: string
+      description: Destination index for the redirect rule.
+    reason:
+      type: string
+      description: Reason for the redirect rule.
+    succeed:
+      type: boolean
+      description: Status for the redirect rule.
+    data:
+      type: object
+      description: Data for the redirect rule.
+      required:
+        - ruleObjectID
+      properties:
+        ruleObjectID:
+          type: string
+  required:
+    - data
+    - succeed
+    - reason
+    - dest
+    - source

@@ -59,6 +59,16 @@ get:
   parameters:
     - $ref: '../../common/parameters.yml#/Offset'
     - $ref: '../../common/parameters.yml#/Limit'
+    - name: indexPrefix
+      in: query
+      description: Filters the returned ab tests by any indices starting with the provided prefix that are assigned to either variant of an ab test.
+      schema:
+        type: string
+    - name: indexSuffix
+      in: query
+      description: Filters the returned ab tests by any indices ending with the provided suffix that are assigned to either variant of an ab test.
+      schema:
+        type: string
   responses:
     '200':
       description: OK

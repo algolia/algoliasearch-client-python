@@ -280,6 +280,21 @@ indexSettingsAsSearchParams:
       $ref: '#/queryType'
     removeWordsIfNoResults:
       $ref: '#/removeWordsIfNoResults'
+    mode:
+      $ref: '#/mode'
+    semanticSearch:
+      type: object
+      description: >
+        The settings relevant for configuration of the semantic search engine.
+        These settings are only used when the mode is set to 'neuralSearch'.
+      properties:
+        eventSources:
+          description: When null, the current index / replica group will be used as the event source.
+          nullable: true
+          type: array
+          items:
+            type: string
+
     advancedSyntax:
       type: boolean
       description: Enables the advanced query syntax.
@@ -318,6 +333,14 @@ indexSettingsAsSearchParams:
         $ref: '#/advancedSyntaxFeatures'
       description: Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is enabled.
       default: [exactPhrase, excludeWords]
+      x-categories:
+        - Query strategy
+    explain:
+      type: array
+      items:
+        type: string
+      description: Enriches the API’s response with meta-information as to how the query was processed.
+      default: []
       x-categories:
         - Query strategy
     distinct:
@@ -391,6 +414,14 @@ queryType:
   enum: [prefixLast, prefixAll, prefixNone]
   description: Controls if and how query words are interpreted as prefixes.
   default: prefixLast
+  x-categories:
+    - Query strategy
+
+mode:
+  type: string
+  enum: ['neuralSearch', 'keywordSearch']
+  description: The search mode that the index will use to query for results.
+  default: keywordSearch
   x-categories:
     - Query strategy
 
