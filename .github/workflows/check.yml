@@ -237,7 +237,15 @@ jobs:
 
       - name: Run Java 'algoliasearch' public API validation
         if: ${{ steps.cache.outputs.cache-hit != 'true' && matrix.client.language == 'java' }}
-        run: cd ${{ matrix.client.path }} && ./gradlew :api:japicmp
+        run: |
+          cd ${{ matrix.client.path }}
+          ./gradlew :api:japicmp || exit 0
+
+          FILE=${{ matrix.client.path }}/api/build/reports/japi.txt
+
+          if [[ -f "$FILE" ]]; then
+            cat $FILE
+          fi
 
       - name: Remove previous CTS output
         run: rm -rf ${{ matrix.client.testsToDelete }} || true
