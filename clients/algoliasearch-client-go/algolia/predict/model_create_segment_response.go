@@ -10,18 +10,31 @@ import (
 type CreateSegmentResponse struct {
 	// The ID of the segment.
 	SegmentID string `json:"segmentID"`
+	// The approximate number of users that matched the segment conditions when it was created, last updated, or when model inference last ran.
+	Size *float32 `json:"size,omitempty"`
 	// The date and time at which the segment was updated (RFC3339).
 	UpdatedAt string `json:"updatedAt"`
+}
+
+type CreateSegmentResponseOption func(f *CreateSegmentResponse)
+
+func WithCreateSegmentResponseSize(val float32) CreateSegmentResponseOption {
+	return func(f *CreateSegmentResponse) {
+		f.Size = &val
+	}
 }
 
 // NewCreateSegmentResponse instantiates a new CreateSegmentResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateSegmentResponse(segmentID string, updatedAt string) *CreateSegmentResponse {
+func NewCreateSegmentResponse(segmentID string, updatedAt string, opts ...CreateSegmentResponseOption) *CreateSegmentResponse {
 	this := &CreateSegmentResponse{}
 	this.SegmentID = segmentID
 	this.UpdatedAt = updatedAt
+	for _, opt := range opts {
+		opt(this)
+	}
 	return this
 }
 
@@ -57,6 +70,38 @@ func (o *CreateSegmentResponse) SetSegmentID(v string) {
 	o.SegmentID = v
 }
 
+// GetSize returns the Size field value if set, zero value otherwise.
+func (o *CreateSegmentResponse) GetSize() float32 {
+	if o == nil || o.Size == nil {
+		var ret float32
+		return ret
+	}
+	return *o.Size
+}
+
+// GetSizeOk returns a tuple with the Size field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateSegmentResponse) GetSizeOk() (*float32, bool) {
+	if o == nil || o.Size == nil {
+		return nil, false
+	}
+	return o.Size, true
+}
+
+// HasSize returns a boolean if a field has been set.
+func (o *CreateSegmentResponse) HasSize() bool {
+	if o != nil && o.Size != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSize gets a reference to the given float32 and assigns it to the Size field.
+func (o *CreateSegmentResponse) SetSize(v float32) {
+	o.Size = &v
+}
+
 // GetUpdatedAt returns the UpdatedAt field value
 func (o *CreateSegmentResponse) GetUpdatedAt() string {
 	if o == nil {
@@ -86,6 +131,9 @@ func (o CreateSegmentResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["segmentID"] = o.SegmentID
 	}
+	if o.Size != nil {
+		toSerialize["size"] = o.Size
+	}
 	if true {
 		toSerialize["updatedAt"] = o.UpdatedAt
 	}
@@ -95,6 +143,7 @@ func (o CreateSegmentResponse) MarshalJSON() ([]byte, error) {
 func (o CreateSegmentResponse) String() string {
 	out := ""
 	out += fmt.Sprintf("  segmentID=%v\n", o.SegmentID)
+	out += fmt.Sprintf("  size=%v\n", o.Size)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
 	return fmt.Sprintf("CreateSegmentResponse {\n%s}", out)
 }

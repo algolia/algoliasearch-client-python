@@ -757,6 +757,8 @@ components:
       properties:
         segmentID:
           $ref: '#/components/schemas/segmentID'
+        size:
+          $ref: '#/components/schemas/segmentSize'
         updatedAt:
           $ref: '#/components/schemas/Segment_updatedAt'
     deletedUntil:
@@ -798,6 +800,8 @@ components:
       properties:
         segmentID:
           $ref: '#/components/schemas/segmentID'
+        size:
+          $ref: '#/components/schemas/segmentSize'
         updatedAt:
           $ref: '#/components/schemas/Segment_updatedAt'
   responses:
