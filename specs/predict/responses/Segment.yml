@@ -7,6 +7,8 @@ updateSegmentResponse:
   properties:
     segmentID:
       $ref: '#/segmentID'
+    size:
+      $ref: '#/segmentSize'
     updatedAt:
       $ref: '#/updatedAt'
 
@@ -59,6 +61,8 @@ createSegmentResponse:
   properties:
     segmentID:
       $ref: '#/segmentID'
+    size:
+      $ref: '#/segmentSize'
     updatedAt:
       $ref: '#/updatedAt'
 
