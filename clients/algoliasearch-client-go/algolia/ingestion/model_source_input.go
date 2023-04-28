@@ -9,6 +9,7 @@ import (
 // SourceInput - struct for SourceInput
 type SourceInput struct {
 	SourceBigCommerce   *SourceBigCommerce
+	SourceBigQuery      *SourceBigQuery
 	SourceCSV           *SourceCSV
 	SourceCommercetools *SourceCommercetools
 	SourceJSON          *SourceJSON
@@ -18,6 +19,13 @@ type SourceInput struct {
 func SourceBigCommerceAsSourceInput(v *SourceBigCommerce) SourceInput {
 	return SourceInput{
 		SourceBigCommerce: v,
+	}
+}
+
+// SourceBigQueryAsSourceInput is a convenience function that returns SourceBigQuery wrapped in SourceInput
+func SourceBigQueryAsSourceInput(v *SourceBigQuery) SourceInput {
+	return SourceInput{
+		SourceBigQuery: v,
 	}
 }
 
@@ -57,6 +65,19 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 		}
 	} else {
 		dst.SourceBigCommerce = nil
+	}
+
+	// try to unmarshal data into SourceBigQuery
+	err = newStrictDecoder(data).Decode(&dst.SourceBigQuery)
+	if err == nil {
+		jsonSourceBigQuery, _ := json.Marshal(dst.SourceBigQuery)
+		if string(jsonSourceBigQuery) == "{}" { // empty struct
+			dst.SourceBigQuery = nil
+		} else {
+			match++
+		}
+	} else {
+		dst.SourceBigQuery = nil
 	}
 
 	// try to unmarshal data into SourceCSV
@@ -101,6 +122,7 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.SourceBigCommerce = nil
+		dst.SourceBigQuery = nil
 		dst.SourceCSV = nil
 		dst.SourceCommercetools = nil
 		dst.SourceJSON = nil
@@ -117,6 +139,10 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 func (src SourceInput) MarshalJSON() ([]byte, error) {
 	if src.SourceBigCommerce != nil {
 		return json.Marshal(&src.SourceBigCommerce)
+	}
+
+	if src.SourceBigQuery != nil {
+		return json.Marshal(&src.SourceBigQuery)
 	}
 
 	if src.SourceCSV != nil {
@@ -141,6 +167,10 @@ func (obj *SourceInput) GetActualInstance() any {
 	}
 	if obj.SourceBigCommerce != nil {
 		return obj.SourceBigCommerce
+	}
+
+	if obj.SourceBigQuery != nil {
+		return obj.SourceBigQuery
 	}
 
 	if obj.SourceCSV != nil {

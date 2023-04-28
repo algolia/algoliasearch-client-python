@@ -716,6 +716,7 @@ components:
         - commercetools
         - json
         - csv
+        - bigquery
     sourceSortKeys:
       type: string
       description: Used to sort the Source list endpoint.
@@ -841,12 +842,39 @@ components:
             comma (\r, \n, 0xFFFD, and space are forbidden).
       required:
         - url
+    BigQueryDataType:
+      type: string
+      enum:
+        - ga4
+        - ga360
+    SourceBigQuery:
+      type: object
+      additionalProperties: false
+      properties:
+        projectID:
+          type: string
+          description: Project ID of the BigQuery Source.
+        datasetID:
+          type: string
+          description: Dataset ID of the BigQuery Source.
+        dataType:
+          $ref: '#/components/schemas/BigQueryDataType'
+        table:
+          type: string
+          description: Table name (for default BQ).
+        tablePrefix:
+          type: string
+          description: Table prefix (for Google Analytics).
+      required:
+        - projectID
+        - datasetID
     SourceInput:
       oneOf:
         - $ref: '#/components/schemas/SourceCommercetools'
         - $ref: '#/components/schemas/SourceBigCommerce'
         - $ref: '#/components/schemas/SourceJSON'
         - $ref: '#/components/schemas/SourceCSV'
+        - $ref: '#/components/schemas/SourceBigQuery'
     Source:
       type: object
       additionalProperties: false
@@ -932,6 +960,7 @@ components:
         - $ref: '#/components/schemas/SourceUpdateCommercetools'
         - $ref: '#/components/schemas/SourceJSON'
         - $ref: '#/components/schemas/SourceCSV'
+        - $ref: '#/components/schemas/SourceBigQuery'
     SourceUpdate:
       type: object
       additionalProperties: false

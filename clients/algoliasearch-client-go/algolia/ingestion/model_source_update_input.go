@@ -8,9 +8,17 @@ import (
 
 // SourceUpdateInput - struct for SourceUpdateInput
 type SourceUpdateInput struct {
+	SourceBigQuery            *SourceBigQuery
 	SourceCSV                 *SourceCSV
 	SourceJSON                *SourceJSON
 	SourceUpdateCommercetools *SourceUpdateCommercetools
+}
+
+// SourceBigQueryAsSourceUpdateInput is a convenience function that returns SourceBigQuery wrapped in SourceUpdateInput
+func SourceBigQueryAsSourceUpdateInput(v *SourceBigQuery) SourceUpdateInput {
+	return SourceUpdateInput{
+		SourceBigQuery: v,
+	}
 }
 
 // SourceCSVAsSourceUpdateInput is a convenience function that returns SourceCSV wrapped in SourceUpdateInput
@@ -38,6 +46,19 @@ func SourceUpdateCommercetoolsAsSourceUpdateInput(v *SourceUpdateCommercetools) 
 func (dst *SourceUpdateInput) UnmarshalJSON(data []byte) error {
 	var err error
 	match := 0
+	// try to unmarshal data into SourceBigQuery
+	err = newStrictDecoder(data).Decode(&dst.SourceBigQuery)
+	if err == nil {
+		jsonSourceBigQuery, _ := json.Marshal(dst.SourceBigQuery)
+		if string(jsonSourceBigQuery) == "{}" { // empty struct
+			dst.SourceBigQuery = nil
+		} else {
+			match++
+		}
+	} else {
+		dst.SourceBigQuery = nil
+	}
+
 	// try to unmarshal data into SourceCSV
 	err = newStrictDecoder(data).Decode(&dst.SourceCSV)
 	if err == nil {
@@ -79,6 +100,7 @@ func (dst *SourceUpdateInput) UnmarshalJSON(data []byte) error {
 
 	if match > 1 { // more than 1 match
 		// reset to nil
+		dst.SourceBigQuery = nil
 		dst.SourceCSV = nil
 		dst.SourceJSON = nil
 		dst.SourceUpdateCommercetools = nil
@@ -93,6 +115,10 @@ func (dst *SourceUpdateInput) UnmarshalJSON(data []byte) error {
 
 // Marshal data from the first non-nil pointers in the struct to JSON
 func (src SourceUpdateInput) MarshalJSON() ([]byte, error) {
+	if src.SourceBigQuery != nil {
+		return json.Marshal(&src.SourceBigQuery)
+	}
+
 	if src.SourceCSV != nil {
 		return json.Marshal(&src.SourceCSV)
 	}
@@ -113,6 +139,10 @@ func (obj *SourceUpdateInput) GetActualInstance() any {
 	if obj == nil {
 		return nil
 	}
+	if obj.SourceBigQuery != nil {
+		return obj.SourceBigQuery
+	}
+
 	if obj.SourceCSV != nil {
 		return obj.SourceCSV
 	}
