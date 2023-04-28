@@ -263,7 +263,7 @@ segmentAffinityFilter:
   type: object
   required:
     - value
-    - probability
+    - operator
   properties:
     operator:
       $ref: '#/segmentFilterOperatorNumerical'

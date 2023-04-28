@@ -53,7 +53,7 @@
       "sourceID": "search",
       "destinationID": "destinationName",
       "trigger": {
-        "type": "subscription"
+        "type": "onDemand"
       },
       "action": "replace"
     },
@@ -64,7 +64,7 @@
         "sourceID": "search",
         "destinationID": "destinationName",
         "trigger": {
-          "type": "subscription"
+          "type": "onDemand"
         },
         "action": "replace"
       }
