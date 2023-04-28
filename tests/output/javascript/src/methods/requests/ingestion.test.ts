@@ -148,7 +148,7 @@ describe('createTask', () => {
     const req = (await client.createTask({
       sourceID: 'search',
       destinationID: 'destinationName',
-      trigger: { type: 'subscription' },
+      trigger: { type: 'onDemand' },
       action: 'replace',
     })) as unknown as EchoResponse;
 
@@ -157,7 +157,7 @@ describe('createTask', () => {
     expect(req.data).toEqual({
       sourceID: 'search',
       destinationID: 'destinationName',
-      trigger: { type: 'subscription' },
+      trigger: { type: 'onDemand' },
       action: 'replace',
     });
     expect(req.searchParams).toStrictEqual(undefined);

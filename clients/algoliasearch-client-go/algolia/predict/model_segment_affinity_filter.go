@@ -8,16 +8,16 @@ import (
 
 // SegmentAffinityFilter Filter for affinity model predictions.
 type SegmentAffinityFilter struct {
-	Operator    *SegmentFilterOperatorNumerical `json:"operator,omitempty"`
-	Value       SegmentAffinityFilterValue      `json:"value"`
-	Probability SegmentFilterProbability        `json:"probability"`
+	Operator    SegmentFilterOperatorNumerical `json:"operator"`
+	Value       SegmentAffinityFilterValue     `json:"value"`
+	Probability *SegmentFilterProbability      `json:"probability,omitempty"`
 }
 
 type SegmentAffinityFilterOption func(f *SegmentAffinityFilter)
 
-func WithSegmentAffinityFilterOperator(val SegmentFilterOperatorNumerical) SegmentAffinityFilterOption {
+func WithSegmentAffinityFilterProbability(val SegmentFilterProbability) SegmentAffinityFilterOption {
 	return func(f *SegmentAffinityFilter) {
-		f.Operator = &val
+		f.Probability = &val
 	}
 }
 
@@ -25,10 +25,10 @@ func WithSegmentAffinityFilterOperator(val SegmentFilterOperatorNumerical) Segme
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSegmentAffinityFilter(value SegmentAffinityFilterValue, probability SegmentFilterProbability, opts ...SegmentAffinityFilterOption) *SegmentAffinityFilter {
+func NewSegmentAffinityFilter(operator SegmentFilterOperatorNumerical, value SegmentAffinityFilterValue, opts ...SegmentAffinityFilterOption) *SegmentAffinityFilter {
 	this := &SegmentAffinityFilter{}
+	this.Operator = operator
 	this.Value = value
-	this.Probability = probability
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -41,40 +41,32 @@ func NewSegmentAffinityFilter(value SegmentAffinityFilterValue, probability Segm
 func NewSegmentAffinityFilterWithDefaults() *SegmentAffinityFilter {
 	this := &SegmentAffinityFilter{}
 	var operator SegmentFilterOperatorNumerical = SEGMENTFILTEROPERATORNUMERICAL_EQ
-	this.Operator = &operator
+	this.Operator = operator
 	return this
 }
 
-// GetOperator returns the Operator field value if set, zero value otherwise.
+// GetOperator returns the Operator field value
 func (o *SegmentAffinityFilter) GetOperator() SegmentFilterOperatorNumerical {
-	if o == nil || o.Operator == nil {
+	if o == nil {
 		var ret SegmentFilterOperatorNumerical
 		return ret
 	}
-	return *o.Operator
+
+	return o.Operator
 }
 
-// GetOperatorOk returns a tuple with the Operator field value if set, nil otherwise
+// GetOperatorOk returns a tuple with the Operator field value
 // and a boolean to check if the value has been set.
 func (o *SegmentAffinityFilter) GetOperatorOk() (*SegmentFilterOperatorNumerical, bool) {
-	if o == nil || o.Operator == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Operator, true
+	return &o.Operator, true
 }
 
-// HasOperator returns a boolean if a field has been set.
-func (o *SegmentAffinityFilter) HasOperator() bool {
-	if o != nil && o.Operator != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetOperator gets a reference to the given SegmentFilterOperatorNumerical and assigns it to the Operator field.
+// SetOperator sets field value
 func (o *SegmentAffinityFilter) SetOperator(v SegmentFilterOperatorNumerical) {
-	o.Operator = &v
+	o.Operator = v
 }
 
 // GetValue returns the Value field value
@@ -101,39 +93,47 @@ func (o *SegmentAffinityFilter) SetValue(v SegmentAffinityFilterValue) {
 	o.Value = v
 }
 
-// GetProbability returns the Probability field value
+// GetProbability returns the Probability field value if set, zero value otherwise.
 func (o *SegmentAffinityFilter) GetProbability() SegmentFilterProbability {
-	if o == nil {
+	if o == nil || o.Probability == nil {
 		var ret SegmentFilterProbability
 		return ret
 	}
-
-	return o.Probability
+	return *o.Probability
 }
 
-// GetProbabilityOk returns a tuple with the Probability field value
+// GetProbabilityOk returns a tuple with the Probability field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SegmentAffinityFilter) GetProbabilityOk() (*SegmentFilterProbability, bool) {
-	if o == nil {
+	if o == nil || o.Probability == nil {
 		return nil, false
 	}
-	return &o.Probability, true
+	return o.Probability, true
 }
 
-// SetProbability sets field value
+// HasProbability returns a boolean if a field has been set.
+func (o *SegmentAffinityFilter) HasProbability() bool {
+	if o != nil && o.Probability != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetProbability gets a reference to the given SegmentFilterProbability and assigns it to the Probability field.
 func (o *SegmentAffinityFilter) SetProbability(v SegmentFilterProbability) {
-	o.Probability = v
+	o.Probability = &v
 }
 
 func (o SegmentAffinityFilter) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
-	if o.Operator != nil {
+	if true {
 		toSerialize["operator"] = o.Operator
 	}
 	if true {
 		toSerialize["value"] = o.Value
 	}
-	if true {
+	if o.Probability != nil {
 		toSerialize["probability"] = o.Probability
 	}
 	return json.Marshal(toSerialize)

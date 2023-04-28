@@ -513,7 +513,7 @@ components:
       type: object
       required:
         - value
-        - probability
+        - operator
       properties:
         operator:
           $ref: '#/components/schemas/segmentFilterOperatorNumerical'
