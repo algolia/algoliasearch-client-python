@@ -5243,9 +5243,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docusaurus-theme-redoc@npm:1.6.1":
-  version: 1.6.1
-  resolution: "docusaurus-theme-redoc@npm:1.6.1"
+"docusaurus-theme-redoc@npm:1.6.2":
+  version: 1.6.2
+  resolution: "docusaurus-theme-redoc@npm:1.6.2"
   dependencies:
     "@redocly/openapi-core": 1.0.0-beta.123
     clsx: ^1.2.1
@@ -5256,7 +5256,7 @@ __metadata:
     styled-components: ^5.3.6
   peerDependencies:
     "@docusaurus/theme-common": ^2.0.0
-  checksum: 67866ca4be03dafa2aadf99284b41b699e4911a3b6ec7c692f999cb1c7a616af0cb1a11b2b3ab2789c850ff469b5d93867d6a5f7ef73720e094f5d9f4da34828
+  checksum: a90308f6ef85264e6799eafbca9c0f2688425f2ed835f64f044cff43f4b72e5b27166ba8d1afe2fe70b6cb904dfefce30f66f1df3cacd71461812f625b4a2cb2
   languageName: node
   linkType: hard
 
@@ -9749,16 +9749,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redocusaurus@npm:1.6.1":
-  version: 1.6.1
-  resolution: "redocusaurus@npm:1.6.1"
+"redocusaurus@npm:1.6.2":
+  version: 1.6.2
+  resolution: "redocusaurus@npm:1.6.2"
   dependencies:
     docusaurus-plugin-redoc: 1.6.0
-    docusaurus-theme-redoc: 1.6.1
+    docusaurus-theme-redoc: 1.6.2
   peerDependencies:
     "@docusaurus/theme-common": ^2.0.0
     "@docusaurus/utils": ^2.0.0
-  checksum: 2e72f313a02efb637c1cbee5dca557f0ce31dc02288dc546e0df4cfea466e63035917972523e4a8bf401b992f94b9164634359951fa4bd937269dc21c416ec1b
+  checksum: 6d7262e9d1c8caaa95af1b29f6acf1b0f6d2af8a98142337b8c3dfcd1b4b38f988129018045127d0256a40ecfb5a954a4154bb1cc09a2db7e76eec09272569c4
   languageName: node
   linkType: hard
 
@@ -11875,7 +11875,7 @@ __metadata:
     docusaurus-preset-shiki-twoslash: 1.1.40
     react: 18.2.0
     react-dom: 18.2.0
-    redocusaurus: 1.6.1
+    redocusaurus: 1.6.2
   languageName: unknown
   linkType: soft
 
