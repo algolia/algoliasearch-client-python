@@ -125,7 +125,7 @@ TaskSearch:
 ActionType:
   type: string
   description: The action to perform on the Algolia index.
-  enum: ['replace', 'save', 'delete']
+  enum: ['replace', 'save']
 
 TriggerInput:
   type: object
