@@ -991,7 +991,6 @@ components:
       enum:
         - replace
         - save
-        - delete
     TriggerType:
       type: string
       description: |
