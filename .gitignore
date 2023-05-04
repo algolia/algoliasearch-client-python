@@ -31,3 +31,4 @@ dist
 generators/bin
 
 **/java/bin/
+**/kotlin/bin/

@@ -15,6 +15,7 @@ async function buildClient(
   const spinner = createSpinner(`building '${language}'`);
   switch (language) {
     case 'java':
+    case 'kotlin':
       await run(`./gradle/gradlew --no-daemon -p ${cwd} assemble`);
       break;
     case 'php':

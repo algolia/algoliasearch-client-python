@@ -31,6 +31,9 @@ export async function formatter(
         cmd = `cd ${folder} && /usr/local/go/bin/go fmt ./...`;
       }
       break;
+    case 'kotlin':
+      cmd = `${folder}/gradlew -p ${folder} spotlessApply`;
+      break;
     default:
       return;
   }

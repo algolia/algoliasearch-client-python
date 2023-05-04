@@ -1,0 +1,8 @@
+{{>licenseInfo}}
+package {{modelPackage}}
+
+{{#models}}
+{{#model}}
+{{#vendorExtensions.x-is-type-alias}}{{> typealias}}{{/vendorExtensions.x-is-type-alias}}{{^vendorExtensions.x-is-type-alias}}{{#isEnum}}{{>enum_class}}{{/isEnum}}{{^isEnum}}{{#vendorExtensions.x-is-one-of-interface}}{{>oneof_interface}}{{/vendorExtensions.x-is-one-of-interface}}{{^vendorExtensions.x-is-one-of-interface}}{{#isAlias}}typealias {{classname}} = {{{dataType}}}{{/isAlias}}{{^isAlias}}{{>data_class}}{{/isAlias}}{{/vendorExtensions.x-is-one-of-interface}}{{/isEnum}}{{/vendorExtensions.x-is-type-alias}}
+{{/model}}
+{{/models}}

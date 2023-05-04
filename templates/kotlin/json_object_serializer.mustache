@@ -1,0 +1,36 @@
+internal object {{classname}}Serializer : KSerializer<{{classname}}> {
+
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("{{classname}}") {
+        {{#vars}}
+        element<{{{datatypeWithEnum}}}>("{{{vendorExtensions.x-base-name-literal}}}"{{#isOptional}}, isOptional = true{{/isOptional}})
+        {{/vars}}
+    }
+
+    override fun deserialize(decoder: Decoder): {{classname}} {
+        val input = decoder.asJsonDecoder()
+        val tree = input.decodeJsonObject()
+        return {{classname}}(
+            {{#requiredVars}}
+            {{{name}}} = tree.getValue("{{baseName}}").let { input.json.decodeFromJsonElement(it) },
+            {{/requiredVars}}
+            {{#optionalVars}}
+            {{{name}}} = tree["{{{vendorExtensions.x-base-name-literal}}}"]?.let { input.json.decodeFromJsonElement(it) },
+            {{/optionalVars}}
+            additionalProperties = tree.filterKeys { it !in descriptor.elementNames },
+        )
+    }  
+
+    override fun serialize(encoder: Encoder, value: {{classname}}) {
+        val output = encoder.asJsonEncoder()
+        val json = buildJsonObject {
+            {{#requiredVars}}
+            put("{{baseName}}", output.json.encodeToJsonElement(value.{{name}}))
+            {{/requiredVars}}
+            {{#optionalVars}}
+            value.{{name}}?.let { put("{{baseName}}", output.json.encodeToJsonElement(it)) }
+            {{/optionalVars}}
+            value.additionalProperties?.onEach { (key, element) -> put(key, element) }
+        }
+        (encoder as JsonEncoder).encodeJsonElement(json)
+    }
+}

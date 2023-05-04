@@ -8,7 +8,8 @@
     "javascript": "next",
     "php": "next",
     "java": "next",
-    "go": "next"
+    "go": "next",
+    "kotlin": "next"
   },
   "defaultTargetBranch": "next",
   "gitAuthor": {

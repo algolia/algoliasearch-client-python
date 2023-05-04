@@ -66,6 +66,8 @@ public abstract class TestsGenerator {
         return "JavaScript";
       case "php":
         return "PHP";
+      case "kotlin":
+        return "Kotlin";
       default:
         return language;
     }

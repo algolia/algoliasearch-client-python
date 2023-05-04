@@ -1,0 +1,20 @@
+import kotlinx.serialization.*
+
+{{#description}}
+/**
+ * {{{description}}}
+ */
+{{/description}}
+@Serializable
+public enum class {{classname}}(public val value: kotlin.String){{>oneof_parent}} {
+{{#allowableValues}}{{#enumVars}}
+    {{#enumDescription}}
+    /**
+     * {{{.}}}
+     */
+    {{/enumDescription}}
+    @SerialName(value = {{{value}}})
+    {{#lambda.pascalcase}}{{&name}}{{/lambda.pascalcase}}({{{value}}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
+{{/enumVars}}{{/allowableValues}}
+    override fun toString(): kotlin.String = value
+}

@@ -1,0 +1,74 @@
+import {{packageName}}.exception.AlgoliaClientException
+import {{packageName}}.extensions.internal.*
+import kotlinx.serialization.*
+import kotlinx.serialization.builtins.*
+import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.encoding.*
+import kotlinx.serialization.json.*
+
+/**
+ * {{{description}}}{{^description}}{{classname}}{{/description}}
+ */
+{{#isDeprecated}}
+@Deprecated(message = "This schema is deprecated.")
+{{/isDeprecated}}
+{{#additionalModelTypeAnnotations}}
+{{{.}}}
+{{/additionalModelTypeAnnotations}}
+@Serializable({{classname}}Serializer::class)
+public sealed interface {{classname}} {
+    {{#vendorExtensions}}
+    {{#x-one-of-list}}
+    {{^child}}
+
+    public data class {{name}}Wrapper(val value: {{{type}}}): {{classname}}
+    {{/child}}    
+    {{/x-one-of-list}}
+
+    public companion object {
+    {{#x-sealed-childs}}
+
+    {{> builder_function}}
+    {{/x-sealed-childs}}
+    }
+    {{/vendorExtensions}}
+}
+
+internal class {{classname}}Serializer : KSerializer<{{classname}}> {
+
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("{{classname}}")
+
+    override fun serialize(encoder: Encoder, value: {{classname}}) {
+        when(value) {
+        {{#vendorExtensions}}
+        {{#x-one-of-list}}
+        {{#child}}
+          is {{{type}}} -> {{{type}}}.serializer().serialize(encoder, value)
+        {{/child}}
+        {{^child}}
+          is {{classname}}.{{name}}Wrapper -> {{#isList}}ListSerializer({{{listElementType}}}.serializer()){{/isList}}{{^isList}}{{{type}}}.serializer(){{/isList}}.serialize(encoder, value.value)
+        {{/child}}  
+        {{/x-one-of-list}}
+        {{/vendorExtensions}}
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): {{classname}} {
+        val codec = decoder.asJsonDecoder()
+        val tree = codec.decodeJsonElement()
+        {{#vendorExtensions.x-one-of-list}}
+
+        // deserialize {{{type}}}
+        if (tree is {{#isObject}}JsonObject{{/isObject}}{{#isList}}JsonArray{{/isList}}{{^isObject}}{{^isList}}JsonPrimitive{{/isList}}{{/isObject}}) {
+            try {    
+                return codec.json.decodeFromJsonElement<{{>oneof_compound}}>(tree)
+            } catch (e: Exception) {
+                // deserialization failed, continue
+                println("Failed to deserialize {{{type}}} (error: ${e.message})")
+            }    
+        }
+        {{/vendorExtensions.x-one-of-list}}
+
+        throw AlgoliaClientException("Failed to deserialize json element: $tree")
+    }
+}

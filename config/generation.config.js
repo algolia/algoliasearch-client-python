@@ -45,5 +45,17 @@ module.exports = {
     '!clients/algoliasearch-client-go/algolia/call/*',
     '!clients/algoliasearch-client-go/algolia/compression/*',
     '!clients/algoliasearch-client-go/algolia/debug/*',
+
+    // Kotlin
+    '!clients/algoliasearch-client-kotlin/**',
+    'clients/algoliasearch-client-kotlin/gradle.properties',
+    'clients/algoliasearch-client-kotlin/client/README.md',
+    'clients/algoliasearch-client-kotlin/client-bom/README.md',
+    'clients/algoliasearch-client-kotlin/client/src/commonMain/kotlin/com/algolia/client/BuildConfig.kt',
+    'clients/algoliasearch-client-kotlin/client/src/commonMain/kotlin/com/algolia/client/api/**',
+    'clients/algoliasearch-client-kotlin/client/src/commonMain/kotlin/com/algolia/client/model/**',
+
+    'tests/output/kotlin/src/commonTest/kotlin/com/algolia/client/**',
+    'tests/output/kotlin/src/commonTest/kotlin/com/algolia/methods/requests/**'
   ],
 };

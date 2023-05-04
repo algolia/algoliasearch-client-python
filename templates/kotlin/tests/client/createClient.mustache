@@ -1,0 +1,1 @@
+{{^autoCreateClient}}val client = {{/autoCreateClient}}{{client}}(appId = "{{parametersWithDataTypeMap.appId.value}}", apiKey = "{{parametersWithDataTypeMap.apiKey.value}}",{{#hasRegionalHost}}{{#parametersWithDataTypeMap.region}}"{{parametersWithDataTypeMap.region.value}}",{{/parametersWithDataTypeMap.region}}{{/hasRegionalHost}})

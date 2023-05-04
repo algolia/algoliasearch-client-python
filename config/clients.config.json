@@ -47,5 +47,17 @@
       "extension": "_test.go",
       "outputFolder": ""
     }
+  },
+  "kotlin": {
+    "folder": "clients/algoliasearch-client-kotlin",
+    "gitRepoId": "algoliasearch-client-kotlin",
+    "packageVersion": "3.0.0-SNAPSHOT",
+    "modelFolder": "client/src/commonMain/kotlin/com/algolia/model",
+    "apiFolder": "client/src/commonMain/kotlin/com/algolia/api",
+    "customGenerator": "algolia-kotlin",
+    "tests": {
+      "extension": "Test.kt",
+      "outputFolder": "src/commonTest/kotlin/com/algolia"
+    }
   }
 }

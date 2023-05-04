@@ -1,0 +1,1 @@
+{{^isAdditionalProperty}}{{#isKeyAllUpperCase}}{{#lambda.lowercase}}{{&key}}{{/lambda.lowercase}}{{/isKeyAllUpperCase}}{{^isKeyAllUpperCase}}{{#lambda.camelcase}}{{&key}}{{/lambda.camelcase}}{{/isKeyAllUpperCase}} = {{> param_value}}{{/isAdditionalProperty}}{{#isAdditionalProperty}}additionalProperties = mapOf("{{key}}" to {{> param_json_element}}){{/isAdditionalProperty}}

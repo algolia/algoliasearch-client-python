@@ -22,6 +22,9 @@ async function runCtsOne(language: string): Promise<void> {
       );
       break;
     }
+    case 'kotlin':
+      await run('./gradle/gradlew --no-daemon -p tests/output/kotlin allTests');
+      break;
     default:
       spinner.warn(`skipping unknown language '${language}' to run the CTS`);
       return;

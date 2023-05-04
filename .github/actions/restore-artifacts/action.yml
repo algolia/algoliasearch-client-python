@@ -21,6 +21,9 @@ inputs:
   go:
     description: Whether this job ran or not
     required: false
+  kotlin:
+    description: Whether this job ran or not
+    required: false   
 
 runs:
   using: composite
@@ -87,3 +90,17 @@ runs:
       run: |
         rm -rf clients/algoliasearch-client-go
         unzip -q -o clients-go.zip && rm clients-go.zip
+
+    # Kotlin
+    - name: Download clients-kotlin artifact
+      if: ${{ inputs.kotlin == 'true' && inputs.type == 'all' }}
+      uses: actions/download-artifact@v3
+      with:
+        name: clients-kotlin
+
+    - name: Unzip clients-kotlin artifact
+      if: ${{ inputs.kotlin == 'true' && inputs.type == 'all' }}
+      shell: bash
+      run: |
+        rm -rf clients/algoliasearch-client-kotlin
+        unzip -q -o clients-kotlin.zip && rm clients-kotlin.zip    

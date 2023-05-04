@@ -154,6 +154,33 @@
         "additionalProperties": {
           "packageName": "predict"
         }
+      },
+      "kotlin-search": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-recommend": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-personalization": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-analytics": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-insights": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-abtesting": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-query-suggestions": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-predict": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-ingestion": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
       }
     }
   }
