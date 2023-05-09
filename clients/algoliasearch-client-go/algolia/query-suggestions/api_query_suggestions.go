@@ -73,8 +73,13 @@ func (c *APIClient) NewApiCreateConfigRequest() ApiCreateConfigRequest {
 	return ApiCreateConfigRequest{}
 }
 
-// @return SuccessResponse
+// CreateConfig wraps CreateConfigWithContext using context.Background.
 func (c *APIClient) CreateConfig(r ApiCreateConfigRequest, opts ...Option) (*SuccessResponse, error) {
+	return c.CreateConfigWithContext(context.Background(), r, opts...)
+}
+
+// @return SuccessResponse
+func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	var (
 		postBody    any
 		returnValue *SuccessResponse
@@ -100,7 +105,7 @@ func (c *APIClient) CreateConfig(r ApiCreateConfigRequest, opts ...Option) (*Suc
 
 	// body params
 	postBody = r.querySuggestionsIndexWithIndexParam
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -226,8 +231,13 @@ func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Del wraps DelWithContext using context.Background.
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.DelWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -255,7 +265,7 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -356,8 +366,13 @@ func (c *APIClient) NewApiDeleteConfigRequest(indexName string) ApiDeleteConfigR
 	}
 }
 
-// @return SuccessResponse
+// DeleteConfig wraps DeleteConfigWithContext using context.Background.
 func (c *APIClient) DeleteConfig(r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
+	return c.DeleteConfigWithContext(context.Background(), r, opts...)
+}
+
+// @return SuccessResponse
+func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	var (
 		postBody    any
 		returnValue *SuccessResponse
@@ -379,7 +394,7 @@ func (c *APIClient) DeleteConfig(r ApiDeleteConfigRequest, opts ...Option) (*Suc
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -487,8 +502,13 @@ func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Get wraps GetWithContext using context.Background.
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.GetWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -516,7 +536,7 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -605,8 +625,13 @@ func (c *APIClient) NewApiGetAllConfigsRequest() ApiGetAllConfigsRequest {
 	return ApiGetAllConfigsRequest{}
 }
 
-// @return []QuerySuggestionsIndex
+// GetAllConfigs wraps GetAllConfigsWithContext using context.Background.
 func (c *APIClient) GetAllConfigs(r ApiGetAllConfigsRequest, opts ...Option) ([]QuerySuggestionsIndex, error) {
+	return c.GetAllConfigsWithContext(context.Background(), r, opts...)
+}
+
+// @return []QuerySuggestionsIndex
+func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, r ApiGetAllConfigsRequest, opts ...Option) ([]QuerySuggestionsIndex, error) {
 	var (
 		postBody    any
 		returnValue []QuerySuggestionsIndex
@@ -627,7 +652,7 @@ func (c *APIClient) GetAllConfigs(r ApiGetAllConfigsRequest, opts ...Option) ([]
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -728,8 +753,13 @@ func (c *APIClient) NewApiGetConfigRequest(indexName string) ApiGetConfigRequest
 	}
 }
 
-// @return QuerySuggestionsIndex
+// GetConfig wraps GetConfigWithContext using context.Background.
 func (c *APIClient) GetConfig(r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
+	return c.GetConfigWithContext(context.Background(), r, opts...)
+}
+
+// @return QuerySuggestionsIndex
+func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
 	var (
 		postBody    any
 		returnValue *QuerySuggestionsIndex
@@ -751,7 +781,7 @@ func (c *APIClient) GetConfig(r ApiGetConfigRequest, opts ...Option) (*QuerySugg
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -861,8 +891,13 @@ func (c *APIClient) NewApiGetConfigStatusRequest(indexName string) ApiGetConfigS
 	}
 }
 
-// @return Status
+// GetConfigStatus wraps GetConfigStatusWithContext using context.Background.
 func (c *APIClient) GetConfigStatus(r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
+	return c.GetConfigStatusWithContext(context.Background(), r, opts...)
+}
+
+// @return Status
+func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
 	var (
 		postBody    any
 		returnValue *Status
@@ -884,7 +919,7 @@ func (c *APIClient) GetConfigStatus(r ApiGetConfigStatusRequest, opts ...Option)
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -976,8 +1011,13 @@ func (c *APIClient) NewApiGetLogFileRequest(indexName string) ApiGetLogFileReque
 	}
 }
 
-// @return []LogFile
+// GetLogFile wraps GetLogFileWithContext using context.Background.
 func (c *APIClient) GetLogFile(r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
+	return c.GetLogFileWithContext(context.Background(), r, opts...)
+}
+
+// @return []LogFile
+func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
 	var (
 		postBody    any
 		returnValue []LogFile
@@ -999,7 +1039,7 @@ func (c *APIClient) GetLogFile(r ApiGetLogFileRequest, opts ...Option) ([]LogFil
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1132,8 +1172,13 @@ func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Post wraps PostWithContext using context.Background.
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PostWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -1167,7 +1212,7 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1300,8 +1345,13 @@ func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Put wraps PutWithContext using context.Background.
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PutWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -1335,7 +1385,7 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1456,8 +1506,13 @@ func (c *APIClient) NewApiUpdateConfigRequest(indexName string) ApiUpdateConfigR
 	}
 }
 
-// @return SuccessResponse
+// UpdateConfig wraps UpdateConfigWithContext using context.Background.
 func (c *APIClient) UpdateConfig(r ApiUpdateConfigRequest, opts ...Option) (*SuccessResponse, error) {
+	return c.UpdateConfigWithContext(context.Background(), r, opts...)
+}
+
+// @return SuccessResponse
+func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	var (
 		postBody    any
 		returnValue *SuccessResponse
@@ -1484,7 +1539,7 @@ func (c *APIClient) UpdateConfig(r ApiUpdateConfigRequest, opts ...Option) (*Suc
 
 	// body params
 	postBody = r.querySuggestionsIndexParam
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}

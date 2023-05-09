@@ -73,8 +73,13 @@ func (c *APIClient) NewApiCreateAuthenticationRequest() ApiCreateAuthenticationR
 	return ApiCreateAuthenticationRequest{}
 }
 
-// @return AuthenticationCreateResponse
+// CreateAuthentication wraps CreateAuthenticationWithContext using context.Background.
 func (c *APIClient) CreateAuthentication(r ApiCreateAuthenticationRequest, opts ...Option) (*AuthenticationCreateResponse, error) {
+	return c.CreateAuthenticationWithContext(context.Background(), r, opts...)
+}
+
+// @return AuthenticationCreateResponse
+func (c *APIClient) CreateAuthenticationWithContext(ctx context.Context, r ApiCreateAuthenticationRequest, opts ...Option) (*AuthenticationCreateResponse, error) {
 	var (
 		postBody    any
 		returnValue *AuthenticationCreateResponse
@@ -100,7 +105,7 @@ func (c *APIClient) CreateAuthentication(r ApiCreateAuthenticationRequest, opts 
 
 	// body params
 	postBody = r.authenticationCreate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -182,8 +187,13 @@ func (c *APIClient) NewApiCreateDestinationRequest() ApiCreateDestinationRequest
 	return ApiCreateDestinationRequest{}
 }
 
-// @return DestinationCreateResponse
+// CreateDestination wraps CreateDestinationWithContext using context.Background.
 func (c *APIClient) CreateDestination(r ApiCreateDestinationRequest, opts ...Option) (*DestinationCreateResponse, error) {
+	return c.CreateDestinationWithContext(context.Background(), r, opts...)
+}
+
+// @return DestinationCreateResponse
+func (c *APIClient) CreateDestinationWithContext(ctx context.Context, r ApiCreateDestinationRequest, opts ...Option) (*DestinationCreateResponse, error) {
 	var (
 		postBody    any
 		returnValue *DestinationCreateResponse
@@ -209,7 +219,7 @@ func (c *APIClient) CreateDestination(r ApiCreateDestinationRequest, opts ...Opt
 
 	// body params
 	postBody = r.destinationCreate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -291,8 +301,13 @@ func (c *APIClient) NewApiCreateSourceRequest() ApiCreateSourceRequest {
 	return ApiCreateSourceRequest{}
 }
 
-// @return SourceCreateResponse
+// CreateSource wraps CreateSourceWithContext using context.Background.
 func (c *APIClient) CreateSource(r ApiCreateSourceRequest, opts ...Option) (*SourceCreateResponse, error) {
+	return c.CreateSourceWithContext(context.Background(), r, opts...)
+}
+
+// @return SourceCreateResponse
+func (c *APIClient) CreateSourceWithContext(ctx context.Context, r ApiCreateSourceRequest, opts ...Option) (*SourceCreateResponse, error) {
 	var (
 		postBody    any
 		returnValue *SourceCreateResponse
@@ -318,7 +333,7 @@ func (c *APIClient) CreateSource(r ApiCreateSourceRequest, opts ...Option) (*Sou
 
 	// body params
 	postBody = r.sourceCreate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -400,8 +415,13 @@ func (c *APIClient) NewApiCreateTaskRequest() ApiCreateTaskRequest {
 	return ApiCreateTaskRequest{}
 }
 
-// @return TaskCreateResponse
+// CreateTask wraps CreateTaskWithContext using context.Background.
 func (c *APIClient) CreateTask(r ApiCreateTaskRequest, opts ...Option) (*TaskCreateResponse, error) {
+	return c.CreateTaskWithContext(context.Background(), r, opts...)
+}
+
+// @return TaskCreateResponse
+func (c *APIClient) CreateTaskWithContext(ctx context.Context, r ApiCreateTaskRequest, opts ...Option) (*TaskCreateResponse, error) {
 	var (
 		postBody    any
 		returnValue *TaskCreateResponse
@@ -427,7 +447,7 @@ func (c *APIClient) CreateTask(r ApiCreateTaskRequest, opts ...Option) (*TaskCre
 
 	// body params
 	postBody = r.taskCreate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -517,8 +537,13 @@ func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Del wraps DelWithContext using context.Background.
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.DelWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -546,7 +571,7 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -647,8 +672,13 @@ func (c *APIClient) NewApiDeleteAuthenticationRequest(authenticationID string) A
 	}
 }
 
-// @return DeleteResponse
+// DeleteAuthentication wraps DeleteAuthenticationWithContext using context.Background.
 func (c *APIClient) DeleteAuthentication(r ApiDeleteAuthenticationRequest, opts ...Option) (*DeleteResponse, error) {
+	return c.DeleteAuthenticationWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteAuthenticationWithContext(ctx context.Context, r ApiDeleteAuthenticationRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteResponse
@@ -670,7 +700,7 @@ func (c *APIClient) DeleteAuthentication(r ApiDeleteAuthenticationRequest, opts 
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -744,8 +774,13 @@ func (c *APIClient) NewApiDeleteDestinationRequest(destinationID string) ApiDele
 	}
 }
 
-// @return DeleteResponse
+// DeleteDestination wraps DeleteDestinationWithContext using context.Background.
 func (c *APIClient) DeleteDestination(r ApiDeleteDestinationRequest, opts ...Option) (*DeleteResponse, error) {
+	return c.DeleteDestinationWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteDestinationWithContext(ctx context.Context, r ApiDeleteDestinationRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteResponse
@@ -767,7 +802,7 @@ func (c *APIClient) DeleteDestination(r ApiDeleteDestinationRequest, opts ...Opt
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -841,8 +876,13 @@ func (c *APIClient) NewApiDeleteSourceRequest(sourceID string) ApiDeleteSourceRe
 	}
 }
 
-// @return DeleteResponse
+// DeleteSource wraps DeleteSourceWithContext using context.Background.
 func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*DeleteResponse, error) {
+	return c.DeleteSourceWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteSourceWithContext(ctx context.Context, r ApiDeleteSourceRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteResponse
@@ -864,7 +904,7 @@ func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*Del
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -938,8 +978,13 @@ func (c *APIClient) NewApiDeleteTaskRequest(taskID string) ApiDeleteTaskRequest 
 	}
 }
 
-// @return DeleteResponse
+// DeleteTask wraps DeleteTaskWithContext using context.Background.
 func (c *APIClient) DeleteTask(r ApiDeleteTaskRequest, opts ...Option) (*DeleteResponse, error) {
+	return c.DeleteTaskWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteResponse
+func (c *APIClient) DeleteTaskWithContext(ctx context.Context, r ApiDeleteTaskRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteResponse
@@ -961,7 +1006,7 @@ func (c *APIClient) DeleteTask(r ApiDeleteTaskRequest, opts ...Option) (*DeleteR
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1035,8 +1080,13 @@ func (c *APIClient) NewApiDisableTaskRequest(taskID string) ApiDisableTaskReques
 	}
 }
 
-// @return TaskUpdateResponse
+// DisableTask wraps DisableTaskWithContext using context.Background.
 func (c *APIClient) DisableTask(r ApiDisableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
+	return c.DisableTaskWithContext(context.Background(), r, opts...)
+}
+
+// @return TaskUpdateResponse
+func (c *APIClient) DisableTaskWithContext(ctx context.Context, r ApiDisableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	var (
 		postBody    any
 		returnValue *TaskUpdateResponse
@@ -1058,7 +1108,7 @@ func (c *APIClient) DisableTask(r ApiDisableTaskRequest, opts ...Option) (*TaskU
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1132,8 +1182,13 @@ func (c *APIClient) NewApiEnableTaskRequest(taskID string) ApiEnableTaskRequest 
 	}
 }
 
-// @return TaskUpdateResponse
+// EnableTask wraps EnableTaskWithContext using context.Background.
 func (c *APIClient) EnableTask(r ApiEnableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
+	return c.EnableTaskWithContext(context.Background(), r, opts...)
+}
+
+// @return TaskUpdateResponse
+func (c *APIClient) EnableTaskWithContext(ctx context.Context, r ApiEnableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	var (
 		postBody    any
 		returnValue *TaskUpdateResponse
@@ -1155,7 +1210,7 @@ func (c *APIClient) EnableTask(r ApiEnableTaskRequest, opts ...Option) (*TaskUpd
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1245,8 +1300,13 @@ func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Get wraps GetWithContext using context.Background.
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.GetWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -1274,7 +1334,7 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1375,8 +1435,13 @@ func (c *APIClient) NewApiGetAuthenticationRequest(authenticationID string) ApiG
 	}
 }
 
-// @return AuthenticationWithInput
+// GetAuthentication wraps GetAuthenticationWithContext using context.Background.
 func (c *APIClient) GetAuthentication(r ApiGetAuthenticationRequest, opts ...Option) (*AuthenticationWithInput, error) {
+	return c.GetAuthenticationWithContext(context.Background(), r, opts...)
+}
+
+// @return AuthenticationWithInput
+func (c *APIClient) GetAuthenticationWithContext(ctx context.Context, r ApiGetAuthenticationRequest, opts ...Option) (*AuthenticationWithInput, error) {
 	var (
 		postBody    any
 		returnValue *AuthenticationWithInput
@@ -1398,7 +1463,7 @@ func (c *APIClient) GetAuthentication(r ApiGetAuthenticationRequest, opts ...Opt
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1556,8 +1621,13 @@ func (c *APIClient) NewApiGetAuthenticationsRequest() ApiGetAuthenticationsReque
 	return ApiGetAuthenticationsRequest{}
 }
 
-// @return ListAuthenticationsResponse
+// GetAuthentications wraps GetAuthenticationsWithContext using context.Background.
 func (c *APIClient) GetAuthentications(r ApiGetAuthenticationsRequest, opts ...Option) (*ListAuthenticationsResponse, error) {
+	return c.GetAuthenticationsWithContext(context.Background(), r, opts...)
+}
+
+// @return ListAuthenticationsResponse
+func (c *APIClient) GetAuthenticationsWithContext(ctx context.Context, r ApiGetAuthenticationsRequest, opts ...Option) (*ListAuthenticationsResponse, error) {
 	var (
 		postBody    any
 		returnValue *ListAuthenticationsResponse
@@ -1597,7 +1667,7 @@ func (c *APIClient) GetAuthentications(r ApiGetAuthenticationsRequest, opts ...O
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1671,8 +1741,13 @@ func (c *APIClient) NewApiGetDestinationRequest(destinationID string) ApiGetDest
 	}
 }
 
-// @return Destination
+// GetDestination wraps GetDestinationWithContext using context.Background.
 func (c *APIClient) GetDestination(r ApiGetDestinationRequest, opts ...Option) (*Destination, error) {
+	return c.GetDestinationWithContext(context.Background(), r, opts...)
+}
+
+// @return Destination
+func (c *APIClient) GetDestinationWithContext(ctx context.Context, r ApiGetDestinationRequest, opts ...Option) (*Destination, error) {
 	var (
 		postBody    any
 		returnValue *Destination
@@ -1694,7 +1769,7 @@ func (c *APIClient) GetDestination(r ApiGetDestinationRequest, opts ...Option) (
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1852,8 +1927,13 @@ func (c *APIClient) NewApiGetDestinationsRequest() ApiGetDestinationsRequest {
 	return ApiGetDestinationsRequest{}
 }
 
-// @return ListDestinationsResponse
+// GetDestinations wraps GetDestinationsWithContext using context.Background.
 func (c *APIClient) GetDestinations(r ApiGetDestinationsRequest, opts ...Option) (*ListDestinationsResponse, error) {
+	return c.GetDestinationsWithContext(context.Background(), r, opts...)
+}
+
+// @return ListDestinationsResponse
+func (c *APIClient) GetDestinationsWithContext(ctx context.Context, r ApiGetDestinationsRequest, opts ...Option) (*ListDestinationsResponse, error) {
 	var (
 		postBody    any
 		returnValue *ListDestinationsResponse
@@ -1893,7 +1973,7 @@ func (c *APIClient) GetDestinations(r ApiGetDestinationsRequest, opts ...Option)
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1978,8 +2058,13 @@ func (c *APIClient) NewApiGetEventRequest(runID string, eventID string) ApiGetEv
 	}
 }
 
-// @return Event
+// GetEvent wraps GetEventWithContext using context.Background.
 func (c *APIClient) GetEvent(r ApiGetEventRequest, opts ...Option) (*Event, error) {
+	return c.GetEventWithContext(context.Background(), r, opts...)
+}
+
+// @return Event
+func (c *APIClient) GetEventWithContext(ctx context.Context, r ApiGetEventRequest, opts ...Option) (*Event, error) {
 	var (
 		postBody    any
 		returnValue *Event
@@ -2002,7 +2087,7 @@ func (c *APIClient) GetEvent(r ApiGetEventRequest, opts ...Option) (*Event, erro
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2172,8 +2257,13 @@ func (c *APIClient) NewApiGetEventsRequest(runID string) ApiGetEventsRequest {
 	}
 }
 
-// @return ListEventsResponse
+// GetEvents wraps GetEventsWithContext using context.Background.
 func (c *APIClient) GetEvents(r ApiGetEventsRequest, opts ...Option) (*ListEventsResponse, error) {
+	return c.GetEventsWithContext(context.Background(), r, opts...)
+}
+
+// @return ListEventsResponse
+func (c *APIClient) GetEventsWithContext(ctx context.Context, r ApiGetEventsRequest, opts ...Option) (*ListEventsResponse, error) {
 	var (
 		postBody    any
 		returnValue *ListEventsResponse
@@ -2214,7 +2304,7 @@ func (c *APIClient) GetEvents(r ApiGetEventsRequest, opts ...Option) (*ListEvent
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2288,8 +2378,13 @@ func (c *APIClient) NewApiGetRunRequest(runID string) ApiGetRunRequest {
 	}
 }
 
-// @return Run
+// GetRun wraps GetRunWithContext using context.Background.
 func (c *APIClient) GetRun(r ApiGetRunRequest, opts ...Option) (*Run, error) {
+	return c.GetRunWithContext(context.Background(), r, opts...)
+}
+
+// @return Run
+func (c *APIClient) GetRunWithContext(ctx context.Context, r ApiGetRunRequest, opts ...Option) (*Run, error) {
 	var (
 		postBody    any
 		returnValue *Run
@@ -2311,7 +2406,7 @@ func (c *APIClient) GetRun(r ApiGetRunRequest, opts ...Option) (*Run, error) {
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2469,8 +2564,13 @@ func (c *APIClient) NewApiGetRunsRequest() ApiGetRunsRequest {
 	return ApiGetRunsRequest{}
 }
 
-// @return RunListResponse
+// GetRuns wraps GetRunsWithContext using context.Background.
 func (c *APIClient) GetRuns(r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
+	return c.GetRunsWithContext(context.Background(), r, opts...)
+}
+
+// @return RunListResponse
+func (c *APIClient) GetRunsWithContext(ctx context.Context, r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
 	var (
 		postBody    any
 		returnValue *RunListResponse
@@ -2510,7 +2610,7 @@ func (c *APIClient) GetRuns(r ApiGetRunsRequest, opts ...Option) (*RunListRespon
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2584,8 +2684,13 @@ func (c *APIClient) NewApiGetSourceRequest(sourceID string) ApiGetSourceRequest 
 	}
 }
 
-// @return Source
+// GetSource wraps GetSourceWithContext using context.Background.
 func (c *APIClient) GetSource(r ApiGetSourceRequest, opts ...Option) (*Source, error) {
+	return c.GetSourceWithContext(context.Background(), r, opts...)
+}
+
+// @return Source
+func (c *APIClient) GetSourceWithContext(ctx context.Context, r ApiGetSourceRequest, opts ...Option) (*Source, error) {
 	var (
 		postBody    any
 		returnValue *Source
@@ -2607,7 +2712,7 @@ func (c *APIClient) GetSource(r ApiGetSourceRequest, opts ...Option) (*Source, e
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2765,8 +2870,13 @@ func (c *APIClient) NewApiGetSourcesRequest() ApiGetSourcesRequest {
 	return ApiGetSourcesRequest{}
 }
 
-// @return ListSourcesResponse
+// GetSources wraps GetSourcesWithContext using context.Background.
 func (c *APIClient) GetSources(r ApiGetSourcesRequest, opts ...Option) (*ListSourcesResponse, error) {
+	return c.GetSourcesWithContext(context.Background(), r, opts...)
+}
+
+// @return ListSourcesResponse
+func (c *APIClient) GetSourcesWithContext(ctx context.Context, r ApiGetSourcesRequest, opts ...Option) (*ListSourcesResponse, error) {
 	var (
 		postBody    any
 		returnValue *ListSourcesResponse
@@ -2806,7 +2916,7 @@ func (c *APIClient) GetSources(r ApiGetSourcesRequest, opts ...Option) (*ListSou
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2880,8 +2990,13 @@ func (c *APIClient) NewApiGetTaskRequest(taskID string) ApiGetTaskRequest {
 	}
 }
 
-// @return Task
+// GetTask wraps GetTaskWithContext using context.Background.
 func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*Task, error) {
+	return c.GetTaskWithContext(context.Background(), r, opts...)
+}
+
+// @return Task
+func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest, opts ...Option) (*Task, error) {
 	var (
 		postBody    any
 		returnValue *Task
@@ -2903,7 +3018,7 @@ func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*Task, error) 
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3109,8 +3224,13 @@ func (c *APIClient) NewApiGetTasksRequest() ApiGetTasksRequest {
 	return ApiGetTasksRequest{}
 }
 
-// @return ListTasksResponse
+// GetTasks wraps GetTasksWithContext using context.Background.
 func (c *APIClient) GetTasks(r ApiGetTasksRequest, opts ...Option) (*ListTasksResponse, error) {
+	return c.GetTasksWithContext(context.Background(), r, opts...)
+}
+
+// @return ListTasksResponse
+func (c *APIClient) GetTasksWithContext(ctx context.Context, r ApiGetTasksRequest, opts ...Option) (*ListTasksResponse, error) {
 	var (
 		postBody    any
 		returnValue *ListTasksResponse
@@ -3159,7 +3279,7 @@ func (c *APIClient) GetTasks(r ApiGetTasksRequest, opts ...Option) (*ListTasksRe
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3265,8 +3385,13 @@ func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Post wraps PostWithContext using context.Background.
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PostWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -3300,7 +3425,7 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3433,8 +3558,13 @@ func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Put wraps PutWithContext using context.Background.
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PutWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -3468,7 +3598,7 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3569,8 +3699,13 @@ func (c *APIClient) NewApiRunTaskRequest(taskID string) ApiRunTaskRequest {
 	}
 }
 
-// @return RunResponse
+// RunTask wraps RunTaskWithContext using context.Background.
 func (c *APIClient) RunTask(r ApiRunTaskRequest, opts ...Option) (*RunResponse, error) {
+	return c.RunTaskWithContext(context.Background(), r, opts...)
+}
+
+// @return RunResponse
+func (c *APIClient) RunTaskWithContext(ctx context.Context, r ApiRunTaskRequest, opts ...Option) (*RunResponse, error) {
 	var (
 		postBody    any
 		returnValue *RunResponse
@@ -3592,7 +3727,7 @@ func (c *APIClient) RunTask(r ApiRunTaskRequest, opts ...Option) (*RunResponse, 
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3674,8 +3809,13 @@ func (c *APIClient) NewApiSearchAuthenticationsRequest() ApiSearchAuthentication
 	return ApiSearchAuthenticationsRequest{}
 }
 
-// @return []Authentication
+// SearchAuthentications wraps SearchAuthenticationsWithContext using context.Background.
 func (c *APIClient) SearchAuthentications(r ApiSearchAuthenticationsRequest, opts ...Option) ([]Authentication, error) {
+	return c.SearchAuthenticationsWithContext(context.Background(), r, opts...)
+}
+
+// @return []Authentication
+func (c *APIClient) SearchAuthenticationsWithContext(ctx context.Context, r ApiSearchAuthenticationsRequest, opts ...Option) ([]Authentication, error) {
 	var (
 		postBody    any
 		returnValue []Authentication
@@ -3701,7 +3841,7 @@ func (c *APIClient) SearchAuthentications(r ApiSearchAuthenticationsRequest, opt
 
 	// body params
 	postBody = r.authenticationSearch
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3783,8 +3923,13 @@ func (c *APIClient) NewApiSearchDestinationsRequest() ApiSearchDestinationsReque
 	return ApiSearchDestinationsRequest{}
 }
 
-// @return []Destination
+// SearchDestinations wraps SearchDestinationsWithContext using context.Background.
 func (c *APIClient) SearchDestinations(r ApiSearchDestinationsRequest, opts ...Option) ([]Destination, error) {
+	return c.SearchDestinationsWithContext(context.Background(), r, opts...)
+}
+
+// @return []Destination
+func (c *APIClient) SearchDestinationsWithContext(ctx context.Context, r ApiSearchDestinationsRequest, opts ...Option) ([]Destination, error) {
 	var (
 		postBody    any
 		returnValue []Destination
@@ -3810,7 +3955,7 @@ func (c *APIClient) SearchDestinations(r ApiSearchDestinationsRequest, opts ...O
 
 	// body params
 	postBody = r.destinationSearch
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3892,8 +4037,13 @@ func (c *APIClient) NewApiSearchSourcesRequest() ApiSearchSourcesRequest {
 	return ApiSearchSourcesRequest{}
 }
 
-// @return []Source
+// SearchSources wraps SearchSourcesWithContext using context.Background.
 func (c *APIClient) SearchSources(r ApiSearchSourcesRequest, opts ...Option) ([]Source, error) {
+	return c.SearchSourcesWithContext(context.Background(), r, opts...)
+}
+
+// @return []Source
+func (c *APIClient) SearchSourcesWithContext(ctx context.Context, r ApiSearchSourcesRequest, opts ...Option) ([]Source, error) {
 	var (
 		postBody    any
 		returnValue []Source
@@ -3919,7 +4069,7 @@ func (c *APIClient) SearchSources(r ApiSearchSourcesRequest, opts ...Option) ([]
 
 	// body params
 	postBody = r.sourceSearch
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4001,8 +4151,13 @@ func (c *APIClient) NewApiSearchTasksRequest() ApiSearchTasksRequest {
 	return ApiSearchTasksRequest{}
 }
 
-// @return []Task
+// SearchTasks wraps SearchTasksWithContext using context.Background.
 func (c *APIClient) SearchTasks(r ApiSearchTasksRequest, opts ...Option) ([]Task, error) {
+	return c.SearchTasksWithContext(context.Background(), r, opts...)
+}
+
+// @return []Task
+func (c *APIClient) SearchTasksWithContext(ctx context.Context, r ApiSearchTasksRequest, opts ...Option) ([]Task, error) {
 	var (
 		postBody    any
 		returnValue []Task
@@ -4028,7 +4183,7 @@ func (c *APIClient) SearchTasks(r ApiSearchTasksRequest, opts ...Option) ([]Task
 
 	// body params
 	postBody = r.taskSearch
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4122,8 +4277,13 @@ func (c *APIClient) NewApiUpdateAuthenticationRequest(authenticationID string) A
 	}
 }
 
-// @return AuthenticationUpdateResponse
+// UpdateAuthentication wraps UpdateAuthenticationWithContext using context.Background.
 func (c *APIClient) UpdateAuthentication(r ApiUpdateAuthenticationRequest, opts ...Option) (*AuthenticationUpdateResponse, error) {
+	return c.UpdateAuthenticationWithContext(context.Background(), r, opts...)
+}
+
+// @return AuthenticationUpdateResponse
+func (c *APIClient) UpdateAuthenticationWithContext(ctx context.Context, r ApiUpdateAuthenticationRequest, opts ...Option) (*AuthenticationUpdateResponse, error) {
 	var (
 		postBody    any
 		returnValue *AuthenticationUpdateResponse
@@ -4150,7 +4310,7 @@ func (c *APIClient) UpdateAuthentication(r ApiUpdateAuthenticationRequest, opts 
 
 	// body params
 	postBody = r.authenticationUpdate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4244,8 +4404,13 @@ func (c *APIClient) NewApiUpdateDestinationRequest(destinationID string) ApiUpda
 	}
 }
 
-// @return DestinationUpdateResponse
+// UpdateDestination wraps UpdateDestinationWithContext using context.Background.
 func (c *APIClient) UpdateDestination(r ApiUpdateDestinationRequest, opts ...Option) (*DestinationUpdateResponse, error) {
+	return c.UpdateDestinationWithContext(context.Background(), r, opts...)
+}
+
+// @return DestinationUpdateResponse
+func (c *APIClient) UpdateDestinationWithContext(ctx context.Context, r ApiUpdateDestinationRequest, opts ...Option) (*DestinationUpdateResponse, error) {
 	var (
 		postBody    any
 		returnValue *DestinationUpdateResponse
@@ -4272,7 +4437,7 @@ func (c *APIClient) UpdateDestination(r ApiUpdateDestinationRequest, opts ...Opt
 
 	// body params
 	postBody = r.destinationUpdate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4366,8 +4531,13 @@ func (c *APIClient) NewApiUpdateSourceRequest(sourceID string) ApiUpdateSourceRe
 	}
 }
 
-// @return SourceUpdateResponse
+// UpdateSource wraps UpdateSourceWithContext using context.Background.
 func (c *APIClient) UpdateSource(r ApiUpdateSourceRequest, opts ...Option) (*SourceUpdateResponse, error) {
+	return c.UpdateSourceWithContext(context.Background(), r, opts...)
+}
+
+// @return SourceUpdateResponse
+func (c *APIClient) UpdateSourceWithContext(ctx context.Context, r ApiUpdateSourceRequest, opts ...Option) (*SourceUpdateResponse, error) {
 	var (
 		postBody    any
 		returnValue *SourceUpdateResponse
@@ -4394,7 +4564,7 @@ func (c *APIClient) UpdateSource(r ApiUpdateSourceRequest, opts ...Option) (*Sou
 
 	// body params
 	postBody = r.sourceUpdate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4488,8 +4658,13 @@ func (c *APIClient) NewApiUpdateTaskRequest(taskID string) ApiUpdateTaskRequest 
 	}
 }
 
-// @return TaskUpdateResponse
+// UpdateTask wraps UpdateTaskWithContext using context.Background.
 func (c *APIClient) UpdateTask(r ApiUpdateTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
+	return c.UpdateTaskWithContext(context.Background(), r, opts...)
+}
+
+// @return TaskUpdateResponse
+func (c *APIClient) UpdateTaskWithContext(ctx context.Context, r ApiUpdateTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	var (
 		postBody    any
 		returnValue *TaskUpdateResponse
@@ -4516,7 +4691,7 @@ func (c *APIClient) UpdateTask(r ApiUpdateTaskRequest, opts ...Option) (*TaskUpd
 
 	// body params
 	postBody = r.taskUpdate
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}

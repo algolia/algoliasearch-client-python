@@ -81,8 +81,13 @@ func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Del wraps DelWithContext using context.Background.
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.DelWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -110,7 +115,7 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -211,8 +216,13 @@ func (c *APIClient) NewApiDeleteUserProfileRequest(userToken string) ApiDeleteUs
 	}
 }
 
-// @return DeleteUserProfileResponse
+// DeleteUserProfile wraps DeleteUserProfileWithContext using context.Background.
 func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
+	return c.DeleteUserProfileWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteUserProfileResponse
+func (c *APIClient) DeleteUserProfileWithContext(ctx context.Context, r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteUserProfileResponse
@@ -234,7 +244,7 @@ func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Opt
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -351,8 +361,13 @@ func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Get wraps GetWithContext using context.Background.
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.GetWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -380,7 +395,7 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -469,8 +484,13 @@ func (c *APIClient) NewApiGetPersonalizationStrategyRequest() ApiGetPersonalizat
 	return ApiGetPersonalizationStrategyRequest{}
 }
 
-// @return PersonalizationStrategyParams
+// GetPersonalizationStrategy wraps GetPersonalizationStrategyWithContext using context.Background.
 func (c *APIClient) GetPersonalizationStrategy(r ApiGetPersonalizationStrategyRequest, opts ...Option) (*PersonalizationStrategyParams, error) {
+	return c.GetPersonalizationStrategyWithContext(context.Background(), r, opts...)
+}
+
+// @return PersonalizationStrategyParams
+func (c *APIClient) GetPersonalizationStrategyWithContext(ctx context.Context, r ApiGetPersonalizationStrategyRequest, opts ...Option) (*PersonalizationStrategyParams, error) {
 	var (
 		postBody    any
 		returnValue *PersonalizationStrategyParams
@@ -491,7 +511,7 @@ func (c *APIClient) GetPersonalizationStrategy(r ApiGetPersonalizationStrategyRe
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -592,8 +612,13 @@ func (c *APIClient) NewApiGetUserTokenProfileRequest(userToken string) ApiGetUse
 	}
 }
 
-// @return GetUserTokenResponse
+// GetUserTokenProfile wraps GetUserTokenProfileWithContext using context.Background.
 func (c *APIClient) GetUserTokenProfile(r ApiGetUserTokenProfileRequest, opts ...Option) (*GetUserTokenResponse, error) {
+	return c.GetUserTokenProfileWithContext(context.Background(), r, opts...)
+}
+
+// @return GetUserTokenResponse
+func (c *APIClient) GetUserTokenProfileWithContext(ctx context.Context, r ApiGetUserTokenProfileRequest, opts ...Option) (*GetUserTokenResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetUserTokenResponse
@@ -615,7 +640,7 @@ func (c *APIClient) GetUserTokenProfile(r ApiGetUserTokenProfileRequest, opts ..
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -748,8 +773,13 @@ func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Post wraps PostWithContext using context.Background.
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PostWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -783,7 +813,7 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -916,8 +946,13 @@ func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Put wraps PutWithContext using context.Background.
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PutWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -951,7 +986,7 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1060,8 +1095,13 @@ func (c *APIClient) NewApiSetPersonalizationStrategyRequest() ApiSetPersonalizat
 	return ApiSetPersonalizationStrategyRequest{}
 }
 
-// @return SetPersonalizationStrategyResponse
+// SetPersonalizationStrategy wraps SetPersonalizationStrategyWithContext using context.Background.
 func (c *APIClient) SetPersonalizationStrategy(r ApiSetPersonalizationStrategyRequest, opts ...Option) (*SetPersonalizationStrategyResponse, error) {
+	return c.SetPersonalizationStrategyWithContext(context.Background(), r, opts...)
+}
+
+// @return SetPersonalizationStrategyResponse
+func (c *APIClient) SetPersonalizationStrategyWithContext(ctx context.Context, r ApiSetPersonalizationStrategyRequest, opts ...Option) (*SetPersonalizationStrategyResponse, error) {
 	var (
 		postBody    any
 		returnValue *SetPersonalizationStrategyResponse
@@ -1087,7 +1127,7 @@ func (c *APIClient) SetPersonalizationStrategy(r ApiSetPersonalizationStrategyRe
 
 	// body params
 	postBody = r.personalizationStrategyParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}

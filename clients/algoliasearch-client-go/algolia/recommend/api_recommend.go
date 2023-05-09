@@ -81,8 +81,13 @@ func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Del wraps DelWithContext using context.Background.
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.DelWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -110,7 +115,7 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -227,8 +232,13 @@ func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Get wraps GetWithContext using context.Background.
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.GetWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -256,7 +266,7 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -365,8 +375,13 @@ func (c *APIClient) NewApiGetRecommendationsRequest() ApiGetRecommendationsReque
 	return ApiGetRecommendationsRequest{}
 }
 
-// @return GetRecommendationsResponse
+// GetRecommendations wraps GetRecommendationsWithContext using context.Background.
 func (c *APIClient) GetRecommendations(r ApiGetRecommendationsRequest, opts ...Option) (*GetRecommendationsResponse, error) {
+	return c.GetRecommendationsWithContext(context.Background(), r, opts...)
+}
+
+// @return GetRecommendationsResponse
+func (c *APIClient) GetRecommendationsWithContext(ctx context.Context, r ApiGetRecommendationsRequest, opts ...Option) (*GetRecommendationsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetRecommendationsResponse
@@ -392,7 +407,7 @@ func (c *APIClient) GetRecommendations(r ApiGetRecommendationsRequest, opts ...O
 
 	// body params
 	postBody = r.getRecommendationsParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -525,8 +540,13 @@ func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Post wraps PostWithContext using context.Background.
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PostWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -560,7 +580,7 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -693,8 +713,13 @@ func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Put wraps PutWithContext using context.Background.
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PutWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -728,7 +753,7 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}

@@ -73,8 +73,13 @@ func (c *APIClient) NewApiActivateModelInstanceRequest() ApiActivateModelInstanc
 	return ApiActivateModelInstanceRequest{}
 }
 
-// @return ActivateModelInstanceResponse
+// ActivateModelInstance wraps ActivateModelInstanceWithContext using context.Background.
 func (c *APIClient) ActivateModelInstance(r ApiActivateModelInstanceRequest, opts ...Option) (*ActivateModelInstanceResponse, error) {
+	return c.ActivateModelInstanceWithContext(context.Background(), r, opts...)
+}
+
+// @return ActivateModelInstanceResponse
+func (c *APIClient) ActivateModelInstanceWithContext(ctx context.Context, r ApiActivateModelInstanceRequest, opts ...Option) (*ActivateModelInstanceResponse, error) {
 	var (
 		postBody    any
 		returnValue *ActivateModelInstanceResponse
@@ -100,7 +105,7 @@ func (c *APIClient) ActivateModelInstance(r ApiActivateModelInstanceRequest, opt
 
 	// body params
 	postBody = r.activateModelParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -200,8 +205,13 @@ func (c *APIClient) NewApiCreateSegmentRequest() ApiCreateSegmentRequest {
 	return ApiCreateSegmentRequest{}
 }
 
-// @return CreateSegmentResponse
+// CreateSegment wraps CreateSegmentWithContext using context.Background.
 func (c *APIClient) CreateSegment(r ApiCreateSegmentRequest, opts ...Option) (*CreateSegmentResponse, error) {
+	return c.CreateSegmentWithContext(context.Background(), r, opts...)
+}
+
+// @return CreateSegmentResponse
+func (c *APIClient) CreateSegmentWithContext(ctx context.Context, r ApiCreateSegmentRequest, opts ...Option) (*CreateSegmentResponse, error) {
 	var (
 		postBody    any
 		returnValue *CreateSegmentResponse
@@ -227,7 +237,7 @@ func (c *APIClient) CreateSegment(r ApiCreateSegmentRequest, opts ...Option) (*C
 
 	// body params
 	postBody = r.createSegmentParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -344,8 +354,13 @@ func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Del wraps DelWithContext using context.Background.
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.DelWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -373,7 +388,7 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -474,8 +489,13 @@ func (c *APIClient) NewApiDeleteModelInstanceRequest(modelID string) ApiDeleteMo
 	}
 }
 
-// @return DeleteModelInstanceResponse
+// DeleteModelInstance wraps DeleteModelInstanceWithContext using context.Background.
 func (c *APIClient) DeleteModelInstance(r ApiDeleteModelInstanceRequest, opts ...Option) (*DeleteModelInstanceResponse, error) {
+	return c.DeleteModelInstanceWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteModelInstanceResponse
+func (c *APIClient) DeleteModelInstanceWithContext(ctx context.Context, r ApiDeleteModelInstanceRequest, opts ...Option) (*DeleteModelInstanceResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteModelInstanceResponse
@@ -497,7 +517,7 @@ func (c *APIClient) DeleteModelInstance(r ApiDeleteModelInstanceRequest, opts ..
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -598,8 +618,13 @@ func (c *APIClient) NewApiDeleteSegmentRequest(segmentID string) ApiDeleteSegmen
 	}
 }
 
-// @return DeleteSegmentResponse
+// DeleteSegment wraps DeleteSegmentWithContext using context.Background.
 func (c *APIClient) DeleteSegment(r ApiDeleteSegmentRequest, opts ...Option) (*DeleteSegmentResponse, error) {
+	return c.DeleteSegmentWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteSegmentResponse
+func (c *APIClient) DeleteSegmentWithContext(ctx context.Context, r ApiDeleteSegmentRequest, opts ...Option) (*DeleteSegmentResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteSegmentResponse
@@ -621,7 +646,7 @@ func (c *APIClient) DeleteSegment(r ApiDeleteSegmentRequest, opts ...Option) (*D
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -722,8 +747,13 @@ func (c *APIClient) NewApiDeleteUserProfileRequest(userID string) ApiDeleteUserP
 	}
 }
 
-// @return DeleteUserProfileResponse
+// DeleteUserProfile wraps DeleteUserProfileWithContext using context.Background.
 func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
+	return c.DeleteUserProfileWithContext(context.Background(), r, opts...)
+}
+
+// @return DeleteUserProfileResponse
+func (c *APIClient) DeleteUserProfileWithContext(ctx context.Context, r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
 	var (
 		postBody    any
 		returnValue *DeleteUserProfileResponse
@@ -745,7 +775,7 @@ func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Opt
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -850,8 +880,13 @@ func (c *APIClient) NewApiFetchAllSegmentsRequest() ApiFetchAllSegmentsRequest {
 	return ApiFetchAllSegmentsRequest{}
 }
 
-// @return []Segment
+// FetchAllSegments wraps FetchAllSegmentsWithContext using context.Background.
 func (c *APIClient) FetchAllSegments(r ApiFetchAllSegmentsRequest, opts ...Option) ([]Segment, error) {
+	return c.FetchAllSegmentsWithContext(context.Background(), r, opts...)
+}
+
+// @return []Segment
+func (c *APIClient) FetchAllSegmentsWithContext(ctx context.Context, r ApiFetchAllSegmentsRequest, opts ...Option) ([]Segment, error) {
 	var (
 		postBody    any
 		returnValue []Segment
@@ -876,7 +911,7 @@ func (c *APIClient) FetchAllSegments(r ApiFetchAllSegmentsRequest, opts ...Optio
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -976,8 +1011,13 @@ func (c *APIClient) NewApiFetchAllUserProfilesRequest() ApiFetchAllUserProfilesR
 	return ApiFetchAllUserProfilesRequest{}
 }
 
-// @return FetchAllUserProfilesResponse
+// FetchAllUserProfiles wraps FetchAllUserProfilesWithContext using context.Background.
 func (c *APIClient) FetchAllUserProfiles(r ApiFetchAllUserProfilesRequest, opts ...Option) (*FetchAllUserProfilesResponse, error) {
+	return c.FetchAllUserProfilesWithContext(context.Background(), r, opts...)
+}
+
+// @return FetchAllUserProfilesResponse
+func (c *APIClient) FetchAllUserProfilesWithContext(ctx context.Context, r ApiFetchAllUserProfilesRequest, opts ...Option) (*FetchAllUserProfilesResponse, error) {
 	var (
 		postBody    any
 		returnValue *FetchAllUserProfilesResponse
@@ -1003,7 +1043,7 @@ func (c *APIClient) FetchAllUserProfiles(r ApiFetchAllUserProfilesRequest, opts 
 
 	// body params
 	postBody = r.fetchAllUserProfilesParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1104,8 +1144,13 @@ func (c *APIClient) NewApiFetchSegmentRequest(segmentID string) ApiFetchSegmentR
 	}
 }
 
-// @return Segment
+// FetchSegment wraps FetchSegmentWithContext using context.Background.
 func (c *APIClient) FetchSegment(r ApiFetchSegmentRequest, opts ...Option) (*Segment, error) {
+	return c.FetchSegmentWithContext(context.Background(), r, opts...)
+}
+
+// @return Segment
+func (c *APIClient) FetchSegmentWithContext(ctx context.Context, r ApiFetchSegmentRequest, opts ...Option) (*Segment, error) {
 	var (
 		postBody    any
 		returnValue *Segment
@@ -1127,7 +1172,7 @@ func (c *APIClient) FetchSegment(r ApiFetchSegmentRequest, opts ...Option) (*Seg
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1239,8 +1284,13 @@ func (c *APIClient) NewApiFetchUserProfileRequest(userID string) ApiFetchUserPro
 	}
 }
 
-// @return UserProfile
+// FetchUserProfile wraps FetchUserProfileWithContext using context.Background.
 func (c *APIClient) FetchUserProfile(r ApiFetchUserProfileRequest, opts ...Option) (*UserProfile, error) {
+	return c.FetchUserProfileWithContext(context.Background(), r, opts...)
+}
+
+// @return UserProfile
+func (c *APIClient) FetchUserProfileWithContext(ctx context.Context, r ApiFetchUserProfileRequest, opts ...Option) (*UserProfile, error) {
 	var (
 		postBody    any
 		returnValue *UserProfile
@@ -1267,7 +1317,7 @@ func (c *APIClient) FetchUserProfile(r ApiFetchUserProfileRequest, opts ...Optio
 
 	// body params
 	postBody = r.params
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1375,8 +1425,13 @@ func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Get wraps GetWithContext using context.Background.
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.GetWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -1404,7 +1459,7 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1493,8 +1548,13 @@ func (c *APIClient) NewApiGetAvailableModelTypesRequest() ApiGetAvailableModelTy
 	return ApiGetAvailableModelTypesRequest{}
 }
 
-// @return []GetAvailableModelTypesResponseInner
+// GetAvailableModelTypes wraps GetAvailableModelTypesWithContext using context.Background.
 func (c *APIClient) GetAvailableModelTypes(r ApiGetAvailableModelTypesRequest, opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
+	return c.GetAvailableModelTypesWithContext(context.Background(), r, opts...)
+}
+
+// @return []GetAvailableModelTypesResponseInner
+func (c *APIClient) GetAvailableModelTypesWithContext(ctx context.Context, r ApiGetAvailableModelTypesRequest, opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
 	var (
 		postBody    any
 		returnValue []GetAvailableModelTypesResponseInner
@@ -1515,7 +1575,7 @@ func (c *APIClient) GetAvailableModelTypes(r ApiGetAvailableModelTypesRequest, o
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1607,8 +1667,13 @@ func (c *APIClient) NewApiGetModelInstanceConfigRequest(modelID string) ApiGetMo
 	}
 }
 
-// @return ModelInstance
+// GetModelInstanceConfig wraps GetModelInstanceConfigWithContext using context.Background.
 func (c *APIClient) GetModelInstanceConfig(r ApiGetModelInstanceConfigRequest, opts ...Option) (*ModelInstance, error) {
+	return c.GetModelInstanceConfigWithContext(context.Background(), r, opts...)
+}
+
+// @return ModelInstance
+func (c *APIClient) GetModelInstanceConfigWithContext(ctx context.Context, r ApiGetModelInstanceConfigRequest, opts ...Option) (*ModelInstance, error) {
 	var (
 		postBody    any
 		returnValue *ModelInstance
@@ -1630,7 +1695,7 @@ func (c *APIClient) GetModelInstanceConfig(r ApiGetModelInstanceConfigRequest, o
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1719,8 +1784,13 @@ func (c *APIClient) NewApiGetModelInstancesRequest() ApiGetModelInstancesRequest
 	return ApiGetModelInstancesRequest{}
 }
 
-// @return []ModelInstance
+// GetModelInstances wraps GetModelInstancesWithContext using context.Background.
 func (c *APIClient) GetModelInstances(r ApiGetModelInstancesRequest, opts ...Option) ([]ModelInstance, error) {
+	return c.GetModelInstancesWithContext(context.Background(), r, opts...)
+}
+
+// @return []ModelInstance
+func (c *APIClient) GetModelInstancesWithContext(ctx context.Context, r ApiGetModelInstancesRequest, opts ...Option) ([]ModelInstance, error) {
 	var (
 		postBody    any
 		returnValue []ModelInstance
@@ -1741,7 +1811,7 @@ func (c *APIClient) GetModelInstances(r ApiGetModelInstancesRequest, opts ...Opt
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1833,8 +1903,13 @@ func (c *APIClient) NewApiGetModelMetricsRequest(modelID string) ApiGetModelMetr
 	}
 }
 
-// @return GetModelMetricsResponse
+// GetModelMetrics wraps GetModelMetricsWithContext using context.Background.
 func (c *APIClient) GetModelMetrics(r ApiGetModelMetricsRequest, opts ...Option) (*GetModelMetricsResponse, error) {
+	return c.GetModelMetricsWithContext(context.Background(), r, opts...)
+}
+
+// @return GetModelMetricsResponse
+func (c *APIClient) GetModelMetricsWithContext(ctx context.Context, r ApiGetModelMetricsRequest, opts ...Option) (*GetModelMetricsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetModelMetricsResponse
@@ -1856,7 +1931,7 @@ func (c *APIClient) GetModelMetrics(r ApiGetModelMetricsRequest, opts ...Option)
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1977,8 +2052,13 @@ func (c *APIClient) NewApiGetSegmentUsersRequest(segmentID string) ApiGetSegment
 	}
 }
 
-// @return GetSegmentUsersResponse
+// GetSegmentUsers wraps GetSegmentUsersWithContext using context.Background.
 func (c *APIClient) GetSegmentUsers(r ApiGetSegmentUsersRequest, opts ...Option) (*GetSegmentUsersResponse, error) {
+	return c.GetSegmentUsersWithContext(context.Background(), r, opts...)
+}
+
+// @return GetSegmentUsersResponse
+func (c *APIClient) GetSegmentUsersWithContext(ctx context.Context, r ApiGetSegmentUsersRequest, opts ...Option) (*GetSegmentUsersResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetSegmentUsersResponse
@@ -2005,7 +2085,7 @@ func (c *APIClient) GetSegmentUsers(r ApiGetSegmentUsersRequest, opts ...Option)
 
 	// body params
 	postBody = r.fetchAllUserProfilesParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2147,8 +2227,13 @@ func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Post wraps PostWithContext using context.Background.
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PostWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -2182,7 +2267,7 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2315,8 +2400,13 @@ func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Put wraps PutWithContext using context.Background.
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PutWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -2350,7 +2440,7 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2471,8 +2561,13 @@ func (c *APIClient) NewApiUpdateModelInstanceRequest(modelID string) ApiUpdateMo
 	}
 }
 
-// @return UpdateModelInstanceResponse
+// UpdateModelInstance wraps UpdateModelInstanceWithContext using context.Background.
 func (c *APIClient) UpdateModelInstance(r ApiUpdateModelInstanceRequest, opts ...Option) (*UpdateModelInstanceResponse, error) {
+	return c.UpdateModelInstanceWithContext(context.Background(), r, opts...)
+}
+
+// @return UpdateModelInstanceResponse
+func (c *APIClient) UpdateModelInstanceWithContext(ctx context.Context, r ApiUpdateModelInstanceRequest, opts ...Option) (*UpdateModelInstanceResponse, error) {
 	var (
 		postBody    any
 		returnValue *UpdateModelInstanceResponse
@@ -2499,7 +2594,7 @@ func (c *APIClient) UpdateModelInstance(r ApiUpdateModelInstanceRequest, opts ..
 
 	// body params
 	postBody = r.updateModelParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2620,8 +2715,13 @@ func (c *APIClient) NewApiUpdateSegmentRequest(segmentID string) ApiUpdateSegmen
 	}
 }
 
-// @return UpdateSegmentResponse
+// UpdateSegment wraps UpdateSegmentWithContext using context.Background.
 func (c *APIClient) UpdateSegment(r ApiUpdateSegmentRequest, opts ...Option) (*UpdateSegmentResponse, error) {
+	return c.UpdateSegmentWithContext(context.Background(), r, opts...)
+}
+
+// @return UpdateSegmentResponse
+func (c *APIClient) UpdateSegmentWithContext(ctx context.Context, r ApiUpdateSegmentRequest, opts ...Option) (*UpdateSegmentResponse, error) {
 	var (
 		postBody    any
 		returnValue *UpdateSegmentResponse
@@ -2648,7 +2748,7 @@ func (c *APIClient) UpdateSegment(r ApiUpdateSegmentRequest, opts ...Option) (*U
 
 	// body params
 	postBody = r.updateSegmentParams
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}

@@ -81,8 +81,13 @@ func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Del wraps DelWithContext using context.Background.
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.DelWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -110,7 +115,7 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodDelete, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -227,8 +232,13 @@ func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Get wraps GetWithContext using context.Background.
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.GetWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -256,7 +266,7 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -409,8 +419,13 @@ func (c *APIClient) NewApiGetAverageClickPositionRequest() ApiGetAverageClickPos
 	return ApiGetAverageClickPositionRequest{}
 }
 
-// @return GetAverageClickPositionResponse
+// GetAverageClickPosition wraps GetAverageClickPositionWithContext using context.Background.
 func (c *APIClient) GetAverageClickPosition(r ApiGetAverageClickPositionRequest, opts ...Option) (*GetAverageClickPositionResponse, error) {
+	return c.GetAverageClickPositionWithContext(context.Background(), r, opts...)
+}
+
+// @return GetAverageClickPositionResponse
+func (c *APIClient) GetAverageClickPositionWithContext(ctx context.Context, r ApiGetAverageClickPositionRequest, opts ...Option) (*GetAverageClickPositionResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetAverageClickPositionResponse
@@ -445,7 +460,7 @@ func (c *APIClient) GetAverageClickPosition(r ApiGetAverageClickPositionRequest,
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -598,8 +613,13 @@ func (c *APIClient) NewApiGetClickPositionsRequest() ApiGetClickPositionsRequest
 	return ApiGetClickPositionsRequest{}
 }
 
-// @return GetClickPositionsResponse
+// GetClickPositions wraps GetClickPositionsWithContext using context.Background.
 func (c *APIClient) GetClickPositions(r ApiGetClickPositionsRequest, opts ...Option) (*GetClickPositionsResponse, error) {
+	return c.GetClickPositionsWithContext(context.Background(), r, opts...)
+}
+
+// @return GetClickPositionsResponse
+func (c *APIClient) GetClickPositionsWithContext(ctx context.Context, r ApiGetClickPositionsRequest, opts ...Option) (*GetClickPositionsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetClickPositionsResponse
@@ -634,7 +654,7 @@ func (c *APIClient) GetClickPositions(r ApiGetClickPositionsRequest, opts ...Opt
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -787,8 +807,13 @@ func (c *APIClient) NewApiGetClickThroughRateRequest() ApiGetClickThroughRateReq
 	return ApiGetClickThroughRateRequest{}
 }
 
-// @return GetClickThroughRateResponse
+// GetClickThroughRate wraps GetClickThroughRateWithContext using context.Background.
 func (c *APIClient) GetClickThroughRate(r ApiGetClickThroughRateRequest, opts ...Option) (*GetClickThroughRateResponse, error) {
+	return c.GetClickThroughRateWithContext(context.Background(), r, opts...)
+}
+
+// @return GetClickThroughRateResponse
+func (c *APIClient) GetClickThroughRateWithContext(ctx context.Context, r ApiGetClickThroughRateRequest, opts ...Option) (*GetClickThroughRateResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetClickThroughRateResponse
@@ -823,7 +848,7 @@ func (c *APIClient) GetClickThroughRate(r ApiGetClickThroughRateRequest, opts ..
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -976,8 +1001,13 @@ func (c *APIClient) NewApiGetConversationRateRequest() ApiGetConversationRateReq
 	return ApiGetConversationRateRequest{}
 }
 
-// @return GetConversationRateResponse
+// GetConversationRate wraps GetConversationRateWithContext using context.Background.
 func (c *APIClient) GetConversationRate(r ApiGetConversationRateRequest, opts ...Option) (*GetConversationRateResponse, error) {
+	return c.GetConversationRateWithContext(context.Background(), r, opts...)
+}
+
+// @return GetConversationRateResponse
+func (c *APIClient) GetConversationRateWithContext(ctx context.Context, r ApiGetConversationRateRequest, opts ...Option) (*GetConversationRateResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetConversationRateResponse
@@ -1012,7 +1042,7 @@ func (c *APIClient) GetConversationRate(r ApiGetConversationRateRequest, opts ..
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1165,8 +1195,13 @@ func (c *APIClient) NewApiGetNoClickRateRequest() ApiGetNoClickRateRequest {
 	return ApiGetNoClickRateRequest{}
 }
 
-// @return GetNoClickRateResponse
+// GetNoClickRate wraps GetNoClickRateWithContext using context.Background.
 func (c *APIClient) GetNoClickRate(r ApiGetNoClickRateRequest, opts ...Option) (*GetNoClickRateResponse, error) {
+	return c.GetNoClickRateWithContext(context.Background(), r, opts...)
+}
+
+// @return GetNoClickRateResponse
+func (c *APIClient) GetNoClickRateWithContext(ctx context.Context, r ApiGetNoClickRateRequest, opts ...Option) (*GetNoClickRateResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetNoClickRateResponse
@@ -1201,7 +1236,7 @@ func (c *APIClient) GetNoClickRate(r ApiGetNoClickRateRequest, opts ...Option) (
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1354,8 +1389,13 @@ func (c *APIClient) NewApiGetNoResultsRateRequest() ApiGetNoResultsRateRequest {
 	return ApiGetNoResultsRateRequest{}
 }
 
-// @return GetNoResultsRateResponse
+// GetNoResultsRate wraps GetNoResultsRateWithContext using context.Background.
 func (c *APIClient) GetNoResultsRate(r ApiGetNoResultsRateRequest, opts ...Option) (*GetNoResultsRateResponse, error) {
+	return c.GetNoResultsRateWithContext(context.Background(), r, opts...)
+}
+
+// @return GetNoResultsRateResponse
+func (c *APIClient) GetNoResultsRateWithContext(ctx context.Context, r ApiGetNoResultsRateRequest, opts ...Option) (*GetNoResultsRateResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetNoResultsRateResponse
@@ -1390,7 +1430,7 @@ func (c *APIClient) GetNoResultsRate(r ApiGetNoResultsRateRequest, opts ...Optio
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1543,8 +1583,13 @@ func (c *APIClient) NewApiGetSearchesCountRequest() ApiGetSearchesCountRequest {
 	return ApiGetSearchesCountRequest{}
 }
 
-// @return GetSearchesCountResponse
+// GetSearchesCount wraps GetSearchesCountWithContext using context.Background.
 func (c *APIClient) GetSearchesCount(r ApiGetSearchesCountRequest, opts ...Option) (*GetSearchesCountResponse, error) {
+	return c.GetSearchesCountWithContext(context.Background(), r, opts...)
+}
+
+// @return GetSearchesCountResponse
+func (c *APIClient) GetSearchesCountWithContext(ctx context.Context, r ApiGetSearchesCountRequest, opts ...Option) (*GetSearchesCountResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetSearchesCountResponse
@@ -1579,7 +1624,7 @@ func (c *APIClient) GetSearchesCount(r ApiGetSearchesCountRequest, opts ...Optio
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1764,8 +1809,13 @@ func (c *APIClient) NewApiGetSearchesNoClicksRequest() ApiGetSearchesNoClicksReq
 	return ApiGetSearchesNoClicksRequest{}
 }
 
-// @return GetSearchesNoClicksResponse
+// GetSearchesNoClicks wraps GetSearchesNoClicksWithContext using context.Background.
 func (c *APIClient) GetSearchesNoClicks(r ApiGetSearchesNoClicksRequest, opts ...Option) (*GetSearchesNoClicksResponse, error) {
+	return c.GetSearchesNoClicksWithContext(context.Background(), r, opts...)
+}
+
+// @return GetSearchesNoClicksResponse
+func (c *APIClient) GetSearchesNoClicksWithContext(ctx context.Context, r ApiGetSearchesNoClicksRequest, opts ...Option) (*GetSearchesNoClicksResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetSearchesNoClicksResponse
@@ -1806,7 +1856,7 @@ func (c *APIClient) GetSearchesNoClicks(r ApiGetSearchesNoClicksRequest, opts ..
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -1991,8 +2041,13 @@ func (c *APIClient) NewApiGetSearchesNoResultsRequest() ApiGetSearchesNoResultsR
 	return ApiGetSearchesNoResultsRequest{}
 }
 
-// @return GetSearchesNoResultsResponse
+// GetSearchesNoResults wraps GetSearchesNoResultsWithContext using context.Background.
 func (c *APIClient) GetSearchesNoResults(r ApiGetSearchesNoResultsRequest, opts ...Option) (*GetSearchesNoResultsResponse, error) {
+	return c.GetSearchesNoResultsWithContext(context.Background(), r, opts...)
+}
+
+// @return GetSearchesNoResultsResponse
+func (c *APIClient) GetSearchesNoResultsWithContext(ctx context.Context, r ApiGetSearchesNoResultsRequest, opts ...Option) (*GetSearchesNoResultsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetSearchesNoResultsResponse
@@ -2033,7 +2088,7 @@ func (c *APIClient) GetSearchesNoResults(r ApiGetSearchesNoResultsRequest, opts 
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2138,8 +2193,13 @@ func (c *APIClient) NewApiGetStatusRequest() ApiGetStatusRequest {
 	return ApiGetStatusRequest{}
 }
 
-// @return GetStatusResponse
+// GetStatus wraps GetStatusWithContext using context.Background.
 func (c *APIClient) GetStatus(r ApiGetStatusRequest, opts ...Option) (*GetStatusResponse, error) {
+	return c.GetStatusWithContext(context.Background(), r, opts...)
+}
+
+// @return GetStatusResponse
+func (c *APIClient) GetStatusWithContext(ctx context.Context, r ApiGetStatusRequest, opts ...Option) (*GetStatusResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetStatusResponse
@@ -2165,7 +2225,7 @@ func (c *APIClient) GetStatus(r ApiGetStatusRequest, opts ...Option) (*GetStatus
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2350,8 +2410,13 @@ func (c *APIClient) NewApiGetTopCountriesRequest() ApiGetTopCountriesRequest {
 	return ApiGetTopCountriesRequest{}
 }
 
-// @return GetTopCountriesResponse
+// GetTopCountries wraps GetTopCountriesWithContext using context.Background.
 func (c *APIClient) GetTopCountries(r ApiGetTopCountriesRequest, opts ...Option) (*GetTopCountriesResponse, error) {
+	return c.GetTopCountriesWithContext(context.Background(), r, opts...)
+}
+
+// @return GetTopCountriesResponse
+func (c *APIClient) GetTopCountriesWithContext(ctx context.Context, r ApiGetTopCountriesRequest, opts ...Option) (*GetTopCountriesResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetTopCountriesResponse
@@ -2392,7 +2457,7 @@ func (c *APIClient) GetTopCountries(r ApiGetTopCountriesRequest, opts ...Option)
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2593,8 +2658,13 @@ func (c *APIClient) NewApiGetTopFilterAttributesRequest() ApiGetTopFilterAttribu
 	return ApiGetTopFilterAttributesRequest{}
 }
 
-// @return GetTopFilterAttributesResponse
+// GetTopFilterAttributes wraps GetTopFilterAttributesWithContext using context.Background.
 func (c *APIClient) GetTopFilterAttributes(r ApiGetTopFilterAttributesRequest, opts ...Option) (*GetTopFilterAttributesResponse, error) {
+	return c.GetTopFilterAttributesWithContext(context.Background(), r, opts...)
+}
+
+// @return GetTopFilterAttributesResponse
+func (c *APIClient) GetTopFilterAttributesWithContext(ctx context.Context, r ApiGetTopFilterAttributesRequest, opts ...Option) (*GetTopFilterAttributesResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetTopFilterAttributesResponse
@@ -2638,7 +2708,7 @@ func (c *APIClient) GetTopFilterAttributes(r ApiGetTopFilterAttributesRequest, o
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -2851,8 +2921,13 @@ func (c *APIClient) NewApiGetTopFilterForAttributeRequest(attribute string) ApiG
 	}
 }
 
-// @return GetTopFilterForAttributeResponse
+// GetTopFilterForAttribute wraps GetTopFilterForAttributeWithContext using context.Background.
 func (c *APIClient) GetTopFilterForAttribute(r ApiGetTopFilterForAttributeRequest, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
+	return c.GetTopFilterForAttributeWithContext(context.Background(), r, opts...)
+}
+
+// @return GetTopFilterForAttributeResponse
+func (c *APIClient) GetTopFilterForAttributeWithContext(ctx context.Context, r ApiGetTopFilterForAttributeRequest, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetTopFilterForAttributeResponse
@@ -2897,7 +2972,7 @@ func (c *APIClient) GetTopFilterForAttribute(r ApiGetTopFilterForAttributeReques
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3098,8 +3173,13 @@ func (c *APIClient) NewApiGetTopFiltersNoResultsRequest() ApiGetTopFiltersNoResu
 	return ApiGetTopFiltersNoResultsRequest{}
 }
 
-// @return GetTopFiltersNoResultsResponse
+// GetTopFiltersNoResults wraps GetTopFiltersNoResultsWithContext using context.Background.
 func (c *APIClient) GetTopFiltersNoResults(r ApiGetTopFiltersNoResultsRequest, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
+	return c.GetTopFiltersNoResultsWithContext(context.Background(), r, opts...)
+}
+
+// @return GetTopFiltersNoResultsResponse
+func (c *APIClient) GetTopFiltersNoResultsWithContext(ctx context.Context, r ApiGetTopFiltersNoResultsRequest, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetTopFiltersNoResultsResponse
@@ -3143,7 +3223,7 @@ func (c *APIClient) GetTopFiltersNoResults(r ApiGetTopFiltersNoResultsRequest, o
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3360,8 +3440,13 @@ func (c *APIClient) NewApiGetTopHitsRequest() ApiGetTopHitsRequest {
 	return ApiGetTopHitsRequest{}
 }
 
-// @return GetTopHitsResponse
+// GetTopHits wraps GetTopHitsWithContext using context.Background.
 func (c *APIClient) GetTopHits(r ApiGetTopHitsRequest, opts ...Option) (*GetTopHitsResponse, error) {
+	return c.GetTopHitsWithContext(context.Background(), r, opts...)
+}
+
+// @return GetTopHitsResponse
+func (c *APIClient) GetTopHitsWithContext(ctx context.Context, r ApiGetTopHitsRequest, opts ...Option) (*GetTopHitsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetTopHitsResponse
@@ -3408,7 +3493,7 @@ func (c *APIClient) GetTopHits(r ApiGetTopHitsRequest, opts ...Option) (*GetTopH
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3641,8 +3726,13 @@ func (c *APIClient) NewApiGetTopSearchesRequest() ApiGetTopSearchesRequest {
 	return ApiGetTopSearchesRequest{}
 }
 
-// @return GetTopSearchesResponse
+// GetTopSearches wraps GetTopSearchesWithContext using context.Background.
 func (c *APIClient) GetTopSearches(r ApiGetTopSearchesRequest, opts ...Option) (*GetTopSearchesResponse, error) {
+	return c.GetTopSearchesWithContext(context.Background(), r, opts...)
+}
+
+// @return GetTopSearchesResponse
+func (c *APIClient) GetTopSearchesWithContext(ctx context.Context, r ApiGetTopSearchesRequest, opts ...Option) (*GetTopSearchesResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetTopSearchesResponse
@@ -3692,7 +3782,7 @@ func (c *APIClient) GetTopSearches(r ApiGetTopSearchesRequest, opts ...Option) (
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -3845,8 +3935,13 @@ func (c *APIClient) NewApiGetUsersCountRequest() ApiGetUsersCountRequest {
 	return ApiGetUsersCountRequest{}
 }
 
-// @return GetUsersCountResponse
+// GetUsersCount wraps GetUsersCountWithContext using context.Background.
 func (c *APIClient) GetUsersCount(r ApiGetUsersCountRequest, opts ...Option) (*GetUsersCountResponse, error) {
+	return c.GetUsersCountWithContext(context.Background(), r, opts...)
+}
+
+// @return GetUsersCountResponse
+func (c *APIClient) GetUsersCountWithContext(ctx context.Context, r ApiGetUsersCountRequest, opts ...Option) (*GetUsersCountResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetUsersCountResponse
@@ -3881,7 +3976,7 @@ func (c *APIClient) GetUsersCount(r ApiGetUsersCountRequest, opts ...Option) (*G
 		}
 	}
 
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodGet, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4014,8 +4109,13 @@ func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Post wraps PostWithContext using context.Background.
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PostWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -4049,7 +4149,7 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -4182,8 +4282,13 @@ func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	}
 }
 
-// @return map[string]interface{}
+// Put wraps PutWithContext using context.Background.
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
+	return c.PutWithContext(context.Background(), r, opts...)
+}
+
+// @return map[string]interface{}
+func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
 		returnValue map[string]interface{}
@@ -4217,7 +4322,7 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	} else {
 		postBody = r.body
 	}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
