@@ -40,6 +40,7 @@ module.exports = {
 
     // GO
     'clients/algoliasearch-client-go/algolia/**',
+    '!clients/algoliasearch-client-go/.github/**',
     '!clients/algoliasearch-client-go/*',
     '!clients/algoliasearch-client-go/algolia/internal/**',
     '!clients/algoliasearch-client-go/algolia/call/*',
