@@ -29,15 +29,14 @@ func Int32AsAroundRadius(v *int32) AroundRadius {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *AroundRadius) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into AroundRadiusAll
 	err = newStrictDecoder(data).Decode(&dst.AroundRadiusAll)
-	if err == nil {
+	if err == nil && validateStruct(dst.AroundRadiusAll) == nil {
 		jsonAroundRadiusAll, _ := json.Marshal(dst.AroundRadiusAll)
 		if string(jsonAroundRadiusAll) == "{}" { // empty struct
 			dst.AroundRadiusAll = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AroundRadiusAll = nil
@@ -45,28 +44,18 @@ func (dst *AroundRadius) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into Int32
 	err = newStrictDecoder(data).Decode(&dst.Int32)
-	if err == nil {
+	if err == nil && validateStruct(dst.Int32) == nil {
 		jsonInt32, _ := json.Marshal(dst.Int32)
 		if string(jsonInt32) == "{}" { // empty struct
 			dst.Int32 = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.Int32 = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.AroundRadiusAll = nil
-		dst.Int32 = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(AroundRadius)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(AroundRadius)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(AroundRadius)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

@@ -9,9 +9,9 @@ import (
 // DeletedAtResponse The response with a taskID and a deletedAt timestamp.
 type DeletedAtResponse struct {
 	// taskID of the task to wait for.
-	TaskID int64 `json:"taskID"`
+	TaskID int64 `json:"taskID" validate:"required"`
 	// Date of deletion (ISO-8601 format).
-	DeletedAt string `json:"deletedAt"`
+	DeletedAt string `json:"deletedAt" validate:"required"`
 }
 
 // NewDeletedAtResponse instantiates a new DeletedAtResponse object

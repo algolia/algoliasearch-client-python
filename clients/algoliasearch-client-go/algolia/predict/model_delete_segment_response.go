@@ -9,9 +9,9 @@ import (
 // DeleteSegmentResponse struct for DeleteSegmentResponse
 type DeleteSegmentResponse struct {
 	// The ID of the segment.
-	SegmentID string `json:"segmentID"`
+	SegmentID string `json:"segmentID" validate:"required"`
 	// The date and time at which the segment will be re-ingested.
-	DeletedUntil string `json:"deletedUntil"`
+	DeletedUntil string `json:"deletedUntil" validate:"required"`
 }
 
 // NewDeleteSegmentResponse instantiates a new DeleteSegmentResponse object

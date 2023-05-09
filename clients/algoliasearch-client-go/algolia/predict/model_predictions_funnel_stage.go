@@ -29,15 +29,14 @@ func PredictionsFunnelStageSuccessAsPredictionsFunnelStage(v *PredictionsFunnelS
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *PredictionsFunnelStage) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into ModelError
 	err = newStrictDecoder(data).Decode(&dst.ModelError)
-	if err == nil {
+	if err == nil && validateStruct(dst.ModelError) == nil {
 		jsonModelError, _ := json.Marshal(dst.ModelError)
 		if string(jsonModelError) == "{}" { // empty struct
 			dst.ModelError = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ModelError = nil
@@ -45,28 +44,18 @@ func (dst *PredictionsFunnelStage) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into PredictionsFunnelStageSuccess
 	err = newStrictDecoder(data).Decode(&dst.PredictionsFunnelStageSuccess)
-	if err == nil {
+	if err == nil && validateStruct(dst.PredictionsFunnelStageSuccess) == nil {
 		jsonPredictionsFunnelStageSuccess, _ := json.Marshal(dst.PredictionsFunnelStageSuccess)
 		if string(jsonPredictionsFunnelStageSuccess) == "{}" { // empty struct
 			dst.PredictionsFunnelStageSuccess = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.PredictionsFunnelStageSuccess = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.ModelError = nil
-		dst.PredictionsFunnelStageSuccess = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(PredictionsFunnelStage)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(PredictionsFunnelStage)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(PredictionsFunnelStage)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

@@ -9,13 +9,13 @@ import (
 // QuerySuggestionsIndex struct for QuerySuggestionsIndex
 type QuerySuggestionsIndex struct {
 	// Index name to target.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 	// List of source indices used to generate a Query Suggestions index.
-	SourceIndices []SourceIndexWithReplicas `json:"sourceIndices"`
+	SourceIndices []SourceIndexWithReplicas `json:"sourceIndices" validate:"required"`
 	// De-duplicate singular and plural suggestions. For example, let's say your index contains English content, and that two suggestions “shoe” and “shoes” end up in your Query Suggestions index. If the English language is configured, only the most popular of those two suggestions would remain.
-	Languages []string `json:"languages"`
+	Languages []string `json:"languages" validate:"required"`
 	// List of words and patterns to exclude from the Query Suggestions index.
-	Exclude []string `json:"exclude"`
+	Exclude []string `json:"exclude" validate:"required"`
 }
 
 // NewQuerySuggestionsIndex instantiates a new QuerySuggestionsIndex object

@@ -9,7 +9,7 @@ import (
 // SearchForHitsOptions struct for SearchForHitsOptions
 type SearchForHitsOptions struct {
 	// The Algolia index name.
-	IndexName string             `json:"indexName"`
+	IndexName string             `json:"indexName" validate:"required"`
 	Type      *SearchTypeDefault `json:"type,omitempty"`
 }
 

@@ -8,8 +8,8 @@ import (
 
 // BatchDictionaryEntriesRequest struct for BatchDictionaryEntriesRequest
 type BatchDictionaryEntriesRequest struct {
-	Action DictionaryAction `json:"action"`
-	Body   DictionaryEntry  `json:"body"`
+	Action DictionaryAction `json:"action" validate:"required"`
+	Body   DictionaryEntry  `json:"body" validate:"required"`
 }
 
 // NewBatchDictionaryEntriesRequest instantiates a new BatchDictionaryEntriesRequest object

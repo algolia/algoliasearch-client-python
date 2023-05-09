@@ -9,11 +9,11 @@ import (
 // SearchNoResultEvent struct for SearchNoResultEvent
 type SearchNoResultEvent struct {
 	// The search query.
-	Search string `json:"search"`
+	Search string `json:"search" validate:"required"`
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// Number of hits that the search query matched.
-	NbHits int32 `json:"nbHits"`
+	NbHits int32 `json:"nbHits" validate:"required"`
 }
 
 // NewSearchNoResultEvent instantiates a new SearchNoResultEvent object

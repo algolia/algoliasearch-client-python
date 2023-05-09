@@ -9,9 +9,9 @@ import (
 // TaskUpdateResponse The response from the API after a task update.
 type TaskUpdateResponse struct {
 	// The task UUID.
-	TaskID string `json:"taskID"`
+	TaskID string `json:"taskID" validate:"required"`
 	// Date of last update (RFC3339 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewTaskUpdateResponse instantiates a new TaskUpdateResponse object

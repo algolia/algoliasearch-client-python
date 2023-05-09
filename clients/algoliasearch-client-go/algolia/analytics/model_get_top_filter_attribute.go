@@ -9,9 +9,9 @@ import (
 // GetTopFilterAttribute struct for GetTopFilterAttribute
 type GetTopFilterAttribute struct {
 	// The attribute.
-	Attribute string `json:"attribute"`
+	Attribute string `json:"attribute" validate:"required"`
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 }
 
 // NewGetTopFilterAttribute instantiates a new GetTopFilterAttribute object

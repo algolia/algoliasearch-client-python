@@ -9,9 +9,9 @@ import (
 // DictionaryEntry A dictionary entry.
 type DictionaryEntry struct {
 	// Unique identifier of the object.
-	ObjectID string `json:"objectID"`
+	ObjectID string `json:"objectID" validate:"required"`
 	// Language ISO code supported by the dictionary (e.g., \"en\" for English).
-	Language string `json:"language"`
+	Language string `json:"language" validate:"required"`
 	// The word of the dictionary entry.
 	Word *string `json:"word,omitempty"`
 	// The words of the dictionary entry.

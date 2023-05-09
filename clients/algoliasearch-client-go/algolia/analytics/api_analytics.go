@@ -4,6 +4,7 @@ package analytics
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
@@ -29,7 +30,7 @@ func QueryParamOption(name string, val any) Option {
 func HeaderParamOption(name string, val any) Option {
 	return Option{
 		optionType: "header",
-		name:       "itemsPerPage",
+		name:       name,
 		value:      parameterToString(val),
 	}
 }
@@ -37,6 +38,34 @@ func HeaderParamOption(name string, val any) Option {
 type ApiDelRequest struct {
 	path       string
 	parameters map[string]interface{}
+}
+
+func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 // Query parameters to be applied to the current query.
@@ -66,14 +95,16 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -155,6 +186,34 @@ type ApiGetRequest struct {
 	parameters map[string]interface{}
 }
 
+func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
 	r.parameters = parameters
@@ -182,14 +241,16 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -273,6 +334,52 @@ type ApiGetAverageClickPositionRequest struct {
 	tags      string
 }
 
+func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetAverageClickPositionRequest) WithIndex(index string) ApiGetAverageClickPositionRequest {
 	r.index = index
@@ -317,22 +424,22 @@ func (c *APIClient) GetAverageClickPosition(r ApiGetAverageClickPositionRequest,
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -416,6 +523,52 @@ type ApiGetClickPositionsRequest struct {
 	tags      string
 }
 
+func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetClickPositionsRequest) WithIndex(index string) ApiGetClickPositionsRequest {
 	r.index = index
@@ -460,22 +613,22 @@ func (c *APIClient) GetClickPositions(r ApiGetClickPositionsRequest, opts ...Opt
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -559,6 +712,52 @@ type ApiGetClickThroughRateRequest struct {
 	tags      string
 }
 
+func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetClickThroughRateRequest) WithIndex(index string) ApiGetClickThroughRateRequest {
 	r.index = index
@@ -603,22 +802,22 @@ func (c *APIClient) GetClickThroughRate(r ApiGetClickThroughRateRequest, opts ..
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -702,6 +901,52 @@ type ApiGetConversationRateRequest struct {
 	tags      string
 }
 
+func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetConversationRateRequest) WithIndex(index string) ApiGetConversationRateRequest {
 	r.index = index
@@ -746,22 +991,22 @@ func (c *APIClient) GetConversationRate(r ApiGetConversationRateRequest, opts ..
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -845,6 +1090,52 @@ type ApiGetNoClickRateRequest struct {
 	tags      string
 }
 
+func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetNoClickRateRequest) WithIndex(index string) ApiGetNoClickRateRequest {
 	r.index = index
@@ -889,22 +1180,22 @@ func (c *APIClient) GetNoClickRate(r ApiGetNoClickRateRequest, opts ...Option) (
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -988,6 +1279,52 @@ type ApiGetNoResultsRateRequest struct {
 	tags      string
 }
 
+func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetNoResultsRateRequest) WithIndex(index string) ApiGetNoResultsRateRequest {
 	r.index = index
@@ -1032,22 +1369,22 @@ func (c *APIClient) GetNoResultsRate(r ApiGetNoResultsRateRequest, opts ...Optio
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -1131,6 +1468,52 @@ type ApiGetSearchesCountRequest struct {
 	tags      string
 }
 
+func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetSearchesCountRequest) WithIndex(index string) ApiGetSearchesCountRequest {
 	r.index = index
@@ -1175,22 +1558,22 @@ func (c *APIClient) GetSearchesCount(r ApiGetSearchesCountRequest, opts ...Optio
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -1276,6 +1659,70 @@ type ApiGetSearchesNoClicksRequest struct {
 	tags      string
 }
 
+func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetSearchesNoClicksRequest) WithIndex(index string) ApiGetSearchesNoClicksRequest {
 	r.index = index
@@ -1332,28 +1779,28 @@ func (c *APIClient) GetSearchesNoClicks(r ApiGetSearchesNoClicksRequest, opts ..
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -1439,6 +1886,70 @@ type ApiGetSearchesNoResultsRequest struct {
 	tags      string
 }
 
+func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetSearchesNoResultsRequest) WithIndex(index string) ApiGetSearchesNoResultsRequest {
 	r.index = index
@@ -1495,28 +2006,28 @@ func (c *APIClient) GetSearchesNoResults(r ApiGetSearchesNoResultsRequest, opts 
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -1597,6 +2108,25 @@ type ApiGetStatusRequest struct {
 	index string
 }
 
+func (r *ApiGetStatusRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetStatusRequest) WithIndex(index string) ApiGetStatusRequest {
 	r.index = index
@@ -1623,13 +2153,13 @@ func (c *APIClient) GetStatus(r ApiGetStatusRequest, opts ...Option) (*GetStatus
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -1715,6 +2245,70 @@ type ApiGetTopCountriesRequest struct {
 	tags      string
 }
 
+func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetTopCountriesRequest) WithIndex(index string) ApiGetTopCountriesRequest {
 	r.index = index
@@ -1771,28 +2365,28 @@ func (c *APIClient) GetTopCountries(r ApiGetTopCountriesRequest, opts ...Option)
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -1879,6 +2473,79 @@ type ApiGetTopFilterAttributesRequest struct {
 	tags      string
 }
 
+func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["search"]; ok { //search
+		err = json.Unmarshal(v, &r.search)
+		if err != nil {
+			err = json.Unmarshal(b, &r.search)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetTopFilterAttributesRequest) WithIndex(index string) ApiGetTopFilterAttributesRequest {
 	r.index = index
@@ -1941,31 +2608,31 @@ func (c *APIClient) GetTopFilterAttributes(r ApiGetTopFilterAttributesRequest, o
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.search) {
-		queryParams.Add("search", parameterToString(r.search))
+		queryParams.Set("search", parameterToString(r.search))
 	}
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -2053,6 +2720,88 @@ type ApiGetTopFilterForAttributeRequest struct {
 	tags      string
 }
 
+func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["attribute"]; ok { //attribute
+		err = json.Unmarshal(v, &r.attribute)
+		if err != nil {
+			err = json.Unmarshal(b, &r.attribute)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["search"]; ok { //search
+		err = json.Unmarshal(v, &r.search)
+		if err != nil {
+			err = json.Unmarshal(b, &r.search)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetTopFilterForAttributeRequest) WithIndex(index string) ApiGetTopFilterForAttributeRequest {
 	r.index = index
@@ -2118,31 +2867,31 @@ func (c *APIClient) GetTopFilterForAttribute(r ApiGetTopFilterForAttributeReques
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.search) {
-		queryParams.Add("search", parameterToString(r.search))
+		queryParams.Set("search", parameterToString(r.search))
 	}
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -2229,6 +2978,79 @@ type ApiGetTopFiltersNoResultsRequest struct {
 	tags      string
 }
 
+func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["search"]; ok { //search
+		err = json.Unmarshal(v, &r.search)
+		if err != nil {
+			err = json.Unmarshal(b, &r.search)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetTopFiltersNoResultsRequest) WithIndex(index string) ApiGetTopFiltersNoResultsRequest {
 	r.index = index
@@ -2291,31 +3113,31 @@ func (c *APIClient) GetTopFiltersNoResults(r ApiGetTopFiltersNoResultsRequest, o
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.search) {
-		queryParams.Add("search", parameterToString(r.search))
+		queryParams.Set("search", parameterToString(r.search))
 	}
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -2403,6 +3225,88 @@ type ApiGetTopHitsRequest struct {
 	tags           string
 }
 
+func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["search"]; ok { //search
+		err = json.Unmarshal(v, &r.search)
+		if err != nil {
+			err = json.Unmarshal(b, &r.search)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["clickAnalytics"]; ok { //clickAnalytics
+		err = json.Unmarshal(v, &r.clickAnalytics)
+		if err != nil {
+			err = json.Unmarshal(b, &r.clickAnalytics)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetTopHitsRequest) WithIndex(index string) ApiGetTopHitsRequest {
 	r.index = index
@@ -2471,34 +3375,34 @@ func (c *APIClient) GetTopHits(r ApiGetTopHitsRequest, opts ...Option) (*GetTopH
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.search) {
-		queryParams.Add("search", parameterToString(r.search))
+		queryParams.Set("search", parameterToString(r.search))
 	}
 	if !isNilorEmpty(r.clickAnalytics) {
-		queryParams.Add("clickAnalytics", parameterToString(r.clickAnalytics))
+		queryParams.Set("clickAnalytics", parameterToString(r.clickAnalytics))
 	}
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -2587,6 +3491,97 @@ type ApiGetTopSearchesRequest struct {
 	tags           string
 }
 
+func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["clickAnalytics"]; ok { //clickAnalytics
+		err = json.Unmarshal(v, &r.clickAnalytics)
+		if err != nil {
+			err = json.Unmarshal(b, &r.clickAnalytics)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["orderBy"]; ok { //orderBy
+		err = json.Unmarshal(v, &r.orderBy)
+		if err != nil {
+			err = json.Unmarshal(b, &r.orderBy)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["direction"]; ok { //direction
+		err = json.Unmarshal(v, &r.direction)
+		if err != nil {
+			err = json.Unmarshal(b, &r.direction)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["limit"]; ok { //limit
+		err = json.Unmarshal(v, &r.limit)
+		if err != nil {
+			err = json.Unmarshal(b, &r.limit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["offset"]; ok { //offset
+		err = json.Unmarshal(v, &r.offset)
+		if err != nil {
+			err = json.Unmarshal(b, &r.offset)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetTopSearchesRequest) WithIndex(index string) ApiGetTopSearchesRequest {
 	r.index = index
@@ -2612,14 +3607,14 @@ func (r ApiGetTopSearchesRequest) WithEndDate(endDate string) ApiGetTopSearchesR
 }
 
 // Reorder the results.
-func (r ApiGetTopSearchesRequest) WithOrderBy(orderBy OrderBy) ApiGetTopSearchesRequest {
-	r.orderBy = &orderBy
+func (r ApiGetTopSearchesRequest) WithOrderBy(orderBy *OrderBy) ApiGetTopSearchesRequest {
+	r.orderBy = orderBy
 	return r
 }
 
 // The sorting of the result.
-func (r ApiGetTopSearchesRequest) WithDirection(direction Direction) ApiGetTopSearchesRequest {
-	r.direction = &direction
+func (r ApiGetTopSearchesRequest) WithDirection(direction *Direction) ApiGetTopSearchesRequest {
+	r.direction = direction
 	return r
 }
 
@@ -2661,37 +3656,37 @@ func (c *APIClient) GetTopSearches(r ApiGetTopSearchesRequest, opts ...Option) (
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.clickAnalytics) {
-		queryParams.Add("clickAnalytics", parameterToString(r.clickAnalytics))
+		queryParams.Set("clickAnalytics", parameterToString(r.clickAnalytics))
 	}
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.orderBy) {
-		queryParams.Add("orderBy", parameterToString(*r.orderBy))
+		queryParams.Set("orderBy", parameterToString(*r.orderBy))
 	}
 	if !isNilorEmpty(r.direction) {
-		queryParams.Add("direction", parameterToString(*r.direction))
+		queryParams.Set("direction", parameterToString(*r.direction))
 	}
 	if !isNilorEmpty(r.limit) {
-		queryParams.Add("limit", parameterToString(r.limit))
+		queryParams.Set("limit", parameterToString(r.limit))
 	}
 	if !isNilorEmpty(r.offset) {
-		queryParams.Add("offset", parameterToString(r.offset))
+		queryParams.Set("offset", parameterToString(r.offset))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -2775,6 +3770,52 @@ type ApiGetUsersCountRequest struct {
 	tags      string
 }
 
+func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["index"]; ok { //index
+		err = json.Unmarshal(v, &r.index)
+		if err != nil {
+			err = json.Unmarshal(b, &r.index)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["startDate"]; ok { //startDate
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok { //endDate
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["tags"]; ok { //tags
+		err = json.Unmarshal(v, &r.tags)
+		if err != nil {
+			err = json.Unmarshal(b, &r.tags)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // The index name to target.
 func (r ApiGetUsersCountRequest) WithIndex(index string) ApiGetUsersCountRequest {
 	r.index = index
@@ -2819,22 +3860,22 @@ func (c *APIClient) GetUsersCount(r ApiGetUsersCountRequest, opts ...Option) (*G
 		return returnValue, reportError("index is required and must be specified")
 	}
 
-	queryParams.Add("index", parameterToString(r.index))
+	queryParams.Set("index", parameterToString(r.index))
 	if !isNilorEmpty(r.startDate) {
-		queryParams.Add("startDate", parameterToString(r.startDate))
+		queryParams.Set("startDate", parameterToString(r.startDate))
 	}
 	if !isNilorEmpty(r.endDate) {
-		queryParams.Add("endDate", parameterToString(r.endDate))
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 	if !isNilorEmpty(r.tags) {
-		queryParams.Add("tags", parameterToString(r.tags))
+		queryParams.Set("tags", parameterToString(r.tags))
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -2917,6 +3958,43 @@ type ApiPostRequest struct {
 	body       map[string]interface{}
 }
 
+func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["body"]; ok { //body
+		err = json.Unmarshal(v, &r.body)
+		if err != nil {
+			err = json.Unmarshal(b, &r.body)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
 	r.parameters = parameters
@@ -2950,21 +4028,27 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
 	}
 
 	// body params
-	postBody = r.body
+	if isNilorEmpty(r.body) {
+		postBody = "{}"
+	} else {
+		postBody = r.body
+	}
 	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -3042,6 +4126,43 @@ type ApiPutRequest struct {
 	body       map[string]interface{}
 }
 
+func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["body"]; ok { //body
+		err = json.Unmarshal(v, &r.body)
+		if err != nil {
+			err = json.Unmarshal(b, &r.body)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
 	r.parameters = parameters
@@ -3075,21 +4196,27 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
 	}
 
 	// body params
-	postBody = r.body
+	if isNilorEmpty(r.body) {
+		postBody = "{}"
+	} else {
+		postBody = r.body
+	}
 	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err

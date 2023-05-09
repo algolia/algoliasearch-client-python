@@ -9,9 +9,9 @@ import (
 // FacetScoring struct for FacetScoring
 type FacetScoring struct {
 	// The score for the event.
-	Score int32 `json:"score"`
+	Score int32 `json:"score" validate:"required"`
 	// The name of the facet.
-	FacetName string `json:"facetName"`
+	FacetName string `json:"facetName" validate:"required"`
 }
 
 // NewFacetScoring instantiates a new FacetScoring object

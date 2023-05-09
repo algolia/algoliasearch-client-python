@@ -37,15 +37,14 @@ func SegmentNameParamAsUpdateSegmentParams(v *SegmentNameParam) UpdateSegmentPar
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *UpdateSegmentParams) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into AllUpdateSegmentParams
 	err = newStrictDecoder(data).Decode(&dst.AllUpdateSegmentParams)
-	if err == nil {
+	if err == nil && validateStruct(dst.AllUpdateSegmentParams) == nil {
 		jsonAllUpdateSegmentParams, _ := json.Marshal(dst.AllUpdateSegmentParams)
 		if string(jsonAllUpdateSegmentParams) == "{}" { // empty struct
 			dst.AllUpdateSegmentParams = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AllUpdateSegmentParams = nil
@@ -53,12 +52,12 @@ func (dst *UpdateSegmentParams) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SegmentConditionsParam
 	err = newStrictDecoder(data).Decode(&dst.SegmentConditionsParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.SegmentConditionsParam) == nil {
 		jsonSegmentConditionsParam, _ := json.Marshal(dst.SegmentConditionsParam)
 		if string(jsonSegmentConditionsParam) == "{}" { // empty struct
 			dst.SegmentConditionsParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SegmentConditionsParam = nil
@@ -66,29 +65,18 @@ func (dst *UpdateSegmentParams) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SegmentNameParam
 	err = newStrictDecoder(data).Decode(&dst.SegmentNameParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.SegmentNameParam) == nil {
 		jsonSegmentNameParam, _ := json.Marshal(dst.SegmentNameParam)
 		if string(jsonSegmentNameParam) == "{}" { // empty struct
 			dst.SegmentNameParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SegmentNameParam = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.AllUpdateSegmentParams = nil
-		dst.SegmentConditionsParam = nil
-		dst.SegmentNameParam = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(UpdateSegmentParams)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(UpdateSegmentParams)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(UpdateSegmentParams)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

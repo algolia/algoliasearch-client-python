@@ -9,7 +9,7 @@ import (
 // GetRecommendationsParams The `getRecommendations` parameters.
 type GetRecommendationsParams struct {
 	// The `getRecommendations` requests.
-	Requests []RecommendationsRequest `json:"requests"`
+	Requests []RecommendationsRequest `json:"requests" validate:"required"`
 }
 
 // NewGetRecommendationsParams instantiates a new GetRecommendationsParams object

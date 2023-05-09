@@ -8,8 +8,8 @@ import (
 
 // ListAuthenticationsResponse struct for ListAuthenticationsResponse
 type ListAuthenticationsResponse struct {
-	Authentications []Authentication `json:"authentications"`
-	Pagination      Pagination       `json:"pagination"`
+	Authentications []Authentication `json:"authentications" validate:"required"`
+	Pagination      Pagination       `json:"pagination" validate:"required"`
 }
 
 // NewListAuthenticationsResponse instantiates a new ListAuthenticationsResponse object

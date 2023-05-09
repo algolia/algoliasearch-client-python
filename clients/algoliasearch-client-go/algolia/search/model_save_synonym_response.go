@@ -9,11 +9,11 @@ import (
 // SaveSynonymResponse struct for SaveSynonymResponse
 type SaveSynonymResponse struct {
 	// taskID of the task to wait for.
-	TaskID int64 `json:"taskID"`
+	TaskID int64 `json:"taskID" validate:"required"`
 	// Date of last update (ISO-8601 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 	// objectID of the inserted object.
-	Id string `json:"id"`
+	Id string `json:"id" validate:"required"`
 }
 
 // NewSaveSynonymResponse instantiates a new SaveSynonymResponse object

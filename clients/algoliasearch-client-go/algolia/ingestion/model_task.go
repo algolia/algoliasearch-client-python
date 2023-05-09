@@ -9,19 +9,19 @@ import (
 // Task struct for Task
 type Task struct {
 	// The task UUID.
-	TaskID string `json:"taskID"`
+	TaskID string `json:"taskID" validate:"required"`
 	// The source UUID.
-	SourceID string `json:"sourceID"`
+	SourceID string `json:"sourceID" validate:"required"`
 	// The destination UUID.
-	DestinationID string  `json:"destinationID"`
-	Trigger       Trigger `json:"trigger"`
+	DestinationID string  `json:"destinationID" validate:"required"`
+	Trigger       Trigger `json:"trigger" validate:"required"`
 	// The input that holds information specific to the task.
 	Input map[string]interface{} `json:"input,omitempty"`
 	// Whether the task is enabled or not.
-	Enabled bool       `json:"enabled"`
-	Action  ActionType `json:"action"`
+	Enabled bool       `json:"enabled" validate:"required"`
+	Action  ActionType `json:"action" validate:"required"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 	// Date of last update (RFC3339 format).
 	UpdatedAt *string `json:"updatedAt,omitempty"`
 }

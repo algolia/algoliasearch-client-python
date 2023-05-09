@@ -9,9 +9,9 @@ import (
 // GetAvailableModelTypesResponseInnerDataRequirements struct for GetAvailableModelTypesResponseInnerDataRequirements
 type GetAvailableModelTypesResponseInnerDataRequirements struct {
 	// Minimum number of users required for this model.
-	MinUsers int32 `json:"minUsers"`
+	MinUsers int32 `json:"minUsers" validate:"required"`
 	// Minimum number of days model needs to run.
-	MinDays int32 `json:"minDays"`
+	MinDays int32 `json:"minDays" validate:"required"`
 }
 
 // NewGetAvailableModelTypesResponseInnerDataRequirements instantiates a new GetAvailableModelTypesResponseInnerDataRequirements object

@@ -8,9 +8,9 @@ import (
 
 // OperationIndexParams struct for OperationIndexParams
 type OperationIndexParams struct {
-	Operation OperationType `json:"operation"`
+	Operation OperationType `json:"operation" validate:"required"`
 	// The Algolia index name.
-	Destination string `json:"destination"`
+	Destination string `json:"destination" validate:"required"`
 	// Scope of the data to copy. When absent, a full copy is performed. When present, only the selected scopes are copied.
 	Scope []ScopeType `json:"scope,omitempty"`
 }

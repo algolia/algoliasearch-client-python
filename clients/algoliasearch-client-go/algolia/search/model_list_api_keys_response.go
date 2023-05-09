@@ -9,7 +9,7 @@ import (
 // ListApiKeysResponse struct for ListApiKeysResponse
 type ListApiKeysResponse struct {
 	// List of api keys.
-	Keys []GetApiKeyResponse `json:"keys"`
+	Keys []GetApiKeyResponse `json:"keys" validate:"required"`
 }
 
 // NewListApiKeysResponse instantiates a new ListApiKeysResponse object

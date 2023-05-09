@@ -8,7 +8,7 @@ import (
 
 // OnDemandTrigger The trigger information of a task of type `onDemand`.
 type OnDemandTrigger struct {
-	Type OnDemandTriggerType `json:"type"`
+	Type OnDemandTriggerType `json:"type" validate:"required"`
 	// The last time the scheduled task ran (RFC3339 format).
 	LastRun *string `json:"lastRun,omitempty"`
 }

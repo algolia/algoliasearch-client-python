@@ -9,11 +9,11 @@ import (
 // DestinationUpdateResponse Response from the API when the Destination is successfully updated.
 type DestinationUpdateResponse struct {
 	// The destination UUID.
-	DestinationID string `json:"destinationID"`
+	DestinationID string `json:"destinationID" validate:"required"`
 	// An human readable name describing the object.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 	// Date of last update (RFC3339 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewDestinationUpdateResponse instantiates a new DestinationUpdateResponse object

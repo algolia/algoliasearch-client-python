@@ -29,15 +29,14 @@ func ArrayOfSnippetResultOptionAsSnippetResult(v *[]SnippetResultOption) Snippet
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *SnippetResult) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into SnippetResultOption
 	err = newStrictDecoder(data).Decode(&dst.SnippetResultOption)
-	if err == nil {
+	if err == nil && validateStruct(dst.SnippetResultOption) == nil {
 		jsonSnippetResultOption, _ := json.Marshal(dst.SnippetResultOption)
 		if string(jsonSnippetResultOption) == "{}" { // empty struct
 			dst.SnippetResultOption = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SnippetResultOption = nil
@@ -45,28 +44,18 @@ func (dst *SnippetResult) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into ArrayOfSnippetResultOption
 	err = newStrictDecoder(data).Decode(&dst.ArrayOfSnippetResultOption)
-	if err == nil {
+	if err == nil && validateStruct(dst.ArrayOfSnippetResultOption) == nil {
 		jsonArrayOfSnippetResultOption, _ := json.Marshal(dst.ArrayOfSnippetResultOption)
 		if string(jsonArrayOfSnippetResultOption) == "{}" { // empty struct
 			dst.ArrayOfSnippetResultOption = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ArrayOfSnippetResultOption = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.SnippetResultOption = nil
-		dst.ArrayOfSnippetResultOption = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(SnippetResult)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(SnippetResult)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(SnippetResult)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

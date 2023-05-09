@@ -9,7 +9,7 @@ import (
 // InsightEvents Object containing the events sent.
 type InsightEvents struct {
 	// Array of events sent.
-	Events []InsightEvent `json:"events"`
+	Events []InsightEvent `json:"events" validate:"required"`
 }
 
 // NewInsightEvents instantiates a new InsightEvents object

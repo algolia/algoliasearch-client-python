@@ -11,9 +11,9 @@ type GetObjectsRequest struct {
 	// List of attributes to retrieve. By default, all retrievable attributes are returned.
 	AttributesToRetrieve []string `json:"attributesToRetrieve,omitempty"`
 	// ID of the object within that index.
-	ObjectID string `json:"objectID"`
+	ObjectID string `json:"objectID" validate:"required"`
 	// name of the index containing the object.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 }
 
 type GetObjectsRequestOption func(f *GetObjectsRequest)

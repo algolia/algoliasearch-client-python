@@ -8,8 +8,8 @@ import (
 
 // SegmentAffinityFilter Filter for affinity model predictions.
 type SegmentAffinityFilter struct {
-	Operator    SegmentFilterOperatorNumerical `json:"operator"`
-	Value       SegmentAffinityFilterValue     `json:"value"`
+	Operator    SegmentFilterOperatorNumerical `json:"operator" validate:"required"`
+	Value       SegmentAffinityFilterValue     `json:"value" validate:"required"`
 	Probability *SegmentFilterProbability      `json:"probability,omitempty"`
 }
 

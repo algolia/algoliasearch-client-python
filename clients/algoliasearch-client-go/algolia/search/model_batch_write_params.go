@@ -8,7 +8,7 @@ import (
 
 // BatchWriteParams The `batch` parameters.
 type BatchWriteParams struct {
-	Requests []BatchRequest `json:"requests"`
+	Requests []BatchRequest `json:"requests" validate:"required"`
 }
 
 // NewBatchWriteParams instantiates a new BatchWriteParams object

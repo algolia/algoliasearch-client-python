@@ -8,7 +8,7 @@ import (
 
 // RecommendHits struct for RecommendHits
 type RecommendHits struct {
-	Hits []RecommendHit `json:"hits"`
+	Hits []RecommendHit `json:"hits" validate:"required"`
 }
 
 // NewRecommendHits instantiates a new RecommendHits object

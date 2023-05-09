@@ -8,7 +8,7 @@ import (
 
 // TriggerInput The trigger input of a task.
 type TriggerInput struct {
-	Type TriggerType `json:"type"`
+	Type TriggerType `json:"type" validate:"required"`
 }
 
 // NewTriggerInput instantiates a new TriggerInput object

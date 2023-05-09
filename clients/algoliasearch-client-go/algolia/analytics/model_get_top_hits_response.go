@@ -29,15 +29,14 @@ func TopHitsResponseWithAnalyticsAsGetTopHitsResponse(v *TopHitsResponseWithAnal
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *GetTopHitsResponse) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into TopHitsResponse
 	err = newStrictDecoder(data).Decode(&dst.TopHitsResponse)
-	if err == nil {
+	if err == nil && validateStruct(dst.TopHitsResponse) == nil {
 		jsonTopHitsResponse, _ := json.Marshal(dst.TopHitsResponse)
 		if string(jsonTopHitsResponse) == "{}" { // empty struct
 			dst.TopHitsResponse = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.TopHitsResponse = nil
@@ -45,28 +44,18 @@ func (dst *GetTopHitsResponse) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into TopHitsResponseWithAnalytics
 	err = newStrictDecoder(data).Decode(&dst.TopHitsResponseWithAnalytics)
-	if err == nil {
+	if err == nil && validateStruct(dst.TopHitsResponseWithAnalytics) == nil {
 		jsonTopHitsResponseWithAnalytics, _ := json.Marshal(dst.TopHitsResponseWithAnalytics)
 		if string(jsonTopHitsResponseWithAnalytics) == "{}" { // empty struct
 			dst.TopHitsResponseWithAnalytics = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.TopHitsResponseWithAnalytics = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.TopHitsResponse = nil
-		dst.TopHitsResponseWithAnalytics = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(GetTopHitsResponse)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(GetTopHitsResponse)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(GetTopHitsResponse)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

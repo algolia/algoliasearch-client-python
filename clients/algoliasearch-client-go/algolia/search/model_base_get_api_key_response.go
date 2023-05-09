@@ -11,7 +11,7 @@ type BaseGetApiKeyResponse struct {
 	// The API key.
 	Value *string `json:"value,omitempty"`
 	// Time of the event expressed in milliseconds since the Unix epoch.
-	CreatedAt int64 `json:"createdAt"`
+	CreatedAt int64 `json:"createdAt" validate:"required"`
 }
 
 type BaseGetApiKeyResponseOption func(f *BaseGetApiKeyResponse)

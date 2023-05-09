@@ -9,11 +9,11 @@ import (
 // DestinationCreateResponse Response from the API when the Destination is successfully created.
 type DestinationCreateResponse struct {
 	// The destination UUID.
-	DestinationID string `json:"destinationID"`
+	DestinationID string `json:"destinationID" validate:"required"`
 	// An human readable name describing the object.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 }
 
 // NewDestinationCreateResponse instantiates a new DestinationCreateResponse object

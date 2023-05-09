@@ -53,15 +53,14 @@ func TypesToRetrieveParamAsFetchAllUserProfilesParams(v *TypesToRetrieveParam) F
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *FetchAllUserProfilesParams) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into LimitParam
 	err = newStrictDecoder(data).Decode(&dst.LimitParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.LimitParam) == nil {
 		jsonLimitParam, _ := json.Marshal(dst.LimitParam)
 		if string(jsonLimitParam) == "{}" { // empty struct
 			dst.LimitParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.LimitParam = nil
@@ -69,12 +68,12 @@ func (dst *FetchAllUserProfilesParams) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into ModelsToRetrieveParam
 	err = newStrictDecoder(data).Decode(&dst.ModelsToRetrieveParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.ModelsToRetrieveParam) == nil {
 		jsonModelsToRetrieveParam, _ := json.Marshal(dst.ModelsToRetrieveParam)
 		if string(jsonModelsToRetrieveParam) == "{}" { // empty struct
 			dst.ModelsToRetrieveParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ModelsToRetrieveParam = nil
@@ -82,12 +81,12 @@ func (dst *FetchAllUserProfilesParams) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into NextPageTokenParam
 	err = newStrictDecoder(data).Decode(&dst.NextPageTokenParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.NextPageTokenParam) == nil {
 		jsonNextPageTokenParam, _ := json.Marshal(dst.NextPageTokenParam)
 		if string(jsonNextPageTokenParam) == "{}" { // empty struct
 			dst.NextPageTokenParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.NextPageTokenParam = nil
@@ -95,12 +94,12 @@ func (dst *FetchAllUserProfilesParams) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into PreviousPageTokenParam
 	err = newStrictDecoder(data).Decode(&dst.PreviousPageTokenParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.PreviousPageTokenParam) == nil {
 		jsonPreviousPageTokenParam, _ := json.Marshal(dst.PreviousPageTokenParam)
 		if string(jsonPreviousPageTokenParam) == "{}" { // empty struct
 			dst.PreviousPageTokenParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.PreviousPageTokenParam = nil
@@ -108,31 +107,18 @@ func (dst *FetchAllUserProfilesParams) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into TypesToRetrieveParam
 	err = newStrictDecoder(data).Decode(&dst.TypesToRetrieveParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.TypesToRetrieveParam) == nil {
 		jsonTypesToRetrieveParam, _ := json.Marshal(dst.TypesToRetrieveParam)
 		if string(jsonTypesToRetrieveParam) == "{}" { // empty struct
 			dst.TypesToRetrieveParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.TypesToRetrieveParam = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.LimitParam = nil
-		dst.ModelsToRetrieveParam = nil
-		dst.NextPageTokenParam = nil
-		dst.PreviousPageTokenParam = nil
-		dst.TypesToRetrieveParam = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(FetchAllUserProfilesParams)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(FetchAllUserProfilesParams)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(FetchAllUserProfilesParams)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

@@ -9,8 +9,8 @@ import (
 // CreateSegmentParams struct for CreateSegmentParams
 type CreateSegmentParams struct {
 	// The name or description of the segment.
-	Name       string                  `json:"name"`
-	Conditions SegmentParentConditions `json:"conditions"`
+	Name       string                  `json:"name" validate:"required"`
+	Conditions SegmentParentConditions `json:"conditions" validate:"required"`
 }
 
 // NewCreateSegmentParams instantiates a new CreateSegmentParams object

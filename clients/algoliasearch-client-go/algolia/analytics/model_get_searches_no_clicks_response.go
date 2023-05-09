@@ -9,7 +9,7 @@ import (
 // GetSearchesNoClicksResponse struct for GetSearchesNoClicksResponse
 type GetSearchesNoClicksResponse struct {
 	// A list of searches with no clicks and their count.
-	Searches []SearchNoClickEvent `json:"searches"`
+	Searches []SearchNoClickEvent `json:"searches" validate:"required"`
 }
 
 // NewGetSearchesNoClicksResponse instantiates a new GetSearchesNoClicksResponse object

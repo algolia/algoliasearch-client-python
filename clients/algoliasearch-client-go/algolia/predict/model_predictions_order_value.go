@@ -29,15 +29,14 @@ func PredictionsOrderValueSuccessAsPredictionsOrderValue(v *PredictionsOrderValu
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *PredictionsOrderValue) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into ModelError
 	err = newStrictDecoder(data).Decode(&dst.ModelError)
-	if err == nil {
+	if err == nil && validateStruct(dst.ModelError) == nil {
 		jsonModelError, _ := json.Marshal(dst.ModelError)
 		if string(jsonModelError) == "{}" { // empty struct
 			dst.ModelError = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ModelError = nil
@@ -45,28 +44,18 @@ func (dst *PredictionsOrderValue) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into PredictionsOrderValueSuccess
 	err = newStrictDecoder(data).Decode(&dst.PredictionsOrderValueSuccess)
-	if err == nil {
+	if err == nil && validateStruct(dst.PredictionsOrderValueSuccess) == nil {
 		jsonPredictionsOrderValueSuccess, _ := json.Marshal(dst.PredictionsOrderValueSuccess)
 		if string(jsonPredictionsOrderValueSuccess) == "{}" { // empty struct
 			dst.PredictionsOrderValueSuccess = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.PredictionsOrderValueSuccess = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.ModelError = nil
-		dst.PredictionsOrderValueSuccess = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(PredictionsOrderValue)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(PredictionsOrderValue)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(PredictionsOrderValue)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

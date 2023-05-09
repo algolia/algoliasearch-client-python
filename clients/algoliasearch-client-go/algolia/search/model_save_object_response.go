@@ -8,9 +8,9 @@ import (
 
 // SaveObjectResponse struct for SaveObjectResponse
 type SaveObjectResponse struct {
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 	// taskID of the task to wait for.
-	TaskID int64 `json:"taskID"`
+	TaskID int64 `json:"taskID" validate:"required"`
 	// Unique identifier of the object.
 	ObjectID *string `json:"objectID,omitempty"`
 }

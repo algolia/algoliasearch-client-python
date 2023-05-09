@@ -9,13 +9,13 @@ import (
 // GetTopFilterForAttribute struct for GetTopFilterForAttribute
 type GetTopFilterForAttribute struct {
 	// The attribute.
-	Attribute string `json:"attribute"`
+	Attribute string `json:"attribute" validate:"required"`
 	// The operator.
-	Operator string `json:"operator"`
+	Operator string `json:"operator" validate:"required"`
 	// The value of the attribute.
-	Value string `json:"value"`
+	Value string `json:"value" validate:"required"`
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 }
 
 // NewGetTopFilterForAttribute instantiates a new GetTopFilterForAttribute object

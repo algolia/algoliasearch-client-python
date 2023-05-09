@@ -29,15 +29,14 @@ func StringAsConsequenceQuery(v *string) ConsequenceQuery {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *ConsequenceQuery) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into ConsequenceQueryObject
 	err = newStrictDecoder(data).Decode(&dst.ConsequenceQueryObject)
-	if err == nil {
+	if err == nil && validateStruct(dst.ConsequenceQueryObject) == nil {
 		jsonConsequenceQueryObject, _ := json.Marshal(dst.ConsequenceQueryObject)
 		if string(jsonConsequenceQueryObject) == "{}" { // empty struct
 			dst.ConsequenceQueryObject = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ConsequenceQueryObject = nil
@@ -45,28 +44,18 @@ func (dst *ConsequenceQuery) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into String
 	err = newStrictDecoder(data).Decode(&dst.String)
-	if err == nil {
+	if err == nil && validateStruct(dst.String) == nil {
 		jsonString, _ := json.Marshal(dst.String)
 		if string(jsonString) == "{}" { // empty struct
 			dst.String = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.String = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.ConsequenceQueryObject = nil
-		dst.String = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(ConsequenceQuery)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(ConsequenceQuery)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(ConsequenceQuery)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

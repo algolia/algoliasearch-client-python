@@ -9,13 +9,13 @@ import (
 // NoResultsRateEvent struct for NoResultsRateEvent
 type NoResultsRateEvent struct {
 	// Date of the event.
-	Date string `json:"date"`
+	Date string `json:"date" validate:"required"`
 	// The number of occurrences.
-	NoResultCount int32 `json:"noResultCount"`
+	NoResultCount int32 `json:"noResultCount" validate:"required"`
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// The click-through rate.
-	Rate float64 `json:"rate"`
+	Rate float64 `json:"rate" validate:"required"`
 }
 
 // NewNoResultsRateEvent instantiates a new NoResultsRateEvent object

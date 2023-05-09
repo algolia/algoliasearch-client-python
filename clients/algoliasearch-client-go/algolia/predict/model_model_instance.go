@@ -9,19 +9,19 @@ import (
 // ModelInstance struct for ModelInstance
 type ModelInstance struct {
 	// ID of the model.
-	ModelID string `json:"modelID"`
+	ModelID string `json:"modelID" validate:"required"`
 	// Name of model instance.
-	Name            string            `json:"name"`
-	Type            ModelsToRetrieve  `json:"type"`
-	SourceID        string            `json:"sourceID"`
-	Index           string            `json:"index"`
+	Name            string            `json:"name" validate:"required"`
+	Type            ModelsToRetrieve  `json:"type" validate:"required"`
+	SourceID        string            `json:"sourceID" validate:"required"`
+	Index           string            `json:"index" validate:"required"`
 	ModelAttributes []ModelAttributes `json:"modelAttributes,omitempty"`
 	// The date and time this model instance was last trained.
-	LastTrained string `json:"lastTrained"`
+	LastTrained string `json:"lastTrained" validate:"required"`
 	// The date and time this model instance generated its last inference.
-	LastInference string                       `json:"lastInference"`
+	LastInference string                       `json:"lastInference" validate:"required"`
 	ErrorMessage  *string                      `json:"errorMessage,omitempty"`
-	ModelStatus   GetModelInstanceConfigStatus `json:"modelStatus"`
+	ModelStatus   GetModelInstanceConfigStatus `json:"modelStatus" validate:"required"`
 }
 
 type ModelInstanceOption func(f *ModelInstance)

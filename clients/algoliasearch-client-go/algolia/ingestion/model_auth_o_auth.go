@@ -9,11 +9,11 @@ import (
 // AuthOAuth Authentication input for OAuth login.
 type AuthOAuth struct {
 	// The OAuth endpoint URL.
-	Url string `json:"url"`
+	Url string `json:"url" validate:"required"`
 	// The clientID.
-	ClientId string `json:"client_id"`
+	ClientId string `json:"client_id" validate:"required"`
 	// The secret.
-	ClientSecret string `json:"client_secret"`
+	ClientSecret string `json:"client_secret" validate:"required"`
 }
 
 // NewAuthOAuth instantiates a new AuthOAuth object

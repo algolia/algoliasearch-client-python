@@ -9,7 +9,7 @@ import (
 // Hit A single hit.
 type Hit struct {
 	// Unique identifier of the object.
-	ObjectID string `json:"objectID"`
+	ObjectID string `json:"objectID" validate:"required"`
 	// Show highlighted section and words matched on a query.
 	HighlightResult *map[string]HighlightResult `json:"_highlightResult,omitempty"`
 	// Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.

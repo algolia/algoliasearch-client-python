@@ -9,11 +9,11 @@ import (
 // TopSearch struct for TopSearch
 type TopSearch struct {
 	// The search query.
-	Search string `json:"search"`
+	Search string `json:"search" validate:"required"`
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// Number of hits that the search query matched.
-	NbHits int32 `json:"nbHits"`
+	NbHits int32 `json:"nbHits" validate:"required"`
 }
 
 // NewTopSearch instantiates a new TopSearch object

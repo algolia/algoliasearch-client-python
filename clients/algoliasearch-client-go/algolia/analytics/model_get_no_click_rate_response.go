@@ -9,13 +9,13 @@ import (
 // GetNoClickRateResponse struct for GetNoClickRateResponse
 type GetNoClickRateResponse struct {
 	// The click-through rate.
-	Rate float64 `json:"rate"`
+	Rate float64 `json:"rate" validate:"required"`
 	// The number of click event.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// The number of click event.
-	NoClickCount int32 `json:"noClickCount"`
+	NoClickCount int32 `json:"noClickCount" validate:"required"`
 	// A list of searches without clicks with their date, rate and counts.
-	Dates []NoClickRateEvent `json:"dates"`
+	Dates []NoClickRateEvent `json:"dates" validate:"required"`
 }
 
 // NewGetNoClickRateResponse instantiates a new GetNoClickRateResponse object

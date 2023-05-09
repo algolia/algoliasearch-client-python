@@ -9,11 +9,11 @@ import (
 // Status struct for Status
 type Status struct {
 	// The targeted index name.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 	// true if the Query Suggestions index is running.
-	IsRunning bool `json:"isRunning"`
+	IsRunning bool `json:"isRunning" validate:"required"`
 	// Date and time of the last build.
-	LastBuiltAt string `json:"lastBuiltAt"`
+	LastBuiltAt string `json:"lastBuiltAt" validate:"required"`
 }
 
 // NewStatus instantiates a new Status object

@@ -8,8 +8,8 @@ import (
 
 // SegmentOperandOrderValue Operand for order value model predictions.
 type SegmentOperandOrderValue struct {
-	Name    string                    `json:"name"`
-	Filters []SegmentOrderValueFilter `json:"filters"`
+	Name    string                    `json:"name" validate:"required"`
+	Filters []SegmentOrderValueFilter `json:"filters" validate:"required"`
 }
 
 // NewSegmentOperandOrderValue instantiates a new SegmentOperandOrderValue object

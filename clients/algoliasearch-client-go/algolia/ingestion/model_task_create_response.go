@@ -9,9 +9,9 @@ import (
 // TaskCreateResponse The response from the API after a task creation.
 type TaskCreateResponse struct {
 	// The task UUID.
-	TaskID string `json:"taskID"`
+	TaskID string `json:"taskID" validate:"required"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 }
 
 // NewTaskCreateResponse instantiates a new TaskCreateResponse object

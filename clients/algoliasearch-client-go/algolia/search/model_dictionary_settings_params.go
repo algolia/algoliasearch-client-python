@@ -8,7 +8,7 @@ import (
 
 // DictionarySettingsParams Disable the builtin Algolia entries for a type of dictionary per language.
 type DictionarySettingsParams struct {
-	DisableStandardEntries StandardEntries `json:"disableStandardEntries"`
+	DisableStandardEntries StandardEntries `json:"disableStandardEntries" validate:"required"`
 }
 
 // NewDictionarySettingsParams instantiates a new DictionarySettingsParams object

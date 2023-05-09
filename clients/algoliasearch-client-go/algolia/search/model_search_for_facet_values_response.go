@@ -8,7 +8,7 @@ import (
 
 // SearchForFacetValuesResponse struct for SearchForFacetValuesResponse
 type SearchForFacetValuesResponse struct {
-	FacetHits []FacetHits `json:"facetHits"`
+	FacetHits []FacetHits `json:"facetHits" validate:"required"`
 }
 
 // NewSearchForFacetValuesResponse instantiates a new SearchForFacetValuesResponse object

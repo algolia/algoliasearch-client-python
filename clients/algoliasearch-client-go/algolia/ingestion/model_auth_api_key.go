@@ -8,7 +8,7 @@ import (
 
 // AuthAPIKey Authentication input used for token credentials.
 type AuthAPIKey struct {
-	Key string `json:"key"`
+	Key string `json:"key" validate:"required"`
 }
 
 // NewAuthAPIKey instantiates a new AuthAPIKey object

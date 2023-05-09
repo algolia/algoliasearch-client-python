@@ -8,8 +8,8 @@ import (
 
 // SegmentOperandProperty Operand for user profile properties.
 type SegmentOperandProperty struct {
-	Name    string                  `json:"name"`
-	Filters []SegmentPropertyFilter `json:"filters"`
+	Name    string                  `json:"name" validate:"required"`
+	Filters []SegmentPropertyFilter `json:"filters" validate:"required"`
 }
 
 // NewSegmentOperandProperty instantiates a new SegmentOperandProperty object

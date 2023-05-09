@@ -29,15 +29,14 @@ func SearchParamsStringAsBrowseParams(v *SearchParamsString) BrowseParams {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *BrowseParams) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into BrowseParamsObject
 	err = newStrictDecoder(data).Decode(&dst.BrowseParamsObject)
-	if err == nil {
+	if err == nil && validateStruct(dst.BrowseParamsObject) == nil {
 		jsonBrowseParamsObject, _ := json.Marshal(dst.BrowseParamsObject)
 		if string(jsonBrowseParamsObject) == "{}" { // empty struct
 			dst.BrowseParamsObject = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.BrowseParamsObject = nil
@@ -45,28 +44,18 @@ func (dst *BrowseParams) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SearchParamsString
 	err = newStrictDecoder(data).Decode(&dst.SearchParamsString)
-	if err == nil {
+	if err == nil && validateStruct(dst.SearchParamsString) == nil {
 		jsonSearchParamsString, _ := json.Marshal(dst.SearchParamsString)
 		if string(jsonSearchParamsString) == "{}" { // empty struct
 			dst.SearchParamsString = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SearchParamsString = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.BrowseParamsObject = nil
-		dst.SearchParamsString = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(BrowseParams)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(BrowseParams)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(BrowseParams)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

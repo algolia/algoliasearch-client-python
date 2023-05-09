@@ -9,11 +9,11 @@ import (
 // PersonalizationStrategyParams struct for PersonalizationStrategyParams
 type PersonalizationStrategyParams struct {
 	// Scores associated with the events.
-	EventScoring []EventScoring `json:"eventScoring"`
+	EventScoring []EventScoring `json:"eventScoring" validate:"required"`
 	// Scores associated with the facets.
-	FacetScoring []FacetScoring `json:"facetScoring"`
+	FacetScoring []FacetScoring `json:"facetScoring" validate:"required"`
 	// The impact that personalization has on search results: a number between 0 (personalization disabled) and 100 (personalization fully enabled).
-	PersonalizationImpact int32 `json:"personalizationImpact"`
+	PersonalizationImpact int32 `json:"personalizationImpact" validate:"required"`
 }
 
 // NewPersonalizationStrategyParams instantiates a new PersonalizationStrategyParams object

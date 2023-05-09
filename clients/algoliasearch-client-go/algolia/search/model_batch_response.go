@@ -9,9 +9,9 @@ import (
 // BatchResponse struct for BatchResponse
 type BatchResponse struct {
 	// taskID of the task to wait for.
-	TaskID int64 `json:"taskID"`
+	TaskID int64 `json:"taskID" validate:"required"`
 	// List of objectID.
-	ObjectIDs []string `json:"objectIDs"`
+	ObjectIDs []string `json:"objectIDs" validate:"required"`
 }
 
 // NewBatchResponse instantiates a new BatchResponse object

@@ -9,7 +9,7 @@ import (
 // GetTopUserIdsResponse Array of userIDs and clusters.
 type GetTopUserIdsResponse struct {
 	// Mapping of cluster names to top users.
-	TopUsers []map[string][]UserId `json:"topUsers"`
+	TopUsers []map[string][]UserId `json:"topUsers" validate:"required"`
 }
 
 // NewGetTopUserIdsResponse instantiates a new GetTopUserIdsResponse object

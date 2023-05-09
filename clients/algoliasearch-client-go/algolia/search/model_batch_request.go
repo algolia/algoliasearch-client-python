@@ -8,9 +8,9 @@ import (
 
 // BatchRequest struct for BatchRequest
 type BatchRequest struct {
-	Action Action `json:"action"`
+	Action Action `json:"action" validate:"required"`
 	// arguments to the operation (depends on the type of the operation).
-	Body map[string]interface{} `json:"body"`
+	Body map[string]interface{} `json:"body" validate:"required"`
 }
 
 // NewBatchRequest instantiates a new BatchRequest object

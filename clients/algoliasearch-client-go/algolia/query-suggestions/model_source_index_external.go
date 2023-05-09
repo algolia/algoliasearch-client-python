@@ -9,9 +9,9 @@ import (
 // SourceIndexExternal struct for SourceIndexExternal
 type SourceIndexExternal struct {
 	// The suggestion you would like to add.
-	Query string `json:"query"`
+	Query string `json:"query" validate:"required"`
 	// The measure of the suggestion relative popularity.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 }
 
 // NewSourceIndexExternal instantiates a new SourceIndexExternal object

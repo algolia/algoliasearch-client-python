@@ -9,11 +9,11 @@ import (
 // FacetHits struct for FacetHits
 type FacetHits struct {
 	// Raw value of the facet.
-	Value string `json:"value"`
+	Value string `json:"value" validate:"required"`
 	// Markup text with occurrences highlighted.
-	Highlighted string `json:"highlighted"`
+	Highlighted string `json:"highlighted" validate:"required"`
 	// How many objects contain this facet value. This takes into account the extra search parameters specified in the query. Like for a regular search query, the counts may not be exhaustive.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 }
 
 // NewFacetHits instantiates a new FacetHits object

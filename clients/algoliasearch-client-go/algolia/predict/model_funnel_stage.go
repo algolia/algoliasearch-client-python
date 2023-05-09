@@ -8,8 +8,8 @@ import (
 
 // FunnelStage struct for FunnelStage
 type FunnelStage struct {
-	Name        string  `json:"name"`
-	Probability float64 `json:"probability"`
+	Name        string  `json:"name" validate:"required"`
+	Probability float64 `json:"probability" validate:"required"`
 }
 
 // NewFunnelStage instantiates a new FunnelStage object

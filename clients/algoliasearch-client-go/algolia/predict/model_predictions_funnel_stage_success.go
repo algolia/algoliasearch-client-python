@@ -8,8 +8,8 @@ import (
 
 // PredictionsFunnelStageSuccess Prediction for the **funnel_stage** model.
 type PredictionsFunnelStageSuccess struct {
-	Value         []FunnelStage `json:"value"`
-	LastUpdatedAt string        `json:"lastUpdatedAt"`
+	Value         []FunnelStage `json:"value" validate:"required"`
+	LastUpdatedAt string        `json:"lastUpdatedAt" validate:"required"`
 }
 
 // NewPredictionsFunnelStageSuccess instantiates a new PredictionsFunnelStageSuccess object

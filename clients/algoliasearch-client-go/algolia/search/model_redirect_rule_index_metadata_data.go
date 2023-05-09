@@ -8,7 +8,7 @@ import (
 
 // RedirectRuleIndexMetadataData Data for the redirect rule.
 type RedirectRuleIndexMetadataData struct {
-	RuleObjectID string `json:"ruleObjectID"`
+	RuleObjectID string `json:"ruleObjectID" validate:"required"`
 }
 
 // NewRedirectRuleIndexMetadataData instantiates a new RedirectRuleIndexMetadataData object

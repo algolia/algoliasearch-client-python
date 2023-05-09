@@ -153,12 +153,12 @@ type SearchForFacets struct {
 	AttributeCriteriaComputedByMinProximity *bool             `json:"attributeCriteriaComputedByMinProximity,omitempty"`
 	RenderingContent                        *RenderingContent `json:"renderingContent,omitempty"`
 	// The `facet` name.
-	Facet string `json:"facet"`
+	Facet string `json:"facet" validate:"required"`
 	// The Algolia index name.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 	// Text to search inside the facet's values.
 	FacetQuery *string         `json:"facetQuery,omitempty"`
-	Type       SearchTypeFacet `json:"type"`
+	Type       SearchTypeFacet `json:"type" validate:"required"`
 }
 
 type SearchForFacetsOption func(f *SearchForFacets)

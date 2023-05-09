@@ -9,7 +9,7 @@ import (
 // SegmentOrderValueFilter Filter for order value model predictions.
 type SegmentOrderValueFilter struct {
 	Operator *SegmentFilterOperatorNumerical `json:"operator,omitempty"`
-	Value    float32                         `json:"value"`
+	Value    float32                         `json:"value" validate:"required"`
 }
 
 type SegmentOrderValueFilterOption func(f *SegmentOrderValueFilter)

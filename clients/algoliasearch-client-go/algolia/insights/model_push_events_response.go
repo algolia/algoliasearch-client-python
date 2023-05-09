@@ -9,7 +9,7 @@ import (
 // PushEventsResponse struct for PushEventsResponse
 type PushEventsResponse struct {
 	// A message confirming the event push.
-	Message string `json:"message"`
+	Message string `json:"message" validate:"required"`
 }
 
 // NewPushEventsResponse instantiates a new PushEventsResponse object

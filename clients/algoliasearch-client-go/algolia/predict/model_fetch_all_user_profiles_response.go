@@ -8,7 +8,7 @@ import (
 
 // FetchAllUserProfilesResponse struct for FetchAllUserProfilesResponse
 type FetchAllUserProfilesResponse struct {
-	Users []UserProfile `json:"users"`
+	Users []UserProfile `json:"users" validate:"required"`
 	// The token is used to navigate backward in the user list. To navigate from the current user list to the previous page, the API generates the previous page token and it sends the token in the response, beside the current user list. NOTE: This body param cannot be used with `nextPageToken` at the same time.
 	PreviousPageToken *string `json:"previousPageToken,omitempty"`
 	// The token is used to navigate forward in the user list. To navigate from the current user list to the next page, the API generates the next page token and it sends the token in the response, beside the current user list. NOTE: This body param cannot be used with `previousPageToken` at the same time.

@@ -29,15 +29,14 @@ func ArrayOfStringAsAutomaticFacetFilters(v *[]string) AutomaticFacetFilters {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *AutomaticFacetFilters) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into ArrayOfAutomaticFacetFilter
 	err = newStrictDecoder(data).Decode(&dst.ArrayOfAutomaticFacetFilter)
-	if err == nil {
+	if err == nil && validateStruct(dst.ArrayOfAutomaticFacetFilter) == nil {
 		jsonArrayOfAutomaticFacetFilter, _ := json.Marshal(dst.ArrayOfAutomaticFacetFilter)
 		if string(jsonArrayOfAutomaticFacetFilter) == "{}" { // empty struct
 			dst.ArrayOfAutomaticFacetFilter = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ArrayOfAutomaticFacetFilter = nil
@@ -45,28 +44,18 @@ func (dst *AutomaticFacetFilters) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into ArrayOfString
 	err = newStrictDecoder(data).Decode(&dst.ArrayOfString)
-	if err == nil {
+	if err == nil && validateStruct(dst.ArrayOfString) == nil {
 		jsonArrayOfString, _ := json.Marshal(dst.ArrayOfString)
 		if string(jsonArrayOfString) == "{}" { // empty struct
 			dst.ArrayOfString = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ArrayOfString = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.ArrayOfAutomaticFacetFilter = nil
-		dst.ArrayOfString = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(AutomaticFacetFilters)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(AutomaticFacetFilters)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(AutomaticFacetFilters)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

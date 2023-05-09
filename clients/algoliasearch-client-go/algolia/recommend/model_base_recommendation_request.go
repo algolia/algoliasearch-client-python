@@ -8,9 +8,9 @@ import (
 
 // BaseRecommendationRequest struct for BaseRecommendationRequest
 type BaseRecommendationRequest struct {
-	Model RecommendationModels `json:"model"`
+	Model RecommendationModels `json:"model" validate:"required"`
 	// Unique identifier of the object.
-	ObjectID string `json:"objectID"`
+	ObjectID string `json:"objectID" validate:"required"`
 }
 
 // NewBaseRecommendationRequest instantiates a new BaseRecommendationRequest object

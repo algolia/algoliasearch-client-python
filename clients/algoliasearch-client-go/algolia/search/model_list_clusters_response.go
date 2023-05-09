@@ -9,7 +9,7 @@ import (
 // ListClustersResponse Array of clusters.
 type ListClustersResponse struct {
 	// Mapping of cluster names to top users.
-	TopUsers []string `json:"topUsers"`
+	TopUsers []string `json:"topUsers" validate:"required"`
 }
 
 // NewListClustersResponse instantiates a new ListClustersResponse object

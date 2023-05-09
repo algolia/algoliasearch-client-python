@@ -8,9 +8,9 @@ import (
 
 // Languages A dictionary language.
 type Languages struct {
-	Plurals   NullableDictionaryLanguage `json:"plurals"`
-	Stopwords NullableDictionaryLanguage `json:"stopwords"`
-	Compounds NullableDictionaryLanguage `json:"compounds"`
+	Plurals   NullableDictionaryLanguage `json:"plurals" validate:"required"`
+	Stopwords NullableDictionaryLanguage `json:"stopwords" validate:"required"`
+	Compounds NullableDictionaryLanguage `json:"compounds" validate:"required"`
 }
 
 // NewLanguages instantiates a new Languages object

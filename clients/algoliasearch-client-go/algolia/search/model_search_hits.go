@@ -8,7 +8,7 @@ import (
 
 // SearchHits struct for SearchHits
 type SearchHits struct {
-	Hits []Hit `json:"hits"`
+	Hits []Hit `json:"hits" validate:"required"`
 }
 
 // NewSearchHits instantiates a new SearchHits object

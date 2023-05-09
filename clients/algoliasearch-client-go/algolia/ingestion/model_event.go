@@ -9,16 +9,16 @@ import (
 // Event An event describe a step of the task execution flow..
 type Event struct {
 	// The event UUID.
-	EventID string `json:"eventID"`
+	EventID string `json:"eventID" validate:"required"`
 	// The run UUID.
-	RunID string `json:"runID"`
+	RunID string `json:"runID" validate:"required"`
 	// The parent event, the cause of this event.
 	ParentID *string                `json:"parentID,omitempty"`
-	Status   EventStatus            `json:"status"`
-	Type     EventType              `json:"type"`
+	Status   EventStatus            `json:"status" validate:"required"`
+	Type     EventType              `json:"type" validate:"required"`
 	Data     map[string]interface{} `json:"data,omitempty"`
 	// Date of publish (RFC3339 format).
-	PublishedAt string `json:"publishedAt"`
+	PublishedAt string `json:"publishedAt" validate:"required"`
 }
 
 type EventOption func(f *Event)

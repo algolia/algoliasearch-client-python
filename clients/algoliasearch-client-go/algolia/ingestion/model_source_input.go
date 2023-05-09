@@ -53,15 +53,14 @@ func SourceJSONAsSourceInput(v *SourceJSON) SourceInput {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into SourceBigCommerce
 	err = newStrictDecoder(data).Decode(&dst.SourceBigCommerce)
-	if err == nil {
+	if err == nil && validateStruct(dst.SourceBigCommerce) == nil {
 		jsonSourceBigCommerce, _ := json.Marshal(dst.SourceBigCommerce)
 		if string(jsonSourceBigCommerce) == "{}" { // empty struct
 			dst.SourceBigCommerce = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SourceBigCommerce = nil
@@ -69,12 +68,12 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SourceBigQuery
 	err = newStrictDecoder(data).Decode(&dst.SourceBigQuery)
-	if err == nil {
+	if err == nil && validateStruct(dst.SourceBigQuery) == nil {
 		jsonSourceBigQuery, _ := json.Marshal(dst.SourceBigQuery)
 		if string(jsonSourceBigQuery) == "{}" { // empty struct
 			dst.SourceBigQuery = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SourceBigQuery = nil
@@ -82,12 +81,12 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SourceCSV
 	err = newStrictDecoder(data).Decode(&dst.SourceCSV)
-	if err == nil {
+	if err == nil && validateStruct(dst.SourceCSV) == nil {
 		jsonSourceCSV, _ := json.Marshal(dst.SourceCSV)
 		if string(jsonSourceCSV) == "{}" { // empty struct
 			dst.SourceCSV = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SourceCSV = nil
@@ -95,12 +94,12 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SourceCommercetools
 	err = newStrictDecoder(data).Decode(&dst.SourceCommercetools)
-	if err == nil {
+	if err == nil && validateStruct(dst.SourceCommercetools) == nil {
 		jsonSourceCommercetools, _ := json.Marshal(dst.SourceCommercetools)
 		if string(jsonSourceCommercetools) == "{}" { // empty struct
 			dst.SourceCommercetools = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SourceCommercetools = nil
@@ -108,31 +107,18 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SourceJSON
 	err = newStrictDecoder(data).Decode(&dst.SourceJSON)
-	if err == nil {
+	if err == nil && validateStruct(dst.SourceJSON) == nil {
 		jsonSourceJSON, _ := json.Marshal(dst.SourceJSON)
 		if string(jsonSourceJSON) == "{}" { // empty struct
 			dst.SourceJSON = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SourceJSON = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.SourceBigCommerce = nil
-		dst.SourceBigQuery = nil
-		dst.SourceCSV = nil
-		dst.SourceCommercetools = nil
-		dst.SourceJSON = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(SourceInput)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(SourceInput)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(SourceInput)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

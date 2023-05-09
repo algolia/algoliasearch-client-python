@@ -11,8 +11,8 @@ type SourceCommercetools struct {
 	StoreKeys []string `json:"storeKeys,omitempty"`
 	// Array of locales that must match the following pattern: ^[a-z]{2}(-[A-Z]{2})?$. For example [\"fr-FR\", \"en\"].
 	Locales    []string `json:"locales,omitempty"`
-	Url        string   `json:"url"`
-	ProjectKey string   `json:"projectKey"`
+	Url        string   `json:"url" validate:"required"`
+	ProjectKey string   `json:"projectKey" validate:"required"`
 }
 
 type SourceCommercetoolsOption func(f *SourceCommercetools)

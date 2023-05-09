@@ -9,7 +9,7 @@ import (
 // Source The source.
 type Source struct {
 	// The IP range of the source.
-	Source string `json:"source"`
+	Source string `json:"source" validate:"required"`
 	// The description of the source.
 	Description *string `json:"description,omitempty"`
 }

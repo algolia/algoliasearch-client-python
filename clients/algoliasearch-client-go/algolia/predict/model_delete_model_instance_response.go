@@ -9,9 +9,9 @@ import (
 // DeleteModelInstanceResponse struct for DeleteModelInstanceResponse
 type DeleteModelInstanceResponse struct {
 	// The ID of the model.
-	ModelID string `json:"modelID"`
+	ModelID string `json:"modelID" validate:"required"`
 	// The date until which you can safely consider the data as being deleted.
-	DeletedUntil string `json:"deletedUntil"`
+	DeletedUntil string `json:"deletedUntil" validate:"required"`
 }
 
 // NewDeleteModelInstanceResponse instantiates a new DeleteModelInstanceResponse object

@@ -8,8 +8,8 @@ import (
 
 // SegmentOperandAffinity Operand for affinity model predictions.
 type SegmentOperandAffinity struct {
-	Name    string                  `json:"name"`
-	Filters []SegmentAffinityFilter `json:"filters"`
+	Name    string                  `json:"name" validate:"required"`
+	Filters []SegmentAffinityFilter `json:"filters" validate:"required"`
 }
 
 // NewSegmentOperandAffinity instantiates a new SegmentOperandAffinity object

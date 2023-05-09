@@ -9,23 +9,23 @@ import (
 // TopSearchWithAnalytics struct for TopSearchWithAnalytics
 type TopSearchWithAnalytics struct {
 	// The search query.
-	Search string `json:"search"`
+	Search string `json:"search" validate:"required"`
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// The click-through rate.
-	ClickThroughRate float64 `json:"clickThroughRate"`
+	ClickThroughRate float64 `json:"clickThroughRate" validate:"required"`
 	// The average position of all the click count event.
-	AverageClickPosition int32 `json:"averageClickPosition"`
+	AverageClickPosition int32 `json:"averageClickPosition" validate:"required"`
 	// The conversion rate.
-	ConversionRate float64 `json:"conversionRate"`
+	ConversionRate float64 `json:"conversionRate" validate:"required"`
 	// The number of tracked search click.
-	TrackedSearchCount int32 `json:"trackedSearchCount"`
+	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
 	// The number of click event.
-	ClickCount int32 `json:"clickCount"`
+	ClickCount int32 `json:"clickCount" validate:"required"`
 	// The number of converted clicks.
-	ConversionCount int32 `json:"conversionCount"`
+	ConversionCount int32 `json:"conversionCount" validate:"required"`
 	// Number of hits that the search query matched.
-	NbHits int32 `json:"nbHits"`
+	NbHits int32 `json:"nbHits" validate:"required"`
 }
 
 // NewTopSearchWithAnalytics instantiates a new TopSearchWithAnalytics object

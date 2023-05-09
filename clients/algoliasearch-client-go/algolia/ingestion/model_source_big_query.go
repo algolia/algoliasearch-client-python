@@ -9,9 +9,9 @@ import (
 // SourceBigQuery struct for SourceBigQuery
 type SourceBigQuery struct {
 	// Project ID of the BigQuery Source.
-	ProjectID string `json:"projectID"`
+	ProjectID string `json:"projectID" validate:"required"`
 	// Dataset ID of the BigQuery Source.
-	DatasetID string            `json:"datasetID"`
+	DatasetID string            `json:"datasetID" validate:"required"`
 	DataType  *BigQueryDataType `json:"dataType,omitempty"`
 	// Table name (for default BQ).
 	Table *string `json:"table,omitempty"`

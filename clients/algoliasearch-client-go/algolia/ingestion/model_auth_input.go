@@ -53,15 +53,14 @@ func AuthOAuthAsAuthInput(v *AuthOAuth) AuthInput {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *AuthInput) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into AuthAPIKey
 	err = newStrictDecoder(data).Decode(&dst.AuthAPIKey)
-	if err == nil {
+	if err == nil && validateStruct(dst.AuthAPIKey) == nil {
 		jsonAuthAPIKey, _ := json.Marshal(dst.AuthAPIKey)
 		if string(jsonAuthAPIKey) == "{}" { // empty struct
 			dst.AuthAPIKey = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AuthAPIKey = nil
@@ -69,12 +68,12 @@ func (dst *AuthInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into AuthAlgolia
 	err = newStrictDecoder(data).Decode(&dst.AuthAlgolia)
-	if err == nil {
+	if err == nil && validateStruct(dst.AuthAlgolia) == nil {
 		jsonAuthAlgolia, _ := json.Marshal(dst.AuthAlgolia)
 		if string(jsonAuthAlgolia) == "{}" { // empty struct
 			dst.AuthAlgolia = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AuthAlgolia = nil
@@ -82,12 +81,12 @@ func (dst *AuthInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into AuthBasic
 	err = newStrictDecoder(data).Decode(&dst.AuthBasic)
-	if err == nil {
+	if err == nil && validateStruct(dst.AuthBasic) == nil {
 		jsonAuthBasic, _ := json.Marshal(dst.AuthBasic)
 		if string(jsonAuthBasic) == "{}" { // empty struct
 			dst.AuthBasic = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AuthBasic = nil
@@ -95,12 +94,12 @@ func (dst *AuthInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into AuthGoogleServiceAccount
 	err = newStrictDecoder(data).Decode(&dst.AuthGoogleServiceAccount)
-	if err == nil {
+	if err == nil && validateStruct(dst.AuthGoogleServiceAccount) == nil {
 		jsonAuthGoogleServiceAccount, _ := json.Marshal(dst.AuthGoogleServiceAccount)
 		if string(jsonAuthGoogleServiceAccount) == "{}" { // empty struct
 			dst.AuthGoogleServiceAccount = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AuthGoogleServiceAccount = nil
@@ -108,31 +107,18 @@ func (dst *AuthInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into AuthOAuth
 	err = newStrictDecoder(data).Decode(&dst.AuthOAuth)
-	if err == nil {
+	if err == nil && validateStruct(dst.AuthOAuth) == nil {
 		jsonAuthOAuth, _ := json.Marshal(dst.AuthOAuth)
 		if string(jsonAuthOAuth) == "{}" { // empty struct
 			dst.AuthOAuth = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AuthOAuth = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.AuthAPIKey = nil
-		dst.AuthAlgolia = nil
-		dst.AuthBasic = nil
-		dst.AuthGoogleServiceAccount = nil
-		dst.AuthOAuth = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(AuthInput)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(AuthInput)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(AuthInput)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

@@ -37,15 +37,14 @@ func TypesToRetrieveParamAsParams(v *TypesToRetrieveParam) Params {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *Params) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into AllParams
 	err = newStrictDecoder(data).Decode(&dst.AllParams)
-	if err == nil {
+	if err == nil && validateStruct(dst.AllParams) == nil {
 		jsonAllParams, _ := json.Marshal(dst.AllParams)
 		if string(jsonAllParams) == "{}" { // empty struct
 			dst.AllParams = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.AllParams = nil
@@ -53,12 +52,12 @@ func (dst *Params) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into ModelsToRetrieveParam
 	err = newStrictDecoder(data).Decode(&dst.ModelsToRetrieveParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.ModelsToRetrieveParam) == nil {
 		jsonModelsToRetrieveParam, _ := json.Marshal(dst.ModelsToRetrieveParam)
 		if string(jsonModelsToRetrieveParam) == "{}" { // empty struct
 			dst.ModelsToRetrieveParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ModelsToRetrieveParam = nil
@@ -66,29 +65,18 @@ func (dst *Params) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into TypesToRetrieveParam
 	err = newStrictDecoder(data).Decode(&dst.TypesToRetrieveParam)
-	if err == nil {
+	if err == nil && validateStruct(dst.TypesToRetrieveParam) == nil {
 		jsonTypesToRetrieveParam, _ := json.Marshal(dst.TypesToRetrieveParam)
 		if string(jsonTypesToRetrieveParam) == "{}" { // empty struct
 			dst.TypesToRetrieveParam = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.TypesToRetrieveParam = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.AllParams = nil
-		dst.ModelsToRetrieveParam = nil
-		dst.TypesToRetrieveParam = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(Params)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(Params)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(Params)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

@@ -8,7 +8,7 @@ import (
 
 // UserProfile struct for UserProfile
 type UserProfile struct {
-	User        string       `json:"user"`
+	User        string       `json:"user" validate:"required"`
 	Predictions *Predictions `json:"predictions,omitempty"`
 	Properties  *Properties  `json:"properties,omitempty"`
 	Segments    *Segments    `json:"segments,omitempty"`

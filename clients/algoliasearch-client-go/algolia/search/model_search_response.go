@@ -19,7 +19,7 @@ type SearchResponse struct {
 	// Whether the facet count is exhaustive or approximate.
 	ExhaustiveFacetsCount *bool `json:"exhaustiveFacetsCount,omitempty"`
 	// Indicate if the nbHits count was exhaustive or approximate.
-	ExhaustiveNbHits bool `json:"exhaustiveNbHits"`
+	ExhaustiveNbHits bool `json:"exhaustiveNbHits" validate:"required"`
 	// Indicate if the typo-tolerance search was exhaustive or approximate (only included when typo-tolerance is enabled).
 	ExhaustiveTypo *bool `json:"exhaustiveTypo,omitempty"`
 	// A mapping of each facet name to the corresponding facet counts.
@@ -27,7 +27,7 @@ type SearchResponse struct {
 	// Statistics for numerical facets.
 	FacetsStats *map[string]FacetsStats `json:"facets_stats,omitempty"`
 	// Set the number of hits per page.
-	HitsPerPage int32 `json:"hitsPerPage"`
+	HitsPerPage int32 `json:"hitsPerPage" validate:"required"`
 	// Index name used for the query.
 	Index *string `json:"index,omitempty"`
 	// Index name used for the query. In the case of an A/B test, the targeted index isn't always the index used by the query.
@@ -35,22 +35,22 @@ type SearchResponse struct {
 	// Used to return warnings about the query.
 	Message *string `json:"message,omitempty"`
 	// Number of hits that the search query matched.
-	NbHits int32 `json:"nbHits"`
+	NbHits int32 `json:"nbHits" validate:"required"`
 	// Number of pages available for the current query.
-	NbPages int32 `json:"nbPages"`
+	NbPages int32 `json:"nbPages" validate:"required"`
 	// The number of hits selected and sorted by the relevant sort algorithm.
 	NbSortedHits *int32 `json:"nbSortedHits,omitempty"`
 	// Specify the page to retrieve.
-	Page int32 `json:"page"`
+	Page int32 `json:"page" validate:"required"`
 	// A url-encoded string of all search parameters.
-	Params   string                      `json:"params"`
+	Params   string                      `json:"params" validate:"required"`
 	Redirect *BaseSearchResponseRedirect `json:"redirect,omitempty"`
 	// The query string that will be searched, after normalization.
 	ParsedQuery *string `json:"parsedQuery,omitempty"`
 	// Time the server took to process the request, in milliseconds.
-	ProcessingTimeMS int32 `json:"processingTimeMS"`
+	ProcessingTimeMS int32 `json:"processingTimeMS" validate:"required"`
 	// The text to search in the index.
-	Query string `json:"query"`
+	Query string `json:"query" validate:"required"`
 	// A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set.
 	QueryAfterRemoval *string `json:"queryAfterRemoval,omitempty"`
 	// Actual host name of the server that processed the request.
@@ -58,7 +58,7 @@ type SearchResponse struct {
 	// Lets you store custom data in your indices.
 	UserData         map[string]interface{} `json:"userData,omitempty"`
 	RenderingContent *RenderingContent      `json:"renderingContent,omitempty"`
-	Hits             []Hit                  `json:"hits"`
+	Hits             []Hit                  `json:"hits" validate:"required"`
 }
 
 type SearchResponseOption func(f *SearchResponse)

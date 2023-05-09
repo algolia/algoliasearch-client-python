@@ -9,11 +9,11 @@ import (
 // GetAvailableModelTypesResponseInner struct for GetAvailableModelTypesResponseInner
 type GetAvailableModelTypesResponseInner struct {
 	// Name of the model.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 	// Description of the model.
-	Type              string                                              `json:"type"`
-	CompatibleSources []CompatibleSources                                 `json:"compatibleSources"`
-	DataRequirements  GetAvailableModelTypesResponseInnerDataRequirements `json:"dataRequirements"`
+	Type              string                                              `json:"type" validate:"required"`
+	CompatibleSources []CompatibleSources                                 `json:"compatibleSources" validate:"required"`
+	DataRequirements  GetAvailableModelTypesResponseInnerDataRequirements `json:"dataRequirements" validate:"required"`
 }
 
 // NewGetAvailableModelTypesResponseInner instantiates a new GetAvailableModelTypesResponseInner object

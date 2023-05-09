@@ -9,11 +9,11 @@ import (
 // UpdateSegmentResponse struct for UpdateSegmentResponse
 type UpdateSegmentResponse struct {
 	// The ID of the segment.
-	SegmentID string `json:"segmentID"`
+	SegmentID string `json:"segmentID" validate:"required"`
 	// The approximate number of users that matched the segment conditions when it was created, last updated, or when model inference last ran.
 	Size *float32 `json:"size,omitempty"`
 	// The date and time at which the segment was updated (RFC3339).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 type UpdateSegmentResponseOption func(f *UpdateSegmentResponse)

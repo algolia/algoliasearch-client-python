@@ -8,8 +8,8 @@ import (
 
 // SegmentChildConditions Nested segment conditions that only contain operands.
 type SegmentChildConditions struct {
-	Operator SegmentConditionOperator        `json:"operator"`
-	Operands []SegmentChildConditionOperands `json:"operands"`
+	Operator SegmentConditionOperator        `json:"operator" validate:"required"`
+	Operands []SegmentChildConditionOperands `json:"operands" validate:"required"`
 }
 
 // NewSegmentChildConditions instantiates a new SegmentChildConditions object

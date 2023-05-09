@@ -9,8 +9,8 @@ import (
 // GetModelMetricsResponse struct for GetModelMetricsResponse
 type GetModelMetricsResponse struct {
 	// The ID of the model.
-	ModelID string         `json:"modelID"`
-	Metrics []ModelMetrics `json:"metrics"`
+	ModelID string         `json:"modelID" validate:"required"`
+	Metrics []ModelMetrics `json:"metrics" validate:"required"`
 }
 
 // NewGetModelMetricsResponse instantiates a new GetModelMetricsResponse object

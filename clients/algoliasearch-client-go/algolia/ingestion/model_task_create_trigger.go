@@ -37,15 +37,14 @@ func SubscriptionTriggerAsTaskCreateTrigger(v *SubscriptionTrigger) TaskCreateTr
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *TaskCreateTrigger) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into OnDemandTriggerInput
 	err = newStrictDecoder(data).Decode(&dst.OnDemandTriggerInput)
-	if err == nil {
+	if err == nil && validateStruct(dst.OnDemandTriggerInput) == nil {
 		jsonOnDemandTriggerInput, _ := json.Marshal(dst.OnDemandTriggerInput)
 		if string(jsonOnDemandTriggerInput) == "{}" { // empty struct
 			dst.OnDemandTriggerInput = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.OnDemandTriggerInput = nil
@@ -53,12 +52,12 @@ func (dst *TaskCreateTrigger) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into ScheduleTriggerInput
 	err = newStrictDecoder(data).Decode(&dst.ScheduleTriggerInput)
-	if err == nil {
+	if err == nil && validateStruct(dst.ScheduleTriggerInput) == nil {
 		jsonScheduleTriggerInput, _ := json.Marshal(dst.ScheduleTriggerInput)
 		if string(jsonScheduleTriggerInput) == "{}" { // empty struct
 			dst.ScheduleTriggerInput = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ScheduleTriggerInput = nil
@@ -66,29 +65,18 @@ func (dst *TaskCreateTrigger) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SubscriptionTrigger
 	err = newStrictDecoder(data).Decode(&dst.SubscriptionTrigger)
-	if err == nil {
+	if err == nil && validateStruct(dst.SubscriptionTrigger) == nil {
 		jsonSubscriptionTrigger, _ := json.Marshal(dst.SubscriptionTrigger)
 		if string(jsonSubscriptionTrigger) == "{}" { // empty struct
 			dst.SubscriptionTrigger = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SubscriptionTrigger = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.OnDemandTriggerInput = nil
-		dst.ScheduleTriggerInput = nil
-		dst.SubscriptionTrigger = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(TaskCreateTrigger)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(TaskCreateTrigger)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(TaskCreateTrigger)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

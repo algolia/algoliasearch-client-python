@@ -8,13 +8,13 @@ import (
 
 // InsightEvent Insights event.
 type InsightEvent struct {
-	EventType EventType `json:"eventType"`
+	EventType EventType `json:"eventType" validate:"required"`
 	// A user-defined string used to categorize events.
-	EventName string `json:"eventName"`
+	EventName string `json:"eventName" validate:"required"`
 	// Name of the targeted index.
-	Index string `json:"index"`
+	Index string `json:"index" validate:"required"`
 	// A user identifier. Depending if the user is logged-in or not, several strategies can be used from a sessionId to a technical identifier. You should always send pseudonymous or anonymous userTokens.
-	UserToken string `json:"userToken"`
+	UserToken string `json:"userToken" validate:"required"`
 	// Time of the event expressed in milliseconds since the Unix epoch.
 	Timestamp *int64 `json:"timestamp,omitempty"`
 	// Algolia queryID. This is required when an event is tied to a search.

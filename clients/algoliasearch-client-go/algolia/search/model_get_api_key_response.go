@@ -11,9 +11,9 @@ type GetApiKeyResponse struct {
 	// The API key.
 	Value *string `json:"value,omitempty"`
 	// Time of the event expressed in milliseconds since the Unix epoch.
-	CreatedAt int64 `json:"createdAt"`
+	CreatedAt int64 `json:"createdAt" validate:"required"`
 	// Set of permissions associated with the key.
-	Acl []Acl `json:"acl"`
+	Acl []Acl `json:"acl" validate:"required"`
 	// A comment used to identify a key more easily in the dashboard. It is not interpreted by the API.
 	Description *string `json:"description,omitempty"`
 	// Restrict this new API key to a list of indices or index patterns. If the list is empty, all indices are allowed.

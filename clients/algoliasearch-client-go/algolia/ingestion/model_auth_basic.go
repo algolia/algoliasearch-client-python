@@ -8,8 +8,8 @@ import (
 
 // AuthBasic Authentication input for Basic login with username and password.
 type AuthBasic struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 // NewAuthBasic instantiates a new AuthBasic object

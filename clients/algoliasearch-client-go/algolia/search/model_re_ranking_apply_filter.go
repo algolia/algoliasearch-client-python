@@ -34,15 +34,14 @@ func (dst *ReRankingApplyFilter) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	match := 0
 	// try to unmarshal data into ArrayOfMixedSearchFilters
 	err = newStrictDecoder(data).Decode(&dst.ArrayOfMixedSearchFilters)
-	if err == nil {
+	if err == nil && validateStruct(dst.ArrayOfMixedSearchFilters) == nil {
 		jsonArrayOfMixedSearchFilters, _ := json.Marshal(dst.ArrayOfMixedSearchFilters)
 		if string(jsonArrayOfMixedSearchFilters) == "{}" { // empty struct
 			dst.ArrayOfMixedSearchFilters = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ArrayOfMixedSearchFilters = nil
@@ -50,28 +49,18 @@ func (dst *ReRankingApplyFilter) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into String
 	err = newStrictDecoder(data).Decode(&dst.String)
-	if err == nil {
+	if err == nil && validateStruct(dst.String) == nil {
 		jsonString, _ := json.Marshal(dst.String)
 		if string(jsonString) == "{}" { // empty struct
 			dst.String = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.String = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.ArrayOfMixedSearchFilters = nil
-		dst.String = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(ReRankingApplyFilter)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(ReRankingApplyFilter)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(ReRankingApplyFilter)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

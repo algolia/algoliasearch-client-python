@@ -9,9 +9,9 @@ import (
 // GetTopFiltersNoResultsValues struct for GetTopFiltersNoResultsValues
 type GetTopFiltersNoResultsValues struct {
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// A list of filters without results.
-	Values []GetTopFiltersNoResultsValue `json:"values"`
+	Values []GetTopFiltersNoResultsValue `json:"values" validate:"required"`
 }
 
 // NewGetTopFiltersNoResultsValues instantiates a new GetTopFiltersNoResultsValues object

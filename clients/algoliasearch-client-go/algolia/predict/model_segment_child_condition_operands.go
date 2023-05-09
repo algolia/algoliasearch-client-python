@@ -45,15 +45,14 @@ func SegmentOperandPropertyAsSegmentChildConditionOperands(v *SegmentOperandProp
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *SegmentChildConditionOperands) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into SegmentOperandAffinity
 	err = newStrictDecoder(data).Decode(&dst.SegmentOperandAffinity)
-	if err == nil {
+	if err == nil && validateStruct(dst.SegmentOperandAffinity) == nil {
 		jsonSegmentOperandAffinity, _ := json.Marshal(dst.SegmentOperandAffinity)
 		if string(jsonSegmentOperandAffinity) == "{}" { // empty struct
 			dst.SegmentOperandAffinity = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SegmentOperandAffinity = nil
@@ -61,12 +60,12 @@ func (dst *SegmentChildConditionOperands) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SegmentOperandFunnelStage
 	err = newStrictDecoder(data).Decode(&dst.SegmentOperandFunnelStage)
-	if err == nil {
+	if err == nil && validateStruct(dst.SegmentOperandFunnelStage) == nil {
 		jsonSegmentOperandFunnelStage, _ := json.Marshal(dst.SegmentOperandFunnelStage)
 		if string(jsonSegmentOperandFunnelStage) == "{}" { // empty struct
 			dst.SegmentOperandFunnelStage = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SegmentOperandFunnelStage = nil
@@ -74,12 +73,12 @@ func (dst *SegmentChildConditionOperands) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SegmentOperandOrderValue
 	err = newStrictDecoder(data).Decode(&dst.SegmentOperandOrderValue)
-	if err == nil {
+	if err == nil && validateStruct(dst.SegmentOperandOrderValue) == nil {
 		jsonSegmentOperandOrderValue, _ := json.Marshal(dst.SegmentOperandOrderValue)
 		if string(jsonSegmentOperandOrderValue) == "{}" { // empty struct
 			dst.SegmentOperandOrderValue = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SegmentOperandOrderValue = nil
@@ -87,30 +86,18 @@ func (dst *SegmentChildConditionOperands) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SegmentOperandProperty
 	err = newStrictDecoder(data).Decode(&dst.SegmentOperandProperty)
-	if err == nil {
+	if err == nil && validateStruct(dst.SegmentOperandProperty) == nil {
 		jsonSegmentOperandProperty, _ := json.Marshal(dst.SegmentOperandProperty)
 		if string(jsonSegmentOperandProperty) == "{}" { // empty struct
 			dst.SegmentOperandProperty = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SegmentOperandProperty = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.SegmentOperandAffinity = nil
-		dst.SegmentOperandFunnelStage = nil
-		dst.SegmentOperandOrderValue = nil
-		dst.SegmentOperandProperty = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(SegmentChildConditionOperands)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(SegmentChildConditionOperands)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(SegmentChildConditionOperands)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

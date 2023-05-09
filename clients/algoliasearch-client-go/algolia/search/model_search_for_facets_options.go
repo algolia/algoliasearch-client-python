@@ -9,14 +9,14 @@ import (
 // SearchForFacetsOptions struct for SearchForFacetsOptions
 type SearchForFacetsOptions struct {
 	// The `facet` name.
-	Facet string `json:"facet"`
+	Facet string `json:"facet" validate:"required"`
 	// The Algolia index name.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 	// Text to search inside the facet's values.
 	FacetQuery *string `json:"facetQuery,omitempty"`
 	// Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
 	MaxFacetHits *int32          `json:"maxFacetHits,omitempty"`
-	Type         SearchTypeFacet `json:"type"`
+	Type         SearchTypeFacet `json:"type" validate:"required"`
 }
 
 type SearchForFacetsOptionsOption func(f *SearchForFacetsOptions)

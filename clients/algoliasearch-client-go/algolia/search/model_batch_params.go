@@ -8,7 +8,7 @@ import (
 
 // BatchParams The `multipleBatch` parameters.
 type BatchParams struct {
-	Requests []MultipleBatchRequest `json:"requests"`
+	Requests []MultipleBatchRequest `json:"requests" validate:"required"`
 }
 
 // NewBatchParams instantiates a new BatchParams object

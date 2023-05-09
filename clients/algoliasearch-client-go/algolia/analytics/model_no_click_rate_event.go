@@ -9,13 +9,13 @@ import (
 // NoClickRateEvent struct for NoClickRateEvent
 type NoClickRateEvent struct {
 	// The click-through rate.
-	Rate float64 `json:"rate"`
+	Rate float64 `json:"rate" validate:"required"`
 	// The number of click event.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// The number of click event.
-	NoClickCount int32 `json:"noClickCount"`
+	NoClickCount int32 `json:"noClickCount" validate:"required"`
 	// Date of the event.
-	Date string `json:"date"`
+	Date string `json:"date" validate:"required"`
 }
 
 // NewNoClickRateEvent instantiates a new NoClickRateEvent object

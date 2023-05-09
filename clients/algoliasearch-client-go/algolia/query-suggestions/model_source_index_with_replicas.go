@@ -9,21 +9,21 @@ import (
 // SourceIndexWithReplicas Source index with replicas used to generate a Query Suggestions index.
 type SourceIndexWithReplicas struct {
 	// true if the Query Suggestions index is a replicas.
-	Replicas bool `json:"replicas"`
+	Replicas bool `json:"replicas" validate:"required"`
 	// Source index name.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 	// List of analytics tags to filter the popular searches per tag.
-	AnalyticsTags []string `json:"analyticsTags"`
+	AnalyticsTags []string `json:"analyticsTags" validate:"required"`
 	// List of facets to define as categories for the query suggestions.
-	Facets []map[string]interface{} `json:"facets"`
+	Facets []map[string]interface{} `json:"facets" validate:"required"`
 	// Minimum number of hits (e.g., matching records in the source index) to generate a suggestions.
-	MinHits int32 `json:"minHits"`
+	MinHits int32 `json:"minHits" validate:"required"`
 	// Minimum number of required letters for a suggestion to remain.
-	MinLetters int32 `json:"minLetters"`
+	MinLetters int32 `json:"minLetters" validate:"required"`
 	// List of facet attributes used to generate Query Suggestions. The resulting suggestions are every combination of the facets in the nested list (e.g., (facetA and facetB) and facetC).
-	Generate [][]string `json:"generate"`
+	Generate [][]string `json:"generate" validate:"required"`
 	// List of external indices to use to generate custom Query Suggestions.
-	External []SourceIndexExternal `json:"external"`
+	External []SourceIndexExternal `json:"external" validate:"required"`
 }
 
 // NewSourceIndexWithReplicas instantiates a new SourceIndexWithReplicas object

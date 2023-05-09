@@ -9,11 +9,11 @@ import (
 // TaskCreate The payload for a task creation.
 type TaskCreate struct {
 	// The source UUID.
-	SourceID string `json:"sourceID"`
+	SourceID string `json:"sourceID" validate:"required"`
 	// The destination UUID.
-	DestinationID string            `json:"destinationID"`
-	Trigger       TaskCreateTrigger `json:"trigger"`
-	Action        ActionType        `json:"action"`
+	DestinationID string            `json:"destinationID" validate:"required"`
+	Trigger       TaskCreateTrigger `json:"trigger" validate:"required"`
+	Action        ActionType        `json:"action" validate:"required"`
 	// Whether the task is enabled or not.
 	Enabled *bool `json:"enabled,omitempty"`
 }

@@ -4,6 +4,7 @@ package suggestions
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
@@ -29,7 +30,7 @@ func QueryParamOption(name string, val any) Option {
 func HeaderParamOption(name string, val any) Option {
 	return Option{
 		optionType: "header",
-		name:       "itemsPerPage",
+		name:       name,
 		value:      parameterToString(val),
 	}
 }
@@ -38,8 +39,32 @@ type ApiCreateConfigRequest struct {
 	querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam
 }
 
-func (r ApiCreateConfigRequest) WithQuerySuggestionsIndexWithIndexParam(querySuggestionsIndexWithIndexParam QuerySuggestionsIndexWithIndexParam) ApiCreateConfigRequest {
-	r.querySuggestionsIndexWithIndexParam = &querySuggestionsIndexWithIndexParam
+func (r *ApiCreateConfigRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["querySuggestionsIndexWithIndexParam"]; ok { //querySuggestionsIndexWithIndexParam
+		err = json.Unmarshal(v, &r.querySuggestionsIndexWithIndexParam)
+		if err != nil {
+			err = json.Unmarshal(b, &r.querySuggestionsIndexWithIndexParam)
+			if err != nil {
+				return err
+			}
+		}
+	} else {
+		err = json.Unmarshal(b, &r.querySuggestionsIndexWithIndexParam)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r ApiCreateConfigRequest) WithQuerySuggestionsIndexWithIndexParam(querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam) ApiCreateConfigRequest {
+	r.querySuggestionsIndexWithIndexParam = querySuggestionsIndexWithIndexParam
 	return r
 }
 
@@ -67,7 +92,7 @@ func (c *APIClient) CreateConfig(r ApiCreateConfigRequest, opts ...Option) (*Suc
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -160,6 +185,34 @@ type ApiDelRequest struct {
 	parameters map[string]interface{}
 }
 
+func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
 	r.parameters = parameters
@@ -187,14 +240,16 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -275,6 +330,25 @@ type ApiDeleteConfigRequest struct {
 	indexName string
 }
 
+func (r *ApiDeleteConfigRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok { //indexName
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // @return ApiDeleteConfigRequest
 func (c *APIClient) NewApiDeleteConfigRequest(indexName string) ApiDeleteConfigRequest {
 	return ApiDeleteConfigRequest{
@@ -299,7 +373,7 @@ func (c *APIClient) DeleteConfig(r ApiDeleteConfigRequest, opts ...Option) (*Suc
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -372,6 +446,34 @@ type ApiGetRequest struct {
 	parameters map[string]interface{}
 }
 
+func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
 	r.parameters = parameters
@@ -399,14 +501,16 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -486,6 +590,16 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 type ApiGetAllConfigsRequest struct {
 }
 
+func (r *ApiGetAllConfigsRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // @return ApiGetAllConfigsRequest
 func (c *APIClient) NewApiGetAllConfigsRequest() ApiGetAllConfigsRequest {
 	return ApiGetAllConfigsRequest{}
@@ -507,7 +621,7 @@ func (c *APIClient) GetAllConfigs(r ApiGetAllConfigsRequest, opts ...Option) ([]
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -588,6 +702,25 @@ type ApiGetConfigRequest struct {
 	indexName string
 }
 
+func (r *ApiGetConfigRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok { //indexName
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // @return ApiGetConfigRequest
 func (c *APIClient) NewApiGetConfigRequest(indexName string) ApiGetConfigRequest {
 	return ApiGetConfigRequest{
@@ -612,7 +745,7 @@ func (c *APIClient) GetConfig(r ApiGetConfigRequest, opts ...Option) (*QuerySugg
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -702,6 +835,25 @@ type ApiGetConfigStatusRequest struct {
 	indexName string
 }
 
+func (r *ApiGetConfigStatusRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok { //indexName
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // @return ApiGetConfigStatusRequest
 func (c *APIClient) NewApiGetConfigStatusRequest(indexName string) ApiGetConfigStatusRequest {
 	return ApiGetConfigStatusRequest{
@@ -726,7 +878,7 @@ func (c *APIClient) GetConfigStatus(r ApiGetConfigStatusRequest, opts ...Option)
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -798,6 +950,25 @@ type ApiGetLogFileRequest struct {
 	indexName string
 }
 
+func (r *ApiGetLogFileRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok { //indexName
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // @return ApiGetLogFileRequest
 func (c *APIClient) NewApiGetLogFileRequest(indexName string) ApiGetLogFileRequest {
 	return ApiGetLogFileRequest{
@@ -822,7 +993,7 @@ func (c *APIClient) GetLogFile(r ApiGetLogFileRequest, opts ...Option) ([]LogFil
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -905,6 +1076,43 @@ type ApiPostRequest struct {
 	body       map[string]interface{}
 }
 
+func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["body"]; ok { //body
+		err = json.Unmarshal(v, &r.body)
+		if err != nil {
+			err = json.Unmarshal(b, &r.body)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
 	r.parameters = parameters
@@ -938,21 +1146,27 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
 	}
 
 	// body params
-	postBody = r.body
+	if isNilorEmpty(r.body) {
+		postBody = "{}"
+	} else {
+		postBody = r.body
+	}
 	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -1030,6 +1244,43 @@ type ApiPutRequest struct {
 	body       map[string]interface{}
 }
 
+func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["body"]; ok { //body
+		err = json.Unmarshal(v, &r.body)
+		if err != nil {
+			err = json.Unmarshal(b, &r.body)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
 	r.parameters = parameters
@@ -1063,21 +1314,27 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
 	}
 
 	// body params
-	postBody = r.body
+	if isNilorEmpty(r.body) {
+		postBody = "{}"
+	} else {
+		postBody = r.body
+	}
 	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -1154,8 +1411,41 @@ type ApiUpdateConfigRequest struct {
 	querySuggestionsIndexParam *QuerySuggestionsIndexParam
 }
 
-func (r ApiUpdateConfigRequest) WithQuerySuggestionsIndexParam(querySuggestionsIndexParam QuerySuggestionsIndexParam) ApiUpdateConfigRequest {
-	r.querySuggestionsIndexParam = &querySuggestionsIndexParam
+func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok { //indexName
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["querySuggestionsIndexParam"]; ok { //querySuggestionsIndexParam
+		err = json.Unmarshal(v, &r.querySuggestionsIndexParam)
+		if err != nil {
+			err = json.Unmarshal(b, &r.querySuggestionsIndexParam)
+			if err != nil {
+				return err
+			}
+		}
+	} else {
+		err = json.Unmarshal(b, &r.querySuggestionsIndexParam)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r ApiUpdateConfigRequest) WithQuerySuggestionsIndexParam(querySuggestionsIndexParam *QuerySuggestionsIndexParam) ApiUpdateConfigRequest {
+	r.querySuggestionsIndexParam = querySuggestionsIndexParam
 	return r
 }
 
@@ -1186,7 +1476,7 @@ func (c *APIClient) UpdateConfig(r ApiUpdateConfigRequest, opts ...Option) (*Suc
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}

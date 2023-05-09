@@ -9,10 +9,10 @@ import (
 // SourceCreateResponse struct for SourceCreateResponse
 type SourceCreateResponse struct {
 	// The source UUID.
-	SourceID string `json:"sourceID"`
-	Name     string `json:"name"`
+	SourceID string `json:"sourceID" validate:"required"`
+	Name     string `json:"name" validate:"required"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 }
 
 // NewSourceCreateResponse instantiates a new SourceCreateResponse object

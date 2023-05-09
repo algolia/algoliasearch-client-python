@@ -9,12 +9,12 @@ import (
 // LogFile struct for LogFile
 type LogFile struct {
 	// date and time of creation of the record.
-	Timestamp string   `json:"timestamp"`
-	Level     LogLevel `json:"level"`
+	Timestamp string   `json:"timestamp" validate:"required"`
+	Level     LogLevel `json:"level" validate:"required"`
 	// detailed description of what happened.
-	Message string `json:"message"`
+	Message string `json:"message" validate:"required"`
 	// indicates the hierarchy of the records. For example, a record with contextLevel=1 belongs to a preceding record with contextLevel=0.
-	ContextLevel int32 `json:"contextLevel"`
+	ContextLevel int32 `json:"contextLevel" validate:"required"`
 }
 
 // NewLogFile instantiates a new LogFile object

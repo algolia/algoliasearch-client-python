@@ -9,9 +9,9 @@ import (
 // UpdateModelInstanceResponse struct for UpdateModelInstanceResponse
 type UpdateModelInstanceResponse struct {
 	// The ID of the model.
-	ModelID string `json:"modelID"`
+	ModelID string `json:"modelID" validate:"required"`
 	// Date of last update (ISO-8601 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewUpdateModelInstanceResponse instantiates a new UpdateModelInstanceResponse object

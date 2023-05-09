@@ -9,11 +9,11 @@ import (
 // GetUserTokenResponse struct for GetUserTokenResponse
 type GetUserTokenResponse struct {
 	// userToken representing the user for which to fetch the Personalization profile.
-	UserToken string `json:"userToken"`
+	UserToken string `json:"userToken" validate:"required"`
 	// Date of last event update. (ISO-8601 format).
-	LastEventAt string `json:"lastEventAt"`
+	LastEventAt string `json:"lastEventAt" validate:"required"`
 	// The userToken scores.
-	Scores map[string]interface{} `json:"scores"`
+	Scores map[string]interface{} `json:"scores" validate:"required"`
 }
 
 // NewGetUserTokenResponse instantiates a new GetUserTokenResponse object

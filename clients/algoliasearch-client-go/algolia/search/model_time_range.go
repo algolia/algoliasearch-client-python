@@ -9,9 +9,9 @@ import (
 // TimeRange struct for TimeRange
 type TimeRange struct {
 	// Lower bound of the time range (Unix timestamp).
-	From int32 `json:"from"`
+	From int32 `json:"from" validate:"required"`
 	// Upper bound of the time range (Unix timestamp).
-	Until int32 `json:"until"`
+	Until int32 `json:"until" validate:"required"`
 }
 
 // NewTimeRange instantiates a new TimeRange object

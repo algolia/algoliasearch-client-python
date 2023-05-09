@@ -29,15 +29,14 @@ func PlatformNoneAsPlatformWithNone(v *PlatformNone) PlatformWithNone {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *PlatformWithNone) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into Platform
 	err = newStrictDecoder(data).Decode(&dst.Platform)
-	if err == nil {
+	if err == nil && validateStruct(dst.Platform) == nil {
 		jsonPlatform, _ := json.Marshal(dst.Platform)
 		if string(jsonPlatform) == "{}" { // empty struct
 			dst.Platform = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.Platform = nil
@@ -45,28 +44,18 @@ func (dst *PlatformWithNone) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into PlatformNone
 	err = newStrictDecoder(data).Decode(&dst.PlatformNone)
-	if err == nil {
+	if err == nil && validateStruct(dst.PlatformNone) == nil {
 		jsonPlatformNone, _ := json.Marshal(dst.PlatformNone)
 		if string(jsonPlatformNone) == "{}" { // empty struct
 			dst.PlatformNone = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.PlatformNone = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.Platform = nil
-		dst.PlatformNone = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(PlatformWithNone)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(PlatformWithNone)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(PlatformWithNone)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

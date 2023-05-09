@@ -29,15 +29,14 @@ func DestinationIndexPrefixAsDestinationInput(v *DestinationIndexPrefix) Destina
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *DestinationInput) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into DestinationIndexName
 	err = newStrictDecoder(data).Decode(&dst.DestinationIndexName)
-	if err == nil {
+	if err == nil && validateStruct(dst.DestinationIndexName) == nil {
 		jsonDestinationIndexName, _ := json.Marshal(dst.DestinationIndexName)
 		if string(jsonDestinationIndexName) == "{}" { // empty struct
 			dst.DestinationIndexName = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.DestinationIndexName = nil
@@ -45,28 +44,18 @@ func (dst *DestinationInput) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into DestinationIndexPrefix
 	err = newStrictDecoder(data).Decode(&dst.DestinationIndexPrefix)
-	if err == nil {
+	if err == nil && validateStruct(dst.DestinationIndexPrefix) == nil {
 		jsonDestinationIndexPrefix, _ := json.Marshal(dst.DestinationIndexPrefix)
 		if string(jsonDestinationIndexPrefix) == "{}" { // empty struct
 			dst.DestinationIndexPrefix = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.DestinationIndexPrefix = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.DestinationIndexName = nil
-		dst.DestinationIndexPrefix = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(DestinationInput)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(DestinationInput)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(DestinationInput)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

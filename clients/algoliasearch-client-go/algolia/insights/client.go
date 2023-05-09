@@ -20,6 +20,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-playground/validator/v10"
+
 	"github.com/algolia/algoliasearch-client-go/v4/algolia/call"
 	"github.com/algolia/algoliasearch-client-go/v4/algolia/compression"
 	"github.com/algolia/algoliasearch-client-go/v4/algolia/internal/transport"
@@ -132,7 +134,7 @@ func typeCheckParameter(obj any, expected string, name string) error {
 // parameterToString convert any parameters to string.
 func parameterToString(obj any) string {
 	if reflect.TypeOf(obj).Kind() == reflect.Slice {
-		return strings.Trim(strings.Replace(fmt.Sprint(obj), " ", "", -1), "[]")
+		return strings.Trim(strings.Replace(fmt.Sprint(obj), " ", ",", -1), "[]")
 	} else if t, ok := obj.(time.Time); ok {
 		return t.Format(time.RFC3339)
 	}
@@ -231,11 +233,9 @@ func (c *APIClient) prepareRequest(
 
 	// add header parameters, if any
 	if len(headerParams) > 0 {
-		headers := http.Header{}
 		for h, v := range headerParams {
-			headers[h] = []string{v}
+			req.Header.Add(h, v)
 		}
-		req.Header = headers
 	}
 
 	// Add the user agent to the request.
@@ -292,6 +292,17 @@ func newStrictDecoder(data []byte) *json.Decoder {
 	dec := json.NewDecoder(bytes.NewBuffer(data))
 	dec.DisallowUnknownFields()
 	return dec
+}
+
+// A wrapper for validating a struct, returns nil if value is not a struct
+func validateStruct(v any) error {
+	err := validator.New().Struct(v)
+	validationErrors, ok := err.(validator.ValidationErrors)
+	if ok && len(validationErrors) > 0 {
+		return validationErrors
+	}
+
+	return nil
 }
 
 // Set request body from an any

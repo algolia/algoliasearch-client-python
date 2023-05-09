@@ -9,7 +9,7 @@ import (
 // SearchDictionaryEntriesParams The `searchDictionaryEntries` parameters.
 type SearchDictionaryEntriesParams struct {
 	// The text to search in the index.
-	Query string `json:"query"`
+	Query string `json:"query" validate:"required"`
 	// Specify the page to retrieve.
 	Page *int32 `json:"page,omitempty"`
 	// Set the number of hits per page.

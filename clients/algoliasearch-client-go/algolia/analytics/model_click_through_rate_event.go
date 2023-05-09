@@ -9,13 +9,13 @@ import (
 // ClickThroughRateEvent struct for ClickThroughRateEvent
 type ClickThroughRateEvent struct {
 	// The click-through rate.
-	Rate float64 `json:"rate"`
+	Rate float64 `json:"rate" validate:"required"`
 	// The number of click event.
-	ClickCount int32 `json:"clickCount"`
+	ClickCount int32 `json:"clickCount" validate:"required"`
 	// The number of tracked search click.
-	TrackedSearchCount int32 `json:"trackedSearchCount"`
+	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
 	// Date of the event.
-	Date string `json:"date"`
+	Date string `json:"date" validate:"required"`
 }
 
 // NewClickThroughRateEvent instantiates a new ClickThroughRateEvent object

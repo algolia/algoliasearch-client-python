@@ -29,15 +29,14 @@ func BoolAsTypoTolerance(v *bool) TypoTolerance {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *TypoTolerance) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into TypoToleranceEnum
 	err = newStrictDecoder(data).Decode(&dst.TypoToleranceEnum)
-	if err == nil {
+	if err == nil && validateStruct(dst.TypoToleranceEnum) == nil {
 		jsonTypoToleranceEnum, _ := json.Marshal(dst.TypoToleranceEnum)
 		if string(jsonTypoToleranceEnum) == "{}" { // empty struct
 			dst.TypoToleranceEnum = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.TypoToleranceEnum = nil
@@ -45,28 +44,18 @@ func (dst *TypoTolerance) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into Bool
 	err = newStrictDecoder(data).Decode(&dst.Bool)
-	if err == nil {
+	if err == nil && validateStruct(dst.Bool) == nil {
 		jsonBool, _ := json.Marshal(dst.Bool)
 		if string(jsonBool) == "{}" { // empty struct
 			dst.Bool = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.Bool = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.TypoToleranceEnum = nil
-		dst.Bool = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(TypoTolerance)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(TypoTolerance)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(TypoTolerance)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

@@ -9,7 +9,7 @@ import (
 // Rule Rule object.
 type Rule struct {
 	// Unique identifier of the object.
-	ObjectID string `json:"objectID"`
+	ObjectID string `json:"objectID" validate:"required"`
 	// A list of conditions that should apply to activate a Rule. You can use up to 25 conditions per Rule.
 	Conditions  []Condition  `json:"conditions,omitempty"`
 	Consequence *Consequence `json:"consequence,omitempty"`

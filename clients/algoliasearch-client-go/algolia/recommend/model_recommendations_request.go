@@ -29,15 +29,14 @@ func TrendingRequestAsRecommendationsRequest(v *TrendingRequest) Recommendations
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *RecommendationsRequest) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into RecommendationRequest
 	err = newStrictDecoder(data).Decode(&dst.RecommendationRequest)
-	if err == nil {
+	if err == nil && validateStruct(dst.RecommendationRequest) == nil {
 		jsonRecommendationRequest, _ := json.Marshal(dst.RecommendationRequest)
 		if string(jsonRecommendationRequest) == "{}" { // empty struct
 			dst.RecommendationRequest = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.RecommendationRequest = nil
@@ -45,28 +44,18 @@ func (dst *RecommendationsRequest) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into TrendingRequest
 	err = newStrictDecoder(data).Decode(&dst.TrendingRequest)
-	if err == nil {
+	if err == nil && validateStruct(dst.TrendingRequest) == nil {
 		jsonTrendingRequest, _ := json.Marshal(dst.TrendingRequest)
 		if string(jsonTrendingRequest) == "{}" { // empty struct
 			dst.TrendingRequest = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.TrendingRequest = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.RecommendationRequest = nil
-		dst.TrendingRequest = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(RecommendationsRequest)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(RecommendationsRequest)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(RecommendationsRequest)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

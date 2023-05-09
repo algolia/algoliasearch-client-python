@@ -9,13 +9,13 @@ import (
 // GetConversationRateResponse struct for GetConversationRateResponse
 type GetConversationRateResponse struct {
 	// The click-through rate.
-	Rate float64 `json:"rate"`
+	Rate float64 `json:"rate" validate:"required"`
 	// The number of tracked search click.
-	TrackedSearchCount int32 `json:"trackedSearchCount"`
+	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
 	// The number of converted clicks.
-	ConversionCount int32 `json:"conversionCount"`
+	ConversionCount int32 `json:"conversionCount" validate:"required"`
 	// A list of conversion events with their date.
-	Dates []ConversionRateEvent `json:"dates"`
+	Dates []ConversionRateEvent `json:"dates" validate:"required"`
 }
 
 // NewGetConversationRateResponse instantiates a new GetConversationRateResponse object

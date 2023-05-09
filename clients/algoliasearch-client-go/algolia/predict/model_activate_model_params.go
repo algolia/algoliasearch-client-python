@@ -8,13 +8,13 @@ import (
 
 // ActivateModelParams struct for ActivateModelParams
 type ActivateModelParams struct {
-	Type ModelsToRetrieve `json:"type"`
+	Type ModelsToRetrieve `json:"type" validate:"required"`
 	// The model’s instance name.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 	// The data source ID, as returned by the (external) sources API.
-	SourceID string `json:"sourceID"`
+	SourceID string `json:"sourceID" validate:"required"`
 	// The index name.
-	Index           string   `json:"index"`
+	Index           string   `json:"index" validate:"required"`
 	ModelAttributes []string `json:"modelAttributes,omitempty"`
 }
 

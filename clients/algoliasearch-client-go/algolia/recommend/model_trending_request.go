@@ -8,15 +8,15 @@ import (
 
 // TrendingRequest struct for TrendingRequest
 type TrendingRequest struct {
-	Model TrendingModels `json:"model"`
+	Model TrendingModels `json:"model" validate:"required"`
 	// The facet name to use for trending models.
 	FacetName *string `json:"facetName,omitempty"`
 	// The facet value to use for trending models.
 	FacetValue *string `json:"facetValue,omitempty"`
 	// The Algolia index name.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 	// The threshold to use when filtering recommendations by their score.
-	Threshold int32 `json:"threshold"`
+	Threshold int32 `json:"threshold" validate:"required"`
 	// The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the objectID may be returned.
 	MaxRecommendations *int32              `json:"maxRecommendations,omitempty"`
 	QueryParameters    *SearchParamsObject `json:"queryParameters,omitempty"`

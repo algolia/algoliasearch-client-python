@@ -4,6 +4,7 @@ package personalization
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
@@ -29,7 +30,7 @@ func QueryParamOption(name string, val any) Option {
 func HeaderParamOption(name string, val any) Option {
 	return Option{
 		optionType: "header",
-		name:       "itemsPerPage",
+		name:       name,
 		value:      parameterToString(val),
 	}
 }
@@ -37,6 +38,34 @@ func HeaderParamOption(name string, val any) Option {
 type ApiDelRequest struct {
 	path       string
 	parameters map[string]interface{}
+}
+
+func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 // Query parameters to be applied to the current query.
@@ -66,14 +95,16 @@ func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -154,6 +185,25 @@ type ApiDeleteUserProfileRequest struct {
 	userToken string
 }
 
+func (r *ApiDeleteUserProfileRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["userToken"]; ok { //userToken
+		err = json.Unmarshal(v, &r.userToken)
+		if err != nil {
+			err = json.Unmarshal(b, &r.userToken)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // @return ApiDeleteUserProfileRequest
 func (c *APIClient) NewApiDeleteUserProfileRequest(userToken string) ApiDeleteUserProfileRequest {
 	return ApiDeleteUserProfileRequest{
@@ -178,7 +228,7 @@ func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Opt
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -260,6 +310,34 @@ type ApiGetRequest struct {
 	parameters map[string]interface{}
 }
 
+func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
 	r.parameters = parameters
@@ -287,14 +365,16 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -374,6 +454,16 @@ func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}
 type ApiGetPersonalizationStrategyRequest struct {
 }
 
+func (r *ApiGetPersonalizationStrategyRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // @return ApiGetPersonalizationStrategyRequest
 func (c *APIClient) NewApiGetPersonalizationStrategyRequest() ApiGetPersonalizationStrategyRequest {
 	return ApiGetPersonalizationStrategyRequest{}
@@ -395,7 +485,7 @@ func (c *APIClient) GetPersonalizationStrategy(r ApiGetPersonalizationStrategyRe
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -476,6 +566,25 @@ type ApiGetUserTokenProfileRequest struct {
 	userToken string
 }
 
+func (r *ApiGetUserTokenProfileRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["userToken"]; ok { //userToken
+		err = json.Unmarshal(v, &r.userToken)
+		if err != nil {
+			err = json.Unmarshal(b, &r.userToken)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // @return ApiGetUserTokenProfileRequest
 func (c *APIClient) NewApiGetUserTokenProfileRequest(userToken string) ApiGetUserTokenProfileRequest {
 	return ApiGetUserTokenProfileRequest{
@@ -500,7 +609,7 @@ func (c *APIClient) GetUserTokenProfile(r ApiGetUserTokenProfileRequest, opts ..
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
@@ -583,6 +692,43 @@ type ApiPostRequest struct {
 	body       map[string]interface{}
 }
 
+func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["body"]; ok { //body
+		err = json.Unmarshal(v, &r.body)
+		if err != nil {
+			err = json.Unmarshal(b, &r.body)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
 	r.parameters = parameters
@@ -616,21 +762,27 @@ func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
 	}
 
 	// body params
-	postBody = r.body
+	if isNilorEmpty(r.body) {
+		postBody = "{}"
+	} else {
+		postBody = r.body
+	}
 	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -708,6 +860,43 @@ type ApiPutRequest struct {
 	body       map[string]interface{}
 }
 
+func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["path"]; ok { //path
+		err = json.Unmarshal(v, &r.path)
+		if err != nil {
+			err = json.Unmarshal(b, &r.path)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["parameters"]; ok { //parameters
+		err = json.Unmarshal(v, &r.parameters)
+		if err != nil {
+			err = json.Unmarshal(b, &r.parameters)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["body"]; ok { //body
+		err = json.Unmarshal(v, &r.body)
+		if err != nil {
+			err = json.Unmarshal(b, &r.body)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Query parameters to be applied to the current query.
 func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
 	r.parameters = parameters
@@ -741,21 +930,27 @@ func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}
 	queryParams := url.Values{}
 
 	if !isNilorEmpty(r.parameters) {
-		queryParams.Add("parameters", parameterToString(r.parameters))
+		for k, v := range r.parameters {
+			queryParams.Set(k, parameterToString(v))
+		}
 	}
 
 	// optional params if any
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}
 	}
 
 	// body params
-	postBody = r.body
+	if isNilorEmpty(r.body) {
+		postBody = "{}"
+	} else {
+		postBody = r.body
+	}
 	req, err := c.prepareRequest(context.Background(), requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -831,8 +1026,32 @@ type ApiSetPersonalizationStrategyRequest struct {
 	personalizationStrategyParams *PersonalizationStrategyParams
 }
 
-func (r ApiSetPersonalizationStrategyRequest) WithPersonalizationStrategyParams(personalizationStrategyParams PersonalizationStrategyParams) ApiSetPersonalizationStrategyRequest {
-	r.personalizationStrategyParams = &personalizationStrategyParams
+func (r *ApiSetPersonalizationStrategyRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["personalizationStrategyParams"]; ok { //personalizationStrategyParams
+		err = json.Unmarshal(v, &r.personalizationStrategyParams)
+		if err != nil {
+			err = json.Unmarshal(b, &r.personalizationStrategyParams)
+			if err != nil {
+				return err
+			}
+		}
+	} else {
+		err = json.Unmarshal(b, &r.personalizationStrategyParams)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r ApiSetPersonalizationStrategyRequest) WithPersonalizationStrategyParams(personalizationStrategyParams *PersonalizationStrategyParams) ApiSetPersonalizationStrategyRequest {
+	r.personalizationStrategyParams = personalizationStrategyParams
 	return r
 }
 
@@ -860,7 +1079,7 @@ func (c *APIClient) SetPersonalizationStrategy(r ApiSetPersonalizationStrategyRe
 	for _, opt := range opts {
 		switch opt.optionType {
 		case "query":
-			queryParams.Add(opt.name, opt.value)
+			queryParams.Set(opt.name, opt.value)
 		case "header":
 			headers[opt.name] = opt.value
 		}

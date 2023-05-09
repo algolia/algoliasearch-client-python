@@ -9,10 +9,10 @@ import (
 // SourceUpdateResponse struct for SourceUpdateResponse
 type SourceUpdateResponse struct {
 	// The source UUID.
-	SourceID string `json:"sourceID"`
-	Name     string `json:"name"`
+	SourceID string `json:"sourceID" validate:"required"`
+	Name     string `json:"name" validate:"required"`
 	// Date of last update (RFC3339 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewSourceUpdateResponse instantiates a new SourceUpdateResponse object

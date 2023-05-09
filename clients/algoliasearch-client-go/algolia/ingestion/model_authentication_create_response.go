@@ -9,11 +9,11 @@ import (
 // AuthenticationCreateResponse Response from the API when the Authentication is successfully created.
 type AuthenticationCreateResponse struct {
 	// The authentication UUID.
-	AuthenticationID string `json:"authenticationID"`
+	AuthenticationID string `json:"authenticationID" validate:"required"`
 	// An human readable name describing the object.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 }
 
 // NewAuthenticationCreateResponse instantiates a new AuthenticationCreateResponse object

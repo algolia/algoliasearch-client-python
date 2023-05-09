@@ -9,7 +9,7 @@ import (
 // GetStatusResponse struct for GetStatusResponse
 type GetStatusResponse struct {
 	// Date of last update (ISO-8601 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewGetStatusResponse instantiates a new GetStatusResponse object

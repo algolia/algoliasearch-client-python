@@ -9,7 +9,7 @@ import (
 // SourceIndex struct for SourceIndex
 type SourceIndex struct {
 	// Source index name.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 	// List of analytics tags to filter the popular searches per tag.
 	AnalyticsTags []string `json:"analyticsTags,omitempty"`
 	// List of facets to define as categories for the query suggestions.

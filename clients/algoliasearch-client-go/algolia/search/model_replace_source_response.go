@@ -9,7 +9,7 @@ import (
 // ReplaceSourceResponse struct for ReplaceSourceResponse
 type ReplaceSourceResponse struct {
 	// Date of last update (ISO-8601 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewReplaceSourceResponse instantiates a new ReplaceSourceResponse object

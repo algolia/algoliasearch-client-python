@@ -8,9 +8,9 @@ import (
 
 // Affinity struct for Affinity
 type Affinity struct {
-	Name        string                  `json:"name"`
-	Value       PredictionAffinityValue `json:"value"`
-	Probability float64                 `json:"probability"`
+	Name        string                  `json:"name" validate:"required"`
+	Value       PredictionAffinityValue `json:"value" validate:"required"`
+	Probability float64                 `json:"probability" validate:"required"`
 }
 
 // NewAffinity instantiates a new Affinity object

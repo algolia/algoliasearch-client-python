@@ -9,19 +9,19 @@ import (
 // TopHitWithAnalytics struct for TopHitWithAnalytics
 type TopHitWithAnalytics struct {
 	// The hit.
-	Hit string `json:"hit"`
+	Hit string `json:"hit" validate:"required"`
 	// The number of occurrences.
-	Count int32 `json:"count"`
+	Count int32 `json:"count" validate:"required"`
 	// The click-through rate.
-	ClickThroughRate float64 `json:"clickThroughRate"`
+	ClickThroughRate float64 `json:"clickThroughRate" validate:"required"`
 	// The conversion rate.
-	ConversionRate float64 `json:"conversionRate"`
+	ConversionRate float64 `json:"conversionRate" validate:"required"`
 	// The number of tracked search click.
-	TrackedSearchCount int32 `json:"trackedSearchCount"`
+	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
 	// The number of click event.
-	ClickCount int32 `json:"clickCount"`
+	ClickCount int32 `json:"clickCount" validate:"required"`
 	// The number of converted clicks.
-	ConversionCount int32 `json:"conversionCount"`
+	ConversionCount int32 `json:"conversionCount" validate:"required"`
 }
 
 // NewTopHitWithAnalytics instantiates a new TopHitWithAnalytics object

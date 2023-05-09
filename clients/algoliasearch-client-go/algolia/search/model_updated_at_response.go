@@ -9,9 +9,9 @@ import (
 // UpdatedAtResponse The response with a taskID and an updatedAt timestamp.
 type UpdatedAtResponse struct {
 	// taskID of the task to wait for.
-	TaskID int64 `json:"taskID"`
+	TaskID int64 `json:"taskID" validate:"required"`
 	// Date of last update (ISO-8601 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewUpdatedAtResponse instantiates a new UpdatedAtResponse object

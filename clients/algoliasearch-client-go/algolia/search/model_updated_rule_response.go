@@ -9,11 +9,11 @@ import (
 // UpdatedRuleResponse struct for UpdatedRuleResponse
 type UpdatedRuleResponse struct {
 	// Unique identifier of the object.
-	ObjectID string `json:"objectID"`
+	ObjectID string `json:"objectID" validate:"required"`
 	// Date of last update (ISO-8601 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 	// taskID of the task to wait for.
-	TaskID int64 `json:"taskID"`
+	TaskID int64 `json:"taskID" validate:"required"`
 }
 
 // NewUpdatedRuleResponse instantiates a new UpdatedRuleResponse object

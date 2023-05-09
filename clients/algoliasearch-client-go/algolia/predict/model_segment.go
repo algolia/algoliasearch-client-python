@@ -9,16 +9,16 @@ import (
 // Segment struct for Segment
 type Segment struct {
 	// The ID of the segment.
-	SegmentID string `json:"segmentID"`
+	SegmentID string `json:"segmentID" validate:"required"`
 	// The name of the segment.
-	Name       string                  `json:"name"`
-	Conditions SegmentParentConditions `json:"conditions"`
+	Name       string                  `json:"name" validate:"required"`
+	Conditions SegmentParentConditions `json:"conditions" validate:"required"`
 	// The approximate number of users that matched the segment conditions when it was created, last updated, or when model inference last ran.
-	Size          float32       `json:"size"`
-	SegmentStatus SegmentStatus `json:"segmentStatus"`
-	Type          SegmentType   `json:"type"`
+	Size          float32       `json:"size" validate:"required"`
+	SegmentStatus SegmentStatus `json:"segmentStatus" validate:"required"`
+	Type          SegmentType   `json:"type" validate:"required"`
 	// The date and time at which the segment was last updated (RFC3339).
-	LastUpdatedAt string  `json:"lastUpdatedAt"`
+	LastUpdatedAt string  `json:"lastUpdatedAt" validate:"required"`
 	ErrorMessage  *string `json:"errorMessage,omitempty"`
 }
 

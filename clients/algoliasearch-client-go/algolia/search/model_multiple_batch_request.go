@@ -8,11 +8,11 @@ import (
 
 // MultipleBatchRequest struct for MultipleBatchRequest
 type MultipleBatchRequest struct {
-	Action Action `json:"action"`
+	Action Action `json:"action" validate:"required"`
 	// arguments to the operation (depends on the type of the operation).
-	Body map[string]interface{} `json:"body"`
+	Body map[string]interface{} `json:"body" validate:"required"`
 	// Index to target for this operation.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 }
 
 // NewMultipleBatchRequest instantiates a new MultipleBatchRequest object

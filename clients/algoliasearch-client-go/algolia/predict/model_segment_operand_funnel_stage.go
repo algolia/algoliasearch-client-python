@@ -8,8 +8,8 @@ import (
 
 // SegmentOperandFunnelStage Operand for funnel stage model predictions.
 type SegmentOperandFunnelStage struct {
-	Name    string                     `json:"name"`
-	Filters []SegmentFunnelStageFilter `json:"filters"`
+	Name    string                     `json:"name" validate:"required"`
+	Filters []SegmentFunnelStageFilter `json:"filters" validate:"required"`
 }
 
 // NewSegmentOperandFunnelStage instantiates a new SegmentOperandFunnelStage object

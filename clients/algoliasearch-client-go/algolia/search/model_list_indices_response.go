@@ -9,7 +9,7 @@ import (
 // ListIndicesResponse struct for ListIndicesResponse
 type ListIndicesResponse struct {
 	// List of the fetched indices.
-	Items []FetchedIndex `json:"items"`
+	Items []FetchedIndex `json:"items" validate:"required"`
 	// Number of pages.
 	NbPages *int32 `json:"nbPages,omitempty"`
 }

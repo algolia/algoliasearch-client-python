@@ -9,7 +9,7 @@ import (
 // DestinationIndexName struct for DestinationIndexName
 type DestinationIndexName struct {
 	// The index name to store data in.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 }
 
 // NewDestinationIndexName instantiates a new DestinationIndexName object

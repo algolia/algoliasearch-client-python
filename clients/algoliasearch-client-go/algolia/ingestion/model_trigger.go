@@ -37,15 +37,14 @@ func SubscriptionTriggerAsTrigger(v *SubscriptionTrigger) Trigger {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *Trigger) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into OnDemandTrigger
 	err = newStrictDecoder(data).Decode(&dst.OnDemandTrigger)
-	if err == nil {
+	if err == nil && validateStruct(dst.OnDemandTrigger) == nil {
 		jsonOnDemandTrigger, _ := json.Marshal(dst.OnDemandTrigger)
 		if string(jsonOnDemandTrigger) == "{}" { // empty struct
 			dst.OnDemandTrigger = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.OnDemandTrigger = nil
@@ -53,12 +52,12 @@ func (dst *Trigger) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into ScheduleTrigger
 	err = newStrictDecoder(data).Decode(&dst.ScheduleTrigger)
-	if err == nil {
+	if err == nil && validateStruct(dst.ScheduleTrigger) == nil {
 		jsonScheduleTrigger, _ := json.Marshal(dst.ScheduleTrigger)
 		if string(jsonScheduleTrigger) == "{}" { // empty struct
 			dst.ScheduleTrigger = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ScheduleTrigger = nil
@@ -66,29 +65,18 @@ func (dst *Trigger) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SubscriptionTrigger
 	err = newStrictDecoder(data).Decode(&dst.SubscriptionTrigger)
-	if err == nil {
+	if err == nil && validateStruct(dst.SubscriptionTrigger) == nil {
 		jsonSubscriptionTrigger, _ := json.Marshal(dst.SubscriptionTrigger)
 		if string(jsonSubscriptionTrigger) == "{}" { // empty struct
 			dst.SubscriptionTrigger = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SubscriptionTrigger = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.OnDemandTrigger = nil
-		dst.ScheduleTrigger = nil
-		dst.SubscriptionTrigger = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(Trigger)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(Trigger)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(Trigger)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

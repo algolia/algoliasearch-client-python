@@ -29,15 +29,14 @@ func ArrayOfHighlightResultOptionAsHighlightResult(v *[]HighlightResultOption) H
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *HighlightResult) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into HighlightResultOption
 	err = newStrictDecoder(data).Decode(&dst.HighlightResultOption)
-	if err == nil {
+	if err == nil && validateStruct(dst.HighlightResultOption) == nil {
 		jsonHighlightResultOption, _ := json.Marshal(dst.HighlightResultOption)
 		if string(jsonHighlightResultOption) == "{}" { // empty struct
 			dst.HighlightResultOption = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.HighlightResultOption = nil
@@ -45,28 +44,18 @@ func (dst *HighlightResult) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into ArrayOfHighlightResultOption
 	err = newStrictDecoder(data).Decode(&dst.ArrayOfHighlightResultOption)
-	if err == nil {
+	if err == nil && validateStruct(dst.ArrayOfHighlightResultOption) == nil {
 		jsonArrayOfHighlightResultOption, _ := json.Marshal(dst.ArrayOfHighlightResultOption)
 		if string(jsonArrayOfHighlightResultOption) == "{}" { // empty struct
 			dst.ArrayOfHighlightResultOption = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.ArrayOfHighlightResultOption = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.HighlightResultOption = nil
-		dst.ArrayOfHighlightResultOption = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(HighlightResult)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(HighlightResult)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(HighlightResult)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

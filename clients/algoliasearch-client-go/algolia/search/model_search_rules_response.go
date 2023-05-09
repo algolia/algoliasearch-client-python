@@ -9,13 +9,13 @@ import (
 // SearchRulesResponse struct for SearchRulesResponse
 type SearchRulesResponse struct {
 	// Fetched rules.
-	Hits []Rule `json:"hits"`
+	Hits []Rule `json:"hits" validate:"required"`
 	// Number of fetched rules.
-	NbHits int32 `json:"nbHits"`
+	NbHits int32 `json:"nbHits" validate:"required"`
 	// Current page.
-	Page int32 `json:"page"`
+	Page int32 `json:"page" validate:"required"`
 	// Number of pages.
-	NbPages int32 `json:"nbPages"`
+	NbPages int32 `json:"nbPages" validate:"required"`
 }
 
 // NewSearchRulesResponse instantiates a new SearchRulesResponse object

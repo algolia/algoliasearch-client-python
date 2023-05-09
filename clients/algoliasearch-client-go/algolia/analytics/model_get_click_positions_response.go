@@ -9,7 +9,7 @@ import (
 // GetClickPositionsResponse struct for GetClickPositionsResponse
 type GetClickPositionsResponse struct {
 	// A list of the click positions with their click count.
-	Positions []ClickPosition `json:"positions"`
+	Positions []ClickPosition `json:"positions" validate:"required"`
 }
 
 // NewGetClickPositionsResponse instantiates a new GetClickPositionsResponse object

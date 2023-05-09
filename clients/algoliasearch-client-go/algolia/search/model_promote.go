@@ -29,15 +29,14 @@ func PromoteObjectIDsAsPromote(v *PromoteObjectIDs) Promote {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *Promote) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into PromoteObjectID
 	err = newStrictDecoder(data).Decode(&dst.PromoteObjectID)
-	if err == nil {
+	if err == nil && validateStruct(dst.PromoteObjectID) == nil {
 		jsonPromoteObjectID, _ := json.Marshal(dst.PromoteObjectID)
 		if string(jsonPromoteObjectID) == "{}" { // empty struct
 			dst.PromoteObjectID = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.PromoteObjectID = nil
@@ -45,28 +44,18 @@ func (dst *Promote) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into PromoteObjectIDs
 	err = newStrictDecoder(data).Decode(&dst.PromoteObjectIDs)
-	if err == nil {
+	if err == nil && validateStruct(dst.PromoteObjectIDs) == nil {
 		jsonPromoteObjectIDs, _ := json.Marshal(dst.PromoteObjectIDs)
 		if string(jsonPromoteObjectIDs) == "{}" { // empty struct
 			dst.PromoteObjectIDs = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.PromoteObjectIDs = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.PromoteObjectID = nil
-		dst.PromoteObjectIDs = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(Promote)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(Promote)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(Promote)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

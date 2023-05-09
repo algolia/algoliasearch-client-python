@@ -9,7 +9,7 @@ import (
 // SegmentPropertyFilter Filter for user profile properties.
 type SegmentPropertyFilter struct {
 	Operator *SegmentFilterOperatorNumerical `json:"operator,omitempty"`
-	Value    SegmentPropertyFilterValue      `json:"value"`
+	Value    SegmentPropertyFilterValue      `json:"value" validate:"required"`
 }
 
 type SegmentPropertyFilterOption func(f *SegmentPropertyFilter)

@@ -9,9 +9,9 @@ import (
 // DeleteUserProfileResponse struct for DeleteUserProfileResponse
 type DeleteUserProfileResponse struct {
 	// userToken representing the user for which to fetch the Personalization profile.
-	UserToken string `json:"userToken"`
+	UserToken string `json:"userToken" validate:"required"`
 	// A date until which the data can safely be considered as deleted for the given user. Any data received after the `deletedUntil` date will start building a new user profile.
-	DeletedUntil string `json:"deletedUntil"`
+	DeletedUntil string `json:"deletedUntil" validate:"required"`
 }
 
 // NewDeleteUserProfileResponse instantiates a new DeleteUserProfileResponse object

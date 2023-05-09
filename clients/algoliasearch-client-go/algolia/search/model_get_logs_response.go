@@ -8,7 +8,7 @@ import (
 
 // GetLogsResponse struct for GetLogsResponse
 type GetLogsResponse struct {
-	Logs []Log `json:"logs"`
+	Logs []Log `json:"logs" validate:"required"`
 }
 
 // NewGetLogsResponse instantiates a new GetLogsResponse object

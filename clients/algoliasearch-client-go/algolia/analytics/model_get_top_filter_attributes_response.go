@@ -9,7 +9,7 @@ import (
 // GetTopFilterAttributesResponse struct for GetTopFilterAttributesResponse
 type GetTopFilterAttributesResponse struct {
 	// A list of attributes with their count.
-	Attributes []GetTopFilterAttribute `json:"attributes"`
+	Attributes []GetTopFilterAttribute `json:"attributes" validate:"required"`
 }
 
 // NewGetTopFilterAttributesResponse instantiates a new GetTopFilterAttributesResponse object

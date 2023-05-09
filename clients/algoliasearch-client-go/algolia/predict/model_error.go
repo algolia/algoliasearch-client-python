@@ -8,7 +8,7 @@ import (
 
 // ModelError The error when the model is not available.
 type ModelError struct {
-	Error string `json:"error"`
+	Error string `json:"error" validate:"required"`
 }
 
 // NewModelError instantiates a new ModelError object

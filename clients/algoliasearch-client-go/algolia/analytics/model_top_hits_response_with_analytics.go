@@ -9,7 +9,7 @@ import (
 // TopHitsResponseWithAnalytics struct for TopHitsResponseWithAnalytics
 type TopHitsResponseWithAnalytics struct {
 	// A list of top hits with their count and analytics.
-	Hits []TopHitWithAnalytics `json:"hits"`
+	Hits []TopHitWithAnalytics `json:"hits" validate:"required"`
 }
 
 // NewTopHitsResponseWithAnalytics instantiates a new TopHitsResponseWithAnalytics object

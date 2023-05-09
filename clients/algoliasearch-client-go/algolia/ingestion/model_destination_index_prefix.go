@@ -9,7 +9,7 @@ import (
 // DestinationIndexPrefix struct for DestinationIndexPrefix
 type DestinationIndexPrefix struct {
 	// The prefix of the final index name.
-	IndexPrefix string `json:"indexPrefix"`
+	IndexPrefix string `json:"indexPrefix" validate:"required"`
 }
 
 // NewDestinationIndexPrefix instantiates a new DestinationIndexPrefix object

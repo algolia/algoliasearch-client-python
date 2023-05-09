@@ -9,9 +9,9 @@ import (
 // UserHighlightResult struct for UserHighlightResult
 type UserHighlightResult struct {
 	// Show highlighted section and words matched on a query.
-	UserID map[string]HighlightResult `json:"userID"`
+	UserID map[string]HighlightResult `json:"userID" validate:"required"`
 	// Show highlighted section and words matched on a query.
-	ClusterName map[string]HighlightResult `json:"clusterName"`
+	ClusterName map[string]HighlightResult `json:"clusterName" validate:"required"`
 }
 
 // NewUserHighlightResult instantiates a new UserHighlightResult object

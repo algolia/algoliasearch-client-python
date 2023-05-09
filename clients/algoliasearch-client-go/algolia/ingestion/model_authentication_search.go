@@ -8,7 +8,7 @@ import (
 
 // AuthenticationSearch Payload to search for multiple authentications, based on the given `authenticationIDs`.
 type AuthenticationSearch struct {
-	AuthenticationIDs []string `json:"authenticationIDs"`
+	AuthenticationIDs []string `json:"authenticationIDs" validate:"required"`
 }
 
 // NewAuthenticationSearch instantiates a new AuthenticationSearch object

@@ -8,7 +8,7 @@ import (
 
 // ModelAttributes struct for ModelAttributes
 type ModelAttributes struct {
-	Name   string   `json:"name"`
+	Name   string   `json:"name" validate:"required"`
 	Values []string `json:"values,omitempty"`
 }
 

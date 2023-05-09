@@ -29,15 +29,14 @@ func SearchForHitsAsSearchQuery(v *SearchForHits) SearchQuery {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *SearchQuery) UnmarshalJSON(data []byte) error {
 	var err error
-	match := 0
 	// try to unmarshal data into SearchForFacets
 	err = newStrictDecoder(data).Decode(&dst.SearchForFacets)
-	if err == nil {
+	if err == nil && validateStruct(dst.SearchForFacets) == nil {
 		jsonSearchForFacets, _ := json.Marshal(dst.SearchForFacets)
 		if string(jsonSearchForFacets) == "{}" { // empty struct
 			dst.SearchForFacets = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SearchForFacets = nil
@@ -45,28 +44,18 @@ func (dst *SearchQuery) UnmarshalJSON(data []byte) error {
 
 	// try to unmarshal data into SearchForHits
 	err = newStrictDecoder(data).Decode(&dst.SearchForHits)
-	if err == nil {
+	if err == nil && validateStruct(dst.SearchForHits) == nil {
 		jsonSearchForHits, _ := json.Marshal(dst.SearchForHits)
 		if string(jsonSearchForHits) == "{}" { // empty struct
 			dst.SearchForHits = nil
 		} else {
-			match++
+			return nil
 		}
 	} else {
 		dst.SearchForHits = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.SearchForFacets = nil
-		dst.SearchForHits = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(SearchQuery)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(SearchQuery)")
-	}
+	return fmt.Errorf("Data failed to match schemas in oneOf(SearchQuery)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON

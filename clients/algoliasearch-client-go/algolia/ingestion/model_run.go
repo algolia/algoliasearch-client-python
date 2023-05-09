@@ -9,20 +9,20 @@ import (
 // Run struct for Run
 type Run struct {
 	// The run UUID.
-	RunID string `json:"runID"`
-	AppID string `json:"appID"`
+	RunID string `json:"runID" validate:"required"`
+	AppID string `json:"appID" validate:"required"`
 	// The task UUID.
-	TaskID   string       `json:"taskID"`
-	Status   RunStatus    `json:"status"`
+	TaskID   string       `json:"taskID" validate:"required"`
+	Status   RunStatus    `json:"status" validate:"required"`
 	Progress *RunProgress `json:"progress,omitempty"`
 	Outcome  *RunOutcome  `json:"outcome,omitempty"`
 	// Explains the result of outcome.
 	Reason *string `json:"reason,omitempty"`
-	Type   RunType `json:"type"`
+	Type   RunType `json:"type" validate:"required"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 	// Date of last update (RFC3339 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 	// Date of start (RFC3339 format).
 	StartedAt *string `json:"startedAt,omitempty"`
 	// Date of finish (RFC3339 format).

@@ -9,16 +9,16 @@ import (
 // UserHit struct for UserHit
 type UserHit struct {
 	// userID of the user.
-	UserID string `json:"userID"`
+	UserID string `json:"userID" validate:"required"`
 	// Name of the cluster.
-	ClusterName string `json:"clusterName"`
+	ClusterName string `json:"clusterName" validate:"required"`
 	// Number of records in the cluster.
-	NbRecords int32 `json:"nbRecords"`
+	NbRecords int32 `json:"nbRecords" validate:"required"`
 	// Data size taken by all the users assigned to the cluster.
-	DataSize int32 `json:"dataSize"`
+	DataSize int32 `json:"dataSize" validate:"required"`
 	// userID of the requested user. Same as userID.
-	ObjectID        string              `json:"objectID"`
-	HighlightResult UserHighlightResult `json:"_highlightResult"`
+	ObjectID        string              `json:"objectID" validate:"required"`
+	HighlightResult UserHighlightResult `json:"_highlightResult" validate:"required"`
 }
 
 // NewUserHit instantiates a new UserHit object

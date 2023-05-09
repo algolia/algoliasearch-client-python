@@ -8,7 +8,7 @@ import (
 
 // GetObjectsParams The `getObjects` parameters.
 type GetObjectsParams struct {
-	Requests []GetObjectsRequest `json:"requests"`
+	Requests []GetObjectsRequest `json:"requests" validate:"required"`
 }
 
 // NewGetObjectsParams instantiates a new GetObjectsParams object

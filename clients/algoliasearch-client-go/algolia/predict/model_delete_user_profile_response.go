@@ -9,9 +9,9 @@ import (
 // DeleteUserProfileResponse struct for DeleteUserProfileResponse
 type DeleteUserProfileResponse struct {
 	// The ID of the user that was deleted.
-	User string `json:"user"`
+	User string `json:"user" validate:"required"`
 	// The time the same user ID will be imported again when the data is ingested.
-	DeletedUntil string `json:"deletedUntil"`
+	DeletedUntil string `json:"deletedUntil" validate:"required"`
 }
 
 // NewDeleteUserProfileResponse instantiates a new DeleteUserProfileResponse object

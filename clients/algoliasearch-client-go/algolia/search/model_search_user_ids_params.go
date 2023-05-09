@@ -9,7 +9,7 @@ import (
 // SearchUserIdsParams OK
 type SearchUserIdsParams struct {
 	// Query to search. The search is a prefix search with typoTolerance. Use empty query to retrieve all users.
-	Query string `json:"query"`
+	Query string `json:"query" validate:"required"`
 	// Name of the cluster.
 	ClusterName *string `json:"clusterName,omitempty"`
 	// Specify the page to retrieve.

@@ -8,7 +8,7 @@ import (
 
 // DestinationSearch Payload to search for multiple destinations, based on the given `destinationIDs`.
 type DestinationSearch struct {
-	DestinationIDs []string `json:"destinationIDs"`
+	DestinationIDs []string `json:"destinationIDs" validate:"required"`
 }
 
 // NewDestinationSearch instantiates a new DestinationSearch object

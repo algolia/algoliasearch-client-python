@@ -8,8 +8,8 @@ import (
 
 // PredictionsAffinitiesSuccess Prediction for the **affinities** model.
 type PredictionsAffinitiesSuccess struct {
-	Value         []Affinity `json:"value"`
-	LastUpdatedAt string     `json:"lastUpdatedAt"`
+	Value         []Affinity `json:"value" validate:"required"`
+	LastUpdatedAt string     `json:"lastUpdatedAt" validate:"required"`
 }
 
 // NewPredictionsAffinitiesSuccess instantiates a new PredictionsAffinitiesSuccess object

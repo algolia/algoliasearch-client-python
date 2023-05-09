@@ -9,8 +9,8 @@ import (
 // SegmentFunnelStageFilter Filter for funnel stage model predictions.
 type SegmentFunnelStageFilter struct {
 	Operator    *SegmentFilterOperatorBoolean `json:"operator,omitempty"`
-	Value       string                        `json:"value"`
-	Probability SegmentFilterProbability      `json:"probability"`
+	Value       string                        `json:"value" validate:"required"`
+	Probability SegmentFilterProbability      `json:"probability" validate:"required"`
 }
 
 type SegmentFunnelStageFilterOption func(f *SegmentFunnelStageFilter)

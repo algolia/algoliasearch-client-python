@@ -8,7 +8,7 @@ import (
 
 // AuthenticationInput The authentication input property stores the (encrypted) credentials.
 type AuthenticationInput struct {
-	Input AuthInput `json:"input"`
+	Input AuthInput `json:"input" validate:"required"`
 }
 
 // NewAuthenticationInput instantiates a new AuthenticationInput object

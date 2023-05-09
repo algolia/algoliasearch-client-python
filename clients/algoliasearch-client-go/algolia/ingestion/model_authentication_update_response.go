@@ -9,11 +9,11 @@ import (
 // AuthenticationUpdateResponse Response from the API when the Authentication is successfully updated.
 type AuthenticationUpdateResponse struct {
 	// The authentication UUID.
-	AuthenticationID string `json:"authenticationID"`
+	AuthenticationID string `json:"authenticationID" validate:"required"`
 	// An human readable name describing the object.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 	// Date of last update (RFC3339 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewAuthenticationUpdateResponse instantiates a new AuthenticationUpdateResponse object

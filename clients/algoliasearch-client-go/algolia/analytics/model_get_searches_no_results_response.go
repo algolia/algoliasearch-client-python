@@ -9,7 +9,7 @@ import (
 // GetSearchesNoResultsResponse struct for GetSearchesNoResultsResponse
 type GetSearchesNoResultsResponse struct {
 	// A list of searches with no results and their count.
-	Searches []SearchNoResultEvent `json:"searches"`
+	Searches []SearchNoResultEvent `json:"searches" validate:"required"`
 }
 
 // NewGetSearchesNoResultsResponse instantiates a new GetSearchesNoResultsResponse object

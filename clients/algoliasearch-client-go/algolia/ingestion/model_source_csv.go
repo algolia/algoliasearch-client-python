@@ -9,7 +9,7 @@ import (
 // SourceCSV struct for SourceCSV
 type SourceCSV struct {
 	// The URL of the file.
-	Url string `json:"url"`
+	Url string `json:"url" validate:"required"`
 	// The name of the column that contains the unique ID, used as `objectID` in Algolia.
 	UniqueIDColumn *string `json:"uniqueIDColumn,omitempty"`
 	// Mapping of type for every column. For example {\"myColumn\": \"boolean\", \"myOtherColumn\": \"json\"}.

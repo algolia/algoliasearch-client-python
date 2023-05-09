@@ -8,8 +8,8 @@ import (
 
 // SegmentParentConditions The conditions that define which user profiles are included in the segment.  Can contain operands and a maximum of 1 level of nested conditions.
 type SegmentParentConditions struct {
-	Operator SegmentConditionOperator         `json:"operator"`
-	Operands []SegmentParentConditionOperands `json:"operands"`
+	Operator SegmentConditionOperator         `json:"operator" validate:"required"`
+	Operands []SegmentParentConditionOperands `json:"operands" validate:"required"`
 }
 
 // NewSegmentParentConditions instantiates a new SegmentParentConditions object

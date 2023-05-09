@@ -8,8 +8,8 @@ import (
 
 // PredictionsOrderValueSuccess Prediction for the **order_value** model.
 type PredictionsOrderValueSuccess struct {
-	Value         float64 `json:"value"`
-	LastUpdatedAt string  `json:"lastUpdatedAt"`
+	Value         float64 `json:"value" validate:"required"`
+	LastUpdatedAt string  `json:"lastUpdatedAt" validate:"required"`
 }
 
 // NewPredictionsOrderValueSuccess instantiates a new PredictionsOrderValueSuccess object

@@ -9,9 +9,9 @@ import (
 // ClickPosition struct for ClickPosition
 type ClickPosition struct {
 	// Range of positions with the following pattern: - Positions from 1 to 10 included are displayed in separated groups. - Positions from 11 to 20 included are grouped together. - Positions from 21 and up are grouped together.
-	Position []int32 `json:"position"`
+	Position []int32 `json:"position" validate:"required"`
 	// The number of click event.
-	ClickCount int32 `json:"clickCount"`
+	ClickCount int32 `json:"clickCount" validate:"required"`
 }
 
 // NewClickPosition instantiates a new ClickPosition object

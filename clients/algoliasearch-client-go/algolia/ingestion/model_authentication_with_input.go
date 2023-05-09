@@ -9,16 +9,16 @@ import (
 // AuthenticationWithInput struct for AuthenticationWithInput
 type AuthenticationWithInput struct {
 	// The authentication UUID.
-	AuthenticationID string             `json:"authenticationID"`
-	Type             AuthenticationType `json:"type"`
+	AuthenticationID string             `json:"authenticationID" validate:"required"`
+	Type             AuthenticationType `json:"type" validate:"required"`
 	// An human readable name describing the object.
-	Name     string    `json:"name"`
+	Name     string    `json:"name" validate:"required"`
 	Platform *Platform `json:"platform,omitempty"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt" validate:"required"`
 	// Date of last update (RFC3339 format).
 	UpdatedAt *string   `json:"updatedAt,omitempty"`
-	Input     AuthInput `json:"input"`
+	Input     AuthInput `json:"input" validate:"required"`
 }
 
 type AuthenticationWithInputOption func(f *AuthenticationWithInput)

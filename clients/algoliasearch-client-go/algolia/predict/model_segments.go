@@ -9,9 +9,9 @@ import (
 // Segments Segments that the user belongs to.
 type Segments struct {
 	// List of computed segments IDs.
-	Computed []string `json:"computed"`
+	Computed []string `json:"computed" validate:"required"`
 	// List of custom segments IDs.
-	Custom []string `json:"custom"`
+	Custom []string `json:"custom" validate:"required"`
 }
 
 // NewSegments instantiates a new Segments object

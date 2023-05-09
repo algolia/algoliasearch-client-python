@@ -9,9 +9,9 @@ import (
 // UpdateApiKeyResponse struct for UpdateApiKeyResponse
 type UpdateApiKeyResponse struct {
 	// The API key.
-	Key string `json:"key"`
+	Key string `json:"key" validate:"required"`
 	// Date of last update (ISO-8601 format).
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 
 // NewUpdateApiKeyResponse instantiates a new UpdateApiKeyResponse object

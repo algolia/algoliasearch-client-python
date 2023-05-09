@@ -9,13 +9,13 @@ import (
 // QuerySuggestionsIndexWithIndexParam struct for QuerySuggestionsIndexWithIndexParam
 type QuerySuggestionsIndexWithIndexParam struct {
 	// List of source indices used to generate a Query Suggestions index.
-	SourceIndices []SourceIndex `json:"sourceIndices"`
+	SourceIndices []SourceIndex `json:"sourceIndices" validate:"required"`
 	// De-duplicate singular and plural suggestions. For example, let's say your index contains English content, and that two suggestions “shoe” and “shoes” end up in your Query Suggestions index. If the English language is configured, only the most popular of those two suggestions would remain.
 	Languages []string `json:"languages,omitempty"`
 	// List of words and patterns to exclude from the Query Suggestions index.
 	Exclude []string `json:"exclude,omitempty"`
 	// Index name to target.
-	IndexName string `json:"indexName"`
+	IndexName string `json:"indexName" validate:"required"`
 }
 
 type QuerySuggestionsIndexWithIndexParamOption func(f *QuerySuggestionsIndexWithIndexParam)

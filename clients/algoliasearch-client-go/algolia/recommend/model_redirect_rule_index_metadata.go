@@ -9,14 +9,14 @@ import (
 // RedirectRuleIndexMetadata struct for RedirectRuleIndexMetadata
 type RedirectRuleIndexMetadata struct {
 	// Source index for the redirect rule.
-	Source string `json:"source"`
+	Source string `json:"source" validate:"required"`
 	// Destination index for the redirect rule.
-	Dest string `json:"dest"`
+	Dest string `json:"dest" validate:"required"`
 	// Reason for the redirect rule.
-	Reason string `json:"reason"`
+	Reason string `json:"reason" validate:"required"`
 	// Status for the redirect rule.
-	Succeed bool                          `json:"succeed"`
-	Data    RedirectRuleIndexMetadataData `json:"data"`
+	Succeed bool                          `json:"succeed" validate:"required"`
+	Data    RedirectRuleIndexMetadataData `json:"data" validate:"required"`
 }
 
 // NewRedirectRuleIndexMetadata instantiates a new RedirectRuleIndexMetadata object
