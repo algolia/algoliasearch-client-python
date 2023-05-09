@@ -17,6 +17,7 @@ import kotlinx.serialization.json.*
  * @param progress
  * @param outcome
  * @param reason Explains the result of outcome.
+ * @param reasonCode
  * @param startedAt Date of start (RFC3339 format).
  * @param finishedAt Date of finish (RFC3339 format).
  */
@@ -47,6 +48,8 @@ public data class Run(
 
   /** Explains the result of outcome. */
   @SerialName(value = "reason") val reason: String? = null,
+
+  @SerialName(value = "reasonCode") val reasonCode: RunReasonCode? = null,
 
   /** Date of start (RFC3339 format). */
   @SerialName(value = "startedAt") val startedAt: String? = null,

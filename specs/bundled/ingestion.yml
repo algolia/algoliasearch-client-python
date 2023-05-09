@@ -1255,6 +1255,16 @@ components:
       enum:
         - success
         - failure
+    RunReasonCode:
+      type: string
+      description: An identifier that pairs with the outcome reason.
+      enum:
+        - internal
+        - critical
+        - no_events
+        - too_many_errors
+        - ok
+        - discarded
     RunType:
       type: string
       enum:
@@ -1291,6 +1301,8 @@ components:
         reason:
           type: string
           description: Explains the result of outcome.
+        reasonCode:
+          $ref: '#/components/schemas/RunReasonCode'
         type:
           $ref: '#/components/schemas/RunType'
         createdAt:

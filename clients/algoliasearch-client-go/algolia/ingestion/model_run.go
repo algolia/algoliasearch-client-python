@@ -17,8 +17,9 @@ type Run struct {
 	Progress *RunProgress `json:"progress,omitempty"`
 	Outcome  *RunOutcome  `json:"outcome,omitempty"`
 	// Explains the result of outcome.
-	Reason *string `json:"reason,omitempty"`
-	Type   RunType `json:"type" validate:"required"`
+	Reason     *string        `json:"reason,omitempty"`
+	ReasonCode *RunReasonCode `json:"reasonCode,omitempty"`
+	Type       RunType        `json:"type" validate:"required"`
 	// Date of creation (RFC3339 format).
 	CreatedAt string `json:"createdAt" validate:"required"`
 	// Date of last update (RFC3339 format).
@@ -46,6 +47,12 @@ func WithRunOutcome(val RunOutcome) RunOption {
 func WithRunReason(val string) RunOption {
 	return func(f *Run) {
 		f.Reason = &val
+	}
+}
+
+func WithRunReasonCode(val RunReasonCode) RunOption {
+	return func(f *Run) {
+		f.ReasonCode = &val
 	}
 }
 
@@ -280,6 +287,38 @@ func (o *Run) SetReason(v string) {
 	o.Reason = &v
 }
 
+// GetReasonCode returns the ReasonCode field value if set, zero value otherwise.
+func (o *Run) GetReasonCode() RunReasonCode {
+	if o == nil || o.ReasonCode == nil {
+		var ret RunReasonCode
+		return ret
+	}
+	return *o.ReasonCode
+}
+
+// GetReasonCodeOk returns a tuple with the ReasonCode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Run) GetReasonCodeOk() (*RunReasonCode, bool) {
+	if o == nil || o.ReasonCode == nil {
+		return nil, false
+	}
+	return o.ReasonCode, true
+}
+
+// HasReasonCode returns a boolean if a field has been set.
+func (o *Run) HasReasonCode() bool {
+	if o != nil && o.ReasonCode != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetReasonCode gets a reference to the given RunReasonCode and assigns it to the ReasonCode field.
+func (o *Run) SetReasonCode(v RunReasonCode) {
+	o.ReasonCode = &v
+}
+
 // GetType returns the Type field value
 func (o *Run) GetType() RunType {
 	if o == nil {
@@ -439,6 +478,9 @@ func (o Run) MarshalJSON() ([]byte, error) {
 	if o.Reason != nil {
 		toSerialize["reason"] = o.Reason
 	}
+	if o.ReasonCode != nil {
+		toSerialize["reasonCode"] = o.ReasonCode
+	}
 	if true {
 		toSerialize["type"] = o.Type
 	}
@@ -466,6 +508,7 @@ func (o Run) String() string {
 	out += fmt.Sprintf("  progress=%v\n", o.Progress)
 	out += fmt.Sprintf("  outcome=%v\n", o.Outcome)
 	out += fmt.Sprintf("  reason=%v\n", o.Reason)
+	out += fmt.Sprintf("  reasonCode=%v\n", o.ReasonCode)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
