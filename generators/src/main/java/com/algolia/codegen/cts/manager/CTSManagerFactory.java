@@ -16,6 +16,8 @@ public class CTSManagerFactory {
         return new PhpCTSManager();
       case "kotlin":
         return new KotlinCTSManager(client);
+      case "go":
+        return new GoCTSManager();
     }
     return null;
   }

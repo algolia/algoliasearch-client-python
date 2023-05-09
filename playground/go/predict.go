@@ -14,7 +14,7 @@ func testPredict(appID, apiKey string) int {
 		predict.WithAllParamsTypesToRetrieve(predict.AllowedTypesToRetrieveEnumValues),
 	))
 	userProfile, err := predictClient.FetchUserProfile(
-		predictClient.NewApiFetchUserProfileRequest("userId").WithParams(params),
+		predictClient.NewApiFetchUserProfileRequest("userId").WithParams(&params),
 	)
 	if err != nil {
 		fmt.Printf("request error with FetchUserProfile: %v\n", err)

@@ -29,7 +29,7 @@ func testRecommend(appID, apiKey string) int {
 	}
 
 	searchResponse, err := recommendClient.GetRecommendations(
-		recommendClient.NewApiGetRecommendationsRequest().WithGetRecommendationsParams(params),
+		recommendClient.NewApiGetRecommendationsRequest().WithGetRecommendationsParams(&params),
 	)
 	if err != nil {
 		fmt.Printf("request error with SearchSingleIndex: %v\n", err)

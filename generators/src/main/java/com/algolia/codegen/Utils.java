@@ -42,7 +42,7 @@ public class Utils {
    * escape '/' in the path variable
    */
   public static CodegenOperation specifyCustomRequest(CodegenOperation ope) {
-    if (CUSTOM_METHOD.contains(ope.nickname)) {
+    if (CUSTOM_METHOD.contains(ope.operationIdOriginal)) {
       ope.vendorExtensions.put("x-is-custom-request", true);
     }
     return ope;
@@ -50,7 +50,14 @@ public class Utils {
 
   /** Returns the client name for the given language */
   public static String createClientName(String client, String language) {
-    return language.equals("javascript") ? camelize(client) : capitalize(camelize(client));
+    switch (language) {
+      case "javascript":
+        return camelize(client);
+      case "go":
+        return client;
+      default:
+        return capitalize(camelize(client));
+    }
   }
 
   // testInput -> test-input

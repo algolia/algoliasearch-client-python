@@ -5,6 +5,7 @@ package {{packageName}}
 import (
 	"bytes"
 	"context"
+  "encoding/json"
 	"io"
 	"net/http"
 	"net/url"
@@ -30,7 +31,7 @@ func QueryParamOption(name string, val any) Option {
 func HeaderParamOption(name string, val any) Option {
 	return Option{
     optionType:  "header",
-		name:  "itemsPerPage",
+		name:  name,
 		value: parameterToString(val),
 	}
 }
@@ -39,8 +40,34 @@ func HeaderParamOption(name string, val any) Option {
 
   type {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request struct {
 {{#allParams}}
-	{{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}}
+	{{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}}
 {{/allParams}}
+}
+
+func (r *{{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+  {{#allParams}}
+	if v, ok := req["{{#isQueryParam}}{{baseName}}{{/isQueryParam}}{{^isQueryParam}}{{paramName}}{{/isQueryParam}}"]; ok { //{{paramName}}
+		err = json.Unmarshal(v, &r.{{paramName}})
+		if err != nil {
+      err = json.Unmarshal(b, &r.{{paramName}})
+      if err != nil {
+			  return err
+      }
+		}
+	} {{#isBodyParam}}{{#required}}else {
+    err = json.Unmarshal(b, &r.{{paramName}})
+    if err != nil {
+      return err
+    }
+  }{{/required}}{{/isBodyParam}}
+  {{/allParams}}
+
+  return nil
 }
 
 {{#allParams}}
@@ -51,8 +78,8 @@ func HeaderParamOption(name string, val any) Option {
 {{#isDeprecated}}
 // Deprecated
 {{/isDeprecated}}
-func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request) With{{#lambda.titlecase}}{{paramName}}{{/lambda.titlecase}}({{paramName}} {{{dataType}}}) {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request {
-	r.{{paramName}} = {{^isFreeFormObject}}{{^isPrimitiveType}}&{{/isPrimitiveType}}{{/isFreeFormObject}}{{paramName}}
+func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request) With{{#lambda.titlecase}}{{paramName}}{{/lambda.titlecase}}({{paramName}} {{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{{dataType}}}) {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request {
+	r.{{paramName}} = {{paramName}}
 	return r
 }
 
@@ -147,24 +174,34 @@ func (c *APIClient) {{nickname}}(r {{#structPrefix}}{{&classname}}{{/structPrefi
 	{{/required}}
 	{{/allParams}}
 
+  {{#vendorExtensions.x-is-custom-request}}
+    {{#queryParams}}
+      {{^required}}if !isNilorEmpty(r.{{paramName}}) { {{/required}}
+          for k, v := range r.{{paramName}} {
+           queryParams.Set(k, parameterToString(v))
+          }
+      {{^required}} } {{/required}}
+    {{/queryParams}}
+  {{/vendorExtensions.x-is-custom-request}}
+  {{^vendorExtensions.x-is-custom-request}}
 	{{#queryParams}}
 	{{#required}}
-	queryParams.Add("{{baseName}}", parameterToString({{^isFreeFormObject}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isFreeFormObject}}r.{{paramName}}))
+	queryParams.Set("{{baseName}}", parameterToString({{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}r.{{paramName}}))
 	{{/required}}
   {{^required}}
   if !isNilorEmpty(r.{{paramName}}) {
-    queryParams.Add("{{baseName}}", parameterToString({{^isFreeFormObject}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isFreeFormObject}}r.{{paramName}}))
+    queryParams.Set("{{baseName}}", parameterToString({{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}r.{{paramName}}))
   }
   {{/required}}
 	{{/queryParams}}
-
+  {{/vendorExtensions.x-is-custom-request}}
   {{#headerParams}}
 	{{#required}}
-	headers["{{baseName}}"] = parameterToString({{^isFreeFormObject}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isFreeFormObject}}r.{{paramName}})
+	headers["{{baseName}}"] = parameterToString({{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}r.{{paramName}})
 	{{/required}}
   {{^required}}
   if !isNilorEmpty(r.{{paramName}}) {
-    headers["{{baseName}}"] = parameterToString({{^isFreeFormObject}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isFreeFormObject}}r.{{paramName}})
+    headers["{{baseName}}"] = parameterToString({{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}r.{{paramName}})
   }
   {{/required}}
 {{/headerParams}}
@@ -173,15 +210,19 @@ func (c *APIClient) {{nickname}}(r {{#structPrefix}}{{&classname}}{{/structPrefi
   for _, opt := range opts {
     switch opt.optionType {
       case "query":
-        queryParams.Add(opt.name, opt.value)
+        queryParams.Set(opt.name, opt.value)
       case "header":
         headers[opt.name] = opt.value
     }
   }
 
 {{#bodyParams}}
-  // body params
-  postBody = r.{{paramName}}
+  // body params{{^required}}
+  if isNilorEmpty(r.{{paramName}}) {
+    postBody = "{}"
+  } else { {{/required}}
+    postBody = r.{{paramName}}{{^required}}
+   } {{/required}}
 {{/bodyParams}}
 	req, err := c.prepareRequest(context.Background(), requestPath, http.Method{{httpMethod}}, postBody, headers, queryParams)
 	if err != nil {

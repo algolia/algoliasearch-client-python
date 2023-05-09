@@ -1,4 +1,4 @@
-import { run, runComposerUpdate } from '../common';
+import { DOCKER, run, runComposerUpdate } from '../common';
 import { createSpinner } from '../spinners';
 
 async function runCtsOne(language: string): Promise<void> {
@@ -24,6 +24,17 @@ async function runCtsOne(language: string): Promise<void> {
     }
     case 'kotlin':
       await run('./gradle/gradlew --no-daemon -p tests/output/kotlin allTests');
+      break;
+    case 'go':
+      if (DOCKER) {
+        await run('/usr/local/go/bin/go test -count 1 ./...', {
+          cwd: 'tests/output/go',
+        });
+      } else {
+        await run('go test -count 1 ./...', {
+          cwd: 'tests/output/go',
+        });
+      }
       break;
     default:
       spinner.warn(`skipping unknown language '${language}' to run the CTS`);

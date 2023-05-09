@@ -264,9 +264,14 @@ export function wait(waitTime: number): Promise<void> {
 }
 
 export function createClientName(client: string, language: string): string {
-  return language === 'javascript'
-    ? camelize(client)
-    : capitalize(camelize(client));
+  switch (language) {
+    case 'javascript':
+      return camelize(client);
+    case 'go':
+      return client;
+    default:
+      return capitalize(camelize(client));
+  }
 }
 
 /**

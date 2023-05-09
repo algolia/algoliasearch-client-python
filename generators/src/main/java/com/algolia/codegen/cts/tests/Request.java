@@ -16,6 +16,7 @@ public class Request {
   public Map<String, Object> parameters;
   public RequestOptions requestOptions;
   public RequestProp request;
+  public Map<String, Object> extras;
 
   @Override
   public String toString() {
@@ -25,6 +26,7 @@ public class Request {
     sb.append("    parameters: ").append(parameters).append("\n");
     sb.append("    requestOptions: ").append(requestOptions).append("\n");
     sb.append("    request: ").append(request).append("\n");
+    sb.append("    extras: ").append(extras).append("\n");
     sb.append("}");
     return sb.toString();
   }

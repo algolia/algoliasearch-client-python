@@ -1,0 +1,105 @@
+package tests
+
+import (
+  "encoding/json"
+  "net/url"
+  "testing"
+
+  "github.com/kinbiko/jsonassert"
+  "github.com/stretchr/testify/require"
+
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/{{clientImport}}"
+)
+
+func create{{#lambda.titlecase}}{{clientPrefix}}{{/lambda.titlecase}}Client() (*{{clientPrefix}}.APIClient, *echoRequester) {
+  echo := &echoRequester{}
+  cfg := {{clientPrefix}}.Configuration{
+    AppID:     "appID",
+    ApiKey:    "apiKey",{{#hasRegionalHost}}
+    Region:    {{clientPrefix}}.{{#lambda.uppercase}}{{defaultRegion}}{{/lambda.uppercase}},{{/hasRegionalHost}}
+    Requester: echo,
+  }
+  client := {{clientPrefix}}.NewClientWithConfig(cfg)
+
+  return client, echo
+}
+
+{{#blocksRequests}}
+func Test{{#lambda.titlecase}}{{clientPrefix}}{{/lambda.titlecase}}_{{#lambda.titlecase}}{{operationId}}{{/lambda.titlecase}}(t *testing.T) {
+    client, echo := create{{#lambda.titlecase}}{{clientPrefix}}{{/lambda.titlecase}}Client()
+
+    tests := []struct {
+    name     string
+    testFunc func(t *testing.T)
+  }{
+{{#tests}} {
+    name: "{{{testName}}}",
+    testFunc: func(t *testing.T) { {{#extras}}{{#skipForGo}}
+      t.Skip("skipping test for go client"){{/skipForGo}}{{/extras}}
+      parametersStr := `{{{parameters}}}`
+      req := {{clientPrefix}}.Api{{#lambda.titlecase}}{{method}}{{/lambda.titlecase}}Request{}
+      require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+      {{#hasRequestOptions}}
+        var opts []{{clientPrefix}}.Option
+        {{#requestOptions.queryParameters}}
+        requestOptionParameters := map[string]any{}
+        require.NoError(t, json.Unmarshal([]byte(`{{{parameters}}}`), &requestOptionParameters))
+        for k, v := range requestOptionParameters {
+          opts = append(opts, {{clientPrefix}}.QueryParamOption(k, v))
+        }
+        {{/requestOptions.queryParameters}}
+        {{#requestOptions.headers}}
+        requestOptionHeaders := map[string]any{}
+        require.NoError(t, json.Unmarshal([]byte(`{{{parameters}}}`), &requestOptionHeaders))
+        for k, v := range requestOptionHeaders {
+          opts = append(opts, {{clientPrefix}}.HeaderParamOption(k, v))
+        }
+        {{/requestOptions.headers}}
+      {{/hasRequestOptions}}
+      _, err := client.{{#lambda.titlecase}}{{method}}{{/lambda.titlecase}}(req{{#hasRequestOptions}}, opts...{{/hasRequestOptions}})
+      require.NoError(t, err)
+
+      expectedPath, err := url.QueryUnescape("{{{request.path}}}")
+      require.NoError(t, err)
+      require.Equal(t, expectedPath, echo.path)
+      require.Equal(t, "{{{request.method}}}", echo.method)
+
+      {{#request.body}}
+      ja := jsonassert.New(t)
+      ja.Assertf(*echo.body, `{{{request.body}}}`)
+      {{/request.body}}
+      {{^request.body}}
+      {{#assertNullBody}}
+        require.Nil(t, echo.body)
+      {{/assertNullBody}}
+      {{^assertNullBody}}
+        require.Empty(t, echo.body);
+      {{/assertNullBody}}
+      {{/request.body}}
+      {{#request.headers}}
+        headers := map[string]string{}
+        require.NoError(t, json.Unmarshal([]byte(`{{{.}}}`), &headers))
+        for k, v := range headers {
+          require.Equal(t, v, echo.header.Get(k))
+        }
+      {{/request.headers}}
+      {{#request.queryParameters}}
+        queryParams := map[string]string{}
+        require.NoError(t, json.Unmarshal([]byte(`{{{.}}}`), &queryParams))
+        for k, v := range queryParams {
+            require.Equal(t, v, echo.query.Get(k))
+        }
+      {{/request.queryParameters}}
+      },
+    },
+{{/tests}}
+  }
+    for _, test := range tests {
+    test := test
+    t.Run(test.name, func(t *testing.T) {
+      test.testFunc(t)
+    })
+  }
+}
+
+{{/blocksRequests}}

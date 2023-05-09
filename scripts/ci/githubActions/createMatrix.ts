@@ -109,6 +109,9 @@ async function getClientMatrix(baseBranch: string): Promise<void> {
       case 'java':
         testsToStore = `${testsToStore} ${testsRootFolder}/build.gradle`;
         break;
+      case 'go':
+        testsToStore = `${testsToStore} ${testsOutputBase}/methods/requests/common.go`;
+        break;
       /**
        * The CI runs on a node docker image, therefore it's not needed to run
        * via the CLI for the JavaScript client.

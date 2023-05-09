@@ -55,6 +55,9 @@
           ]
         }
       }
+    },
+    "extras": {
+      "skipForGo": true
     }
   },
   {
@@ -99,6 +102,9 @@
           ]
         }
       }
+    },
+    "extras": {
+      "skipForGo": true
     }
   },
   {

@@ -45,7 +45,7 @@
     "customGenerator": "algolia-go",
     "tests": {
       "extension": "_test.go",
-      "outputFolder": ""
+      "outputFolder": "tests"
     }
   },
   "kotlin": {

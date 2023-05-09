@@ -38,6 +38,9 @@
           ]
         }
       }
+    },
+    "extras": {
+      "skipForGo": true
     }
   },
   {

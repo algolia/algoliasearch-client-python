@@ -125,6 +125,12 @@ public class ParametersWithDataType {
       finalParamName = paramName.substring(1);
     }
 
+    // type is a reserved keyword in go, we need to add more generic way to handle reversed keywords
+    // for all languages.
+    if (language.equals("go") && paramName.equals("type")) {
+      finalParamName = "type_";
+    }
+
     Map<String, Object> testOutput = createDefaultOutput();
     testOutput.put("key", finalParamName);
     testOutput.put("isKeyAllUpperCase", StringUtils.isAllUpperCase(finalParamName));
