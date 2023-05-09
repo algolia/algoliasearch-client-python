@@ -15,7 +15,7 @@
     "folder": "clients/algoliasearch-client-javascript",
     "npmNamespace": "@algolia",
     "gitRepoId": "algoliasearch-client-javascript",
-    "utilsPackageVersion": "5.0.0-alpha.60",
+    "utilsPackageVersion": "5.0.0-alpha.61",
     "modelFolder": "model",
     "apiFolder": "src",
     "customGenerator": "algolia-javascript",
@@ -27,7 +27,7 @@
   "php": {
     "folder": "clients/algoliasearch-client-php",
     "gitRepoId": "algoliasearch-client-php",
-    "packageVersion": "4.0.0-alpha.58",
+    "packageVersion": "4.0.0-alpha.59",
     "modelFolder": "lib/Model",
     "customGenerator": "algolia-php",
     "apiFolder": "lib/Api",
@@ -39,7 +39,7 @@
   "go": {
     "folder": "clients/algoliasearch-client-go",
     "gitRepoId": "algoliasearch-client-go",
-    "packageVersion": "4.0.0-alpha.7",
+    "packageVersion": "4.0.0-alpha.8",
     "modelFolder": "algolia/models",
     "apiFolder": "algolia/api",
     "customGenerator": "algolia-go",
