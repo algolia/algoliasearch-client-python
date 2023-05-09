@@ -97,12 +97,20 @@ func (c *APIClient) NewApi{{{nickname}}}Request({{#pathParams}} {{paramName}} {{
 	}
 }
 
+// {{nickname}} wraps {{nickname}}WithContext using context.Background.
+{{#isDeprecated}}
+// Deprecated
+{{/isDeprecated}}
+func (c *APIClient) {{nickname}}(r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request, opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
+  return c.{{nickname}}WithContext(context.Background(), r, opts...)
+}
+
 // {{{description}}}{{#returnType}}
 //  @return {{{.}}}{{/returnType}}
 {{#isDeprecated}}
 // Deprecated
 {{/isDeprecated}}
-func (c *APIClient) {{nickname}}(r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request, opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
+func (c *APIClient) {{nickname}}WithContext(ctx context.Context, r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request, opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
 	var (
     postBody     any
 		{{#returnType}}
@@ -224,7 +232,7 @@ func (c *APIClient) {{nickname}}(r {{#structPrefix}}{{&classname}}{{/structPrefi
     postBody = r.{{paramName}}{{^required}}
    } {{/required}}
 {{/bodyParams}}
-	req, err := c.prepareRequest(context.Background(), requestPath, http.Method{{httpMethod}}, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.Method{{httpMethod}}, postBody, headers, queryParams)
 	if err != nil {
 		return {{#returnType}}returnValue, {{/returnType}}err
 	}
