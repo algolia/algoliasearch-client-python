@@ -97,6 +97,7 @@ public class TestsRequest extends TestsGenerator {
           test.put("request", req.request);
           test.put("hasParameters", req.parameters.size() != 0);
           test.put("extras", req.extras);
+          test.put("hasOperationParams", ope.hasParams);
 
           if (req.requestOptions != null) {
             test.put("hasRequestOptions", true);

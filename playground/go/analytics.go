@@ -11,7 +11,7 @@ func testAnalytics(appID, apiKey string) int {
 	analyticsClient := analytics.NewClient(appID, apiKey, analytics.US)
 
 	getTopFilterForAttributeResponse, err := analyticsClient.GetTopFilterForAttribute(
-		analyticsClient.NewApiGetTopFilterForAttributeRequest("myAttribute1,myAttribute2").WithIndex(indexName),
+		analyticsClient.NewApiGetTopFilterForAttributeRequest("myAttribute1,myAttribute2", indexName),
 	)
 	if err != nil {
 		fmt.Printf("request error with GetTopFilterForAttribute: %v\n", err)

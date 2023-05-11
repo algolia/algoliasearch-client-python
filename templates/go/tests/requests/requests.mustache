@@ -36,9 +36,11 @@ func Test{{#lambda.titlecase}}{{clientPrefix}}{{/lambda.titlecase}}_{{#lambda.ti
     name: "{{{testName}}}",
     testFunc: func(t *testing.T) { {{#extras}}{{#skipForGo}}
       t.Skip("skipping test for go client"){{/skipForGo}}{{/extras}}
+      {{#hasOperationParams}}
       parametersStr := `{{{parameters}}}`
       req := {{clientPrefix}}.Api{{#lambda.titlecase}}{{method}}{{/lambda.titlecase}}Request{}
       require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+      {{/hasOperationParams}}
       {{#hasRequestOptions}}
         var opts []{{clientPrefix}}.Option
         {{#requestOptions.queryParameters}}
@@ -56,7 +58,7 @@ func Test{{#lambda.titlecase}}{{clientPrefix}}{{/lambda.titlecase}}_{{#lambda.ti
         }
         {{/requestOptions.headers}}
       {{/hasRequestOptions}}
-      _, err := client.{{#lambda.titlecase}}{{method}}{{/lambda.titlecase}}(req{{#hasRequestOptions}}, opts...{{/hasRequestOptions}})
+      _, err := client.{{#lambda.titlecase}}{{method}}{{/lambda.titlecase}}({{#hasOperationParams}}req{{/hasOperationParams}}{{#hasRequestOptions}}{{#hasOperationParams}},{{/hasOperationParams}} opts...{{/hasRequestOptions}})
       require.NoError(t, err)
 
       expectedPath, err := url.QueryUnescape("{{{request.path}}}")

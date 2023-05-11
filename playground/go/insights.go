@@ -18,7 +18,7 @@ func testInsights(appID, apiKey string) int {
 			insights.WithInsightEventQueryID("myQueryID")),
 	})
 	pushEventsResponse, err := insightsClient.PushEvents(
-		insightsClient.NewApiPushEventsRequest().WithInsightEvents(events),
+		insightsClient.NewApiPushEventsRequest(events),
 	)
 	if err != nil {
 		fmt.Printf("request error with PushEvents: %v\n", err)

@@ -37,7 +37,7 @@ func HeaderParamOption(name string, val any) Option {
 }
 
 {{#operation}}
-
+  {{#hasParams}}
   type {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request struct {
 {{#allParams}}
 	{{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}}
@@ -51,7 +51,7 @@ func (r *{{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/
 		return err
 	}
   {{#allParams}}
-	if v, ok := req["{{#isQueryParam}}{{baseName}}{{/isQueryParam}}{{^isQueryParam}}{{paramName}}{{/isQueryParam}}"]; ok { //{{paramName}}
+	if v, ok := req["{{#isQueryParam}}{{baseName}}{{/isQueryParam}}{{^isQueryParam}}{{paramName}}{{/isQueryParam}}"]; ok {
 		err = json.Unmarshal(v, &r.{{paramName}})
 		if err != nil {
       err = json.Unmarshal(b, &r.{{paramName}})
@@ -71,7 +71,7 @@ func (r *{{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/
 }
 
 {{#allParams}}
-{{^isPathParam}}
+{{^required}}
 {{#description}}
 // {{.}}
 {{/description}}
@@ -83,26 +83,26 @@ func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/s
 	return r
 }
 
-{{/isPathParam}}
+{{/required}}
 {{/allParams}}
 {{#isDeprecated}}
 // Deprecated
 {{/isDeprecated}}
 //@return {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request
-func (c *APIClient) NewApi{{{nickname}}}Request({{#pathParams}} {{paramName}} {{{dataType}}} {{^-last}},{{/-last}}{{/pathParams}}) {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request {
+func (c *APIClient) NewApi{{{nickname}}}Request({{#requiredParams}} {{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}} {{^-last}},{{/-last}}{{/requiredParams}}) {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request {
 	return {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request{
-		{{#pathParams}}
+		{{#requiredParams}}
 		{{paramName}}: {{paramName}},
-		{{/pathParams}}
+		{{/requiredParams}}
 	}
 }
-
+{{/hasParams}}
 // {{nickname}} wraps {{nickname}}WithContext using context.Background.
 {{#isDeprecated}}
 // Deprecated
 {{/isDeprecated}}
-func (c *APIClient) {{nickname}}(r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request, opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
-  return c.{{nickname}}WithContext(context.Background(), r, opts...)
+func (c *APIClient) {{nickname}}({{#hasParams}}r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request,{{/hasParams}} opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
+  return c.{{nickname}}WithContext(context.Background(), {{#hasParams}}r,{{/hasParams}} opts...)
 }
 
 // {{{description}}}{{#returnType}}
@@ -110,7 +110,7 @@ func (c *APIClient) {{nickname}}(r {{#structPrefix}}{{&classname}}{{/structPrefi
 {{#isDeprecated}}
 // Deprecated
 {{/isDeprecated}}
-func (c *APIClient) {{nickname}}WithContext(ctx context.Context, r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request, opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
+func (c *APIClient) {{nickname}}WithContext(ctx context.Context, {{#hasParams}}r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request,{{/hasParams}} opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
 	var (
     postBody     any
 		{{#returnType}}

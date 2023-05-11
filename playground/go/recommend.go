@@ -15,7 +15,7 @@ func testRecommend(appID, apiKey string) int {
 		})
 	*/
 	// alternative way to create the payloads, a similar approach can be used with any of the other clients
-	params := recommend.GetRecommendationsParams{
+	params := &recommend.GetRecommendationsParams{
 		Requests: []recommend.RecommendationsRequest{
 			{
 				RecommendationRequest: &recommend.RecommendationRequest{
@@ -29,7 +29,7 @@ func testRecommend(appID, apiKey string) int {
 	}
 
 	searchResponse, err := recommendClient.GetRecommendations(
-		recommendClient.NewApiGetRecommendationsRequest().WithGetRecommendationsParams(&params),
+		recommendClient.NewApiGetRecommendationsRequest(params),
 	)
 	if err != nil {
 		fmt.Printf("request error with SearchSingleIndex: %v\n", err)
