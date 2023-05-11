@@ -45,7 +45,7 @@ func (r *ApiActivateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["activateModelParams"]; ok { //activateModelParams
+	if v, ok := req["activateModelParams"]; ok {
 		err = json.Unmarshal(v, &r.activateModelParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.activateModelParams)
@@ -63,14 +63,11 @@ func (r *ApiActivateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiActivateModelInstanceRequest) WithActivateModelParams(activateModelParams *ActivateModelParams) ApiActivateModelInstanceRequest {
-	r.activateModelParams = activateModelParams
-	return r
-}
-
 // @return ApiActivateModelInstanceRequest
-func (c *APIClient) NewApiActivateModelInstanceRequest() ApiActivateModelInstanceRequest {
-	return ApiActivateModelInstanceRequest{}
+func (c *APIClient) NewApiActivateModelInstanceRequest(activateModelParams *ActivateModelParams) ApiActivateModelInstanceRequest {
+	return ApiActivateModelInstanceRequest{
+		activateModelParams: activateModelParams,
+	}
 }
 
 // ActivateModelInstance wraps ActivateModelInstanceWithContext using context.Background.
@@ -177,7 +174,7 @@ func (r *ApiCreateSegmentRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["createSegmentParams"]; ok { //createSegmentParams
+	if v, ok := req["createSegmentParams"]; ok {
 		err = json.Unmarshal(v, &r.createSegmentParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.createSegmentParams)
@@ -195,14 +192,11 @@ func (r *ApiCreateSegmentRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiCreateSegmentRequest) WithCreateSegmentParams(createSegmentParams *CreateSegmentParams) ApiCreateSegmentRequest {
-	r.createSegmentParams = createSegmentParams
-	return r
-}
-
 // @return ApiCreateSegmentRequest
-func (c *APIClient) NewApiCreateSegmentRequest() ApiCreateSegmentRequest {
-	return ApiCreateSegmentRequest{}
+func (c *APIClient) NewApiCreateSegmentRequest(createSegmentParams *CreateSegmentParams) ApiCreateSegmentRequest {
+	return ApiCreateSegmentRequest{
+		createSegmentParams: createSegmentParams,
+	}
 }
 
 // CreateSegment wraps CreateSegmentWithContext using context.Background.
@@ -319,7 +313,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -328,7 +322,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -469,7 +463,7 @@ func (r *ApiDeleteModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["modelID"]; ok { //modelID
+	if v, ok := req["modelID"]; ok {
 		err = json.Unmarshal(v, &r.modelID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.modelID)
@@ -598,7 +592,7 @@ func (r *ApiDeleteSegmentRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["segmentID"]; ok { //segmentID
+	if v, ok := req["segmentID"]; ok {
 		err = json.Unmarshal(v, &r.segmentID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.segmentID)
@@ -727,7 +721,7 @@ func (r *ApiDeleteUserProfileRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["userID"]; ok { //userID
+	if v, ok := req["userID"]; ok {
 		err = json.Unmarshal(v, &r.userID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.userID)
@@ -856,7 +850,7 @@ func (r *ApiFetchAllSegmentsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["type"]; ok { //type_
+	if v, ok := req["type"]; ok {
 		err = json.Unmarshal(v, &r.type_)
 		if err != nil {
 			err = json.Unmarshal(b, &r.type_)
@@ -983,7 +977,7 @@ func (r *ApiFetchAllUserProfilesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["fetchAllUserProfilesParams"]; ok { //fetchAllUserProfilesParams
+	if v, ok := req["fetchAllUserProfilesParams"]; ok {
 		err = json.Unmarshal(v, &r.fetchAllUserProfilesParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.fetchAllUserProfilesParams)
@@ -1001,14 +995,11 @@ func (r *ApiFetchAllUserProfilesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiFetchAllUserProfilesRequest) WithFetchAllUserProfilesParams(fetchAllUserProfilesParams *FetchAllUserProfilesParams) ApiFetchAllUserProfilesRequest {
-	r.fetchAllUserProfilesParams = fetchAllUserProfilesParams
-	return r
-}
-
 // @return ApiFetchAllUserProfilesRequest
-func (c *APIClient) NewApiFetchAllUserProfilesRequest() ApiFetchAllUserProfilesRequest {
-	return ApiFetchAllUserProfilesRequest{}
+func (c *APIClient) NewApiFetchAllUserProfilesRequest(fetchAllUserProfilesParams *FetchAllUserProfilesParams) ApiFetchAllUserProfilesRequest {
+	return ApiFetchAllUserProfilesRequest{
+		fetchAllUserProfilesParams: fetchAllUserProfilesParams,
+	}
 }
 
 // FetchAllUserProfiles wraps FetchAllUserProfilesWithContext using context.Background.
@@ -1124,7 +1115,7 @@ func (r *ApiFetchSegmentRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["segmentID"]; ok { //segmentID
+	if v, ok := req["segmentID"]; ok {
 		err = json.Unmarshal(v, &r.segmentID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.segmentID)
@@ -1245,7 +1236,7 @@ func (r *ApiFetchUserProfileRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["userID"]; ok { //userID
+	if v, ok := req["userID"]; ok {
 		err = json.Unmarshal(v, &r.userID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.userID)
@@ -1254,7 +1245,7 @@ func (r *ApiFetchUserProfileRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["params"]; ok { //params
+	if v, ok := req["params"]; ok {
 		err = json.Unmarshal(v, &r.params)
 		if err != nil {
 			err = json.Unmarshal(b, &r.params)
@@ -1272,15 +1263,11 @@ func (r *ApiFetchUserProfileRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiFetchUserProfileRequest) WithParams(params *Params) ApiFetchUserProfileRequest {
-	r.params = params
-	return r
-}
-
 // @return ApiFetchUserProfileRequest
-func (c *APIClient) NewApiFetchUserProfileRequest(userID string) ApiFetchUserProfileRequest {
+func (c *APIClient) NewApiFetchUserProfileRequest(userID string, params *Params) ApiFetchUserProfileRequest {
 	return ApiFetchUserProfileRequest{
 		userID: userID,
+		params: params,
 	}
 }
 
@@ -1390,7 +1377,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -1399,7 +1386,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -1530,31 +1517,13 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetAvailableModelTypesRequest struct {
-}
-
-func (r *ApiGetAvailableModelTypesRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetAvailableModelTypesRequest
-func (c *APIClient) NewApiGetAvailableModelTypesRequest() ApiGetAvailableModelTypesRequest {
-	return ApiGetAvailableModelTypesRequest{}
-}
-
 // GetAvailableModelTypes wraps GetAvailableModelTypesWithContext using context.Background.
-func (c *APIClient) GetAvailableModelTypes(r ApiGetAvailableModelTypesRequest, opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
-	return c.GetAvailableModelTypesWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetAvailableModelTypes(opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
+	return c.GetAvailableModelTypesWithContext(context.Background(), opts...)
 }
 
 // @return []GetAvailableModelTypesResponseInner
-func (c *APIClient) GetAvailableModelTypesWithContext(ctx context.Context, r ApiGetAvailableModelTypesRequest, opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
+func (c *APIClient) GetAvailableModelTypesWithContext(ctx context.Context, opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
 	var (
 		postBody    any
 		returnValue []GetAvailableModelTypesResponseInner
@@ -1647,7 +1616,7 @@ func (r *ApiGetModelInstanceConfigRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["modelID"]; ok { //modelID
+	if v, ok := req["modelID"]; ok {
 		err = json.Unmarshal(v, &r.modelID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.modelID)
@@ -1766,31 +1735,13 @@ func (c *APIClient) GetModelInstanceConfigWithContext(ctx context.Context, r Api
 	return returnValue, nil
 }
 
-type ApiGetModelInstancesRequest struct {
-}
-
-func (r *ApiGetModelInstancesRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetModelInstancesRequest
-func (c *APIClient) NewApiGetModelInstancesRequest() ApiGetModelInstancesRequest {
-	return ApiGetModelInstancesRequest{}
-}
-
 // GetModelInstances wraps GetModelInstancesWithContext using context.Background.
-func (c *APIClient) GetModelInstances(r ApiGetModelInstancesRequest, opts ...Option) ([]ModelInstance, error) {
-	return c.GetModelInstancesWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetModelInstances(opts ...Option) ([]ModelInstance, error) {
+	return c.GetModelInstancesWithContext(context.Background(), opts...)
 }
 
 // @return []ModelInstance
-func (c *APIClient) GetModelInstancesWithContext(ctx context.Context, r ApiGetModelInstancesRequest, opts ...Option) ([]ModelInstance, error) {
+func (c *APIClient) GetModelInstancesWithContext(ctx context.Context, opts ...Option) ([]ModelInstance, error) {
 	var (
 		postBody    any
 		returnValue []ModelInstance
@@ -1883,7 +1834,7 @@ func (r *ApiGetModelMetricsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["modelID"]; ok { //modelID
+	if v, ok := req["modelID"]; ok {
 		err = json.Unmarshal(v, &r.modelID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.modelID)
@@ -2013,7 +1964,7 @@ func (r *ApiGetSegmentUsersRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["segmentID"]; ok { //segmentID
+	if v, ok := req["segmentID"]; ok {
 		err = json.Unmarshal(v, &r.segmentID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.segmentID)
@@ -2022,7 +1973,7 @@ func (r *ApiGetSegmentUsersRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["fetchAllUserProfilesParams"]; ok { //fetchAllUserProfilesParams
+	if v, ok := req["fetchAllUserProfilesParams"]; ok {
 		err = json.Unmarshal(v, &r.fetchAllUserProfilesParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.fetchAllUserProfilesParams)
@@ -2040,15 +1991,11 @@ func (r *ApiGetSegmentUsersRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiGetSegmentUsersRequest) WithFetchAllUserProfilesParams(fetchAllUserProfilesParams *FetchAllUserProfilesParams) ApiGetSegmentUsersRequest {
-	r.fetchAllUserProfilesParams = fetchAllUserProfilesParams
-	return r
-}
-
 // @return ApiGetSegmentUsersRequest
-func (c *APIClient) NewApiGetSegmentUsersRequest(segmentID string) ApiGetSegmentUsersRequest {
+func (c *APIClient) NewApiGetSegmentUsersRequest(segmentID string, fetchAllUserProfilesParams *FetchAllUserProfilesParams) ApiGetSegmentUsersRequest {
 	return ApiGetSegmentUsersRequest{
-		segmentID: segmentID,
+		segmentID:                  segmentID,
+		fetchAllUserProfilesParams: fetchAllUserProfilesParams,
 	}
 }
 
@@ -2177,7 +2124,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -2186,7 +2133,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -2195,7 +2142,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -2350,7 +2297,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -2359,7 +2306,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -2368,7 +2315,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -2522,7 +2469,7 @@ func (r *ApiUpdateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["modelID"]; ok { //modelID
+	if v, ok := req["modelID"]; ok {
 		err = json.Unmarshal(v, &r.modelID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.modelID)
@@ -2531,7 +2478,7 @@ func (r *ApiUpdateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["updateModelParams"]; ok { //updateModelParams
+	if v, ok := req["updateModelParams"]; ok {
 		err = json.Unmarshal(v, &r.updateModelParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.updateModelParams)
@@ -2549,15 +2496,11 @@ func (r *ApiUpdateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateModelInstanceRequest) WithUpdateModelParams(updateModelParams *UpdateModelParams) ApiUpdateModelInstanceRequest {
-	r.updateModelParams = updateModelParams
-	return r
-}
-
 // @return ApiUpdateModelInstanceRequest
-func (c *APIClient) NewApiUpdateModelInstanceRequest(modelID string) ApiUpdateModelInstanceRequest {
+func (c *APIClient) NewApiUpdateModelInstanceRequest(modelID string, updateModelParams *UpdateModelParams) ApiUpdateModelInstanceRequest {
 	return ApiUpdateModelInstanceRequest{
-		modelID: modelID,
+		modelID:           modelID,
+		updateModelParams: updateModelParams,
 	}
 }
 
@@ -2676,7 +2619,7 @@ func (r *ApiUpdateSegmentRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["segmentID"]; ok { //segmentID
+	if v, ok := req["segmentID"]; ok {
 		err = json.Unmarshal(v, &r.segmentID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.segmentID)
@@ -2685,7 +2628,7 @@ func (r *ApiUpdateSegmentRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["updateSegmentParams"]; ok { //updateSegmentParams
+	if v, ok := req["updateSegmentParams"]; ok {
 		err = json.Unmarshal(v, &r.updateSegmentParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.updateSegmentParams)
@@ -2703,15 +2646,11 @@ func (r *ApiUpdateSegmentRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateSegmentRequest) WithUpdateSegmentParams(updateSegmentParams *UpdateSegmentParams) ApiUpdateSegmentRequest {
-	r.updateSegmentParams = updateSegmentParams
-	return r
-}
-
 // @return ApiUpdateSegmentRequest
-func (c *APIClient) NewApiUpdateSegmentRequest(segmentID string) ApiUpdateSegmentRequest {
+func (c *APIClient) NewApiUpdateSegmentRequest(segmentID string, updateSegmentParams *UpdateSegmentParams) ApiUpdateSegmentRequest {
 	return ApiUpdateSegmentRequest{
-		segmentID: segmentID,
+		segmentID:           segmentID,
+		updateSegmentParams: updateSegmentParams,
 	}
 }
 

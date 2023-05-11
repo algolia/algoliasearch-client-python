@@ -969,10 +969,7 @@ func TestSearch_GetDictionaryLanguages(t *testing.T) {
 		{
 			name: "get getDictionaryLanguages",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := search.ApiGetDictionaryLanguagesRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetDictionaryLanguages(req)
+				_, err := client.GetDictionaryLanguages()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/dictionaries/*/languages")
@@ -1002,10 +999,7 @@ func TestSearch_GetDictionarySettings(t *testing.T) {
 		{
 			name: "get getDictionarySettings results",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := search.ApiGetDictionarySettingsRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetDictionarySettings(req)
+				_, err := client.GetDictionarySettings()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/dictionaries/*/settings")
@@ -1228,10 +1222,7 @@ func TestSearch_GetSources(t *testing.T) {
 		{
 			name: "getSources",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := search.ApiGetSourcesRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetSources(req)
+				_, err := client.GetSources()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/security/sources")
@@ -1327,10 +1318,7 @@ func TestSearch_GetTopUserIds(t *testing.T) {
 		{
 			name: "getTopUserIds",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := search.ApiGetTopUserIdsRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetTopUserIds(req)
+				_, err := client.GetTopUserIds()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/clusters/mapping/top")
@@ -1448,10 +1436,7 @@ func TestSearch_ListApiKeys(t *testing.T) {
 		{
 			name: "listApiKeys",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := search.ApiListApiKeysRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.ListApiKeys(req)
+				_, err := client.ListApiKeys()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/keys")
@@ -1481,10 +1466,7 @@ func TestSearch_ListClusters(t *testing.T) {
 		{
 			name: "listClusters",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := search.ApiListClustersRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.ListClusters(req)
+				_, err := client.ListClusters()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/clusters")

@@ -45,7 +45,7 @@ func (r *ApiCreateConfigRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["querySuggestionsIndexWithIndexParam"]; ok { //querySuggestionsIndexWithIndexParam
+	if v, ok := req["querySuggestionsIndexWithIndexParam"]; ok {
 		err = json.Unmarshal(v, &r.querySuggestionsIndexWithIndexParam)
 		if err != nil {
 			err = json.Unmarshal(b, &r.querySuggestionsIndexWithIndexParam)
@@ -63,14 +63,11 @@ func (r *ApiCreateConfigRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiCreateConfigRequest) WithQuerySuggestionsIndexWithIndexParam(querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam) ApiCreateConfigRequest {
-	r.querySuggestionsIndexWithIndexParam = querySuggestionsIndexWithIndexParam
-	return r
-}
-
 // @return ApiCreateConfigRequest
-func (c *APIClient) NewApiCreateConfigRequest() ApiCreateConfigRequest {
-	return ApiCreateConfigRequest{}
+func (c *APIClient) NewApiCreateConfigRequest(querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam) ApiCreateConfigRequest {
+	return ApiCreateConfigRequest{
+		querySuggestionsIndexWithIndexParam: querySuggestionsIndexWithIndexParam,
+	}
 }
 
 // CreateConfig wraps CreateConfigWithContext using context.Background.
@@ -196,7 +193,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -205,7 +202,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -346,7 +343,7 @@ func (r *ApiDeleteConfigRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -467,7 +464,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -476,7 +473,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -607,31 +604,13 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetAllConfigsRequest struct {
-}
-
-func (r *ApiGetAllConfigsRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetAllConfigsRequest
-func (c *APIClient) NewApiGetAllConfigsRequest() ApiGetAllConfigsRequest {
-	return ApiGetAllConfigsRequest{}
-}
-
 // GetAllConfigs wraps GetAllConfigsWithContext using context.Background.
-func (c *APIClient) GetAllConfigs(r ApiGetAllConfigsRequest, opts ...Option) ([]QuerySuggestionsIndex, error) {
-	return c.GetAllConfigsWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetAllConfigs(opts ...Option) ([]QuerySuggestionsIndex, error) {
+	return c.GetAllConfigsWithContext(context.Background(), opts...)
 }
 
 // @return []QuerySuggestionsIndex
-func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, r ApiGetAllConfigsRequest, opts ...Option) ([]QuerySuggestionsIndex, error) {
+func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, opts ...Option) ([]QuerySuggestionsIndex, error) {
 	var (
 		postBody    any
 		returnValue []QuerySuggestionsIndex
@@ -733,7 +712,7 @@ func (r *ApiGetConfigRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -871,7 +850,7 @@ func (r *ApiGetConfigStatusRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -991,7 +970,7 @@ func (r *ApiGetLogFileRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -1122,7 +1101,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -1131,7 +1110,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -1140,7 +1119,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -1295,7 +1274,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -1304,7 +1283,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -1313,7 +1292,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -1467,7 +1446,7 @@ func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -1476,7 +1455,7 @@ func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["querySuggestionsIndexParam"]; ok { //querySuggestionsIndexParam
+	if v, ok := req["querySuggestionsIndexParam"]; ok {
 		err = json.Unmarshal(v, &r.querySuggestionsIndexParam)
 		if err != nil {
 			err = json.Unmarshal(b, &r.querySuggestionsIndexParam)
@@ -1494,15 +1473,11 @@ func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateConfigRequest) WithQuerySuggestionsIndexParam(querySuggestionsIndexParam *QuerySuggestionsIndexParam) ApiUpdateConfigRequest {
-	r.querySuggestionsIndexParam = querySuggestionsIndexParam
-	return r
-}
-
 // @return ApiUpdateConfigRequest
-func (c *APIClient) NewApiUpdateConfigRequest(indexName string) ApiUpdateConfigRequest {
+func (c *APIClient) NewApiUpdateConfigRequest(indexName string, querySuggestionsIndexParam *QuerySuggestionsIndexParam) ApiUpdateConfigRequest {
 	return ApiUpdateConfigRequest{
-		indexName: indexName,
+		indexName:                  indexName,
+		querySuggestionsIndexParam: querySuggestionsIndexParam,
 	}
 }
 

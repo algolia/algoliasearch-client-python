@@ -616,10 +616,7 @@ func TestPredict_GetAvailableModelTypes(t *testing.T) {
 		{
 			name: "get available model types",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := predict.ApiGetAvailableModelTypesRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetAvailableModelTypes(req)
+				_, err := client.GetAvailableModelTypes()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/predict/modeltypes")
@@ -682,10 +679,7 @@ func TestPredict_GetModelInstances(t *testing.T) {
 		{
 			name: "get a list of model instances",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := predict.ApiGetModelInstancesRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetModelInstances(req)
+				_, err := client.GetModelInstances()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/predict/models")

@@ -45,7 +45,7 @@ func (r *ApiAddApiKeyRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["apiKey"]; ok { //apiKey
+	if v, ok := req["apiKey"]; ok {
 		err = json.Unmarshal(v, &r.apiKey)
 		if err != nil {
 			err = json.Unmarshal(b, &r.apiKey)
@@ -63,14 +63,11 @@ func (r *ApiAddApiKeyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiAddApiKeyRequest) WithApiKey(apiKey *ApiKey) ApiAddApiKeyRequest {
-	r.apiKey = apiKey
-	return r
-}
-
 // @return ApiAddApiKeyRequest
-func (c *APIClient) NewApiAddApiKeyRequest() ApiAddApiKeyRequest {
-	return ApiAddApiKeyRequest{}
+func (c *APIClient) NewApiAddApiKeyRequest(apiKey *ApiKey) ApiAddApiKeyRequest {
+	return ApiAddApiKeyRequest{
+		apiKey: apiKey,
+	}
 }
 
 // AddApiKey wraps AddApiKeyWithContext using context.Background.
@@ -188,7 +185,7 @@ func (r *ApiAddOrUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -197,7 +194,7 @@ func (r *ApiAddOrUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -206,7 +203,7 @@ func (r *ApiAddOrUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -224,17 +221,12 @@ func (r *ApiAddOrUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The Algolia object.
-func (r ApiAddOrUpdateObjectRequest) WithBody(body map[string]interface{}) ApiAddOrUpdateObjectRequest {
-	r.body = body
-	return r
-}
-
 // @return ApiAddOrUpdateObjectRequest
-func (c *APIClient) NewApiAddOrUpdateObjectRequest(indexName string, objectID string) ApiAddOrUpdateObjectRequest {
+func (c *APIClient) NewApiAddOrUpdateObjectRequest(indexName string, objectID string, body map[string]interface{}) ApiAddOrUpdateObjectRequest {
 	return ApiAddOrUpdateObjectRequest{
 		indexName: indexName,
 		objectID:  objectID,
+		body:      body,
 	}
 }
 
@@ -350,7 +342,7 @@ func (r *ApiAppendSourceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["source"]; ok { //source
+	if v, ok := req["source"]; ok {
 		err = json.Unmarshal(v, &r.source)
 		if err != nil {
 			err = json.Unmarshal(b, &r.source)
@@ -368,15 +360,11 @@ func (r *ApiAppendSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The source to add.
-func (r ApiAppendSourceRequest) WithSource(source *Source) ApiAppendSourceRequest {
-	r.source = source
-	return r
-}
-
 // @return ApiAppendSourceRequest
-func (c *APIClient) NewApiAppendSourceRequest() ApiAppendSourceRequest {
-	return ApiAppendSourceRequest{}
+func (c *APIClient) NewApiAppendSourceRequest(source *Source) ApiAppendSourceRequest {
+	return ApiAppendSourceRequest{
+		source: source,
+	}
 }
 
 // AppendSource wraps AppendSourceWithContext using context.Background.
@@ -493,7 +481,7 @@ func (r *ApiAssignUserIdRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["xAlgoliaUserID"]; ok { //xAlgoliaUserID
+	if v, ok := req["xAlgoliaUserID"]; ok {
 		err = json.Unmarshal(v, &r.xAlgoliaUserID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.xAlgoliaUserID)
@@ -502,7 +490,7 @@ func (r *ApiAssignUserIdRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["assignUserIdParams"]; ok { //assignUserIdParams
+	if v, ok := req["assignUserIdParams"]; ok {
 		err = json.Unmarshal(v, &r.assignUserIdParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.assignUserIdParams)
@@ -520,20 +508,12 @@ func (r *ApiAssignUserIdRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// userID to assign.
-func (r ApiAssignUserIdRequest) WithXAlgoliaUserID(xAlgoliaUserID string) ApiAssignUserIdRequest {
-	r.xAlgoliaUserID = xAlgoliaUserID
-	return r
-}
-
-func (r ApiAssignUserIdRequest) WithAssignUserIdParams(assignUserIdParams *AssignUserIdParams) ApiAssignUserIdRequest {
-	r.assignUserIdParams = assignUserIdParams
-	return r
-}
-
 // @return ApiAssignUserIdRequest
-func (c *APIClient) NewApiAssignUserIdRequest() ApiAssignUserIdRequest {
-	return ApiAssignUserIdRequest{}
+func (c *APIClient) NewApiAssignUserIdRequest(xAlgoliaUserID string, assignUserIdParams *AssignUserIdParams) ApiAssignUserIdRequest {
+	return ApiAssignUserIdRequest{
+		xAlgoliaUserID:     xAlgoliaUserID,
+		assignUserIdParams: assignUserIdParams,
+	}
 }
 
 // AssignUserId wraps AssignUserIdWithContext using context.Background.
@@ -655,7 +635,7 @@ func (r *ApiBatchRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -664,7 +644,7 @@ func (r *ApiBatchRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["batchWriteParams"]; ok { //batchWriteParams
+	if v, ok := req["batchWriteParams"]; ok {
 		err = json.Unmarshal(v, &r.batchWriteParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.batchWriteParams)
@@ -682,15 +662,11 @@ func (r *ApiBatchRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiBatchRequest) WithBatchWriteParams(batchWriteParams *BatchWriteParams) ApiBatchRequest {
-	r.batchWriteParams = batchWriteParams
-	return r
-}
-
 // @return ApiBatchRequest
-func (c *APIClient) NewApiBatchRequest(indexName string) ApiBatchRequest {
+func (c *APIClient) NewApiBatchRequest(indexName string, batchWriteParams *BatchWriteParams) ApiBatchRequest {
 	return ApiBatchRequest{
-		indexName: indexName,
+		indexName:        indexName,
+		batchWriteParams: batchWriteParams,
 	}
 }
 
@@ -809,7 +785,7 @@ func (r *ApiBatchAssignUserIdsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["xAlgoliaUserID"]; ok { //xAlgoliaUserID
+	if v, ok := req["xAlgoliaUserID"]; ok {
 		err = json.Unmarshal(v, &r.xAlgoliaUserID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.xAlgoliaUserID)
@@ -818,7 +794,7 @@ func (r *ApiBatchAssignUserIdsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["batchAssignUserIdsParams"]; ok { //batchAssignUserIdsParams
+	if v, ok := req["batchAssignUserIdsParams"]; ok {
 		err = json.Unmarshal(v, &r.batchAssignUserIdsParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.batchAssignUserIdsParams)
@@ -836,20 +812,12 @@ func (r *ApiBatchAssignUserIdsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// userID to assign.
-func (r ApiBatchAssignUserIdsRequest) WithXAlgoliaUserID(xAlgoliaUserID string) ApiBatchAssignUserIdsRequest {
-	r.xAlgoliaUserID = xAlgoliaUserID
-	return r
-}
-
-func (r ApiBatchAssignUserIdsRequest) WithBatchAssignUserIdsParams(batchAssignUserIdsParams *BatchAssignUserIdsParams) ApiBatchAssignUserIdsRequest {
-	r.batchAssignUserIdsParams = batchAssignUserIdsParams
-	return r
-}
-
 // @return ApiBatchAssignUserIdsRequest
-func (c *APIClient) NewApiBatchAssignUserIdsRequest() ApiBatchAssignUserIdsRequest {
-	return ApiBatchAssignUserIdsRequest{}
+func (c *APIClient) NewApiBatchAssignUserIdsRequest(xAlgoliaUserID string, batchAssignUserIdsParams *BatchAssignUserIdsParams) ApiBatchAssignUserIdsRequest {
+	return ApiBatchAssignUserIdsRequest{
+		xAlgoliaUserID:           xAlgoliaUserID,
+		batchAssignUserIdsParams: batchAssignUserIdsParams,
+	}
 }
 
 // BatchAssignUserIds wraps BatchAssignUserIdsWithContext using context.Background.
@@ -971,7 +939,7 @@ func (r *ApiBatchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["dictionaryName"]; ok { //dictionaryName
+	if v, ok := req["dictionaryName"]; ok {
 		err = json.Unmarshal(v, &r.dictionaryName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.dictionaryName)
@@ -980,7 +948,7 @@ func (r *ApiBatchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["batchDictionaryEntriesParams"]; ok { //batchDictionaryEntriesParams
+	if v, ok := req["batchDictionaryEntriesParams"]; ok {
 		err = json.Unmarshal(v, &r.batchDictionaryEntriesParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.batchDictionaryEntriesParams)
@@ -998,15 +966,11 @@ func (r *ApiBatchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiBatchDictionaryEntriesRequest) WithBatchDictionaryEntriesParams(batchDictionaryEntriesParams *BatchDictionaryEntriesParams) ApiBatchDictionaryEntriesRequest {
-	r.batchDictionaryEntriesParams = batchDictionaryEntriesParams
-	return r
-}
-
 // @return ApiBatchDictionaryEntriesRequest
-func (c *APIClient) NewApiBatchDictionaryEntriesRequest(dictionaryName DictionaryType) ApiBatchDictionaryEntriesRequest {
+func (c *APIClient) NewApiBatchDictionaryEntriesRequest(dictionaryName DictionaryType, batchDictionaryEntriesParams *BatchDictionaryEntriesParams) ApiBatchDictionaryEntriesRequest {
 	return ApiBatchDictionaryEntriesRequest{
-		dictionaryName: dictionaryName,
+		dictionaryName:               dictionaryName,
+		batchDictionaryEntriesParams: batchDictionaryEntriesParams,
 	}
 }
 
@@ -1125,7 +1089,7 @@ func (r *ApiBrowseRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -1134,7 +1098,7 @@ func (r *ApiBrowseRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["browseParams"]; ok { //browseParams
+	if v, ok := req["browseParams"]; ok {
 		err = json.Unmarshal(v, &r.browseParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.browseParams)
@@ -1275,7 +1239,7 @@ func (r *ApiClearAllSynonymsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -1284,7 +1248,7 @@ func (r *ApiClearAllSynonymsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -1423,7 +1387,7 @@ func (r *ApiClearObjectsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -1553,7 +1517,7 @@ func (r *ApiClearRulesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -1562,7 +1526,7 @@ func (r *ApiClearRulesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -1702,7 +1666,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -1711,7 +1675,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -1852,7 +1816,7 @@ func (r *ApiDeleteApiKeyRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["key"]; ok { //key
+	if v, ok := req["key"]; ok {
 		err = json.Unmarshal(v, &r.key)
 		if err != nil {
 			err = json.Unmarshal(b, &r.key)
@@ -1982,7 +1946,7 @@ func (r *ApiDeleteByRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -1991,7 +1955,7 @@ func (r *ApiDeleteByRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["deleteByParams"]; ok { //deleteByParams
+	if v, ok := req["deleteByParams"]; ok {
 		err = json.Unmarshal(v, &r.deleteByParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.deleteByParams)
@@ -2009,15 +1973,11 @@ func (r *ApiDeleteByRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiDeleteByRequest) WithDeleteByParams(deleteByParams *DeleteByParams) ApiDeleteByRequest {
-	r.deleteByParams = deleteByParams
-	return r
-}
-
 // @return ApiDeleteByRequest
-func (c *APIClient) NewApiDeleteByRequest(indexName string) ApiDeleteByRequest {
+func (c *APIClient) NewApiDeleteByRequest(indexName string, deleteByParams *DeleteByParams) ApiDeleteByRequest {
 	return ApiDeleteByRequest{
-		indexName: indexName,
+		indexName:      indexName,
+		deleteByParams: deleteByParams,
 	}
 }
 
@@ -2135,7 +2095,7 @@ func (r *ApiDeleteIndexRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -2265,7 +2225,7 @@ func (r *ApiDeleteObjectRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -2274,7 +2234,7 @@ func (r *ApiDeleteObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -2407,7 +2367,7 @@ func (r *ApiDeleteRuleRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -2416,7 +2376,7 @@ func (r *ApiDeleteRuleRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -2425,7 +2385,7 @@ func (r *ApiDeleteRuleRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -2566,7 +2526,7 @@ func (r *ApiDeleteSourceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["source"]; ok { //source
+	if v, ok := req["source"]; ok {
 		err = json.Unmarshal(v, &r.source)
 		if err != nil {
 			err = json.Unmarshal(b, &r.source)
@@ -2697,7 +2657,7 @@ func (r *ApiDeleteSynonymRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -2706,7 +2666,7 @@ func (r *ApiDeleteSynonymRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -2715,7 +2675,7 @@ func (r *ApiDeleteSynonymRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -2857,7 +2817,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -2866,7 +2826,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -3007,7 +2967,7 @@ func (r *ApiGetApiKeyRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["key"]; ok { //key
+	if v, ok := req["key"]; ok {
 		err = json.Unmarshal(v, &r.key)
 		if err != nil {
 			err = json.Unmarshal(b, &r.key)
@@ -3126,31 +3086,13 @@ func (c *APIClient) GetApiKeyWithContext(ctx context.Context, r ApiGetApiKeyRequ
 	return returnValue, nil
 }
 
-type ApiGetDictionaryLanguagesRequest struct {
-}
-
-func (r *ApiGetDictionaryLanguagesRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetDictionaryLanguagesRequest
-func (c *APIClient) NewApiGetDictionaryLanguagesRequest() ApiGetDictionaryLanguagesRequest {
-	return ApiGetDictionaryLanguagesRequest{}
-}
-
 // GetDictionaryLanguages wraps GetDictionaryLanguagesWithContext using context.Background.
-func (c *APIClient) GetDictionaryLanguages(r ApiGetDictionaryLanguagesRequest, opts ...Option) (*map[string]Languages, error) {
-	return c.GetDictionaryLanguagesWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetDictionaryLanguages(opts ...Option) (*map[string]Languages, error) {
+	return c.GetDictionaryLanguagesWithContext(context.Background(), opts...)
 }
 
 // @return map[string]Languages
-func (c *APIClient) GetDictionaryLanguagesWithContext(ctx context.Context, r ApiGetDictionaryLanguagesRequest, opts ...Option) (*map[string]Languages, error) {
+func (c *APIClient) GetDictionaryLanguagesWithContext(ctx context.Context, opts ...Option) (*map[string]Languages, error) {
 	var (
 		postBody    any
 		returnValue *map[string]Languages
@@ -3242,31 +3184,13 @@ func (c *APIClient) GetDictionaryLanguagesWithContext(ctx context.Context, r Api
 	return returnValue, nil
 }
 
-type ApiGetDictionarySettingsRequest struct {
-}
-
-func (r *ApiGetDictionarySettingsRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetDictionarySettingsRequest
-func (c *APIClient) NewApiGetDictionarySettingsRequest() ApiGetDictionarySettingsRequest {
-	return ApiGetDictionarySettingsRequest{}
-}
-
 // GetDictionarySettings wraps GetDictionarySettingsWithContext using context.Background.
-func (c *APIClient) GetDictionarySettings(r ApiGetDictionarySettingsRequest, opts ...Option) (*GetDictionarySettingsResponse, error) {
-	return c.GetDictionarySettingsWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetDictionarySettings(opts ...Option) (*GetDictionarySettingsResponse, error) {
+	return c.GetDictionarySettingsWithContext(context.Background(), opts...)
 }
 
 // @return GetDictionarySettingsResponse
-func (c *APIClient) GetDictionarySettingsWithContext(ctx context.Context, r ApiGetDictionarySettingsRequest, opts ...Option) (*GetDictionarySettingsResponse, error) {
+func (c *APIClient) GetDictionarySettingsWithContext(ctx context.Context, opts ...Option) (*GetDictionarySettingsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetDictionarySettingsResponse
@@ -3371,7 +3295,7 @@ func (r *ApiGetLogsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -3380,7 +3304,7 @@ func (r *ApiGetLogsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["length"]; ok { //length
+	if v, ok := req["length"]; ok {
 		err = json.Unmarshal(v, &r.length)
 		if err != nil {
 			err = json.Unmarshal(b, &r.length)
@@ -3389,7 +3313,7 @@ func (r *ApiGetLogsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -3398,7 +3322,7 @@ func (r *ApiGetLogsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["type"]; ok { //type_
+	if v, ok := req["type"]; ok {
 		err = json.Unmarshal(v, &r.type_)
 		if err != nil {
 			err = json.Unmarshal(b, &r.type_)
@@ -3563,7 +3487,7 @@ func (r *ApiGetObjectRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -3572,7 +3496,7 @@ func (r *ApiGetObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -3581,7 +3505,7 @@ func (r *ApiGetObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["attributesToRetrieve"]; ok { //attributesToRetrieve
+	if v, ok := req["attributesToRetrieve"]; ok {
 		err = json.Unmarshal(v, &r.attributesToRetrieve)
 		if err != nil {
 			err = json.Unmarshal(b, &r.attributesToRetrieve)
@@ -3722,7 +3646,7 @@ func (r *ApiGetObjectsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["getObjectsParams"]; ok { //getObjectsParams
+	if v, ok := req["getObjectsParams"]; ok {
 		err = json.Unmarshal(v, &r.getObjectsParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.getObjectsParams)
@@ -3740,15 +3664,11 @@ func (r *ApiGetObjectsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The Algolia object.
-func (r ApiGetObjectsRequest) WithGetObjectsParams(getObjectsParams *GetObjectsParams) ApiGetObjectsRequest {
-	r.getObjectsParams = getObjectsParams
-	return r
-}
-
 // @return ApiGetObjectsRequest
-func (c *APIClient) NewApiGetObjectsRequest() ApiGetObjectsRequest {
-	return ApiGetObjectsRequest{}
+func (c *APIClient) NewApiGetObjectsRequest(getObjectsParams *GetObjectsParams) ApiGetObjectsRequest {
+	return ApiGetObjectsRequest{
+		getObjectsParams: getObjectsParams,
+	}
 }
 
 // GetObjects wraps GetObjectsWithContext using context.Background.
@@ -3865,7 +3785,7 @@ func (r *ApiGetRuleRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -3874,7 +3794,7 @@ func (r *ApiGetRuleRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -4005,7 +3925,7 @@ func (r *ApiGetSettingsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -4124,31 +4044,13 @@ func (c *APIClient) GetSettingsWithContext(ctx context.Context, r ApiGetSettings
 	return returnValue, nil
 }
 
-type ApiGetSourcesRequest struct {
-}
-
-func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetSourcesRequest
-func (c *APIClient) NewApiGetSourcesRequest() ApiGetSourcesRequest {
-	return ApiGetSourcesRequest{}
-}
-
 // GetSources wraps GetSourcesWithContext using context.Background.
-func (c *APIClient) GetSources(r ApiGetSourcesRequest, opts ...Option) ([]Source, error) {
-	return c.GetSourcesWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetSources(opts ...Option) ([]Source, error) {
+	return c.GetSourcesWithContext(context.Background(), opts...)
 }
 
 // @return []Source
-func (c *APIClient) GetSourcesWithContext(ctx context.Context, r ApiGetSourcesRequest, opts ...Option) ([]Source, error) {
+func (c *APIClient) GetSourcesWithContext(ctx context.Context, opts ...Option) ([]Source, error) {
 	var (
 		postBody    any
 		returnValue []Source
@@ -4251,7 +4153,7 @@ func (r *ApiGetSynonymRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -4260,7 +4162,7 @@ func (r *ApiGetSynonymRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -4392,7 +4294,7 @@ func (r *ApiGetTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -4401,7 +4303,7 @@ func (r *ApiGetTaskRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -4522,31 +4424,13 @@ func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest,
 	return returnValue, nil
 }
 
-type ApiGetTopUserIdsRequest struct {
-}
-
-func (r *ApiGetTopUserIdsRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetTopUserIdsRequest
-func (c *APIClient) NewApiGetTopUserIdsRequest() ApiGetTopUserIdsRequest {
-	return ApiGetTopUserIdsRequest{}
-}
-
 // GetTopUserIds wraps GetTopUserIdsWithContext using context.Background.
-func (c *APIClient) GetTopUserIds(r ApiGetTopUserIdsRequest, opts ...Option) (*GetTopUserIdsResponse, error) {
-	return c.GetTopUserIdsWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetTopUserIds(opts ...Option) (*GetTopUserIdsResponse, error) {
+	return c.GetTopUserIdsWithContext(context.Background(), opts...)
 }
 
 // @return GetTopUserIdsResponse
-func (c *APIClient) GetTopUserIdsWithContext(ctx context.Context, r ApiGetTopUserIdsRequest, opts ...Option) (*GetTopUserIdsResponse, error) {
+func (c *APIClient) GetTopUserIdsWithContext(ctx context.Context, opts ...Option) (*GetTopUserIdsResponse, error) {
 	var (
 		postBody    any
 		returnValue *GetTopUserIdsResponse
@@ -4648,7 +4532,7 @@ func (r *ApiGetUserIdRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["userID"]; ok { //userID
+	if v, ok := req["userID"]; ok {
 		err = json.Unmarshal(v, &r.userID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.userID)
@@ -4777,7 +4661,7 @@ func (r *ApiHasPendingMappingsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["getClusters"]; ok { //getClusters
+	if v, ok := req["getClusters"]; ok {
 		err = json.Unmarshal(v, &r.getClusters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.getClusters)
@@ -4903,31 +4787,13 @@ func (c *APIClient) HasPendingMappingsWithContext(ctx context.Context, r ApiHasP
 	return returnValue, nil
 }
 
-type ApiListApiKeysRequest struct {
-}
-
-func (r *ApiListApiKeysRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiListApiKeysRequest
-func (c *APIClient) NewApiListApiKeysRequest() ApiListApiKeysRequest {
-	return ApiListApiKeysRequest{}
-}
-
 // ListApiKeys wraps ListApiKeysWithContext using context.Background.
-func (c *APIClient) ListApiKeys(r ApiListApiKeysRequest, opts ...Option) (*ListApiKeysResponse, error) {
-	return c.ListApiKeysWithContext(context.Background(), r, opts...)
+func (c *APIClient) ListApiKeys(opts ...Option) (*ListApiKeysResponse, error) {
+	return c.ListApiKeysWithContext(context.Background(), opts...)
 }
 
 // @return ListApiKeysResponse
-func (c *APIClient) ListApiKeysWithContext(ctx context.Context, r ApiListApiKeysRequest, opts ...Option) (*ListApiKeysResponse, error) {
+func (c *APIClient) ListApiKeysWithContext(ctx context.Context, opts ...Option) (*ListApiKeysResponse, error) {
 	var (
 		postBody    any
 		returnValue *ListApiKeysResponse
@@ -5019,31 +4885,13 @@ func (c *APIClient) ListApiKeysWithContext(ctx context.Context, r ApiListApiKeys
 	return returnValue, nil
 }
 
-type ApiListClustersRequest struct {
-}
-
-func (r *ApiListClustersRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiListClustersRequest
-func (c *APIClient) NewApiListClustersRequest() ApiListClustersRequest {
-	return ApiListClustersRequest{}
-}
-
 // ListClusters wraps ListClustersWithContext using context.Background.
-func (c *APIClient) ListClusters(r ApiListClustersRequest, opts ...Option) (*ListClustersResponse, error) {
-	return c.ListClustersWithContext(context.Background(), r, opts...)
+func (c *APIClient) ListClusters(opts ...Option) (*ListClustersResponse, error) {
+	return c.ListClustersWithContext(context.Background(), opts...)
 }
 
 // @return ListClustersResponse
-func (c *APIClient) ListClustersWithContext(ctx context.Context, r ApiListClustersRequest, opts ...Option) (*ListClustersResponse, error) {
+func (c *APIClient) ListClustersWithContext(ctx context.Context, opts ...Option) (*ListClustersResponse, error) {
 	var (
 		postBody    any
 		returnValue *ListClustersResponse
@@ -5145,7 +4993,7 @@ func (r *ApiListIndicesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -5282,7 +5130,7 @@ func (r *ApiListUserIdsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -5291,7 +5139,7 @@ func (r *ApiListUserIdsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["hitsPerPage"]; ok { //hitsPerPage
+	if v, ok := req["hitsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.hitsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.hitsPerPage)
@@ -5436,7 +5284,7 @@ func (r *ApiMultipleBatchRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["batchParams"]; ok { //batchParams
+	if v, ok := req["batchParams"]; ok {
 		err = json.Unmarshal(v, &r.batchParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.batchParams)
@@ -5454,14 +5302,11 @@ func (r *ApiMultipleBatchRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiMultipleBatchRequest) WithBatchParams(batchParams *BatchParams) ApiMultipleBatchRequest {
-	r.batchParams = batchParams
-	return r
-}
-
 // @return ApiMultipleBatchRequest
-func (c *APIClient) NewApiMultipleBatchRequest() ApiMultipleBatchRequest {
-	return ApiMultipleBatchRequest{}
+func (c *APIClient) NewApiMultipleBatchRequest(batchParams *BatchParams) ApiMultipleBatchRequest {
+	return ApiMultipleBatchRequest{
+		batchParams: batchParams,
+	}
 }
 
 // MultipleBatch wraps MultipleBatchWithContext using context.Background.
@@ -5578,7 +5423,7 @@ func (r *ApiOperationIndexRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -5587,7 +5432,7 @@ func (r *ApiOperationIndexRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["operationIndexParams"]; ok { //operationIndexParams
+	if v, ok := req["operationIndexParams"]; ok {
 		err = json.Unmarshal(v, &r.operationIndexParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.operationIndexParams)
@@ -5605,15 +5450,11 @@ func (r *ApiOperationIndexRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiOperationIndexRequest) WithOperationIndexParams(operationIndexParams *OperationIndexParams) ApiOperationIndexRequest {
-	r.operationIndexParams = operationIndexParams
-	return r
-}
-
 // @return ApiOperationIndexRequest
-func (c *APIClient) NewApiOperationIndexRequest(indexName string) ApiOperationIndexRequest {
+func (c *APIClient) NewApiOperationIndexRequest(indexName string, operationIndexParams *OperationIndexParams) ApiOperationIndexRequest {
 	return ApiOperationIndexRequest{
-		indexName: indexName,
+		indexName:            indexName,
+		operationIndexParams: operationIndexParams,
 	}
 }
 
@@ -5734,7 +5575,7 @@ func (r *ApiPartialUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -5743,7 +5584,7 @@ func (r *ApiPartialUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -5752,7 +5593,7 @@ func (r *ApiPartialUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["attributesToUpdate"]; ok { //attributesToUpdate
+	if v, ok := req["attributesToUpdate"]; ok {
 		err = json.Unmarshal(v, &r.attributesToUpdate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.attributesToUpdate)
@@ -5766,7 +5607,7 @@ func (r *ApiPartialUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 			return err
 		}
 	}
-	if v, ok := req["createIfNotExists"]; ok { //createIfNotExists
+	if v, ok := req["createIfNotExists"]; ok {
 		err = json.Unmarshal(v, &r.createIfNotExists)
 		if err != nil {
 			err = json.Unmarshal(b, &r.createIfNotExists)
@@ -5779,12 +5620,6 @@ func (r *ApiPartialUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Map of attribute(s) to update.
-func (r ApiPartialUpdateObjectRequest) WithAttributesToUpdate(attributesToUpdate *map[string]AttributeToUpdate) ApiPartialUpdateObjectRequest {
-	r.attributesToUpdate = attributesToUpdate
-	return r
-}
-
 // Creates the record if it does not exist yet.
 func (r ApiPartialUpdateObjectRequest) WithCreateIfNotExists(createIfNotExists bool) ApiPartialUpdateObjectRequest {
 	r.createIfNotExists = createIfNotExists
@@ -5792,10 +5627,11 @@ func (r ApiPartialUpdateObjectRequest) WithCreateIfNotExists(createIfNotExists b
 }
 
 // @return ApiPartialUpdateObjectRequest
-func (c *APIClient) NewApiPartialUpdateObjectRequest(indexName string, objectID string) ApiPartialUpdateObjectRequest {
+func (c *APIClient) NewApiPartialUpdateObjectRequest(indexName string, objectID string, attributesToUpdate *map[string]AttributeToUpdate) ApiPartialUpdateObjectRequest {
 	return ApiPartialUpdateObjectRequest{
-		indexName: indexName,
-		objectID:  objectID,
+		indexName:          indexName,
+		objectID:           objectID,
+		attributesToUpdate: attributesToUpdate,
 	}
 }
 
@@ -5920,7 +5756,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -5929,7 +5765,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -5938,7 +5774,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -6093,7 +5929,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -6102,7 +5938,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -6111,7 +5947,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -6264,7 +6100,7 @@ func (r *ApiRemoveUserIdRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["userID"]; ok { //userID
+	if v, ok := req["userID"]; ok {
 		err = json.Unmarshal(v, &r.userID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.userID)
@@ -6393,7 +6229,7 @@ func (r *ApiReplaceSourcesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["source"]; ok { //source
+	if v, ok := req["source"]; ok {
 		err = json.Unmarshal(v, &r.source)
 		if err != nil {
 			err = json.Unmarshal(b, &r.source)
@@ -6411,15 +6247,11 @@ func (r *ApiReplaceSourcesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The sources to allow.
-func (r ApiReplaceSourcesRequest) WithSource(source []Source) ApiReplaceSourcesRequest {
-	r.source = source
-	return r
-}
-
 // @return ApiReplaceSourcesRequest
-func (c *APIClient) NewApiReplaceSourcesRequest() ApiReplaceSourcesRequest {
-	return ApiReplaceSourcesRequest{}
+func (c *APIClient) NewApiReplaceSourcesRequest(source []Source) ApiReplaceSourcesRequest {
+	return ApiReplaceSourcesRequest{
+		source: source,
+	}
 }
 
 // ReplaceSources wraps ReplaceSourcesWithContext using context.Background.
@@ -6535,7 +6367,7 @@ func (r *ApiRestoreApiKeyRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["key"]; ok { //key
+	if v, ok := req["key"]; ok {
 		err = json.Unmarshal(v, &r.key)
 		if err != nil {
 			err = json.Unmarshal(b, &r.key)
@@ -6665,7 +6497,7 @@ func (r *ApiSaveObjectRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -6674,7 +6506,7 @@ func (r *ApiSaveObjectRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -6692,16 +6524,11 @@ func (r *ApiSaveObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The Algolia record.
-func (r ApiSaveObjectRequest) WithBody(body map[string]interface{}) ApiSaveObjectRequest {
-	r.body = body
-	return r
-}
-
 // @return ApiSaveObjectRequest
-func (c *APIClient) NewApiSaveObjectRequest(indexName string) ApiSaveObjectRequest {
+func (c *APIClient) NewApiSaveObjectRequest(indexName string, body map[string]interface{}) ApiSaveObjectRequest {
 	return ApiSaveObjectRequest{
 		indexName: indexName,
+		body:      body,
 	}
 }
 
@@ -6819,7 +6646,7 @@ func (r *ApiSaveRuleRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -6828,7 +6655,7 @@ func (r *ApiSaveRuleRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -6837,7 +6664,7 @@ func (r *ApiSaveRuleRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["rule"]; ok { //rule
+	if v, ok := req["rule"]; ok {
 		err = json.Unmarshal(v, &r.rule)
 		if err != nil {
 			err = json.Unmarshal(b, &r.rule)
@@ -6851,7 +6678,7 @@ func (r *ApiSaveRuleRequest) UnmarshalJSON(b []byte) error {
 			return err
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -6864,11 +6691,6 @@ func (r *ApiSaveRuleRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSaveRuleRequest) WithRule(rule *Rule) ApiSaveRuleRequest {
-	r.rule = rule
-	return r
-}
-
 // When true, changes are also propagated to replicas of the given indexName.
 func (r ApiSaveRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveRuleRequest {
 	r.forwardToReplicas = forwardToReplicas
@@ -6876,10 +6698,11 @@ func (r ApiSaveRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSav
 }
 
 // @return ApiSaveRuleRequest
-func (c *APIClient) NewApiSaveRuleRequest(indexName string, objectID string) ApiSaveRuleRequest {
+func (c *APIClient) NewApiSaveRuleRequest(indexName string, objectID string, rule *Rule) ApiSaveRuleRequest {
 	return ApiSaveRuleRequest{
 		indexName: indexName,
 		objectID:  objectID,
+		rule:      rule,
 	}
 }
 
@@ -7005,7 +6828,7 @@ func (r *ApiSaveRulesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -7014,7 +6837,7 @@ func (r *ApiSaveRulesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["rules"]; ok { //rules
+	if v, ok := req["rules"]; ok {
 		err = json.Unmarshal(v, &r.rules)
 		if err != nil {
 			err = json.Unmarshal(b, &r.rules)
@@ -7028,7 +6851,7 @@ func (r *ApiSaveRulesRequest) UnmarshalJSON(b []byte) error {
 			return err
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -7037,7 +6860,7 @@ func (r *ApiSaveRulesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["clearExistingRules"]; ok { //clearExistingRules
+	if v, ok := req["clearExistingRules"]; ok {
 		err = json.Unmarshal(v, &r.clearExistingRules)
 		if err != nil {
 			err = json.Unmarshal(b, &r.clearExistingRules)
@@ -7048,11 +6871,6 @@ func (r *ApiSaveRulesRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-func (r ApiSaveRulesRequest) WithRules(rules []Rule) ApiSaveRulesRequest {
-	r.rules = rules
-	return r
 }
 
 // When true, changes are also propagated to replicas of the given indexName.
@@ -7068,9 +6886,10 @@ func (r ApiSaveRulesRequest) WithClearExistingRules(clearExistingRules bool) Api
 }
 
 // @return ApiSaveRulesRequest
-func (c *APIClient) NewApiSaveRulesRequest(indexName string) ApiSaveRulesRequest {
+func (c *APIClient) NewApiSaveRulesRequest(indexName string, rules []Rule) ApiSaveRulesRequest {
 	return ApiSaveRulesRequest{
 		indexName: indexName,
+		rules:     rules,
 	}
 }
 
@@ -7198,7 +7017,7 @@ func (r *ApiSaveSynonymRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -7207,7 +7026,7 @@ func (r *ApiSaveSynonymRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["objectID"]; ok { //objectID
+	if v, ok := req["objectID"]; ok {
 		err = json.Unmarshal(v, &r.objectID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.objectID)
@@ -7216,7 +7035,7 @@ func (r *ApiSaveSynonymRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["synonymHit"]; ok { //synonymHit
+	if v, ok := req["synonymHit"]; ok {
 		err = json.Unmarshal(v, &r.synonymHit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.synonymHit)
@@ -7230,7 +7049,7 @@ func (r *ApiSaveSynonymRequest) UnmarshalJSON(b []byte) error {
 			return err
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -7243,11 +7062,6 @@ func (r *ApiSaveSynonymRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSaveSynonymRequest) WithSynonymHit(synonymHit *SynonymHit) ApiSaveSynonymRequest {
-	r.synonymHit = synonymHit
-	return r
-}
-
 // When true, changes are also propagated to replicas of the given indexName.
 func (r ApiSaveSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveSynonymRequest {
 	r.forwardToReplicas = forwardToReplicas
@@ -7255,10 +7069,11 @@ func (r ApiSaveSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) Api
 }
 
 // @return ApiSaveSynonymRequest
-func (c *APIClient) NewApiSaveSynonymRequest(indexName string, objectID string) ApiSaveSynonymRequest {
+func (c *APIClient) NewApiSaveSynonymRequest(indexName string, objectID string, synonymHit *SynonymHit) ApiSaveSynonymRequest {
 	return ApiSaveSynonymRequest{
-		indexName: indexName,
-		objectID:  objectID,
+		indexName:  indexName,
+		objectID:   objectID,
+		synonymHit: synonymHit,
 	}
 }
 
@@ -7384,7 +7199,7 @@ func (r *ApiSaveSynonymsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -7393,7 +7208,7 @@ func (r *ApiSaveSynonymsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["synonymHit"]; ok { //synonymHit
+	if v, ok := req["synonymHit"]; ok {
 		err = json.Unmarshal(v, &r.synonymHit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.synonymHit)
@@ -7407,7 +7222,7 @@ func (r *ApiSaveSynonymsRequest) UnmarshalJSON(b []byte) error {
 			return err
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -7416,7 +7231,7 @@ func (r *ApiSaveSynonymsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["replaceExistingSynonyms"]; ok { //replaceExistingSynonyms
+	if v, ok := req["replaceExistingSynonyms"]; ok {
 		err = json.Unmarshal(v, &r.replaceExistingSynonyms)
 		if err != nil {
 			err = json.Unmarshal(b, &r.replaceExistingSynonyms)
@@ -7427,11 +7242,6 @@ func (r *ApiSaveSynonymsRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-func (r ApiSaveSynonymsRequest) WithSynonymHit(synonymHit []SynonymHit) ApiSaveSynonymsRequest {
-	r.synonymHit = synonymHit
-	return r
 }
 
 // When true, changes are also propagated to replicas of the given indexName.
@@ -7447,9 +7257,10 @@ func (r ApiSaveSynonymsRequest) WithReplaceExistingSynonyms(replaceExistingSynon
 }
 
 // @return ApiSaveSynonymsRequest
-func (c *APIClient) NewApiSaveSynonymsRequest(indexName string) ApiSaveSynonymsRequest {
+func (c *APIClient) NewApiSaveSynonymsRequest(indexName string, synonymHit []SynonymHit) ApiSaveSynonymsRequest {
 	return ApiSaveSynonymsRequest{
-		indexName: indexName,
+		indexName:  indexName,
+		synonymHit: synonymHit,
 	}
 }
 
@@ -7574,7 +7385,7 @@ func (r *ApiSearchRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["searchMethodParams"]; ok { //searchMethodParams
+	if v, ok := req["searchMethodParams"]; ok {
 		err = json.Unmarshal(v, &r.searchMethodParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.searchMethodParams)
@@ -7592,15 +7403,11 @@ func (r *ApiSearchRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The &#x60;search&#x60; requests and strategy.
-func (r ApiSearchRequest) WithSearchMethodParams(searchMethodParams *SearchMethodParams) ApiSearchRequest {
-	r.searchMethodParams = searchMethodParams
-	return r
-}
-
 // @return ApiSearchRequest
-func (c *APIClient) NewApiSearchRequest() ApiSearchRequest {
-	return ApiSearchRequest{}
+func (c *APIClient) NewApiSearchRequest(searchMethodParams *SearchMethodParams) ApiSearchRequest {
+	return ApiSearchRequest{
+		searchMethodParams: searchMethodParams,
+	}
 }
 
 // Search wraps SearchWithContext using context.Background.
@@ -7717,7 +7524,7 @@ func (r *ApiSearchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["dictionaryName"]; ok { //dictionaryName
+	if v, ok := req["dictionaryName"]; ok {
 		err = json.Unmarshal(v, &r.dictionaryName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.dictionaryName)
@@ -7726,7 +7533,7 @@ func (r *ApiSearchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["searchDictionaryEntriesParams"]; ok { //searchDictionaryEntriesParams
+	if v, ok := req["searchDictionaryEntriesParams"]; ok {
 		err = json.Unmarshal(v, &r.searchDictionaryEntriesParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.searchDictionaryEntriesParams)
@@ -7744,15 +7551,11 @@ func (r *ApiSearchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchDictionaryEntriesRequest) WithSearchDictionaryEntriesParams(searchDictionaryEntriesParams *SearchDictionaryEntriesParams) ApiSearchDictionaryEntriesRequest {
-	r.searchDictionaryEntriesParams = searchDictionaryEntriesParams
-	return r
-}
-
 // @return ApiSearchDictionaryEntriesRequest
-func (c *APIClient) NewApiSearchDictionaryEntriesRequest(dictionaryName DictionaryType) ApiSearchDictionaryEntriesRequest {
+func (c *APIClient) NewApiSearchDictionaryEntriesRequest(dictionaryName DictionaryType, searchDictionaryEntriesParams *SearchDictionaryEntriesParams) ApiSearchDictionaryEntriesRequest {
 	return ApiSearchDictionaryEntriesRequest{
-		dictionaryName: dictionaryName,
+		dictionaryName:                dictionaryName,
+		searchDictionaryEntriesParams: searchDictionaryEntriesParams,
 	}
 }
 
@@ -7872,7 +7675,7 @@ func (r *ApiSearchForFacetValuesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -7881,7 +7684,7 @@ func (r *ApiSearchForFacetValuesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["facetName"]; ok { //facetName
+	if v, ok := req["facetName"]; ok {
 		err = json.Unmarshal(v, &r.facetName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.facetName)
@@ -7890,7 +7693,7 @@ func (r *ApiSearchForFacetValuesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["searchForFacetValuesRequest"]; ok { //searchForFacetValuesRequest
+	if v, ok := req["searchForFacetValuesRequest"]; ok {
 		err = json.Unmarshal(v, &r.searchForFacetValuesRequest)
 		if err != nil {
 			err = json.Unmarshal(b, &r.searchForFacetValuesRequest)
@@ -8033,7 +7836,7 @@ func (r *ApiSearchRulesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -8042,7 +7845,7 @@ func (r *ApiSearchRulesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["searchRulesParams"]; ok { //searchRulesParams
+	if v, ok := req["searchRulesParams"]; ok {
 		err = json.Unmarshal(v, &r.searchRulesParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.searchRulesParams)
@@ -8183,7 +7986,7 @@ func (r *ApiSearchSingleIndexRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -8192,7 +7995,7 @@ func (r *ApiSearchSingleIndexRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["searchParams"]; ok { //searchParams
+	if v, ok := req["searchParams"]; ok {
 		err = json.Unmarshal(v, &r.searchParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.searchParams)
@@ -8336,7 +8139,7 @@ func (r *ApiSearchSynonymsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -8345,7 +8148,7 @@ func (r *ApiSearchSynonymsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["type"]; ok { //type_
+	if v, ok := req["type"]; ok {
 		err = json.Unmarshal(v, &r.type_)
 		if err != nil {
 			err = json.Unmarshal(b, &r.type_)
@@ -8354,7 +8157,7 @@ func (r *ApiSearchSynonymsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -8363,7 +8166,7 @@ func (r *ApiSearchSynonymsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["hitsPerPage"]; ok { //hitsPerPage
+	if v, ok := req["hitsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.hitsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.hitsPerPage)
@@ -8372,7 +8175,7 @@ func (r *ApiSearchSynonymsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["searchSynonymsParams"]; ok { //searchSynonymsParams
+	if v, ok := req["searchSynonymsParams"]; ok {
 		err = json.Unmarshal(v, &r.searchSynonymsParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.searchSynonymsParams)
@@ -8541,7 +8344,7 @@ func (r *ApiSearchUserIdsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["searchUserIdsParams"]; ok { //searchUserIdsParams
+	if v, ok := req["searchUserIdsParams"]; ok {
 		err = json.Unmarshal(v, &r.searchUserIdsParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.searchUserIdsParams)
@@ -8559,14 +8362,11 @@ func (r *ApiSearchUserIdsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchUserIdsRequest) WithSearchUserIdsParams(searchUserIdsParams *SearchUserIdsParams) ApiSearchUserIdsRequest {
-	r.searchUserIdsParams = searchUserIdsParams
-	return r
-}
-
 // @return ApiSearchUserIdsRequest
-func (c *APIClient) NewApiSearchUserIdsRequest() ApiSearchUserIdsRequest {
-	return ApiSearchUserIdsRequest{}
+func (c *APIClient) NewApiSearchUserIdsRequest(searchUserIdsParams *SearchUserIdsParams) ApiSearchUserIdsRequest {
+	return ApiSearchUserIdsRequest{
+		searchUserIdsParams: searchUserIdsParams,
+	}
 }
 
 // SearchUserIds wraps SearchUserIdsWithContext using context.Background.
@@ -8682,7 +8482,7 @@ func (r *ApiSetDictionarySettingsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["dictionarySettingsParams"]; ok { //dictionarySettingsParams
+	if v, ok := req["dictionarySettingsParams"]; ok {
 		err = json.Unmarshal(v, &r.dictionarySettingsParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.dictionarySettingsParams)
@@ -8700,14 +8500,11 @@ func (r *ApiSetDictionarySettingsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSetDictionarySettingsRequest) WithDictionarySettingsParams(dictionarySettingsParams *DictionarySettingsParams) ApiSetDictionarySettingsRequest {
-	r.dictionarySettingsParams = dictionarySettingsParams
-	return r
-}
-
 // @return ApiSetDictionarySettingsRequest
-func (c *APIClient) NewApiSetDictionarySettingsRequest() ApiSetDictionarySettingsRequest {
-	return ApiSetDictionarySettingsRequest{}
+func (c *APIClient) NewApiSetDictionarySettingsRequest(dictionarySettingsParams *DictionarySettingsParams) ApiSetDictionarySettingsRequest {
+	return ApiSetDictionarySettingsRequest{
+		dictionarySettingsParams: dictionarySettingsParams,
+	}
 }
 
 // SetDictionarySettings wraps SetDictionarySettingsWithContext using context.Background.
@@ -8825,7 +8622,7 @@ func (r *ApiSetSettingsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["indexName"]; ok { //indexName
+	if v, ok := req["indexName"]; ok {
 		err = json.Unmarshal(v, &r.indexName)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexName)
@@ -8834,7 +8631,7 @@ func (r *ApiSetSettingsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["indexSettings"]; ok { //indexSettings
+	if v, ok := req["indexSettings"]; ok {
 		err = json.Unmarshal(v, &r.indexSettings)
 		if err != nil {
 			err = json.Unmarshal(b, &r.indexSettings)
@@ -8848,7 +8645,7 @@ func (r *ApiSetSettingsRequest) UnmarshalJSON(b []byte) error {
 			return err
 		}
 	}
-	if v, ok := req["forwardToReplicas"]; ok { //forwardToReplicas
+	if v, ok := req["forwardToReplicas"]; ok {
 		err = json.Unmarshal(v, &r.forwardToReplicas)
 		if err != nil {
 			err = json.Unmarshal(b, &r.forwardToReplicas)
@@ -8861,11 +8658,6 @@ func (r *ApiSetSettingsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSetSettingsRequest) WithIndexSettings(indexSettings *IndexSettings) ApiSetSettingsRequest {
-	r.indexSettings = indexSettings
-	return r
-}
-
 // When true, changes are also propagated to replicas of the given indexName.
 func (r ApiSetSettingsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSetSettingsRequest {
 	r.forwardToReplicas = forwardToReplicas
@@ -8873,9 +8665,10 @@ func (r ApiSetSettingsRequest) WithForwardToReplicas(forwardToReplicas bool) Api
 }
 
 // @return ApiSetSettingsRequest
-func (c *APIClient) NewApiSetSettingsRequest(indexName string) ApiSetSettingsRequest {
+func (c *APIClient) NewApiSetSettingsRequest(indexName string, indexSettings *IndexSettings) ApiSetSettingsRequest {
 	return ApiSetSettingsRequest{
-		indexName: indexName,
+		indexName:     indexName,
+		indexSettings: indexSettings,
 	}
 }
 
@@ -8998,7 +8791,7 @@ func (r *ApiUpdateApiKeyRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["key"]; ok { //key
+	if v, ok := req["key"]; ok {
 		err = json.Unmarshal(v, &r.key)
 		if err != nil {
 			err = json.Unmarshal(b, &r.key)
@@ -9007,7 +8800,7 @@ func (r *ApiUpdateApiKeyRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["apiKey"]; ok { //apiKey
+	if v, ok := req["apiKey"]; ok {
 		err = json.Unmarshal(v, &r.apiKey)
 		if err != nil {
 			err = json.Unmarshal(b, &r.apiKey)
@@ -9025,15 +8818,11 @@ func (r *ApiUpdateApiKeyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateApiKeyRequest) WithApiKey(apiKey *ApiKey) ApiUpdateApiKeyRequest {
-	r.apiKey = apiKey
-	return r
-}
-
 // @return ApiUpdateApiKeyRequest
-func (c *APIClient) NewApiUpdateApiKeyRequest(key string) ApiUpdateApiKeyRequest {
+func (c *APIClient) NewApiUpdateApiKeyRequest(key string, apiKey *ApiKey) ApiUpdateApiKeyRequest {
 	return ApiUpdateApiKeyRequest{
-		key: key,
+		key:    key,
+		apiKey: apiKey,
 	}
 }
 

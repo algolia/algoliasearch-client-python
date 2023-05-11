@@ -45,7 +45,7 @@ func (r *ApiCreateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["authenticationCreate"]; ok { //authenticationCreate
+	if v, ok := req["authenticationCreate"]; ok {
 		err = json.Unmarshal(v, &r.authenticationCreate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationCreate)
@@ -63,14 +63,11 @@ func (r *ApiCreateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiCreateAuthenticationRequest) WithAuthenticationCreate(authenticationCreate *AuthenticationCreate) ApiCreateAuthenticationRequest {
-	r.authenticationCreate = authenticationCreate
-	return r
-}
-
 // @return ApiCreateAuthenticationRequest
-func (c *APIClient) NewApiCreateAuthenticationRequest() ApiCreateAuthenticationRequest {
-	return ApiCreateAuthenticationRequest{}
+func (c *APIClient) NewApiCreateAuthenticationRequest(authenticationCreate *AuthenticationCreate) ApiCreateAuthenticationRequest {
+	return ApiCreateAuthenticationRequest{
+		authenticationCreate: authenticationCreate,
+	}
 }
 
 // CreateAuthentication wraps CreateAuthenticationWithContext using context.Background.
@@ -159,7 +156,7 @@ func (r *ApiCreateDestinationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["destinationCreate"]; ok { //destinationCreate
+	if v, ok := req["destinationCreate"]; ok {
 		err = json.Unmarshal(v, &r.destinationCreate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.destinationCreate)
@@ -177,14 +174,11 @@ func (r *ApiCreateDestinationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiCreateDestinationRequest) WithDestinationCreate(destinationCreate *DestinationCreate) ApiCreateDestinationRequest {
-	r.destinationCreate = destinationCreate
-	return r
-}
-
 // @return ApiCreateDestinationRequest
-func (c *APIClient) NewApiCreateDestinationRequest() ApiCreateDestinationRequest {
-	return ApiCreateDestinationRequest{}
+func (c *APIClient) NewApiCreateDestinationRequest(destinationCreate *DestinationCreate) ApiCreateDestinationRequest {
+	return ApiCreateDestinationRequest{
+		destinationCreate: destinationCreate,
+	}
 }
 
 // CreateDestination wraps CreateDestinationWithContext using context.Background.
@@ -273,7 +267,7 @@ func (r *ApiCreateSourceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["sourceCreate"]; ok { //sourceCreate
+	if v, ok := req["sourceCreate"]; ok {
 		err = json.Unmarshal(v, &r.sourceCreate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sourceCreate)
@@ -291,14 +285,11 @@ func (r *ApiCreateSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiCreateSourceRequest) WithSourceCreate(sourceCreate *SourceCreate) ApiCreateSourceRequest {
-	r.sourceCreate = sourceCreate
-	return r
-}
-
 // @return ApiCreateSourceRequest
-func (c *APIClient) NewApiCreateSourceRequest() ApiCreateSourceRequest {
-	return ApiCreateSourceRequest{}
+func (c *APIClient) NewApiCreateSourceRequest(sourceCreate *SourceCreate) ApiCreateSourceRequest {
+	return ApiCreateSourceRequest{
+		sourceCreate: sourceCreate,
+	}
 }
 
 // CreateSource wraps CreateSourceWithContext using context.Background.
@@ -387,7 +378,7 @@ func (r *ApiCreateTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskCreate"]; ok { //taskCreate
+	if v, ok := req["taskCreate"]; ok {
 		err = json.Unmarshal(v, &r.taskCreate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskCreate)
@@ -405,14 +396,11 @@ func (r *ApiCreateTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiCreateTaskRequest) WithTaskCreate(taskCreate *TaskCreate) ApiCreateTaskRequest {
-	r.taskCreate = taskCreate
-	return r
-}
-
 // @return ApiCreateTaskRequest
-func (c *APIClient) NewApiCreateTaskRequest() ApiCreateTaskRequest {
-	return ApiCreateTaskRequest{}
+func (c *APIClient) NewApiCreateTaskRequest(taskCreate *TaskCreate) ApiCreateTaskRequest {
+	return ApiCreateTaskRequest{
+		taskCreate: taskCreate,
+	}
 }
 
 // CreateTask wraps CreateTaskWithContext using context.Background.
@@ -502,7 +490,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -511,7 +499,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -652,7 +640,7 @@ func (r *ApiDeleteAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["authenticationID"]; ok { //authenticationID
+	if v, ok := req["authenticationID"]; ok {
 		err = json.Unmarshal(v, &r.authenticationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationID)
@@ -754,7 +742,7 @@ func (r *ApiDeleteDestinationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["destinationID"]; ok { //destinationID
+	if v, ok := req["destinationID"]; ok {
 		err = json.Unmarshal(v, &r.destinationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.destinationID)
@@ -856,7 +844,7 @@ func (r *ApiDeleteSourceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["sourceID"]; ok { //sourceID
+	if v, ok := req["sourceID"]; ok {
 		err = json.Unmarshal(v, &r.sourceID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sourceID)
@@ -958,7 +946,7 @@ func (r *ApiDeleteTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -1060,7 +1048,7 @@ func (r *ApiDisableTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -1162,7 +1150,7 @@ func (r *ApiEnableTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -1265,7 +1253,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -1274,7 +1262,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -1415,7 +1403,7 @@ func (r *ApiGetAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["authenticationID"]; ok { //authenticationID
+	if v, ok := req["authenticationID"]; ok {
 		err = json.Unmarshal(v, &r.authenticationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationID)
@@ -1522,7 +1510,7 @@ func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["itemsPerPage"]; ok { //itemsPerPage
+	if v, ok := req["itemsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.itemsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.itemsPerPage)
@@ -1531,7 +1519,7 @@ func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -1540,7 +1528,7 @@ func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["type"]; ok { //type_
+	if v, ok := req["type"]; ok {
 		err = json.Unmarshal(v, &r.type_)
 		if err != nil {
 			err = json.Unmarshal(b, &r.type_)
@@ -1549,7 +1537,7 @@ func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["platform"]; ok { //platform
+	if v, ok := req["platform"]; ok {
 		err = json.Unmarshal(v, &r.platform)
 		if err != nil {
 			err = json.Unmarshal(b, &r.platform)
@@ -1558,7 +1546,7 @@ func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sort"]; ok { //sort
+	if v, ok := req["sort"]; ok {
 		err = json.Unmarshal(v, &r.sort)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sort)
@@ -1567,7 +1555,7 @@ func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["order"]; ok { //order
+	if v, ok := req["order"]; ok {
 		err = json.Unmarshal(v, &r.order)
 		if err != nil {
 			err = json.Unmarshal(b, &r.order)
@@ -1721,7 +1709,7 @@ func (r *ApiGetDestinationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["destinationID"]; ok { //destinationID
+	if v, ok := req["destinationID"]; ok {
 		err = json.Unmarshal(v, &r.destinationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.destinationID)
@@ -1828,7 +1816,7 @@ func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["itemsPerPage"]; ok { //itemsPerPage
+	if v, ok := req["itemsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.itemsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.itemsPerPage)
@@ -1837,7 +1825,7 @@ func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -1846,7 +1834,7 @@ func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["type"]; ok { //type_
+	if v, ok := req["type"]; ok {
 		err = json.Unmarshal(v, &r.type_)
 		if err != nil {
 			err = json.Unmarshal(b, &r.type_)
@@ -1855,7 +1843,7 @@ func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["authenticationID"]; ok { //authenticationID
+	if v, ok := req["authenticationID"]; ok {
 		err = json.Unmarshal(v, &r.authenticationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationID)
@@ -1864,7 +1852,7 @@ func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sort"]; ok { //sort
+	if v, ok := req["sort"]; ok {
 		err = json.Unmarshal(v, &r.sort)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sort)
@@ -1873,7 +1861,7 @@ func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["order"]; ok { //order
+	if v, ok := req["order"]; ok {
 		err = json.Unmarshal(v, &r.order)
 		if err != nil {
 			err = json.Unmarshal(b, &r.order)
@@ -2028,7 +2016,7 @@ func (r *ApiGetEventRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["runID"]; ok { //runID
+	if v, ok := req["runID"]; ok {
 		err = json.Unmarshal(v, &r.runID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.runID)
@@ -2037,7 +2025,7 @@ func (r *ApiGetEventRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["eventID"]; ok { //eventID
+	if v, ok := req["eventID"]; ok {
 		err = json.Unmarshal(v, &r.eventID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.eventID)
@@ -2147,7 +2135,7 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["runID"]; ok { //runID
+	if v, ok := req["runID"]; ok {
 		err = json.Unmarshal(v, &r.runID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.runID)
@@ -2156,7 +2144,7 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["itemsPerPage"]; ok { //itemsPerPage
+	if v, ok := req["itemsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.itemsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.itemsPerPage)
@@ -2165,7 +2153,7 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -2174,7 +2162,7 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["status"]; ok { //status
+	if v, ok := req["status"]; ok {
 		err = json.Unmarshal(v, &r.status)
 		if err != nil {
 			err = json.Unmarshal(b, &r.status)
@@ -2183,7 +2171,7 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["type"]; ok { //type_
+	if v, ok := req["type"]; ok {
 		err = json.Unmarshal(v, &r.type_)
 		if err != nil {
 			err = json.Unmarshal(b, &r.type_)
@@ -2192,7 +2180,7 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sort"]; ok { //sort
+	if v, ok := req["sort"]; ok {
 		err = json.Unmarshal(v, &r.sort)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sort)
@@ -2201,7 +2189,7 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["order"]; ok { //order
+	if v, ok := req["order"]; ok {
 		err = json.Unmarshal(v, &r.order)
 		if err != nil {
 			err = json.Unmarshal(b, &r.order)
@@ -2358,7 +2346,7 @@ func (r *ApiGetRunRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["runID"]; ok { //runID
+	if v, ok := req["runID"]; ok {
 		err = json.Unmarshal(v, &r.runID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.runID)
@@ -2465,7 +2453,7 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["itemsPerPage"]; ok { //itemsPerPage
+	if v, ok := req["itemsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.itemsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.itemsPerPage)
@@ -2474,7 +2462,7 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -2483,7 +2471,7 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["status"]; ok { //status
+	if v, ok := req["status"]; ok {
 		err = json.Unmarshal(v, &r.status)
 		if err != nil {
 			err = json.Unmarshal(b, &r.status)
@@ -2492,7 +2480,7 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -2501,7 +2489,7 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sort"]; ok { //sort
+	if v, ok := req["sort"]; ok {
 		err = json.Unmarshal(v, &r.sort)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sort)
@@ -2510,7 +2498,7 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["order"]; ok { //order
+	if v, ok := req["order"]; ok {
 		err = json.Unmarshal(v, &r.order)
 		if err != nil {
 			err = json.Unmarshal(b, &r.order)
@@ -2664,7 +2652,7 @@ func (r *ApiGetSourceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["sourceID"]; ok { //sourceID
+	if v, ok := req["sourceID"]; ok {
 		err = json.Unmarshal(v, &r.sourceID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sourceID)
@@ -2771,7 +2759,7 @@ func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["itemsPerPage"]; ok { //itemsPerPage
+	if v, ok := req["itemsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.itemsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.itemsPerPage)
@@ -2780,7 +2768,7 @@ func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -2789,7 +2777,7 @@ func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["type"]; ok { //type_
+	if v, ok := req["type"]; ok {
 		err = json.Unmarshal(v, &r.type_)
 		if err != nil {
 			err = json.Unmarshal(b, &r.type_)
@@ -2798,7 +2786,7 @@ func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["authenticationID"]; ok { //authenticationID
+	if v, ok := req["authenticationID"]; ok {
 		err = json.Unmarshal(v, &r.authenticationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationID)
@@ -2807,7 +2795,7 @@ func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sort"]; ok { //sort
+	if v, ok := req["sort"]; ok {
 		err = json.Unmarshal(v, &r.sort)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sort)
@@ -2816,7 +2804,7 @@ func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["order"]; ok { //order
+	if v, ok := req["order"]; ok {
 		err = json.Unmarshal(v, &r.order)
 		if err != nil {
 			err = json.Unmarshal(b, &r.order)
@@ -2970,7 +2958,7 @@ func (r *ApiGetTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -3080,7 +3068,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["itemsPerPage"]; ok { //itemsPerPage
+	if v, ok := req["itemsPerPage"]; ok {
 		err = json.Unmarshal(v, &r.itemsPerPage)
 		if err != nil {
 			err = json.Unmarshal(b, &r.itemsPerPage)
@@ -3089,7 +3077,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["page"]; ok { //page
+	if v, ok := req["page"]; ok {
 		err = json.Unmarshal(v, &r.page)
 		if err != nil {
 			err = json.Unmarshal(b, &r.page)
@@ -3098,7 +3086,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["action"]; ok { //action
+	if v, ok := req["action"]; ok {
 		err = json.Unmarshal(v, &r.action)
 		if err != nil {
 			err = json.Unmarshal(b, &r.action)
@@ -3107,7 +3095,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["enabled"]; ok { //enabled
+	if v, ok := req["enabled"]; ok {
 		err = json.Unmarshal(v, &r.enabled)
 		if err != nil {
 			err = json.Unmarshal(b, &r.enabled)
@@ -3116,7 +3104,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sourceID"]; ok { //sourceID
+	if v, ok := req["sourceID"]; ok {
 		err = json.Unmarshal(v, &r.sourceID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sourceID)
@@ -3125,7 +3113,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["destinationID"]; ok { //destinationID
+	if v, ok := req["destinationID"]; ok {
 		err = json.Unmarshal(v, &r.destinationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.destinationID)
@@ -3134,7 +3122,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["triggerType"]; ok { //triggerType
+	if v, ok := req["triggerType"]; ok {
 		err = json.Unmarshal(v, &r.triggerType)
 		if err != nil {
 			err = json.Unmarshal(b, &r.triggerType)
@@ -3143,7 +3131,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sort"]; ok { //sort
+	if v, ok := req["sort"]; ok {
 		err = json.Unmarshal(v, &r.sort)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sort)
@@ -3152,7 +3140,7 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["order"]; ok { //order
+	if v, ok := req["order"]; ok {
 		err = json.Unmarshal(v, &r.order)
 		if err != nil {
 			err = json.Unmarshal(b, &r.order)
@@ -3335,7 +3323,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -3344,7 +3332,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -3353,7 +3341,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -3508,7 +3496,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -3517,7 +3505,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -3526,7 +3514,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -3679,7 +3667,7 @@ func (r *ApiRunTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -3781,7 +3769,7 @@ func (r *ApiSearchAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["authenticationSearch"]; ok { //authenticationSearch
+	if v, ok := req["authenticationSearch"]; ok {
 		err = json.Unmarshal(v, &r.authenticationSearch)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationSearch)
@@ -3799,14 +3787,11 @@ func (r *ApiSearchAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchAuthenticationsRequest) WithAuthenticationSearch(authenticationSearch *AuthenticationSearch) ApiSearchAuthenticationsRequest {
-	r.authenticationSearch = authenticationSearch
-	return r
-}
-
 // @return ApiSearchAuthenticationsRequest
-func (c *APIClient) NewApiSearchAuthenticationsRequest() ApiSearchAuthenticationsRequest {
-	return ApiSearchAuthenticationsRequest{}
+func (c *APIClient) NewApiSearchAuthenticationsRequest(authenticationSearch *AuthenticationSearch) ApiSearchAuthenticationsRequest {
+	return ApiSearchAuthenticationsRequest{
+		authenticationSearch: authenticationSearch,
+	}
 }
 
 // SearchAuthentications wraps SearchAuthenticationsWithContext using context.Background.
@@ -3895,7 +3880,7 @@ func (r *ApiSearchDestinationsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["destinationSearch"]; ok { //destinationSearch
+	if v, ok := req["destinationSearch"]; ok {
 		err = json.Unmarshal(v, &r.destinationSearch)
 		if err != nil {
 			err = json.Unmarshal(b, &r.destinationSearch)
@@ -3913,14 +3898,11 @@ func (r *ApiSearchDestinationsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchDestinationsRequest) WithDestinationSearch(destinationSearch *DestinationSearch) ApiSearchDestinationsRequest {
-	r.destinationSearch = destinationSearch
-	return r
-}
-
 // @return ApiSearchDestinationsRequest
-func (c *APIClient) NewApiSearchDestinationsRequest() ApiSearchDestinationsRequest {
-	return ApiSearchDestinationsRequest{}
+func (c *APIClient) NewApiSearchDestinationsRequest(destinationSearch *DestinationSearch) ApiSearchDestinationsRequest {
+	return ApiSearchDestinationsRequest{
+		destinationSearch: destinationSearch,
+	}
 }
 
 // SearchDestinations wraps SearchDestinationsWithContext using context.Background.
@@ -4009,7 +3991,7 @@ func (r *ApiSearchSourcesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["sourceSearch"]; ok { //sourceSearch
+	if v, ok := req["sourceSearch"]; ok {
 		err = json.Unmarshal(v, &r.sourceSearch)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sourceSearch)
@@ -4027,14 +4009,11 @@ func (r *ApiSearchSourcesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchSourcesRequest) WithSourceSearch(sourceSearch *SourceSearch) ApiSearchSourcesRequest {
-	r.sourceSearch = sourceSearch
-	return r
-}
-
 // @return ApiSearchSourcesRequest
-func (c *APIClient) NewApiSearchSourcesRequest() ApiSearchSourcesRequest {
-	return ApiSearchSourcesRequest{}
+func (c *APIClient) NewApiSearchSourcesRequest(sourceSearch *SourceSearch) ApiSearchSourcesRequest {
+	return ApiSearchSourcesRequest{
+		sourceSearch: sourceSearch,
+	}
 }
 
 // SearchSources wraps SearchSourcesWithContext using context.Background.
@@ -4123,7 +4102,7 @@ func (r *ApiSearchTasksRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskSearch"]; ok { //taskSearch
+	if v, ok := req["taskSearch"]; ok {
 		err = json.Unmarshal(v, &r.taskSearch)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskSearch)
@@ -4141,14 +4120,11 @@ func (r *ApiSearchTasksRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchTasksRequest) WithTaskSearch(taskSearch *TaskSearch) ApiSearchTasksRequest {
-	r.taskSearch = taskSearch
-	return r
-}
-
 // @return ApiSearchTasksRequest
-func (c *APIClient) NewApiSearchTasksRequest() ApiSearchTasksRequest {
-	return ApiSearchTasksRequest{}
+func (c *APIClient) NewApiSearchTasksRequest(taskSearch *TaskSearch) ApiSearchTasksRequest {
+	return ApiSearchTasksRequest{
+		taskSearch: taskSearch,
+	}
 }
 
 // SearchTasks wraps SearchTasksWithContext using context.Background.
@@ -4238,7 +4214,7 @@ func (r *ApiUpdateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["authenticationID"]; ok { //authenticationID
+	if v, ok := req["authenticationID"]; ok {
 		err = json.Unmarshal(v, &r.authenticationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationID)
@@ -4247,7 +4223,7 @@ func (r *ApiUpdateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["authenticationUpdate"]; ok { //authenticationUpdate
+	if v, ok := req["authenticationUpdate"]; ok {
 		err = json.Unmarshal(v, &r.authenticationUpdate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.authenticationUpdate)
@@ -4265,15 +4241,11 @@ func (r *ApiUpdateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateAuthenticationRequest) WithAuthenticationUpdate(authenticationUpdate *AuthenticationUpdate) ApiUpdateAuthenticationRequest {
-	r.authenticationUpdate = authenticationUpdate
-	return r
-}
-
 // @return ApiUpdateAuthenticationRequest
-func (c *APIClient) NewApiUpdateAuthenticationRequest(authenticationID string) ApiUpdateAuthenticationRequest {
+func (c *APIClient) NewApiUpdateAuthenticationRequest(authenticationID string, authenticationUpdate *AuthenticationUpdate) ApiUpdateAuthenticationRequest {
 	return ApiUpdateAuthenticationRequest{
-		authenticationID: authenticationID,
+		authenticationID:     authenticationID,
+		authenticationUpdate: authenticationUpdate,
 	}
 }
 
@@ -4365,7 +4337,7 @@ func (r *ApiUpdateDestinationRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["destinationID"]; ok { //destinationID
+	if v, ok := req["destinationID"]; ok {
 		err = json.Unmarshal(v, &r.destinationID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.destinationID)
@@ -4374,7 +4346,7 @@ func (r *ApiUpdateDestinationRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["destinationUpdate"]; ok { //destinationUpdate
+	if v, ok := req["destinationUpdate"]; ok {
 		err = json.Unmarshal(v, &r.destinationUpdate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.destinationUpdate)
@@ -4392,15 +4364,11 @@ func (r *ApiUpdateDestinationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateDestinationRequest) WithDestinationUpdate(destinationUpdate *DestinationUpdate) ApiUpdateDestinationRequest {
-	r.destinationUpdate = destinationUpdate
-	return r
-}
-
 // @return ApiUpdateDestinationRequest
-func (c *APIClient) NewApiUpdateDestinationRequest(destinationID string) ApiUpdateDestinationRequest {
+func (c *APIClient) NewApiUpdateDestinationRequest(destinationID string, destinationUpdate *DestinationUpdate) ApiUpdateDestinationRequest {
 	return ApiUpdateDestinationRequest{
-		destinationID: destinationID,
+		destinationID:     destinationID,
+		destinationUpdate: destinationUpdate,
 	}
 }
 
@@ -4492,7 +4460,7 @@ func (r *ApiUpdateSourceRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["sourceID"]; ok { //sourceID
+	if v, ok := req["sourceID"]; ok {
 		err = json.Unmarshal(v, &r.sourceID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sourceID)
@@ -4501,7 +4469,7 @@ func (r *ApiUpdateSourceRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["sourceUpdate"]; ok { //sourceUpdate
+	if v, ok := req["sourceUpdate"]; ok {
 		err = json.Unmarshal(v, &r.sourceUpdate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.sourceUpdate)
@@ -4519,15 +4487,11 @@ func (r *ApiUpdateSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateSourceRequest) WithSourceUpdate(sourceUpdate *SourceUpdate) ApiUpdateSourceRequest {
-	r.sourceUpdate = sourceUpdate
-	return r
-}
-
 // @return ApiUpdateSourceRequest
-func (c *APIClient) NewApiUpdateSourceRequest(sourceID string) ApiUpdateSourceRequest {
+func (c *APIClient) NewApiUpdateSourceRequest(sourceID string, sourceUpdate *SourceUpdate) ApiUpdateSourceRequest {
 	return ApiUpdateSourceRequest{
-		sourceID: sourceID,
+		sourceID:     sourceID,
+		sourceUpdate: sourceUpdate,
 	}
 }
 
@@ -4619,7 +4583,7 @@ func (r *ApiUpdateTaskRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["taskID"]; ok { //taskID
+	if v, ok := req["taskID"]; ok {
 		err = json.Unmarshal(v, &r.taskID)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskID)
@@ -4628,7 +4592,7 @@ func (r *ApiUpdateTaskRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["taskUpdate"]; ok { //taskUpdate
+	if v, ok := req["taskUpdate"]; ok {
 		err = json.Unmarshal(v, &r.taskUpdate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.taskUpdate)
@@ -4646,15 +4610,11 @@ func (r *ApiUpdateTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiUpdateTaskRequest) WithTaskUpdate(taskUpdate *TaskUpdate) ApiUpdateTaskRequest {
-	r.taskUpdate = taskUpdate
-	return r
-}
-
 // @return ApiUpdateTaskRequest
-func (c *APIClient) NewApiUpdateTaskRequest(taskID string) ApiUpdateTaskRequest {
+func (c *APIClient) NewApiUpdateTaskRequest(taskID string, taskUpdate *TaskUpdate) ApiUpdateTaskRequest {
 	return ApiUpdateTaskRequest{
-		taskID: taskID,
+		taskID:     taskID,
+		taskUpdate: taskUpdate,
 	}
 }
 

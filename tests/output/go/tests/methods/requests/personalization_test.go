@@ -177,10 +177,7 @@ func TestPersonalization_GetPersonalizationStrategy(t *testing.T) {
 		{
 			name: "get getPersonalizationStrategy",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := personalization.ApiGetPersonalizationStrategyRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetPersonalizationStrategy(req)
+				_, err := client.GetPersonalizationStrategy()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/strategies/personalization")

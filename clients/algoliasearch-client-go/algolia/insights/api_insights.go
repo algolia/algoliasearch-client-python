@@ -46,7 +46,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -55,7 +55,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -197,7 +197,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -206,7 +206,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -349,7 +349,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -358,7 +358,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -367,7 +367,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -520,7 +520,7 @@ func (r *ApiPushEventsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["insightEvents"]; ok { //insightEvents
+	if v, ok := req["insightEvents"]; ok {
 		err = json.Unmarshal(v, &r.insightEvents)
 		if err != nil {
 			err = json.Unmarshal(b, &r.insightEvents)
@@ -538,14 +538,11 @@ func (r *ApiPushEventsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiPushEventsRequest) WithInsightEvents(insightEvents *InsightEvents) ApiPushEventsRequest {
-	r.insightEvents = insightEvents
-	return r
-}
-
 // @return ApiPushEventsRequest
-func (c *APIClient) NewApiPushEventsRequest() ApiPushEventsRequest {
-	return ApiPushEventsRequest{}
+func (c *APIClient) NewApiPushEventsRequest(insightEvents *InsightEvents) ApiPushEventsRequest {
+	return ApiPushEventsRequest{
+		insightEvents: insightEvents,
+	}
 }
 
 // PushEvents wraps PushEventsWithContext using context.Background.
@@ -663,7 +660,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -672,7 +669,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -681,7 +678,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)

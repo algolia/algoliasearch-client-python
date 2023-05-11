@@ -211,10 +211,7 @@ func TestSuggestions_GetAllConfigs(t *testing.T) {
 		{
 			name: "getAllConfigs",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{}`
-				req := suggestions.ApiGetAllConfigsRequest{}
-				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
-				_, err := client.GetAllConfigs(req)
+				_, err := client.GetAllConfigs()
 				require.NoError(t, err)
 
 				expectedPath, err := url.QueryUnescape("/1/configs")

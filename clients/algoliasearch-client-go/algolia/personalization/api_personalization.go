@@ -46,7 +46,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -55,7 +55,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -196,7 +196,7 @@ func (r *ApiDeleteUserProfileRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["userToken"]; ok { //userToken
+	if v, ok := req["userToken"]; ok {
 		err = json.Unmarshal(v, &r.userToken)
 		if err != nil {
 			err = json.Unmarshal(b, &r.userToken)
@@ -326,7 +326,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -335,7 +335,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -466,31 +466,13 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetPersonalizationStrategyRequest struct {
-}
-
-func (r *ApiGetPersonalizationStrategyRequest) UnmarshalJSON(b []byte) error {
-	req := map[string]json.RawMessage{}
-	err := json.Unmarshal(b, &req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// @return ApiGetPersonalizationStrategyRequest
-func (c *APIClient) NewApiGetPersonalizationStrategyRequest() ApiGetPersonalizationStrategyRequest {
-	return ApiGetPersonalizationStrategyRequest{}
-}
-
 // GetPersonalizationStrategy wraps GetPersonalizationStrategyWithContext using context.Background.
-func (c *APIClient) GetPersonalizationStrategy(r ApiGetPersonalizationStrategyRequest, opts ...Option) (*PersonalizationStrategyParams, error) {
-	return c.GetPersonalizationStrategyWithContext(context.Background(), r, opts...)
+func (c *APIClient) GetPersonalizationStrategy(opts ...Option) (*PersonalizationStrategyParams, error) {
+	return c.GetPersonalizationStrategyWithContext(context.Background(), opts...)
 }
 
 // @return PersonalizationStrategyParams
-func (c *APIClient) GetPersonalizationStrategyWithContext(ctx context.Context, r ApiGetPersonalizationStrategyRequest, opts ...Option) (*PersonalizationStrategyParams, error) {
+func (c *APIClient) GetPersonalizationStrategyWithContext(ctx context.Context, opts ...Option) (*PersonalizationStrategyParams, error) {
 	var (
 		postBody    any
 		returnValue *PersonalizationStrategyParams
@@ -592,7 +574,7 @@ func (r *ApiGetUserTokenProfileRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["userToken"]; ok { //userToken
+	if v, ok := req["userToken"]; ok {
 		err = json.Unmarshal(v, &r.userToken)
 		if err != nil {
 			err = json.Unmarshal(b, &r.userToken)
@@ -723,7 +705,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -732,7 +714,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -741,7 +723,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -896,7 +878,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -905,7 +887,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -914,7 +896,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -1067,7 +1049,7 @@ func (r *ApiSetPersonalizationStrategyRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["personalizationStrategyParams"]; ok { //personalizationStrategyParams
+	if v, ok := req["personalizationStrategyParams"]; ok {
 		err = json.Unmarshal(v, &r.personalizationStrategyParams)
 		if err != nil {
 			err = json.Unmarshal(b, &r.personalizationStrategyParams)
@@ -1085,14 +1067,11 @@ func (r *ApiSetPersonalizationStrategyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSetPersonalizationStrategyRequest) WithPersonalizationStrategyParams(personalizationStrategyParams *PersonalizationStrategyParams) ApiSetPersonalizationStrategyRequest {
-	r.personalizationStrategyParams = personalizationStrategyParams
-	return r
-}
-
 // @return ApiSetPersonalizationStrategyRequest
-func (c *APIClient) NewApiSetPersonalizationStrategyRequest() ApiSetPersonalizationStrategyRequest {
-	return ApiSetPersonalizationStrategyRequest{}
+func (c *APIClient) NewApiSetPersonalizationStrategyRequest(personalizationStrategyParams *PersonalizationStrategyParams) ApiSetPersonalizationStrategyRequest {
+	return ApiSetPersonalizationStrategyRequest{
+		personalizationStrategyParams: personalizationStrategyParams,
+	}
 }
 
 // SetPersonalizationStrategy wraps SetPersonalizationStrategyWithContext using context.Background.

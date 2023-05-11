@@ -46,7 +46,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -55,7 +55,7 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -197,7 +197,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -206,7 +206,7 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -350,7 +350,7 @@ func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -359,7 +359,7 @@ func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -368,7 +368,7 @@ func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -377,7 +377,7 @@ func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -388,12 +388,6 @@ func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetAverageClickPositionRequest) WithIndex(index string) ApiGetAverageClickPositionRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -415,8 +409,10 @@ func (r ApiGetAverageClickPositionRequest) WithTags(tags string) ApiGetAverageCl
 }
 
 // @return ApiGetAverageClickPositionRequest
-func (c *APIClient) NewApiGetAverageClickPositionRequest() ApiGetAverageClickPositionRequest {
-	return ApiGetAverageClickPositionRequest{}
+func (c *APIClient) NewApiGetAverageClickPositionRequest(index string) ApiGetAverageClickPositionRequest {
+	return ApiGetAverageClickPositionRequest{
+		index: index,
+	}
 }
 
 // GetAverageClickPosition wraps GetAverageClickPositionWithContext using context.Background.
@@ -544,7 +540,7 @@ func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -553,7 +549,7 @@ func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -562,7 +558,7 @@ func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -571,7 +567,7 @@ func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -582,12 +578,6 @@ func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetClickPositionsRequest) WithIndex(index string) ApiGetClickPositionsRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -609,8 +599,10 @@ func (r ApiGetClickPositionsRequest) WithTags(tags string) ApiGetClickPositionsR
 }
 
 // @return ApiGetClickPositionsRequest
-func (c *APIClient) NewApiGetClickPositionsRequest() ApiGetClickPositionsRequest {
-	return ApiGetClickPositionsRequest{}
+func (c *APIClient) NewApiGetClickPositionsRequest(index string) ApiGetClickPositionsRequest {
+	return ApiGetClickPositionsRequest{
+		index: index,
+	}
 }
 
 // GetClickPositions wraps GetClickPositionsWithContext using context.Background.
@@ -738,7 +730,7 @@ func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -747,7 +739,7 @@ func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -756,7 +748,7 @@ func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -765,7 +757,7 @@ func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -776,12 +768,6 @@ func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetClickThroughRateRequest) WithIndex(index string) ApiGetClickThroughRateRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -803,8 +789,10 @@ func (r ApiGetClickThroughRateRequest) WithTags(tags string) ApiGetClickThroughR
 }
 
 // @return ApiGetClickThroughRateRequest
-func (c *APIClient) NewApiGetClickThroughRateRequest() ApiGetClickThroughRateRequest {
-	return ApiGetClickThroughRateRequest{}
+func (c *APIClient) NewApiGetClickThroughRateRequest(index string) ApiGetClickThroughRateRequest {
+	return ApiGetClickThroughRateRequest{
+		index: index,
+	}
 }
 
 // GetClickThroughRate wraps GetClickThroughRateWithContext using context.Background.
@@ -932,7 +920,7 @@ func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -941,7 +929,7 @@ func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -950,7 +938,7 @@ func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -959,7 +947,7 @@ func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -970,12 +958,6 @@ func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetConversationRateRequest) WithIndex(index string) ApiGetConversationRateRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -997,8 +979,10 @@ func (r ApiGetConversationRateRequest) WithTags(tags string) ApiGetConversationR
 }
 
 // @return ApiGetConversationRateRequest
-func (c *APIClient) NewApiGetConversationRateRequest() ApiGetConversationRateRequest {
-	return ApiGetConversationRateRequest{}
+func (c *APIClient) NewApiGetConversationRateRequest(index string) ApiGetConversationRateRequest {
+	return ApiGetConversationRateRequest{
+		index: index,
+	}
 }
 
 // GetConversationRate wraps GetConversationRateWithContext using context.Background.
@@ -1126,7 +1110,7 @@ func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -1135,7 +1119,7 @@ func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -1144,7 +1128,7 @@ func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -1153,7 +1137,7 @@ func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -1164,12 +1148,6 @@ func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetNoClickRateRequest) WithIndex(index string) ApiGetNoClickRateRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -1191,8 +1169,10 @@ func (r ApiGetNoClickRateRequest) WithTags(tags string) ApiGetNoClickRateRequest
 }
 
 // @return ApiGetNoClickRateRequest
-func (c *APIClient) NewApiGetNoClickRateRequest() ApiGetNoClickRateRequest {
-	return ApiGetNoClickRateRequest{}
+func (c *APIClient) NewApiGetNoClickRateRequest(index string) ApiGetNoClickRateRequest {
+	return ApiGetNoClickRateRequest{
+		index: index,
+	}
 }
 
 // GetNoClickRate wraps GetNoClickRateWithContext using context.Background.
@@ -1320,7 +1300,7 @@ func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -1329,7 +1309,7 @@ func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -1338,7 +1318,7 @@ func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -1347,7 +1327,7 @@ func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -1358,12 +1338,6 @@ func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetNoResultsRateRequest) WithIndex(index string) ApiGetNoResultsRateRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -1385,8 +1359,10 @@ func (r ApiGetNoResultsRateRequest) WithTags(tags string) ApiGetNoResultsRateReq
 }
 
 // @return ApiGetNoResultsRateRequest
-func (c *APIClient) NewApiGetNoResultsRateRequest() ApiGetNoResultsRateRequest {
-	return ApiGetNoResultsRateRequest{}
+func (c *APIClient) NewApiGetNoResultsRateRequest(index string) ApiGetNoResultsRateRequest {
+	return ApiGetNoResultsRateRequest{
+		index: index,
+	}
 }
 
 // GetNoResultsRate wraps GetNoResultsRateWithContext using context.Background.
@@ -1514,7 +1490,7 @@ func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -1523,7 +1499,7 @@ func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -1532,7 +1508,7 @@ func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -1541,7 +1517,7 @@ func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -1552,12 +1528,6 @@ func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetSearchesCountRequest) WithIndex(index string) ApiGetSearchesCountRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -1579,8 +1549,10 @@ func (r ApiGetSearchesCountRequest) WithTags(tags string) ApiGetSearchesCountReq
 }
 
 // @return ApiGetSearchesCountRequest
-func (c *APIClient) NewApiGetSearchesCountRequest() ApiGetSearchesCountRequest {
-	return ApiGetSearchesCountRequest{}
+func (c *APIClient) NewApiGetSearchesCountRequest(index string) ApiGetSearchesCountRequest {
+	return ApiGetSearchesCountRequest{
+		index: index,
+	}
 }
 
 // GetSearchesCount wraps GetSearchesCountWithContext using context.Background.
@@ -1710,7 +1682,7 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -1719,7 +1691,7 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -1728,7 +1700,7 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -1737,7 +1709,7 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -1746,7 +1718,7 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -1755,7 +1727,7 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -1766,12 +1738,6 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetSearchesNoClicksRequest) WithIndex(index string) ApiGetSearchesNoClicksRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -1805,8 +1771,10 @@ func (r ApiGetSearchesNoClicksRequest) WithTags(tags string) ApiGetSearchesNoCli
 }
 
 // @return ApiGetSearchesNoClicksRequest
-func (c *APIClient) NewApiGetSearchesNoClicksRequest() ApiGetSearchesNoClicksRequest {
-	return ApiGetSearchesNoClicksRequest{}
+func (c *APIClient) NewApiGetSearchesNoClicksRequest(index string) ApiGetSearchesNoClicksRequest {
+	return ApiGetSearchesNoClicksRequest{
+		index: index,
+	}
 }
 
 // GetSearchesNoClicks wraps GetSearchesNoClicksWithContext using context.Background.
@@ -1942,7 +1910,7 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -1951,7 +1919,7 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -1960,7 +1928,7 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -1969,7 +1937,7 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -1978,7 +1946,7 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -1987,7 +1955,7 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -1998,12 +1966,6 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetSearchesNoResultsRequest) WithIndex(index string) ApiGetSearchesNoResultsRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -2037,8 +1999,10 @@ func (r ApiGetSearchesNoResultsRequest) WithTags(tags string) ApiGetSearchesNoRe
 }
 
 // @return ApiGetSearchesNoResultsRequest
-func (c *APIClient) NewApiGetSearchesNoResultsRequest() ApiGetSearchesNoResultsRequest {
-	return ApiGetSearchesNoResultsRequest{}
+func (c *APIClient) NewApiGetSearchesNoResultsRequest(index string) ApiGetSearchesNoResultsRequest {
+	return ApiGetSearchesNoResultsRequest{
+		index: index,
+	}
 }
 
 // GetSearchesNoResults wraps GetSearchesNoResultsWithContext using context.Background.
@@ -2169,7 +2133,7 @@ func (r *ApiGetStatusRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -2182,15 +2146,11 @@ func (r *ApiGetStatusRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The index name to target.
-func (r ApiGetStatusRequest) WithIndex(index string) ApiGetStatusRequest {
-	r.index = index
-	return r
-}
-
 // @return ApiGetStatusRequest
-func (c *APIClient) NewApiGetStatusRequest() ApiGetStatusRequest {
-	return ApiGetStatusRequest{}
+func (c *APIClient) NewApiGetStatusRequest(index string) ApiGetStatusRequest {
+	return ApiGetStatusRequest{
+		index: index,
+	}
 }
 
 // GetStatus wraps GetStatusWithContext using context.Background.
@@ -2311,7 +2271,7 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -2320,7 +2280,7 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -2329,7 +2289,7 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -2338,7 +2298,7 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -2347,7 +2307,7 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -2356,7 +2316,7 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -2367,12 +2327,6 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetTopCountriesRequest) WithIndex(index string) ApiGetTopCountriesRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -2406,8 +2360,10 @@ func (r ApiGetTopCountriesRequest) WithTags(tags string) ApiGetTopCountriesReque
 }
 
 // @return ApiGetTopCountriesRequest
-func (c *APIClient) NewApiGetTopCountriesRequest() ApiGetTopCountriesRequest {
-	return ApiGetTopCountriesRequest{}
+func (c *APIClient) NewApiGetTopCountriesRequest(index string) ApiGetTopCountriesRequest {
+	return ApiGetTopCountriesRequest{
+		index: index,
+	}
 }
 
 // GetTopCountries wraps GetTopCountriesWithContext using context.Background.
@@ -2544,7 +2500,7 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -2553,7 +2509,7 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["search"]; ok { //search
+	if v, ok := req["search"]; ok {
 		err = json.Unmarshal(v, &r.search)
 		if err != nil {
 			err = json.Unmarshal(b, &r.search)
@@ -2562,7 +2518,7 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -2571,7 +2527,7 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -2580,7 +2536,7 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -2589,7 +2545,7 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -2598,7 +2554,7 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -2609,12 +2565,6 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetTopFilterAttributesRequest) WithIndex(index string) ApiGetTopFilterAttributesRequest {
-	r.index = index
-	return r
 }
 
 // The query term to search for. Must match the exact user input.
@@ -2654,8 +2604,10 @@ func (r ApiGetTopFilterAttributesRequest) WithTags(tags string) ApiGetTopFilterA
 }
 
 // @return ApiGetTopFilterAttributesRequest
-func (c *APIClient) NewApiGetTopFilterAttributesRequest() ApiGetTopFilterAttributesRequest {
-	return ApiGetTopFilterAttributesRequest{}
+func (c *APIClient) NewApiGetTopFilterAttributesRequest(index string) ApiGetTopFilterAttributesRequest {
+	return ApiGetTopFilterAttributesRequest{
+		index: index,
+	}
 }
 
 // GetTopFilterAttributes wraps GetTopFilterAttributesWithContext using context.Background.
@@ -2796,7 +2748,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["attribute"]; ok { //attribute
+	if v, ok := req["attribute"]; ok {
 		err = json.Unmarshal(v, &r.attribute)
 		if err != nil {
 			err = json.Unmarshal(b, &r.attribute)
@@ -2805,7 +2757,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -2814,7 +2766,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["search"]; ok { //search
+	if v, ok := req["search"]; ok {
 		err = json.Unmarshal(v, &r.search)
 		if err != nil {
 			err = json.Unmarshal(b, &r.search)
@@ -2823,7 +2775,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -2832,7 +2784,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -2841,7 +2793,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -2850,7 +2802,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -2859,7 +2811,7 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -2870,12 +2822,6 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetTopFilterForAttributeRequest) WithIndex(index string) ApiGetTopFilterForAttributeRequest {
-	r.index = index
-	return r
 }
 
 // The query term to search for. Must match the exact user input.
@@ -2915,9 +2861,10 @@ func (r ApiGetTopFilterForAttributeRequest) WithTags(tags string) ApiGetTopFilte
 }
 
 // @return ApiGetTopFilterForAttributeRequest
-func (c *APIClient) NewApiGetTopFilterForAttributeRequest(attribute string) ApiGetTopFilterForAttributeRequest {
+func (c *APIClient) NewApiGetTopFilterForAttributeRequest(attribute string, index string) ApiGetTopFilterForAttributeRequest {
 	return ApiGetTopFilterForAttributeRequest{
 		attribute: attribute,
+		index:     index,
 	}
 }
 
@@ -3059,7 +3006,7 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -3068,7 +3015,7 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["search"]; ok { //search
+	if v, ok := req["search"]; ok {
 		err = json.Unmarshal(v, &r.search)
 		if err != nil {
 			err = json.Unmarshal(b, &r.search)
@@ -3077,7 +3024,7 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -3086,7 +3033,7 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -3095,7 +3042,7 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -3104,7 +3051,7 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -3113,7 +3060,7 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -3124,12 +3071,6 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetTopFiltersNoResultsRequest) WithIndex(index string) ApiGetTopFiltersNoResultsRequest {
-	r.index = index
-	return r
 }
 
 // The query term to search for. Must match the exact user input.
@@ -3169,8 +3110,10 @@ func (r ApiGetTopFiltersNoResultsRequest) WithTags(tags string) ApiGetTopFilters
 }
 
 // @return ApiGetTopFiltersNoResultsRequest
-func (c *APIClient) NewApiGetTopFiltersNoResultsRequest() ApiGetTopFiltersNoResultsRequest {
-	return ApiGetTopFiltersNoResultsRequest{}
+func (c *APIClient) NewApiGetTopFiltersNoResultsRequest(index string) ApiGetTopFiltersNoResultsRequest {
+	return ApiGetTopFiltersNoResultsRequest{
+		index: index,
+	}
 }
 
 // GetTopFiltersNoResults wraps GetTopFiltersNoResultsWithContext using context.Background.
@@ -3311,7 +3254,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -3320,7 +3263,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["search"]; ok { //search
+	if v, ok := req["search"]; ok {
 		err = json.Unmarshal(v, &r.search)
 		if err != nil {
 			err = json.Unmarshal(b, &r.search)
@@ -3329,7 +3272,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["clickAnalytics"]; ok { //clickAnalytics
+	if v, ok := req["clickAnalytics"]; ok {
 		err = json.Unmarshal(v, &r.clickAnalytics)
 		if err != nil {
 			err = json.Unmarshal(b, &r.clickAnalytics)
@@ -3338,7 +3281,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -3347,7 +3290,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -3356,7 +3299,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -3365,7 +3308,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -3374,7 +3317,7 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -3385,12 +3328,6 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetTopHitsRequest) WithIndex(index string) ApiGetTopHitsRequest {
-	r.index = index
-	return r
 }
 
 // The query term to search for. Must match the exact user input.
@@ -3436,8 +3373,10 @@ func (r ApiGetTopHitsRequest) WithTags(tags string) ApiGetTopHitsRequest {
 }
 
 // @return ApiGetTopHitsRequest
-func (c *APIClient) NewApiGetTopHitsRequest() ApiGetTopHitsRequest {
-	return ApiGetTopHitsRequest{}
+func (c *APIClient) NewApiGetTopHitsRequest(index string) ApiGetTopHitsRequest {
+	return ApiGetTopHitsRequest{
+		index: index,
+	}
 }
 
 // GetTopHits wraps GetTopHitsWithContext using context.Background.
@@ -3582,7 +3521,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -3591,7 +3530,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["clickAnalytics"]; ok { //clickAnalytics
+	if v, ok := req["clickAnalytics"]; ok {
 		err = json.Unmarshal(v, &r.clickAnalytics)
 		if err != nil {
 			err = json.Unmarshal(b, &r.clickAnalytics)
@@ -3600,7 +3539,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -3609,7 +3548,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -3618,7 +3557,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["orderBy"]; ok { //orderBy
+	if v, ok := req["orderBy"]; ok {
 		err = json.Unmarshal(v, &r.orderBy)
 		if err != nil {
 			err = json.Unmarshal(b, &r.orderBy)
@@ -3627,7 +3566,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["direction"]; ok { //direction
+	if v, ok := req["direction"]; ok {
 		err = json.Unmarshal(v, &r.direction)
 		if err != nil {
 			err = json.Unmarshal(b, &r.direction)
@@ -3636,7 +3575,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["limit"]; ok { //limit
+	if v, ok := req["limit"]; ok {
 		err = json.Unmarshal(v, &r.limit)
 		if err != nil {
 			err = json.Unmarshal(b, &r.limit)
@@ -3645,7 +3584,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["offset"]; ok { //offset
+	if v, ok := req["offset"]; ok {
 		err = json.Unmarshal(v, &r.offset)
 		if err != nil {
 			err = json.Unmarshal(b, &r.offset)
@@ -3654,7 +3593,7 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -3665,12 +3604,6 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetTopSearchesRequest) WithIndex(index string) ApiGetTopSearchesRequest {
-	r.index = index
-	return r
 }
 
 // Whether to include the click-through and conversion rates for a search.
@@ -3722,8 +3655,10 @@ func (r ApiGetTopSearchesRequest) WithTags(tags string) ApiGetTopSearchesRequest
 }
 
 // @return ApiGetTopSearchesRequest
-func (c *APIClient) NewApiGetTopSearchesRequest() ApiGetTopSearchesRequest {
-	return ApiGetTopSearchesRequest{}
+func (c *APIClient) NewApiGetTopSearchesRequest(index string) ApiGetTopSearchesRequest {
+	return ApiGetTopSearchesRequest{
+		index: index,
+	}
 }
 
 // GetTopSearches wraps GetTopSearchesWithContext using context.Background.
@@ -3866,7 +3801,7 @@ func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["index"]; ok { //index
+	if v, ok := req["index"]; ok {
 		err = json.Unmarshal(v, &r.index)
 		if err != nil {
 			err = json.Unmarshal(b, &r.index)
@@ -3875,7 +3810,7 @@ func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["startDate"]; ok { //startDate
+	if v, ok := req["startDate"]; ok {
 		err = json.Unmarshal(v, &r.startDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.startDate)
@@ -3884,7 +3819,7 @@ func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["endDate"]; ok { //endDate
+	if v, ok := req["endDate"]; ok {
 		err = json.Unmarshal(v, &r.endDate)
 		if err != nil {
 			err = json.Unmarshal(b, &r.endDate)
@@ -3893,7 +3828,7 @@ func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["tags"]; ok { //tags
+	if v, ok := req["tags"]; ok {
 		err = json.Unmarshal(v, &r.tags)
 		if err != nil {
 			err = json.Unmarshal(b, &r.tags)
@@ -3904,12 +3839,6 @@ func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
 	}
 
 	return nil
-}
-
-// The index name to target.
-func (r ApiGetUsersCountRequest) WithIndex(index string) ApiGetUsersCountRequest {
-	r.index = index
-	return r
 }
 
 // The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
@@ -3931,8 +3860,10 @@ func (r ApiGetUsersCountRequest) WithTags(tags string) ApiGetUsersCountRequest {
 }
 
 // @return ApiGetUsersCountRequest
-func (c *APIClient) NewApiGetUsersCountRequest() ApiGetUsersCountRequest {
-	return ApiGetUsersCountRequest{}
+func (c *APIClient) NewApiGetUsersCountRequest(index string) ApiGetUsersCountRequest {
+	return ApiGetUsersCountRequest{
+		index: index,
+	}
 }
 
 // GetUsersCount wraps GetUsersCountWithContext using context.Background.
@@ -4059,7 +3990,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -4068,7 +3999,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -4077,7 +4008,7 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
@@ -4232,7 +4163,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["path"]; ok { //path
+	if v, ok := req["path"]; ok {
 		err = json.Unmarshal(v, &r.path)
 		if err != nil {
 			err = json.Unmarshal(b, &r.path)
@@ -4241,7 +4172,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["parameters"]; ok { //parameters
+	if v, ok := req["parameters"]; ok {
 		err = json.Unmarshal(v, &r.parameters)
 		if err != nil {
 			err = json.Unmarshal(b, &r.parameters)
@@ -4250,7 +4181,7 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["body"]; ok { //body
+	if v, ok := req["body"]; ok {
 		err = json.Unmarshal(v, &r.body)
 		if err != nil {
 			err = json.Unmarshal(b, &r.body)
