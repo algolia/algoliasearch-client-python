@@ -17,6 +17,8 @@ type SourceBigQuery struct {
 	Table *string `json:"table,omitempty"`
 	// Table prefix (for Google Analytics).
 	TablePrefix *string `json:"tablePrefix,omitempty"`
+	// Custom SQL request to extract data from the BigQuery table.
+	CustomSQLRequest *string `json:"customSQLRequest,omitempty"`
 }
 
 type SourceBigQueryOption func(f *SourceBigQuery)
@@ -36,6 +38,12 @@ func WithSourceBigQueryTable(val string) SourceBigQueryOption {
 func WithSourceBigQueryTablePrefix(val string) SourceBigQueryOption {
 	return func(f *SourceBigQuery) {
 		f.TablePrefix = &val
+	}
+}
+
+func WithSourceBigQueryCustomSQLRequest(val string) SourceBigQueryOption {
+	return func(f *SourceBigQuery) {
+		f.CustomSQLRequest = &val
 	}
 }
 
@@ -205,6 +213,38 @@ func (o *SourceBigQuery) SetTablePrefix(v string) {
 	o.TablePrefix = &v
 }
 
+// GetCustomSQLRequest returns the CustomSQLRequest field value if set, zero value otherwise.
+func (o *SourceBigQuery) GetCustomSQLRequest() string {
+	if o == nil || o.CustomSQLRequest == nil {
+		var ret string
+		return ret
+	}
+	return *o.CustomSQLRequest
+}
+
+// GetCustomSQLRequestOk returns a tuple with the CustomSQLRequest field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceBigQuery) GetCustomSQLRequestOk() (*string, bool) {
+	if o == nil || o.CustomSQLRequest == nil {
+		return nil, false
+	}
+	return o.CustomSQLRequest, true
+}
+
+// HasCustomSQLRequest returns a boolean if a field has been set.
+func (o *SourceBigQuery) HasCustomSQLRequest() bool {
+	if o != nil && o.CustomSQLRequest != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCustomSQLRequest gets a reference to the given string and assigns it to the CustomSQLRequest field.
+func (o *SourceBigQuery) SetCustomSQLRequest(v string) {
+	o.CustomSQLRequest = &v
+}
+
 func (o SourceBigQuery) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -222,6 +262,9 @@ func (o SourceBigQuery) MarshalJSON() ([]byte, error) {
 	if o.TablePrefix != nil {
 		toSerialize["tablePrefix"] = o.TablePrefix
 	}
+	if o.CustomSQLRequest != nil {
+		toSerialize["customSQLRequest"] = o.CustomSQLRequest
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -232,6 +275,7 @@ func (o SourceBigQuery) String() string {
 	out += fmt.Sprintf("  dataType=%v\n", o.DataType)
 	out += fmt.Sprintf("  table=%v\n", o.Table)
 	out += fmt.Sprintf("  tablePrefix=%v\n", o.TablePrefix)
+	out += fmt.Sprintf("  customSQLRequest=%v\n", o.CustomSQLRequest)
 	return fmt.Sprintf("SourceBigQuery {\n%s}", out)
 }
 

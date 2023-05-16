@@ -39,6 +39,7 @@ public sealed interface SourceInput {
      * @param dataType
      * @param table Table name (for default BQ).
      * @param tablePrefix Table prefix (for Google Analytics).
+     * @param customSQLRequest Custom SQL request to extract data from the BigQuery table.
      */
     public fun SourceBigQuery(
       projectID: String,
@@ -46,12 +47,14 @@ public sealed interface SourceInput {
       dataType: BigQueryDataType? = null,
       table: String? = null,
       tablePrefix: String? = null,
+      customSQLRequest: String? = null,
     ): SourceBigQuery = com.algolia.client.model.ingestion.SourceBigQuery(
       projectID = projectID,
       datasetID = datasetID,
       dataType = dataType,
       table = table,
       tablePrefix = tablePrefix,
+      customSQLRequest = customSQLRequest,
     )
 
     /**

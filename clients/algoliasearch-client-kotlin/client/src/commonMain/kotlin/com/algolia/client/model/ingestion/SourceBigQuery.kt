@@ -12,6 +12,7 @@ import kotlinx.serialization.json.*
  * @param dataType
  * @param table Table name (for default BQ).
  * @param tablePrefix Table prefix (for Google Analytics).
+ * @param customSQLRequest Custom SQL request to extract data from the BigQuery table.
  */
 @Serializable
 public data class SourceBigQuery(
@@ -29,4 +30,7 @@ public data class SourceBigQuery(
 
   /** Table prefix (for Google Analytics). */
   @SerialName(value = "tablePrefix") val tablePrefix: String? = null,
+
+  /** Custom SQL request to extract data from the BigQuery table. */
+  @SerialName(value = "customSQLRequest") val customSQLRequest: String? = null,
 ) : SourceUpdateInput, SourceInput
