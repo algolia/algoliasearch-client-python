@@ -1,3 +1,10 @@
+## [4.0.0-alpha.10](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.9...4.0.0-alpha.10)
+
+- [72755c18](https://github.com/algolia/api-clients-automation/commit/72755c18) feat(go): comments are enhanced to provide better developer experience ([#1536](https://github.com/algolia/api-clients-automation/pull/1536)) by [@mehmetaligok](https://github.com/mehmetaligok/)
+- [49b4c00c](https://github.com/algolia/api-clients-automation/commit/49b4c00c) feat(specs): add property to BigQuery source input ([#1547](https://github.com/algolia/api-clients-automation/pull/1547)) by [@Fluf22](https://github.com/Fluf22/)
+- [fe7057d1](https://github.com/algolia/api-clients-automation/commit/fe7057d1) feat(go): parameter arguments for request creation improved with all … ([#1535](https://github.com/algolia/api-clients-automation/pull/1535)) by [@mehmetaligok](https://github.com/mehmetaligok/)
+- [d2ad9cb9](https://github.com/algolia/api-clients-automation/commit/d2ad9cb9) feat(go): Add context support to all requests ([#1527](https://github.com/algolia/api-clients-automation/pull/1527)) by [@mehmetaligok](https://github.com/mehmetaligok/)
+
 ## [4.0.0-alpha.9](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.8...4.0.0-alpha.9)
 
 - [49b4c00c](https://github.com/algolia/api-clients-automation/commit/49b4c00c) feat(specs): add property to BigQuery source input ([#1547](https://github.com/algolia/api-clients-automation/pull/1547)) by [@Fluf22](https://github.com/Fluf22/)
