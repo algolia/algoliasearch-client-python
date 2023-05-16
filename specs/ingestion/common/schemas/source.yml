@@ -218,6 +218,9 @@ SourceBigQuery:
     tablePrefix:
       type: string
       description: Table prefix (for Google Analytics).
+    customSQLRequest:
+      type: string
+      description: Custom SQL request to extract data from the BigQuery table.
   required:
     - projectID
     - datasetID  
