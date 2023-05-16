@@ -38,12 +38,6 @@ func HeaderParamOption(name string, val any) Option {
 
 {{#operation}}
   {{#hasParams}}
-  type {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request struct {
-{{#allParams}}
-	{{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}}
-{{/allParams}}
-}
-
 func (r *{{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -70,11 +64,28 @@ func (r *{{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/
   return nil
 }
 
+// {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request represents the request with all the parameters for the API call.
+type {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request struct {
+{{#allParams}}
+	{{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}}
+{{/allParams}}
+}
+
+{{#isDeprecated}}
+// Deprecated
+{{/isDeprecated}}
+//New{{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request creates an instance of the {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request to be used for the API call.
+func (c *APIClient) NewApi{{{nickname}}}Request({{#requiredParams}} {{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}} {{^-last}},{{/-last}}{{/requiredParams}}) {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request {
+	return {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request{
+		{{#requiredParams}}
+		{{paramName}}: {{paramName}},
+		{{/requiredParams}}
+	}
+}
+
 {{#allParams}}
 {{^required}}
-{{#description}}
-// {{.}}
-{{/description}}
+// With{{#lambda.titlecase}}{{paramName}}{{/lambda.titlecase}} adds the {{paramName}} to the {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request and returns the request for chaining.
 {{#isDeprecated}}
 // Deprecated
 {{/isDeprecated}}
@@ -85,19 +96,24 @@ func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/s
 
 {{/required}}
 {{/allParams}}
-{{#isDeprecated}}
-// Deprecated
-{{/isDeprecated}}
-//@return {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request
-func (c *APIClient) NewApi{{{nickname}}}Request({{#requiredParams}} {{paramName}} {{^isPathParam}}{{^isFreeFormObject}}{{^isArray}}{{^isPrimitiveType}}*{{/isPrimitiveType}}{{/isArray}}{{/isFreeFormObject}}{{/isPathParam}}{{{dataType}}} {{^-last}},{{/-last}}{{/requiredParams}}) {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request {
-	return {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request{
-		{{#requiredParams}}
-		{{paramName}}: {{paramName}},
-		{{/requiredParams}}
-	}
-}
 {{/hasParams}}
-// {{nickname}} wraps {{nickname}}WithContext using context.Background.
+/*
+{{operationId}} {{{summary}}} Wraps {{nickname}}WithContext using context.Background.{{^summary}}Method for {{operationId}}{{/summary}}
+{{#notes}}
+
+{{{unescapedNotes}}}
+{{/notes}}
+
+Request can be constructed by NewApi{{operationId}}Request with parameters below.
+ {{#allParams}}
+ @param {{paramName}} {{dataType}}{{#description}} - {{{.}}}{{/description}}
+ {{/allParams}}
+ {{#returnType}}@return {{{.}}}{{/returnType}}
+{{#isDeprecated}}
+
+Deprecated
+{{/isDeprecated}}
+*/
 {{#isDeprecated}}
 // Deprecated
 {{/isDeprecated}}
@@ -105,11 +121,23 @@ func (c *APIClient) {{nickname}}({{#hasParams}}r {{#structPrefix}}{{&classname}}
   return c.{{nickname}}WithContext(context.Background(), {{#hasParams}}r,{{/hasParams}} opts...)
 }
 
-// {{{description}}}{{#returnType}}
-//  @return {{{.}}}{{/returnType}}
+/*
+{{operationId}} {{{summary}}}{{^summary}}Method for {{operationId}}{{/summary}}
+{{#notes}}
+
+{{{unescapedNotes}}}
+{{/notes}}
+
+Request can be constructed by NewApi{{operationId}}Request with parameters below.
+ {{#allParams}}
+ @param {{paramName}} {{dataType}}{{#description}} - {{{.}}}{{/description}}
+ {{/allParams}}
+ {{#returnType}}@return {{{.}}}{{/returnType}}
 {{#isDeprecated}}
-// Deprecated
+
+Deprecated
 {{/isDeprecated}}
+*/
 func (c *APIClient) {{nickname}}WithContext(ctx context.Context, {{#hasParams}}r {{#structPrefix}}{{&classname}}{{/structPrefix}}{{^structPrefix}}Api{{/structPrefix}}{{operationId}}Request,{{/hasParams}} opts ...Option) ({{#returnType}}{{^isArray}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{/isArray}}{{{.}}}, {{/returnType}}error) {
 	var (
     postBody     any
@@ -305,5 +333,6 @@ func (c *APIClient) {{nickname}}WithContext(ctx context.Context, {{#hasParams}}r
 	{{/returnType}}
 	return {{#returnType}}returnValue, {{/returnType}}nil
 }
+
 {{/operation}}
 {{/operations}}
