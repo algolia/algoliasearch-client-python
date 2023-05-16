@@ -1,3 +1,9 @@
+## [4.0.0-alpha.9](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.8...4.0.0-alpha.9)
+
+- [49b4c00c](https://github.com/algolia/api-clients-automation/commit/49b4c00c) feat(specs): add property to BigQuery source input ([#1547](https://github.com/algolia/api-clients-automation/pull/1547)) by [@Fluf22](https://github.com/Fluf22/)
+- [fe7057d1](https://github.com/algolia/api-clients-automation/commit/fe7057d1) feat(go): parameter arguments for request creation improved with all … ([#1535](https://github.com/algolia/api-clients-automation/pull/1535)) by [@mehmetaligok](https://github.com/mehmetaligok/)
+- [d2ad9cb9](https://github.com/algolia/api-clients-automation/commit/d2ad9cb9) feat(go): Add context support to all requests ([#1527](https://github.com/algolia/api-clients-automation/pull/1527)) by [@mehmetaligok](https://github.com/mehmetaligok/)
+
 ## [4.0.0-alpha.8](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.7...4.0.0-alpha.8)
 
 - [57b59189](https://github.com/algolia/api-clients-automation/commit/57b59189) feat(go): release process for generated go client ([#1512](https://github.com/algolia/api-clients-automation/pull/1512)) by [@mehmetaligok](https://github.com/mehmetaligok/)
