@@ -35,11 +35,6 @@ func HeaderParamOption(name string, val any) Option {
 	}
 }
 
-type ApiDelRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -68,25 +63,51 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
-	r.parameters = parameters
-	return r
+// ApiDelRequest represents the request with all the parameters for the API call.
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiDelRequest
+// NewApiDelRequest creates an instance of the ApiDelRequest to be used for the API call.
 func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	return ApiDelRequest{
 		path: path,
 	}
 }
 
-// Del wraps DelWithContext using context.Background.
+// WithParameters adds the parameters to the ApiDelRequest and returns the request for chaining.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Del Send requests to the Algolia REST API. Wraps DelWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.DelWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Del Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -186,11 +207,6 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -219,25 +235,51 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
-	r.parameters = parameters
-	return r
+// ApiGetRequest represents the request with all the parameters for the API call.
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiGetRequest
+// NewApiGetRequest creates an instance of the ApiGetRequest to be used for the API call.
 func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	return ApiGetRequest{
 		path: path,
 	}
 }
 
-// Get wraps GetWithContext using context.Background.
+// WithParameters adds the parameters to the ApiGetRequest and returns the request for chaining.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Get Send requests to the Algolia REST API. Wraps GetWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.GetWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Get Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -337,12 +379,6 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiPostRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -380,31 +416,60 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
-	r.parameters = parameters
-	return r
+// ApiPostRequest represents the request with all the parameters for the API call.
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPostRequest
+// NewApiPostRequest creates an instance of the ApiPostRequest to be used for the API call.
 func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	return ApiPostRequest{
 		path: path,
 	}
 }
 
-// Post wraps PostWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+/*
+Post Send requests to the Algolia REST API. Wraps PostWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PostWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Post Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -510,10 +575,6 @@ func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts 
 	return returnValue, nil
 }
 
-type ApiPushEventsRequest struct {
-	insightEvents *InsightEvents
-}
-
 func (r *ApiPushEventsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -538,19 +599,68 @@ func (r *ApiPushEventsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiPushEventsRequest
+// ApiPushEventsRequest represents the request with all the parameters for the API call.
+type ApiPushEventsRequest struct {
+	insightEvents *InsightEvents
+}
+
+// NewApiPushEventsRequest creates an instance of the ApiPushEventsRequest to be used for the API call.
 func (c *APIClient) NewApiPushEventsRequest(insightEvents *InsightEvents) ApiPushEventsRequest {
 	return ApiPushEventsRequest{
 		insightEvents: insightEvents,
 	}
 }
 
-// PushEvents wraps PushEventsWithContext using context.Background.
+/*
+PushEvents Push events. Wraps PushEventsWithContext using context.Background.
+
+This command pushes an array of events.
+
+An event is
+  - an action: `eventName`
+  - performed in a context: `eventType`
+  - at some point in time provided: `timestamp`
+  - by an end user: `userToken`
+  - on something: `index`
+
+Notes:
+  - To be accepted, all events sent must be valid.
+  - The size of the body must be *less than 2 MB*.
+  - When an event is tied to an Algolia search, it must also provide a `queryID`. If that event is a `click`, their absolute `positions` should also be passed.
+  - We consider that an `index` provides access to 2 resources: objects and filters. An event can only interact with a single resource type, but not necessarily on a single item. As such an event will accept an array of `objectIDs` or `filters`.
+
+Request can be constructed by NewApiPushEventsRequest with parameters below.
+
+	@param insightEvents InsightEvents
+	@return PushEventsResponse
+*/
 func (c *APIClient) PushEvents(r ApiPushEventsRequest, opts ...Option) (*PushEventsResponse, error) {
 	return c.PushEventsWithContext(context.Background(), r, opts...)
 }
 
-// @return PushEventsResponse
+/*
+PushEvents Push events.
+
+This command pushes an array of events.
+
+An event is
+  - an action: `eventName`
+  - performed in a context: `eventType`
+  - at some point in time provided: `timestamp`
+  - by an end user: `userToken`
+  - on something: `index`
+
+Notes:
+  - To be accepted, all events sent must be valid.
+  - The size of the body must be *less than 2 MB*.
+  - When an event is tied to an Algolia search, it must also provide a `queryID`. If that event is a `click`, their absolute `positions` should also be passed.
+  - We consider that an `index` provides access to 2 resources: objects and filters. An event can only interact with a single resource type, but not necessarily on a single item. As such an event will accept an array of `objectIDs` or `filters`.
+
+Request can be constructed by NewApiPushEventsRequest with parameters below.
+
+	@param insightEvents InsightEvents
+	@return PushEventsResponse
+*/
 func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRequest, opts ...Option) (*PushEventsResponse, error) {
 	var (
 		postBody    any
@@ -648,12 +758,6 @@ func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRe
 	return returnValue, nil
 }
 
-type ApiPutRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -691,31 +795,60 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
-	r.parameters = parameters
-	return r
+// ApiPutRequest represents the request with all the parameters for the API call.
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPutRequest
+// NewApiPutRequest creates an instance of the ApiPutRequest to be used for the API call.
 func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	return ApiPutRequest{
 		path: path,
 	}
 }
 
-// Put wraps PutWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+/*
+Put Send requests to the Algolia REST API. Wraps PutWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PutWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Put Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any

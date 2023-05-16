@@ -35,11 +35,6 @@ func HeaderParamOption(name string, val any) Option {
 	}
 }
 
-type ApiDelRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -68,25 +63,51 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
-	r.parameters = parameters
-	return r
+// ApiDelRequest represents the request with all the parameters for the API call.
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiDelRequest
+// NewApiDelRequest creates an instance of the ApiDelRequest to be used for the API call.
 func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	return ApiDelRequest{
 		path: path,
 	}
 }
 
-// Del wraps DelWithContext using context.Background.
+// WithParameters adds the parameters to the ApiDelRequest and returns the request for chaining.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Del Send requests to the Algolia REST API. Wraps DelWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.DelWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Del Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -186,10 +207,6 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiDeleteUserProfileRequest struct {
-	userToken string
-}
-
 func (r *ApiDeleteUserProfileRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -209,19 +226,50 @@ func (r *ApiDeleteUserProfileRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteUserProfileRequest
+// ApiDeleteUserProfileRequest represents the request with all the parameters for the API call.
+type ApiDeleteUserProfileRequest struct {
+	userToken string
+}
+
+// NewApiDeleteUserProfileRequest creates an instance of the ApiDeleteUserProfileRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteUserProfileRequest(userToken string) ApiDeleteUserProfileRequest {
 	return ApiDeleteUserProfileRequest{
 		userToken: userToken,
 	}
 }
 
-// DeleteUserProfile wraps DeleteUserProfileWithContext using context.Background.
+/*
+DeleteUserProfile Delete a user profile. Wraps DeleteUserProfileWithContext using context.Background.
+
+Delete the user profile and all its associated data.
+
+Returns, as part of the response, a date until which the data can safely be considered as deleted for the given user. This means if you send events for the given user before this date, they will be ignored. Any data received after the deletedUntil date will start building a new user profile.
+
+It might take a couple hours for the deletion request to be fully processed.
+
+Request can be constructed by NewApiDeleteUserProfileRequest with parameters below.
+
+	@param userToken string - userToken representing the user for which to fetch the Personalization profile.
+	@return DeleteUserProfileResponse
+*/
 func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
 	return c.DeleteUserProfileWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteUserProfileResponse
+/*
+DeleteUserProfile Delete a user profile.
+
+Delete the user profile and all its associated data.
+
+Returns, as part of the response, a date until which the data can safely be considered as deleted for the given user. This means if you send events for the given user before this date, they will be ignored. Any data received after the deletedUntil date will start building a new user profile.
+
+It might take a couple hours for the deletion request to be fully processed.
+
+Request can be constructed by NewApiDeleteUserProfileRequest with parameters below.
+
+	@param userToken string - userToken representing the user for which to fetch the Personalization profile.
+	@return DeleteUserProfileResponse
+*/
 func (c *APIClient) DeleteUserProfileWithContext(ctx context.Context, r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
 	var (
 		postBody    any
@@ -315,11 +363,6 @@ func (c *APIClient) DeleteUserProfileWithContext(ctx context.Context, r ApiDelet
 	return returnValue, nil
 }
 
-type ApiGetRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -348,25 +391,51 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
-	r.parameters = parameters
-	return r
+// ApiGetRequest represents the request with all the parameters for the API call.
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiGetRequest
+// NewApiGetRequest creates an instance of the ApiGetRequest to be used for the API call.
 func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	return ApiGetRequest{
 		path: path,
 	}
 }
 
-// Get wraps GetWithContext using context.Background.
+// WithParameters adds the parameters to the ApiGetRequest and returns the request for chaining.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Get Send requests to the Algolia REST API. Wraps GetWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.GetWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Get Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -466,12 +535,28 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-// GetPersonalizationStrategy wraps GetPersonalizationStrategyWithContext using context.Background.
+/*
+GetPersonalizationStrategy Get the current strategy. Wraps GetPersonalizationStrategyWithContext using context.Background.
+
+The strategy contains information on the events and facets that impact user profiles and personalized search results.
+
+Request can be constructed by NewApiGetPersonalizationStrategyRequest with parameters below.
+
+	@return PersonalizationStrategyParams
+*/
 func (c *APIClient) GetPersonalizationStrategy(opts ...Option) (*PersonalizationStrategyParams, error) {
 	return c.GetPersonalizationStrategyWithContext(context.Background(), opts...)
 }
 
-// @return PersonalizationStrategyParams
+/*
+GetPersonalizationStrategy Get the current strategy.
+
+The strategy contains information on the events and facets that impact user profiles and personalized search results.
+
+Request can be constructed by NewApiGetPersonalizationStrategyRequest with parameters below.
+
+	@return PersonalizationStrategyParams
+*/
 func (c *APIClient) GetPersonalizationStrategyWithContext(ctx context.Context, opts ...Option) (*PersonalizationStrategyParams, error) {
 	var (
 		postBody    any
@@ -564,10 +649,6 @@ func (c *APIClient) GetPersonalizationStrategyWithContext(ctx context.Context, o
 	return returnValue, nil
 }
 
-type ApiGetUserTokenProfileRequest struct {
-	userToken string
-}
-
 func (r *ApiGetUserTokenProfileRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -587,19 +668,46 @@ func (r *ApiGetUserTokenProfileRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetUserTokenProfileRequest
+// ApiGetUserTokenProfileRequest represents the request with all the parameters for the API call.
+type ApiGetUserTokenProfileRequest struct {
+	userToken string
+}
+
+// NewApiGetUserTokenProfileRequest creates an instance of the ApiGetUserTokenProfileRequest to be used for the API call.
 func (c *APIClient) NewApiGetUserTokenProfileRequest(userToken string) ApiGetUserTokenProfileRequest {
 	return ApiGetUserTokenProfileRequest{
 		userToken: userToken,
 	}
 }
 
-// GetUserTokenProfile wraps GetUserTokenProfileWithContext using context.Background.
+/*
+GetUserTokenProfile Get a user profile. Wraps GetUserTokenProfileWithContext using context.Background.
+
+Get the user profile built from Personalization strategy.
+
+The profile is structured by facet name used in the strategy. Each facet value is mapped to its score. Each score represents the user affinity for a specific facet value given the userToken past events and the Personalization strategy defined. Scores are bounded to 20. The last processed event timestamp is provided using the ISO 8601 format for debugging purposes.
+
+Request can be constructed by NewApiGetUserTokenProfileRequest with parameters below.
+
+	@param userToken string - userToken representing the user for which to fetch the Personalization profile.
+	@return GetUserTokenResponse
+*/
 func (c *APIClient) GetUserTokenProfile(r ApiGetUserTokenProfileRequest, opts ...Option) (*GetUserTokenResponse, error) {
 	return c.GetUserTokenProfileWithContext(context.Background(), r, opts...)
 }
 
-// @return GetUserTokenResponse
+/*
+GetUserTokenProfile Get a user profile.
+
+Get the user profile built from Personalization strategy.
+
+The profile is structured by facet name used in the strategy. Each facet value is mapped to its score. Each score represents the user affinity for a specific facet value given the userToken past events and the Personalization strategy defined. Scores are bounded to 20. The last processed event timestamp is provided using the ISO 8601 format for debugging purposes.
+
+Request can be constructed by NewApiGetUserTokenProfileRequest with parameters below.
+
+	@param userToken string - userToken representing the user for which to fetch the Personalization profile.
+	@return GetUserTokenResponse
+*/
 func (c *APIClient) GetUserTokenProfileWithContext(ctx context.Context, r ApiGetUserTokenProfileRequest, opts ...Option) (*GetUserTokenResponse, error) {
 	var (
 		postBody    any
@@ -693,12 +801,6 @@ func (c *APIClient) GetUserTokenProfileWithContext(ctx context.Context, r ApiGet
 	return returnValue, nil
 }
 
-type ApiPostRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -736,31 +838,60 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
-	r.parameters = parameters
-	return r
+// ApiPostRequest represents the request with all the parameters for the API call.
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPostRequest
+// NewApiPostRequest creates an instance of the ApiPostRequest to be used for the API call.
 func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	return ApiPostRequest{
 		path: path,
 	}
 }
 
-// Post wraps PostWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+/*
+Post Send requests to the Algolia REST API. Wraps PostWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PostWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Post Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -866,12 +997,6 @@ func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts 
 	return returnValue, nil
 }
 
-type ApiPutRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -909,31 +1034,60 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
-	r.parameters = parameters
-	return r
+// ApiPutRequest represents the request with all the parameters for the API call.
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPutRequest
+// NewApiPutRequest creates an instance of the ApiPutRequest to be used for the API call.
 func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	return ApiPutRequest{
 		path: path,
 	}
 }
 
-// Put wraps PutWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+/*
+Put Send requests to the Algolia REST API. Wraps PutWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PutWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Put Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -1039,10 +1193,6 @@ func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiSetPersonalizationStrategyRequest struct {
-	personalizationStrategyParams *PersonalizationStrategyParams
-}
-
 func (r *ApiSetPersonalizationStrategyRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1067,19 +1217,42 @@ func (r *ApiSetPersonalizationStrategyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSetPersonalizationStrategyRequest
+// ApiSetPersonalizationStrategyRequest represents the request with all the parameters for the API call.
+type ApiSetPersonalizationStrategyRequest struct {
+	personalizationStrategyParams *PersonalizationStrategyParams
+}
+
+// NewApiSetPersonalizationStrategyRequest creates an instance of the ApiSetPersonalizationStrategyRequest to be used for the API call.
 func (c *APIClient) NewApiSetPersonalizationStrategyRequest(personalizationStrategyParams *PersonalizationStrategyParams) ApiSetPersonalizationStrategyRequest {
 	return ApiSetPersonalizationStrategyRequest{
 		personalizationStrategyParams: personalizationStrategyParams,
 	}
 }
 
-// SetPersonalizationStrategy wraps SetPersonalizationStrategyWithContext using context.Background.
+/*
+SetPersonalizationStrategy Set a new strategy. Wraps SetPersonalizationStrategyWithContext using context.Background.
+
+A strategy defines the events and facets that impact user profiles and personalized search results.
+
+Request can be constructed by NewApiSetPersonalizationStrategyRequest with parameters below.
+
+	@param personalizationStrategyParams PersonalizationStrategyParams
+	@return SetPersonalizationStrategyResponse
+*/
 func (c *APIClient) SetPersonalizationStrategy(r ApiSetPersonalizationStrategyRequest, opts ...Option) (*SetPersonalizationStrategyResponse, error) {
 	return c.SetPersonalizationStrategyWithContext(context.Background(), r, opts...)
 }
 
-// @return SetPersonalizationStrategyResponse
+/*
+SetPersonalizationStrategy Set a new strategy.
+
+A strategy defines the events and facets that impact user profiles and personalized search results.
+
+Request can be constructed by NewApiSetPersonalizationStrategyRequest with parameters below.
+
+	@param personalizationStrategyParams PersonalizationStrategyParams
+	@return SetPersonalizationStrategyResponse
+*/
 func (c *APIClient) SetPersonalizationStrategyWithContext(ctx context.Context, r ApiSetPersonalizationStrategyRequest, opts ...Option) (*SetPersonalizationStrategyResponse, error) {
 	var (
 		postBody    any

@@ -35,10 +35,6 @@ func HeaderParamOption(name string, val any) Option {
 	}
 }
 
-type ApiCreateConfigRequest struct {
-	querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam
-}
-
 func (r *ApiCreateConfigRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -63,19 +59,42 @@ func (r *ApiCreateConfigRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiCreateConfigRequest
+// ApiCreateConfigRequest represents the request with all the parameters for the API call.
+type ApiCreateConfigRequest struct {
+	querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam
+}
+
+// NewApiCreateConfigRequest creates an instance of the ApiCreateConfigRequest to be used for the API call.
 func (c *APIClient) NewApiCreateConfigRequest(querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam) ApiCreateConfigRequest {
 	return ApiCreateConfigRequest{
 		querySuggestionsIndexWithIndexParam: querySuggestionsIndexWithIndexParam,
 	}
 }
 
-// CreateConfig wraps CreateConfigWithContext using context.Background.
+/*
+CreateConfig Create a configuration. Wraps CreateConfigWithContext using context.Background.
+
+Create a configuration of a Query Suggestions index. There's a limit of 100 configurations per application.
+
+Request can be constructed by NewApiCreateConfigRequest with parameters below.
+
+	@param querySuggestionsIndexWithIndexParam QuerySuggestionsIndexWithIndexParam
+	@return SuccessResponse
+*/
 func (c *APIClient) CreateConfig(r ApiCreateConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	return c.CreateConfigWithContext(context.Background(), r, opts...)
 }
 
-// @return SuccessResponse
+/*
+CreateConfig Create a configuration.
+
+Create a configuration of a Query Suggestions index. There's a limit of 100 configurations per application.
+
+Request can be constructed by NewApiCreateConfigRequest with parameters below.
+
+	@param querySuggestionsIndexWithIndexParam QuerySuggestionsIndexWithIndexParam
+	@return SuccessResponse
+*/
 func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	var (
 		postBody    any
@@ -182,11 +201,6 @@ func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConf
 	return returnValue, nil
 }
 
-type ApiDelRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -215,25 +229,51 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
-	r.parameters = parameters
-	return r
+// ApiDelRequest represents the request with all the parameters for the API call.
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiDelRequest
+// NewApiDelRequest creates an instance of the ApiDelRequest to be used for the API call.
 func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	return ApiDelRequest{
 		path: path,
 	}
 }
 
-// Del wraps DelWithContext using context.Background.
+// WithParameters adds the parameters to the ApiDelRequest and returns the request for chaining.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Del Send requests to the Algolia REST API. Wraps DelWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.DelWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Del Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -333,10 +373,6 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiDeleteConfigRequest struct {
-	indexName string
-}
-
 func (r *ApiDeleteConfigRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -356,19 +392,46 @@ func (r *ApiDeleteConfigRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteConfigRequest
+// ApiDeleteConfigRequest represents the request with all the parameters for the API call.
+type ApiDeleteConfigRequest struct {
+	indexName string
+}
+
+// NewApiDeleteConfigRequest creates an instance of the ApiDeleteConfigRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteConfigRequest(indexName string) ApiDeleteConfigRequest {
 	return ApiDeleteConfigRequest{
 		indexName: indexName,
 	}
 }
 
-// DeleteConfig wraps DeleteConfigWithContext using context.Background.
+/*
+DeleteConfig Delete a configuration. Wraps DeleteConfigWithContext using context.Background.
+
+Delete a configuration of a Query Suggestion's index.
+By deleting a configuration, you stop all updates to the underlying query suggestion index.
+Note that when doing this, the underlying index does not change - existing suggestions remain untouched.
+
+Request can be constructed by NewApiDeleteConfigRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return SuccessResponse
+*/
 func (c *APIClient) DeleteConfig(r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	return c.DeleteConfigWithContext(context.Background(), r, opts...)
 }
 
-// @return SuccessResponse
+/*
+DeleteConfig Delete a configuration.
+
+Delete a configuration of a Query Suggestion's index.
+By deleting a configuration, you stop all updates to the underlying query suggestion index.
+Note that when doing this, the underlying index does not change - existing suggestions remain untouched.
+
+Request can be constructed by NewApiDeleteConfigRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return SuccessResponse
+*/
 func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	var (
 		postBody    any
@@ -453,11 +516,6 @@ func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConf
 	return returnValue, nil
 }
 
-type ApiGetRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -486,25 +544,51 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
-	r.parameters = parameters
-	return r
+// ApiGetRequest represents the request with all the parameters for the API call.
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiGetRequest
+// NewApiGetRequest creates an instance of the ApiGetRequest to be used for the API call.
 func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	return ApiGetRequest{
 		path: path,
 	}
 }
 
-// Get wraps GetWithContext using context.Background.
+// WithParameters adds the parameters to the ApiGetRequest and returns the request for chaining.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Get Send requests to the Algolia REST API. Wraps GetWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.GetWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Get Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -604,12 +688,30 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-// GetAllConfigs wraps GetAllConfigsWithContext using context.Background.
+/*
+GetAllConfigs List configurations. Wraps GetAllConfigsWithContext using context.Background.
+
+Get all the configurations of Query Suggestions.
+For each index, you get a block of JSON with a list of its configuration settings.
+
+Request can be constructed by NewApiGetAllConfigsRequest with parameters below.
+
+	@return []QuerySuggestionsIndex
+*/
 func (c *APIClient) GetAllConfigs(opts ...Option) ([]QuerySuggestionsIndex, error) {
 	return c.GetAllConfigsWithContext(context.Background(), opts...)
 }
 
-// @return []QuerySuggestionsIndex
+/*
+GetAllConfigs List configurations.
+
+Get all the configurations of Query Suggestions.
+For each index, you get a block of JSON with a list of its configuration settings.
+
+Request can be constructed by NewApiGetAllConfigsRequest with parameters below.
+
+	@return []QuerySuggestionsIndex
+*/
 func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, opts ...Option) ([]QuerySuggestionsIndex, error) {
 	var (
 		postBody    any
@@ -702,10 +804,6 @@ func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, opts ...Option
 	return returnValue, nil
 }
 
-type ApiGetConfigRequest struct {
-	indexName string
-}
-
 func (r *ApiGetConfigRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -725,19 +823,42 @@ func (r *ApiGetConfigRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetConfigRequest
+// ApiGetConfigRequest represents the request with all the parameters for the API call.
+type ApiGetConfigRequest struct {
+	indexName string
+}
+
+// NewApiGetConfigRequest creates an instance of the ApiGetConfigRequest to be used for the API call.
 func (c *APIClient) NewApiGetConfigRequest(indexName string) ApiGetConfigRequest {
 	return ApiGetConfigRequest{
 		indexName: indexName,
 	}
 }
 
-// GetConfig wraps GetConfigWithContext using context.Background.
+/*
+GetConfig Get a single configuration. Wraps GetConfigWithContext using context.Background.
+
+Get the configuration of a single Query Suggestions index.
+
+Request can be constructed by NewApiGetConfigRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return QuerySuggestionsIndex
+*/
 func (c *APIClient) GetConfig(r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
 	return c.GetConfigWithContext(context.Background(), r, opts...)
 }
 
-// @return QuerySuggestionsIndex
+/*
+GetConfig Get a single configuration.
+
+Get the configuration of a single Query Suggestions index.
+
+Request can be constructed by NewApiGetConfigRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return QuerySuggestionsIndex
+*/
 func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
 	var (
 		postBody    any
@@ -840,10 +961,6 @@ func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequ
 	return returnValue, nil
 }
 
-type ApiGetConfigStatusRequest struct {
-	indexName string
-}
-
 func (r *ApiGetConfigStatusRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -863,19 +980,44 @@ func (r *ApiGetConfigStatusRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetConfigStatusRequest
+// ApiGetConfigStatusRequest represents the request with all the parameters for the API call.
+type ApiGetConfigStatusRequest struct {
+	indexName string
+}
+
+// NewApiGetConfigStatusRequest creates an instance of the ApiGetConfigStatusRequest to be used for the API call.
 func (c *APIClient) NewApiGetConfigStatusRequest(indexName string) ApiGetConfigStatusRequest {
 	return ApiGetConfigStatusRequest{
 		indexName: indexName,
 	}
 }
 
-// GetConfigStatus wraps GetConfigStatusWithContext using context.Background.
+/*
+GetConfigStatus Get configuration status. Wraps GetConfigStatusWithContext using context.Background.
+
+Get the status of a Query Suggestion's index.
+The status includes whether the Query Suggestions index is currently in the process of being built, and the last build time.
+
+Request can be constructed by NewApiGetConfigStatusRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return Status
+*/
 func (c *APIClient) GetConfigStatus(r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
 	return c.GetConfigStatusWithContext(context.Background(), r, opts...)
 }
 
-// @return Status
+/*
+GetConfigStatus Get configuration status.
+
+Get the status of a Query Suggestion's index.
+The status includes whether the Query Suggestions index is currently in the process of being built, and the last build time.
+
+Request can be constructed by NewApiGetConfigStatusRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return Status
+*/
 func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
 	var (
 		postBody    any
@@ -960,10 +1102,6 @@ func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConf
 	return returnValue, nil
 }
 
-type ApiGetLogFileRequest struct {
-	indexName string
-}
-
 func (r *ApiGetLogFileRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -983,19 +1121,42 @@ func (r *ApiGetLogFileRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetLogFileRequest
+// ApiGetLogFileRequest represents the request with all the parameters for the API call.
+type ApiGetLogFileRequest struct {
+	indexName string
+}
+
+// NewApiGetLogFileRequest creates an instance of the ApiGetLogFileRequest to be used for the API call.
 func (c *APIClient) NewApiGetLogFileRequest(indexName string) ApiGetLogFileRequest {
 	return ApiGetLogFileRequest{
 		indexName: indexName,
 	}
 }
 
-// GetLogFile wraps GetLogFileWithContext using context.Background.
+/*
+GetLogFile Get a log file. Wraps GetLogFileWithContext using context.Background.
+
+Get the log file of the last build of a single Query Suggestion index.
+
+Request can be constructed by NewApiGetLogFileRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return []LogFile
+*/
 func (c *APIClient) GetLogFile(r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
 	return c.GetLogFileWithContext(context.Background(), r, opts...)
 }
 
-// @return []LogFile
+/*
+GetLogFile Get a log file.
+
+Get the log file of the last build of a single Query Suggestion index.
+
+Request can be constructed by NewApiGetLogFileRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return []LogFile
+*/
 func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
 	var (
 		postBody    any
@@ -1089,12 +1250,6 @@ func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRe
 	return returnValue, nil
 }
 
-type ApiPostRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1132,31 +1287,60 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
-	r.parameters = parameters
-	return r
+// ApiPostRequest represents the request with all the parameters for the API call.
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPostRequest
+// NewApiPostRequest creates an instance of the ApiPostRequest to be used for the API call.
 func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	return ApiPostRequest{
 		path: path,
 	}
 }
 
-// Post wraps PostWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+/*
+Post Send requests to the Algolia REST API. Wraps PostWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PostWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Post Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -1262,12 +1446,6 @@ func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts 
 	return returnValue, nil
 }
 
-type ApiPutRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1305,31 +1483,60 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
-	r.parameters = parameters
-	return r
+// ApiPutRequest represents the request with all the parameters for the API call.
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPutRequest
+// NewApiPutRequest creates an instance of the ApiPutRequest to be used for the API call.
 func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	return ApiPutRequest{
 		path: path,
 	}
 }
 
-// Put wraps PutWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+/*
+Put Send requests to the Algolia REST API. Wraps PutWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PutWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Put Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -1435,11 +1642,6 @@ func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiUpdateConfigRequest struct {
-	indexName                  string
-	querySuggestionsIndexParam *QuerySuggestionsIndexParam
-}
-
 func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1473,7 +1675,13 @@ func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateConfigRequest
+// ApiUpdateConfigRequest represents the request with all the parameters for the API call.
+type ApiUpdateConfigRequest struct {
+	indexName                  string
+	querySuggestionsIndexParam *QuerySuggestionsIndexParam
+}
+
+// NewApiUpdateConfigRequest creates an instance of the ApiUpdateConfigRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateConfigRequest(indexName string, querySuggestionsIndexParam *QuerySuggestionsIndexParam) ApiUpdateConfigRequest {
 	return ApiUpdateConfigRequest{
 		indexName:                  indexName,
@@ -1481,12 +1689,32 @@ func (c *APIClient) NewApiUpdateConfigRequest(indexName string, querySuggestions
 	}
 }
 
-// UpdateConfig wraps UpdateConfigWithContext using context.Background.
+/*
+UpdateConfig Update a configuration. Wraps UpdateConfigWithContext using context.Background.
+
+Update the configuration of a Query Suggestions index.
+
+Request can be constructed by NewApiUpdateConfigRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param querySuggestionsIndexParam QuerySuggestionsIndexParam
+	@return SuccessResponse
+*/
 func (c *APIClient) UpdateConfig(r ApiUpdateConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	return c.UpdateConfigWithContext(context.Background(), r, opts...)
 }
 
-// @return SuccessResponse
+/*
+UpdateConfig Update a configuration.
+
+Update the configuration of a Query Suggestions index.
+
+Request can be constructed by NewApiUpdateConfigRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param querySuggestionsIndexParam QuerySuggestionsIndexParam
+	@return SuccessResponse
+*/
 func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConfigRequest, opts ...Option) (*SuccessResponse, error) {
 	var (
 		postBody    any

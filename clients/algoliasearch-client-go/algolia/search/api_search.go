@@ -35,10 +35,6 @@ func HeaderParamOption(name string, val any) Option {
 	}
 }
 
-type ApiAddApiKeyRequest struct {
-	apiKey *ApiKey
-}
-
 func (r *ApiAddApiKeyRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -63,19 +59,42 @@ func (r *ApiAddApiKeyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiAddApiKeyRequest
+// ApiAddApiKeyRequest represents the request with all the parameters for the API call.
+type ApiAddApiKeyRequest struct {
+	apiKey *ApiKey
+}
+
+// NewApiAddApiKeyRequest creates an instance of the ApiAddApiKeyRequest to be used for the API call.
 func (c *APIClient) NewApiAddApiKeyRequest(apiKey *ApiKey) ApiAddApiKeyRequest {
 	return ApiAddApiKeyRequest{
 		apiKey: apiKey,
 	}
 }
 
-// AddApiKey wraps AddApiKeyWithContext using context.Background.
+/*
+AddApiKey Create an API key. Wraps AddApiKeyWithContext using context.Background.
+
+Add a new API Key with specific permissions/restrictions.
+
+Request can be constructed by NewApiAddApiKeyRequest with parameters below.
+
+	@param apiKey ApiKey
+	@return AddApiKeyResponse
+*/
 func (c *APIClient) AddApiKey(r ApiAddApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
 	return c.AddApiKeyWithContext(context.Background(), r, opts...)
 }
 
-// @return AddApiKeyResponse
+/*
+AddApiKey Create an API key.
+
+Add a new API Key with specific permissions/restrictions.
+
+Request can be constructed by NewApiAddApiKeyRequest with parameters below.
+
+	@param apiKey ApiKey
+	@return AddApiKeyResponse
+*/
 func (c *APIClient) AddApiKeyWithContext(ctx context.Context, r ApiAddApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
 	var (
 		postBody    any
@@ -173,12 +192,6 @@ func (c *APIClient) AddApiKeyWithContext(ctx context.Context, r ApiAddApiKeyRequ
 	return returnValue, nil
 }
 
-type ApiAddOrUpdateObjectRequest struct {
-	indexName string
-	objectID  string
-	body      map[string]interface{}
-}
-
 func (r *ApiAddOrUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -221,7 +234,14 @@ func (r *ApiAddOrUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiAddOrUpdateObjectRequest
+// ApiAddOrUpdateObjectRequest represents the request with all the parameters for the API call.
+type ApiAddOrUpdateObjectRequest struct {
+	indexName string
+	objectID  string
+	body      map[string]interface{}
+}
+
+// NewApiAddOrUpdateObjectRequest creates an instance of the ApiAddOrUpdateObjectRequest to be used for the API call.
 func (c *APIClient) NewApiAddOrUpdateObjectRequest(indexName string, objectID string, body map[string]interface{}) ApiAddOrUpdateObjectRequest {
 	return ApiAddOrUpdateObjectRequest{
 		indexName: indexName,
@@ -230,12 +250,38 @@ func (c *APIClient) NewApiAddOrUpdateObjectRequest(indexName string, objectID st
 	}
 }
 
-// AddOrUpdateObject wraps AddOrUpdateObjectWithContext using context.Background.
+/*
+AddOrUpdateObject Add or replace an object. Wraps AddOrUpdateObjectWithContext using context.Background.
+
+Add or replace an object with a given object ID.
+If the object does not exist, it will be created.
+If it already exists, it will be replaced.
+
+Request can be constructed by NewApiAddOrUpdateObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param body map[string]interface{} - The Algolia object.
+	@return UpdatedAtWithObjectIdResponse
+*/
 func (c *APIClient) AddOrUpdateObject(r ApiAddOrUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
 	return c.AddOrUpdateObjectWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtWithObjectIdResponse
+/*
+AddOrUpdateObject Add or replace an object.
+
+Add or replace an object with a given object ID.
+If the object does not exist, it will be created.
+If it already exists, it will be replaced.
+
+Request can be constructed by NewApiAddOrUpdateObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param body map[string]interface{} - The Algolia object.
+	@return UpdatedAtWithObjectIdResponse
+*/
 func (c *APIClient) AddOrUpdateObjectWithContext(ctx context.Context, r ApiAddOrUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
 	var (
 		postBody    any
@@ -332,10 +378,6 @@ func (c *APIClient) AddOrUpdateObjectWithContext(ctx context.Context, r ApiAddOr
 	return returnValue, nil
 }
 
-type ApiAppendSourceRequest struct {
-	source *Source
-}
-
 func (r *ApiAppendSourceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -360,19 +402,42 @@ func (r *ApiAppendSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiAppendSourceRequest
+// ApiAppendSourceRequest represents the request with all the parameters for the API call.
+type ApiAppendSourceRequest struct {
+	source *Source
+}
+
+// NewApiAppendSourceRequest creates an instance of the ApiAppendSourceRequest to be used for the API call.
 func (c *APIClient) NewApiAppendSourceRequest(source *Source) ApiAppendSourceRequest {
 	return ApiAppendSourceRequest{
 		source: source,
 	}
 }
 
-// AppendSource wraps AppendSourceWithContext using context.Background.
+/*
+AppendSource Add a single source. Wraps AppendSourceWithContext using context.Background.
+
+Add a single source to the list of allowed sources.
+
+Request can be constructed by NewApiAppendSourceRequest with parameters below.
+
+	@param source Source - The source to add.
+	@return CreatedAtResponse
+*/
 func (c *APIClient) AppendSource(r ApiAppendSourceRequest, opts ...Option) (*CreatedAtResponse, error) {
 	return c.AppendSourceWithContext(context.Background(), r, opts...)
 }
 
-// @return CreatedAtResponse
+/*
+AppendSource Add a single source.
+
+Add a single source to the list of allowed sources.
+
+Request can be constructed by NewApiAppendSourceRequest with parameters below.
+
+	@param source Source - The source to add.
+	@return CreatedAtResponse
+*/
 func (c *APIClient) AppendSourceWithContext(ctx context.Context, r ApiAppendSourceRequest, opts ...Option) (*CreatedAtResponse, error) {
 	var (
 		postBody    any
@@ -470,11 +535,6 @@ func (c *APIClient) AppendSourceWithContext(ctx context.Context, r ApiAppendSour
 	return returnValue, nil
 }
 
-type ApiAssignUserIdRequest struct {
-	xAlgoliaUserID     string
-	assignUserIdParams *AssignUserIdParams
-}
-
 func (r *ApiAssignUserIdRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -508,7 +568,13 @@ func (r *ApiAssignUserIdRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiAssignUserIdRequest
+// ApiAssignUserIdRequest represents the request with all the parameters for the API call.
+type ApiAssignUserIdRequest struct {
+	xAlgoliaUserID     string
+	assignUserIdParams *AssignUserIdParams
+}
+
+// NewApiAssignUserIdRequest creates an instance of the ApiAssignUserIdRequest to be used for the API call.
 func (c *APIClient) NewApiAssignUserIdRequest(xAlgoliaUserID string, assignUserIdParams *AssignUserIdParams) ApiAssignUserIdRequest {
 	return ApiAssignUserIdRequest{
 		xAlgoliaUserID:     xAlgoliaUserID,
@@ -516,12 +582,38 @@ func (c *APIClient) NewApiAssignUserIdRequest(xAlgoliaUserID string, assignUserI
 	}
 }
 
-// AssignUserId wraps AssignUserIdWithContext using context.Background.
+/*
+AssignUserId Assign or Move userID. Wraps AssignUserIdWithContext using context.Background.
+
+Assign or Move a userID to a cluster.
+The time it takes to migrate (move) a user is proportional to the amount of data linked to the userID.
+Upon success, the response is 200 OK.
+A successful response indicates that the operation has been taken into account, and the userID is directly usable.
+
+Request can be constructed by NewApiAssignUserIdRequest with parameters below.
+
+	@param xAlgoliaUserID string - userID to assign.
+	@param assignUserIdParams AssignUserIdParams
+	@return CreatedAtResponse
+*/
 func (c *APIClient) AssignUserId(r ApiAssignUserIdRequest, opts ...Option) (*CreatedAtResponse, error) {
 	return c.AssignUserIdWithContext(context.Background(), r, opts...)
 }
 
-// @return CreatedAtResponse
+/*
+AssignUserId Assign or Move userID.
+
+Assign or Move a userID to a cluster.
+The time it takes to migrate (move) a user is proportional to the amount of data linked to the userID.
+Upon success, the response is 200 OK.
+A successful response indicates that the operation has been taken into account, and the userID is directly usable.
+
+Request can be constructed by NewApiAssignUserIdRequest with parameters below.
+
+	@param xAlgoliaUserID string - userID to assign.
+	@param assignUserIdParams AssignUserIdParams
+	@return CreatedAtResponse
+*/
 func (c *APIClient) AssignUserIdWithContext(ctx context.Context, r ApiAssignUserIdRequest, opts ...Option) (*CreatedAtResponse, error) {
 	var (
 		postBody    any
@@ -624,11 +716,6 @@ func (c *APIClient) AssignUserIdWithContext(ctx context.Context, r ApiAssignUser
 	return returnValue, nil
 }
 
-type ApiBatchRequest struct {
-	indexName        string
-	batchWriteParams *BatchWriteParams
-}
-
 func (r *ApiBatchRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -662,7 +749,13 @@ func (r *ApiBatchRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiBatchRequest
+// ApiBatchRequest represents the request with all the parameters for the API call.
+type ApiBatchRequest struct {
+	indexName        string
+	batchWriteParams *BatchWriteParams
+}
+
+// NewApiBatchRequest creates an instance of the ApiBatchRequest to be used for the API call.
 func (c *APIClient) NewApiBatchRequest(indexName string, batchWriteParams *BatchWriteParams) ApiBatchRequest {
 	return ApiBatchRequest{
 		indexName:        indexName,
@@ -670,12 +763,32 @@ func (c *APIClient) NewApiBatchRequest(indexName string, batchWriteParams *Batch
 	}
 }
 
-// Batch wraps BatchWithContext using context.Background.
+/*
+Batch Batch operations to one index. Wraps BatchWithContext using context.Background.
+
+Perform multiple write operations targeting one index, in a single API call.
+
+Request can be constructed by NewApiBatchRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param batchWriteParams BatchWriteParams
+	@return BatchResponse
+*/
 func (c *APIClient) Batch(r ApiBatchRequest, opts ...Option) (*BatchResponse, error) {
 	return c.BatchWithContext(context.Background(), r, opts...)
 }
 
-// @return BatchResponse
+/*
+Batch Batch operations to one index.
+
+Perform multiple write operations targeting one index, in a single API call.
+
+Request can be constructed by NewApiBatchRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param batchWriteParams BatchWriteParams
+	@return BatchResponse
+*/
 func (c *APIClient) BatchWithContext(ctx context.Context, r ApiBatchRequest, opts ...Option) (*BatchResponse, error) {
 	var (
 		postBody    any
@@ -774,11 +887,6 @@ func (c *APIClient) BatchWithContext(ctx context.Context, r ApiBatchRequest, opt
 	return returnValue, nil
 }
 
-type ApiBatchAssignUserIdsRequest struct {
-	xAlgoliaUserID           string
-	batchAssignUserIdsParams *BatchAssignUserIdsParams
-}
-
 func (r *ApiBatchAssignUserIdsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -812,7 +920,13 @@ func (r *ApiBatchAssignUserIdsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiBatchAssignUserIdsRequest
+// ApiBatchAssignUserIdsRequest represents the request with all the parameters for the API call.
+type ApiBatchAssignUserIdsRequest struct {
+	xAlgoliaUserID           string
+	batchAssignUserIdsParams *BatchAssignUserIdsParams
+}
+
+// NewApiBatchAssignUserIdsRequest creates an instance of the ApiBatchAssignUserIdsRequest to be used for the API call.
 func (c *APIClient) NewApiBatchAssignUserIdsRequest(xAlgoliaUserID string, batchAssignUserIdsParams *BatchAssignUserIdsParams) ApiBatchAssignUserIdsRequest {
 	return ApiBatchAssignUserIdsRequest{
 		xAlgoliaUserID:           xAlgoliaUserID,
@@ -820,12 +934,36 @@ func (c *APIClient) NewApiBatchAssignUserIdsRequest(xAlgoliaUserID string, batch
 	}
 }
 
-// BatchAssignUserIds wraps BatchAssignUserIdsWithContext using context.Background.
+/*
+BatchAssignUserIds Batch assign userIDs. Wraps BatchAssignUserIdsWithContext using context.Background.
+
+Assign multiple userIDs to a cluster.
+Upon success, the response is 200 OK.
+A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+
+Request can be constructed by NewApiBatchAssignUserIdsRequest with parameters below.
+
+	@param xAlgoliaUserID string - userID to assign.
+	@param batchAssignUserIdsParams BatchAssignUserIdsParams
+	@return CreatedAtResponse
+*/
 func (c *APIClient) BatchAssignUserIds(r ApiBatchAssignUserIdsRequest, opts ...Option) (*CreatedAtResponse, error) {
 	return c.BatchAssignUserIdsWithContext(context.Background(), r, opts...)
 }
 
-// @return CreatedAtResponse
+/*
+BatchAssignUserIds Batch assign userIDs.
+
+Assign multiple userIDs to a cluster.
+Upon success, the response is 200 OK.
+A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+
+Request can be constructed by NewApiBatchAssignUserIdsRequest with parameters below.
+
+	@param xAlgoliaUserID string - userID to assign.
+	@param batchAssignUserIdsParams BatchAssignUserIdsParams
+	@return CreatedAtResponse
+*/
 func (c *APIClient) BatchAssignUserIdsWithContext(ctx context.Context, r ApiBatchAssignUserIdsRequest, opts ...Option) (*CreatedAtResponse, error) {
 	var (
 		postBody    any
@@ -928,11 +1066,6 @@ func (c *APIClient) BatchAssignUserIdsWithContext(ctx context.Context, r ApiBatc
 	return returnValue, nil
 }
 
-type ApiBatchDictionaryEntriesRequest struct {
-	dictionaryName               DictionaryType
-	batchDictionaryEntriesParams *BatchDictionaryEntriesParams
-}
-
 func (r *ApiBatchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -966,7 +1099,13 @@ func (r *ApiBatchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiBatchDictionaryEntriesRequest
+// ApiBatchDictionaryEntriesRequest represents the request with all the parameters for the API call.
+type ApiBatchDictionaryEntriesRequest struct {
+	dictionaryName               DictionaryType
+	batchDictionaryEntriesParams *BatchDictionaryEntriesParams
+}
+
+// NewApiBatchDictionaryEntriesRequest creates an instance of the ApiBatchDictionaryEntriesRequest to be used for the API call.
 func (c *APIClient) NewApiBatchDictionaryEntriesRequest(dictionaryName DictionaryType, batchDictionaryEntriesParams *BatchDictionaryEntriesParams) ApiBatchDictionaryEntriesRequest {
 	return ApiBatchDictionaryEntriesRequest{
 		dictionaryName:               dictionaryName,
@@ -974,12 +1113,32 @@ func (c *APIClient) NewApiBatchDictionaryEntriesRequest(dictionaryName Dictionar
 	}
 }
 
-// BatchDictionaryEntries wraps BatchDictionaryEntriesWithContext using context.Background.
+/*
+BatchDictionaryEntries Batch dictionary entries. Wraps BatchDictionaryEntriesWithContext using context.Background.
+
+Send a batch of dictionary entries.
+
+Request can be constructed by NewApiBatchDictionaryEntriesRequest with parameters below.
+
+	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param batchDictionaryEntriesParams BatchDictionaryEntriesParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) BatchDictionaryEntries(r ApiBatchDictionaryEntriesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.BatchDictionaryEntriesWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+BatchDictionaryEntries Batch dictionary entries.
+
+Send a batch of dictionary entries.
+
+Request can be constructed by NewApiBatchDictionaryEntriesRequest with parameters below.
+
+	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param batchDictionaryEntriesParams BatchDictionaryEntriesParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) BatchDictionaryEntriesWithContext(ctx context.Context, r ApiBatchDictionaryEntriesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -1078,11 +1237,6 @@ func (c *APIClient) BatchDictionaryEntriesWithContext(ctx context.Context, r Api
 	return returnValue, nil
 }
 
-type ApiBrowseRequest struct {
-	indexName    string
-	browseParams *BrowseParams
-}
-
 func (r *ApiBrowseRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1111,24 +1265,55 @@ func (r *ApiBrowseRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiBrowseRequest) WithBrowseParams(browseParams *BrowseParams) ApiBrowseRequest {
-	r.browseParams = browseParams
-	return r
+// ApiBrowseRequest represents the request with all the parameters for the API call.
+type ApiBrowseRequest struct {
+	indexName    string
+	browseParams *BrowseParams
 }
 
-// @return ApiBrowseRequest
+// NewApiBrowseRequest creates an instance of the ApiBrowseRequest to be used for the API call.
 func (c *APIClient) NewApiBrowseRequest(indexName string) ApiBrowseRequest {
 	return ApiBrowseRequest{
 		indexName: indexName,
 	}
 }
 
-// Browse wraps BrowseWithContext using context.Background.
+// WithBrowseParams adds the browseParams to the ApiBrowseRequest and returns the request for chaining.
+func (r ApiBrowseRequest) WithBrowseParams(browseParams *BrowseParams) ApiBrowseRequest {
+	r.browseParams = browseParams
+	return r
+}
+
+/*
+Browse Retrieve all index content. Wraps BrowseWithContext using context.Background.
+
+This method allows you to retrieve all index content. It can retrieve up to 1,000 records per call and supports full text search and filters.
+For performance reasons, some features are not supported, including `distinct`, sorting by `typos`, `words` or `geo distance`.
+When there is more content to be browsed, the response contains a cursor field. This cursor has to be passed to the subsequent call to browse in order to get the next page of results. When the end of the index has been reached, the cursor field is absent from the response.
+
+Request can be constructed by NewApiBrowseRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param browseParams BrowseParams
+	@return BrowseResponse
+*/
 func (c *APIClient) Browse(r ApiBrowseRequest, opts ...Option) (*BrowseResponse, error) {
 	return c.BrowseWithContext(context.Background(), r, opts...)
 }
 
-// @return BrowseResponse
+/*
+Browse Retrieve all index content.
+
+This method allows you to retrieve all index content. It can retrieve up to 1,000 records per call and supports full text search and filters.
+For performance reasons, some features are not supported, including `distinct`, sorting by `typos`, `words` or `geo distance`.
+When there is more content to be browsed, the response contains a cursor field. This cursor has to be passed to the subsequent call to browse in order to get the next page of results. When the end of the index has been reached, the cursor field is absent from the response.
+
+Request can be constructed by NewApiBrowseRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param browseParams BrowseParams
+	@return BrowseResponse
+*/
 func (c *APIClient) BrowseWithContext(ctx context.Context, r ApiBrowseRequest, opts ...Option) (*BrowseResponse, error) {
 	var (
 		postBody    any
@@ -1228,11 +1413,6 @@ func (c *APIClient) BrowseWithContext(ctx context.Context, r ApiBrowseRequest, o
 	return returnValue, nil
 }
 
-type ApiClearAllSynonymsRequest struct {
-	indexName         string
-	forwardToReplicas bool
-}
-
 func (r *ApiClearAllSynonymsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1261,25 +1441,51 @@ func (r *ApiClearAllSynonymsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiClearAllSynonymsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiClearAllSynonymsRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiClearAllSynonymsRequest represents the request with all the parameters for the API call.
+type ApiClearAllSynonymsRequest struct {
+	indexName         string
+	forwardToReplicas bool
 }
 
-// @return ApiClearAllSynonymsRequest
+// NewApiClearAllSynonymsRequest creates an instance of the ApiClearAllSynonymsRequest to be used for the API call.
 func (c *APIClient) NewApiClearAllSynonymsRequest(indexName string) ApiClearAllSynonymsRequest {
 	return ApiClearAllSynonymsRequest{
 		indexName: indexName,
 	}
 }
 
-// ClearAllSynonyms wraps ClearAllSynonymsWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiClearAllSynonymsRequest and returns the request for chaining.
+func (r ApiClearAllSynonymsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiClearAllSynonymsRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+/*
+ClearAllSynonyms Clear all synonyms. Wraps ClearAllSynonymsWithContext using context.Background.
+
+Remove all synonyms from an index.
+
+Request can be constructed by NewApiClearAllSynonymsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) ClearAllSynonyms(r ApiClearAllSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.ClearAllSynonymsWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+ClearAllSynonyms Clear all synonyms.
+
+Remove all synonyms from an index.
+
+Request can be constructed by NewApiClearAllSynonymsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) ClearAllSynonymsWithContext(ctx context.Context, r ApiClearAllSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -1377,10 +1583,6 @@ func (c *APIClient) ClearAllSynonymsWithContext(ctx context.Context, r ApiClearA
 	return returnValue, nil
 }
 
-type ApiClearObjectsRequest struct {
-	indexName string
-}
-
 func (r *ApiClearObjectsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1400,19 +1602,42 @@ func (r *ApiClearObjectsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiClearObjectsRequest
+// ApiClearObjectsRequest represents the request with all the parameters for the API call.
+type ApiClearObjectsRequest struct {
+	indexName string
+}
+
+// NewApiClearObjectsRequest creates an instance of the ApiClearObjectsRequest to be used for the API call.
 func (c *APIClient) NewApiClearObjectsRequest(indexName string) ApiClearObjectsRequest {
 	return ApiClearObjectsRequest{
 		indexName: indexName,
 	}
 }
 
-// ClearObjects wraps ClearObjectsWithContext using context.Background.
+/*
+ClearObjects Clear all objects from an index. Wraps ClearObjectsWithContext using context.Background.
+
+Delete an index's content, but leave settings and index-specific API keys untouched.
+
+Request can be constructed by NewApiClearObjectsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) ClearObjects(r ApiClearObjectsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.ClearObjectsWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+ClearObjects Clear all objects from an index.
+
+Delete an index's content, but leave settings and index-specific API keys untouched.
+
+Request can be constructed by NewApiClearObjectsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) ClearObjectsWithContext(ctx context.Context, r ApiClearObjectsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -1506,11 +1731,6 @@ func (c *APIClient) ClearObjectsWithContext(ctx context.Context, r ApiClearObjec
 	return returnValue, nil
 }
 
-type ApiClearRulesRequest struct {
-	indexName         string
-	forwardToReplicas bool
-}
-
 func (r *ApiClearRulesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1539,25 +1759,51 @@ func (r *ApiClearRulesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiClearRulesRequest) WithForwardToReplicas(forwardToReplicas bool) ApiClearRulesRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiClearRulesRequest represents the request with all the parameters for the API call.
+type ApiClearRulesRequest struct {
+	indexName         string
+	forwardToReplicas bool
 }
 
-// @return ApiClearRulesRequest
+// NewApiClearRulesRequest creates an instance of the ApiClearRulesRequest to be used for the API call.
 func (c *APIClient) NewApiClearRulesRequest(indexName string) ApiClearRulesRequest {
 	return ApiClearRulesRequest{
 		indexName: indexName,
 	}
 }
 
-// ClearRules wraps ClearRulesWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiClearRulesRequest and returns the request for chaining.
+func (r ApiClearRulesRequest) WithForwardToReplicas(forwardToReplicas bool) ApiClearRulesRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+/*
+ClearRules Clear Rules. Wraps ClearRulesWithContext using context.Background.
+
+Delete all Rules in the index.
+
+Request can be constructed by NewApiClearRulesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) ClearRules(r ApiClearRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.ClearRulesWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+ClearRules Clear Rules.
+
+Delete all Rules in the index.
+
+Request can be constructed by NewApiClearRulesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) ClearRulesWithContext(ctx context.Context, r ApiClearRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -1655,11 +1901,6 @@ func (c *APIClient) ClearRulesWithContext(ctx context.Context, r ApiClearRulesRe
 	return returnValue, nil
 }
 
-type ApiDelRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1688,25 +1929,51 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
-	r.parameters = parameters
-	return r
+// ApiDelRequest represents the request with all the parameters for the API call.
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiDelRequest
+// NewApiDelRequest creates an instance of the ApiDelRequest to be used for the API call.
 func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	return ApiDelRequest{
 		path: path,
 	}
 }
 
-// Del wraps DelWithContext using context.Background.
+// WithParameters adds the parameters to the ApiDelRequest and returns the request for chaining.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Del Send requests to the Algolia REST API. Wraps DelWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.DelWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Del Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -1806,10 +2073,6 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiDeleteApiKeyRequest struct {
-	key string
-}
-
 func (r *ApiDeleteApiKeyRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1829,19 +2092,42 @@ func (r *ApiDeleteApiKeyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteApiKeyRequest
+// ApiDeleteApiKeyRequest represents the request with all the parameters for the API call.
+type ApiDeleteApiKeyRequest struct {
+	key string
+}
+
+// NewApiDeleteApiKeyRequest creates an instance of the ApiDeleteApiKeyRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteApiKeyRequest(key string) ApiDeleteApiKeyRequest {
 	return ApiDeleteApiKeyRequest{
 		key: key,
 	}
 }
 
-// DeleteApiKey wraps DeleteApiKeyWithContext using context.Background.
+/*
+DeleteApiKey Delete an API key. Wraps DeleteApiKeyWithContext using context.Background.
+
+Delete an existing API Key.
+
+Request can be constructed by NewApiDeleteApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@return DeleteApiKeyResponse
+*/
 func (c *APIClient) DeleteApiKey(r ApiDeleteApiKeyRequest, opts ...Option) (*DeleteApiKeyResponse, error) {
 	return c.DeleteApiKeyWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteApiKeyResponse
+/*
+DeleteApiKey Delete an API key.
+
+Delete an existing API Key.
+
+Request can be constructed by NewApiDeleteApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@return DeleteApiKeyResponse
+*/
 func (c *APIClient) DeleteApiKeyWithContext(ctx context.Context, r ApiDeleteApiKeyRequest, opts ...Option) (*DeleteApiKeyResponse, error) {
 	var (
 		postBody    any
@@ -1935,11 +2221,6 @@ func (c *APIClient) DeleteApiKeyWithContext(ctx context.Context, r ApiDeleteApiK
 	return returnValue, nil
 }
 
-type ApiDeleteByRequest struct {
-	indexName      string
-	deleteByParams *DeleteByParams
-}
-
 func (r *ApiDeleteByRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1973,7 +2254,13 @@ func (r *ApiDeleteByRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteByRequest
+// ApiDeleteByRequest represents the request with all the parameters for the API call.
+type ApiDeleteByRequest struct {
+	indexName      string
+	deleteByParams *DeleteByParams
+}
+
+// NewApiDeleteByRequest creates an instance of the ApiDeleteByRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteByRequest(indexName string, deleteByParams *DeleteByParams) ApiDeleteByRequest {
 	return ApiDeleteByRequest{
 		indexName:      indexName,
@@ -1981,12 +2268,36 @@ func (c *APIClient) NewApiDeleteByRequest(indexName string, deleteByParams *Dele
 	}
 }
 
-// DeleteBy wraps DeleteByWithContext using context.Background.
+/*
+DeleteBy Delete all records matching the query. Wraps DeleteByWithContext using context.Background.
+
+Remove all objects matching a filter (including geo filters).
+This method enables you to delete one or more objects based on filters (numeric, facet, tag or geo queries).
+It doesn't accept empty filters or a query.
+
+Request can be constructed by NewApiDeleteByRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param deleteByParams DeleteByParams
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteBy(r ApiDeleteByRequest, opts ...Option) (*DeletedAtResponse, error) {
 	return c.DeleteByWithContext(context.Background(), r, opts...)
 }
 
-// @return DeletedAtResponse
+/*
+DeleteBy Delete all records matching the query.
+
+Remove all objects matching a filter (including geo filters).
+This method enables you to delete one or more objects based on filters (numeric, facet, tag or geo queries).
+It doesn't accept empty filters or a query.
+
+Request can be constructed by NewApiDeleteByRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param deleteByParams DeleteByParams
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteByWithContext(ctx context.Context, r ApiDeleteByRequest, opts ...Option) (*DeletedAtResponse, error) {
 	var (
 		postBody    any
@@ -2085,10 +2396,6 @@ func (c *APIClient) DeleteByWithContext(ctx context.Context, r ApiDeleteByReques
 	return returnValue, nil
 }
 
-type ApiDeleteIndexRequest struct {
-	indexName string
-}
-
 func (r *ApiDeleteIndexRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2108,19 +2415,42 @@ func (r *ApiDeleteIndexRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteIndexRequest
+// ApiDeleteIndexRequest represents the request with all the parameters for the API call.
+type ApiDeleteIndexRequest struct {
+	indexName string
+}
+
+// NewApiDeleteIndexRequest creates an instance of the ApiDeleteIndexRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteIndexRequest(indexName string) ApiDeleteIndexRequest {
 	return ApiDeleteIndexRequest{
 		indexName: indexName,
 	}
 }
 
-// DeleteIndex wraps DeleteIndexWithContext using context.Background.
+/*
+DeleteIndex Delete index. Wraps DeleteIndexWithContext using context.Background.
+
+Delete an existing index.
+
+Request can be constructed by NewApiDeleteIndexRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteIndex(r ApiDeleteIndexRequest, opts ...Option) (*DeletedAtResponse, error) {
 	return c.DeleteIndexWithContext(context.Background(), r, opts...)
 }
 
-// @return DeletedAtResponse
+/*
+DeleteIndex Delete index.
+
+Delete an existing index.
+
+Request can be constructed by NewApiDeleteIndexRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteIndexWithContext(ctx context.Context, r ApiDeleteIndexRequest, opts ...Option) (*DeletedAtResponse, error) {
 	var (
 		postBody    any
@@ -2214,11 +2544,6 @@ func (c *APIClient) DeleteIndexWithContext(ctx context.Context, r ApiDeleteIndex
 	return returnValue, nil
 }
 
-type ApiDeleteObjectRequest struct {
-	indexName string
-	objectID  string
-}
-
 func (r *ApiDeleteObjectRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2247,7 +2572,13 @@ func (r *ApiDeleteObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteObjectRequest
+// ApiDeleteObjectRequest represents the request with all the parameters for the API call.
+type ApiDeleteObjectRequest struct {
+	indexName string
+	objectID  string
+}
+
+// NewApiDeleteObjectRequest creates an instance of the ApiDeleteObjectRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteObjectRequest(indexName string, objectID string) ApiDeleteObjectRequest {
 	return ApiDeleteObjectRequest{
 		indexName: indexName,
@@ -2255,12 +2586,32 @@ func (c *APIClient) NewApiDeleteObjectRequest(indexName string, objectID string)
 	}
 }
 
-// DeleteObject wraps DeleteObjectWithContext using context.Background.
+/*
+DeleteObject Delete an object. Wraps DeleteObjectWithContext using context.Background.
+
+Delete an existing object.
+
+Request can be constructed by NewApiDeleteObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteObject(r ApiDeleteObjectRequest, opts ...Option) (*DeletedAtResponse, error) {
 	return c.DeleteObjectWithContext(context.Background(), r, opts...)
 }
 
-// @return DeletedAtResponse
+/*
+DeleteObject Delete an object.
+
+Delete an existing object.
+
+Request can be constructed by NewApiDeleteObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteObjectWithContext(ctx context.Context, r ApiDeleteObjectRequest, opts ...Option) (*DeletedAtResponse, error) {
 	var (
 		postBody    any
@@ -2355,12 +2706,6 @@ func (c *APIClient) DeleteObjectWithContext(ctx context.Context, r ApiDeleteObje
 	return returnValue, nil
 }
 
-type ApiDeleteRuleRequest struct {
-	indexName         string
-	objectID          string
-	forwardToReplicas bool
-}
-
 func (r *ApiDeleteRuleRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2398,13 +2743,14 @@ func (r *ApiDeleteRuleRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiDeleteRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiDeleteRuleRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiDeleteRuleRequest represents the request with all the parameters for the API call.
+type ApiDeleteRuleRequest struct {
+	indexName         string
+	objectID          string
+	forwardToReplicas bool
 }
 
-// @return ApiDeleteRuleRequest
+// NewApiDeleteRuleRequest creates an instance of the ApiDeleteRuleRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteRuleRequest(indexName string, objectID string) ApiDeleteRuleRequest {
 	return ApiDeleteRuleRequest{
 		indexName: indexName,
@@ -2412,12 +2758,40 @@ func (c *APIClient) NewApiDeleteRuleRequest(indexName string, objectID string) A
 	}
 }
 
-// DeleteRule wraps DeleteRuleWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiDeleteRuleRequest and returns the request for chaining.
+func (r ApiDeleteRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiDeleteRuleRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+/*
+DeleteRule Delete a rule. Wraps DeleteRuleWithContext using context.Background.
+
+Delete the Rule with the specified objectID.
+
+Request can be constructed by NewApiDeleteRuleRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) DeleteRule(r ApiDeleteRuleRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.DeleteRuleWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+DeleteRule Delete a rule.
+
+Delete the Rule with the specified objectID.
+
+Request can be constructed by NewApiDeleteRuleRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) DeleteRuleWithContext(ctx context.Context, r ApiDeleteRuleRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -2516,10 +2890,6 @@ func (c *APIClient) DeleteRuleWithContext(ctx context.Context, r ApiDeleteRuleRe
 	return returnValue, nil
 }
 
-type ApiDeleteSourceRequest struct {
-	source string
-}
-
 func (r *ApiDeleteSourceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2539,19 +2909,42 @@ func (r *ApiDeleteSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteSourceRequest
+// ApiDeleteSourceRequest represents the request with all the parameters for the API call.
+type ApiDeleteSourceRequest struct {
+	source string
+}
+
+// NewApiDeleteSourceRequest creates an instance of the ApiDeleteSourceRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteSourceRequest(source string) ApiDeleteSourceRequest {
 	return ApiDeleteSourceRequest{
 		source: source,
 	}
 }
 
-// DeleteSource wraps DeleteSourceWithContext using context.Background.
+/*
+DeleteSource Remove a single source. Wraps DeleteSourceWithContext using context.Background.
+
+Remove a single source from the list of allowed sources.
+
+Request can be constructed by NewApiDeleteSourceRequest with parameters below.
+
+	@param source string - The IP range of the source.
+	@return DeleteSourceResponse
+*/
 func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*DeleteSourceResponse, error) {
 	return c.DeleteSourceWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteSourceResponse
+/*
+DeleteSource Remove a single source.
+
+Remove a single source from the list of allowed sources.
+
+Request can be constructed by NewApiDeleteSourceRequest with parameters below.
+
+	@param source string - The IP range of the source.
+	@return DeleteSourceResponse
+*/
 func (c *APIClient) DeleteSourceWithContext(ctx context.Context, r ApiDeleteSourceRequest, opts ...Option) (*DeleteSourceResponse, error) {
 	var (
 		postBody    any
@@ -2645,12 +3038,6 @@ func (c *APIClient) DeleteSourceWithContext(ctx context.Context, r ApiDeleteSour
 	return returnValue, nil
 }
 
-type ApiDeleteSynonymRequest struct {
-	indexName         string
-	objectID          string
-	forwardToReplicas bool
-}
-
 func (r *ApiDeleteSynonymRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2688,13 +3075,14 @@ func (r *ApiDeleteSynonymRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiDeleteSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) ApiDeleteSynonymRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiDeleteSynonymRequest represents the request with all the parameters for the API call.
+type ApiDeleteSynonymRequest struct {
+	indexName         string
+	objectID          string
+	forwardToReplicas bool
 }
 
-// @return ApiDeleteSynonymRequest
+// NewApiDeleteSynonymRequest creates an instance of the ApiDeleteSynonymRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteSynonymRequest(indexName string, objectID string) ApiDeleteSynonymRequest {
 	return ApiDeleteSynonymRequest{
 		indexName: indexName,
@@ -2702,12 +3090,40 @@ func (c *APIClient) NewApiDeleteSynonymRequest(indexName string, objectID string
 	}
 }
 
-// DeleteSynonym wraps DeleteSynonymWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiDeleteSynonymRequest and returns the request for chaining.
+func (r ApiDeleteSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) ApiDeleteSynonymRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+/*
+DeleteSynonym Delete synonym. Wraps DeleteSynonymWithContext using context.Background.
+
+Delete a single synonyms set, identified by the given objectID.
+
+Request can be constructed by NewApiDeleteSynonymRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteSynonym(r ApiDeleteSynonymRequest, opts ...Option) (*DeletedAtResponse, error) {
 	return c.DeleteSynonymWithContext(context.Background(), r, opts...)
 }
 
-// @return DeletedAtResponse
+/*
+DeleteSynonym Delete synonym.
+
+Delete a single synonyms set, identified by the given objectID.
+
+Request can be constructed by NewApiDeleteSynonymRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return DeletedAtResponse
+*/
 func (c *APIClient) DeleteSynonymWithContext(ctx context.Context, r ApiDeleteSynonymRequest, opts ...Option) (*DeletedAtResponse, error) {
 	var (
 		postBody    any
@@ -2806,11 +3222,6 @@ func (c *APIClient) DeleteSynonymWithContext(ctx context.Context, r ApiDeleteSyn
 	return returnValue, nil
 }
 
-type ApiGetRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2839,25 +3250,51 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
-	r.parameters = parameters
-	return r
+// ApiGetRequest represents the request with all the parameters for the API call.
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiGetRequest
+// NewApiGetRequest creates an instance of the ApiGetRequest to be used for the API call.
 func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	return ApiGetRequest{
 		path: path,
 	}
 }
 
-// Get wraps GetWithContext using context.Background.
+// WithParameters adds the parameters to the ApiGetRequest and returns the request for chaining.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Get Send requests to the Algolia REST API. Wraps GetWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.GetWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Get Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -2957,10 +3394,6 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetApiKeyRequest struct {
-	key string
-}
-
 func (r *ApiGetApiKeyRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2980,19 +3413,42 @@ func (r *ApiGetApiKeyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetApiKeyRequest
+// ApiGetApiKeyRequest represents the request with all the parameters for the API call.
+type ApiGetApiKeyRequest struct {
+	key string
+}
+
+// NewApiGetApiKeyRequest creates an instance of the ApiGetApiKeyRequest to be used for the API call.
 func (c *APIClient) NewApiGetApiKeyRequest(key string) ApiGetApiKeyRequest {
 	return ApiGetApiKeyRequest{
 		key: key,
 	}
 }
 
-// GetApiKey wraps GetApiKeyWithContext using context.Background.
+/*
+GetApiKey Get an API key. Wraps GetApiKeyWithContext using context.Background.
+
+Get the permissions of an API key.
+
+Request can be constructed by NewApiGetApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@return GetApiKeyResponse
+*/
 func (c *APIClient) GetApiKey(r ApiGetApiKeyRequest, opts ...Option) (*GetApiKeyResponse, error) {
 	return c.GetApiKeyWithContext(context.Background(), r, opts...)
 }
 
-// @return GetApiKeyResponse
+/*
+GetApiKey Get an API key.
+
+Get the permissions of an API key.
+
+Request can be constructed by NewApiGetApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@return GetApiKeyResponse
+*/
 func (c *APIClient) GetApiKeyWithContext(ctx context.Context, r ApiGetApiKeyRequest, opts ...Option) (*GetApiKeyResponse, error) {
 	var (
 		postBody    any
@@ -3086,12 +3542,28 @@ func (c *APIClient) GetApiKeyWithContext(ctx context.Context, r ApiGetApiKeyRequ
 	return returnValue, nil
 }
 
-// GetDictionaryLanguages wraps GetDictionaryLanguagesWithContext using context.Background.
+/*
+GetDictionaryLanguages List available languages. Wraps GetDictionaryLanguagesWithContext using context.Background.
+
+List dictionaries supported per language.
+
+Request can be constructed by NewApiGetDictionaryLanguagesRequest with parameters below.
+
+	@return map[string]Languages
+*/
 func (c *APIClient) GetDictionaryLanguages(opts ...Option) (*map[string]Languages, error) {
 	return c.GetDictionaryLanguagesWithContext(context.Background(), opts...)
 }
 
-// @return map[string]Languages
+/*
+GetDictionaryLanguages List available languages.
+
+List dictionaries supported per language.
+
+Request can be constructed by NewApiGetDictionaryLanguagesRequest with parameters below.
+
+	@return map[string]Languages
+*/
 func (c *APIClient) GetDictionaryLanguagesWithContext(ctx context.Context, opts ...Option) (*map[string]Languages, error) {
 	var (
 		postBody    any
@@ -3184,12 +3656,28 @@ func (c *APIClient) GetDictionaryLanguagesWithContext(ctx context.Context, opts 
 	return returnValue, nil
 }
 
-// GetDictionarySettings wraps GetDictionarySettingsWithContext using context.Background.
+/*
+GetDictionarySettings Retrieve dictionaries settings. Wraps GetDictionarySettingsWithContext using context.Background.
+
+Retrieve dictionaries settings. The API stores languages whose standard entries are disabled. Fetch settings does not return false values.
+
+Request can be constructed by NewApiGetDictionarySettingsRequest with parameters below.
+
+	@return GetDictionarySettingsResponse
+*/
 func (c *APIClient) GetDictionarySettings(opts ...Option) (*GetDictionarySettingsResponse, error) {
 	return c.GetDictionarySettingsWithContext(context.Background(), opts...)
 }
 
-// @return GetDictionarySettingsResponse
+/*
+GetDictionarySettings Retrieve dictionaries settings.
+
+Retrieve dictionaries settings. The API stores languages whose standard entries are disabled. Fetch settings does not return false values.
+
+Request can be constructed by NewApiGetDictionarySettingsRequest with parameters below.
+
+	@return GetDictionarySettingsResponse
+*/
 func (c *APIClient) GetDictionarySettingsWithContext(ctx context.Context, opts ...Option) (*GetDictionarySettingsResponse, error) {
 	var (
 		postBody    any
@@ -3282,13 +3770,6 @@ func (c *APIClient) GetDictionarySettingsWithContext(ctx context.Context, opts .
 	return returnValue, nil
 }
 
-type ApiGetLogsRequest struct {
-	offset    int32
-	length    int32
-	indexName string
-	type_     *LogType
-}
-
 func (r *ApiGetLogsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3335,41 +3816,73 @@ func (r *ApiGetLogsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// First entry to retrieve (zero-based). Log entries are sorted by decreasing date, therefore 0 designates the most recent log entry.
+// ApiGetLogsRequest represents the request with all the parameters for the API call.
+type ApiGetLogsRequest struct {
+	offset    int32
+	length    int32
+	indexName string
+	type_     *LogType
+}
+
+// NewApiGetLogsRequest creates an instance of the ApiGetLogsRequest to be used for the API call.
+func (c *APIClient) NewApiGetLogsRequest() ApiGetLogsRequest {
+	return ApiGetLogsRequest{}
+}
+
+// WithOffset adds the offset to the ApiGetLogsRequest and returns the request for chaining.
 func (r ApiGetLogsRequest) WithOffset(offset int32) ApiGetLogsRequest {
 	r.offset = offset
 	return r
 }
 
-// Maximum number of entries to retrieve. The maximum allowed value is 1000.
+// WithLength adds the length to the ApiGetLogsRequest and returns the request for chaining.
 func (r ApiGetLogsRequest) WithLength(length int32) ApiGetLogsRequest {
 	r.length = length
 	return r
 }
 
-// Index for which log entries should be retrieved. When omitted, log entries are retrieved across all indices.
+// WithIndexName adds the indexName to the ApiGetLogsRequest and returns the request for chaining.
 func (r ApiGetLogsRequest) WithIndexName(indexName string) ApiGetLogsRequest {
 	r.indexName = indexName
 	return r
 }
 
-// Type of log entries to retrieve. When omitted, all log entries are retrieved.
+// WithType_ adds the type_ to the ApiGetLogsRequest and returns the request for chaining.
 func (r ApiGetLogsRequest) WithType_(type_ *LogType) ApiGetLogsRequest {
 	r.type_ = type_
 	return r
 }
 
-// @return ApiGetLogsRequest
-func (c *APIClient) NewApiGetLogsRequest() ApiGetLogsRequest {
-	return ApiGetLogsRequest{}
-}
+/*
+GetLogs Return the latest log entries. Wraps GetLogsWithContext using context.Background.
 
-// GetLogs wraps GetLogsWithContext using context.Background.
+Return the latest log entries.
+
+Request can be constructed by NewApiGetLogsRequest with parameters below.
+
+	@param offset int32 - First entry to retrieve (zero-based). Log entries are sorted by decreasing date, therefore 0 designates the most recent log entry.
+	@param length int32 - Maximum number of entries to retrieve. The maximum allowed value is 1000.
+	@param indexName string - Index for which log entries should be retrieved. When omitted, log entries are retrieved across all indices.
+	@param type_ LogType - Type of log entries to retrieve. When omitted, all log entries are retrieved.
+	@return GetLogsResponse
+*/
 func (c *APIClient) GetLogs(r ApiGetLogsRequest, opts ...Option) (*GetLogsResponse, error) {
 	return c.GetLogsWithContext(context.Background(), r, opts...)
 }
 
-// @return GetLogsResponse
+/*
+GetLogs Return the latest log entries.
+
+Return the latest log entries.
+
+Request can be constructed by NewApiGetLogsRequest with parameters below.
+
+	@param offset int32 - First entry to retrieve (zero-based). Log entries are sorted by decreasing date, therefore 0 designates the most recent log entry.
+	@param length int32 - Maximum number of entries to retrieve. The maximum allowed value is 1000.
+	@param indexName string - Index for which log entries should be retrieved. When omitted, log entries are retrieved across all indices.
+	@param type_ LogType - Type of log entries to retrieve. When omitted, all log entries are retrieved.
+	@return GetLogsResponse
+*/
 func (c *APIClient) GetLogsWithContext(ctx context.Context, r ApiGetLogsRequest, opts ...Option) (*GetLogsResponse, error) {
 	var (
 		postBody    any
@@ -3475,12 +3988,6 @@ func (c *APIClient) GetLogsWithContext(ctx context.Context, r ApiGetLogsRequest,
 	return returnValue, nil
 }
 
-type ApiGetObjectRequest struct {
-	indexName            string
-	objectID             string
-	attributesToRetrieve []string
-}
-
 func (r *ApiGetObjectRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3518,13 +4025,14 @@ func (r *ApiGetObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// List of attributes to retrieve. If not specified, all retrievable attributes are returned.
-func (r ApiGetObjectRequest) WithAttributesToRetrieve(attributesToRetrieve []string) ApiGetObjectRequest {
-	r.attributesToRetrieve = attributesToRetrieve
-	return r
+// ApiGetObjectRequest represents the request with all the parameters for the API call.
+type ApiGetObjectRequest struct {
+	indexName            string
+	objectID             string
+	attributesToRetrieve []string
 }
 
-// @return ApiGetObjectRequest
+// NewApiGetObjectRequest creates an instance of the ApiGetObjectRequest to be used for the API call.
 func (c *APIClient) NewApiGetObjectRequest(indexName string, objectID string) ApiGetObjectRequest {
 	return ApiGetObjectRequest{
 		indexName: indexName,
@@ -3532,12 +4040,40 @@ func (c *APIClient) NewApiGetObjectRequest(indexName string, objectID string) Ap
 	}
 }
 
-// GetObject wraps GetObjectWithContext using context.Background.
+// WithAttributesToRetrieve adds the attributesToRetrieve to the ApiGetObjectRequest and returns the request for chaining.
+func (r ApiGetObjectRequest) WithAttributesToRetrieve(attributesToRetrieve []string) ApiGetObjectRequest {
+	r.attributesToRetrieve = attributesToRetrieve
+	return r
+}
+
+/*
+GetObject Retrieve an object. Wraps GetObjectWithContext using context.Background.
+
+Retrieve one object from the index.
+
+Request can be constructed by NewApiGetObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param attributesToRetrieve []string - List of attributes to retrieve. If not specified, all retrievable attributes are returned.
+	@return map[string]string
+*/
 func (c *APIClient) GetObject(r ApiGetObjectRequest, opts ...Option) (map[string]string, error) {
 	return c.GetObjectWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]string
+/*
+GetObject Retrieve an object.
+
+Retrieve one object from the index.
+
+Request can be constructed by NewApiGetObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param attributesToRetrieve []string - List of attributes to retrieve. If not specified, all retrievable attributes are returned.
+	@return map[string]string
+*/
 func (c *APIClient) GetObjectWithContext(ctx context.Context, r ApiGetObjectRequest, opts ...Option) (map[string]string, error) {
 	var (
 		postBody    any
@@ -3636,10 +4172,6 @@ func (c *APIClient) GetObjectWithContext(ctx context.Context, r ApiGetObjectRequ
 	return returnValue, nil
 }
 
-type ApiGetObjectsRequest struct {
-	getObjectsParams *GetObjectsParams
-}
-
 func (r *ApiGetObjectsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3664,19 +4196,42 @@ func (r *ApiGetObjectsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetObjectsRequest
+// ApiGetObjectsRequest represents the request with all the parameters for the API call.
+type ApiGetObjectsRequest struct {
+	getObjectsParams *GetObjectsParams
+}
+
+// NewApiGetObjectsRequest creates an instance of the ApiGetObjectsRequest to be used for the API call.
 func (c *APIClient) NewApiGetObjectsRequest(getObjectsParams *GetObjectsParams) ApiGetObjectsRequest {
 	return ApiGetObjectsRequest{
 		getObjectsParams: getObjectsParams,
 	}
 }
 
-// GetObjects wraps GetObjectsWithContext using context.Background.
+/*
+GetObjects Retrieve one or more objects. Wraps GetObjectsWithContext using context.Background.
+
+Retrieve one or more objects, potentially from different indices, in a single API call.
+
+Request can be constructed by NewApiGetObjectsRequest with parameters below.
+
+	@param getObjectsParams GetObjectsParams - The Algolia object.
+	@return GetObjectsResponse
+*/
 func (c *APIClient) GetObjects(r ApiGetObjectsRequest, opts ...Option) (*GetObjectsResponse, error) {
 	return c.GetObjectsWithContext(context.Background(), r, opts...)
 }
 
-// @return GetObjectsResponse
+/*
+GetObjects Retrieve one or more objects.
+
+Retrieve one or more objects, potentially from different indices, in a single API call.
+
+Request can be constructed by NewApiGetObjectsRequest with parameters below.
+
+	@param getObjectsParams GetObjectsParams - The Algolia object.
+	@return GetObjectsResponse
+*/
 func (c *APIClient) GetObjectsWithContext(ctx context.Context, r ApiGetObjectsRequest, opts ...Option) (*GetObjectsResponse, error) {
 	var (
 		postBody    any
@@ -3774,11 +4329,6 @@ func (c *APIClient) GetObjectsWithContext(ctx context.Context, r ApiGetObjectsRe
 	return returnValue, nil
 }
 
-type ApiGetRuleRequest struct {
-	indexName string
-	objectID  string
-}
-
 func (r *ApiGetRuleRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3807,7 +4357,13 @@ func (r *ApiGetRuleRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetRuleRequest
+// ApiGetRuleRequest represents the request with all the parameters for the API call.
+type ApiGetRuleRequest struct {
+	indexName string
+	objectID  string
+}
+
+// NewApiGetRuleRequest creates an instance of the ApiGetRuleRequest to be used for the API call.
 func (c *APIClient) NewApiGetRuleRequest(indexName string, objectID string) ApiGetRuleRequest {
 	return ApiGetRuleRequest{
 		indexName: indexName,
@@ -3815,12 +4371,32 @@ func (c *APIClient) NewApiGetRuleRequest(indexName string, objectID string) ApiG
 	}
 }
 
-// GetRule wraps GetRuleWithContext using context.Background.
+/*
+GetRule Get a rule. Wraps GetRuleWithContext using context.Background.
+
+Retrieve the Rule with the specified objectID.
+
+Request can be constructed by NewApiGetRuleRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@return Rule
+*/
 func (c *APIClient) GetRule(r ApiGetRuleRequest, opts ...Option) (*Rule, error) {
 	return c.GetRuleWithContext(context.Background(), r, opts...)
 }
 
-// @return Rule
+/*
+GetRule Get a rule.
+
+Retrieve the Rule with the specified objectID.
+
+Request can be constructed by NewApiGetRuleRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@return Rule
+*/
 func (c *APIClient) GetRuleWithContext(ctx context.Context, r ApiGetRuleRequest, opts ...Option) (*Rule, error) {
 	var (
 		postBody    any
@@ -3915,10 +4491,6 @@ func (c *APIClient) GetRuleWithContext(ctx context.Context, r ApiGetRuleRequest,
 	return returnValue, nil
 }
 
-type ApiGetSettingsRequest struct {
-	indexName string
-}
-
 func (r *ApiGetSettingsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3938,19 +4510,42 @@ func (r *ApiGetSettingsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetSettingsRequest
+// ApiGetSettingsRequest represents the request with all the parameters for the API call.
+type ApiGetSettingsRequest struct {
+	indexName string
+}
+
+// NewApiGetSettingsRequest creates an instance of the ApiGetSettingsRequest to be used for the API call.
 func (c *APIClient) NewApiGetSettingsRequest(indexName string) ApiGetSettingsRequest {
 	return ApiGetSettingsRequest{
 		indexName: indexName,
 	}
 }
 
-// GetSettings wraps GetSettingsWithContext using context.Background.
+/*
+GetSettings Retrieve settings of an index. Wraps GetSettingsWithContext using context.Background.
+
+Retrieve settings of an index.
+
+Request can be constructed by NewApiGetSettingsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return IndexSettings
+*/
 func (c *APIClient) GetSettings(r ApiGetSettingsRequest, opts ...Option) (*IndexSettings, error) {
 	return c.GetSettingsWithContext(context.Background(), r, opts...)
 }
 
-// @return IndexSettings
+/*
+GetSettings Retrieve settings of an index.
+
+Retrieve settings of an index.
+
+Request can be constructed by NewApiGetSettingsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@return IndexSettings
+*/
 func (c *APIClient) GetSettingsWithContext(ctx context.Context, r ApiGetSettingsRequest, opts ...Option) (*IndexSettings, error) {
 	var (
 		postBody    any
@@ -4044,12 +4639,28 @@ func (c *APIClient) GetSettingsWithContext(ctx context.Context, r ApiGetSettings
 	return returnValue, nil
 }
 
-// GetSources wraps GetSourcesWithContext using context.Background.
+/*
+GetSources List all allowed sources. Wraps GetSourcesWithContext using context.Background.
+
+List all allowed sources.
+
+Request can be constructed by NewApiGetSourcesRequest with parameters below.
+
+	@return []Source
+*/
 func (c *APIClient) GetSources(opts ...Option) ([]Source, error) {
 	return c.GetSourcesWithContext(context.Background(), opts...)
 }
 
-// @return []Source
+/*
+GetSources List all allowed sources.
+
+List all allowed sources.
+
+Request can be constructed by NewApiGetSourcesRequest with parameters below.
+
+	@return []Source
+*/
 func (c *APIClient) GetSourcesWithContext(ctx context.Context, opts ...Option) ([]Source, error) {
 	var (
 		postBody    any
@@ -4142,11 +4753,6 @@ func (c *APIClient) GetSourcesWithContext(ctx context.Context, opts ...Option) (
 	return returnValue, nil
 }
 
-type ApiGetSynonymRequest struct {
-	indexName string
-	objectID  string
-}
-
 func (r *ApiGetSynonymRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4175,7 +4781,13 @@ func (r *ApiGetSynonymRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetSynonymRequest
+// ApiGetSynonymRequest represents the request with all the parameters for the API call.
+type ApiGetSynonymRequest struct {
+	indexName string
+	objectID  string
+}
+
+// NewApiGetSynonymRequest creates an instance of the ApiGetSynonymRequest to be used for the API call.
 func (c *APIClient) NewApiGetSynonymRequest(indexName string, objectID string) ApiGetSynonymRequest {
 	return ApiGetSynonymRequest{
 		indexName: indexName,
@@ -4183,12 +4795,32 @@ func (c *APIClient) NewApiGetSynonymRequest(indexName string, objectID string) A
 	}
 }
 
-// GetSynonym wraps GetSynonymWithContext using context.Background.
+/*
+GetSynonym Get synonym. Wraps GetSynonymWithContext using context.Background.
+
+Fetch a synonym object identified by its objectID.
+
+Request can be constructed by NewApiGetSynonymRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@return SynonymHit
+*/
 func (c *APIClient) GetSynonym(r ApiGetSynonymRequest, opts ...Option) (*SynonymHit, error) {
 	return c.GetSynonymWithContext(context.Background(), r, opts...)
 }
 
-// @return SynonymHit
+/*
+GetSynonym Get synonym.
+
+Fetch a synonym object identified by its objectID.
+
+Request can be constructed by NewApiGetSynonymRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@return SynonymHit
+*/
 func (c *APIClient) GetSynonymWithContext(ctx context.Context, r ApiGetSynonymRequest, opts ...Option) (*SynonymHit, error) {
 	var (
 		postBody    any
@@ -4283,11 +4915,6 @@ func (c *APIClient) GetSynonymWithContext(ctx context.Context, r ApiGetSynonymRe
 	return returnValue, nil
 }
 
-type ApiGetTaskRequest struct {
-	indexName string
-	taskID    int64
-}
-
 func (r *ApiGetTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4316,7 +4943,13 @@ func (r *ApiGetTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetTaskRequest
+// ApiGetTaskRequest represents the request with all the parameters for the API call.
+type ApiGetTaskRequest struct {
+	indexName string
+	taskID    int64
+}
+
+// NewApiGetTaskRequest creates an instance of the ApiGetTaskRequest to be used for the API call.
 func (c *APIClient) NewApiGetTaskRequest(indexName string, taskID int64) ApiGetTaskRequest {
 	return ApiGetTaskRequest{
 		indexName: indexName,
@@ -4324,12 +4957,32 @@ func (c *APIClient) NewApiGetTaskRequest(indexName string, taskID int64) ApiGetT
 	}
 }
 
-// GetTask wraps GetTaskWithContext using context.Background.
+/*
+GetTask Check the status of a task. Wraps GetTaskWithContext using context.Background.
+
+Check the current status of a given task.
+
+Request can be constructed by NewApiGetTaskRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param taskID int64 - Unique identifier of an task. Numeric value (up to 64bits).
+	@return GetTaskResponse
+*/
 func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*GetTaskResponse, error) {
 	return c.GetTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return GetTaskResponse
+/*
+GetTask Check the status of a task.
+
+Check the current status of a given task.
+
+Request can be constructed by NewApiGetTaskRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param taskID int64 - Unique identifier of an task. Numeric value (up to 64bits).
+	@return GetTaskResponse
+*/
 func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest, opts ...Option) (*GetTaskResponse, error) {
 	var (
 		postBody    any
@@ -4424,12 +5077,32 @@ func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest,
 	return returnValue, nil
 }
 
-// GetTopUserIds wraps GetTopUserIdsWithContext using context.Background.
+/*
+GetTopUserIds Get top userID. Wraps GetTopUserIdsWithContext using context.Background.
+
+Get the top 10 userIDs with the highest number of records per cluster.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
+Upon success, the response is 200 OK and contains the following array of userIDs and clusters.
+
+Request can be constructed by NewApiGetTopUserIdsRequest with parameters below.
+
+	@return GetTopUserIdsResponse
+*/
 func (c *APIClient) GetTopUserIds(opts ...Option) (*GetTopUserIdsResponse, error) {
 	return c.GetTopUserIdsWithContext(context.Background(), opts...)
 }
 
-// @return GetTopUserIdsResponse
+/*
+GetTopUserIds Get top userID.
+
+Get the top 10 userIDs with the highest number of records per cluster.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
+Upon success, the response is 200 OK and contains the following array of userIDs and clusters.
+
+Request can be constructed by NewApiGetTopUserIdsRequest with parameters below.
+
+	@return GetTopUserIdsResponse
+*/
 func (c *APIClient) GetTopUserIdsWithContext(ctx context.Context, opts ...Option) (*GetTopUserIdsResponse, error) {
 	var (
 		postBody    any
@@ -4522,10 +5195,6 @@ func (c *APIClient) GetTopUserIdsWithContext(ctx context.Context, opts ...Option
 	return returnValue, nil
 }
 
-type ApiGetUserIdRequest struct {
-	userID string
-}
-
 func (r *ApiGetUserIdRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4545,19 +5214,46 @@ func (r *ApiGetUserIdRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetUserIdRequest
+// ApiGetUserIdRequest represents the request with all the parameters for the API call.
+type ApiGetUserIdRequest struct {
+	userID string
+}
+
+// NewApiGetUserIdRequest creates an instance of the ApiGetUserIdRequest to be used for the API call.
 func (c *APIClient) NewApiGetUserIdRequest(userID string) ApiGetUserIdRequest {
 	return ApiGetUserIdRequest{
 		userID: userID,
 	}
 }
 
-// GetUserId wraps GetUserIdWithContext using context.Background.
+/*
+GetUserId Get userID. Wraps GetUserIdWithContext using context.Background.
+
+Returns the userID data stored in the mapping.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
+Upon success, the response is 200 OK and contains the following userID data.
+
+Request can be constructed by NewApiGetUserIdRequest with parameters below.
+
+	@param userID string - userID to assign.
+	@return UserId
+*/
 func (c *APIClient) GetUserId(r ApiGetUserIdRequest, opts ...Option) (*UserId, error) {
 	return c.GetUserIdWithContext(context.Background(), r, opts...)
 }
 
-// @return UserId
+/*
+GetUserId Get userID.
+
+Returns the userID data stored in the mapping.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
+Upon success, the response is 200 OK and contains the following userID data.
+
+Request can be constructed by NewApiGetUserIdRequest with parameters below.
+
+	@param userID string - userID to assign.
+	@return UserId
+*/
 func (c *APIClient) GetUserIdWithContext(ctx context.Context, r ApiGetUserIdRequest, opts ...Option) (*UserId, error) {
 	var (
 		postBody    any
@@ -4651,10 +5347,6 @@ func (c *APIClient) GetUserIdWithContext(ctx context.Context, r ApiGetUserIdRequ
 	return returnValue, nil
 }
 
-type ApiHasPendingMappingsRequest struct {
-	getClusters bool
-}
-
 func (r *ApiHasPendingMappingsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4674,23 +5366,52 @@ func (r *ApiHasPendingMappingsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// If the clusters pending mapping state should be on the response.
+// ApiHasPendingMappingsRequest represents the request with all the parameters for the API call.
+type ApiHasPendingMappingsRequest struct {
+	getClusters bool
+}
+
+// NewApiHasPendingMappingsRequest creates an instance of the ApiHasPendingMappingsRequest to be used for the API call.
+func (c *APIClient) NewApiHasPendingMappingsRequest() ApiHasPendingMappingsRequest {
+	return ApiHasPendingMappingsRequest{}
+}
+
+// WithGetClusters adds the getClusters to the ApiHasPendingMappingsRequest and returns the request for chaining.
 func (r ApiHasPendingMappingsRequest) WithGetClusters(getClusters bool) ApiHasPendingMappingsRequest {
 	r.getClusters = getClusters
 	return r
 }
 
-// @return ApiHasPendingMappingsRequest
-func (c *APIClient) NewApiHasPendingMappingsRequest() ApiHasPendingMappingsRequest {
-	return ApiHasPendingMappingsRequest{}
-}
+/*
+HasPendingMappings Get migration status. Wraps HasPendingMappingsWithContext using context.Background.
 
-// HasPendingMappings wraps HasPendingMappingsWithContext using context.Background.
+Get the status of your clusters' migrations or user creations.
+Creating a large batch of users or migrating your multi-cluster may take quite some time. This method lets you retrieve the status of the migration, so you can know when it's done.
+Upon success, the response is 200 OK.
+A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+
+Request can be constructed by NewApiHasPendingMappingsRequest with parameters below.
+
+	@param getClusters bool - If the clusters pending mapping state should be on the response.
+	@return HasPendingMappingsResponse
+*/
 func (c *APIClient) HasPendingMappings(r ApiHasPendingMappingsRequest, opts ...Option) (*HasPendingMappingsResponse, error) {
 	return c.HasPendingMappingsWithContext(context.Background(), r, opts...)
 }
 
-// @return HasPendingMappingsResponse
+/*
+HasPendingMappings Get migration status.
+
+Get the status of your clusters' migrations or user creations.
+Creating a large batch of users or migrating your multi-cluster may take quite some time. This method lets you retrieve the status of the migration, so you can know when it's done.
+Upon success, the response is 200 OK.
+A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+
+Request can be constructed by NewApiHasPendingMappingsRequest with parameters below.
+
+	@param getClusters bool - If the clusters pending mapping state should be on the response.
+	@return HasPendingMappingsResponse
+*/
 func (c *APIClient) HasPendingMappingsWithContext(ctx context.Context, r ApiHasPendingMappingsRequest, opts ...Option) (*HasPendingMappingsResponse, error) {
 	var (
 		postBody    any
@@ -4787,12 +5508,28 @@ func (c *APIClient) HasPendingMappingsWithContext(ctx context.Context, r ApiHasP
 	return returnValue, nil
 }
 
-// ListApiKeys wraps ListApiKeysWithContext using context.Background.
+/*
+ListApiKeys List API Keys. Wraps ListApiKeysWithContext using context.Background.
+
+List API keys, along with their associated rights.
+
+Request can be constructed by NewApiListApiKeysRequest with parameters below.
+
+	@return ListApiKeysResponse
+*/
 func (c *APIClient) ListApiKeys(opts ...Option) (*ListApiKeysResponse, error) {
 	return c.ListApiKeysWithContext(context.Background(), opts...)
 }
 
-// @return ListApiKeysResponse
+/*
+ListApiKeys List API Keys.
+
+List API keys, along with their associated rights.
+
+Request can be constructed by NewApiListApiKeysRequest with parameters below.
+
+	@return ListApiKeysResponse
+*/
 func (c *APIClient) ListApiKeysWithContext(ctx context.Context, opts ...Option) (*ListApiKeysResponse, error) {
 	var (
 		postBody    any
@@ -4885,12 +5622,30 @@ func (c *APIClient) ListApiKeysWithContext(ctx context.Context, opts ...Option) 
 	return returnValue, nil
 }
 
-// ListClusters wraps ListClustersWithContext using context.Background.
+/*
+ListClusters List clusters. Wraps ListClustersWithContext using context.Background.
+
+List the clusters available in a multi-clusters setup for a single appID.
+Upon success, the response is 200 OK and contains the following clusters.
+
+Request can be constructed by NewApiListClustersRequest with parameters below.
+
+	@return ListClustersResponse
+*/
 func (c *APIClient) ListClusters(opts ...Option) (*ListClustersResponse, error) {
 	return c.ListClustersWithContext(context.Background(), opts...)
 }
 
-// @return ListClustersResponse
+/*
+ListClusters List clusters.
+
+List the clusters available in a multi-clusters setup for a single appID.
+Upon success, the response is 200 OK and contains the following clusters.
+
+Request can be constructed by NewApiListClustersRequest with parameters below.
+
+	@return ListClustersResponse
+*/
 func (c *APIClient) ListClustersWithContext(ctx context.Context, opts ...Option) (*ListClustersResponse, error) {
 	var (
 		postBody    any
@@ -4983,10 +5738,6 @@ func (c *APIClient) ListClustersWithContext(ctx context.Context, opts ...Option)
 	return returnValue, nil
 }
 
-type ApiListIndicesRequest struct {
-	page int32
-}
-
 func (r *ApiListIndicesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -5006,23 +5757,46 @@ func (r *ApiListIndicesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+// ApiListIndicesRequest represents the request with all the parameters for the API call.
+type ApiListIndicesRequest struct {
+	page int32
+}
+
+// NewApiListIndicesRequest creates an instance of the ApiListIndicesRequest to be used for the API call.
+func (c *APIClient) NewApiListIndicesRequest() ApiListIndicesRequest {
+	return ApiListIndicesRequest{}
+}
+
+// WithPage adds the page to the ApiListIndicesRequest and returns the request for chaining.
 func (r ApiListIndicesRequest) WithPage(page int32) ApiListIndicesRequest {
 	r.page = page
 	return r
 }
 
-// @return ApiListIndicesRequest
-func (c *APIClient) NewApiListIndicesRequest() ApiListIndicesRequest {
-	return ApiListIndicesRequest{}
-}
+/*
+ListIndices List existing indexes. Wraps ListIndicesWithContext using context.Background.
 
-// ListIndices wraps ListIndicesWithContext using context.Background.
+List existing indexes from an application.
+
+Request can be constructed by NewApiListIndicesRequest with parameters below.
+
+	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@return ListIndicesResponse
+*/
 func (c *APIClient) ListIndices(r ApiListIndicesRequest, opts ...Option) (*ListIndicesResponse, error) {
 	return c.ListIndicesWithContext(context.Background(), r, opts...)
 }
 
-// @return ListIndicesResponse
+/*
+ListIndices List existing indexes.
+
+List existing indexes from an application.
+
+Request can be constructed by NewApiListIndicesRequest with parameters below.
+
+	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@return ListIndicesResponse
+*/
 func (c *APIClient) ListIndicesWithContext(ctx context.Context, r ApiListIndicesRequest, opts ...Option) (*ListIndicesResponse, error) {
 	var (
 		postBody    any
@@ -5119,11 +5893,6 @@ func (c *APIClient) ListIndicesWithContext(ctx context.Context, r ApiListIndices
 	return returnValue, nil
 }
 
-type ApiListUserIdsRequest struct {
-	page        int32
-	hitsPerPage int32
-}
-
 func (r *ApiListUserIdsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -5152,29 +5921,59 @@ func (r *ApiListUserIdsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+// ApiListUserIdsRequest represents the request with all the parameters for the API call.
+type ApiListUserIdsRequest struct {
+	page        int32
+	hitsPerPage int32
+}
+
+// NewApiListUserIdsRequest creates an instance of the ApiListUserIdsRequest to be used for the API call.
+func (c *APIClient) NewApiListUserIdsRequest() ApiListUserIdsRequest {
+	return ApiListUserIdsRequest{}
+}
+
+// WithPage adds the page to the ApiListUserIdsRequest and returns the request for chaining.
 func (r ApiListUserIdsRequest) WithPage(page int32) ApiListUserIdsRequest {
 	r.page = page
 	return r
 }
 
-// Maximum number of objects to retrieve.
+// WithHitsPerPage adds the hitsPerPage to the ApiListUserIdsRequest and returns the request for chaining.
 func (r ApiListUserIdsRequest) WithHitsPerPage(hitsPerPage int32) ApiListUserIdsRequest {
 	r.hitsPerPage = hitsPerPage
 	return r
 }
 
-// @return ApiListUserIdsRequest
-func (c *APIClient) NewApiListUserIdsRequest() ApiListUserIdsRequest {
-	return ApiListUserIdsRequest{}
-}
+/*
+ListUserIds List userIDs. Wraps ListUserIdsWithContext using context.Background.
 
-// ListUserIds wraps ListUserIdsWithContext using context.Background.
+List the userIDs assigned to a multi-clusters appID.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
+Upon success, the response is 200 OK and contains the following userIDs data.
+
+Request can be constructed by NewApiListUserIdsRequest with parameters below.
+
+	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@param hitsPerPage int32 - Maximum number of objects to retrieve.
+	@return ListUserIdsResponse
+*/
 func (c *APIClient) ListUserIds(r ApiListUserIdsRequest, opts ...Option) (*ListUserIdsResponse, error) {
 	return c.ListUserIdsWithContext(context.Background(), r, opts...)
 }
 
-// @return ListUserIdsResponse
+/*
+ListUserIds List userIDs.
+
+List the userIDs assigned to a multi-clusters appID.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
+Upon success, the response is 200 OK and contains the following userIDs data.
+
+Request can be constructed by NewApiListUserIdsRequest with parameters below.
+
+	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@param hitsPerPage int32 - Maximum number of objects to retrieve.
+	@return ListUserIdsResponse
+*/
 func (c *APIClient) ListUserIdsWithContext(ctx context.Context, r ApiListUserIdsRequest, opts ...Option) (*ListUserIdsResponse, error) {
 	var (
 		postBody    any
@@ -5274,10 +6073,6 @@ func (c *APIClient) ListUserIdsWithContext(ctx context.Context, r ApiListUserIds
 	return returnValue, nil
 }
 
-type ApiMultipleBatchRequest struct {
-	batchParams *BatchParams
-}
-
 func (r *ApiMultipleBatchRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -5302,19 +6097,42 @@ func (r *ApiMultipleBatchRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiMultipleBatchRequest
+// ApiMultipleBatchRequest represents the request with all the parameters for the API call.
+type ApiMultipleBatchRequest struct {
+	batchParams *BatchParams
+}
+
+// NewApiMultipleBatchRequest creates an instance of the ApiMultipleBatchRequest to be used for the API call.
 func (c *APIClient) NewApiMultipleBatchRequest(batchParams *BatchParams) ApiMultipleBatchRequest {
 	return ApiMultipleBatchRequest{
 		batchParams: batchParams,
 	}
 }
 
-// MultipleBatch wraps MultipleBatchWithContext using context.Background.
+/*
+MultipleBatch Batch operations to many indices. Wraps MultipleBatchWithContext using context.Background.
+
+Perform multiple write operations, potentially targeting multiple indices, in a single API call.
+
+Request can be constructed by NewApiMultipleBatchRequest with parameters below.
+
+	@param batchParams BatchParams
+	@return MultipleBatchResponse
+*/
 func (c *APIClient) MultipleBatch(r ApiMultipleBatchRequest, opts ...Option) (*MultipleBatchResponse, error) {
 	return c.MultipleBatchWithContext(context.Background(), r, opts...)
 }
 
-// @return MultipleBatchResponse
+/*
+MultipleBatch Batch operations to many indices.
+
+Perform multiple write operations, potentially targeting multiple indices, in a single API call.
+
+Request can be constructed by NewApiMultipleBatchRequest with parameters below.
+
+	@param batchParams BatchParams
+	@return MultipleBatchResponse
+*/
 func (c *APIClient) MultipleBatchWithContext(ctx context.Context, r ApiMultipleBatchRequest, opts ...Option) (*MultipleBatchResponse, error) {
 	var (
 		postBody    any
@@ -5412,11 +6230,6 @@ func (c *APIClient) MultipleBatchWithContext(ctx context.Context, r ApiMultipleB
 	return returnValue, nil
 }
 
-type ApiOperationIndexRequest struct {
-	indexName            string
-	operationIndexParams *OperationIndexParams
-}
-
 func (r *ApiOperationIndexRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -5450,7 +6263,13 @@ func (r *ApiOperationIndexRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiOperationIndexRequest
+// ApiOperationIndexRequest represents the request with all the parameters for the API call.
+type ApiOperationIndexRequest struct {
+	indexName            string
+	operationIndexParams *OperationIndexParams
+}
+
+// NewApiOperationIndexRequest creates an instance of the ApiOperationIndexRequest to be used for the API call.
 func (c *APIClient) NewApiOperationIndexRequest(indexName string, operationIndexParams *OperationIndexParams) ApiOperationIndexRequest {
 	return ApiOperationIndexRequest{
 		indexName:            indexName,
@@ -5458,12 +6277,32 @@ func (c *APIClient) NewApiOperationIndexRequest(indexName string, operationIndex
 	}
 }
 
-// OperationIndex wraps OperationIndexWithContext using context.Background.
+/*
+OperationIndex Copy/move index. Wraps OperationIndexWithContext using context.Background.
+
+Performs a copy or a move operation on a index.
+
+Request can be constructed by NewApiOperationIndexRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param operationIndexParams OperationIndexParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) OperationIndex(r ApiOperationIndexRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.OperationIndexWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+OperationIndex Copy/move index.
+
+Performs a copy or a move operation on a index.
+
+Request can be constructed by NewApiOperationIndexRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param operationIndexParams OperationIndexParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) OperationIndexWithContext(ctx context.Context, r ApiOperationIndexRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -5562,13 +6401,6 @@ func (c *APIClient) OperationIndexWithContext(ctx context.Context, r ApiOperatio
 	return returnValue, nil
 }
 
-type ApiPartialUpdateObjectRequest struct {
-	indexName          string
-	objectID           string
-	attributesToUpdate *map[string]AttributeToUpdate
-	createIfNotExists  bool
-}
-
 func (r *ApiPartialUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -5620,13 +6452,15 @@ func (r *ApiPartialUpdateObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Creates the record if it does not exist yet.
-func (r ApiPartialUpdateObjectRequest) WithCreateIfNotExists(createIfNotExists bool) ApiPartialUpdateObjectRequest {
-	r.createIfNotExists = createIfNotExists
-	return r
+// ApiPartialUpdateObjectRequest represents the request with all the parameters for the API call.
+type ApiPartialUpdateObjectRequest struct {
+	indexName          string
+	objectID           string
+	attributesToUpdate *map[string]AttributeToUpdate
+	createIfNotExists  bool
 }
 
-// @return ApiPartialUpdateObjectRequest
+// NewApiPartialUpdateObjectRequest creates an instance of the ApiPartialUpdateObjectRequest to be used for the API call.
 func (c *APIClient) NewApiPartialUpdateObjectRequest(indexName string, objectID string, attributesToUpdate *map[string]AttributeToUpdate) ApiPartialUpdateObjectRequest {
 	return ApiPartialUpdateObjectRequest{
 		indexName:          indexName,
@@ -5635,12 +6469,48 @@ func (c *APIClient) NewApiPartialUpdateObjectRequest(indexName string, objectID 
 	}
 }
 
-// PartialUpdateObject wraps PartialUpdateObjectWithContext using context.Background.
+// WithCreateIfNotExists adds the createIfNotExists to the ApiPartialUpdateObjectRequest and returns the request for chaining.
+func (r ApiPartialUpdateObjectRequest) WithCreateIfNotExists(createIfNotExists bool) ApiPartialUpdateObjectRequest {
+	r.createIfNotExists = createIfNotExists
+	return r
+}
+
+/*
+PartialUpdateObject Partially update an object. Wraps PartialUpdateObjectWithContext using context.Background.
+
+Update one or more attributes of an existing object.
+This method lets you update only a part of an existing object, either by adding new attributes or updating existing ones.
+You can partially update several objects in a single method call.
+If the index targeted by this operation doesn't exist yet, it's automatically created.
+
+Request can be constructed by NewApiPartialUpdateObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param attributesToUpdate map[string]AttributeToUpdate - Map of attribute(s) to update.
+	@param createIfNotExists bool - Creates the record if it does not exist yet.
+	@return UpdatedAtWithObjectIdResponse
+*/
 func (c *APIClient) PartialUpdateObject(r ApiPartialUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
 	return c.PartialUpdateObjectWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtWithObjectIdResponse
+/*
+PartialUpdateObject Partially update an object.
+
+Update one or more attributes of an existing object.
+This method lets you update only a part of an existing object, either by adding new attributes or updating existing ones.
+You can partially update several objects in a single method call.
+If the index targeted by this operation doesn't exist yet, it's automatically created.
+
+Request can be constructed by NewApiPartialUpdateObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param attributesToUpdate map[string]AttributeToUpdate - Map of attribute(s) to update.
+	@param createIfNotExists bool - Creates the record if it does not exist yet.
+	@return UpdatedAtWithObjectIdResponse
+*/
 func (c *APIClient) PartialUpdateObjectWithContext(ctx context.Context, r ApiPartialUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
 	var (
 		postBody    any
@@ -5744,12 +6614,6 @@ func (c *APIClient) PartialUpdateObjectWithContext(ctx context.Context, r ApiPar
 	return returnValue, nil
 }
 
-type ApiPostRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -5787,31 +6651,60 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
-	r.parameters = parameters
-	return r
+// ApiPostRequest represents the request with all the parameters for the API call.
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPostRequest
+// NewApiPostRequest creates an instance of the ApiPostRequest to be used for the API call.
 func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	return ApiPostRequest{
 		path: path,
 	}
 }
 
-// Post wraps PostWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+/*
+Post Send requests to the Algolia REST API. Wraps PostWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PostWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Post Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -5917,12 +6810,6 @@ func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts 
 	return returnValue, nil
 }
 
-type ApiPutRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -5960,31 +6847,60 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
-	r.parameters = parameters
-	return r
+// ApiPutRequest represents the request with all the parameters for the API call.
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPutRequest
+// NewApiPutRequest creates an instance of the ApiPutRequest to be used for the API call.
 func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	return ApiPutRequest{
 		path: path,
 	}
 }
 
-// Put wraps PutWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+/*
+Put Send requests to the Algolia REST API. Wraps PutWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PutWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Put Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -6090,10 +7006,6 @@ func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiRemoveUserIdRequest struct {
-	userID string
-}
-
 func (r *ApiRemoveUserIdRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -6113,19 +7025,44 @@ func (r *ApiRemoveUserIdRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiRemoveUserIdRequest
+// ApiRemoveUserIdRequest represents the request with all the parameters for the API call.
+type ApiRemoveUserIdRequest struct {
+	userID string
+}
+
+// NewApiRemoveUserIdRequest creates an instance of the ApiRemoveUserIdRequest to be used for the API call.
 func (c *APIClient) NewApiRemoveUserIdRequest(userID string) ApiRemoveUserIdRequest {
 	return ApiRemoveUserIdRequest{
 		userID: userID,
 	}
 }
 
-// RemoveUserId wraps RemoveUserIdWithContext using context.Background.
+/*
+RemoveUserId Remove userID. Wraps RemoveUserIdWithContext using context.Background.
+
+Remove a userID and its associated data from the multi-clusters.
+Upon success, the response is 200 OK and a task is created to remove the userID data and mapping.
+
+Request can be constructed by NewApiRemoveUserIdRequest with parameters below.
+
+	@param userID string - userID to assign.
+	@return RemoveUserIdResponse
+*/
 func (c *APIClient) RemoveUserId(r ApiRemoveUserIdRequest, opts ...Option) (*RemoveUserIdResponse, error) {
 	return c.RemoveUserIdWithContext(context.Background(), r, opts...)
 }
 
-// @return RemoveUserIdResponse
+/*
+RemoveUserId Remove userID.
+
+Remove a userID and its associated data from the multi-clusters.
+Upon success, the response is 200 OK and a task is created to remove the userID data and mapping.
+
+Request can be constructed by NewApiRemoveUserIdRequest with parameters below.
+
+	@param userID string - userID to assign.
+	@return RemoveUserIdResponse
+*/
 func (c *APIClient) RemoveUserIdWithContext(ctx context.Context, r ApiRemoveUserIdRequest, opts ...Option) (*RemoveUserIdResponse, error) {
 	var (
 		postBody    any
@@ -6219,10 +7156,6 @@ func (c *APIClient) RemoveUserIdWithContext(ctx context.Context, r ApiRemoveUser
 	return returnValue, nil
 }
 
-type ApiReplaceSourcesRequest struct {
-	source []Source
-}
-
 func (r *ApiReplaceSourcesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -6247,19 +7180,42 @@ func (r *ApiReplaceSourcesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiReplaceSourcesRequest
+// ApiReplaceSourcesRequest represents the request with all the parameters for the API call.
+type ApiReplaceSourcesRequest struct {
+	source []Source
+}
+
+// NewApiReplaceSourcesRequest creates an instance of the ApiReplaceSourcesRequest to be used for the API call.
 func (c *APIClient) NewApiReplaceSourcesRequest(source []Source) ApiReplaceSourcesRequest {
 	return ApiReplaceSourcesRequest{
 		source: source,
 	}
 }
 
-// ReplaceSources wraps ReplaceSourcesWithContext using context.Background.
+/*
+ReplaceSources Replace all allowed sources. Wraps ReplaceSourcesWithContext using context.Background.
+
+Replace all allowed sources.
+
+Request can be constructed by NewApiReplaceSourcesRequest with parameters below.
+
+	@param source []Source - The sources to allow.
+	@return ReplaceSourceResponse
+*/
 func (c *APIClient) ReplaceSources(r ApiReplaceSourcesRequest, opts ...Option) (*ReplaceSourceResponse, error) {
 	return c.ReplaceSourcesWithContext(context.Background(), r, opts...)
 }
 
-// @return ReplaceSourceResponse
+/*
+ReplaceSources Replace all allowed sources.
+
+Replace all allowed sources.
+
+Request can be constructed by NewApiReplaceSourcesRequest with parameters below.
+
+	@param source []Source - The sources to allow.
+	@return ReplaceSourceResponse
+*/
 func (c *APIClient) ReplaceSourcesWithContext(ctx context.Context, r ApiReplaceSourcesRequest, opts ...Option) (*ReplaceSourceResponse, error) {
 	var (
 		postBody    any
@@ -6357,10 +7313,6 @@ func (c *APIClient) ReplaceSourcesWithContext(ctx context.Context, r ApiReplaceS
 	return returnValue, nil
 }
 
-type ApiRestoreApiKeyRequest struct {
-	key string
-}
-
 func (r *ApiRestoreApiKeyRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -6380,19 +7332,42 @@ func (r *ApiRestoreApiKeyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiRestoreApiKeyRequest
+// ApiRestoreApiKeyRequest represents the request with all the parameters for the API call.
+type ApiRestoreApiKeyRequest struct {
+	key string
+}
+
+// NewApiRestoreApiKeyRequest creates an instance of the ApiRestoreApiKeyRequest to be used for the API call.
 func (c *APIClient) NewApiRestoreApiKeyRequest(key string) ApiRestoreApiKeyRequest {
 	return ApiRestoreApiKeyRequest{
 		key: key,
 	}
 }
 
-// RestoreApiKey wraps RestoreApiKeyWithContext using context.Background.
+/*
+RestoreApiKey Restore an API key. Wraps RestoreApiKeyWithContext using context.Background.
+
+Restore a deleted API key, along with its associated rights.
+
+Request can be constructed by NewApiRestoreApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@return AddApiKeyResponse
+*/
 func (c *APIClient) RestoreApiKey(r ApiRestoreApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
 	return c.RestoreApiKeyWithContext(context.Background(), r, opts...)
 }
 
-// @return AddApiKeyResponse
+/*
+RestoreApiKey Restore an API key.
+
+Restore a deleted API key, along with its associated rights.
+
+Request can be constructed by NewApiRestoreApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@return AddApiKeyResponse
+*/
 func (c *APIClient) RestoreApiKeyWithContext(ctx context.Context, r ApiRestoreApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
 	var (
 		postBody    any
@@ -6486,11 +7461,6 @@ func (c *APIClient) RestoreApiKeyWithContext(ctx context.Context, r ApiRestoreAp
 	return returnValue, nil
 }
 
-type ApiSaveObjectRequest struct {
-	indexName string
-	body      map[string]interface{}
-}
-
 func (r *ApiSaveObjectRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -6524,7 +7494,13 @@ func (r *ApiSaveObjectRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSaveObjectRequest
+// ApiSaveObjectRequest represents the request with all the parameters for the API call.
+type ApiSaveObjectRequest struct {
+	indexName string
+	body      map[string]interface{}
+}
+
+// NewApiSaveObjectRequest creates an instance of the ApiSaveObjectRequest to be used for the API call.
 func (c *APIClient) NewApiSaveObjectRequest(indexName string, body map[string]interface{}) ApiSaveObjectRequest {
 	return ApiSaveObjectRequest{
 		indexName: indexName,
@@ -6532,12 +7508,32 @@ func (c *APIClient) NewApiSaveObjectRequest(indexName string, body map[string]in
 	}
 }
 
-// SaveObject wraps SaveObjectWithContext using context.Background.
+/*
+SaveObject Add an object to the index. Wraps SaveObjectWithContext using context.Background.
+
+Add an object to the index, automatically assigning it an object ID.
+
+Request can be constructed by NewApiSaveObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param body map[string]interface{} - The Algolia record.
+	@return SaveObjectResponse
+*/
 func (c *APIClient) SaveObject(r ApiSaveObjectRequest, opts ...Option) (*SaveObjectResponse, error) {
 	return c.SaveObjectWithContext(context.Background(), r, opts...)
 }
 
-// @return SaveObjectResponse
+/*
+SaveObject Add an object to the index.
+
+Add an object to the index, automatically assigning it an object ID.
+
+Request can be constructed by NewApiSaveObjectRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param body map[string]interface{} - The Algolia record.
+	@return SaveObjectResponse
+*/
 func (c *APIClient) SaveObjectWithContext(ctx context.Context, r ApiSaveObjectRequest, opts ...Option) (*SaveObjectResponse, error) {
 	var (
 		postBody    any
@@ -6633,13 +7629,6 @@ func (c *APIClient) SaveObjectWithContext(ctx context.Context, r ApiSaveObjectRe
 	return returnValue, nil
 }
 
-type ApiSaveRuleRequest struct {
-	indexName         string
-	objectID          string
-	rule              *Rule
-	forwardToReplicas bool
-}
-
 func (r *ApiSaveRuleRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -6691,13 +7680,15 @@ func (r *ApiSaveRuleRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiSaveRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveRuleRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiSaveRuleRequest represents the request with all the parameters for the API call.
+type ApiSaveRuleRequest struct {
+	indexName         string
+	objectID          string
+	rule              *Rule
+	forwardToReplicas bool
 }
 
-// @return ApiSaveRuleRequest
+// NewApiSaveRuleRequest creates an instance of the ApiSaveRuleRequest to be used for the API call.
 func (c *APIClient) NewApiSaveRuleRequest(indexName string, objectID string, rule *Rule) ApiSaveRuleRequest {
 	return ApiSaveRuleRequest{
 		indexName: indexName,
@@ -6706,12 +7697,42 @@ func (c *APIClient) NewApiSaveRuleRequest(indexName string, objectID string, rul
 	}
 }
 
-// SaveRule wraps SaveRuleWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiSaveRuleRequest and returns the request for chaining.
+func (r ApiSaveRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveRuleRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+/*
+SaveRule Save/Update a rule. Wraps SaveRuleWithContext using context.Background.
+
+Create or update the Rule with the specified objectID.
+
+Request can be constructed by NewApiSaveRuleRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param rule Rule
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedRuleResponse
+*/
 func (c *APIClient) SaveRule(r ApiSaveRuleRequest, opts ...Option) (*UpdatedRuleResponse, error) {
 	return c.SaveRuleWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedRuleResponse
+/*
+SaveRule Save/Update a rule.
+
+Create or update the Rule with the specified objectID.
+
+Request can be constructed by NewApiSaveRuleRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param rule Rule
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedRuleResponse
+*/
 func (c *APIClient) SaveRuleWithContext(ctx context.Context, r ApiSaveRuleRequest, opts ...Option) (*UpdatedRuleResponse, error) {
 	var (
 		postBody    any
@@ -6815,13 +7836,6 @@ func (c *APIClient) SaveRuleWithContext(ctx context.Context, r ApiSaveRuleReques
 	return returnValue, nil
 }
 
-type ApiSaveRulesRequest struct {
-	indexName          string
-	rules              []Rule
-	forwardToReplicas  bool
-	clearExistingRules bool
-}
-
 func (r *ApiSaveRulesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -6873,19 +7887,15 @@ func (r *ApiSaveRulesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiSaveRulesRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveRulesRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiSaveRulesRequest represents the request with all the parameters for the API call.
+type ApiSaveRulesRequest struct {
+	indexName          string
+	rules              []Rule
+	forwardToReplicas  bool
+	clearExistingRules bool
 }
 
-// When true, existing Rules are cleared before adding this batch. When false, existing Rules are kept.
-func (r ApiSaveRulesRequest) WithClearExistingRules(clearExistingRules bool) ApiSaveRulesRequest {
-	r.clearExistingRules = clearExistingRules
-	return r
-}
-
-// @return ApiSaveRulesRequest
+// NewApiSaveRulesRequest creates an instance of the ApiSaveRulesRequest to be used for the API call.
 func (c *APIClient) NewApiSaveRulesRequest(indexName string, rules []Rule) ApiSaveRulesRequest {
 	return ApiSaveRulesRequest{
 		indexName: indexName,
@@ -6893,12 +7903,48 @@ func (c *APIClient) NewApiSaveRulesRequest(indexName string, rules []Rule) ApiSa
 	}
 }
 
-// SaveRules wraps SaveRulesWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiSaveRulesRequest and returns the request for chaining.
+func (r ApiSaveRulesRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveRulesRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// WithClearExistingRules adds the clearExistingRules to the ApiSaveRulesRequest and returns the request for chaining.
+func (r ApiSaveRulesRequest) WithClearExistingRules(clearExistingRules bool) ApiSaveRulesRequest {
+	r.clearExistingRules = clearExistingRules
+	return r
+}
+
+/*
+SaveRules Save a batch of rules. Wraps SaveRulesWithContext using context.Background.
+
+Create/update multiple rules objects at once.
+
+Request can be constructed by NewApiSaveRulesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param rules []Rule
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param clearExistingRules bool - When true, existing Rules are cleared before adding this batch. When false, existing Rules are kept.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SaveRules(r ApiSaveRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.SaveRulesWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+SaveRules Save a batch of rules.
+
+Create/update multiple rules objects at once.
+
+Request can be constructed by NewApiSaveRulesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param rules []Rule
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param clearExistingRules bool - When true, existing Rules are cleared before adding this batch. When false, existing Rules are kept.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SaveRulesWithContext(ctx context.Context, r ApiSaveRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -7004,13 +8050,6 @@ func (c *APIClient) SaveRulesWithContext(ctx context.Context, r ApiSaveRulesRequ
 	return returnValue, nil
 }
 
-type ApiSaveSynonymRequest struct {
-	indexName         string
-	objectID          string
-	synonymHit        *SynonymHit
-	forwardToReplicas bool
-}
-
 func (r *ApiSaveSynonymRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -7062,13 +8101,15 @@ func (r *ApiSaveSynonymRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiSaveSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveSynonymRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiSaveSynonymRequest represents the request with all the parameters for the API call.
+type ApiSaveSynonymRequest struct {
+	indexName         string
+	objectID          string
+	synonymHit        *SynonymHit
+	forwardToReplicas bool
 }
 
-// @return ApiSaveSynonymRequest
+// NewApiSaveSynonymRequest creates an instance of the ApiSaveSynonymRequest to be used for the API call.
 func (c *APIClient) NewApiSaveSynonymRequest(indexName string, objectID string, synonymHit *SynonymHit) ApiSaveSynonymRequest {
 	return ApiSaveSynonymRequest{
 		indexName:  indexName,
@@ -7077,12 +8118,42 @@ func (c *APIClient) NewApiSaveSynonymRequest(indexName string, objectID string, 
 	}
 }
 
-// SaveSynonym wraps SaveSynonymWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiSaveSynonymRequest and returns the request for chaining.
+func (r ApiSaveSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveSynonymRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+/*
+SaveSynonym Save synonym. Wraps SaveSynonymWithContext using context.Background.
+
+Create a new synonym object or update the existing synonym object with the given object ID.
+
+Request can be constructed by NewApiSaveSynonymRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param synonymHit SynonymHit
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return SaveSynonymResponse
+*/
 func (c *APIClient) SaveSynonym(r ApiSaveSynonymRequest, opts ...Option) (*SaveSynonymResponse, error) {
 	return c.SaveSynonymWithContext(context.Background(), r, opts...)
 }
 
-// @return SaveSynonymResponse
+/*
+SaveSynonym Save synonym.
+
+Create a new synonym object or update the existing synonym object with the given object ID.
+
+Request can be constructed by NewApiSaveSynonymRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param objectID string - Unique identifier of an object.
+	@param synonymHit SynonymHit
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return SaveSynonymResponse
+*/
 func (c *APIClient) SaveSynonymWithContext(ctx context.Context, r ApiSaveSynonymRequest, opts ...Option) (*SaveSynonymResponse, error) {
 	var (
 		postBody    any
@@ -7186,13 +8257,6 @@ func (c *APIClient) SaveSynonymWithContext(ctx context.Context, r ApiSaveSynonym
 	return returnValue, nil
 }
 
-type ApiSaveSynonymsRequest struct {
-	indexName               string
-	synonymHit              []SynonymHit
-	forwardToReplicas       bool
-	replaceExistingSynonyms bool
-}
-
 func (r *ApiSaveSynonymsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -7244,19 +8308,15 @@ func (r *ApiSaveSynonymsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiSaveSynonymsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveSynonymsRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiSaveSynonymsRequest represents the request with all the parameters for the API call.
+type ApiSaveSynonymsRequest struct {
+	indexName               string
+	synonymHit              []SynonymHit
+	forwardToReplicas       bool
+	replaceExistingSynonyms bool
 }
 
-// Replace all synonyms of the index with the ones sent with this request.
-func (r ApiSaveSynonymsRequest) WithReplaceExistingSynonyms(replaceExistingSynonyms bool) ApiSaveSynonymsRequest {
-	r.replaceExistingSynonyms = replaceExistingSynonyms
-	return r
-}
-
-// @return ApiSaveSynonymsRequest
+// NewApiSaveSynonymsRequest creates an instance of the ApiSaveSynonymsRequest to be used for the API call.
 func (c *APIClient) NewApiSaveSynonymsRequest(indexName string, synonymHit []SynonymHit) ApiSaveSynonymsRequest {
 	return ApiSaveSynonymsRequest{
 		indexName:  indexName,
@@ -7264,12 +8324,48 @@ func (c *APIClient) NewApiSaveSynonymsRequest(indexName string, synonymHit []Syn
 	}
 }
 
-// SaveSynonyms wraps SaveSynonymsWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiSaveSynonymsRequest and returns the request for chaining.
+func (r ApiSaveSynonymsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSaveSynonymsRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+// WithReplaceExistingSynonyms adds the replaceExistingSynonyms to the ApiSaveSynonymsRequest and returns the request for chaining.
+func (r ApiSaveSynonymsRequest) WithReplaceExistingSynonyms(replaceExistingSynonyms bool) ApiSaveSynonymsRequest {
+	r.replaceExistingSynonyms = replaceExistingSynonyms
+	return r
+}
+
+/*
+SaveSynonyms Save a batch of synonyms. Wraps SaveSynonymsWithContext using context.Background.
+
+Create/update multiple synonym objects at once, potentially replacing the entire list of synonyms if replaceExistingSynonyms is true.
+
+Request can be constructed by NewApiSaveSynonymsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param synonymHit []SynonymHit
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param replaceExistingSynonyms bool - Replace all synonyms of the index with the ones sent with this request.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SaveSynonyms(r ApiSaveSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.SaveSynonymsWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+SaveSynonyms Save a batch of synonyms.
+
+Create/update multiple synonym objects at once, potentially replacing the entire list of synonyms if replaceExistingSynonyms is true.
+
+Request can be constructed by NewApiSaveSynonymsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param synonymHit []SynonymHit
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param replaceExistingSynonyms bool - Replace all synonyms of the index with the ones sent with this request.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SaveSynonymsWithContext(ctx context.Context, r ApiSaveSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -7375,10 +8471,6 @@ func (c *APIClient) SaveSynonymsWithContext(ctx context.Context, r ApiSaveSynony
 	return returnValue, nil
 }
 
-type ApiSearchRequest struct {
-	searchMethodParams *SearchMethodParams
-}
-
 func (r *ApiSearchRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -7403,19 +8495,42 @@ func (r *ApiSearchRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSearchRequest
+// ApiSearchRequest represents the request with all the parameters for the API call.
+type ApiSearchRequest struct {
+	searchMethodParams *SearchMethodParams
+}
+
+// NewApiSearchRequest creates an instance of the ApiSearchRequest to be used for the API call.
 func (c *APIClient) NewApiSearchRequest(searchMethodParams *SearchMethodParams) ApiSearchRequest {
 	return ApiSearchRequest{
 		searchMethodParams: searchMethodParams,
 	}
 }
 
-// Search wraps SearchWithContext using context.Background.
+/*
+Search Search multiple indices. Wraps SearchWithContext using context.Background.
+
+Perform a search operation targeting one or many indices.
+
+Request can be constructed by NewApiSearchRequest with parameters below.
+
+	@param searchMethodParams SearchMethodParams - The `search` requests and strategy.
+	@return SearchResponses
+*/
 func (c *APIClient) Search(r ApiSearchRequest, opts ...Option) (*SearchResponses, error) {
 	return c.SearchWithContext(context.Background(), r, opts...)
 }
 
-// @return SearchResponses
+/*
+Search Search multiple indices.
+
+Perform a search operation targeting one or many indices.
+
+Request can be constructed by NewApiSearchRequest with parameters below.
+
+	@param searchMethodParams SearchMethodParams - The `search` requests and strategy.
+	@return SearchResponses
+*/
 func (c *APIClient) SearchWithContext(ctx context.Context, r ApiSearchRequest, opts ...Option) (*SearchResponses, error) {
 	var (
 		postBody    any
@@ -7513,11 +8628,6 @@ func (c *APIClient) SearchWithContext(ctx context.Context, r ApiSearchRequest, o
 	return returnValue, nil
 }
 
-type ApiSearchDictionaryEntriesRequest struct {
-	dictionaryName                DictionaryType
-	searchDictionaryEntriesParams *SearchDictionaryEntriesParams
-}
-
 func (r *ApiSearchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -7551,7 +8661,13 @@ func (r *ApiSearchDictionaryEntriesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSearchDictionaryEntriesRequest
+// ApiSearchDictionaryEntriesRequest represents the request with all the parameters for the API call.
+type ApiSearchDictionaryEntriesRequest struct {
+	dictionaryName                DictionaryType
+	searchDictionaryEntriesParams *SearchDictionaryEntriesParams
+}
+
+// NewApiSearchDictionaryEntriesRequest creates an instance of the ApiSearchDictionaryEntriesRequest to be used for the API call.
 func (c *APIClient) NewApiSearchDictionaryEntriesRequest(dictionaryName DictionaryType, searchDictionaryEntriesParams *SearchDictionaryEntriesParams) ApiSearchDictionaryEntriesRequest {
 	return ApiSearchDictionaryEntriesRequest{
 		dictionaryName:                dictionaryName,
@@ -7559,12 +8675,32 @@ func (c *APIClient) NewApiSearchDictionaryEntriesRequest(dictionaryName Dictiona
 	}
 }
 
-// SearchDictionaryEntries wraps SearchDictionaryEntriesWithContext using context.Background.
+/*
+SearchDictionaryEntries Search a dictionary entries. Wraps SearchDictionaryEntriesWithContext using context.Background.
+
+Search the dictionary entries.
+
+Request can be constructed by NewApiSearchDictionaryEntriesRequest with parameters below.
+
+	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param searchDictionaryEntriesParams SearchDictionaryEntriesParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SearchDictionaryEntries(r ApiSearchDictionaryEntriesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.SearchDictionaryEntriesWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+SearchDictionaryEntries Search a dictionary entries.
+
+Search the dictionary entries.
+
+Request can be constructed by NewApiSearchDictionaryEntriesRequest with parameters below.
+
+	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param searchDictionaryEntriesParams SearchDictionaryEntriesParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SearchDictionaryEntriesWithContext(ctx context.Context, r ApiSearchDictionaryEntriesRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -7663,12 +8799,6 @@ func (c *APIClient) SearchDictionaryEntriesWithContext(ctx context.Context, r Ap
 	return returnValue, nil
 }
 
-type ApiSearchForFacetValuesRequest struct {
-	indexName                   string
-	facetName                   string
-	searchForFacetValuesRequest *SearchForFacetValuesRequest
-}
-
 func (r *ApiSearchForFacetValuesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -7706,12 +8836,14 @@ func (r *ApiSearchForFacetValuesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchForFacetValuesRequest) WithSearchForFacetValuesRequest(searchForFacetValuesRequest *SearchForFacetValuesRequest) ApiSearchForFacetValuesRequest {
-	r.searchForFacetValuesRequest = searchForFacetValuesRequest
-	return r
+// ApiSearchForFacetValuesRequest represents the request with all the parameters for the API call.
+type ApiSearchForFacetValuesRequest struct {
+	indexName                   string
+	facetName                   string
+	searchForFacetValuesRequest *SearchForFacetValuesRequest
 }
 
-// @return ApiSearchForFacetValuesRequest
+// NewApiSearchForFacetValuesRequest creates an instance of the ApiSearchForFacetValuesRequest to be used for the API call.
 func (c *APIClient) NewApiSearchForFacetValuesRequest(indexName string, facetName string) ApiSearchForFacetValuesRequest {
 	return ApiSearchForFacetValuesRequest{
 		indexName: indexName,
@@ -7719,12 +8851,40 @@ func (c *APIClient) NewApiSearchForFacetValuesRequest(indexName string, facetNam
 	}
 }
 
-// SearchForFacetValues wraps SearchForFacetValuesWithContext using context.Background.
+// WithSearchForFacetValuesRequest adds the searchForFacetValuesRequest to the ApiSearchForFacetValuesRequest and returns the request for chaining.
+func (r ApiSearchForFacetValuesRequest) WithSearchForFacetValuesRequest(searchForFacetValuesRequest *SearchForFacetValuesRequest) ApiSearchForFacetValuesRequest {
+	r.searchForFacetValuesRequest = searchForFacetValuesRequest
+	return r
+}
+
+/*
+SearchForFacetValues Search for values of a given facet. Wraps SearchForFacetValuesWithContext using context.Background.
+
+Search for values of a given facet, optionally restricting the returned values to those contained in objects matching other search criteria.
+
+Request can be constructed by NewApiSearchForFacetValuesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param facetName string - The facet name.
+	@param searchForFacetValuesRequest SearchForFacetValuesRequest
+	@return SearchForFacetValuesResponse
+*/
 func (c *APIClient) SearchForFacetValues(r ApiSearchForFacetValuesRequest, opts ...Option) (*SearchForFacetValuesResponse, error) {
 	return c.SearchForFacetValuesWithContext(context.Background(), r, opts...)
 }
 
-// @return SearchForFacetValuesResponse
+/*
+SearchForFacetValues Search for values of a given facet.
+
+Search for values of a given facet, optionally restricting the returned values to those contained in objects matching other search criteria.
+
+Request can be constructed by NewApiSearchForFacetValuesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param facetName string - The facet name.
+	@param searchForFacetValuesRequest SearchForFacetValuesRequest
+	@return SearchForFacetValuesResponse
+*/
 func (c *APIClient) SearchForFacetValuesWithContext(ctx context.Context, r ApiSearchForFacetValuesRequest, opts ...Option) (*SearchForFacetValuesResponse, error) {
 	var (
 		postBody    any
@@ -7825,11 +8985,6 @@ func (c *APIClient) SearchForFacetValuesWithContext(ctx context.Context, r ApiSe
 	return returnValue, nil
 }
 
-type ApiSearchRulesRequest struct {
-	indexName         string
-	searchRulesParams *SearchRulesParams
-}
-
 func (r *ApiSearchRulesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -7858,24 +9013,51 @@ func (r *ApiSearchRulesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchRulesRequest) WithSearchRulesParams(searchRulesParams *SearchRulesParams) ApiSearchRulesRequest {
-	r.searchRulesParams = searchRulesParams
-	return r
+// ApiSearchRulesRequest represents the request with all the parameters for the API call.
+type ApiSearchRulesRequest struct {
+	indexName         string
+	searchRulesParams *SearchRulesParams
 }
 
-// @return ApiSearchRulesRequest
+// NewApiSearchRulesRequest creates an instance of the ApiSearchRulesRequest to be used for the API call.
 func (c *APIClient) NewApiSearchRulesRequest(indexName string) ApiSearchRulesRequest {
 	return ApiSearchRulesRequest{
 		indexName: indexName,
 	}
 }
 
-// SearchRules wraps SearchRulesWithContext using context.Background.
+// WithSearchRulesParams adds the searchRulesParams to the ApiSearchRulesRequest and returns the request for chaining.
+func (r ApiSearchRulesRequest) WithSearchRulesParams(searchRulesParams *SearchRulesParams) ApiSearchRulesRequest {
+	r.searchRulesParams = searchRulesParams
+	return r
+}
+
+/*
+SearchRules Search for rules. Wraps SearchRulesWithContext using context.Background.
+
+Search for rules matching various criteria.
+
+Request can be constructed by NewApiSearchRulesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param searchRulesParams SearchRulesParams
+	@return SearchRulesResponse
+*/
 func (c *APIClient) SearchRules(r ApiSearchRulesRequest, opts ...Option) (*SearchRulesResponse, error) {
 	return c.SearchRulesWithContext(context.Background(), r, opts...)
 }
 
-// @return SearchRulesResponse
+/*
+SearchRules Search for rules.
+
+Search for rules matching various criteria.
+
+Request can be constructed by NewApiSearchRulesRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param searchRulesParams SearchRulesParams
+	@return SearchRulesResponse
+*/
 func (c *APIClient) SearchRulesWithContext(ctx context.Context, r ApiSearchRulesRequest, opts ...Option) (*SearchRulesResponse, error) {
 	var (
 		postBody    any
@@ -7975,11 +9157,6 @@ func (c *APIClient) SearchRulesWithContext(ctx context.Context, r ApiSearchRules
 	return returnValue, nil
 }
 
-type ApiSearchSingleIndexRequest struct {
-	indexName    string
-	searchParams *SearchParams
-}
-
 func (r *ApiSearchSingleIndexRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -8008,24 +9185,51 @@ func (r *ApiSearchSingleIndexRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r ApiSearchSingleIndexRequest) WithSearchParams(searchParams *SearchParams) ApiSearchSingleIndexRequest {
-	r.searchParams = searchParams
-	return r
+// ApiSearchSingleIndexRequest represents the request with all the parameters for the API call.
+type ApiSearchSingleIndexRequest struct {
+	indexName    string
+	searchParams *SearchParams
 }
 
-// @return ApiSearchSingleIndexRequest
+// NewApiSearchSingleIndexRequest creates an instance of the ApiSearchSingleIndexRequest to be used for the API call.
 func (c *APIClient) NewApiSearchSingleIndexRequest(indexName string) ApiSearchSingleIndexRequest {
 	return ApiSearchSingleIndexRequest{
 		indexName: indexName,
 	}
 }
 
-// SearchSingleIndex wraps SearchSingleIndexWithContext using context.Background.
+// WithSearchParams adds the searchParams to the ApiSearchSingleIndexRequest and returns the request for chaining.
+func (r ApiSearchSingleIndexRequest) WithSearchParams(searchParams *SearchParams) ApiSearchSingleIndexRequest {
+	r.searchParams = searchParams
+	return r
+}
+
+/*
+SearchSingleIndex Search in a single index. Wraps SearchSingleIndexWithContext using context.Background.
+
+Perform a search operation targeting one specific index.
+
+Request can be constructed by NewApiSearchSingleIndexRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param searchParams SearchParams
+	@return SearchResponse
+*/
 func (c *APIClient) SearchSingleIndex(r ApiSearchSingleIndexRequest, opts ...Option) (*SearchResponse, error) {
 	return c.SearchSingleIndexWithContext(context.Background(), r, opts...)
 }
 
-// @return SearchResponse
+/*
+SearchSingleIndex Search in a single index.
+
+Perform a search operation targeting one specific index.
+
+Request can be constructed by NewApiSearchSingleIndexRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param searchParams SearchParams
+	@return SearchResponse
+*/
 func (c *APIClient) SearchSingleIndexWithContext(ctx context.Context, r ApiSearchSingleIndexRequest, opts ...Option) (*SearchResponse, error) {
 	var (
 		postBody    any
@@ -8125,14 +9329,6 @@ func (c *APIClient) SearchSingleIndexWithContext(ctx context.Context, r ApiSearc
 	return returnValue, nil
 }
 
-type ApiSearchSynonymsRequest struct {
-	indexName            string
-	type_                *SynonymType
-	page                 int32
-	hitsPerPage          int32
-	searchSynonymsParams *SearchSynonymsParams
-}
-
 func (r *ApiSearchSynonymsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -8188,43 +9384,78 @@ func (r *ApiSearchSynonymsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Only search for specific types of synonyms.
-func (r ApiSearchSynonymsRequest) WithType_(type_ *SynonymType) ApiSearchSynonymsRequest {
-	r.type_ = type_
-	return r
+// ApiSearchSynonymsRequest represents the request with all the parameters for the API call.
+type ApiSearchSynonymsRequest struct {
+	indexName            string
+	type_                *SynonymType
+	page                 int32
+	hitsPerPage          int32
+	searchSynonymsParams *SearchSynonymsParams
 }
 
-// Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
-func (r ApiSearchSynonymsRequest) WithPage(page int32) ApiSearchSynonymsRequest {
-	r.page = page
-	return r
-}
-
-// Maximum number of objects to retrieve.
-func (r ApiSearchSynonymsRequest) WithHitsPerPage(hitsPerPage int32) ApiSearchSynonymsRequest {
-	r.hitsPerPage = hitsPerPage
-	return r
-}
-
-// The body of the the &#x60;searchSynonyms&#x60; method.
-func (r ApiSearchSynonymsRequest) WithSearchSynonymsParams(searchSynonymsParams *SearchSynonymsParams) ApiSearchSynonymsRequest {
-	r.searchSynonymsParams = searchSynonymsParams
-	return r
-}
-
-// @return ApiSearchSynonymsRequest
+// NewApiSearchSynonymsRequest creates an instance of the ApiSearchSynonymsRequest to be used for the API call.
 func (c *APIClient) NewApiSearchSynonymsRequest(indexName string) ApiSearchSynonymsRequest {
 	return ApiSearchSynonymsRequest{
 		indexName: indexName,
 	}
 }
 
-// SearchSynonyms wraps SearchSynonymsWithContext using context.Background.
+// WithType_ adds the type_ to the ApiSearchSynonymsRequest and returns the request for chaining.
+func (r ApiSearchSynonymsRequest) WithType_(type_ *SynonymType) ApiSearchSynonymsRequest {
+	r.type_ = type_
+	return r
+}
+
+// WithPage adds the page to the ApiSearchSynonymsRequest and returns the request for chaining.
+func (r ApiSearchSynonymsRequest) WithPage(page int32) ApiSearchSynonymsRequest {
+	r.page = page
+	return r
+}
+
+// WithHitsPerPage adds the hitsPerPage to the ApiSearchSynonymsRequest and returns the request for chaining.
+func (r ApiSearchSynonymsRequest) WithHitsPerPage(hitsPerPage int32) ApiSearchSynonymsRequest {
+	r.hitsPerPage = hitsPerPage
+	return r
+}
+
+// WithSearchSynonymsParams adds the searchSynonymsParams to the ApiSearchSynonymsRequest and returns the request for chaining.
+func (r ApiSearchSynonymsRequest) WithSearchSynonymsParams(searchSynonymsParams *SearchSynonymsParams) ApiSearchSynonymsRequest {
+	r.searchSynonymsParams = searchSynonymsParams
+	return r
+}
+
+/*
+SearchSynonyms Search synonyms. Wraps SearchSynonymsWithContext using context.Background.
+
+Search or browse all synonyms, optionally filtering them by type.
+
+Request can be constructed by NewApiSearchSynonymsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param type_ SynonymType - Only search for specific types of synonyms.
+	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@param hitsPerPage int32 - Maximum number of objects to retrieve.
+	@param searchSynonymsParams SearchSynonymsParams - The body of the the `searchSynonyms` method.
+	@return SearchSynonymsResponse
+*/
 func (c *APIClient) SearchSynonyms(r ApiSearchSynonymsRequest, opts ...Option) (*SearchSynonymsResponse, error) {
 	return c.SearchSynonymsWithContext(context.Background(), r, opts...)
 }
 
-// @return SearchSynonymsResponse
+/*
+SearchSynonyms Search synonyms.
+
+Search or browse all synonyms, optionally filtering them by type.
+
+Request can be constructed by NewApiSearchSynonymsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param type_ SynonymType - Only search for specific types of synonyms.
+	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@param hitsPerPage int32 - Maximum number of objects to retrieve.
+	@param searchSynonymsParams SearchSynonymsParams - The body of the the `searchSynonyms` method.
+	@return SearchSynonymsResponse
+*/
 func (c *APIClient) SearchSynonymsWithContext(ctx context.Context, r ApiSearchSynonymsRequest, opts ...Option) (*SearchSynonymsResponse, error) {
 	var (
 		postBody    any
@@ -8334,10 +9565,6 @@ func (c *APIClient) SearchSynonymsWithContext(ctx context.Context, r ApiSearchSy
 	return returnValue, nil
 }
 
-type ApiSearchUserIdsRequest struct {
-	searchUserIdsParams *SearchUserIdsParams
-}
-
 func (r *ApiSearchUserIdsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -8362,19 +9589,48 @@ func (r *ApiSearchUserIdsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSearchUserIdsRequest
+// ApiSearchUserIdsRequest represents the request with all the parameters for the API call.
+type ApiSearchUserIdsRequest struct {
+	searchUserIdsParams *SearchUserIdsParams
+}
+
+// NewApiSearchUserIdsRequest creates an instance of the ApiSearchUserIdsRequest to be used for the API call.
 func (c *APIClient) NewApiSearchUserIdsRequest(searchUserIdsParams *SearchUserIdsParams) ApiSearchUserIdsRequest {
 	return ApiSearchUserIdsRequest{
 		searchUserIdsParams: searchUserIdsParams,
 	}
 }
 
-// SearchUserIds wraps SearchUserIdsWithContext using context.Background.
+/*
+SearchUserIds Search userID. Wraps SearchUserIdsWithContext using context.Background.
+
+Search for userIDs.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds propagate to the different clusters.
+To keep updates moving quickly, the index of userIDs isn't built synchronously with the mapping. Instead, the index is built once every 12h, at the same time as the update of userID usage. For example, when you perform a modification like adding or moving a userID, the search will report an outdated value until the next rebuild of the mapping, which takes place every 12h.
+Upon success, the response is 200 OK and contains the following userIDs data.
+
+Request can be constructed by NewApiSearchUserIdsRequest with parameters below.
+
+	@param searchUserIdsParams SearchUserIdsParams
+	@return SearchUserIdsResponse
+*/
 func (c *APIClient) SearchUserIds(r ApiSearchUserIdsRequest, opts ...Option) (*SearchUserIdsResponse, error) {
 	return c.SearchUserIdsWithContext(context.Background(), r, opts...)
 }
 
-// @return SearchUserIdsResponse
+/*
+SearchUserIds Search userID.
+
+Search for userIDs.
+The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds propagate to the different clusters.
+To keep updates moving quickly, the index of userIDs isn't built synchronously with the mapping. Instead, the index is built once every 12h, at the same time as the update of userID usage. For example, when you perform a modification like adding or moving a userID, the search will report an outdated value until the next rebuild of the mapping, which takes place every 12h.
+Upon success, the response is 200 OK and contains the following userIDs data.
+
+Request can be constructed by NewApiSearchUserIdsRequest with parameters below.
+
+	@param searchUserIdsParams SearchUserIdsParams
+	@return SearchUserIdsResponse
+*/
 func (c *APIClient) SearchUserIdsWithContext(ctx context.Context, r ApiSearchUserIdsRequest, opts ...Option) (*SearchUserIdsResponse, error) {
 	var (
 		postBody    any
@@ -8472,10 +9728,6 @@ func (c *APIClient) SearchUserIdsWithContext(ctx context.Context, r ApiSearchUse
 	return returnValue, nil
 }
 
-type ApiSetDictionarySettingsRequest struct {
-	dictionarySettingsParams *DictionarySettingsParams
-}
-
 func (r *ApiSetDictionarySettingsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -8500,19 +9752,42 @@ func (r *ApiSetDictionarySettingsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSetDictionarySettingsRequest
+// ApiSetDictionarySettingsRequest represents the request with all the parameters for the API call.
+type ApiSetDictionarySettingsRequest struct {
+	dictionarySettingsParams *DictionarySettingsParams
+}
+
+// NewApiSetDictionarySettingsRequest creates an instance of the ApiSetDictionarySettingsRequest to be used for the API call.
 func (c *APIClient) NewApiSetDictionarySettingsRequest(dictionarySettingsParams *DictionarySettingsParams) ApiSetDictionarySettingsRequest {
 	return ApiSetDictionarySettingsRequest{
 		dictionarySettingsParams: dictionarySettingsParams,
 	}
 }
 
-// SetDictionarySettings wraps SetDictionarySettingsWithContext using context.Background.
+/*
+SetDictionarySettings Set dictionaries settings. Wraps SetDictionarySettingsWithContext using context.Background.
+
+Set dictionaries settings.
+
+Request can be constructed by NewApiSetDictionarySettingsRequest with parameters below.
+
+	@param dictionarySettingsParams DictionarySettingsParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SetDictionarySettings(r ApiSetDictionarySettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.SetDictionarySettingsWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+SetDictionarySettings Set dictionaries settings.
+
+Set dictionaries settings.
+
+Request can be constructed by NewApiSetDictionarySettingsRequest with parameters below.
+
+	@param dictionarySettingsParams DictionarySettingsParams
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SetDictionarySettingsWithContext(ctx context.Context, r ApiSetDictionarySettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -8610,12 +9885,6 @@ func (c *APIClient) SetDictionarySettingsWithContext(ctx context.Context, r ApiS
 	return returnValue, nil
 }
 
-type ApiSetSettingsRequest struct {
-	indexName         string
-	indexSettings     *IndexSettings
-	forwardToReplicas bool
-}
-
 func (r *ApiSetSettingsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -8658,13 +9927,14 @@ func (r *ApiSetSettingsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// When true, changes are also propagated to replicas of the given indexName.
-func (r ApiSetSettingsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSetSettingsRequest {
-	r.forwardToReplicas = forwardToReplicas
-	return r
+// ApiSetSettingsRequest represents the request with all the parameters for the API call.
+type ApiSetSettingsRequest struct {
+	indexName         string
+	indexSettings     *IndexSettings
+	forwardToReplicas bool
 }
 
-// @return ApiSetSettingsRequest
+// NewApiSetSettingsRequest creates an instance of the ApiSetSettingsRequest to be used for the API call.
 func (c *APIClient) NewApiSetSettingsRequest(indexName string, indexSettings *IndexSettings) ApiSetSettingsRequest {
 	return ApiSetSettingsRequest{
 		indexName:     indexName,
@@ -8672,12 +9942,40 @@ func (c *APIClient) NewApiSetSettingsRequest(indexName string, indexSettings *In
 	}
 }
 
-// SetSettings wraps SetSettingsWithContext using context.Background.
+// WithForwardToReplicas adds the forwardToReplicas to the ApiSetSettingsRequest and returns the request for chaining.
+func (r ApiSetSettingsRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSetSettingsRequest {
+	r.forwardToReplicas = forwardToReplicas
+	return r
+}
+
+/*
+SetSettings Update settings of an index. Wraps SetSettingsWithContext using context.Background.
+
+Update settings of an index. Only specified settings are overridden; unspecified settings are left unchanged. Specifying null for a setting resets it to its default value.
+
+Request can be constructed by NewApiSetSettingsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param indexSettings IndexSettings
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SetSettings(r ApiSetSettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	return c.SetSettingsWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdatedAtResponse
+/*
+SetSettings Update settings of an index.
+
+Update settings of an index. Only specified settings are overridden; unspecified settings are left unchanged. Specifying null for a setting resets it to its default value.
+
+Request can be constructed by NewApiSetSettingsRequest with parameters below.
+
+	@param indexName string - The index in which to perform the request.
+	@param indexSettings IndexSettings
+	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@return UpdatedAtResponse
+*/
 func (c *APIClient) SetSettingsWithContext(ctx context.Context, r ApiSetSettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
 	var (
 		postBody    any
@@ -8780,11 +10078,6 @@ func (c *APIClient) SetSettingsWithContext(ctx context.Context, r ApiSetSettings
 	return returnValue, nil
 }
 
-type ApiUpdateApiKeyRequest struct {
-	key    string
-	apiKey *ApiKey
-}
-
 func (r *ApiUpdateApiKeyRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -8818,7 +10111,13 @@ func (r *ApiUpdateApiKeyRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateApiKeyRequest
+// ApiUpdateApiKeyRequest represents the request with all the parameters for the API call.
+type ApiUpdateApiKeyRequest struct {
+	key    string
+	apiKey *ApiKey
+}
+
+// NewApiUpdateApiKeyRequest creates an instance of the ApiUpdateApiKeyRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateApiKeyRequest(key string, apiKey *ApiKey) ApiUpdateApiKeyRequest {
 	return ApiUpdateApiKeyRequest{
 		key:    key,
@@ -8826,12 +10125,32 @@ func (c *APIClient) NewApiUpdateApiKeyRequest(key string, apiKey *ApiKey) ApiUpd
 	}
 }
 
-// UpdateApiKey wraps UpdateApiKeyWithContext using context.Background.
+/*
+UpdateApiKey Update an API key. Wraps UpdateApiKeyWithContext using context.Background.
+
+Replace every permission of an existing API key.
+
+Request can be constructed by NewApiUpdateApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@param apiKey ApiKey
+	@return UpdateApiKeyResponse
+*/
 func (c *APIClient) UpdateApiKey(r ApiUpdateApiKeyRequest, opts ...Option) (*UpdateApiKeyResponse, error) {
 	return c.UpdateApiKeyWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdateApiKeyResponse
+/*
+UpdateApiKey Update an API key.
+
+Replace every permission of an existing API key.
+
+Request can be constructed by NewApiUpdateApiKeyRequest with parameters below.
+
+	@param key string - API Key string.
+	@param apiKey ApiKey
+	@return UpdateApiKeyResponse
+*/
 func (c *APIClient) UpdateApiKeyWithContext(ctx context.Context, r ApiUpdateApiKeyRequest, opts ...Option) (*UpdateApiKeyResponse, error) {
 	var (
 		postBody    any

@@ -35,11 +35,6 @@ func HeaderParamOption(name string, val any) Option {
 	}
 }
 
-type ApiDelRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -68,25 +63,51 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
-	r.parameters = parameters
-	return r
+// ApiDelRequest represents the request with all the parameters for the API call.
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiDelRequest
+// NewApiDelRequest creates an instance of the ApiDelRequest to be used for the API call.
 func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	return ApiDelRequest{
 		path: path,
 	}
 }
 
-// Del wraps DelWithContext using context.Background.
+// WithParameters adds the parameters to the ApiDelRequest and returns the request for chaining.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Del Send requests to the Algolia REST API. Wraps DelWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.DelWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Del Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -186,11 +207,6 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -219,25 +235,51 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
-	r.parameters = parameters
-	return r
+// ApiGetRequest represents the request with all the parameters for the API call.
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiGetRequest
+// NewApiGetRequest creates an instance of the ApiGetRequest to be used for the API call.
 func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	return ApiGetRequest{
 		path: path,
 	}
 }
 
-// Get wraps GetWithContext using context.Background.
+// WithParameters adds the parameters to the ApiGetRequest and returns the request for chaining.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Get Send requests to the Algolia REST API. Wraps GetWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.GetWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Get Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -337,13 +379,6 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetAverageClickPositionRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -390,37 +425,69 @@ func (r *ApiGetAverageClickPositionRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetAverageClickPositionRequest) WithStartDate(startDate string) ApiGetAverageClickPositionRequest {
-	r.startDate = startDate
-	return r
+// ApiGetAverageClickPositionRequest represents the request with all the parameters for the API call.
+type ApiGetAverageClickPositionRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetAverageClickPositionRequest) WithEndDate(endDate string) ApiGetAverageClickPositionRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetAverageClickPositionRequest) WithTags(tags string) ApiGetAverageClickPositionRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetAverageClickPositionRequest
+// NewApiGetAverageClickPositionRequest creates an instance of the ApiGetAverageClickPositionRequest to be used for the API call.
 func (c *APIClient) NewApiGetAverageClickPositionRequest(index string) ApiGetAverageClickPositionRequest {
 	return ApiGetAverageClickPositionRequest{
 		index: index,
 	}
 }
 
-// GetAverageClickPosition wraps GetAverageClickPositionWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetAverageClickPositionRequest and returns the request for chaining.
+func (r ApiGetAverageClickPositionRequest) WithStartDate(startDate string) ApiGetAverageClickPositionRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetAverageClickPositionRequest and returns the request for chaining.
+func (r ApiGetAverageClickPositionRequest) WithEndDate(endDate string) ApiGetAverageClickPositionRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetAverageClickPositionRequest and returns the request for chaining.
+func (r ApiGetAverageClickPositionRequest) WithTags(tags string) ApiGetAverageClickPositionRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetAverageClickPosition Get average click position. Wraps GetAverageClickPositionWithContext using context.Background.
+
+Returns the average click position. The endpoint returns a value for the complete given time range, as well as a value per day.
+
+Request can be constructed by NewApiGetAverageClickPositionRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetAverageClickPositionResponse
+*/
 func (c *APIClient) GetAverageClickPosition(r ApiGetAverageClickPositionRequest, opts ...Option) (*GetAverageClickPositionResponse, error) {
 	return c.GetAverageClickPositionWithContext(context.Background(), r, opts...)
 }
 
-// @return GetAverageClickPositionResponse
+/*
+GetAverageClickPosition Get average click position.
+
+Returns the average click position. The endpoint returns a value for the complete given time range, as well as a value per day.
+
+Request can be constructed by NewApiGetAverageClickPositionRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetAverageClickPositionResponse
+*/
 func (c *APIClient) GetAverageClickPositionWithContext(ctx context.Context, r ApiGetAverageClickPositionRequest, opts ...Option) (*GetAverageClickPositionResponse, error) {
 	var (
 		postBody    any
@@ -527,13 +594,6 @@ func (c *APIClient) GetAverageClickPositionWithContext(ctx context.Context, r Ap
 	return returnValue, nil
 }
 
-type ApiGetClickPositionsRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -580,37 +640,75 @@ func (r *ApiGetClickPositionsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetClickPositionsRequest) WithStartDate(startDate string) ApiGetClickPositionsRequest {
-	r.startDate = startDate
-	return r
+// ApiGetClickPositionsRequest represents the request with all the parameters for the API call.
+type ApiGetClickPositionsRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetClickPositionsRequest) WithEndDate(endDate string) ApiGetClickPositionsRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetClickPositionsRequest) WithTags(tags string) ApiGetClickPositionsRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetClickPositionsRequest
+// NewApiGetClickPositionsRequest creates an instance of the ApiGetClickPositionsRequest to be used for the API call.
 func (c *APIClient) NewApiGetClickPositionsRequest(index string) ApiGetClickPositionsRequest {
 	return ApiGetClickPositionsRequest{
 		index: index,
 	}
 }
 
-// GetClickPositions wraps GetClickPositionsWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetClickPositionsRequest and returns the request for chaining.
+func (r ApiGetClickPositionsRequest) WithStartDate(startDate string) ApiGetClickPositionsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetClickPositionsRequest and returns the request for chaining.
+func (r ApiGetClickPositionsRequest) WithEndDate(endDate string) ApiGetClickPositionsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetClickPositionsRequest and returns the request for chaining.
+func (r ApiGetClickPositionsRequest) WithTags(tags string) ApiGetClickPositionsRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetClickPositions Get clicks per positions. Wraps GetClickPositionsWithContext using context.Background.
+
+Returns the distribution of clicks per range of positions.
+
+If the groups all have a count of 0, it means Algolia didn’t receive any click events for the queries with the clickAnalytics search parameter set to true.
+The count is 0 until Algolia receives at least one click event.
+
+Request can be constructed by NewApiGetClickPositionsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetClickPositionsResponse
+*/
 func (c *APIClient) GetClickPositions(r ApiGetClickPositionsRequest, opts ...Option) (*GetClickPositionsResponse, error) {
 	return c.GetClickPositionsWithContext(context.Background(), r, opts...)
 }
 
-// @return GetClickPositionsResponse
+/*
+GetClickPositions Get clicks per positions.
+
+Returns the distribution of clicks per range of positions.
+
+If the groups all have a count of 0, it means Algolia didn’t receive any click events for the queries with the clickAnalytics search parameter set to true.
+The count is 0 until Algolia receives at least one click event.
+
+Request can be constructed by NewApiGetClickPositionsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetClickPositionsResponse
+*/
 func (c *APIClient) GetClickPositionsWithContext(ctx context.Context, r ApiGetClickPositionsRequest, opts ...Option) (*GetClickPositionsResponse, error) {
 	var (
 		postBody    any
@@ -717,13 +815,6 @@ func (c *APIClient) GetClickPositionsWithContext(ctx context.Context, r ApiGetCl
 	return returnValue, nil
 }
 
-type ApiGetClickThroughRateRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -770,37 +861,69 @@ func (r *ApiGetClickThroughRateRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetClickThroughRateRequest) WithStartDate(startDate string) ApiGetClickThroughRateRequest {
-	r.startDate = startDate
-	return r
+// ApiGetClickThroughRateRequest represents the request with all the parameters for the API call.
+type ApiGetClickThroughRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetClickThroughRateRequest) WithEndDate(endDate string) ApiGetClickThroughRateRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetClickThroughRateRequest) WithTags(tags string) ApiGetClickThroughRateRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetClickThroughRateRequest
+// NewApiGetClickThroughRateRequest creates an instance of the ApiGetClickThroughRateRequest to be used for the API call.
 func (c *APIClient) NewApiGetClickThroughRateRequest(index string) ApiGetClickThroughRateRequest {
 	return ApiGetClickThroughRateRequest{
 		index: index,
 	}
 }
 
-// GetClickThroughRate wraps GetClickThroughRateWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetClickThroughRateRequest and returns the request for chaining.
+func (r ApiGetClickThroughRateRequest) WithStartDate(startDate string) ApiGetClickThroughRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetClickThroughRateRequest and returns the request for chaining.
+func (r ApiGetClickThroughRateRequest) WithEndDate(endDate string) ApiGetClickThroughRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetClickThroughRateRequest and returns the request for chaining.
+func (r ApiGetClickThroughRateRequest) WithTags(tags string) ApiGetClickThroughRateRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetClickThroughRate Get click-through rate (CTR). Wraps GetClickThroughRateWithContext using context.Background.
+
+Returns a click-through rate (CTR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of clicks and searches used to compute the rates.
+
+Request can be constructed by NewApiGetClickThroughRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetClickThroughRateResponse
+*/
 func (c *APIClient) GetClickThroughRate(r ApiGetClickThroughRateRequest, opts ...Option) (*GetClickThroughRateResponse, error) {
 	return c.GetClickThroughRateWithContext(context.Background(), r, opts...)
 }
 
-// @return GetClickThroughRateResponse
+/*
+GetClickThroughRate Get click-through rate (CTR).
+
+Returns a click-through rate (CTR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of clicks and searches used to compute the rates.
+
+Request can be constructed by NewApiGetClickThroughRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetClickThroughRateResponse
+*/
 func (c *APIClient) GetClickThroughRateWithContext(ctx context.Context, r ApiGetClickThroughRateRequest, opts ...Option) (*GetClickThroughRateResponse, error) {
 	var (
 		postBody    any
@@ -907,13 +1030,6 @@ func (c *APIClient) GetClickThroughRateWithContext(ctx context.Context, r ApiGet
 	return returnValue, nil
 }
 
-type ApiGetConversationRateRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -960,37 +1076,69 @@ func (r *ApiGetConversationRateRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetConversationRateRequest) WithStartDate(startDate string) ApiGetConversationRateRequest {
-	r.startDate = startDate
-	return r
+// ApiGetConversationRateRequest represents the request with all the parameters for the API call.
+type ApiGetConversationRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetConversationRateRequest) WithEndDate(endDate string) ApiGetConversationRateRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetConversationRateRequest) WithTags(tags string) ApiGetConversationRateRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetConversationRateRequest
+// NewApiGetConversationRateRequest creates an instance of the ApiGetConversationRateRequest to be used for the API call.
 func (c *APIClient) NewApiGetConversationRateRequest(index string) ApiGetConversationRateRequest {
 	return ApiGetConversationRateRequest{
 		index: index,
 	}
 }
 
-// GetConversationRate wraps GetConversationRateWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetConversationRateRequest and returns the request for chaining.
+func (r ApiGetConversationRateRequest) WithStartDate(startDate string) ApiGetConversationRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetConversationRateRequest and returns the request for chaining.
+func (r ApiGetConversationRateRequest) WithEndDate(endDate string) ApiGetConversationRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetConversationRateRequest and returns the request for chaining.
+func (r ApiGetConversationRateRequest) WithTags(tags string) ApiGetConversationRateRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetConversationRate Get conversion rate (CR). Wraps GetConversationRateWithContext using context.Background.
+
+Returns a conversion rate (CR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of conversion and searches used to compute the rates.
+
+Request can be constructed by NewApiGetConversationRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetConversationRateResponse
+*/
 func (c *APIClient) GetConversationRate(r ApiGetConversationRateRequest, opts ...Option) (*GetConversationRateResponse, error) {
 	return c.GetConversationRateWithContext(context.Background(), r, opts...)
 }
 
-// @return GetConversationRateResponse
+/*
+GetConversationRate Get conversion rate (CR).
+
+Returns a conversion rate (CR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of conversion and searches used to compute the rates.
+
+Request can be constructed by NewApiGetConversationRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetConversationRateResponse
+*/
 func (c *APIClient) GetConversationRateWithContext(ctx context.Context, r ApiGetConversationRateRequest, opts ...Option) (*GetConversationRateResponse, error) {
 	var (
 		postBody    any
@@ -1097,13 +1245,6 @@ func (c *APIClient) GetConversationRateWithContext(ctx context.Context, r ApiGet
 	return returnValue, nil
 }
 
-type ApiGetNoClickRateRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1150,37 +1291,69 @@ func (r *ApiGetNoClickRateRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetNoClickRateRequest) WithStartDate(startDate string) ApiGetNoClickRateRequest {
-	r.startDate = startDate
-	return r
+// ApiGetNoClickRateRequest represents the request with all the parameters for the API call.
+type ApiGetNoClickRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetNoClickRateRequest) WithEndDate(endDate string) ApiGetNoClickRateRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetNoClickRateRequest) WithTags(tags string) ApiGetNoClickRateRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetNoClickRateRequest
+// NewApiGetNoClickRateRequest creates an instance of the ApiGetNoClickRateRequest to be used for the API call.
 func (c *APIClient) NewApiGetNoClickRateRequest(index string) ApiGetNoClickRateRequest {
 	return ApiGetNoClickRateRequest{
 		index: index,
 	}
 }
 
-// GetNoClickRate wraps GetNoClickRateWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetNoClickRateRequest and returns the request for chaining.
+func (r ApiGetNoClickRateRequest) WithStartDate(startDate string) ApiGetNoClickRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetNoClickRateRequest and returns the request for chaining.
+func (r ApiGetNoClickRateRequest) WithEndDate(endDate string) ApiGetNoClickRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetNoClickRateRequest and returns the request for chaining.
+func (r ApiGetNoClickRateRequest) WithTags(tags string) ApiGetNoClickRateRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetNoClickRate Get no click rate. Wraps GetNoClickRateWithContext using context.Background.
+
+Returns the rate at which searches didn't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+
+Request can be constructed by NewApiGetNoClickRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetNoClickRateResponse
+*/
 func (c *APIClient) GetNoClickRate(r ApiGetNoClickRateRequest, opts ...Option) (*GetNoClickRateResponse, error) {
 	return c.GetNoClickRateWithContext(context.Background(), r, opts...)
 }
 
-// @return GetNoClickRateResponse
+/*
+GetNoClickRate Get no click rate.
+
+Returns the rate at which searches didn't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+
+Request can be constructed by NewApiGetNoClickRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetNoClickRateResponse
+*/
 func (c *APIClient) GetNoClickRateWithContext(ctx context.Context, r ApiGetNoClickRateRequest, opts ...Option) (*GetNoClickRateResponse, error) {
 	var (
 		postBody    any
@@ -1287,13 +1460,6 @@ func (c *APIClient) GetNoClickRateWithContext(ctx context.Context, r ApiGetNoCli
 	return returnValue, nil
 }
 
-type ApiGetNoResultsRateRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1340,37 +1506,69 @@ func (r *ApiGetNoResultsRateRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetNoResultsRateRequest) WithStartDate(startDate string) ApiGetNoResultsRateRequest {
-	r.startDate = startDate
-	return r
+// ApiGetNoResultsRateRequest represents the request with all the parameters for the API call.
+type ApiGetNoResultsRateRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetNoResultsRateRequest) WithEndDate(endDate string) ApiGetNoResultsRateRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetNoResultsRateRequest) WithTags(tags string) ApiGetNoResultsRateRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetNoResultsRateRequest
+// NewApiGetNoResultsRateRequest creates an instance of the ApiGetNoResultsRateRequest to be used for the API call.
 func (c *APIClient) NewApiGetNoResultsRateRequest(index string) ApiGetNoResultsRateRequest {
 	return ApiGetNoResultsRateRequest{
 		index: index,
 	}
 }
 
-// GetNoResultsRate wraps GetNoResultsRateWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetNoResultsRateRequest and returns the request for chaining.
+func (r ApiGetNoResultsRateRequest) WithStartDate(startDate string) ApiGetNoResultsRateRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetNoResultsRateRequest and returns the request for chaining.
+func (r ApiGetNoResultsRateRequest) WithEndDate(endDate string) ApiGetNoResultsRateRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetNoResultsRateRequest and returns the request for chaining.
+func (r ApiGetNoResultsRateRequest) WithTags(tags string) ApiGetNoResultsRateRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetNoResultsRate Get no results rate. Wraps GetNoResultsRateWithContext using context.Background.
+
+Returns the rate at which searches didn't return any results. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without results used to compute the rates.
+
+Request can be constructed by NewApiGetNoResultsRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetNoResultsRateResponse
+*/
 func (c *APIClient) GetNoResultsRate(r ApiGetNoResultsRateRequest, opts ...Option) (*GetNoResultsRateResponse, error) {
 	return c.GetNoResultsRateWithContext(context.Background(), r, opts...)
 }
 
-// @return GetNoResultsRateResponse
+/*
+GetNoResultsRate Get no results rate.
+
+Returns the rate at which searches didn't return any results. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without results used to compute the rates.
+
+Request can be constructed by NewApiGetNoResultsRateRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetNoResultsRateResponse
+*/
 func (c *APIClient) GetNoResultsRateWithContext(ctx context.Context, r ApiGetNoResultsRateRequest, opts ...Option) (*GetNoResultsRateResponse, error) {
 	var (
 		postBody    any
@@ -1477,13 +1675,6 @@ func (c *APIClient) GetNoResultsRateWithContext(ctx context.Context, r ApiGetNoR
 	return returnValue, nil
 }
 
-type ApiGetSearchesCountRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1530,37 +1721,69 @@ func (r *ApiGetSearchesCountRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetSearchesCountRequest) WithStartDate(startDate string) ApiGetSearchesCountRequest {
-	r.startDate = startDate
-	return r
+// ApiGetSearchesCountRequest represents the request with all the parameters for the API call.
+type ApiGetSearchesCountRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetSearchesCountRequest) WithEndDate(endDate string) ApiGetSearchesCountRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetSearchesCountRequest) WithTags(tags string) ApiGetSearchesCountRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetSearchesCountRequest
+// NewApiGetSearchesCountRequest creates an instance of the ApiGetSearchesCountRequest to be used for the API call.
 func (c *APIClient) NewApiGetSearchesCountRequest(index string) ApiGetSearchesCountRequest {
 	return ApiGetSearchesCountRequest{
 		index: index,
 	}
 }
 
-// GetSearchesCount wraps GetSearchesCountWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetSearchesCountRequest and returns the request for chaining.
+func (r ApiGetSearchesCountRequest) WithStartDate(startDate string) ApiGetSearchesCountRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetSearchesCountRequest and returns the request for chaining.
+func (r ApiGetSearchesCountRequest) WithEndDate(endDate string) ApiGetSearchesCountRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetSearchesCountRequest and returns the request for chaining.
+func (r ApiGetSearchesCountRequest) WithTags(tags string) ApiGetSearchesCountRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetSearchesCount Get searches count. Wraps GetSearchesCountWithContext using context.Background.
+
+Returns the number of searches across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+
+Request can be constructed by NewApiGetSearchesCountRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetSearchesCountResponse
+*/
 func (c *APIClient) GetSearchesCount(r ApiGetSearchesCountRequest, opts ...Option) (*GetSearchesCountResponse, error) {
 	return c.GetSearchesCountWithContext(context.Background(), r, opts...)
 }
 
-// @return GetSearchesCountResponse
+/*
+GetSearchesCount Get searches count.
+
+Returns the number of searches across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+
+Request can be constructed by NewApiGetSearchesCountRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetSearchesCountResponse
+*/
 func (c *APIClient) GetSearchesCountWithContext(ctx context.Context, r ApiGetSearchesCountRequest, opts ...Option) (*GetSearchesCountResponse, error) {
 	var (
 		postBody    any
@@ -1667,15 +1890,6 @@ func (c *APIClient) GetSearchesCountWithContext(ctx context.Context, r ApiGetSea
 	return returnValue, nil
 }
 
-type ApiGetSearchesNoClicksRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	limit     int32
-	offset    int32
-	tags      string
-}
-
 func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1740,49 +1954,87 @@ func (r *ApiGetSearchesNoClicksRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetSearchesNoClicksRequest) WithStartDate(startDate string) ApiGetSearchesNoClicksRequest {
-	r.startDate = startDate
-	return r
+// ApiGetSearchesNoClicksRequest represents the request with all the parameters for the API call.
+type ApiGetSearchesNoClicksRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetSearchesNoClicksRequest) WithEndDate(endDate string) ApiGetSearchesNoClicksRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetSearchesNoClicksRequest) WithLimit(limit int32) ApiGetSearchesNoClicksRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetSearchesNoClicksRequest) WithOffset(offset int32) ApiGetSearchesNoClicksRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetSearchesNoClicksRequest) WithTags(tags string) ApiGetSearchesNoClicksRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetSearchesNoClicksRequest
+// NewApiGetSearchesNoClicksRequest creates an instance of the ApiGetSearchesNoClicksRequest to be used for the API call.
 func (c *APIClient) NewApiGetSearchesNoClicksRequest(index string) ApiGetSearchesNoClicksRequest {
 	return ApiGetSearchesNoClicksRequest{
 		index: index,
 	}
 }
 
-// GetSearchesNoClicks wraps GetSearchesNoClicksWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetSearchesNoClicksRequest and returns the request for chaining.
+func (r ApiGetSearchesNoClicksRequest) WithStartDate(startDate string) ApiGetSearchesNoClicksRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetSearchesNoClicksRequest and returns the request for chaining.
+func (r ApiGetSearchesNoClicksRequest) WithEndDate(endDate string) ApiGetSearchesNoClicksRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetSearchesNoClicksRequest and returns the request for chaining.
+func (r ApiGetSearchesNoClicksRequest) WithLimit(limit int32) ApiGetSearchesNoClicksRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetSearchesNoClicksRequest and returns the request for chaining.
+func (r ApiGetSearchesNoClicksRequest) WithOffset(offset int32) ApiGetSearchesNoClicksRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetSearchesNoClicksRequest and returns the request for chaining.
+func (r ApiGetSearchesNoClicksRequest) WithTags(tags string) ApiGetSearchesNoClicksRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetSearchesNoClicks Get top searches with no clicks. Wraps GetSearchesNoClicksWithContext using context.Background.
+
+Returns top searches that didn't lead to any clicks. Limited to the 1000 most frequent ones. For each search, also returns the average number of found hits.
+
+Request can be constructed by NewApiGetSearchesNoClicksRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetSearchesNoClicksResponse
+*/
 func (c *APIClient) GetSearchesNoClicks(r ApiGetSearchesNoClicksRequest, opts ...Option) (*GetSearchesNoClicksResponse, error) {
 	return c.GetSearchesNoClicksWithContext(context.Background(), r, opts...)
 }
 
-// @return GetSearchesNoClicksResponse
+/*
+GetSearchesNoClicks Get top searches with no clicks.
+
+Returns top searches that didn't lead to any clicks. Limited to the 1000 most frequent ones. For each search, also returns the average number of found hits.
+
+Request can be constructed by NewApiGetSearchesNoClicksRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetSearchesNoClicksResponse
+*/
 func (c *APIClient) GetSearchesNoClicksWithContext(ctx context.Context, r ApiGetSearchesNoClicksRequest, opts ...Option) (*GetSearchesNoClicksResponse, error) {
 	var (
 		postBody    any
@@ -1895,15 +2147,6 @@ func (c *APIClient) GetSearchesNoClicksWithContext(ctx context.Context, r ApiGet
 	return returnValue, nil
 }
 
-type ApiGetSearchesNoResultsRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	limit     int32
-	offset    int32
-	tags      string
-}
-
 func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1968,49 +2211,87 @@ func (r *ApiGetSearchesNoResultsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetSearchesNoResultsRequest) WithStartDate(startDate string) ApiGetSearchesNoResultsRequest {
-	r.startDate = startDate
-	return r
+// ApiGetSearchesNoResultsRequest represents the request with all the parameters for the API call.
+type ApiGetSearchesNoResultsRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetSearchesNoResultsRequest) WithEndDate(endDate string) ApiGetSearchesNoResultsRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetSearchesNoResultsRequest) WithLimit(limit int32) ApiGetSearchesNoResultsRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetSearchesNoResultsRequest) WithOffset(offset int32) ApiGetSearchesNoResultsRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetSearchesNoResultsRequest) WithTags(tags string) ApiGetSearchesNoResultsRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetSearchesNoResultsRequest
+// NewApiGetSearchesNoResultsRequest creates an instance of the ApiGetSearchesNoResultsRequest to be used for the API call.
 func (c *APIClient) NewApiGetSearchesNoResultsRequest(index string) ApiGetSearchesNoResultsRequest {
 	return ApiGetSearchesNoResultsRequest{
 		index: index,
 	}
 }
 
-// GetSearchesNoResults wraps GetSearchesNoResultsWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetSearchesNoResultsRequest and returns the request for chaining.
+func (r ApiGetSearchesNoResultsRequest) WithStartDate(startDate string) ApiGetSearchesNoResultsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetSearchesNoResultsRequest and returns the request for chaining.
+func (r ApiGetSearchesNoResultsRequest) WithEndDate(endDate string) ApiGetSearchesNoResultsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetSearchesNoResultsRequest and returns the request for chaining.
+func (r ApiGetSearchesNoResultsRequest) WithLimit(limit int32) ApiGetSearchesNoResultsRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetSearchesNoResultsRequest and returns the request for chaining.
+func (r ApiGetSearchesNoResultsRequest) WithOffset(offset int32) ApiGetSearchesNoResultsRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetSearchesNoResultsRequest and returns the request for chaining.
+func (r ApiGetSearchesNoResultsRequest) WithTags(tags string) ApiGetSearchesNoResultsRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetSearchesNoResults Get top searches with no results. Wraps GetSearchesNoResultsWithContext using context.Background.
+
+Returns top searches that didn't return any results. Limited to the 1000 most frequent ones.
+
+Request can be constructed by NewApiGetSearchesNoResultsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetSearchesNoResultsResponse
+*/
 func (c *APIClient) GetSearchesNoResults(r ApiGetSearchesNoResultsRequest, opts ...Option) (*GetSearchesNoResultsResponse, error) {
 	return c.GetSearchesNoResultsWithContext(context.Background(), r, opts...)
 }
 
-// @return GetSearchesNoResultsResponse
+/*
+GetSearchesNoResults Get top searches with no results.
+
+Returns top searches that didn't return any results. Limited to the 1000 most frequent ones.
+
+Request can be constructed by NewApiGetSearchesNoResultsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetSearchesNoResultsResponse
+*/
 func (c *APIClient) GetSearchesNoResultsWithContext(ctx context.Context, r ApiGetSearchesNoResultsRequest, opts ...Option) (*GetSearchesNoResultsResponse, error) {
 	var (
 		postBody    any
@@ -2123,10 +2404,6 @@ func (c *APIClient) GetSearchesNoResultsWithContext(ctx context.Context, r ApiGe
 	return returnValue, nil
 }
 
-type ApiGetStatusRequest struct {
-	index string
-}
-
 func (r *ApiGetStatusRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2146,19 +2423,42 @@ func (r *ApiGetStatusRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetStatusRequest
+// ApiGetStatusRequest represents the request with all the parameters for the API call.
+type ApiGetStatusRequest struct {
+	index string
+}
+
+// NewApiGetStatusRequest creates an instance of the ApiGetStatusRequest to be used for the API call.
 func (c *APIClient) NewApiGetStatusRequest(index string) ApiGetStatusRequest {
 	return ApiGetStatusRequest{
 		index: index,
 	}
 }
 
-// GetStatus wraps GetStatusWithContext using context.Background.
+/*
+GetStatus Get Analytics API status. Wraps GetStatusWithContext using context.Background.
+
+Returns the latest update time of the analytics API for a given index. If the index has been recently created and/or no search has been performed yet the updated time will be null.
+
+Request can be constructed by NewApiGetStatusRequest with parameters below.
+
+	@param index string - The index name to target.
+	@return GetStatusResponse
+*/
 func (c *APIClient) GetStatus(r ApiGetStatusRequest, opts ...Option) (*GetStatusResponse, error) {
 	return c.GetStatusWithContext(context.Background(), r, opts...)
 }
 
-// @return GetStatusResponse
+/*
+GetStatus Get Analytics API status.
+
+Returns the latest update time of the analytics API for a given index. If the index has been recently created and/or no search has been performed yet the updated time will be null.
+
+Request can be constructed by NewApiGetStatusRequest with parameters below.
+
+	@param index string - The index name to target.
+	@return GetStatusResponse
+*/
 func (c *APIClient) GetStatusWithContext(ctx context.Context, r ApiGetStatusRequest, opts ...Option) (*GetStatusResponse, error) {
 	var (
 		postBody    any
@@ -2256,15 +2556,6 @@ func (c *APIClient) GetStatusWithContext(ctx context.Context, r ApiGetStatusRequ
 	return returnValue, nil
 }
 
-type ApiGetTopCountriesRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	limit     int32
-	offset    int32
-	tags      string
-}
-
 func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2329,49 +2620,87 @@ func (r *ApiGetTopCountriesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopCountriesRequest) WithStartDate(startDate string) ApiGetTopCountriesRequest {
-	r.startDate = startDate
-	return r
+// ApiGetTopCountriesRequest represents the request with all the parameters for the API call.
+type ApiGetTopCountriesRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopCountriesRequest) WithEndDate(endDate string) ApiGetTopCountriesRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetTopCountriesRequest) WithLimit(limit int32) ApiGetTopCountriesRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetTopCountriesRequest) WithOffset(offset int32) ApiGetTopCountriesRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetTopCountriesRequest) WithTags(tags string) ApiGetTopCountriesRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetTopCountriesRequest
+// NewApiGetTopCountriesRequest creates an instance of the ApiGetTopCountriesRequest to be used for the API call.
 func (c *APIClient) NewApiGetTopCountriesRequest(index string) ApiGetTopCountriesRequest {
 	return ApiGetTopCountriesRequest{
 		index: index,
 	}
 }
 
-// GetTopCountries wraps GetTopCountriesWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetTopCountriesRequest and returns the request for chaining.
+func (r ApiGetTopCountriesRequest) WithStartDate(startDate string) ApiGetTopCountriesRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetTopCountriesRequest and returns the request for chaining.
+func (r ApiGetTopCountriesRequest) WithEndDate(endDate string) ApiGetTopCountriesRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetTopCountriesRequest and returns the request for chaining.
+func (r ApiGetTopCountriesRequest) WithLimit(limit int32) ApiGetTopCountriesRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetTopCountriesRequest and returns the request for chaining.
+func (r ApiGetTopCountriesRequest) WithOffset(offset int32) ApiGetTopCountriesRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetTopCountriesRequest and returns the request for chaining.
+func (r ApiGetTopCountriesRequest) WithTags(tags string) ApiGetTopCountriesRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetTopCountries Get top countries. Wraps GetTopCountriesWithContext using context.Background.
+
+Returns top countries. Limited to the 1000 most frequent ones.
+
+Request can be constructed by NewApiGetTopCountriesRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopCountriesResponse
+*/
 func (c *APIClient) GetTopCountries(r ApiGetTopCountriesRequest, opts ...Option) (*GetTopCountriesResponse, error) {
 	return c.GetTopCountriesWithContext(context.Background(), r, opts...)
 }
 
-// @return GetTopCountriesResponse
+/*
+GetTopCountries Get top countries.
+
+Returns top countries. Limited to the 1000 most frequent ones.
+
+Request can be constructed by NewApiGetTopCountriesRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopCountriesResponse
+*/
 func (c *APIClient) GetTopCountriesWithContext(ctx context.Context, r ApiGetTopCountriesRequest, opts ...Option) (*GetTopCountriesResponse, error) {
 	var (
 		postBody    any
@@ -2484,16 +2813,6 @@ func (c *APIClient) GetTopCountriesWithContext(ctx context.Context, r ApiGetTopC
 	return returnValue, nil
 }
 
-type ApiGetTopFilterAttributesRequest struct {
-	index     string
-	search    string
-	startDate string
-	endDate   string
-	limit     int32
-	offset    int32
-	tags      string
-}
-
 func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2567,55 +2886,96 @@ func (r *ApiGetTopFilterAttributesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The query term to search for. Must match the exact user input.
-func (r ApiGetTopFilterAttributesRequest) WithSearch(search string) ApiGetTopFilterAttributesRequest {
-	r.search = search
-	return r
+// ApiGetTopFilterAttributesRequest represents the request with all the parameters for the API call.
+type ApiGetTopFilterAttributesRequest struct {
+	index     string
+	search    string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopFilterAttributesRequest) WithStartDate(startDate string) ApiGetTopFilterAttributesRequest {
-	r.startDate = startDate
-	return r
-}
-
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopFilterAttributesRequest) WithEndDate(endDate string) ApiGetTopFilterAttributesRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetTopFilterAttributesRequest) WithLimit(limit int32) ApiGetTopFilterAttributesRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetTopFilterAttributesRequest) WithOffset(offset int32) ApiGetTopFilterAttributesRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetTopFilterAttributesRequest) WithTags(tags string) ApiGetTopFilterAttributesRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetTopFilterAttributesRequest
+// NewApiGetTopFilterAttributesRequest creates an instance of the ApiGetTopFilterAttributesRequest to be used for the API call.
 func (c *APIClient) NewApiGetTopFilterAttributesRequest(index string) ApiGetTopFilterAttributesRequest {
 	return ApiGetTopFilterAttributesRequest{
 		index: index,
 	}
 }
 
-// GetTopFilterAttributes wraps GetTopFilterAttributesWithContext using context.Background.
+// WithSearch adds the search to the ApiGetTopFilterAttributesRequest and returns the request for chaining.
+func (r ApiGetTopFilterAttributesRequest) WithSearch(search string) ApiGetTopFilterAttributesRequest {
+	r.search = search
+	return r
+}
+
+// WithStartDate adds the startDate to the ApiGetTopFilterAttributesRequest and returns the request for chaining.
+func (r ApiGetTopFilterAttributesRequest) WithStartDate(startDate string) ApiGetTopFilterAttributesRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetTopFilterAttributesRequest and returns the request for chaining.
+func (r ApiGetTopFilterAttributesRequest) WithEndDate(endDate string) ApiGetTopFilterAttributesRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetTopFilterAttributesRequest and returns the request for chaining.
+func (r ApiGetTopFilterAttributesRequest) WithLimit(limit int32) ApiGetTopFilterAttributesRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetTopFilterAttributesRequest and returns the request for chaining.
+func (r ApiGetTopFilterAttributesRequest) WithOffset(offset int32) ApiGetTopFilterAttributesRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetTopFilterAttributesRequest and returns the request for chaining.
+func (r ApiGetTopFilterAttributesRequest) WithTags(tags string) ApiGetTopFilterAttributesRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetTopFilterAttributes Get top filter attributes. Wraps GetTopFilterAttributesWithContext using context.Background.
+
+Returns top filter attributes. Limited to the 1000 most used filters.
+
+Request can be constructed by NewApiGetTopFilterAttributesRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopFilterAttributesResponse
+*/
 func (c *APIClient) GetTopFilterAttributes(r ApiGetTopFilterAttributesRequest, opts ...Option) (*GetTopFilterAttributesResponse, error) {
 	return c.GetTopFilterAttributesWithContext(context.Background(), r, opts...)
 }
 
-// @return GetTopFilterAttributesResponse
+/*
+GetTopFilterAttributes Get top filter attributes.
+
+Returns top filter attributes. Limited to the 1000 most used filters.
+
+Request can be constructed by NewApiGetTopFilterAttributesRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopFilterAttributesResponse
+*/
 func (c *APIClient) GetTopFilterAttributesWithContext(ctx context.Context, r ApiGetTopFilterAttributesRequest, opts ...Option) (*GetTopFilterAttributesResponse, error) {
 	var (
 		postBody    any
@@ -2731,17 +3091,6 @@ func (c *APIClient) GetTopFilterAttributesWithContext(ctx context.Context, r Api
 	return returnValue, nil
 }
 
-type ApiGetTopFilterForAttributeRequest struct {
-	attribute string
-	index     string
-	search    string
-	startDate string
-	endDate   string
-	limit     int32
-	offset    int32
-	tags      string
-}
-
 func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2824,43 +3173,19 @@ func (r *ApiGetTopFilterForAttributeRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The query term to search for. Must match the exact user input.
-func (r ApiGetTopFilterForAttributeRequest) WithSearch(search string) ApiGetTopFilterForAttributeRequest {
-	r.search = search
-	return r
+// ApiGetTopFilterForAttributeRequest represents the request with all the parameters for the API call.
+type ApiGetTopFilterForAttributeRequest struct {
+	attribute string
+	index     string
+	search    string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopFilterForAttributeRequest) WithStartDate(startDate string) ApiGetTopFilterForAttributeRequest {
-	r.startDate = startDate
-	return r
-}
-
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopFilterForAttributeRequest) WithEndDate(endDate string) ApiGetTopFilterForAttributeRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetTopFilterForAttributeRequest) WithLimit(limit int32) ApiGetTopFilterForAttributeRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetTopFilterForAttributeRequest) WithOffset(offset int32) ApiGetTopFilterForAttributeRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetTopFilterForAttributeRequest) WithTags(tags string) ApiGetTopFilterForAttributeRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetTopFilterForAttributeRequest
+// NewApiGetTopFilterForAttributeRequest creates an instance of the ApiGetTopFilterForAttributeRequest to be used for the API call.
 func (c *APIClient) NewApiGetTopFilterForAttributeRequest(attribute string, index string) ApiGetTopFilterForAttributeRequest {
 	return ApiGetTopFilterForAttributeRequest{
 		attribute: attribute,
@@ -2868,12 +3193,80 @@ func (c *APIClient) NewApiGetTopFilterForAttributeRequest(attribute string, inde
 	}
 }
 
-// GetTopFilterForAttribute wraps GetTopFilterForAttributeWithContext using context.Background.
+// WithSearch adds the search to the ApiGetTopFilterForAttributeRequest and returns the request for chaining.
+func (r ApiGetTopFilterForAttributeRequest) WithSearch(search string) ApiGetTopFilterForAttributeRequest {
+	r.search = search
+	return r
+}
+
+// WithStartDate adds the startDate to the ApiGetTopFilterForAttributeRequest and returns the request for chaining.
+func (r ApiGetTopFilterForAttributeRequest) WithStartDate(startDate string) ApiGetTopFilterForAttributeRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetTopFilterForAttributeRequest and returns the request for chaining.
+func (r ApiGetTopFilterForAttributeRequest) WithEndDate(endDate string) ApiGetTopFilterForAttributeRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetTopFilterForAttributeRequest and returns the request for chaining.
+func (r ApiGetTopFilterForAttributeRequest) WithLimit(limit int32) ApiGetTopFilterForAttributeRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetTopFilterForAttributeRequest and returns the request for chaining.
+func (r ApiGetTopFilterForAttributeRequest) WithOffset(offset int32) ApiGetTopFilterForAttributeRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetTopFilterForAttributeRequest and returns the request for chaining.
+func (r ApiGetTopFilterForAttributeRequest) WithTags(tags string) ApiGetTopFilterForAttributeRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetTopFilterForAttribute Get top filters for the an attribute. Wraps GetTopFilterForAttributeWithContext using context.Background.
+
+Returns top filters for the given attribute. Limited to the 1000 most used filters.
+
+Request can be constructed by NewApiGetTopFilterForAttributeRequest with parameters below.
+
+	@param attribute string - The exact name of the attribute.
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopFilterForAttributeResponse
+*/
 func (c *APIClient) GetTopFilterForAttribute(r ApiGetTopFilterForAttributeRequest, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
 	return c.GetTopFilterForAttributeWithContext(context.Background(), r, opts...)
 }
 
-// @return GetTopFilterForAttributeResponse
+/*
+GetTopFilterForAttribute Get top filters for the an attribute.
+
+Returns top filters for the given attribute. Limited to the 1000 most used filters.
+
+Request can be constructed by NewApiGetTopFilterForAttributeRequest with parameters below.
+
+	@param attribute string - The exact name of the attribute.
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopFilterForAttributeResponse
+*/
 func (c *APIClient) GetTopFilterForAttributeWithContext(ctx context.Context, r ApiGetTopFilterForAttributeRequest, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
 	var (
 		postBody    any
@@ -2990,16 +3383,6 @@ func (c *APIClient) GetTopFilterForAttributeWithContext(ctx context.Context, r A
 	return returnValue, nil
 }
 
-type ApiGetTopFiltersNoResultsRequest struct {
-	index     string
-	search    string
-	startDate string
-	endDate   string
-	limit     int32
-	offset    int32
-	tags      string
-}
-
 func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3073,55 +3456,96 @@ func (r *ApiGetTopFiltersNoResultsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The query term to search for. Must match the exact user input.
-func (r ApiGetTopFiltersNoResultsRequest) WithSearch(search string) ApiGetTopFiltersNoResultsRequest {
-	r.search = search
-	return r
+// ApiGetTopFiltersNoResultsRequest represents the request with all the parameters for the API call.
+type ApiGetTopFiltersNoResultsRequest struct {
+	index     string
+	search    string
+	startDate string
+	endDate   string
+	limit     int32
+	offset    int32
+	tags      string
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopFiltersNoResultsRequest) WithStartDate(startDate string) ApiGetTopFiltersNoResultsRequest {
-	r.startDate = startDate
-	return r
-}
-
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopFiltersNoResultsRequest) WithEndDate(endDate string) ApiGetTopFiltersNoResultsRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetTopFiltersNoResultsRequest) WithLimit(limit int32) ApiGetTopFiltersNoResultsRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetTopFiltersNoResultsRequest) WithOffset(offset int32) ApiGetTopFiltersNoResultsRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetTopFiltersNoResultsRequest) WithTags(tags string) ApiGetTopFiltersNoResultsRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetTopFiltersNoResultsRequest
+// NewApiGetTopFiltersNoResultsRequest creates an instance of the ApiGetTopFiltersNoResultsRequest to be used for the API call.
 func (c *APIClient) NewApiGetTopFiltersNoResultsRequest(index string) ApiGetTopFiltersNoResultsRequest {
 	return ApiGetTopFiltersNoResultsRequest{
 		index: index,
 	}
 }
 
-// GetTopFiltersNoResults wraps GetTopFiltersNoResultsWithContext using context.Background.
+// WithSearch adds the search to the ApiGetTopFiltersNoResultsRequest and returns the request for chaining.
+func (r ApiGetTopFiltersNoResultsRequest) WithSearch(search string) ApiGetTopFiltersNoResultsRequest {
+	r.search = search
+	return r
+}
+
+// WithStartDate adds the startDate to the ApiGetTopFiltersNoResultsRequest and returns the request for chaining.
+func (r ApiGetTopFiltersNoResultsRequest) WithStartDate(startDate string) ApiGetTopFiltersNoResultsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetTopFiltersNoResultsRequest and returns the request for chaining.
+func (r ApiGetTopFiltersNoResultsRequest) WithEndDate(endDate string) ApiGetTopFiltersNoResultsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetTopFiltersNoResultsRequest and returns the request for chaining.
+func (r ApiGetTopFiltersNoResultsRequest) WithLimit(limit int32) ApiGetTopFiltersNoResultsRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetTopFiltersNoResultsRequest and returns the request for chaining.
+func (r ApiGetTopFiltersNoResultsRequest) WithOffset(offset int32) ApiGetTopFiltersNoResultsRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetTopFiltersNoResultsRequest and returns the request for chaining.
+func (r ApiGetTopFiltersNoResultsRequest) WithTags(tags string) ApiGetTopFiltersNoResultsRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetTopFiltersNoResults Get top filters for a no result search. Wraps GetTopFiltersNoResultsWithContext using context.Background.
+
+Returns top filters with no results. Limited to the 1000 most used filters.
+
+Request can be constructed by NewApiGetTopFiltersNoResultsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopFiltersNoResultsResponse
+*/
 func (c *APIClient) GetTopFiltersNoResults(r ApiGetTopFiltersNoResultsRequest, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
 	return c.GetTopFiltersNoResultsWithContext(context.Background(), r, opts...)
 }
 
-// @return GetTopFiltersNoResultsResponse
+/*
+GetTopFiltersNoResults Get top filters for a no result search.
+
+Returns top filters with no results. Limited to the 1000 most used filters.
+
+Request can be constructed by NewApiGetTopFiltersNoResultsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopFiltersNoResultsResponse
+*/
 func (c *APIClient) GetTopFiltersNoResultsWithContext(ctx context.Context, r ApiGetTopFiltersNoResultsRequest, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
 	var (
 		postBody    any
@@ -3237,17 +3661,6 @@ func (c *APIClient) GetTopFiltersNoResultsWithContext(ctx context.Context, r Api
 	return returnValue, nil
 }
 
-type ApiGetTopHitsRequest struct {
-	index          string
-	search         string
-	clickAnalytics bool
-	startDate      string
-	endDate        string
-	limit          int32
-	offset         int32
-	tags           string
-}
-
 func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3330,61 +3743,105 @@ func (r *ApiGetTopHitsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The query term to search for. Must match the exact user input.
-func (r ApiGetTopHitsRequest) WithSearch(search string) ApiGetTopHitsRequest {
-	r.search = search
-	return r
+// ApiGetTopHitsRequest represents the request with all the parameters for the API call.
+type ApiGetTopHitsRequest struct {
+	index          string
+	search         string
+	clickAnalytics bool
+	startDate      string
+	endDate        string
+	limit          int32
+	offset         int32
+	tags           string
 }
 
-// Whether to include the click-through and conversion rates for a search.
-func (r ApiGetTopHitsRequest) WithClickAnalytics(clickAnalytics bool) ApiGetTopHitsRequest {
-	r.clickAnalytics = clickAnalytics
-	return r
-}
-
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopHitsRequest) WithStartDate(startDate string) ApiGetTopHitsRequest {
-	r.startDate = startDate
-	return r
-}
-
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopHitsRequest) WithEndDate(endDate string) ApiGetTopHitsRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetTopHitsRequest) WithLimit(limit int32) ApiGetTopHitsRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetTopHitsRequest) WithOffset(offset int32) ApiGetTopHitsRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetTopHitsRequest) WithTags(tags string) ApiGetTopHitsRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetTopHitsRequest
+// NewApiGetTopHitsRequest creates an instance of the ApiGetTopHitsRequest to be used for the API call.
 func (c *APIClient) NewApiGetTopHitsRequest(index string) ApiGetTopHitsRequest {
 	return ApiGetTopHitsRequest{
 		index: index,
 	}
 }
 
-// GetTopHits wraps GetTopHitsWithContext using context.Background.
+// WithSearch adds the search to the ApiGetTopHitsRequest and returns the request for chaining.
+func (r ApiGetTopHitsRequest) WithSearch(search string) ApiGetTopHitsRequest {
+	r.search = search
+	return r
+}
+
+// WithClickAnalytics adds the clickAnalytics to the ApiGetTopHitsRequest and returns the request for chaining.
+func (r ApiGetTopHitsRequest) WithClickAnalytics(clickAnalytics bool) ApiGetTopHitsRequest {
+	r.clickAnalytics = clickAnalytics
+	return r
+}
+
+// WithStartDate adds the startDate to the ApiGetTopHitsRequest and returns the request for chaining.
+func (r ApiGetTopHitsRequest) WithStartDate(startDate string) ApiGetTopHitsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetTopHitsRequest and returns the request for chaining.
+func (r ApiGetTopHitsRequest) WithEndDate(endDate string) ApiGetTopHitsRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetTopHitsRequest and returns the request for chaining.
+func (r ApiGetTopHitsRequest) WithLimit(limit int32) ApiGetTopHitsRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetTopHitsRequest and returns the request for chaining.
+func (r ApiGetTopHitsRequest) WithOffset(offset int32) ApiGetTopHitsRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetTopHitsRequest and returns the request for chaining.
+func (r ApiGetTopHitsRequest) WithTags(tags string) ApiGetTopHitsRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetTopHits Get top hits. Wraps GetTopHitsWithContext using context.Background.
+
+Returns top hits. Limited to the 1000 most frequent ones.
+
+Request can be constructed by NewApiGetTopHitsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopHitsResponse
+*/
 func (c *APIClient) GetTopHits(r ApiGetTopHitsRequest, opts ...Option) (*GetTopHitsResponse, error) {
 	return c.GetTopHitsWithContext(context.Background(), r, opts...)
 }
 
-// @return GetTopHitsResponse
+/*
+GetTopHits Get top hits.
+
+Returns top hits. Limited to the 1000 most frequent ones.
+
+Request can be constructed by NewApiGetTopHitsRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param search string - The query term to search for. Must match the exact user input.
+	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopHitsResponse
+*/
 func (c *APIClient) GetTopHitsWithContext(ctx context.Context, r ApiGetTopHitsRequest, opts ...Option) (*GetTopHitsResponse, error) {
 	var (
 		postBody    any
@@ -3503,18 +3960,6 @@ func (c *APIClient) GetTopHitsWithContext(ctx context.Context, r ApiGetTopHitsRe
 	return returnValue, nil
 }
 
-type ApiGetTopSearchesRequest struct {
-	index          string
-	clickAnalytics bool
-	startDate      string
-	endDate        string
-	orderBy        *OrderBy
-	direction      *Direction
-	limit          int32
-	offset         int32
-	tags           string
-}
-
 func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3606,67 +4051,114 @@ func (r *ApiGetTopSearchesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Whether to include the click-through and conversion rates for a search.
-func (r ApiGetTopSearchesRequest) WithClickAnalytics(clickAnalytics bool) ApiGetTopSearchesRequest {
-	r.clickAnalytics = clickAnalytics
-	return r
+// ApiGetTopSearchesRequest represents the request with all the parameters for the API call.
+type ApiGetTopSearchesRequest struct {
+	index          string
+	clickAnalytics bool
+	startDate      string
+	endDate        string
+	orderBy        *OrderBy
+	direction      *Direction
+	limit          int32
+	offset         int32
+	tags           string
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopSearchesRequest) WithStartDate(startDate string) ApiGetTopSearchesRequest {
-	r.startDate = startDate
-	return r
-}
-
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetTopSearchesRequest) WithEndDate(endDate string) ApiGetTopSearchesRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Reorder the results.
-func (r ApiGetTopSearchesRequest) WithOrderBy(orderBy *OrderBy) ApiGetTopSearchesRequest {
-	r.orderBy = orderBy
-	return r
-}
-
-// The sorting of the result.
-func (r ApiGetTopSearchesRequest) WithDirection(direction *Direction) ApiGetTopSearchesRequest {
-	r.direction = direction
-	return r
-}
-
-// Number of records to return. Limit is the size of the page.
-func (r ApiGetTopSearchesRequest) WithLimit(limit int32) ApiGetTopSearchesRequest {
-	r.limit = limit
-	return r
-}
-
-// Position of the starting record. Used for paging. 0 is the first record.
-func (r ApiGetTopSearchesRequest) WithOffset(offset int32) ApiGetTopSearchesRequest {
-	r.offset = offset
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetTopSearchesRequest) WithTags(tags string) ApiGetTopSearchesRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetTopSearchesRequest
+// NewApiGetTopSearchesRequest creates an instance of the ApiGetTopSearchesRequest to be used for the API call.
 func (c *APIClient) NewApiGetTopSearchesRequest(index string) ApiGetTopSearchesRequest {
 	return ApiGetTopSearchesRequest{
 		index: index,
 	}
 }
 
-// GetTopSearches wraps GetTopSearchesWithContext using context.Background.
+// WithClickAnalytics adds the clickAnalytics to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithClickAnalytics(clickAnalytics bool) ApiGetTopSearchesRequest {
+	r.clickAnalytics = clickAnalytics
+	return r
+}
+
+// WithStartDate adds the startDate to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithStartDate(startDate string) ApiGetTopSearchesRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithEndDate(endDate string) ApiGetTopSearchesRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithOrderBy adds the orderBy to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithOrderBy(orderBy *OrderBy) ApiGetTopSearchesRequest {
+	r.orderBy = orderBy
+	return r
+}
+
+// WithDirection adds the direction to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithDirection(direction *Direction) ApiGetTopSearchesRequest {
+	r.direction = direction
+	return r
+}
+
+// WithLimit adds the limit to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithLimit(limit int32) ApiGetTopSearchesRequest {
+	r.limit = limit
+	return r
+}
+
+// WithOffset adds the offset to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithOffset(offset int32) ApiGetTopSearchesRequest {
+	r.offset = offset
+	return r
+}
+
+// WithTags adds the tags to the ApiGetTopSearchesRequest and returns the request for chaining.
+func (r ApiGetTopSearchesRequest) WithTags(tags string) ApiGetTopSearchesRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetTopSearches Get top searches. Wraps GetTopSearchesWithContext using context.Background.
+
+Returns top searches. Limited to the 1000 most frequent ones. For each search, also returns the average number of hits returned.
+
+Request can be constructed by NewApiGetTopSearchesRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param orderBy OrderBy - Reorder the results.
+	@param direction Direction - The sorting of the result.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopSearchesResponse
+*/
 func (c *APIClient) GetTopSearches(r ApiGetTopSearchesRequest, opts ...Option) (*GetTopSearchesResponse, error) {
 	return c.GetTopSearchesWithContext(context.Background(), r, opts...)
 }
 
-// @return GetTopSearchesResponse
+/*
+GetTopSearches Get top searches.
+
+Returns top searches. Limited to the 1000 most frequent ones. For each search, also returns the average number of hits returned.
+
+Request can be constructed by NewApiGetTopSearchesRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param orderBy OrderBy - Reorder the results.
+	@param direction Direction - The sorting of the result.
+	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetTopSearchesResponse
+*/
 func (c *APIClient) GetTopSearchesWithContext(ctx context.Context, r ApiGetTopSearchesRequest, opts ...Option) (*GetTopSearchesResponse, error) {
 	var (
 		postBody    any
@@ -3788,13 +4280,6 @@ func (c *APIClient) GetTopSearchesWithContext(ctx context.Context, r ApiGetTopSe
 	return returnValue, nil
 }
 
-type ApiGetUsersCountRequest struct {
-	index     string
-	startDate string
-	endDate   string
-	tags      string
-}
-
 func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3841,37 +4326,69 @@ func (r *ApiGetUsersCountRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The lower bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetUsersCountRequest) WithStartDate(startDate string) ApiGetUsersCountRequest {
-	r.startDate = startDate
-	return r
+// ApiGetUsersCountRequest represents the request with all the parameters for the API call.
+type ApiGetUsersCountRequest struct {
+	index     string
+	startDate string
+	endDate   string
+	tags      string
 }
 
-// The upper bound timestamp (a date, a string like \&quot;2006-01-02\&quot;) of the period to analyze.
-func (r ApiGetUsersCountRequest) WithEndDate(endDate string) ApiGetUsersCountRequest {
-	r.endDate = endDate
-	return r
-}
-
-// Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
-func (r ApiGetUsersCountRequest) WithTags(tags string) ApiGetUsersCountRequest {
-	r.tags = tags
-	return r
-}
-
-// @return ApiGetUsersCountRequest
+// NewApiGetUsersCountRequest creates an instance of the ApiGetUsersCountRequest to be used for the API call.
 func (c *APIClient) NewApiGetUsersCountRequest(index string) ApiGetUsersCountRequest {
 	return ApiGetUsersCountRequest{
 		index: index,
 	}
 }
 
-// GetUsersCount wraps GetUsersCountWithContext using context.Background.
+// WithStartDate adds the startDate to the ApiGetUsersCountRequest and returns the request for chaining.
+func (r ApiGetUsersCountRequest) WithStartDate(startDate string) ApiGetUsersCountRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetUsersCountRequest and returns the request for chaining.
+func (r ApiGetUsersCountRequest) WithEndDate(endDate string) ApiGetUsersCountRequest {
+	r.endDate = endDate
+	return r
+}
+
+// WithTags adds the tags to the ApiGetUsersCountRequest and returns the request for chaining.
+func (r ApiGetUsersCountRequest) WithTags(tags string) ApiGetUsersCountRequest {
+	r.tags = tags
+	return r
+}
+
+/*
+GetUsersCount Get users count. Wraps GetUsersCountWithContext using context.Background.
+
+Returns the distinct count of users across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+
+Request can be constructed by NewApiGetUsersCountRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetUsersCountResponse
+*/
 func (c *APIClient) GetUsersCount(r ApiGetUsersCountRequest, opts ...Option) (*GetUsersCountResponse, error) {
 	return c.GetUsersCountWithContext(context.Background(), r, opts...)
 }
 
-// @return GetUsersCountResponse
+/*
+GetUsersCount Get users count.
+
+Returns the distinct count of users across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+
+Request can be constructed by NewApiGetUsersCountRequest with parameters below.
+
+	@param index string - The index name to target.
+	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@return GetUsersCountResponse
+*/
 func (c *APIClient) GetUsersCountWithContext(ctx context.Context, r ApiGetUsersCountRequest, opts ...Option) (*GetUsersCountResponse, error) {
 	var (
 		postBody    any
@@ -3978,12 +4495,6 @@ func (c *APIClient) GetUsersCountWithContext(ctx context.Context, r ApiGetUsersC
 	return returnValue, nil
 }
 
-type ApiPostRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4021,31 +4532,60 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
-	r.parameters = parameters
-	return r
+// ApiPostRequest represents the request with all the parameters for the API call.
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPostRequest
+// NewApiPostRequest creates an instance of the ApiPostRequest to be used for the API call.
 func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	return ApiPostRequest{
 		path: path,
 	}
 }
 
-// Post wraps PostWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+/*
+Post Send requests to the Algolia REST API. Wraps PostWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PostWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Post Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -4151,12 +4691,6 @@ func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts 
 	return returnValue, nil
 }
 
-type ApiPutRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4194,31 +4728,60 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
-	r.parameters = parameters
-	return r
+// ApiPutRequest represents the request with all the parameters for the API call.
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPutRequest
+// NewApiPutRequest creates an instance of the ApiPutRequest to be used for the API call.
 func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	return ApiPutRequest{
 		path: path,
 	}
 }
 
-// Put wraps PutWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+/*
+Put Send requests to the Algolia REST API. Wraps PutWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PutWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Put Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any

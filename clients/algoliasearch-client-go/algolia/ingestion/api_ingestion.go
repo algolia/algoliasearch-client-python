@@ -35,10 +35,6 @@ func HeaderParamOption(name string, val any) Option {
 	}
 }
 
-type ApiCreateAuthenticationRequest struct {
-	authenticationCreate *AuthenticationCreate
-}
-
 func (r *ApiCreateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -63,19 +59,42 @@ func (r *ApiCreateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiCreateAuthenticationRequest
+// ApiCreateAuthenticationRequest represents the request with all the parameters for the API call.
+type ApiCreateAuthenticationRequest struct {
+	authenticationCreate *AuthenticationCreate
+}
+
+// NewApiCreateAuthenticationRequest creates an instance of the ApiCreateAuthenticationRequest to be used for the API call.
 func (c *APIClient) NewApiCreateAuthenticationRequest(authenticationCreate *AuthenticationCreate) ApiCreateAuthenticationRequest {
 	return ApiCreateAuthenticationRequest{
 		authenticationCreate: authenticationCreate,
 	}
 }
 
-// CreateAuthentication wraps CreateAuthenticationWithContext using context.Background.
+/*
+CreateAuthentication Create a authentication. Wraps CreateAuthenticationWithContext using context.Background.
+
+Create a authentication.
+
+Request can be constructed by NewApiCreateAuthenticationRequest with parameters below.
+
+	@param authenticationCreate AuthenticationCreate -
+	@return AuthenticationCreateResponse
+*/
 func (c *APIClient) CreateAuthentication(r ApiCreateAuthenticationRequest, opts ...Option) (*AuthenticationCreateResponse, error) {
 	return c.CreateAuthenticationWithContext(context.Background(), r, opts...)
 }
 
-// @return AuthenticationCreateResponse
+/*
+CreateAuthentication Create a authentication.
+
+Create a authentication.
+
+Request can be constructed by NewApiCreateAuthenticationRequest with parameters below.
+
+	@param authenticationCreate AuthenticationCreate -
+	@return AuthenticationCreateResponse
+*/
 func (c *APIClient) CreateAuthenticationWithContext(ctx context.Context, r ApiCreateAuthenticationRequest, opts ...Option) (*AuthenticationCreateResponse, error) {
 	var (
 		postBody    any
@@ -146,10 +165,6 @@ func (c *APIClient) CreateAuthenticationWithContext(ctx context.Context, r ApiCr
 	return returnValue, nil
 }
 
-type ApiCreateDestinationRequest struct {
-	destinationCreate *DestinationCreate
-}
-
 func (r *ApiCreateDestinationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -174,19 +189,42 @@ func (r *ApiCreateDestinationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiCreateDestinationRequest
+// ApiCreateDestinationRequest represents the request with all the parameters for the API call.
+type ApiCreateDestinationRequest struct {
+	destinationCreate *DestinationCreate
+}
+
+// NewApiCreateDestinationRequest creates an instance of the ApiCreateDestinationRequest to be used for the API call.
 func (c *APIClient) NewApiCreateDestinationRequest(destinationCreate *DestinationCreate) ApiCreateDestinationRequest {
 	return ApiCreateDestinationRequest{
 		destinationCreate: destinationCreate,
 	}
 }
 
-// CreateDestination wraps CreateDestinationWithContext using context.Background.
+/*
+CreateDestination Create a destination. Wraps CreateDestinationWithContext using context.Background.
+
+Create a destination.
+
+Request can be constructed by NewApiCreateDestinationRequest with parameters below.
+
+	@param destinationCreate DestinationCreate -
+	@return DestinationCreateResponse
+*/
 func (c *APIClient) CreateDestination(r ApiCreateDestinationRequest, opts ...Option) (*DestinationCreateResponse, error) {
 	return c.CreateDestinationWithContext(context.Background(), r, opts...)
 }
 
-// @return DestinationCreateResponse
+/*
+CreateDestination Create a destination.
+
+Create a destination.
+
+Request can be constructed by NewApiCreateDestinationRequest with parameters below.
+
+	@param destinationCreate DestinationCreate -
+	@return DestinationCreateResponse
+*/
 func (c *APIClient) CreateDestinationWithContext(ctx context.Context, r ApiCreateDestinationRequest, opts ...Option) (*DestinationCreateResponse, error) {
 	var (
 		postBody    any
@@ -257,10 +295,6 @@ func (c *APIClient) CreateDestinationWithContext(ctx context.Context, r ApiCreat
 	return returnValue, nil
 }
 
-type ApiCreateSourceRequest struct {
-	sourceCreate *SourceCreate
-}
-
 func (r *ApiCreateSourceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -285,19 +319,42 @@ func (r *ApiCreateSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiCreateSourceRequest
+// ApiCreateSourceRequest represents the request with all the parameters for the API call.
+type ApiCreateSourceRequest struct {
+	sourceCreate *SourceCreate
+}
+
+// NewApiCreateSourceRequest creates an instance of the ApiCreateSourceRequest to be used for the API call.
 func (c *APIClient) NewApiCreateSourceRequest(sourceCreate *SourceCreate) ApiCreateSourceRequest {
 	return ApiCreateSourceRequest{
 		sourceCreate: sourceCreate,
 	}
 }
 
-// CreateSource wraps CreateSourceWithContext using context.Background.
+/*
+CreateSource Create a source. Wraps CreateSourceWithContext using context.Background.
+
+Create a source.
+
+Request can be constructed by NewApiCreateSourceRequest with parameters below.
+
+	@param sourceCreate SourceCreate -
+	@return SourceCreateResponse
+*/
 func (c *APIClient) CreateSource(r ApiCreateSourceRequest, opts ...Option) (*SourceCreateResponse, error) {
 	return c.CreateSourceWithContext(context.Background(), r, opts...)
 }
 
-// @return SourceCreateResponse
+/*
+CreateSource Create a source.
+
+Create a source.
+
+Request can be constructed by NewApiCreateSourceRequest with parameters below.
+
+	@param sourceCreate SourceCreate -
+	@return SourceCreateResponse
+*/
 func (c *APIClient) CreateSourceWithContext(ctx context.Context, r ApiCreateSourceRequest, opts ...Option) (*SourceCreateResponse, error) {
 	var (
 		postBody    any
@@ -368,10 +425,6 @@ func (c *APIClient) CreateSourceWithContext(ctx context.Context, r ApiCreateSour
 	return returnValue, nil
 }
 
-type ApiCreateTaskRequest struct {
-	taskCreate *TaskCreate
-}
-
 func (r *ApiCreateTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -396,19 +449,42 @@ func (r *ApiCreateTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiCreateTaskRequest
+// ApiCreateTaskRequest represents the request with all the parameters for the API call.
+type ApiCreateTaskRequest struct {
+	taskCreate *TaskCreate
+}
+
+// NewApiCreateTaskRequest creates an instance of the ApiCreateTaskRequest to be used for the API call.
 func (c *APIClient) NewApiCreateTaskRequest(taskCreate *TaskCreate) ApiCreateTaskRequest {
 	return ApiCreateTaskRequest{
 		taskCreate: taskCreate,
 	}
 }
 
-// CreateTask wraps CreateTaskWithContext using context.Background.
+/*
+CreateTask Create a task. Wraps CreateTaskWithContext using context.Background.
+
+Create a task.
+
+Request can be constructed by NewApiCreateTaskRequest with parameters below.
+
+	@param taskCreate TaskCreate -
+	@return TaskCreateResponse
+*/
 func (c *APIClient) CreateTask(r ApiCreateTaskRequest, opts ...Option) (*TaskCreateResponse, error) {
 	return c.CreateTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return TaskCreateResponse
+/*
+CreateTask Create a task.
+
+Create a task.
+
+Request can be constructed by NewApiCreateTaskRequest with parameters below.
+
+	@param taskCreate TaskCreate -
+	@return TaskCreateResponse
+*/
 func (c *APIClient) CreateTaskWithContext(ctx context.Context, r ApiCreateTaskRequest, opts ...Option) (*TaskCreateResponse, error) {
 	var (
 		postBody    any
@@ -479,11 +555,6 @@ func (c *APIClient) CreateTaskWithContext(ctx context.Context, r ApiCreateTaskRe
 	return returnValue, nil
 }
 
-type ApiDelRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -512,25 +583,51 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
-	r.parameters = parameters
-	return r
+// ApiDelRequest represents the request with all the parameters for the API call.
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiDelRequest
+// NewApiDelRequest creates an instance of the ApiDelRequest to be used for the API call.
 func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	return ApiDelRequest{
 		path: path,
 	}
 }
 
-// Del wraps DelWithContext using context.Background.
+// WithParameters adds the parameters to the ApiDelRequest and returns the request for chaining.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Del Send requests to the Algolia REST API. Wraps DelWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.DelWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Del Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -630,10 +727,6 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiDeleteAuthenticationRequest struct {
-	authenticationID string
-}
-
 func (r *ApiDeleteAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -653,19 +746,42 @@ func (r *ApiDeleteAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteAuthenticationRequest
+// ApiDeleteAuthenticationRequest represents the request with all the parameters for the API call.
+type ApiDeleteAuthenticationRequest struct {
+	authenticationID string
+}
+
+// NewApiDeleteAuthenticationRequest creates an instance of the ApiDeleteAuthenticationRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteAuthenticationRequest(authenticationID string) ApiDeleteAuthenticationRequest {
 	return ApiDeleteAuthenticationRequest{
 		authenticationID: authenticationID,
 	}
 }
 
-// DeleteAuthentication wraps DeleteAuthenticationWithContext using context.Background.
+/*
+DeleteAuthentication Delete a authentication. Wraps DeleteAuthenticationWithContext using context.Background.
+
+Soft delete the authentication of the given authenticationID.
+
+Request can be constructed by NewApiDeleteAuthenticationRequest with parameters below.
+
+	@param authenticationID string - The authentication UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteAuthentication(r ApiDeleteAuthenticationRequest, opts ...Option) (*DeleteResponse, error) {
 	return c.DeleteAuthenticationWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteResponse
+/*
+DeleteAuthentication Delete a authentication.
+
+Soft delete the authentication of the given authenticationID.
+
+Request can be constructed by NewApiDeleteAuthenticationRequest with parameters below.
+
+	@param authenticationID string - The authentication UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteAuthenticationWithContext(ctx context.Context, r ApiDeleteAuthenticationRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
@@ -732,10 +848,6 @@ func (c *APIClient) DeleteAuthenticationWithContext(ctx context.Context, r ApiDe
 	return returnValue, nil
 }
 
-type ApiDeleteDestinationRequest struct {
-	destinationID string
-}
-
 func (r *ApiDeleteDestinationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -755,19 +867,42 @@ func (r *ApiDeleteDestinationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteDestinationRequest
+// ApiDeleteDestinationRequest represents the request with all the parameters for the API call.
+type ApiDeleteDestinationRequest struct {
+	destinationID string
+}
+
+// NewApiDeleteDestinationRequest creates an instance of the ApiDeleteDestinationRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteDestinationRequest(destinationID string) ApiDeleteDestinationRequest {
 	return ApiDeleteDestinationRequest{
 		destinationID: destinationID,
 	}
 }
 
-// DeleteDestination wraps DeleteDestinationWithContext using context.Background.
+/*
+DeleteDestination Delete a destination. Wraps DeleteDestinationWithContext using context.Background.
+
+Soft delete the destination of the given destinationID.
+
+Request can be constructed by NewApiDeleteDestinationRequest with parameters below.
+
+	@param destinationID string - The destination UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteDestination(r ApiDeleteDestinationRequest, opts ...Option) (*DeleteResponse, error) {
 	return c.DeleteDestinationWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteResponse
+/*
+DeleteDestination Delete a destination.
+
+Soft delete the destination of the given destinationID.
+
+Request can be constructed by NewApiDeleteDestinationRequest with parameters below.
+
+	@param destinationID string - The destination UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteDestinationWithContext(ctx context.Context, r ApiDeleteDestinationRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
@@ -834,10 +969,6 @@ func (c *APIClient) DeleteDestinationWithContext(ctx context.Context, r ApiDelet
 	return returnValue, nil
 }
 
-type ApiDeleteSourceRequest struct {
-	sourceID string
-}
-
 func (r *ApiDeleteSourceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -857,19 +988,42 @@ func (r *ApiDeleteSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteSourceRequest
+// ApiDeleteSourceRequest represents the request with all the parameters for the API call.
+type ApiDeleteSourceRequest struct {
+	sourceID string
+}
+
+// NewApiDeleteSourceRequest creates an instance of the ApiDeleteSourceRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteSourceRequest(sourceID string) ApiDeleteSourceRequest {
 	return ApiDeleteSourceRequest{
 		sourceID: sourceID,
 	}
 }
 
-// DeleteSource wraps DeleteSourceWithContext using context.Background.
+/*
+DeleteSource Delete a source. Wraps DeleteSourceWithContext using context.Background.
+
+Soft delete the source of the given sourceID.
+
+Request can be constructed by NewApiDeleteSourceRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*DeleteResponse, error) {
 	return c.DeleteSourceWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteResponse
+/*
+DeleteSource Delete a source.
+
+Soft delete the source of the given sourceID.
+
+Request can be constructed by NewApiDeleteSourceRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteSourceWithContext(ctx context.Context, r ApiDeleteSourceRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
@@ -936,10 +1090,6 @@ func (c *APIClient) DeleteSourceWithContext(ctx context.Context, r ApiDeleteSour
 	return returnValue, nil
 }
 
-type ApiDeleteTaskRequest struct {
-	taskID string
-}
-
 func (r *ApiDeleteTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -959,19 +1109,42 @@ func (r *ApiDeleteTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteTaskRequest
+// ApiDeleteTaskRequest represents the request with all the parameters for the API call.
+type ApiDeleteTaskRequest struct {
+	taskID string
+}
+
+// NewApiDeleteTaskRequest creates an instance of the ApiDeleteTaskRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteTaskRequest(taskID string) ApiDeleteTaskRequest {
 	return ApiDeleteTaskRequest{
 		taskID: taskID,
 	}
 }
 
-// DeleteTask wraps DeleteTaskWithContext using context.Background.
+/*
+DeleteTask Delete a task. Wraps DeleteTaskWithContext using context.Background.
+
+Soft delete the task of the given taskID.
+
+Request can be constructed by NewApiDeleteTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteTask(r ApiDeleteTaskRequest, opts ...Option) (*DeleteResponse, error) {
 	return c.DeleteTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteResponse
+/*
+DeleteTask Delete a task.
+
+Soft delete the task of the given taskID.
+
+Request can be constructed by NewApiDeleteTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return DeleteResponse
+*/
 func (c *APIClient) DeleteTaskWithContext(ctx context.Context, r ApiDeleteTaskRequest, opts ...Option) (*DeleteResponse, error) {
 	var (
 		postBody    any
@@ -1038,10 +1211,6 @@ func (c *APIClient) DeleteTaskWithContext(ctx context.Context, r ApiDeleteTaskRe
 	return returnValue, nil
 }
 
-type ApiDisableTaskRequest struct {
-	taskID string
-}
-
 func (r *ApiDisableTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1061,19 +1230,42 @@ func (r *ApiDisableTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDisableTaskRequest
+// ApiDisableTaskRequest represents the request with all the parameters for the API call.
+type ApiDisableTaskRequest struct {
+	taskID string
+}
+
+// NewApiDisableTaskRequest creates an instance of the ApiDisableTaskRequest to be used for the API call.
 func (c *APIClient) NewApiDisableTaskRequest(taskID string) ApiDisableTaskRequest {
 	return ApiDisableTaskRequest{
 		taskID: taskID,
 	}
 }
 
-// DisableTask wraps DisableTaskWithContext using context.Background.
+/*
+DisableTask Disable a task. Wraps DisableTaskWithContext using context.Background.
+
+Disable the task of the given taskID.
+
+Request can be constructed by NewApiDisableTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return TaskUpdateResponse
+*/
 func (c *APIClient) DisableTask(r ApiDisableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	return c.DisableTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return TaskUpdateResponse
+/*
+DisableTask Disable a task.
+
+Disable the task of the given taskID.
+
+Request can be constructed by NewApiDisableTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return TaskUpdateResponse
+*/
 func (c *APIClient) DisableTaskWithContext(ctx context.Context, r ApiDisableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	var (
 		postBody    any
@@ -1140,10 +1332,6 @@ func (c *APIClient) DisableTaskWithContext(ctx context.Context, r ApiDisableTask
 	return returnValue, nil
 }
 
-type ApiEnableTaskRequest struct {
-	taskID string
-}
-
 func (r *ApiEnableTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1163,19 +1351,42 @@ func (r *ApiEnableTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiEnableTaskRequest
+// ApiEnableTaskRequest represents the request with all the parameters for the API call.
+type ApiEnableTaskRequest struct {
+	taskID string
+}
+
+// NewApiEnableTaskRequest creates an instance of the ApiEnableTaskRequest to be used for the API call.
 func (c *APIClient) NewApiEnableTaskRequest(taskID string) ApiEnableTaskRequest {
 	return ApiEnableTaskRequest{
 		taskID: taskID,
 	}
 }
 
-// EnableTask wraps EnableTaskWithContext using context.Background.
+/*
+EnableTask Enable a task. Wraps EnableTaskWithContext using context.Background.
+
+Enable the task of the given taskID.
+
+Request can be constructed by NewApiEnableTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return TaskUpdateResponse
+*/
 func (c *APIClient) EnableTask(r ApiEnableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	return c.EnableTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return TaskUpdateResponse
+/*
+EnableTask Enable a task.
+
+Enable the task of the given taskID.
+
+Request can be constructed by NewApiEnableTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return TaskUpdateResponse
+*/
 func (c *APIClient) EnableTaskWithContext(ctx context.Context, r ApiEnableTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	var (
 		postBody    any
@@ -1242,11 +1453,6 @@ func (c *APIClient) EnableTaskWithContext(ctx context.Context, r ApiEnableTaskRe
 	return returnValue, nil
 }
 
-type ApiGetRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1275,25 +1481,51 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
-	r.parameters = parameters
-	return r
+// ApiGetRequest represents the request with all the parameters for the API call.
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiGetRequest
+// NewApiGetRequest creates an instance of the ApiGetRequest to be used for the API call.
 func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	return ApiGetRequest{
 		path: path,
 	}
 }
 
-// Get wraps GetWithContext using context.Background.
+// WithParameters adds the parameters to the ApiGetRequest and returns the request for chaining.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Get Send requests to the Algolia REST API. Wraps GetWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.GetWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Get Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -1393,10 +1625,6 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiGetAuthenticationRequest struct {
-	authenticationID string
-}
-
 func (r *ApiGetAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1416,19 +1644,42 @@ func (r *ApiGetAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetAuthenticationRequest
+// ApiGetAuthenticationRequest represents the request with all the parameters for the API call.
+type ApiGetAuthenticationRequest struct {
+	authenticationID string
+}
+
+// NewApiGetAuthenticationRequest creates an instance of the ApiGetAuthenticationRequest to be used for the API call.
 func (c *APIClient) NewApiGetAuthenticationRequest(authenticationID string) ApiGetAuthenticationRequest {
 	return ApiGetAuthenticationRequest{
 		authenticationID: authenticationID,
 	}
 }
 
-// GetAuthentication wraps GetAuthenticationWithContext using context.Background.
+/*
+GetAuthentication Get a authentication. Wraps GetAuthenticationWithContext using context.Background.
+
+Get the authentication of the given authenticationID.
+
+Request can be constructed by NewApiGetAuthenticationRequest with parameters below.
+
+	@param authenticationID string - The authentication UUID.
+	@return AuthenticationWithInput
+*/
 func (c *APIClient) GetAuthentication(r ApiGetAuthenticationRequest, opts ...Option) (*AuthenticationWithInput, error) {
 	return c.GetAuthenticationWithContext(context.Background(), r, opts...)
 }
 
-// @return AuthenticationWithInput
+/*
+GetAuthentication Get a authentication.
+
+Get the authentication of the given authenticationID.
+
+Request can be constructed by NewApiGetAuthenticationRequest with parameters below.
+
+	@param authenticationID string - The authentication UUID.
+	@return AuthenticationWithInput
+*/
 func (c *APIClient) GetAuthenticationWithContext(ctx context.Context, r ApiGetAuthenticationRequest, opts ...Option) (*AuthenticationWithInput, error) {
 	var (
 		postBody    any
@@ -1495,15 +1746,6 @@ func (c *APIClient) GetAuthenticationWithContext(ctx context.Context, r ApiGetAu
 	return returnValue, nil
 }
 
-type ApiGetAuthenticationsRequest struct {
-	itemsPerPage int32
-	page         int32
-	type_        []AuthenticationType
-	platform     []PlatformWithNone
-	sort         *AuthenticationSortKeys
-	order        *OrderKeys
-}
-
 func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1568,53 +1810,91 @@ func (r *ApiGetAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The number of items per page to return.
+// ApiGetAuthenticationsRequest represents the request with all the parameters for the API call.
+type ApiGetAuthenticationsRequest struct {
+	itemsPerPage int32
+	page         int32
+	type_        []AuthenticationType
+	platform     []PlatformWithNone
+	sort         *AuthenticationSortKeys
+	order        *OrderKeys
+}
+
+// NewApiGetAuthenticationsRequest creates an instance of the ApiGetAuthenticationsRequest to be used for the API call.
+func (c *APIClient) NewApiGetAuthenticationsRequest() ApiGetAuthenticationsRequest {
+	return ApiGetAuthenticationsRequest{}
+}
+
+// WithItemsPerPage adds the itemsPerPage to the ApiGetAuthenticationsRequest and returns the request for chaining.
 func (r ApiGetAuthenticationsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetAuthenticationsRequest {
 	r.itemsPerPage = itemsPerPage
 	return r
 }
 
-// The page number to fetch, starting at 1.
+// WithPage adds the page to the ApiGetAuthenticationsRequest and returns the request for chaining.
 func (r ApiGetAuthenticationsRequest) WithPage(page int32) ApiGetAuthenticationsRequest {
 	r.page = page
 	return r
 }
 
-// The type of the authentications to retrieve.
+// WithType_ adds the type_ to the ApiGetAuthenticationsRequest and returns the request for chaining.
 func (r ApiGetAuthenticationsRequest) WithType_(type_ []AuthenticationType) ApiGetAuthenticationsRequest {
 	r.type_ = type_
 	return r
 }
 
-// The platform of the authentications to retrieve.
+// WithPlatform adds the platform to the ApiGetAuthenticationsRequest and returns the request for chaining.
 func (r ApiGetAuthenticationsRequest) WithPlatform(platform []PlatformWithNone) ApiGetAuthenticationsRequest {
 	r.platform = platform
 	return r
 }
 
-// The key by which the list should be sorted.
+// WithSort adds the sort to the ApiGetAuthenticationsRequest and returns the request for chaining.
 func (r ApiGetAuthenticationsRequest) WithSort(sort *AuthenticationSortKeys) ApiGetAuthenticationsRequest {
 	r.sort = sort
 	return r
 }
 
-// The order of the returned list.
+// WithOrder adds the order to the ApiGetAuthenticationsRequest and returns the request for chaining.
 func (r ApiGetAuthenticationsRequest) WithOrder(order *OrderKeys) ApiGetAuthenticationsRequest {
 	r.order = order
 	return r
 }
 
-// @return ApiGetAuthenticationsRequest
-func (c *APIClient) NewApiGetAuthenticationsRequest() ApiGetAuthenticationsRequest {
-	return ApiGetAuthenticationsRequest{}
-}
+/*
+GetAuthentications Get a list of authentications. Wraps GetAuthenticationsWithContext using context.Background.
 
-// GetAuthentications wraps GetAuthenticationsWithContext using context.Background.
+Get a list of authentications for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetAuthenticationsRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param type_ []AuthenticationType - The type of the authentications to retrieve.
+	@param platform []PlatformWithNone - The platform of the authentications to retrieve.
+	@param sort AuthenticationSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListAuthenticationsResponse
+*/
 func (c *APIClient) GetAuthentications(r ApiGetAuthenticationsRequest, opts ...Option) (*ListAuthenticationsResponse, error) {
 	return c.GetAuthenticationsWithContext(context.Background(), r, opts...)
 }
 
-// @return ListAuthenticationsResponse
+/*
+GetAuthentications Get a list of authentications.
+
+Get a list of authentications for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetAuthenticationsRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param type_ []AuthenticationType - The type of the authentications to retrieve.
+	@param platform []PlatformWithNone - The platform of the authentications to retrieve.
+	@param sort AuthenticationSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListAuthenticationsResponse
+*/
 func (c *APIClient) GetAuthenticationsWithContext(ctx context.Context, r ApiGetAuthenticationsRequest, opts ...Option) (*ListAuthenticationsResponse, error) {
 	var (
 		postBody    any
@@ -1699,10 +1979,6 @@ func (c *APIClient) GetAuthenticationsWithContext(ctx context.Context, r ApiGetA
 	return returnValue, nil
 }
 
-type ApiGetDestinationRequest struct {
-	destinationID string
-}
-
 func (r *ApiGetDestinationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1722,19 +1998,42 @@ func (r *ApiGetDestinationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetDestinationRequest
+// ApiGetDestinationRequest represents the request with all the parameters for the API call.
+type ApiGetDestinationRequest struct {
+	destinationID string
+}
+
+// NewApiGetDestinationRequest creates an instance of the ApiGetDestinationRequest to be used for the API call.
 func (c *APIClient) NewApiGetDestinationRequest(destinationID string) ApiGetDestinationRequest {
 	return ApiGetDestinationRequest{
 		destinationID: destinationID,
 	}
 }
 
-// GetDestination wraps GetDestinationWithContext using context.Background.
+/*
+GetDestination Get a destination. Wraps GetDestinationWithContext using context.Background.
+
+Get the destination of the given destinationID.
+
+Request can be constructed by NewApiGetDestinationRequest with parameters below.
+
+	@param destinationID string - The destination UUID.
+	@return Destination
+*/
 func (c *APIClient) GetDestination(r ApiGetDestinationRequest, opts ...Option) (*Destination, error) {
 	return c.GetDestinationWithContext(context.Background(), r, opts...)
 }
 
-// @return Destination
+/*
+GetDestination Get a destination.
+
+Get the destination of the given destinationID.
+
+Request can be constructed by NewApiGetDestinationRequest with parameters below.
+
+	@param destinationID string - The destination UUID.
+	@return Destination
+*/
 func (c *APIClient) GetDestinationWithContext(ctx context.Context, r ApiGetDestinationRequest, opts ...Option) (*Destination, error) {
 	var (
 		postBody    any
@@ -1801,15 +2100,6 @@ func (c *APIClient) GetDestinationWithContext(ctx context.Context, r ApiGetDesti
 	return returnValue, nil
 }
 
-type ApiGetDestinationsRequest struct {
-	itemsPerPage     int32
-	page             int32
-	type_            []DestinationType
-	authenticationID []string
-	sort             *DestinationSortKeys
-	order            *OrderKeys
-}
-
 func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1874,53 +2164,91 @@ func (r *ApiGetDestinationsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The number of items per page to return.
+// ApiGetDestinationsRequest represents the request with all the parameters for the API call.
+type ApiGetDestinationsRequest struct {
+	itemsPerPage     int32
+	page             int32
+	type_            []DestinationType
+	authenticationID []string
+	sort             *DestinationSortKeys
+	order            *OrderKeys
+}
+
+// NewApiGetDestinationsRequest creates an instance of the ApiGetDestinationsRequest to be used for the API call.
+func (c *APIClient) NewApiGetDestinationsRequest() ApiGetDestinationsRequest {
+	return ApiGetDestinationsRequest{}
+}
+
+// WithItemsPerPage adds the itemsPerPage to the ApiGetDestinationsRequest and returns the request for chaining.
 func (r ApiGetDestinationsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetDestinationsRequest {
 	r.itemsPerPage = itemsPerPage
 	return r
 }
 
-// The page number to fetch, starting at 1.
+// WithPage adds the page to the ApiGetDestinationsRequest and returns the request for chaining.
 func (r ApiGetDestinationsRequest) WithPage(page int32) ApiGetDestinationsRequest {
 	r.page = page
 	return r
 }
 
-// The type of the destinations to retrive.
+// WithType_ adds the type_ to the ApiGetDestinationsRequest and returns the request for chaining.
 func (r ApiGetDestinationsRequest) WithType_(type_ []DestinationType) ApiGetDestinationsRequest {
 	r.type_ = type_
 	return r
 }
 
-// The authenticationIDs of the destinations to retrive.
+// WithAuthenticationID adds the authenticationID to the ApiGetDestinationsRequest and returns the request for chaining.
 func (r ApiGetDestinationsRequest) WithAuthenticationID(authenticationID []string) ApiGetDestinationsRequest {
 	r.authenticationID = authenticationID
 	return r
 }
 
-// The key by which the list should be sorted.
+// WithSort adds the sort to the ApiGetDestinationsRequest and returns the request for chaining.
 func (r ApiGetDestinationsRequest) WithSort(sort *DestinationSortKeys) ApiGetDestinationsRequest {
 	r.sort = sort
 	return r
 }
 
-// The order of the returned list.
+// WithOrder adds the order to the ApiGetDestinationsRequest and returns the request for chaining.
 func (r ApiGetDestinationsRequest) WithOrder(order *OrderKeys) ApiGetDestinationsRequest {
 	r.order = order
 	return r
 }
 
-// @return ApiGetDestinationsRequest
-func (c *APIClient) NewApiGetDestinationsRequest() ApiGetDestinationsRequest {
-	return ApiGetDestinationsRequest{}
-}
+/*
+GetDestinations Get a list of destinations. Wraps GetDestinationsWithContext using context.Background.
 
-// GetDestinations wraps GetDestinationsWithContext using context.Background.
+Get a list of destinations for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetDestinationsRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param type_ []DestinationType - The type of the destinations to retrive.
+	@param authenticationID []string - The authenticationIDs of the destinations to retrive.
+	@param sort DestinationSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListDestinationsResponse
+*/
 func (c *APIClient) GetDestinations(r ApiGetDestinationsRequest, opts ...Option) (*ListDestinationsResponse, error) {
 	return c.GetDestinationsWithContext(context.Background(), r, opts...)
 }
 
-// @return ListDestinationsResponse
+/*
+GetDestinations Get a list of destinations.
+
+Get a list of destinations for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetDestinationsRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param type_ []DestinationType - The type of the destinations to retrive.
+	@param authenticationID []string - The authenticationIDs of the destinations to retrive.
+	@param sort DestinationSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListDestinationsResponse
+*/
 func (c *APIClient) GetDestinationsWithContext(ctx context.Context, r ApiGetDestinationsRequest, opts ...Option) (*ListDestinationsResponse, error) {
 	var (
 		postBody    any
@@ -2005,11 +2333,6 @@ func (c *APIClient) GetDestinationsWithContext(ctx context.Context, r ApiGetDest
 	return returnValue, nil
 }
 
-type ApiGetEventRequest struct {
-	runID   string
-	eventID string
-}
-
 func (r *ApiGetEventRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2038,7 +2361,13 @@ func (r *ApiGetEventRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetEventRequest
+// ApiGetEventRequest represents the request with all the parameters for the API call.
+type ApiGetEventRequest struct {
+	runID   string
+	eventID string
+}
+
+// NewApiGetEventRequest creates an instance of the ApiGetEventRequest to be used for the API call.
 func (c *APIClient) NewApiGetEventRequest(runID string, eventID string) ApiGetEventRequest {
 	return ApiGetEventRequest{
 		runID:   runID,
@@ -2046,12 +2375,32 @@ func (c *APIClient) NewApiGetEventRequest(runID string, eventID string) ApiGetEv
 	}
 }
 
-// GetEvent wraps GetEventWithContext using context.Background.
+/*
+GetEvent Get an event. Wraps GetEventWithContext using context.Background.
+
+Get a single event for a specific runID.
+
+Request can be constructed by NewApiGetEventRequest with parameters below.
+
+	@param runID string - The run UUID.
+	@param eventID string - The event UUID.
+	@return Event
+*/
 func (c *APIClient) GetEvent(r ApiGetEventRequest, opts ...Option) (*Event, error) {
 	return c.GetEventWithContext(context.Background(), r, opts...)
 }
 
-// @return Event
+/*
+GetEvent Get an event.
+
+Get a single event for a specific runID.
+
+Request can be constructed by NewApiGetEventRequest with parameters below.
+
+	@param runID string - The run UUID.
+	@param eventID string - The event UUID.
+	@return Event
+*/
 func (c *APIClient) GetEventWithContext(ctx context.Context, r ApiGetEventRequest, opts ...Option) (*Event, error) {
 	var (
 		postBody    any
@@ -2117,16 +2466,6 @@ func (c *APIClient) GetEventWithContext(ctx context.Context, r ApiGetEventReques
 	}
 
 	return returnValue, nil
-}
-
-type ApiGetEventsRequest struct {
-	runID        string
-	itemsPerPage int32
-	page         int32
-	status       []EventStatus
-	type_        []EventType
-	sort         *EventSortKeys
-	order        *OrderKeys
 }
 
 func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
@@ -2202,55 +2541,96 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The number of items per page to return.
-func (r ApiGetEventsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetEventsRequest {
-	r.itemsPerPage = itemsPerPage
-	return r
+// ApiGetEventsRequest represents the request with all the parameters for the API call.
+type ApiGetEventsRequest struct {
+	runID        string
+	itemsPerPage int32
+	page         int32
+	status       []EventStatus
+	type_        []EventType
+	sort         *EventSortKeys
+	order        *OrderKeys
 }
 
-// The page number to fetch, starting at 1.
-func (r ApiGetEventsRequest) WithPage(page int32) ApiGetEventsRequest {
-	r.page = page
-	return r
-}
-
-// Filter the status of the events.
-func (r ApiGetEventsRequest) WithStatus(status []EventStatus) ApiGetEventsRequest {
-	r.status = status
-	return r
-}
-
-// Filter the type of the events.
-func (r ApiGetEventsRequest) WithType_(type_ []EventType) ApiGetEventsRequest {
-	r.type_ = type_
-	return r
-}
-
-// The key by which the list should be sorted.
-func (r ApiGetEventsRequest) WithSort(sort *EventSortKeys) ApiGetEventsRequest {
-	r.sort = sort
-	return r
-}
-
-// The order of the returned list.
-func (r ApiGetEventsRequest) WithOrder(order *OrderKeys) ApiGetEventsRequest {
-	r.order = order
-	return r
-}
-
-// @return ApiGetEventsRequest
+// NewApiGetEventsRequest creates an instance of the ApiGetEventsRequest to be used for the API call.
 func (c *APIClient) NewApiGetEventsRequest(runID string) ApiGetEventsRequest {
 	return ApiGetEventsRequest{
 		runID: runID,
 	}
 }
 
-// GetEvents wraps GetEventsWithContext using context.Background.
+// WithItemsPerPage adds the itemsPerPage to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetEventsRequest {
+	r.itemsPerPage = itemsPerPage
+	return r
+}
+
+// WithPage adds the page to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithPage(page int32) ApiGetEventsRequest {
+	r.page = page
+	return r
+}
+
+// WithStatus adds the status to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithStatus(status []EventStatus) ApiGetEventsRequest {
+	r.status = status
+	return r
+}
+
+// WithType_ adds the type_ to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithType_(type_ []EventType) ApiGetEventsRequest {
+	r.type_ = type_
+	return r
+}
+
+// WithSort adds the sort to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithSort(sort *EventSortKeys) ApiGetEventsRequest {
+	r.sort = sort
+	return r
+}
+
+// WithOrder adds the order to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithOrder(order *OrderKeys) ApiGetEventsRequest {
+	r.order = order
+	return r
+}
+
+/*
+GetEvents Get a list of events. Wraps GetEventsWithContext using context.Background.
+
+Get a list of events associated to the given runID, for the given query parameters.
+
+Request can be constructed by NewApiGetEventsRequest with parameters below.
+
+	@param runID string - The run UUID.
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param status []EventStatus - Filter the status of the events.
+	@param type_ []EventType - Filter the type of the events.
+	@param sort EventSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListEventsResponse
+*/
 func (c *APIClient) GetEvents(r ApiGetEventsRequest, opts ...Option) (*ListEventsResponse, error) {
 	return c.GetEventsWithContext(context.Background(), r, opts...)
 }
 
-// @return ListEventsResponse
+/*
+GetEvents Get a list of events.
+
+Get a list of events associated to the given runID, for the given query parameters.
+
+Request can be constructed by NewApiGetEventsRequest with parameters below.
+
+	@param runID string - The run UUID.
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param status []EventStatus - Filter the status of the events.
+	@param type_ []EventType - Filter the type of the events.
+	@param sort EventSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListEventsResponse
+*/
 func (c *APIClient) GetEventsWithContext(ctx context.Context, r ApiGetEventsRequest, opts ...Option) (*ListEventsResponse, error) {
 	var (
 		postBody    any
@@ -2336,10 +2716,6 @@ func (c *APIClient) GetEventsWithContext(ctx context.Context, r ApiGetEventsRequ
 	return returnValue, nil
 }
 
-type ApiGetRunRequest struct {
-	runID string
-}
-
 func (r *ApiGetRunRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2359,19 +2735,42 @@ func (r *ApiGetRunRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetRunRequest
+// ApiGetRunRequest represents the request with all the parameters for the API call.
+type ApiGetRunRequest struct {
+	runID string
+}
+
+// NewApiGetRunRequest creates an instance of the ApiGetRunRequest to be used for the API call.
 func (c *APIClient) NewApiGetRunRequest(runID string) ApiGetRunRequest {
 	return ApiGetRunRequest{
 		runID: runID,
 	}
 }
 
-// GetRun wraps GetRunWithContext using context.Background.
+/*
+GetRun Get a run. Wraps GetRunWithContext using context.Background.
+
+Get a single run for the given ID.
+
+Request can be constructed by NewApiGetRunRequest with parameters below.
+
+	@param runID string - The run UUID.
+	@return Run
+*/
 func (c *APIClient) GetRun(r ApiGetRunRequest, opts ...Option) (*Run, error) {
 	return c.GetRunWithContext(context.Background(), r, opts...)
 }
 
-// @return Run
+/*
+GetRun Get a run.
+
+Get a single run for the given ID.
+
+Request can be constructed by NewApiGetRunRequest with parameters below.
+
+	@param runID string - The run UUID.
+	@return Run
+*/
 func (c *APIClient) GetRunWithContext(ctx context.Context, r ApiGetRunRequest, opts ...Option) (*Run, error) {
 	var (
 		postBody    any
@@ -2438,15 +2837,6 @@ func (c *APIClient) GetRunWithContext(ctx context.Context, r ApiGetRunRequest, o
 	return returnValue, nil
 }
 
-type ApiGetRunsRequest struct {
-	itemsPerPage int32
-	page         int32
-	status       []RunStatus
-	taskID       string
-	sort         *RunSortKeys
-	order        *OrderKeys
-}
-
 func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2511,53 +2901,91 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The number of items per page to return.
+// ApiGetRunsRequest represents the request with all the parameters for the API call.
+type ApiGetRunsRequest struct {
+	itemsPerPage int32
+	page         int32
+	status       []RunStatus
+	taskID       string
+	sort         *RunSortKeys
+	order        *OrderKeys
+}
+
+// NewApiGetRunsRequest creates an instance of the ApiGetRunsRequest to be used for the API call.
+func (c *APIClient) NewApiGetRunsRequest() ApiGetRunsRequest {
+	return ApiGetRunsRequest{}
+}
+
+// WithItemsPerPage adds the itemsPerPage to the ApiGetRunsRequest and returns the request for chaining.
 func (r ApiGetRunsRequest) WithItemsPerPage(itemsPerPage int32) ApiGetRunsRequest {
 	r.itemsPerPage = itemsPerPage
 	return r
 }
 
-// The page number to fetch, starting at 1.
+// WithPage adds the page to the ApiGetRunsRequest and returns the request for chaining.
 func (r ApiGetRunsRequest) WithPage(page int32) ApiGetRunsRequest {
 	r.page = page
 	return r
 }
 
-// Filter the status of the runs.
+// WithStatus adds the status to the ApiGetRunsRequest and returns the request for chaining.
 func (r ApiGetRunsRequest) WithStatus(status []RunStatus) ApiGetRunsRequest {
 	r.status = status
 	return r
 }
 
-// Filter by taskID.
+// WithTaskID adds the taskID to the ApiGetRunsRequest and returns the request for chaining.
 func (r ApiGetRunsRequest) WithTaskID(taskID string) ApiGetRunsRequest {
 	r.taskID = taskID
 	return r
 }
 
-// The key by which the list should be sorted.
+// WithSort adds the sort to the ApiGetRunsRequest and returns the request for chaining.
 func (r ApiGetRunsRequest) WithSort(sort *RunSortKeys) ApiGetRunsRequest {
 	r.sort = sort
 	return r
 }
 
-// The order of the returned list.
+// WithOrder adds the order to the ApiGetRunsRequest and returns the request for chaining.
 func (r ApiGetRunsRequest) WithOrder(order *OrderKeys) ApiGetRunsRequest {
 	r.order = order
 	return r
 }
 
-// @return ApiGetRunsRequest
-func (c *APIClient) NewApiGetRunsRequest() ApiGetRunsRequest {
-	return ApiGetRunsRequest{}
-}
+/*
+GetRuns Get a list of runs. Wraps GetRunsWithContext using context.Background.
 
-// GetRuns wraps GetRunsWithContext using context.Background.
+Get a list of runs for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetRunsRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param status []RunStatus - Filter the status of the runs.
+	@param taskID string - Filter by taskID.
+	@param sort RunSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return RunListResponse
+*/
 func (c *APIClient) GetRuns(r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
 	return c.GetRunsWithContext(context.Background(), r, opts...)
 }
 
-// @return RunListResponse
+/*
+GetRuns Get a list of runs.
+
+Get a list of runs for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetRunsRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param status []RunStatus - Filter the status of the runs.
+	@param taskID string - Filter by taskID.
+	@param sort RunSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return RunListResponse
+*/
 func (c *APIClient) GetRunsWithContext(ctx context.Context, r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
 	var (
 		postBody    any
@@ -2642,10 +3070,6 @@ func (c *APIClient) GetRunsWithContext(ctx context.Context, r ApiGetRunsRequest,
 	return returnValue, nil
 }
 
-type ApiGetSourceRequest struct {
-	sourceID string
-}
-
 func (r *ApiGetSourceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2665,19 +3089,42 @@ func (r *ApiGetSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetSourceRequest
+// ApiGetSourceRequest represents the request with all the parameters for the API call.
+type ApiGetSourceRequest struct {
+	sourceID string
+}
+
+// NewApiGetSourceRequest creates an instance of the ApiGetSourceRequest to be used for the API call.
 func (c *APIClient) NewApiGetSourceRequest(sourceID string) ApiGetSourceRequest {
 	return ApiGetSourceRequest{
 		sourceID: sourceID,
 	}
 }
 
-// GetSource wraps GetSourceWithContext using context.Background.
+/*
+GetSource Get a source. Wraps GetSourceWithContext using context.Background.
+
+Get the source of the given sourceID.
+
+Request can be constructed by NewApiGetSourceRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return Source
+*/
 func (c *APIClient) GetSource(r ApiGetSourceRequest, opts ...Option) (*Source, error) {
 	return c.GetSourceWithContext(context.Background(), r, opts...)
 }
 
-// @return Source
+/*
+GetSource Get a source.
+
+Get the source of the given sourceID.
+
+Request can be constructed by NewApiGetSourceRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return Source
+*/
 func (c *APIClient) GetSourceWithContext(ctx context.Context, r ApiGetSourceRequest, opts ...Option) (*Source, error) {
 	var (
 		postBody    any
@@ -2744,15 +3191,6 @@ func (c *APIClient) GetSourceWithContext(ctx context.Context, r ApiGetSourceRequ
 	return returnValue, nil
 }
 
-type ApiGetSourcesRequest struct {
-	itemsPerPage     int32
-	page             int32
-	type_            []SourceType
-	authenticationID []string
-	sort             *SourceSortKeys
-	order            *OrderKeys
-}
-
 func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2817,53 +3255,91 @@ func (r *ApiGetSourcesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The number of items per page to return.
+// ApiGetSourcesRequest represents the request with all the parameters for the API call.
+type ApiGetSourcesRequest struct {
+	itemsPerPage     int32
+	page             int32
+	type_            []SourceType
+	authenticationID []string
+	sort             *SourceSortKeys
+	order            *OrderKeys
+}
+
+// NewApiGetSourcesRequest creates an instance of the ApiGetSourcesRequest to be used for the API call.
+func (c *APIClient) NewApiGetSourcesRequest() ApiGetSourcesRequest {
+	return ApiGetSourcesRequest{}
+}
+
+// WithItemsPerPage adds the itemsPerPage to the ApiGetSourcesRequest and returns the request for chaining.
 func (r ApiGetSourcesRequest) WithItemsPerPage(itemsPerPage int32) ApiGetSourcesRequest {
 	r.itemsPerPage = itemsPerPage
 	return r
 }
 
-// The page number to fetch, starting at 1.
+// WithPage adds the page to the ApiGetSourcesRequest and returns the request for chaining.
 func (r ApiGetSourcesRequest) WithPage(page int32) ApiGetSourcesRequest {
 	r.page = page
 	return r
 }
 
-// The type of the sources to retrieve.
+// WithType_ adds the type_ to the ApiGetSourcesRequest and returns the request for chaining.
 func (r ApiGetSourcesRequest) WithType_(type_ []SourceType) ApiGetSourcesRequest {
 	r.type_ = type_
 	return r
 }
 
-// The authenticationIDs of the sources to retrieve. &#39;none&#39; returns sources that doesn&#39;t have an authentication.
+// WithAuthenticationID adds the authenticationID to the ApiGetSourcesRequest and returns the request for chaining.
 func (r ApiGetSourcesRequest) WithAuthenticationID(authenticationID []string) ApiGetSourcesRequest {
 	r.authenticationID = authenticationID
 	return r
 }
 
-// The key by which the list should be sorted.
+// WithSort adds the sort to the ApiGetSourcesRequest and returns the request for chaining.
 func (r ApiGetSourcesRequest) WithSort(sort *SourceSortKeys) ApiGetSourcesRequest {
 	r.sort = sort
 	return r
 }
 
-// The order of the returned list.
+// WithOrder adds the order to the ApiGetSourcesRequest and returns the request for chaining.
 func (r ApiGetSourcesRequest) WithOrder(order *OrderKeys) ApiGetSourcesRequest {
 	r.order = order
 	return r
 }
 
-// @return ApiGetSourcesRequest
-func (c *APIClient) NewApiGetSourcesRequest() ApiGetSourcesRequest {
-	return ApiGetSourcesRequest{}
-}
+/*
+GetSources Get a list of sources. Wraps GetSourcesWithContext using context.Background.
 
-// GetSources wraps GetSourcesWithContext using context.Background.
+Get a list of sources for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetSourcesRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param type_ []SourceType - The type of the sources to retrieve.
+	@param authenticationID []string - The authenticationIDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication.
+	@param sort SourceSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListSourcesResponse
+*/
 func (c *APIClient) GetSources(r ApiGetSourcesRequest, opts ...Option) (*ListSourcesResponse, error) {
 	return c.GetSourcesWithContext(context.Background(), r, opts...)
 }
 
-// @return ListSourcesResponse
+/*
+GetSources Get a list of sources.
+
+Get a list of sources for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetSourcesRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param type_ []SourceType - The type of the sources to retrieve.
+	@param authenticationID []string - The authenticationIDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication.
+	@param sort SourceSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListSourcesResponse
+*/
 func (c *APIClient) GetSourcesWithContext(ctx context.Context, r ApiGetSourcesRequest, opts ...Option) (*ListSourcesResponse, error) {
 	var (
 		postBody    any
@@ -2948,10 +3424,6 @@ func (c *APIClient) GetSourcesWithContext(ctx context.Context, r ApiGetSourcesRe
 	return returnValue, nil
 }
 
-type ApiGetTaskRequest struct {
-	taskID string
-}
-
 func (r *ApiGetTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2971,19 +3443,42 @@ func (r *ApiGetTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetTaskRequest
+// ApiGetTaskRequest represents the request with all the parameters for the API call.
+type ApiGetTaskRequest struct {
+	taskID string
+}
+
+// NewApiGetTaskRequest creates an instance of the ApiGetTaskRequest to be used for the API call.
 func (c *APIClient) NewApiGetTaskRequest(taskID string) ApiGetTaskRequest {
 	return ApiGetTaskRequest{
 		taskID: taskID,
 	}
 }
 
-// GetTask wraps GetTaskWithContext using context.Background.
+/*
+GetTask Get a task. Wraps GetTaskWithContext using context.Background.
+
+Get the task of the given taskID.
+
+Request can be constructed by NewApiGetTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return Task
+*/
 func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*Task, error) {
 	return c.GetTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return Task
+/*
+GetTask Get a task.
+
+Get the task of the given taskID.
+
+Request can be constructed by NewApiGetTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return Task
+*/
 func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest, opts ...Option) (*Task, error) {
 	var (
 		postBody    any
@@ -3048,18 +3543,6 @@ func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest,
 	}
 
 	return returnValue, nil
-}
-
-type ApiGetTasksRequest struct {
-	itemsPerPage  int32
-	page          int32
-	action        []ActionType
-	enabled       bool
-	sourceID      []string
-	destinationID []string
-	triggerType   []TriggerType
-	sort          *TaskSortKeys
-	order         *OrderKeys
 }
 
 func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
@@ -3153,71 +3636,118 @@ func (r *ApiGetTasksRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The number of items per page to return.
+// ApiGetTasksRequest represents the request with all the parameters for the API call.
+type ApiGetTasksRequest struct {
+	itemsPerPage  int32
+	page          int32
+	action        []ActionType
+	enabled       bool
+	sourceID      []string
+	destinationID []string
+	triggerType   []TriggerType
+	sort          *TaskSortKeys
+	order         *OrderKeys
+}
+
+// NewApiGetTasksRequest creates an instance of the ApiGetTasksRequest to be used for the API call.
+func (c *APIClient) NewApiGetTasksRequest() ApiGetTasksRequest {
+	return ApiGetTasksRequest{}
+}
+
+// WithItemsPerPage adds the itemsPerPage to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithItemsPerPage(itemsPerPage int32) ApiGetTasksRequest {
 	r.itemsPerPage = itemsPerPage
 	return r
 }
 
-// The page number to fetch, starting at 1.
+// WithPage adds the page to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithPage(page int32) ApiGetTasksRequest {
 	r.page = page
 	return r
 }
 
-// The action of the tasks to retrieve.
+// WithAction adds the action to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithAction(action []ActionType) ApiGetTasksRequest {
 	r.action = action
 	return r
 }
 
-// Whether the task is enabled or not.
+// WithEnabled adds the enabled to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithEnabled(enabled bool) ApiGetTasksRequest {
 	r.enabled = enabled
 	return r
 }
 
-// The sourceIDs of the tasks to retrive.
+// WithSourceID adds the sourceID to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithSourceID(sourceID []string) ApiGetTasksRequest {
 	r.sourceID = sourceID
 	return r
 }
 
-// The destinationIDs of the tasks to retrive.
+// WithDestinationID adds the destinationID to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithDestinationID(destinationID []string) ApiGetTasksRequest {
 	r.destinationID = destinationID
 	return r
 }
 
-// The trigger type of the task.
+// WithTriggerType adds the triggerType to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithTriggerType(triggerType []TriggerType) ApiGetTasksRequest {
 	r.triggerType = triggerType
 	return r
 }
 
-// The key by which the list should be sorted.
+// WithSort adds the sort to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithSort(sort *TaskSortKeys) ApiGetTasksRequest {
 	r.sort = sort
 	return r
 }
 
-// The order of the returned list.
+// WithOrder adds the order to the ApiGetTasksRequest and returns the request for chaining.
 func (r ApiGetTasksRequest) WithOrder(order *OrderKeys) ApiGetTasksRequest {
 	r.order = order
 	return r
 }
 
-// @return ApiGetTasksRequest
-func (c *APIClient) NewApiGetTasksRequest() ApiGetTasksRequest {
-	return ApiGetTasksRequest{}
-}
+/*
+GetTasks Get a list of tasks. Wraps GetTasksWithContext using context.Background.
 
-// GetTasks wraps GetTasksWithContext using context.Background.
+Get a list of tasks for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetTasksRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param action []ActionType - The action of the tasks to retrieve.
+	@param enabled bool - Whether the task is enabled or not.
+	@param sourceID []string - The sourceIDs of the tasks to retrive.
+	@param destinationID []string - The destinationIDs of the tasks to retrive.
+	@param triggerType []TriggerType - The trigger type of the task.
+	@param sort TaskSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListTasksResponse
+*/
 func (c *APIClient) GetTasks(r ApiGetTasksRequest, opts ...Option) (*ListTasksResponse, error) {
 	return c.GetTasksWithContext(context.Background(), r, opts...)
 }
 
-// @return ListTasksResponse
+/*
+GetTasks Get a list of tasks.
+
+Get a list of tasks for the given query parameters, with pagination details.
+
+Request can be constructed by NewApiGetTasksRequest with parameters below.
+
+	@param itemsPerPage int32 - The number of items per page to return.
+	@param page int32 - The page number to fetch, starting at 1.
+	@param action []ActionType - The action of the tasks to retrieve.
+	@param enabled bool - Whether the task is enabled or not.
+	@param sourceID []string - The sourceIDs of the tasks to retrive.
+	@param destinationID []string - The destinationIDs of the tasks to retrive.
+	@param triggerType []TriggerType - The trigger type of the task.
+	@param sort TaskSortKeys - The key by which the list should be sorted.
+	@param order OrderKeys - The order of the returned list.
+	@return ListTasksResponse
+*/
 func (c *APIClient) GetTasksWithContext(ctx context.Context, r ApiGetTasksRequest, opts ...Option) (*ListTasksResponse, error) {
 	var (
 		postBody    any
@@ -3311,12 +3841,6 @@ func (c *APIClient) GetTasksWithContext(ctx context.Context, r ApiGetTasksReques
 	return returnValue, nil
 }
 
-type ApiPostRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3354,31 +3878,60 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
-	r.parameters = parameters
-	return r
+// ApiPostRequest represents the request with all the parameters for the API call.
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPostRequest
+// NewApiPostRequest creates an instance of the ApiPostRequest to be used for the API call.
 func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	return ApiPostRequest{
 		path: path,
 	}
 }
 
-// Post wraps PostWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+/*
+Post Send requests to the Algolia REST API. Wraps PostWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PostWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Post Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -3484,12 +4037,6 @@ func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts 
 	return returnValue, nil
 }
 
-type ApiPutRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3527,31 +4074,60 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
-	r.parameters = parameters
-	return r
+// ApiPutRequest represents the request with all the parameters for the API call.
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPutRequest
+// NewApiPutRequest creates an instance of the ApiPutRequest to be used for the API call.
 func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	return ApiPutRequest{
 		path: path,
 	}
 }
 
-// Put wraps PutWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+/*
+Put Send requests to the Algolia REST API. Wraps PutWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PutWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Put Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -3657,10 +4233,6 @@ func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiRunTaskRequest struct {
-	taskID string
-}
-
 func (r *ApiRunTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3680,19 +4252,42 @@ func (r *ApiRunTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiRunTaskRequest
+// ApiRunTaskRequest represents the request with all the parameters for the API call.
+type ApiRunTaskRequest struct {
+	taskID string
+}
+
+// NewApiRunTaskRequest creates an instance of the ApiRunTaskRequest to be used for the API call.
 func (c *APIClient) NewApiRunTaskRequest(taskID string) ApiRunTaskRequest {
 	return ApiRunTaskRequest{
 		taskID: taskID,
 	}
 }
 
-// RunTask wraps RunTaskWithContext using context.Background.
+/*
+RunTask Run a task. Wraps RunTaskWithContext using context.Background.
+
+Run the task of the given taskID.
+
+Request can be constructed by NewApiRunTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return RunResponse
+*/
 func (c *APIClient) RunTask(r ApiRunTaskRequest, opts ...Option) (*RunResponse, error) {
 	return c.RunTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return RunResponse
+/*
+RunTask Run a task.
+
+Run the task of the given taskID.
+
+Request can be constructed by NewApiRunTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@return RunResponse
+*/
 func (c *APIClient) RunTaskWithContext(ctx context.Context, r ApiRunTaskRequest, opts ...Option) (*RunResponse, error) {
 	var (
 		postBody    any
@@ -3759,10 +4354,6 @@ func (c *APIClient) RunTaskWithContext(ctx context.Context, r ApiRunTaskRequest,
 	return returnValue, nil
 }
 
-type ApiSearchAuthenticationsRequest struct {
-	authenticationSearch *AuthenticationSearch
-}
-
 func (r *ApiSearchAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3787,19 +4378,42 @@ func (r *ApiSearchAuthenticationsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSearchAuthenticationsRequest
+// ApiSearchAuthenticationsRequest represents the request with all the parameters for the API call.
+type ApiSearchAuthenticationsRequest struct {
+	authenticationSearch *AuthenticationSearch
+}
+
+// NewApiSearchAuthenticationsRequest creates an instance of the ApiSearchAuthenticationsRequest to be used for the API call.
 func (c *APIClient) NewApiSearchAuthenticationsRequest(authenticationSearch *AuthenticationSearch) ApiSearchAuthenticationsRequest {
 	return ApiSearchAuthenticationsRequest{
 		authenticationSearch: authenticationSearch,
 	}
 }
 
-// SearchAuthentications wraps SearchAuthenticationsWithContext using context.Background.
+/*
+SearchAuthentications Search among authentications. Wraps SearchAuthenticationsWithContext using context.Background.
+
+Search among authentications with a defined set of parameters.
+
+Request can be constructed by NewApiSearchAuthenticationsRequest with parameters below.
+
+	@param authenticationSearch AuthenticationSearch
+	@return []Authentication
+*/
 func (c *APIClient) SearchAuthentications(r ApiSearchAuthenticationsRequest, opts ...Option) ([]Authentication, error) {
 	return c.SearchAuthenticationsWithContext(context.Background(), r, opts...)
 }
 
-// @return []Authentication
+/*
+SearchAuthentications Search among authentications.
+
+Search among authentications with a defined set of parameters.
+
+Request can be constructed by NewApiSearchAuthenticationsRequest with parameters below.
+
+	@param authenticationSearch AuthenticationSearch
+	@return []Authentication
+*/
 func (c *APIClient) SearchAuthenticationsWithContext(ctx context.Context, r ApiSearchAuthenticationsRequest, opts ...Option) ([]Authentication, error) {
 	var (
 		postBody    any
@@ -3870,10 +4484,6 @@ func (c *APIClient) SearchAuthenticationsWithContext(ctx context.Context, r ApiS
 	return returnValue, nil
 }
 
-type ApiSearchDestinationsRequest struct {
-	destinationSearch *DestinationSearch
-}
-
 func (r *ApiSearchDestinationsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -3898,19 +4508,42 @@ func (r *ApiSearchDestinationsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSearchDestinationsRequest
+// ApiSearchDestinationsRequest represents the request with all the parameters for the API call.
+type ApiSearchDestinationsRequest struct {
+	destinationSearch *DestinationSearch
+}
+
+// NewApiSearchDestinationsRequest creates an instance of the ApiSearchDestinationsRequest to be used for the API call.
 func (c *APIClient) NewApiSearchDestinationsRequest(destinationSearch *DestinationSearch) ApiSearchDestinationsRequest {
 	return ApiSearchDestinationsRequest{
 		destinationSearch: destinationSearch,
 	}
 }
 
-// SearchDestinations wraps SearchDestinationsWithContext using context.Background.
+/*
+SearchDestinations Search among destinations. Wraps SearchDestinationsWithContext using context.Background.
+
+Search among destinations with a defined set of parameters.
+
+Request can be constructed by NewApiSearchDestinationsRequest with parameters below.
+
+	@param destinationSearch DestinationSearch
+	@return []Destination
+*/
 func (c *APIClient) SearchDestinations(r ApiSearchDestinationsRequest, opts ...Option) ([]Destination, error) {
 	return c.SearchDestinationsWithContext(context.Background(), r, opts...)
 }
 
-// @return []Destination
+/*
+SearchDestinations Search among destinations.
+
+Search among destinations with a defined set of parameters.
+
+Request can be constructed by NewApiSearchDestinationsRequest with parameters below.
+
+	@param destinationSearch DestinationSearch
+	@return []Destination
+*/
 func (c *APIClient) SearchDestinationsWithContext(ctx context.Context, r ApiSearchDestinationsRequest, opts ...Option) ([]Destination, error) {
 	var (
 		postBody    any
@@ -3981,10 +4614,6 @@ func (c *APIClient) SearchDestinationsWithContext(ctx context.Context, r ApiSear
 	return returnValue, nil
 }
 
-type ApiSearchSourcesRequest struct {
-	sourceSearch *SourceSearch
-}
-
 func (r *ApiSearchSourcesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4009,19 +4638,42 @@ func (r *ApiSearchSourcesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSearchSourcesRequest
+// ApiSearchSourcesRequest represents the request with all the parameters for the API call.
+type ApiSearchSourcesRequest struct {
+	sourceSearch *SourceSearch
+}
+
+// NewApiSearchSourcesRequest creates an instance of the ApiSearchSourcesRequest to be used for the API call.
 func (c *APIClient) NewApiSearchSourcesRequest(sourceSearch *SourceSearch) ApiSearchSourcesRequest {
 	return ApiSearchSourcesRequest{
 		sourceSearch: sourceSearch,
 	}
 }
 
-// SearchSources wraps SearchSourcesWithContext using context.Background.
+/*
+SearchSources Search among sources. Wraps SearchSourcesWithContext using context.Background.
+
+Search among sources with a defined set of parameters.
+
+Request can be constructed by NewApiSearchSourcesRequest with parameters below.
+
+	@param sourceSearch SourceSearch
+	@return []Source
+*/
 func (c *APIClient) SearchSources(r ApiSearchSourcesRequest, opts ...Option) ([]Source, error) {
 	return c.SearchSourcesWithContext(context.Background(), r, opts...)
 }
 
-// @return []Source
+/*
+SearchSources Search among sources.
+
+Search among sources with a defined set of parameters.
+
+Request can be constructed by NewApiSearchSourcesRequest with parameters below.
+
+	@param sourceSearch SourceSearch
+	@return []Source
+*/
 func (c *APIClient) SearchSourcesWithContext(ctx context.Context, r ApiSearchSourcesRequest, opts ...Option) ([]Source, error) {
 	var (
 		postBody    any
@@ -4092,10 +4744,6 @@ func (c *APIClient) SearchSourcesWithContext(ctx context.Context, r ApiSearchSou
 	return returnValue, nil
 }
 
-type ApiSearchTasksRequest struct {
-	taskSearch *TaskSearch
-}
-
 func (r *ApiSearchTasksRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4120,19 +4768,42 @@ func (r *ApiSearchTasksRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiSearchTasksRequest
+// ApiSearchTasksRequest represents the request with all the parameters for the API call.
+type ApiSearchTasksRequest struct {
+	taskSearch *TaskSearch
+}
+
+// NewApiSearchTasksRequest creates an instance of the ApiSearchTasksRequest to be used for the API call.
 func (c *APIClient) NewApiSearchTasksRequest(taskSearch *TaskSearch) ApiSearchTasksRequest {
 	return ApiSearchTasksRequest{
 		taskSearch: taskSearch,
 	}
 }
 
-// SearchTasks wraps SearchTasksWithContext using context.Background.
+/*
+SearchTasks Search among tasks. Wraps SearchTasksWithContext using context.Background.
+
+Search among tasks with a defined set of parameters.
+
+Request can be constructed by NewApiSearchTasksRequest with parameters below.
+
+	@param taskSearch TaskSearch
+	@return []Task
+*/
 func (c *APIClient) SearchTasks(r ApiSearchTasksRequest, opts ...Option) ([]Task, error) {
 	return c.SearchTasksWithContext(context.Background(), r, opts...)
 }
 
-// @return []Task
+/*
+SearchTasks Search among tasks.
+
+Search among tasks with a defined set of parameters.
+
+Request can be constructed by NewApiSearchTasksRequest with parameters below.
+
+	@param taskSearch TaskSearch
+	@return []Task
+*/
 func (c *APIClient) SearchTasksWithContext(ctx context.Context, r ApiSearchTasksRequest, opts ...Option) ([]Task, error) {
 	var (
 		postBody    any
@@ -4203,11 +4874,6 @@ func (c *APIClient) SearchTasksWithContext(ctx context.Context, r ApiSearchTasks
 	return returnValue, nil
 }
 
-type ApiUpdateAuthenticationRequest struct {
-	authenticationID     string
-	authenticationUpdate *AuthenticationUpdate
-}
-
 func (r *ApiUpdateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4241,7 +4907,13 @@ func (r *ApiUpdateAuthenticationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateAuthenticationRequest
+// ApiUpdateAuthenticationRequest represents the request with all the parameters for the API call.
+type ApiUpdateAuthenticationRequest struct {
+	authenticationID     string
+	authenticationUpdate *AuthenticationUpdate
+}
+
+// NewApiUpdateAuthenticationRequest creates an instance of the ApiUpdateAuthenticationRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateAuthenticationRequest(authenticationID string, authenticationUpdate *AuthenticationUpdate) ApiUpdateAuthenticationRequest {
 	return ApiUpdateAuthenticationRequest{
 		authenticationID:     authenticationID,
@@ -4249,12 +4921,32 @@ func (c *APIClient) NewApiUpdateAuthenticationRequest(authenticationID string, a
 	}
 }
 
-// UpdateAuthentication wraps UpdateAuthenticationWithContext using context.Background.
+/*
+UpdateAuthentication Update a authentication. Wraps UpdateAuthenticationWithContext using context.Background.
+
+Update the authentication of the given authenticationID.
+
+Request can be constructed by NewApiUpdateAuthenticationRequest with parameters below.
+
+	@param authenticationID string - The authentication UUID.
+	@param authenticationUpdate AuthenticationUpdate
+	@return AuthenticationUpdateResponse
+*/
 func (c *APIClient) UpdateAuthentication(r ApiUpdateAuthenticationRequest, opts ...Option) (*AuthenticationUpdateResponse, error) {
 	return c.UpdateAuthenticationWithContext(context.Background(), r, opts...)
 }
 
-// @return AuthenticationUpdateResponse
+/*
+UpdateAuthentication Update a authentication.
+
+Update the authentication of the given authenticationID.
+
+Request can be constructed by NewApiUpdateAuthenticationRequest with parameters below.
+
+	@param authenticationID string - The authentication UUID.
+	@param authenticationUpdate AuthenticationUpdate
+	@return AuthenticationUpdateResponse
+*/
 func (c *APIClient) UpdateAuthenticationWithContext(ctx context.Context, r ApiUpdateAuthenticationRequest, opts ...Option) (*AuthenticationUpdateResponse, error) {
 	var (
 		postBody    any
@@ -4326,11 +5018,6 @@ func (c *APIClient) UpdateAuthenticationWithContext(ctx context.Context, r ApiUp
 	return returnValue, nil
 }
 
-type ApiUpdateDestinationRequest struct {
-	destinationID     string
-	destinationUpdate *DestinationUpdate
-}
-
 func (r *ApiUpdateDestinationRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4364,7 +5051,13 @@ func (r *ApiUpdateDestinationRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateDestinationRequest
+// ApiUpdateDestinationRequest represents the request with all the parameters for the API call.
+type ApiUpdateDestinationRequest struct {
+	destinationID     string
+	destinationUpdate *DestinationUpdate
+}
+
+// NewApiUpdateDestinationRequest creates an instance of the ApiUpdateDestinationRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateDestinationRequest(destinationID string, destinationUpdate *DestinationUpdate) ApiUpdateDestinationRequest {
 	return ApiUpdateDestinationRequest{
 		destinationID:     destinationID,
@@ -4372,12 +5065,32 @@ func (c *APIClient) NewApiUpdateDestinationRequest(destinationID string, destina
 	}
 }
 
-// UpdateDestination wraps UpdateDestinationWithContext using context.Background.
+/*
+UpdateDestination Update a destination. Wraps UpdateDestinationWithContext using context.Background.
+
+Update the destination of the given destinationID.
+
+Request can be constructed by NewApiUpdateDestinationRequest with parameters below.
+
+	@param destinationID string - The destination UUID.
+	@param destinationUpdate DestinationUpdate
+	@return DestinationUpdateResponse
+*/
 func (c *APIClient) UpdateDestination(r ApiUpdateDestinationRequest, opts ...Option) (*DestinationUpdateResponse, error) {
 	return c.UpdateDestinationWithContext(context.Background(), r, opts...)
 }
 
-// @return DestinationUpdateResponse
+/*
+UpdateDestination Update a destination.
+
+Update the destination of the given destinationID.
+
+Request can be constructed by NewApiUpdateDestinationRequest with parameters below.
+
+	@param destinationID string - The destination UUID.
+	@param destinationUpdate DestinationUpdate
+	@return DestinationUpdateResponse
+*/
 func (c *APIClient) UpdateDestinationWithContext(ctx context.Context, r ApiUpdateDestinationRequest, opts ...Option) (*DestinationUpdateResponse, error) {
 	var (
 		postBody    any
@@ -4449,11 +5162,6 @@ func (c *APIClient) UpdateDestinationWithContext(ctx context.Context, r ApiUpdat
 	return returnValue, nil
 }
 
-type ApiUpdateSourceRequest struct {
-	sourceID     string
-	sourceUpdate *SourceUpdate
-}
-
 func (r *ApiUpdateSourceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4487,7 +5195,13 @@ func (r *ApiUpdateSourceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateSourceRequest
+// ApiUpdateSourceRequest represents the request with all the parameters for the API call.
+type ApiUpdateSourceRequest struct {
+	sourceID     string
+	sourceUpdate *SourceUpdate
+}
+
+// NewApiUpdateSourceRequest creates an instance of the ApiUpdateSourceRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateSourceRequest(sourceID string, sourceUpdate *SourceUpdate) ApiUpdateSourceRequest {
 	return ApiUpdateSourceRequest{
 		sourceID:     sourceID,
@@ -4495,12 +5209,32 @@ func (c *APIClient) NewApiUpdateSourceRequest(sourceID string, sourceUpdate *Sou
 	}
 }
 
-// UpdateSource wraps UpdateSourceWithContext using context.Background.
+/*
+UpdateSource Update a source. Wraps UpdateSourceWithContext using context.Background.
+
+Update the source of the given sourceID.
+
+Request can be constructed by NewApiUpdateSourceRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@param sourceUpdate SourceUpdate
+	@return SourceUpdateResponse
+*/
 func (c *APIClient) UpdateSource(r ApiUpdateSourceRequest, opts ...Option) (*SourceUpdateResponse, error) {
 	return c.UpdateSourceWithContext(context.Background(), r, opts...)
 }
 
-// @return SourceUpdateResponse
+/*
+UpdateSource Update a source.
+
+Update the source of the given sourceID.
+
+Request can be constructed by NewApiUpdateSourceRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@param sourceUpdate SourceUpdate
+	@return SourceUpdateResponse
+*/
 func (c *APIClient) UpdateSourceWithContext(ctx context.Context, r ApiUpdateSourceRequest, opts ...Option) (*SourceUpdateResponse, error) {
 	var (
 		postBody    any
@@ -4572,11 +5306,6 @@ func (c *APIClient) UpdateSourceWithContext(ctx context.Context, r ApiUpdateSour
 	return returnValue, nil
 }
 
-type ApiUpdateTaskRequest struct {
-	taskID     string
-	taskUpdate *TaskUpdate
-}
-
 func (r *ApiUpdateTaskRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4610,7 +5339,13 @@ func (r *ApiUpdateTaskRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateTaskRequest
+// ApiUpdateTaskRequest represents the request with all the parameters for the API call.
+type ApiUpdateTaskRequest struct {
+	taskID     string
+	taskUpdate *TaskUpdate
+}
+
+// NewApiUpdateTaskRequest creates an instance of the ApiUpdateTaskRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateTaskRequest(taskID string, taskUpdate *TaskUpdate) ApiUpdateTaskRequest {
 	return ApiUpdateTaskRequest{
 		taskID:     taskID,
@@ -4618,12 +5353,32 @@ func (c *APIClient) NewApiUpdateTaskRequest(taskID string, taskUpdate *TaskUpdat
 	}
 }
 
-// UpdateTask wraps UpdateTaskWithContext using context.Background.
+/*
+UpdateTask Update a task. Wraps UpdateTaskWithContext using context.Background.
+
+Update the task of the given taskID.
+
+Request can be constructed by NewApiUpdateTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@param taskUpdate TaskUpdate
+	@return TaskUpdateResponse
+*/
 func (c *APIClient) UpdateTask(r ApiUpdateTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	return c.UpdateTaskWithContext(context.Background(), r, opts...)
 }
 
-// @return TaskUpdateResponse
+/*
+UpdateTask Update a task.
+
+Update the task of the given taskID.
+
+Request can be constructed by NewApiUpdateTaskRequest with parameters below.
+
+	@param taskID string - The task UUID.
+	@param taskUpdate TaskUpdate
+	@return TaskUpdateResponse
+*/
 func (c *APIClient) UpdateTaskWithContext(ctx context.Context, r ApiUpdateTaskRequest, opts ...Option) (*TaskUpdateResponse, error) {
 	var (
 		postBody    any

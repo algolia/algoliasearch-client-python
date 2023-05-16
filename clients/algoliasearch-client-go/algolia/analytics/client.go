@@ -50,6 +50,7 @@ func NewClient(appID, apiKey string, region Region) *APIClient {
 	})
 }
 
+// NewClientWithConfig creates a new API client with the given configuration to fully customize the client behaviour.
 func NewClientWithConfig(cfg Configuration) *APIClient {
 	var hosts []*transport.StatefulHost
 
@@ -100,7 +101,7 @@ func getDefaultHosts(r Region) []*transport.StatefulHost {
 	return hosts
 }
 func getUserAgent() string {
-	return fmt.Sprintf("Algolia for Go (4.0.0-alpha.8); Go (%s); Analytics (4.0.0-alpha.8)", runtime.Version())
+	return fmt.Sprintf("Algolia for Go (4.0.0-alpha.9); Go (%s); Analytics (4.0.0-alpha.9)", runtime.Version())
 }
 
 func atoi(in string) (int, error) {

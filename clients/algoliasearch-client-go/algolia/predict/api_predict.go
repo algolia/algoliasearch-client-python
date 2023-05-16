@@ -35,10 +35,6 @@ func HeaderParamOption(name string, val any) Option {
 	}
 }
 
-type ApiActivateModelInstanceRequest struct {
-	activateModelParams *ActivateModelParams
-}
-
 func (r *ApiActivateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -63,19 +59,42 @@ func (r *ApiActivateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiActivateModelInstanceRequest
+// ApiActivateModelInstanceRequest represents the request with all the parameters for the API call.
+type ApiActivateModelInstanceRequest struct {
+	activateModelParams *ActivateModelParams
+}
+
+// NewApiActivateModelInstanceRequest creates an instance of the ApiActivateModelInstanceRequest to be used for the API call.
 func (c *APIClient) NewApiActivateModelInstanceRequest(activateModelParams *ActivateModelParams) ApiActivateModelInstanceRequest {
 	return ApiActivateModelInstanceRequest{
 		activateModelParams: activateModelParams,
 	}
 }
 
-// ActivateModelInstance wraps ActivateModelInstanceWithContext using context.Background.
+/*
+ActivateModelInstance Activate a model instance. Wraps ActivateModelInstanceWithContext using context.Background.
+
+Activate an existing model template. This action triggers the training and inference pipelines for the selected model.  The model is added with `modelStatus=pending`. If a model with the exact same source & index already exists, the API endpoint returns an error.
+
+Request can be constructed by NewApiActivateModelInstanceRequest with parameters below.
+
+	@param activateModelParams ActivateModelParams
+	@return ActivateModelInstanceResponse
+*/
 func (c *APIClient) ActivateModelInstance(r ApiActivateModelInstanceRequest, opts ...Option) (*ActivateModelInstanceResponse, error) {
 	return c.ActivateModelInstanceWithContext(context.Background(), r, opts...)
 }
 
-// @return ActivateModelInstanceResponse
+/*
+ActivateModelInstance Activate a model instance.
+
+Activate an existing model template. This action triggers the training and inference pipelines for the selected model.  The model is added with `modelStatus=pending`. If a model with the exact same source & index already exists, the API endpoint returns an error.
+
+Request can be constructed by NewApiActivateModelInstanceRequest with parameters below.
+
+	@param activateModelParams ActivateModelParams
+	@return ActivateModelInstanceResponse
+*/
 func (c *APIClient) ActivateModelInstanceWithContext(ctx context.Context, r ApiActivateModelInstanceRequest, opts ...Option) (*ActivateModelInstanceResponse, error) {
 	var (
 		postBody    any
@@ -164,10 +183,6 @@ func (c *APIClient) ActivateModelInstanceWithContext(ctx context.Context, r ApiA
 	return returnValue, nil
 }
 
-type ApiCreateSegmentRequest struct {
-	createSegmentParams *CreateSegmentParams
-}
-
 func (r *ApiCreateSegmentRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -192,19 +207,42 @@ func (r *ApiCreateSegmentRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiCreateSegmentRequest
+// ApiCreateSegmentRequest represents the request with all the parameters for the API call.
+type ApiCreateSegmentRequest struct {
+	createSegmentParams *CreateSegmentParams
+}
+
+// NewApiCreateSegmentRequest creates an instance of the ApiCreateSegmentRequest to be used for the API call.
 func (c *APIClient) NewApiCreateSegmentRequest(createSegmentParams *CreateSegmentParams) ApiCreateSegmentRequest {
 	return ApiCreateSegmentRequest{
 		createSegmentParams: createSegmentParams,
 	}
 }
 
-// CreateSegment wraps CreateSegmentWithContext using context.Background.
+/*
+CreateSegment Create a segment. Wraps CreateSegmentWithContext using context.Background.
+
+Create a new segment. All segments added by this endpoint will have a computed type. The endpoint receives a filters parameter, with a syntax similar to filters for Rules.
+
+Request can be constructed by NewApiCreateSegmentRequest with parameters below.
+
+	@param createSegmentParams CreateSegmentParams
+	@return CreateSegmentResponse
+*/
 func (c *APIClient) CreateSegment(r ApiCreateSegmentRequest, opts ...Option) (*CreateSegmentResponse, error) {
 	return c.CreateSegmentWithContext(context.Background(), r, opts...)
 }
 
-// @return CreateSegmentResponse
+/*
+CreateSegment Create a segment.
+
+Create a new segment. All segments added by this endpoint will have a computed type. The endpoint receives a filters parameter, with a syntax similar to filters for Rules.
+
+Request can be constructed by NewApiCreateSegmentRequest with parameters below.
+
+	@param createSegmentParams CreateSegmentParams
+	@return CreateSegmentResponse
+*/
 func (c *APIClient) CreateSegmentWithContext(ctx context.Context, r ApiCreateSegmentRequest, opts ...Option) (*CreateSegmentResponse, error) {
 	var (
 		postBody    any
@@ -302,11 +340,6 @@ func (c *APIClient) CreateSegmentWithContext(ctx context.Context, r ApiCreateSeg
 	return returnValue, nil
 }
 
-type ApiDelRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -335,25 +368,51 @@ func (r *ApiDelRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
-	r.parameters = parameters
-	return r
+// ApiDelRequest represents the request with all the parameters for the API call.
+type ApiDelRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiDelRequest
+// NewApiDelRequest creates an instance of the ApiDelRequest to be used for the API call.
 func (c *APIClient) NewApiDelRequest(path string) ApiDelRequest {
 	return ApiDelRequest{
 		path: path,
 	}
 }
 
-// Del wraps DelWithContext using context.Background.
+// WithParameters adds the parameters to the ApiDelRequest and returns the request for chaining.
+func (r ApiDelRequest) WithParameters(parameters map[string]interface{}) ApiDelRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Del Send requests to the Algolia REST API. Wraps DelWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.DelWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Del Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiDelRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -453,10 +512,6 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiDeleteModelInstanceRequest struct {
-	modelID string
-}
-
 func (r *ApiDeleteModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -476,19 +531,42 @@ func (r *ApiDeleteModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteModelInstanceRequest
+// ApiDeleteModelInstanceRequest represents the request with all the parameters for the API call.
+type ApiDeleteModelInstanceRequest struct {
+	modelID string
+}
+
+// NewApiDeleteModelInstanceRequest creates an instance of the ApiDeleteModelInstanceRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteModelInstanceRequest(modelID string) ApiDeleteModelInstanceRequest {
 	return ApiDeleteModelInstanceRequest{
 		modelID: modelID,
 	}
 }
 
-// DeleteModelInstance wraps DeleteModelInstanceWithContext using context.Background.
+/*
+DeleteModelInstance Delete a model instance. Wraps DeleteModelInstanceWithContext using context.Background.
+
+Delete the model’s configuration, pipelines and generated predictions.
+
+Request can be constructed by NewApiDeleteModelInstanceRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@return DeleteModelInstanceResponse
+*/
 func (c *APIClient) DeleteModelInstance(r ApiDeleteModelInstanceRequest, opts ...Option) (*DeleteModelInstanceResponse, error) {
 	return c.DeleteModelInstanceWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteModelInstanceResponse
+/*
+DeleteModelInstance Delete a model instance.
+
+Delete the model’s configuration, pipelines and generated predictions.
+
+Request can be constructed by NewApiDeleteModelInstanceRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@return DeleteModelInstanceResponse
+*/
 func (c *APIClient) DeleteModelInstanceWithContext(ctx context.Context, r ApiDeleteModelInstanceRequest, opts ...Option) (*DeleteModelInstanceResponse, error) {
 	var (
 		postBody    any
@@ -582,10 +660,6 @@ func (c *APIClient) DeleteModelInstanceWithContext(ctx context.Context, r ApiDel
 	return returnValue, nil
 }
 
-type ApiDeleteSegmentRequest struct {
-	segmentID string
-}
-
 func (r *ApiDeleteSegmentRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -605,19 +679,46 @@ func (r *ApiDeleteSegmentRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteSegmentRequest
+// ApiDeleteSegmentRequest represents the request with all the parameters for the API call.
+type ApiDeleteSegmentRequest struct {
+	segmentID string
+}
+
+// NewApiDeleteSegmentRequest creates an instance of the ApiDeleteSegmentRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteSegmentRequest(segmentID string) ApiDeleteSegmentRequest {
 	return ApiDeleteSegmentRequest{
 		segmentID: segmentID,
 	}
 }
 
-// DeleteSegment wraps DeleteSegmentWithContext using context.Background.
+/*
+DeleteSegment Delete a segment's configuration. Wraps DeleteSegmentWithContext using context.Background.
+
+Delete the segment’s configuration. User intents (predictions) from the segment are not deleted. All segment types (computed or custom) can be deleted.
+
+When the query is successful, the HTTP response is 200 OK and returns the date until which you can safely consider the data as being deleted.
+
+Request can be constructed by NewApiDeleteSegmentRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@return DeleteSegmentResponse
+*/
 func (c *APIClient) DeleteSegment(r ApiDeleteSegmentRequest, opts ...Option) (*DeleteSegmentResponse, error) {
 	return c.DeleteSegmentWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteSegmentResponse
+/*
+DeleteSegment Delete a segment's configuration.
+
+Delete the segment’s configuration. User intents (predictions) from the segment are not deleted. All segment types (computed or custom) can be deleted.
+
+When the query is successful, the HTTP response is 200 OK and returns the date until which you can safely consider the data as being deleted.
+
+Request can be constructed by NewApiDeleteSegmentRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@return DeleteSegmentResponse
+*/
 func (c *APIClient) DeleteSegmentWithContext(ctx context.Context, r ApiDeleteSegmentRequest, opts ...Option) (*DeleteSegmentResponse, error) {
 	var (
 		postBody    any
@@ -711,10 +812,6 @@ func (c *APIClient) DeleteSegmentWithContext(ctx context.Context, r ApiDeleteSeg
 	return returnValue, nil
 }
 
-type ApiDeleteUserProfileRequest struct {
-	userID string
-}
-
 func (r *ApiDeleteUserProfileRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -734,19 +831,42 @@ func (r *ApiDeleteUserProfileRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiDeleteUserProfileRequest
+// ApiDeleteUserProfileRequest represents the request with all the parameters for the API call.
+type ApiDeleteUserProfileRequest struct {
+	userID string
+}
+
+// NewApiDeleteUserProfileRequest creates an instance of the ApiDeleteUserProfileRequest to be used for the API call.
 func (c *APIClient) NewApiDeleteUserProfileRequest(userID string) ApiDeleteUserProfileRequest {
 	return ApiDeleteUserProfileRequest{
 		userID: userID,
 	}
 }
 
-// DeleteUserProfile wraps DeleteUserProfileWithContext using context.Background.
+/*
+DeleteUserProfile Delete user profile. Wraps DeleteUserProfileWithContext using context.Background.
+
+Delete all data and predictions associated with an authenticated user (userID) or an anonymous user (cookieID, sessionID).
+
+Request can be constructed by NewApiDeleteUserProfileRequest with parameters below.
+
+	@param userID string - User ID for authenticated users or cookie ID for non-authenticated repeated users (visitors).
+	@return DeleteUserProfileResponse
+*/
 func (c *APIClient) DeleteUserProfile(r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
 	return c.DeleteUserProfileWithContext(context.Background(), r, opts...)
 }
 
-// @return DeleteUserProfileResponse
+/*
+DeleteUserProfile Delete user profile.
+
+Delete all data and predictions associated with an authenticated user (userID) or an anonymous user (cookieID, sessionID).
+
+Request can be constructed by NewApiDeleteUserProfileRequest with parameters below.
+
+	@param userID string - User ID for authenticated users or cookie ID for non-authenticated repeated users (visitors).
+	@return DeleteUserProfileResponse
+*/
 func (c *APIClient) DeleteUserProfileWithContext(ctx context.Context, r ApiDeleteUserProfileRequest, opts ...Option) (*DeleteUserProfileResponse, error) {
 	var (
 		postBody    any
@@ -840,10 +960,6 @@ func (c *APIClient) DeleteUserProfileWithContext(ctx context.Context, r ApiDelet
 	return returnValue, nil
 }
 
-type ApiFetchAllSegmentsRequest struct {
-	type_ *SegmentType
-}
-
 func (r *ApiFetchAllSegmentsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -863,23 +979,46 @@ func (r *ApiFetchAllSegmentsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// The type of segments to fetch.
+// ApiFetchAllSegmentsRequest represents the request with all the parameters for the API call.
+type ApiFetchAllSegmentsRequest struct {
+	type_ *SegmentType
+}
+
+// NewApiFetchAllSegmentsRequest creates an instance of the ApiFetchAllSegmentsRequest to be used for the API call.
+func (c *APIClient) NewApiFetchAllSegmentsRequest() ApiFetchAllSegmentsRequest {
+	return ApiFetchAllSegmentsRequest{}
+}
+
+// WithType_ adds the type_ to the ApiFetchAllSegmentsRequest and returns the request for chaining.
 func (r ApiFetchAllSegmentsRequest) WithType_(type_ *SegmentType) ApiFetchAllSegmentsRequest {
 	r.type_ = type_
 	return r
 }
 
-// @return ApiFetchAllSegmentsRequest
-func (c *APIClient) NewApiFetchAllSegmentsRequest() ApiFetchAllSegmentsRequest {
-	return ApiFetchAllSegmentsRequest{}
-}
+/*
+FetchAllSegments Get all segments. Wraps FetchAllSegmentsWithContext using context.Background.
 
-// FetchAllSegments wraps FetchAllSegmentsWithContext using context.Background.
+Get the list of segments with their configuration.
+
+Request can be constructed by NewApiFetchAllSegmentsRequest with parameters below.
+
+	@param type_ SegmentType - The type of segments to fetch.
+	@return []Segment
+*/
 func (c *APIClient) FetchAllSegments(r ApiFetchAllSegmentsRequest, opts ...Option) ([]Segment, error) {
 	return c.FetchAllSegmentsWithContext(context.Background(), r, opts...)
 }
 
-// @return []Segment
+/*
+FetchAllSegments Get all segments.
+
+Get the list of segments with their configuration.
+
+Request can be constructed by NewApiFetchAllSegmentsRequest with parameters below.
+
+	@param type_ SegmentType - The type of segments to fetch.
+	@return []Segment
+*/
 func (c *APIClient) FetchAllSegmentsWithContext(ctx context.Context, r ApiFetchAllSegmentsRequest, opts ...Option) ([]Segment, error) {
 	var (
 		postBody    any
@@ -967,10 +1106,6 @@ func (c *APIClient) FetchAllSegmentsWithContext(ctx context.Context, r ApiFetchA
 	return returnValue, nil
 }
 
-type ApiFetchAllUserProfilesRequest struct {
-	fetchAllUserProfilesParams *FetchAllUserProfilesParams
-}
-
 func (r *ApiFetchAllUserProfilesRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -995,19 +1130,42 @@ func (r *ApiFetchAllUserProfilesRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiFetchAllUserProfilesRequest
+// ApiFetchAllUserProfilesRequest represents the request with all the parameters for the API call.
+type ApiFetchAllUserProfilesRequest struct {
+	fetchAllUserProfilesParams *FetchAllUserProfilesParams
+}
+
+// NewApiFetchAllUserProfilesRequest creates an instance of the ApiFetchAllUserProfilesRequest to be used for the API call.
 func (c *APIClient) NewApiFetchAllUserProfilesRequest(fetchAllUserProfilesParams *FetchAllUserProfilesParams) ApiFetchAllUserProfilesRequest {
 	return ApiFetchAllUserProfilesRequest{
 		fetchAllUserProfilesParams: fetchAllUserProfilesParams,
 	}
 }
 
-// FetchAllUserProfiles wraps FetchAllUserProfilesWithContext using context.Background.
+/*
+FetchAllUserProfiles Get all user profiles. Wraps FetchAllUserProfilesWithContext using context.Background.
+
+Get all users with predictions in the provided application.
+
+Request can be constructed by NewApiFetchAllUserProfilesRequest with parameters below.
+
+	@param fetchAllUserProfilesParams FetchAllUserProfilesParams
+	@return FetchAllUserProfilesResponse
+*/
 func (c *APIClient) FetchAllUserProfiles(r ApiFetchAllUserProfilesRequest, opts ...Option) (*FetchAllUserProfilesResponse, error) {
 	return c.FetchAllUserProfilesWithContext(context.Background(), r, opts...)
 }
 
-// @return FetchAllUserProfilesResponse
+/*
+FetchAllUserProfiles Get all user profiles.
+
+Get all users with predictions in the provided application.
+
+Request can be constructed by NewApiFetchAllUserProfilesRequest with parameters below.
+
+	@param fetchAllUserProfilesParams FetchAllUserProfilesParams
+	@return FetchAllUserProfilesResponse
+*/
 func (c *APIClient) FetchAllUserProfilesWithContext(ctx context.Context, r ApiFetchAllUserProfilesRequest, opts ...Option) (*FetchAllUserProfilesResponse, error) {
 	var (
 		postBody    any
@@ -1105,10 +1263,6 @@ func (c *APIClient) FetchAllUserProfilesWithContext(ctx context.Context, r ApiFe
 	return returnValue, nil
 }
 
-type ApiFetchSegmentRequest struct {
-	segmentID string
-}
-
 func (r *ApiFetchSegmentRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1128,19 +1282,42 @@ func (r *ApiFetchSegmentRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiFetchSegmentRequest
+// ApiFetchSegmentRequest represents the request with all the parameters for the API call.
+type ApiFetchSegmentRequest struct {
+	segmentID string
+}
+
+// NewApiFetchSegmentRequest creates an instance of the ApiFetchSegmentRequest to be used for the API call.
 func (c *APIClient) NewApiFetchSegmentRequest(segmentID string) ApiFetchSegmentRequest {
 	return ApiFetchSegmentRequest{
 		segmentID: segmentID,
 	}
 }
 
-// FetchSegment wraps FetchSegmentWithContext using context.Background.
+/*
+FetchSegment Get the segment configuration. Wraps FetchSegmentWithContext using context.Background.
+
+Get the segment configuration.
+
+Request can be constructed by NewApiFetchSegmentRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@return Segment
+*/
 func (c *APIClient) FetchSegment(r ApiFetchSegmentRequest, opts ...Option) (*Segment, error) {
 	return c.FetchSegmentWithContext(context.Background(), r, opts...)
 }
 
-// @return Segment
+/*
+FetchSegment Get the segment configuration.
+
+Get the segment configuration.
+
+Request can be constructed by NewApiFetchSegmentRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@return Segment
+*/
 func (c *APIClient) FetchSegmentWithContext(ctx context.Context, r ApiFetchSegmentRequest, opts ...Option) (*Segment, error) {
 	var (
 		postBody    any
@@ -1225,11 +1402,6 @@ func (c *APIClient) FetchSegmentWithContext(ctx context.Context, r ApiFetchSegme
 	return returnValue, nil
 }
 
-type ApiFetchUserProfileRequest struct {
-	userID string
-	params *Params
-}
-
 func (r *ApiFetchUserProfileRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1263,7 +1435,13 @@ func (r *ApiFetchUserProfileRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiFetchUserProfileRequest
+// ApiFetchUserProfileRequest represents the request with all the parameters for the API call.
+type ApiFetchUserProfileRequest struct {
+	userID string
+	params *Params
+}
+
+// NewApiFetchUserProfileRequest creates an instance of the ApiFetchUserProfileRequest to be used for the API call.
 func (c *APIClient) NewApiFetchUserProfileRequest(userID string, params *Params) ApiFetchUserProfileRequest {
 	return ApiFetchUserProfileRequest{
 		userID: userID,
@@ -1271,12 +1449,32 @@ func (c *APIClient) NewApiFetchUserProfileRequest(userID string, params *Params)
 	}
 }
 
-// FetchUserProfile wraps FetchUserProfileWithContext using context.Background.
+/*
+FetchUserProfile Get user profile. Wraps FetchUserProfileWithContext using context.Background.
+
+Get predictions, properties (raw, computed or custom) and segments (computed or custom) for a user profile.
+
+Request can be constructed by NewApiFetchUserProfileRequest with parameters below.
+
+	@param userID string - User ID for authenticated users or cookie ID for non-authenticated repeated users (visitors).
+	@param params Params
+	@return UserProfile
+*/
 func (c *APIClient) FetchUserProfile(r ApiFetchUserProfileRequest, opts ...Option) (*UserProfile, error) {
 	return c.FetchUserProfileWithContext(context.Background(), r, opts...)
 }
 
-// @return UserProfile
+/*
+FetchUserProfile Get user profile.
+
+Get predictions, properties (raw, computed or custom) and segments (computed or custom) for a user profile.
+
+Request can be constructed by NewApiFetchUserProfileRequest with parameters below.
+
+	@param userID string - User ID for authenticated users or cookie ID for non-authenticated repeated users (visitors).
+	@param params Params
+	@return UserProfile
+*/
 func (c *APIClient) FetchUserProfileWithContext(ctx context.Context, r ApiFetchUserProfileRequest, opts ...Option) (*UserProfile, error) {
 	var (
 		postBody    any
@@ -1366,11 +1564,6 @@ func (c *APIClient) FetchUserProfileWithContext(ctx context.Context, r ApiFetchU
 	return returnValue, nil
 }
 
-type ApiGetRequest struct {
-	path       string
-	parameters map[string]interface{}
-}
-
 func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1399,25 +1592,51 @@ func (r *ApiGetRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
-	r.parameters = parameters
-	return r
+// ApiGetRequest represents the request with all the parameters for the API call.
+type ApiGetRequest struct {
+	path       string
+	parameters map[string]interface{}
 }
 
-// @return ApiGetRequest
+// NewApiGetRequest creates an instance of the ApiGetRequest to be used for the API call.
 func (c *APIClient) NewApiGetRequest(path string) ApiGetRequest {
 	return ApiGetRequest{
 		path: path,
 	}
 }
 
-// Get wraps GetWithContext using context.Background.
+// WithParameters adds the parameters to the ApiGetRequest and returns the request for chaining.
+func (r ApiGetRequest) WithParameters(parameters map[string]interface{}) ApiGetRequest {
+	r.parameters = parameters
+	return r
+}
+
+/*
+Get Send requests to the Algolia REST API. Wraps GetWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.GetWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Get Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiGetRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@return map[string]interface{}
+*/
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -1517,12 +1736,28 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 	return returnValue, nil
 }
 
-// GetAvailableModelTypes wraps GetAvailableModelTypesWithContext using context.Background.
+/*
+GetAvailableModelTypes Get a list of available model types. Wraps GetAvailableModelTypesWithContext using context.Background.
+
+Get a list of all available model types. Each model type can be activated more than once, by selecting a different data source.
+
+Request can be constructed by NewApiGetAvailableModelTypesRequest with parameters below.
+
+	@return []GetAvailableModelTypesResponseInner
+*/
 func (c *APIClient) GetAvailableModelTypes(opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
 	return c.GetAvailableModelTypesWithContext(context.Background(), opts...)
 }
 
-// @return []GetAvailableModelTypesResponseInner
+/*
+GetAvailableModelTypes Get a list of available model types.
+
+Get a list of all available model types. Each model type can be activated more than once, by selecting a different data source.
+
+Request can be constructed by NewApiGetAvailableModelTypesRequest with parameters below.
+
+	@return []GetAvailableModelTypesResponseInner
+*/
 func (c *APIClient) GetAvailableModelTypesWithContext(ctx context.Context, opts ...Option) ([]GetAvailableModelTypesResponseInner, error) {
 	var (
 		postBody    any
@@ -1606,10 +1841,6 @@ func (c *APIClient) GetAvailableModelTypesWithContext(ctx context.Context, opts 
 	return returnValue, nil
 }
 
-type ApiGetModelInstanceConfigRequest struct {
-	modelID string
-}
-
 func (r *ApiGetModelInstanceConfigRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1629,19 +1860,42 @@ func (r *ApiGetModelInstanceConfigRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetModelInstanceConfigRequest
+// ApiGetModelInstanceConfigRequest represents the request with all the parameters for the API call.
+type ApiGetModelInstanceConfigRequest struct {
+	modelID string
+}
+
+// NewApiGetModelInstanceConfigRequest creates an instance of the ApiGetModelInstanceConfigRequest to be used for the API call.
 func (c *APIClient) NewApiGetModelInstanceConfigRequest(modelID string) ApiGetModelInstanceConfigRequest {
 	return ApiGetModelInstanceConfigRequest{
 		modelID: modelID,
 	}
 }
 
-// GetModelInstanceConfig wraps GetModelInstanceConfigWithContext using context.Background.
+/*
+GetModelInstanceConfig Get a model’s instance configuration. Wraps GetModelInstanceConfigWithContext using context.Background.
+
+Get the configuration for a model that was activated.
+
+Request can be constructed by NewApiGetModelInstanceConfigRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@return ModelInstance
+*/
 func (c *APIClient) GetModelInstanceConfig(r ApiGetModelInstanceConfigRequest, opts ...Option) (*ModelInstance, error) {
 	return c.GetModelInstanceConfigWithContext(context.Background(), r, opts...)
 }
 
-// @return ModelInstance
+/*
+GetModelInstanceConfig Get a model’s instance configuration.
+
+Get the configuration for a model that was activated.
+
+Request can be constructed by NewApiGetModelInstanceConfigRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@return ModelInstance
+*/
 func (c *APIClient) GetModelInstanceConfigWithContext(ctx context.Context, r ApiGetModelInstanceConfigRequest, opts ...Option) (*ModelInstance, error) {
 	var (
 		postBody    any
@@ -1735,12 +1989,28 @@ func (c *APIClient) GetModelInstanceConfigWithContext(ctx context.Context, r Api
 	return returnValue, nil
 }
 
-// GetModelInstances wraps GetModelInstancesWithContext using context.Background.
+/*
+GetModelInstances Get model instances. Wraps GetModelInstancesWithContext using context.Background.
+
+Get a list of all model instances.
+
+Request can be constructed by NewApiGetModelInstancesRequest with parameters below.
+
+	@return []ModelInstance
+*/
 func (c *APIClient) GetModelInstances(opts ...Option) ([]ModelInstance, error) {
 	return c.GetModelInstancesWithContext(context.Background(), opts...)
 }
 
-// @return []ModelInstance
+/*
+GetModelInstances Get model instances.
+
+Get a list of all model instances.
+
+Request can be constructed by NewApiGetModelInstancesRequest with parameters below.
+
+	@return []ModelInstance
+*/
 func (c *APIClient) GetModelInstancesWithContext(ctx context.Context, opts ...Option) ([]ModelInstance, error) {
 	var (
 		postBody    any
@@ -1824,10 +2094,6 @@ func (c *APIClient) GetModelInstancesWithContext(ctx context.Context, opts ...Op
 	return returnValue, nil
 }
 
-type ApiGetModelMetricsRequest struct {
-	modelID string
-}
-
 func (r *ApiGetModelMetricsRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1847,19 +2113,42 @@ func (r *ApiGetModelMetricsRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetModelMetricsRequest
+// ApiGetModelMetricsRequest represents the request with all the parameters for the API call.
+type ApiGetModelMetricsRequest struct {
+	modelID string
+}
+
+// NewApiGetModelMetricsRequest creates an instance of the ApiGetModelMetricsRequest to be used for the API call.
 func (c *APIClient) NewApiGetModelMetricsRequest(modelID string) ApiGetModelMetricsRequest {
 	return ApiGetModelMetricsRequest{
 		modelID: modelID,
 	}
 }
 
-// GetModelMetrics wraps GetModelMetricsWithContext using context.Background.
+/*
+GetModelMetrics Get a model’s instance metrics. Wraps GetModelMetricsWithContext using context.Background.
+
+Get the model instance’ training metrics.
+
+Request can be constructed by NewApiGetModelMetricsRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@return GetModelMetricsResponse
+*/
 func (c *APIClient) GetModelMetrics(r ApiGetModelMetricsRequest, opts ...Option) (*GetModelMetricsResponse, error) {
 	return c.GetModelMetricsWithContext(context.Background(), r, opts...)
 }
 
-// @return GetModelMetricsResponse
+/*
+GetModelMetrics Get a model’s instance metrics.
+
+Get the model instance’ training metrics.
+
+Request can be constructed by NewApiGetModelMetricsRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@return GetModelMetricsResponse
+*/
 func (c *APIClient) GetModelMetricsWithContext(ctx context.Context, r ApiGetModelMetricsRequest, opts ...Option) (*GetModelMetricsResponse, error) {
 	var (
 		postBody    any
@@ -1953,11 +2242,6 @@ func (c *APIClient) GetModelMetricsWithContext(ctx context.Context, r ApiGetMode
 	return returnValue, nil
 }
 
-type ApiGetSegmentUsersRequest struct {
-	segmentID                  string
-	fetchAllUserProfilesParams *FetchAllUserProfilesParams
-}
-
 func (r *ApiGetSegmentUsersRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -1991,7 +2275,13 @@ func (r *ApiGetSegmentUsersRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiGetSegmentUsersRequest
+// ApiGetSegmentUsersRequest represents the request with all the parameters for the API call.
+type ApiGetSegmentUsersRequest struct {
+	segmentID                  string
+	fetchAllUserProfilesParams *FetchAllUserProfilesParams
+}
+
+// NewApiGetSegmentUsersRequest creates an instance of the ApiGetSegmentUsersRequest to be used for the API call.
 func (c *APIClient) NewApiGetSegmentUsersRequest(segmentID string, fetchAllUserProfilesParams *FetchAllUserProfilesParams) ApiGetSegmentUsersRequest {
 	return ApiGetSegmentUsersRequest{
 		segmentID:                  segmentID,
@@ -1999,12 +2289,32 @@ func (c *APIClient) NewApiGetSegmentUsersRequest(segmentID string, fetchAllUserP
 	}
 }
 
-// GetSegmentUsers wraps GetSegmentUsersWithContext using context.Background.
+/*
+GetSegmentUsers Get segment users. Wraps GetSegmentUsersWithContext using context.Background.
+
+Get the profiles of users that belong to a segment.
+
+Request can be constructed by NewApiGetSegmentUsersRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@param fetchAllUserProfilesParams FetchAllUserProfilesParams
+	@return GetSegmentUsersResponse
+*/
 func (c *APIClient) GetSegmentUsers(r ApiGetSegmentUsersRequest, opts ...Option) (*GetSegmentUsersResponse, error) {
 	return c.GetSegmentUsersWithContext(context.Background(), r, opts...)
 }
 
-// @return GetSegmentUsersResponse
+/*
+GetSegmentUsers Get segment users.
+
+Get the profiles of users that belong to a segment.
+
+Request can be constructed by NewApiGetSegmentUsersRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@param fetchAllUserProfilesParams FetchAllUserProfilesParams
+	@return GetSegmentUsersResponse
+*/
 func (c *APIClient) GetSegmentUsersWithContext(ctx context.Context, r ApiGetSegmentUsersRequest, opts ...Option) (*GetSegmentUsersResponse, error) {
 	var (
 		postBody    any
@@ -2112,12 +2422,6 @@ func (c *APIClient) GetSegmentUsersWithContext(ctx context.Context, r ApiGetSegm
 	return returnValue, nil
 }
 
-type ApiPostRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2155,31 +2459,60 @@ func (r *ApiPostRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
-	r.parameters = parameters
-	return r
+// ApiPostRequest represents the request with all the parameters for the API call.
+type ApiPostRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPostRequest
+// NewApiPostRequest creates an instance of the ApiPostRequest to be used for the API call.
 func (c *APIClient) NewApiPostRequest(path string) ApiPostRequest {
 	return ApiPostRequest{
 		path: path,
 	}
 }
 
-// Post wraps PostWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithParameters(parameters map[string]interface{}) ApiPostRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPostRequest and returns the request for chaining.
+func (r ApiPostRequest) WithBody(body map[string]interface{}) ApiPostRequest {
+	r.body = body
+	return r
+}
+
+/*
+Post Send requests to the Algolia REST API. Wraps PostWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PostWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Post Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPostRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -2285,12 +2618,6 @@ func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts 
 	return returnValue, nil
 }
 
-type ApiPutRequest struct {
-	path       string
-	parameters map[string]interface{}
-	body       map[string]interface{}
-}
-
 func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2328,31 +2655,60 @@ func (r *ApiPutRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Query parameters to be applied to the current query.
-func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
-	r.parameters = parameters
-	return r
+// ApiPutRequest represents the request with all the parameters for the API call.
+type ApiPutRequest struct {
+	path       string
+	parameters map[string]interface{}
+	body       map[string]interface{}
 }
 
-// The parameters to send with the custom request.
-func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
-	r.body = body
-	return r
-}
-
-// @return ApiPutRequest
+// NewApiPutRequest creates an instance of the ApiPutRequest to be used for the API call.
 func (c *APIClient) NewApiPutRequest(path string) ApiPutRequest {
 	return ApiPutRequest{
 		path: path,
 	}
 }
 
-// Put wraps PutWithContext using context.Background.
+// WithParameters adds the parameters to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithParameters(parameters map[string]interface{}) ApiPutRequest {
+	r.parameters = parameters
+	return r
+}
+
+// WithBody adds the body to the ApiPutRequest and returns the request for chaining.
+func (r ApiPutRequest) WithBody(body map[string]interface{}) ApiPutRequest {
+	r.body = body
+	return r
+}
+
+/*
+Put Send requests to the Algolia REST API. Wraps PutWithContext using context.Background.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	return c.PutWithContext(context.Background(), r, opts...)
 }
 
-// @return map[string]interface{}
+/*
+Put Send requests to the Algolia REST API.
+
+This method allow you to send requests to the Algolia REST API.
+
+Request can be constructed by NewApiPutRequest with parameters below.
+
+	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
+	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param body map[string]interface{} - The parameters to send with the custom request.
+	@return map[string]interface{}
+*/
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
 	var (
 		postBody    any
@@ -2458,11 +2814,6 @@ func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ..
 	return returnValue, nil
 }
 
-type ApiUpdateModelInstanceRequest struct {
-	modelID           string
-	updateModelParams *UpdateModelParams
-}
-
 func (r *ApiUpdateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2496,7 +2847,13 @@ func (r *ApiUpdateModelInstanceRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateModelInstanceRequest
+// ApiUpdateModelInstanceRequest represents the request with all the parameters for the API call.
+type ApiUpdateModelInstanceRequest struct {
+	modelID           string
+	updateModelParams *UpdateModelParams
+}
+
+// NewApiUpdateModelInstanceRequest creates an instance of the ApiUpdateModelInstanceRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateModelInstanceRequest(modelID string, updateModelParams *UpdateModelParams) ApiUpdateModelInstanceRequest {
 	return ApiUpdateModelInstanceRequest{
 		modelID:           modelID,
@@ -2504,12 +2861,32 @@ func (c *APIClient) NewApiUpdateModelInstanceRequest(modelID string, updateModel
 	}
 }
 
-// UpdateModelInstance wraps UpdateModelInstanceWithContext using context.Background.
+/*
+UpdateModelInstance Update a model instance. Wraps UpdateModelInstanceWithContext using context.Background.
+
+Update a model’s configuration.
+
+Request can be constructed by NewApiUpdateModelInstanceRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@param updateModelParams UpdateModelParams
+	@return UpdateModelInstanceResponse
+*/
 func (c *APIClient) UpdateModelInstance(r ApiUpdateModelInstanceRequest, opts ...Option) (*UpdateModelInstanceResponse, error) {
 	return c.UpdateModelInstanceWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdateModelInstanceResponse
+/*
+UpdateModelInstance Update a model instance.
+
+Update a model’s configuration.
+
+Request can be constructed by NewApiUpdateModelInstanceRequest with parameters below.
+
+	@param modelID string - The ID of the model to retrieve.
+	@param updateModelParams UpdateModelParams
+	@return UpdateModelInstanceResponse
+*/
 func (c *APIClient) UpdateModelInstanceWithContext(ctx context.Context, r ApiUpdateModelInstanceRequest, opts ...Option) (*UpdateModelInstanceResponse, error) {
 	var (
 		postBody    any
@@ -2608,11 +2985,6 @@ func (c *APIClient) UpdateModelInstanceWithContext(ctx context.Context, r ApiUpd
 	return returnValue, nil
 }
 
-type ApiUpdateSegmentRequest struct {
-	segmentID           string
-	updateSegmentParams *UpdateSegmentParams
-}
-
 func (r *ApiUpdateSegmentRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -2646,7 +3018,13 @@ func (r *ApiUpdateSegmentRequest) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// @return ApiUpdateSegmentRequest
+// ApiUpdateSegmentRequest represents the request with all the parameters for the API call.
+type ApiUpdateSegmentRequest struct {
+	segmentID           string
+	updateSegmentParams *UpdateSegmentParams
+}
+
+// NewApiUpdateSegmentRequest creates an instance of the ApiUpdateSegmentRequest to be used for the API call.
 func (c *APIClient) NewApiUpdateSegmentRequest(segmentID string, updateSegmentParams *UpdateSegmentParams) ApiUpdateSegmentRequest {
 	return ApiUpdateSegmentRequest{
 		segmentID:           segmentID,
@@ -2654,12 +3032,32 @@ func (c *APIClient) NewApiUpdateSegmentRequest(segmentID string, updateSegmentPa
 	}
 }
 
-// UpdateSegment wraps UpdateSegmentWithContext using context.Background.
+/*
+UpdateSegment Update segment. Wraps UpdateSegmentWithContext using context.Background.
+
+Update a segment’s configuration.
+
+Request can be constructed by NewApiUpdateSegmentRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@param updateSegmentParams UpdateSegmentParams
+	@return UpdateSegmentResponse
+*/
 func (c *APIClient) UpdateSegment(r ApiUpdateSegmentRequest, opts ...Option) (*UpdateSegmentResponse, error) {
 	return c.UpdateSegmentWithContext(context.Background(), r, opts...)
 }
 
-// @return UpdateSegmentResponse
+/*
+UpdateSegment Update segment.
+
+Update a segment’s configuration.
+
+Request can be constructed by NewApiUpdateSegmentRequest with parameters below.
+
+	@param segmentID string - The ID of the Segment to fetch.
+	@param updateSegmentParams UpdateSegmentParams
+	@return UpdateSegmentResponse
+*/
 func (c *APIClient) UpdateSegmentWithContext(ctx context.Context, r ApiUpdateSegmentRequest, opts ...Option) (*UpdateSegmentResponse, error) {
 	var (
 		postBody    any
