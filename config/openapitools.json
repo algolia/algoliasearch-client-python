@@ -1,6 +1,6 @@
 {
   "generator-cli": {
-    "version": "6.5.0",
+    "version": "6.6.0",
     "generators": {
       "javascript-algoliasearch": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/algoliasearch",

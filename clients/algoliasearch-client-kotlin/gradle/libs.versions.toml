@@ -7,7 +7,7 @@ ktor = "2.3.0"
 kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common" }
 kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.5.0" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.5.1" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.0" }
 
 # Ktor
