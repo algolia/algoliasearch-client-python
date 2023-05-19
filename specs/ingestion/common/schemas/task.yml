@@ -11,8 +11,7 @@ Task:
     trigger:
       $ref: '#/Trigger'
     input:
-      description: The input that holds information specific to the task.
-      type: object
+      $ref: '#/TaskInput'
     enabled:
       type: boolean
       default: true
@@ -57,6 +56,8 @@ TaskCreate:
     enabled:
       type: boolean
       description: Whether the task is enabled or not.
+    input:
+      $ref: '#/TaskInput'
     # lastCursorValue:
     #   type: integer
     #   format: int64
@@ -94,6 +95,8 @@ TaskUpdate:
       $ref: './common.yml#/destinationID'
     trigger:
       $ref: '#/TriggerInput'
+    input:
+      $ref: '#/TaskInput'
     enabled:
       type: boolean
       description: Whether the task is enabled or not.
@@ -126,6 +129,11 @@ ActionType:
   type: string
   description: The action to perform on the Algolia index.
   enum: ['replace', 'save']
+
+TaskInput:
+  oneOf:
+    - $ref: '#/OnDemandDateUtilsInput'
+    - $ref: '#/ScheduleDateUtilsInput'
 
 TriggerInput:
   type: object
@@ -239,3 +247,33 @@ SubscriptionTrigger:
       $ref: '#/SubscriptionTriggerType'
   required:
     - type
+
+# Task input
+
+OnDemandDateUtilsInput:
+  type: object
+  additionalProperties: false
+  description: The input for an `onDemand` task whose source is of type `bigquery` and for which extracted data spans a given time range.
+  properties:
+    startDate:
+      description: The start date of the extraction (RFC3339 format).
+      type: string
+    endDate:
+      description: The end date of the extraction (RFC3339 format).
+      type: string
+  required:
+    - startDate
+    - endDate
+
+ScheduleDateUtilsInput:
+  type: object
+  additionalProperties: false
+  description: The input for a `schedule` task whose source is of type `bigquery` and for which extracted data spans a fixed number of days.
+  properties:
+    timeframe:
+      description: The timeframe of the extraction, in number of days from today.
+      type: integer
+      minimum: 1
+      maximum: 30
+  required:
+    - timeframe
