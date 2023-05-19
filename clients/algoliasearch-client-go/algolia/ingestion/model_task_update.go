@@ -11,6 +11,7 @@ type TaskUpdate struct {
 	// The destination UUID.
 	DestinationID *string       `json:"destinationID,omitempty"`
 	Trigger       *TriggerInput `json:"trigger,omitempty"`
+	Input         *TaskInput    `json:"input,omitempty"`
 	// Whether the task is enabled or not.
 	Enabled *bool `json:"enabled,omitempty"`
 }
@@ -26,6 +27,12 @@ func WithTaskUpdateDestinationID(val string) TaskUpdateOption {
 func WithTaskUpdateTrigger(val TriggerInput) TaskUpdateOption {
 	return func(f *TaskUpdate) {
 		f.Trigger = &val
+	}
+}
+
+func WithTaskUpdateInput(val TaskInput) TaskUpdateOption {
+	return func(f *TaskUpdate) {
+		f.Input = &val
 	}
 }
 
@@ -119,6 +126,38 @@ func (o *TaskUpdate) SetTrigger(v TriggerInput) {
 	o.Trigger = &v
 }
 
+// GetInput returns the Input field value if set, zero value otherwise.
+func (o *TaskUpdate) GetInput() TaskInput {
+	if o == nil || o.Input == nil {
+		var ret TaskInput
+		return ret
+	}
+	return *o.Input
+}
+
+// GetInputOk returns a tuple with the Input field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TaskUpdate) GetInputOk() (*TaskInput, bool) {
+	if o == nil || o.Input == nil {
+		return nil, false
+	}
+	return o.Input, true
+}
+
+// HasInput returns a boolean if a field has been set.
+func (o *TaskUpdate) HasInput() bool {
+	if o != nil && o.Input != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetInput gets a reference to the given TaskInput and assigns it to the Input field.
+func (o *TaskUpdate) SetInput(v TaskInput) {
+	o.Input = &v
+}
+
 // GetEnabled returns the Enabled field value if set, zero value otherwise.
 func (o *TaskUpdate) GetEnabled() bool {
 	if o == nil || o.Enabled == nil {
@@ -159,6 +198,9 @@ func (o TaskUpdate) MarshalJSON() ([]byte, error) {
 	if o.Trigger != nil {
 		toSerialize["trigger"] = o.Trigger
 	}
+	if o.Input != nil {
+		toSerialize["input"] = o.Input
+	}
 	if o.Enabled != nil {
 		toSerialize["enabled"] = o.Enabled
 	}
@@ -169,6 +211,7 @@ func (o TaskUpdate) String() string {
 	out := ""
 	out += fmt.Sprintf("  destinationID=%v\n", o.DestinationID)
 	out += fmt.Sprintf("  trigger=%v\n", o.Trigger)
+	out += fmt.Sprintf("  input=%v\n", o.Input)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
 	return fmt.Sprintf("TaskUpdate {\n%s}", out)
 }

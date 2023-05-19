@@ -14,7 +14,7 @@ import kotlinx.serialization.json.*
  * @param enabled Whether the task is enabled or not.
  * @param action
  * @param createdAt Date of creation (RFC3339 format).
- * @param input The input that holds information specific to the task.
+ * @param input
  * @param updatedAt Date of last update (RFC3339 format).
  */
 @Serializable
@@ -39,8 +39,7 @@ public data class Task(
   /** Date of creation (RFC3339 format). */
   @SerialName(value = "createdAt") val createdAt: String,
 
-  /** The input that holds information specific to the task. */
-  @SerialName(value = "input") val input: JsonObject? = null,
+  @SerialName(value = "input") val input: TaskInput? = null,
 
   /** Date of last update (RFC3339 format). */
   @SerialName(value = "updatedAt") val updatedAt: String? = null,

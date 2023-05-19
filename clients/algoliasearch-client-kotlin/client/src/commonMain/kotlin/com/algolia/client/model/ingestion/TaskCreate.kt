@@ -12,6 +12,7 @@ import kotlinx.serialization.json.*
  * @param trigger
  * @param action
  * @param enabled Whether the task is enabled or not.
+ * @param input
  */
 @Serializable
 public data class TaskCreate(
@@ -28,4 +29,6 @@ public data class TaskCreate(
 
   /** Whether the task is enabled or not. */
   @SerialName(value = "enabled") val enabled: Boolean? = null,
+
+  @SerialName(value = "input") val input: TaskInput? = null,
 )

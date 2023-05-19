@@ -13,10 +13,9 @@ type Task struct {
 	// The source UUID.
 	SourceID string `json:"sourceID" validate:"required"`
 	// The destination UUID.
-	DestinationID string  `json:"destinationID" validate:"required"`
-	Trigger       Trigger `json:"trigger" validate:"required"`
-	// The input that holds information specific to the task.
-	Input map[string]interface{} `json:"input,omitempty"`
+	DestinationID string     `json:"destinationID" validate:"required"`
+	Trigger       Trigger    `json:"trigger" validate:"required"`
+	Input         *TaskInput `json:"input,omitempty"`
 	// Whether the task is enabled or not.
 	Enabled bool       `json:"enabled" validate:"required"`
 	Action  ActionType `json:"action" validate:"required"`
@@ -28,9 +27,9 @@ type Task struct {
 
 type TaskOption func(f *Task)
 
-func WithTaskInput(val map[string]interface{}) TaskOption {
+func WithTaskInput(val TaskInput) TaskOption {
 	return func(f *Task) {
-		f.Input = val
+		f.Input = &val
 	}
 }
 
@@ -166,17 +165,17 @@ func (o *Task) SetTrigger(v Trigger) {
 }
 
 // GetInput returns the Input field value if set, zero value otherwise.
-func (o *Task) GetInput() map[string]interface{} {
+func (o *Task) GetInput() TaskInput {
 	if o == nil || o.Input == nil {
-		var ret map[string]interface{}
+		var ret TaskInput
 		return ret
 	}
-	return o.Input
+	return *o.Input
 }
 
 // GetInputOk returns a tuple with the Input field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Task) GetInputOk() (map[string]interface{}, bool) {
+func (o *Task) GetInputOk() (*TaskInput, bool) {
 	if o == nil || o.Input == nil {
 		return nil, false
 	}
@@ -192,9 +191,9 @@ func (o *Task) HasInput() bool {
 	return false
 }
 
-// SetInput gets a reference to the given map[string]interface{} and assigns it to the Input field.
-func (o *Task) SetInput(v map[string]interface{}) {
-	o.Input = v
+// SetInput gets a reference to the given TaskInput and assigns it to the Input field.
+func (o *Task) SetInput(v TaskInput) {
+	o.Input = &v
 }
 
 // GetEnabled returns the Enabled field value

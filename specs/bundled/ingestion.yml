@@ -1085,6 +1085,40 @@ components:
         - $ref: '#/components/schemas/OnDemandTrigger'
         - $ref: '#/components/schemas/ScheduleTrigger'
         - $ref: '#/components/schemas/SubscriptionTrigger'
+    OnDemandDateUtilsInput:
+      type: object
+      additionalProperties: false
+      description: >-
+        The input for an `onDemand` task whose source is of type `bigquery` and
+        for which extracted data spans a given time range.
+      properties:
+        startDate:
+          description: The start date of the extraction (RFC3339 format).
+          type: string
+        endDate:
+          description: The end date of the extraction (RFC3339 format).
+          type: string
+      required:
+        - startDate
+        - endDate
+    ScheduleDateUtilsInput:
+      type: object
+      additionalProperties: false
+      description: >-
+        The input for a `schedule` task whose source is of type `bigquery` and
+        for which extracted data spans a fixed number of days.
+      properties:
+        timeframe:
+          description: The timeframe of the extraction, in number of days from today.
+          type: integer
+          minimum: 1
+          maximum: 30
+      required:
+        - timeframe
+    TaskInput:
+      oneOf:
+        - $ref: '#/components/schemas/OnDemandDateUtilsInput'
+        - $ref: '#/components/schemas/ScheduleDateUtilsInput'
     Task:
       type: object
       additionalProperties: false
@@ -1098,8 +1132,7 @@ components:
         trigger:
           $ref: '#/components/schemas/Trigger'
         input:
-          description: The input that holds information specific to the task.
-          type: object
+          $ref: '#/components/schemas/TaskInput'
         enabled:
           type: boolean
           default: true
@@ -1160,6 +1193,8 @@ components:
         enabled:
           type: boolean
           description: Whether the task is enabled or not.
+        input:
+          $ref: '#/components/schemas/TaskInput'
       required:
         - sourceID
         - destinationID
@@ -1205,6 +1240,8 @@ components:
           $ref: '#/components/schemas/destinationID'
         trigger:
           $ref: '#/components/schemas/TriggerInput'
+        input:
+          $ref: '#/components/schemas/TaskInput'
         enabled:
           type: boolean
           description: Whether the task is enabled or not.

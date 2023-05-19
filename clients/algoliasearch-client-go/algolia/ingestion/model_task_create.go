@@ -15,7 +15,8 @@ type TaskCreate struct {
 	Trigger       TaskCreateTrigger `json:"trigger" validate:"required"`
 	Action        ActionType        `json:"action" validate:"required"`
 	// Whether the task is enabled or not.
-	Enabled *bool `json:"enabled,omitempty"`
+	Enabled *bool      `json:"enabled,omitempty"`
+	Input   *TaskInput `json:"input,omitempty"`
 }
 
 type TaskCreateOption func(f *TaskCreate)
@@ -23,6 +24,12 @@ type TaskCreateOption func(f *TaskCreate)
 func WithTaskCreateEnabled(val bool) TaskCreateOption {
 	return func(f *TaskCreate) {
 		f.Enabled = &val
+	}
+}
+
+func WithTaskCreateInput(val TaskInput) TaskCreateOption {
+	return func(f *TaskCreate) {
+		f.Input = &val
 	}
 }
 
@@ -178,6 +185,38 @@ func (o *TaskCreate) SetEnabled(v bool) {
 	o.Enabled = &v
 }
 
+// GetInput returns the Input field value if set, zero value otherwise.
+func (o *TaskCreate) GetInput() TaskInput {
+	if o == nil || o.Input == nil {
+		var ret TaskInput
+		return ret
+	}
+	return *o.Input
+}
+
+// GetInputOk returns a tuple with the Input field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TaskCreate) GetInputOk() (*TaskInput, bool) {
+	if o == nil || o.Input == nil {
+		return nil, false
+	}
+	return o.Input, true
+}
+
+// HasInput returns a boolean if a field has been set.
+func (o *TaskCreate) HasInput() bool {
+	if o != nil && o.Input != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetInput gets a reference to the given TaskInput and assigns it to the Input field.
+func (o *TaskCreate) SetInput(v TaskInput) {
+	o.Input = &v
+}
+
 func (o TaskCreate) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -195,6 +234,9 @@ func (o TaskCreate) MarshalJSON() ([]byte, error) {
 	if o.Enabled != nil {
 		toSerialize["enabled"] = o.Enabled
 	}
+	if o.Input != nil {
+		toSerialize["input"] = o.Input
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -205,6 +247,7 @@ func (o TaskCreate) String() string {
 	out += fmt.Sprintf("  trigger=%v\n", o.Trigger)
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
+	out += fmt.Sprintf("  input=%v\n", o.Input)
 	return fmt.Sprintf("TaskCreate {\n%s}", out)
 }
 

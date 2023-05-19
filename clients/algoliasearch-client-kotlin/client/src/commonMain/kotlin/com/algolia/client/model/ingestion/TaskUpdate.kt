@@ -9,6 +9,7 @@ import kotlinx.serialization.json.*
  *
  * @param destinationID The destination UUID.
  * @param trigger
+ * @param input
  * @param enabled Whether the task is enabled or not.
  */
 @Serializable
@@ -18,6 +19,8 @@ public data class TaskUpdate(
   @SerialName(value = "destinationID") val destinationID: String? = null,
 
   @SerialName(value = "trigger") val trigger: TriggerInput? = null,
+
+  @SerialName(value = "input") val input: TaskInput? = null,
 
   /** Whether the task is enabled or not. */
   @SerialName(value = "enabled") val enabled: Boolean? = null,
