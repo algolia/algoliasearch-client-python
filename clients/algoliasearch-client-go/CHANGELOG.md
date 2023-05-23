@@ -1,3 +1,7 @@
+## [4.0.0-alpha.11](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.10...4.0.0-alpha.11)
+
+- [6284a8bc](https://github.com/algolia/api-clients-automation/commit/6284a8bc) feat(specs): add task input for bigquery ([#1549](https://github.com/algolia/api-clients-automation/pull/1549)) by [@Fluf22](https://github.com/Fluf22/)
+
 ## [4.0.0-alpha.10](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.9...4.0.0-alpha.10)
 
 - [72755c18](https://github.com/algolia/api-clients-automation/commit/72755c18) feat(go): comments are enhanced to provide better developer experience ([#1536](https://github.com/algolia/api-clients-automation/pull/1536)) by [@mehmetaligok](https://github.com/mehmetaligok/)
