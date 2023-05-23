@@ -132,13 +132,16 @@ async function spreadGeneration(): Promise<void> {
 
       // In case of a release commit, we also want to update tags on the clients repositories
       if (IS_RELEASE_COMMIT) {
+        // Go needs a 'v' prefix for tags.
+        const tagVersion = lang === 'go' ? `v${version}` : version;
+
         console.log(
           `Processing release commit, creating new release tag ('${version}') for '${lang}' repository.`
         );
 
         // we always want to delete the tag in case it exists
-        await run(`git tag -d ${version} || true`, { cwd: tempGitDir });
-        await run(`git tag ${version} HEAD`, { cwd: tempGitDir });
+        await run(`git tag -d ${tagVersion} || true`, { cwd: tempGitDir });
+        await run(`git tag ${tagVersion} HEAD`, { cwd: tempGitDir });
         await run('git push --tags', { cwd: tempGitDir });
       }
 
