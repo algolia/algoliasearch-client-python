@@ -4974,7 +4974,7 @@ func (c *APIClient) UpdateAuthenticationWithContext(ctx context.Context, r ApiUp
 
 	// body params
 	postBody = r.authenticationUpdate
-	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPatch, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5118,7 +5118,7 @@ func (c *APIClient) UpdateDestinationWithContext(ctx context.Context, r ApiUpdat
 
 	// body params
 	postBody = r.destinationUpdate
-	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPatch, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5262,7 +5262,7 @@ func (c *APIClient) UpdateSourceWithContext(ctx context.Context, r ApiUpdateSour
 
 	// body params
 	postBody = r.sourceUpdate
-	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPatch, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}
@@ -5406,7 +5406,7 @@ func (c *APIClient) UpdateTaskWithContext(ctx context.Context, r ApiUpdateTaskRe
 
 	// body params
 	postBody = r.taskUpdate
-	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPatch, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
 	}

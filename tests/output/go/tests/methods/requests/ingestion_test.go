@@ -1491,7 +1491,7 @@ func TestIngestion_UpdateAuthentication(t *testing.T) {
 				expectedPath, err := url.QueryUnescape("/1/authentications/6c02aeb1-775e-418e-870b-1faccd4b2c0f")
 				require.NoError(t, err)
 				require.Equal(t, expectedPath, echo.path)
-				require.Equal(t, "PUT", echo.method)
+				require.Equal(t, "PATCH", echo.method)
 
 				ja := jsonassert.New(t)
 				ja.Assertf(*echo.body, `{"name":"newName"}`)
@@ -1525,7 +1525,7 @@ func TestIngestion_UpdateDestination(t *testing.T) {
 				expectedPath, err := url.QueryUnescape("/1/destinations/6c02aeb1-775e-418e-870b-1faccd4b2c0f")
 				require.NoError(t, err)
 				require.Equal(t, expectedPath, echo.path)
-				require.Equal(t, "PUT", echo.method)
+				require.Equal(t, "PATCH", echo.method)
 
 				ja := jsonassert.New(t)
 				ja.Assertf(*echo.body, `{"name":"newName"}`)
@@ -1559,7 +1559,7 @@ func TestIngestion_UpdateSource(t *testing.T) {
 				expectedPath, err := url.QueryUnescape("/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f")
 				require.NoError(t, err)
 				require.Equal(t, expectedPath, echo.path)
-				require.Equal(t, "PUT", echo.method)
+				require.Equal(t, "PATCH", echo.method)
 
 				ja := jsonassert.New(t)
 				ja.Assertf(*echo.body, `{"name":"newName"}`)
@@ -1593,7 +1593,7 @@ func TestIngestion_UpdateTask(t *testing.T) {
 				expectedPath, err := url.QueryUnescape("/1/tasks/6c02aeb1-775e-418e-870b-1faccd4b2c0f")
 				require.NoError(t, err)
 				require.Equal(t, expectedPath, echo.path)
-				require.Equal(t, "PUT", echo.method)
+				require.Equal(t, "PATCH", echo.method)
 
 				ja := jsonassert.New(t)
 				ja.Assertf(*echo.body, `{"enabled":false}`)

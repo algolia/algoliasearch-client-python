@@ -1040,7 +1040,7 @@ class IngestionTest {
       },
       intercept = {
         assertEquals("/1/authentications/6c02aeb1-775e-418e-870b-1faccd4b2c0f".toPathSegments(), it.url.pathSegments)
-        assertEquals(HttpMethod.parse("PUT"), it.method)
+        assertEquals(HttpMethod.parse("PATCH"), it.method)
         assertJsonBody("""{"name":"newName"}""", it.body)
       },
     )
@@ -1061,7 +1061,7 @@ class IngestionTest {
       },
       intercept = {
         assertEquals("/1/destinations/6c02aeb1-775e-418e-870b-1faccd4b2c0f".toPathSegments(), it.url.pathSegments)
-        assertEquals(HttpMethod.parse("PUT"), it.method)
+        assertEquals(HttpMethod.parse("PATCH"), it.method)
         assertJsonBody("""{"name":"newName"}""", it.body)
       },
     )
@@ -1082,7 +1082,7 @@ class IngestionTest {
       },
       intercept = {
         assertEquals("/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f".toPathSegments(), it.url.pathSegments)
-        assertEquals(HttpMethod.parse("PUT"), it.method)
+        assertEquals(HttpMethod.parse("PATCH"), it.method)
         assertJsonBody("""{"name":"newName"}""", it.body)
       },
     )
@@ -1103,7 +1103,7 @@ class IngestionTest {
       },
       intercept = {
         assertEquals("/1/tasks/6c02aeb1-775e-418e-870b-1faccd4b2c0f".toPathSegments(), it.url.pathSegments)
-        assertEquals(HttpMethod.parse("PUT"), it.method)
+        assertEquals(HttpMethod.parse("PATCH"), it.method)
         assertJsonBody("""{"enabled":false}""", it.body)
       },
     )

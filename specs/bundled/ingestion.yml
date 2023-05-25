@@ -531,6 +531,14 @@ components:
               $ref: '#/components/schemas/AuthInput'
           required:
             - input
+    DeleteResponse:
+      type: object
+      properties:
+        deletedAt:
+          type: string
+          description: Date of deletion (RFC3339 format).
+      required:
+        - deletedAt
     AuthenticationUpdate:
       type: object
       description: Payload to partialy update an Authentication.
@@ -559,14 +567,6 @@ components:
         - authenticationID
         - name
         - updatedAt
-    DeleteResponse:
-      type: object
-      properties:
-        deletedAt:
-          type: string
-          description: Date of deletion (RFC3339 format).
-      required:
-        - deletedAt
     DestinationType:
       type: string
       description: >-
@@ -1701,7 +1701,7 @@ paths:
                 $ref: '#/components/schemas/AuthenticationWithInput'
         '400':
           $ref: '#/components/responses/BadRequest'
-    put:
+    patch:
       tags:
         - ingestion
       summary: Update a authentication.
@@ -1843,7 +1843,7 @@ paths:
                 $ref: '#/components/schemas/Destination'
         '400':
           $ref: '#/components/responses/BadRequest'
-    put:
+    patch:
       tags:
         - ingestion
       summary: Update a destination.
@@ -1985,7 +1985,7 @@ paths:
                 $ref: '#/components/schemas/Source'
         '400':
           $ref: '#/components/responses/BadRequest'
-    put:
+    patch:
       tags:
         - ingestion
       summary: Update a source.
@@ -2131,7 +2131,7 @@ paths:
                 $ref: '#/components/schemas/Task'
         '400':
           $ref: '#/components/responses/BadRequest'
-    put:
+    patch:
       tags:
         - ingestion
       summary: Update a task.

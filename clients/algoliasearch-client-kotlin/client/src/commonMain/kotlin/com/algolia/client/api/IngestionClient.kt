@@ -698,7 +698,7 @@ public class IngestionClient(
   public suspend fun updateAuthentication(authenticationID: String, authenticationUpdate: AuthenticationUpdate, requestOptions: RequestOptions? = null): AuthenticationUpdateResponse {
     require(authenticationID.isNotBlank()) { "Parameter `authenticationID` is required when calling `updateAuthentication`." }
     val requestConfig = RequestConfig(
-      method = RequestMethod.PUT,
+      method = RequestMethod.PATCH,
       path = listOf("1", "authentications", "$authenticationID"),
       body = authenticationUpdate,
     )
@@ -718,7 +718,7 @@ public class IngestionClient(
   public suspend fun updateDestination(destinationID: String, destinationUpdate: DestinationUpdate, requestOptions: RequestOptions? = null): DestinationUpdateResponse {
     require(destinationID.isNotBlank()) { "Parameter `destinationID` is required when calling `updateDestination`." }
     val requestConfig = RequestConfig(
-      method = RequestMethod.PUT,
+      method = RequestMethod.PATCH,
       path = listOf("1", "destinations", "$destinationID"),
       body = destinationUpdate,
     )
@@ -738,7 +738,7 @@ public class IngestionClient(
   public suspend fun updateSource(sourceID: String, sourceUpdate: SourceUpdate, requestOptions: RequestOptions? = null): SourceUpdateResponse {
     require(sourceID.isNotBlank()) { "Parameter `sourceID` is required when calling `updateSource`." }
     val requestConfig = RequestConfig(
-      method = RequestMethod.PUT,
+      method = RequestMethod.PATCH,
       path = listOf("1", "sources", "$sourceID"),
       body = sourceUpdate,
     )
@@ -758,7 +758,7 @@ public class IngestionClient(
   public suspend fun updateTask(taskID: String, taskUpdate: TaskUpdate, requestOptions: RequestOptions? = null): TaskUpdateResponse {
     require(taskID.isNotBlank()) { "Parameter `taskID` is required when calling `updateTask`." }
     val requestConfig = RequestConfig(
-      method = RequestMethod.PUT,
+      method = RequestMethod.PATCH,
       path = listOf("1", "tasks", "$taskID"),
       body = taskUpdate,
     )

@@ -820,7 +820,7 @@ describe('updateAuthentication', () => {
     expect(req.path).toEqual(
       '/1/authentications/6c02aeb1-775e-418e-870b-1faccd4b2c0f'
     );
-    expect(req.method).toEqual('PUT');
+    expect(req.method).toEqual('PATCH');
     expect(req.data).toEqual({ name: 'newName' });
     expect(req.searchParams).toStrictEqual(undefined);
   });
@@ -836,7 +836,7 @@ describe('updateDestination', () => {
     expect(req.path).toEqual(
       '/1/destinations/6c02aeb1-775e-418e-870b-1faccd4b2c0f'
     );
-    expect(req.method).toEqual('PUT');
+    expect(req.method).toEqual('PATCH');
     expect(req.data).toEqual({ name: 'newName' });
     expect(req.searchParams).toStrictEqual(undefined);
   });
@@ -850,7 +850,7 @@ describe('updateSource', () => {
     })) as unknown as EchoResponse;
 
     expect(req.path).toEqual('/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f');
-    expect(req.method).toEqual('PUT');
+    expect(req.method).toEqual('PATCH');
     expect(req.data).toEqual({ name: 'newName' });
     expect(req.searchParams).toStrictEqual(undefined);
   });
@@ -864,7 +864,7 @@ describe('updateTask', () => {
     })) as unknown as EchoResponse;
 
     expect(req.path).toEqual('/1/tasks/6c02aeb1-775e-418e-870b-1faccd4b2c0f');
-    expect(req.method).toEqual('PUT');
+    expect(req.method).toEqual('PATCH');
     expect(req.data).toEqual({ enabled: false });
     expect(req.searchParams).toStrictEqual(undefined);
   });
