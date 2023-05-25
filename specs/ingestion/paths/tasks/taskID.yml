@@ -16,7 +16,7 @@ get:
     '400':
       $ref: '../../../common/responses/BadRequest.yml'
 
-put:
+patch:
   tags:
     - tasks
   summary: Update a task.
