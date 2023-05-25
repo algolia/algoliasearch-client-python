@@ -1,3 +1,8 @@
+## [4.0.0-alpha.12](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.11...4.0.0-alpha.12)
+
+- [635806cb](https://github.com/algolia/api-clients-automation/commit/635806cb) feat(specs): ingestion partial update method changed to patch ([#1564](https://github.com/algolia/api-clients-automation/pull/1564)) by [@mehmetaligok](https://github.com/mehmetaligok/)
+- [ed1222f4](https://github.com/algolia/api-clients-automation/commit/ed1222f4) fix(go): go client tag duplication resolved ([#1563](https://github.com/algolia/api-clients-automation/pull/1563)) by [@mehmetaligok](https://github.com/mehmetaligok/)
+
 ## [4.0.0-alpha.11](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.10...4.0.0-alpha.11)
 
 - [6284a8bc](https://github.com/algolia/api-clients-automation/commit/6284a8bc) feat(specs): add task input for bigquery ([#1549](https://github.com/algolia/api-clients-automation/pull/1549)) by [@Fluf22](https://github.com/Fluf22/)
