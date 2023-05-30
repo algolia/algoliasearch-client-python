@@ -12,7 +12,7 @@
     "algoliasearch": "link:../../../clients/algoliasearch-client-javascript/packages/algoliasearch"
   },
   "devDependencies": {
-    "parcel": "2.8.3",
+    "parcel": "2.9.1",
     "typescript": "5.0.4"
   }
 }
