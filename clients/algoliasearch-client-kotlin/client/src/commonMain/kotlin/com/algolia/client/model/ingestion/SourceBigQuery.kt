@@ -13,6 +13,7 @@ import kotlinx.serialization.json.*
  * @param table Table name (for default BQ).
  * @param tablePrefix Table prefix (for Google Analytics).
  * @param customSQLRequest Custom SQL request to extract data from the BigQuery table.
+ * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
  */
 @Serializable
 public data class SourceBigQuery(
@@ -33,4 +34,7 @@ public data class SourceBigQuery(
 
   /** Custom SQL request to extract data from the BigQuery table. */
   @SerialName(value = "customSQLRequest") val customSQLRequest: String? = null,
+
+  /** The name of the column that contains the unique ID, used as `objectID` in Algolia. */
+  @SerialName(value = "uniqueIDColumn") val uniqueIDColumn: String? = null,
 ) : SourceUpdateInput, SourceInput

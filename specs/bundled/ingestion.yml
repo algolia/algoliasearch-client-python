@@ -868,6 +868,8 @@ components:
         customSQLRequest:
           type: string
           description: Custom SQL request to extract data from the BigQuery table.
+        uniqueIDColumn:
+          $ref: '#/components/schemas/UniqueIDColumn'
       required:
         - projectID
         - datasetID

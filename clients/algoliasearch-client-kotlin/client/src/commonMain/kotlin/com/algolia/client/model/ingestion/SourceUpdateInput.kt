@@ -26,6 +26,7 @@ public sealed interface SourceUpdateInput {
      * @param table Table name (for default BQ).
      * @param tablePrefix Table prefix (for Google Analytics).
      * @param customSQLRequest Custom SQL request to extract data from the BigQuery table.
+     * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
      */
     public fun SourceBigQuery(
       projectID: String,
@@ -34,6 +35,7 @@ public sealed interface SourceUpdateInput {
       table: String? = null,
       tablePrefix: String? = null,
       customSQLRequest: String? = null,
+      uniqueIDColumn: String? = null,
     ): SourceBigQuery = com.algolia.client.model.ingestion.SourceBigQuery(
       projectID = projectID,
       datasetID = datasetID,
@@ -41,6 +43,7 @@ public sealed interface SourceUpdateInput {
       table = table,
       tablePrefix = tablePrefix,
       customSQLRequest = customSQLRequest,
+      uniqueIDColumn = uniqueIDColumn,
     )
 
     /**

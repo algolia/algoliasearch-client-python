@@ -19,6 +19,8 @@ type SourceBigQuery struct {
 	TablePrefix *string `json:"tablePrefix,omitempty"`
 	// Custom SQL request to extract data from the BigQuery table.
 	CustomSQLRequest *string `json:"customSQLRequest,omitempty"`
+	// The name of the column that contains the unique ID, used as `objectID` in Algolia.
+	UniqueIDColumn *string `json:"uniqueIDColumn,omitempty"`
 }
 
 type SourceBigQueryOption func(f *SourceBigQuery)
@@ -44,6 +46,12 @@ func WithSourceBigQueryTablePrefix(val string) SourceBigQueryOption {
 func WithSourceBigQueryCustomSQLRequest(val string) SourceBigQueryOption {
 	return func(f *SourceBigQuery) {
 		f.CustomSQLRequest = &val
+	}
+}
+
+func WithSourceBigQueryUniqueIDColumn(val string) SourceBigQueryOption {
+	return func(f *SourceBigQuery) {
+		f.UniqueIDColumn = &val
 	}
 }
 
@@ -245,6 +253,38 @@ func (o *SourceBigQuery) SetCustomSQLRequest(v string) {
 	o.CustomSQLRequest = &v
 }
 
+// GetUniqueIDColumn returns the UniqueIDColumn field value if set, zero value otherwise.
+func (o *SourceBigQuery) GetUniqueIDColumn() string {
+	if o == nil || o.UniqueIDColumn == nil {
+		var ret string
+		return ret
+	}
+	return *o.UniqueIDColumn
+}
+
+// GetUniqueIDColumnOk returns a tuple with the UniqueIDColumn field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceBigQuery) GetUniqueIDColumnOk() (*string, bool) {
+	if o == nil || o.UniqueIDColumn == nil {
+		return nil, false
+	}
+	return o.UniqueIDColumn, true
+}
+
+// HasUniqueIDColumn returns a boolean if a field has been set.
+func (o *SourceBigQuery) HasUniqueIDColumn() bool {
+	if o != nil && o.UniqueIDColumn != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetUniqueIDColumn gets a reference to the given string and assigns it to the UniqueIDColumn field.
+func (o *SourceBigQuery) SetUniqueIDColumn(v string) {
+	o.UniqueIDColumn = &v
+}
+
 func (o SourceBigQuery) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -265,6 +305,9 @@ func (o SourceBigQuery) MarshalJSON() ([]byte, error) {
 	if o.CustomSQLRequest != nil {
 		toSerialize["customSQLRequest"] = o.CustomSQLRequest
 	}
+	if o.UniqueIDColumn != nil {
+		toSerialize["uniqueIDColumn"] = o.UniqueIDColumn
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -276,6 +319,7 @@ func (o SourceBigQuery) String() string {
 	out += fmt.Sprintf("  table=%v\n", o.Table)
 	out += fmt.Sprintf("  tablePrefix=%v\n", o.TablePrefix)
 	out += fmt.Sprintf("  customSQLRequest=%v\n", o.CustomSQLRequest)
+	out += fmt.Sprintf("  uniqueIDColumn=%v\n", o.UniqueIDColumn)
 	return fmt.Sprintf("SourceBigQuery {\n%s}", out)
 }
 
