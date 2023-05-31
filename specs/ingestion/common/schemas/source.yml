@@ -221,6 +221,8 @@ SourceBigQuery:
     customSQLRequest:
       type: string
       description: Custom SQL request to extract data from the BigQuery table.
+    uniqueIDColumn:
+      $ref: '#/UniqueIDColumn'
   required:
     - projectID
     - datasetID  
