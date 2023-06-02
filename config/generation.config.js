@@ -57,6 +57,17 @@ module.exports = {
     'clients/algoliasearch-client-kotlin/client/src/commonMain/kotlin/com/algolia/client/model/**',
 
     'tests/output/kotlin/src/commonTest/kotlin/com/algolia/client/**',
-    'tests/output/kotlin/src/commonTest/kotlin/com/algolia/methods/requests/**'
+    'tests/output/kotlin/src/commonTest/kotlin/com/algolia/methods/requests/**',
+
+    // Dart
+    '!clients/algoliasearch-client-dart/**',
+    'clients/algoliasearch-client-dart/packages/*/pubspec.yaml',
+    'clients/algoliasearch-client-dart/packages/*/README.md',
+    'clients/algoliasearch-client-dart/packages/*/lib/*.dart',
+    'clients/algoliasearch-client-dart/packages/*/lib/src/*.dart',
+    'clients/algoliasearch-client-dart/packages/*/lib/src/api/**',
+    'clients/algoliasearch-client-dart/packages/*/lib/src/model/**',
+    '!clients/algoliasearch-client-dart/packages/client_core/**',
+    '!clients/algoliasearch-client-dart/packages/*/lib/src/extension.dart',
   ],
 };

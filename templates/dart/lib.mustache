@@ -1,0 +1,10 @@
+// {{pubDescription}}
+library {{pubName}};
+
+export 'package:algolia_client_core/algolia_client_core.dart'
+    show AgentSegment, ApiClient, CallType, ClientOptions, Host, RequestOptions;
+{{#apiInfo}}{{#apis}}export 'package:{{pubName}}/{{sourceFolder}}/{{apiPackage}}/{{classFilename}}.dart';
+{{/apis}}{{/apiInfo}}
+{{#models}}{{#model}}export 'package:{{pubName}}/{{sourceFolder}}/{{modelPackage}}/{{classFilename}}.dart';
+{{/model}}{{/models}}
+export 'package:{{pubName}}/src/extension.dart';

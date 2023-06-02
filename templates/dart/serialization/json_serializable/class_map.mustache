@@ -1,0 +1,68 @@
+import 'package:collection/collection.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part '{{classFilename}}.g.dart';
+
+{{#isDeprecated}}
+@Deprecated('{{{classname}}} has been deprecated')
+{{/isDeprecated}}
+@JsonSerializable()
+final class {{{classname}}} extends DelegatingMap<String, dynamic> {
+  /// Returns a new [{{{classname}}}] instance.
+  const {{{classname}}}({
+  {{#vars}}
+    {{#required}}required{{/required}} this.{{{name}}},
+  {{/vars}}
+    Map<String, dynamic> json = const {},
+  }): super(json);
+
+  {{#vars}}
+    {{#description}}
+        /// {{{description}}}
+    {{/description}}
+    {{^isEnum}}
+        {{#minimum}}
+            // minimum: {{{minimum}}}
+        {{/minimum}}
+        {{#maximum}}
+            // maximum: {{{maximum}}}
+        {{/maximum}}
+    {{/isEnum}}
+    {{#deprecated}}
+    @Deprecated('{{{name}}} has been deprecated')
+    {{/deprecated}}
+    {{^isBinary}}
+    @JsonKey(name: r'{{{baseName}}}')
+    {{/isBinary}}
+    {{#isBinary}}
+    @JsonKey(ignore: true)
+    {{/isBinary}}
+    {{#required}}
+    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}{{#isNullable}}?{{/isNullable}} {{{name}}};
+    {{/required}}
+    {{^required}}
+    {{#finalProperties}}final {{/finalProperties}}{{{datatypeWithEnum}}}? {{{name}}};
+    {{/required}}
+
+  {{/vars}}
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      const MapEquality<String, dynamic>().equals(this, this);
+
+  @override
+  int get hashCode => const MapEquality<String, dynamic>().hash(this);
+
+  factory {{{classname}}}.fromJson(Map<String, dynamic> json) {
+     final instance = _${{{classname}}}FromJson(json);
+     return {{{classname}}} (
+       {{#vars}}
+          {{{name}}}: instance.{{{name}}},
+       {{/vars}}
+       json: json,
+     );
+  }
+
+  Map<String, dynamic> toJson() => this;
+}

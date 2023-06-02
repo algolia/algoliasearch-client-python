@@ -1,0 +1,36 @@
+name: algolia_client
+
+packages:
+  - packages/*
+
+scripts:
+
+  build:
+    exec: dart run build_runner build --delete-conflicting-outputs
+    packageFilters:
+      dependsOn: build_runner
+    description: Build all generated files.
+
+  analyze:
+    exec: dart analyze .
+    description: Run static analysis checks in all packages
+
+  format:
+    exec: dart format .
+    description: Run code format in all packages
+
+  fix:
+    exec: dart fix --apply
+    description: Find and fix static analysis issues in all packages
+
+  lint:
+    run: melos fix && melos format
+    description: fix and format all packages
+
+  get:
+    exec: dart pub get
+    description: Run `dart pub get` in all packages
+
+  clear:
+    exec: rm -rf .dart_tool
+    description: Clear build folders, i.e. `.dart_tool` in all packages

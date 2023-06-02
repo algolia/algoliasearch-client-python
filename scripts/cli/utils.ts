@@ -30,7 +30,7 @@ export function getClientChoices(
     (client) => client !== 'algoliasearch'
   );
 
-  return language === ALL || language === 'javascript'
+  return language === ALL || language === 'javascript' || language === 'dart'
     ? clientList
     : withoutAlgoliaSearch;
 }

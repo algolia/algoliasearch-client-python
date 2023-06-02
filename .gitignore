@@ -32,3 +32,8 @@ generators/bin
 
 **/java/bin/
 **/kotlin/bin/
+
+# Dart
+.dart_tool/
+.packages
+pubspec.lock

@@ -1,0 +1,148 @@
+// {{{generationBanner}}}
+
+import 'package:algolia_client_core/algolia_client_core.dart';
+import 'package:{{pubName}}/src/deserialize.dart';
+import 'package:{{pubName}}/src/version.dart';
+
+{{#operations}}
+{{#imports}}import '{{{.}}}';
+{{/imports}}
+
+{{#description}}
+/// {{{description}}}
+{{/description}}
+final class {{classname}} implements ApiClient {
+
+  @override
+  final String apiKey;
+
+  @override
+  final String appId;
+
+  @override
+  final ClientOptions options;
+
+  final RetryStrategy _retryStrategy;
+
+  {{classname}}({
+    required this.appId,
+    required this.apiKey,
+    this.options = const ClientOptions(),
+    {{#hasRegionalHost}}
+    {{#fallbackToAliasHost}}String?{{/fallbackToAliasHost}}{{^fallbackToAliasHost}}required String{{/fallbackToAliasHost}} region,
+    {{/hasRegionalHost}}
+  }) : _retryStrategy = RetryStrategy.create(
+            segment: AgentSegment(value: "{{{baseName}}}", version: packageVersion),
+            appId: appId,
+            apiKey: apiKey,
+            options: options,
+            {{^hasRegionalHost}}
+            defaultHosts: () => [
+              Host(url: '$appId-dsn.algolia.net', callType: CallType.read),
+              Host(url: '$appId.algolia.net', callType: CallType.write),
+            ] +
+            [
+              Host(url: '$appId-1.algolianet.com'),
+              Host(url: '$appId-2.algolianet.com'),
+              Host(url: '$appId-3.algolianet.com')
+            ]..shuffle(),
+            {{/hasRegionalHost}}
+            {{#hasRegionalHost}}
+            defaultHosts: () {
+              final allowedRegions = [{{#allowedRegions}}'{{.}}'{{^-last}},{{/-last}}{{/allowedRegions}}];
+              {{^fallbackToAliasHost}}
+              assert(allowedRegions.contains(region), '`region` is required and must be one of the following: ${allowedRegions.join(',')}',);
+              {{/fallbackToAliasHost}}
+              {{#fallbackToAliasHost}}
+              assert(region == null || allowedRegions.contains(region),  '`region` must be one of the following: ${allowedRegions.join(',')}',);
+              {{/fallbackToAliasHost}}
+              final url = {{#fallbackToAliasHost}}region == null ? '{{{hostWithFallback}}}' : {{/fallbackToAliasHost}} '{{{regionalHost}}}'.replaceAll('{region}', region);
+              return [Host(url: url)];
+            }  
+            {{/hasRegionalHost}}
+            ) {
+    assert(appId.isNotEmpty, '`appId` is missing.');
+    assert(apiKey.isNotEmpty, '`apiKey` is missing.');
+  }
+  {{#operation}}
+
+  /// {{{summary}}}{{^summary}}{{{nickname}}}{{/summary}}
+  /// {{{notes}}}
+  ///
+  /// Parameters:
+  {{#allParams}}
+  /// * [{{paramName}}] {{#description}}- {{{.}}}{{/description}}
+  {{/allParams}}
+  /// * [requestOptions] additional request configuration.
+  {{#isDeprecated}}
+  @Deprecated('This operation has been deprecated')
+  {{/isDeprecated}}
+  Future<{{{returnType}}}{{^returnType}}void{{/returnType}}> {{nickname}}({ {{#allParams}}{{#isPathParam}}
+    {{#isDeprecated}}@Deprecated('{{paramName}} is deprecated') {{/isDeprecated}}required {{{dataType}}} {{paramName}},{{/isPathParam}}{{#isQueryParam}}
+    {{#isDeprecated}}@Deprecated('{{paramName}} is deprecated') {{/isDeprecated}}{{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isQueryParam}}{{#isHeaderParam}}
+    {{#isDeprecated}}@Deprecated('{{paramName}} is deprecated') {{/isDeprecated}}{{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isHeaderParam}}{{#isBodyParam}}
+    {{#isDeprecated}}@Deprecated('{{paramName}} is deprecated') {{/isDeprecated}}{{#required}}{{^isNullable}}required {{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}},{{/isBodyParam}}{{/allParams}}
+    RequestOptions? requestOptions,
+  }) async {
+    {{#requiredParams}}
+    {{#isString}}
+    assert({{paramName}}.isNotEmpty, 'Parameter `{{paramName}}` is required when calling `{{operationId}}`.',);
+    {{/isString}}
+    {{#isFreeFormObject}}
+    if ({{paramName}} is Map) { assert({{paramName}}.isNotEmpty, 'Parameter `{{paramName}}` is required when calling `{{operationId}}`.',); }
+    if ({{paramName}} is Map) { assert({{paramName}} .isNotEmpty, 'Parameter `{{paramName}} ` is required when calling `{{operationId}}`.', ); }
+    {{/isFreeFormObject}}
+    {{/requiredParams}}
+    final request = ApiRequest(
+        method: RequestMethod.{{#lambda.snakecase}}{{httpMethod}}{{/lambda.snakecase}}, 
+        path: r'{{{path}}}'{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', Uri.encodeComponent({{{paramName}}}.toString())){{/pathParams}},
+        {{#vendorExtensions.x-use-read-transporter}}
+        isRead : {{{vendorExtensions.x-use-read-transporter}}},
+        {{/vendorExtensions.x-use-read-transporter}}
+        {{#hasHeaderParams}}
+        headers : {
+          {{#headerParams}}
+          {{#required}}
+          '{{baseName}}' : {{paramName}},
+          {{/required}}
+          {{^required}}
+          if ({{paramName}} != null) '{{baseName}}' : {{paramName}},
+          {{/required}}
+          {{/headerParams}}
+        },
+        {{/hasHeaderParams}}
+        {{#hasQueryParams}}
+        queryParams: {
+          {{#vendorExtensions.x-is-custom-request}}
+          {{#queryParams}}
+          ...{{^required}}?{{/required}}{{paramName}},
+          {{/queryParams}}
+          {{/vendorExtensions.x-is-custom-request}}
+          {{^vendorExtensions.x-is-custom-request}}
+          {{#queryParams}}
+          {{#required}}
+          '{{baseName}}' : {{paramName}},
+          {{/required}}
+          {{^required}}
+          if ({{paramName}} != null) '{{baseName}}' : {{paramName}}{{#isArray}}.join(','){{/isArray}},
+          {{/required}}
+          {{/queryParams}}
+          {{/vendorExtensions.x-is-custom-request}}
+        },
+        {{/hasQueryParams}}
+        {{#hasBodyParam}}
+        body: {{#bodyParam}}{{{paramName}}}{{#isModel}}{{^isRequired}}?{{/isRequired}}.toJson(){{/isModel}},{{/bodyParam}}
+        {{/hasBodyParam}}
+    );  
+    final response = await _retryStrategy.execute(
+      request: request,
+      options: requestOptions,
+    );
+    return deserialize<{{{returnType}}}, {{{returnBaseType}}}>(response, '{{{returnType}}}', growable: true,);
+  }  
+  {{/operation}}
+
+  @override
+  void dispose() => _retryStrategy.dispose(); 
+}
+{{/operations}}

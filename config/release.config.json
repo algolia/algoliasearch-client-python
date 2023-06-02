@@ -9,7 +9,8 @@
     "php": "next",
     "java": "next",
     "go": "next",
-    "kotlin": "next"
+    "kotlin": "next",
+    "dart": "main"
   },
   "defaultTargetBranch": "next",
   "gitAuthor": {

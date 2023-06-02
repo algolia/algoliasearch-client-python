@@ -59,5 +59,17 @@
       "extension": "Test.kt",
       "outputFolder": "src/commonTest/kotlin/com/algolia"
     }
+  },
+  "dart": {
+    "folder": "clients/algoliasearch-client-dart",
+    "gitRepoId": "algoliasearch-client-dart",
+    "packageVersion": "0.1.0-alpha.1",
+    "modelFolder": "lib/src",
+    "apiFolder": "lib/src/api",
+    "customGenerator": "algolia-dart",
+    "tests": {
+      "extension": "_test.dart",
+      "outputFolder": ""
+    }
   }
 }

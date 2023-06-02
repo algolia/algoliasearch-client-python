@@ -44,6 +44,10 @@ export async function removeExistingCodegen({
         recursive: true,
       });
       break;
+    case 'dart':
+      clientModel = clientName;
+      clientApi = `${clientName}*.dart`;
+      break;
     default:
       break;
   }

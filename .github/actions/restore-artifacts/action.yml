@@ -23,7 +23,10 @@ inputs:
     required: false
   kotlin:
     description: Whether this job ran or not
-    required: false   
+    required: false
+  dart:
+    description: Whether this job ran or not
+    required: false     
 
 runs:
   using: composite
@@ -103,4 +106,18 @@ runs:
       shell: bash
       run: |
         rm -rf clients/algoliasearch-client-kotlin
-        unzip -q -o clients-kotlin.zip && rm clients-kotlin.zip    
+        unzip -q -o clients-kotlin.zip && rm clients-kotlin.zip
+
+    # Dart
+    - name: Download clients-dart artifact
+      if: ${{ inputs.dart == 'true' && inputs.type == 'all' }}
+      uses: actions/download-artifact@v3
+      with:
+        name: clients-dart
+
+    - name: Unzip clients-dart artifact
+      if: ${{ inputs.dart == 'true' && inputs.type == 'all' }}
+      shell: bash
+      run: |
+        rm -rf clients/algoliasearch-client-dart
+        unzip -q -o clients-dart.zip && rm clients-dart.zip

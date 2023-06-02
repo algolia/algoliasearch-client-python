@@ -34,6 +34,9 @@ export async function formatter(
     case 'kotlin':
       cmd = `${folder}/gradlew -p ${folder} spotlessApply`;
       break;
+    case 'dart':
+      cmd = `(cd ${folder} && melos bs && melos build --no-select && melos lint)`;
+      break;
     default:
       return;
   }

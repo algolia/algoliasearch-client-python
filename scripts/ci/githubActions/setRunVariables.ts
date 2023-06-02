@@ -11,6 +11,7 @@ const JAVA_CLIENT_FOLDER = getLanguageFolder('java');
 const PHP_CLIENT_FOLDER = getLanguageFolder('php');
 const GO_CLIENT_FOLDER = getLanguageFolder('go');
 const KOTLIN_CLIENT_FOLDER = getLanguageFolder('kotlin');
+const DART_CLIENT_FOLDER = getLanguageFolder('dart');
 
 // Files that are common to every clients, this is used to determine if we should generate the matrix for this job.
 const CLIENTS_COMMON_FILES = [
@@ -87,6 +88,12 @@ export const DEPENDENCIES = {
     KOTLIN_CLIENT_FOLDER,
     'templates/kotlin',
     'generators/src/main/java/com/algolia/codegen/AlgoliaKotlinGenerator.java',
+  ],
+  DART_CLIENT_CHANGED: [
+    ...CLIENTS_COMMON_FILES,
+    DART_CLIENT_FOLDER,
+    'templates/dart',
+    'generators/src/main/java/com/algolia/codegen/AlgoliaDartGenerator.java',
   ],
 };
 
