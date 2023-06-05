@@ -1,5 +1,9 @@
 ## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
 
+- [e1cb1c89](https://github.com/algolia/api-clients-automation/commit/e1cb1c89) fix(specs): add docker source input ([#1594](https://github.com/algolia/api-clients-automation/pull/1594)) by [@millotp](https://github.com/millotp/)
+
+## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
+
 - [2a55abf5](https://github.com/algolia/api-clients-automation/commit/2a55abf5) feat(specs): add objectID to BQ source input ([#1575](https://github.com/algolia/api-clients-automation/pull/1575)) by [@damcou](https://github.com/damcou/)
 
 ## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
