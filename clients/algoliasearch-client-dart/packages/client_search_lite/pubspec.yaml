@@ -1,0 +1,19 @@
+name: algolia_search_lite
+version: 0.1.0-alpha.1
+description: Dart Algolia Search Lite API client to interact with Algolia
+homepage: https://www.algolia.com/doc/
+repository: https://github.com/algolia/algoliasearch-client-dart/packages/client_search_lite
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  algolia_client_core: ^0.1.0
+  json_annotation: ^4.8.1
+  collection: ^1.17.2
+
+dev_dependencies:
+  build_runner: ^2.4.4
+  json_serializable: ^6.7.0
+  lints: ^2.1.0
+  logging: ^1.2.0
