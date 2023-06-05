@@ -19,7 +19,10 @@ public enum class SourceType(public val value: kotlin.String) {
   Csv("csv"),
 
   @SerialName(value = "bigquery")
-  Bigquery("bigquery");
+  Bigquery("bigquery"),
+
+  @SerialName(value = "docker")
+  Docker("docker");
 
   override fun toString(): kotlin.String = value
 }

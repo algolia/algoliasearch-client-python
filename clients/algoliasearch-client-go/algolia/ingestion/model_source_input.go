@@ -12,6 +12,7 @@ type SourceInput struct {
 	SourceBigQuery      *SourceBigQuery
 	SourceCSV           *SourceCSV
 	SourceCommercetools *SourceCommercetools
+	SourceDocker        *SourceDocker
 	SourceJSON          *SourceJSON
 }
 
@@ -40,6 +41,13 @@ func SourceCSVAsSourceInput(v *SourceCSV) SourceInput {
 func SourceCommercetoolsAsSourceInput(v *SourceCommercetools) SourceInput {
 	return SourceInput{
 		SourceCommercetools: v,
+	}
+}
+
+// SourceDockerAsSourceInput is a convenience function that returns SourceDocker wrapped in SourceInput
+func SourceDockerAsSourceInput(v *SourceDocker) SourceInput {
+	return SourceInput{
+		SourceDocker: v,
 	}
 }
 
@@ -105,6 +113,19 @@ func (dst *SourceInput) UnmarshalJSON(data []byte) error {
 		dst.SourceCommercetools = nil
 	}
 
+	// try to unmarshal data into SourceDocker
+	err = newStrictDecoder(data).Decode(&dst.SourceDocker)
+	if err == nil && validateStruct(dst.SourceDocker) == nil {
+		jsonSourceDocker, _ := json.Marshal(dst.SourceDocker)
+		if string(jsonSourceDocker) == "{}" { // empty struct
+			dst.SourceDocker = nil
+		} else {
+			return nil
+		}
+	} else {
+		dst.SourceDocker = nil
+	}
+
 	// try to unmarshal data into SourceJSON
 	err = newStrictDecoder(data).Decode(&dst.SourceJSON)
 	if err == nil && validateStruct(dst.SourceJSON) == nil {
@@ -139,6 +160,10 @@ func (src SourceInput) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.SourceCommercetools)
 	}
 
+	if src.SourceDocker != nil {
+		return json.Marshal(&src.SourceDocker)
+	}
+
 	if src.SourceJSON != nil {
 		return json.Marshal(&src.SourceJSON)
 	}
@@ -165,6 +190,10 @@ func (obj *SourceInput) GetActualInstance() any {
 
 	if obj.SourceCommercetools != nil {
 		return obj.SourceCommercetools
+	}
+
+	if obj.SourceDocker != nil {
+		return obj.SourceDocker
 	}
 
 	if obj.SourceJSON != nil {

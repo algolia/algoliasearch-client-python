@@ -16,6 +16,7 @@ const (
 	SOURCETYPE_JSON          SourceType = "json"
 	SOURCETYPE_CSV           SourceType = "csv"
 	SOURCETYPE_BIGQUERY      SourceType = "bigquery"
+	SOURCETYPE_DOCKER        SourceType = "docker"
 )
 
 // All allowed values of SourceType enum
@@ -25,6 +26,7 @@ var AllowedSourceTypeEnumValues = []SourceType{
 	"json",
 	"csv",
 	"bigquery",
+	"docker",
 }
 
 func (v *SourceType) UnmarshalJSON(src []byte) error {

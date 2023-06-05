@@ -104,6 +104,32 @@ public sealed interface SourceInput {
     )
 
     /**
+     * SourceDocker
+     *
+     * @param registry
+     * @param image The name of the image to pull.
+     * @param imageType
+     * @param configuration The configuration of the spec.
+     * @param version The version of the image, defaults to `latest`.
+     * @param outputFile The full name of the output file.
+     */
+    public fun SourceDocker(
+      registry: DockerRegistry,
+      image: String,
+      imageType: DockerImageType,
+      configuration: JsonObject,
+      version: String? = null,
+      outputFile: String? = null,
+    ): SourceDocker = com.algolia.client.model.ingestion.SourceDocker(
+      registry = registry,
+      image = image,
+      imageType = imageType,
+      configuration = configuration,
+      version = version,
+      outputFile = outputFile,
+    )
+
+    /**
      * SourceJSON
      *
      * @param url The URL of the file.
@@ -132,6 +158,7 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
       is SourceBigQuery -> SourceBigQuery.serializer().serialize(encoder, value)
       is SourceCSV -> SourceCSV.serializer().serialize(encoder, value)
       is SourceCommercetools -> SourceCommercetools.serializer().serialize(encoder, value)
+      is SourceDocker -> SourceDocker.serializer().serialize(encoder, value)
       is SourceJSON -> SourceJSON.serializer().serialize(encoder, value)
     }
   }
@@ -177,6 +204,16 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceCommercetools (error: ${e.message})")
+      }
+    }
+
+    // deserialize SourceDocker
+    if (tree is JsonObject) {
+      try {
+        return codec.json.decodeFromJsonElement<SourceDocker>(tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize SourceDocker (error: ${e.message})")
       }
     }
 
