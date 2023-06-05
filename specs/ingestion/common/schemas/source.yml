@@ -94,7 +94,7 @@ SourceSearch:
 
 SourceType:
   type: string
-  enum: ['bigcommerce', 'commercetools', 'json', 'csv', 'bigquery']
+  enum: ['bigcommerce', 'commercetools', 'json', 'csv', 'bigquery', 'docker']
 
 SourceCommercetools:
   type: object
@@ -225,11 +225,50 @@ SourceBigQuery:
       $ref: '#/UniqueIDColumn'
   required:
     - projectID
-    - datasetID  
+    - datasetID
 
 BigQueryDataType:
   type: string
   enum: ['ga4', 'ga360']
+
+SourceDocker:
+  type: object
+  additionalProperties: false
+  properties:
+    registry:
+      $ref: '#/DockerRegistry'
+    image:
+      type: string
+      description: The name of the image to pull.
+      example: algolia/zendesk
+    version:
+      type: string
+      description: The version of the image, defaults to `latest`.
+      example: v2.1.0
+    imageType:
+      $ref: '#/DockerImageType'
+    outputFile:
+      type: string
+      description: The full name of the output file.
+      example: output.json
+    configuration:
+      type: object
+      description: The configuration of the spec.
+  required:
+    - registry
+    - image
+    - imageType
+    - configuration
+
+DockerRegistry:
+  type: string
+  enum: ['dockerhub', 'gcr']
+  description: The registry where the image is stored.
+
+DockerImageType:
+  type: string
+  enum: ['singer', 'custom', 'airbyte']
+  description: The type of the image.
 
 SourceInput:
   oneOf:
@@ -238,6 +277,7 @@ SourceInput:
     - $ref: '#/SourceJSON'
     - $ref: '#/SourceCSV'
     - $ref: '#/SourceBigQuery'
+    - $ref: '#/SourceDocker'
 
 SourceUpdateCommercetools:
   type: object
@@ -261,3 +301,4 @@ SourceUpdateInput:
     - $ref: '#/SourceJSON'
     - $ref: '#/SourceCSV'
     - $ref: '#/SourceBigQuery'
+    - $ref: '#/SourceDocker'
