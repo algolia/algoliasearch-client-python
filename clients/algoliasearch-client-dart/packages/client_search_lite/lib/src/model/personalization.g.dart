@@ -7,30 +7,15 @@ part of 'personalization.dart';
 // **************************************************************************
 
 Personalization _$PersonalizationFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'Personalization',
-      json,
-      ($checkedConvert) {
-        final val = Personalization(
-          filtersScore: $checkedConvert('filtersScore', (v) => v as int?),
-          rankingScore: $checkedConvert('rankingScore', (v) => v as int?),
-          score: $checkedConvert('score', (v) => v as int?),
-        );
-        return val;
-      },
+    Personalization(
+      filtersScore: json['filtersScore'] as int?,
+      rankingScore: json['rankingScore'] as int?,
+      score: json['score'] as int?,
     );
 
-Map<String, dynamic> _$PersonalizationToJson(Personalization instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('filtersScore', instance.filtersScore);
-  writeNotNull('rankingScore', instance.rankingScore);
-  writeNotNull('score', instance.score);
-  return val;
-}
+Map<String, dynamic> _$PersonalizationToJson(Personalization instance) =>
+    <String, dynamic>{
+      'filtersScore': instance.filtersScore,
+      'rankingScore': instance.rankingScore,
+      'score': instance.score,
+    };

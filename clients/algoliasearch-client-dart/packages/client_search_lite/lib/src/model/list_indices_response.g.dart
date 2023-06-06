@@ -7,33 +7,16 @@ part of 'list_indices_response.dart';
 // **************************************************************************
 
 ListIndicesResponse _$ListIndicesResponseFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'ListIndicesResponse',
-      json,
-      ($checkedConvert) {
-        final val = ListIndicesResponse(
-          items: $checkedConvert(
-              'items',
-              (v) => (v as List<dynamic>)
-                  .map((e) => FetchedIndex.fromJson(e as Map<String, dynamic>))
-                  .toList()),
-          nbPages: $checkedConvert('nbPages', (v) => v as int?),
-        );
-        return val;
-      },
+    ListIndicesResponse(
+      items: (json['items'] as List<dynamic>)
+          .map((e) => FetchedIndex.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      nbPages: json['nbPages'] as int?,
     );
 
-Map<String, dynamic> _$ListIndicesResponseToJson(ListIndicesResponse instance) {
-  final val = <String, dynamic>{
-    'items': instance.items.map((e) => e.toJson()).toList(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('nbPages', instance.nbPages);
-  return val;
-}
+Map<String, dynamic> _$ListIndicesResponseToJson(
+        ListIndicesResponse instance) =>
+    <String, dynamic>{
+      'items': instance.items,
+      'nbPages': instance.nbPages,
+    };

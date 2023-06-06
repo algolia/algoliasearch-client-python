@@ -7,101 +7,71 @@ part of 'base_search_response.dart';
 // **************************************************************************
 
 BaseSearchResponse _$BaseSearchResponseFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'BaseSearchResponse',
-      json,
-      ($checkedConvert) {
-        final val = BaseSearchResponse(
-          abTestID: $checkedConvert('abTestID', (v) => v as int?),
-          abTestVariantID: $checkedConvert('abTestVariantID', (v) => v as int?),
-          aroundLatLng: $checkedConvert('aroundLatLng', (v) => v as String?),
-          automaticRadius:
-              $checkedConvert('automaticRadius', (v) => v as String?),
-          exhaustiveFacetsCount:
-              $checkedConvert('exhaustiveFacetsCount', (v) => v as bool?),
-          exhaustiveNbHits:
-              $checkedConvert('exhaustiveNbHits', (v) => v as bool),
-          exhaustiveTypo: $checkedConvert('exhaustiveTypo', (v) => v as bool?),
-          facets: $checkedConvert(
-              'facets',
-              (v) => (v as Map<String, dynamic>?)?.map(
-                    (k, e) => MapEntry(k, Map<String, int>.from(e as Map)),
-                  )),
-          facetsStats: $checkedConvert(
-              'facets_stats',
-              (v) => (v as Map<String, dynamic>?)?.map(
-                    (k, e) => MapEntry(
-                        k, FacetsStats.fromJson(e as Map<String, dynamic>)),
-                  )),
-          hitsPerPage: $checkedConvert('hitsPerPage', (v) => v as int),
-          index: $checkedConvert('index', (v) => v as String?),
-          indexUsed: $checkedConvert('indexUsed', (v) => v as String?),
-          message: $checkedConvert('message', (v) => v as String?),
-          nbHits: $checkedConvert('nbHits', (v) => v as int),
-          nbPages: $checkedConvert('nbPages', (v) => v as int),
-          nbSortedHits: $checkedConvert('nbSortedHits', (v) => v as int?),
-          page: $checkedConvert('page', (v) => v as int),
-          params: $checkedConvert('params', (v) => v as String),
-          redirect: $checkedConvert(
-              'redirect',
-              (v) => v == null
-                  ? null
-                  : BaseSearchResponseRedirect.fromJson(
-                      v as Map<String, dynamic>)),
-          parsedQuery: $checkedConvert('parsedQuery', (v) => v as String?),
-          processingTimeMS:
-              $checkedConvert('processingTimeMS', (v) => v as int),
-          query: $checkedConvert('query', (v) => v as String),
-          queryAfterRemoval:
-              $checkedConvert('queryAfterRemoval', (v) => v as String?),
-          serverUsed: $checkedConvert('serverUsed', (v) => v as String?),
-          userData: $checkedConvert('userData', (v) => v),
-          renderingContent: $checkedConvert(
-              'renderingContent',
-              (v) => v == null
-                  ? null
-                  : RenderingContent.fromJson(v as Map<String, dynamic>)),
-        );
-        return val;
-      },
-      fieldKeyMap: const {'facetsStats': 'facets_stats'},
+    BaseSearchResponse(
+      abTestID: json['abTestID'] as int?,
+      abTestVariantID: json['abTestVariantID'] as int?,
+      aroundLatLng: json['aroundLatLng'] as String?,
+      automaticRadius: json['automaticRadius'] as String?,
+      exhaustiveFacetsCount: json['exhaustiveFacetsCount'] as bool?,
+      exhaustiveNbHits: json['exhaustiveNbHits'] as bool,
+      exhaustiveTypo: json['exhaustiveTypo'] as bool?,
+      facets: (json['facets'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, Map<String, int>.from(e as Map)),
+      ),
+      facetsStats: (json['facets_stats'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, FacetsStats.fromJson(e as Map<String, dynamic>)),
+      ),
+      hitsPerPage: json['hitsPerPage'] as int,
+      index: json['index'] as String?,
+      indexUsed: json['indexUsed'] as String?,
+      message: json['message'] as String?,
+      nbHits: json['nbHits'] as int,
+      nbPages: json['nbPages'] as int,
+      nbSortedHits: json['nbSortedHits'] as int?,
+      page: json['page'] as int,
+      params: json['params'] as String,
+      redirect: json['redirect'] == null
+          ? null
+          : BaseSearchResponseRedirect.fromJson(
+              json['redirect'] as Map<String, dynamic>),
+      parsedQuery: json['parsedQuery'] as String?,
+      processingTimeMS: json['processingTimeMS'] as int,
+      query: json['query'] as String,
+      queryAfterRemoval: json['queryAfterRemoval'] as String?,
+      serverUsed: json['serverUsed'] as String?,
+      userData: json['userData'],
+      renderingContent: json['renderingContent'] == null
+          ? null
+          : RenderingContent.fromJson(
+              json['renderingContent'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$BaseSearchResponseToJson(BaseSearchResponse instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('abTestID', instance.abTestID);
-  writeNotNull('abTestVariantID', instance.abTestVariantID);
-  writeNotNull('aroundLatLng', instance.aroundLatLng);
-  writeNotNull('automaticRadius', instance.automaticRadius);
-  writeNotNull('exhaustiveFacetsCount', instance.exhaustiveFacetsCount);
-  val['exhaustiveNbHits'] = instance.exhaustiveNbHits;
-  writeNotNull('exhaustiveTypo', instance.exhaustiveTypo);
-  writeNotNull('facets', instance.facets);
-  writeNotNull('facets_stats',
-      instance.facetsStats?.map((k, e) => MapEntry(k, e.toJson())));
-  val['hitsPerPage'] = instance.hitsPerPage;
-  writeNotNull('index', instance.index);
-  writeNotNull('indexUsed', instance.indexUsed);
-  writeNotNull('message', instance.message);
-  val['nbHits'] = instance.nbHits;
-  val['nbPages'] = instance.nbPages;
-  writeNotNull('nbSortedHits', instance.nbSortedHits);
-  val['page'] = instance.page;
-  val['params'] = instance.params;
-  writeNotNull('redirect', instance.redirect?.toJson());
-  writeNotNull('parsedQuery', instance.parsedQuery);
-  val['processingTimeMS'] = instance.processingTimeMS;
-  val['query'] = instance.query;
-  writeNotNull('queryAfterRemoval', instance.queryAfterRemoval);
-  writeNotNull('serverUsed', instance.serverUsed);
-  writeNotNull('userData', instance.userData);
-  writeNotNull('renderingContent', instance.renderingContent?.toJson());
-  return val;
-}
+Map<String, dynamic> _$BaseSearchResponseToJson(BaseSearchResponse instance) =>
+    <String, dynamic>{
+      'abTestID': instance.abTestID,
+      'abTestVariantID': instance.abTestVariantID,
+      'aroundLatLng': instance.aroundLatLng,
+      'automaticRadius': instance.automaticRadius,
+      'exhaustiveFacetsCount': instance.exhaustiveFacetsCount,
+      'exhaustiveNbHits': instance.exhaustiveNbHits,
+      'exhaustiveTypo': instance.exhaustiveTypo,
+      'facets': instance.facets,
+      'facets_stats': instance.facetsStats,
+      'hitsPerPage': instance.hitsPerPage,
+      'index': instance.index,
+      'indexUsed': instance.indexUsed,
+      'message': instance.message,
+      'nbHits': instance.nbHits,
+      'nbPages': instance.nbPages,
+      'nbSortedHits': instance.nbSortedHits,
+      'page': instance.page,
+      'params': instance.params,
+      'redirect': instance.redirect,
+      'parsedQuery': instance.parsedQuery,
+      'processingTimeMS': instance.processingTimeMS,
+      'query': instance.query,
+      'queryAfterRemoval': instance.queryAfterRemoval,
+      'serverUsed': instance.serverUsed,
+      'userData': instance.userData,
+      'renderingContent': instance.renderingContent,
+    };

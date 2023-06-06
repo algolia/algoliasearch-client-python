@@ -7,30 +7,14 @@ part of 'rendering_content.dart';
 // **************************************************************************
 
 RenderingContent _$RenderingContentFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'RenderingContent',
-      json,
-      ($checkedConvert) {
-        final val = RenderingContent(
-          facetOrdering: $checkedConvert(
-              'facetOrdering',
-              (v) => v == null
-                  ? null
-                  : FacetOrdering.fromJson(v as Map<String, dynamic>)),
-        );
-        return val;
-      },
+    RenderingContent(
+      facetOrdering: json['facetOrdering'] == null
+          ? null
+          : FacetOrdering.fromJson(
+              json['facetOrdering'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$RenderingContentToJson(RenderingContent instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('facetOrdering', instance.facetOrdering?.toJson());
-  return val;
-}
+Map<String, dynamic> _$RenderingContentToJson(RenderingContent instance) =>
+    <String, dynamic>{
+      'facetOrdering': instance.facetOrdering,
+    };

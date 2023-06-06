@@ -7,33 +7,16 @@ part of 'search_method_params.dart';
 // **************************************************************************
 
 SearchMethodParams _$SearchMethodParamsFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'SearchMethodParams',
-      json,
-      ($checkedConvert) {
-        final val = SearchMethodParams(
-          requests: $checkedConvert('requests', (v) => v as List<dynamic>),
-          strategy: $checkedConvert('strategy',
-              (v) => $enumDecodeNullable(_$SearchStrategyEnumMap, v)),
-        );
-        return val;
-      },
+    SearchMethodParams(
+      requests: json['requests'] as List<dynamic>,
+      strategy: $enumDecodeNullable(_$SearchStrategyEnumMap, json['strategy']),
     );
 
-Map<String, dynamic> _$SearchMethodParamsToJson(SearchMethodParams instance) {
-  final val = <String, dynamic>{
-    'requests': instance.requests.toList(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('strategy', _$SearchStrategyEnumMap[instance.strategy]);
-  return val;
-}
+Map<String, dynamic> _$SearchMethodParamsToJson(SearchMethodParams instance) =>
+    <String, dynamic>{
+      'requests': instance.requests.toList(),
+      'strategy': _$SearchStrategyEnumMap[instance.strategy],
+    };
 
 const _$SearchStrategyEnumMap = {
   SearchStrategy.none: 'none',

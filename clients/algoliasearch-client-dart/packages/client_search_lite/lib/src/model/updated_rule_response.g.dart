@@ -7,17 +7,10 @@ part of 'updated_rule_response.dart';
 // **************************************************************************
 
 UpdatedRuleResponse _$UpdatedRuleResponseFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'UpdatedRuleResponse',
-      json,
-      ($checkedConvert) {
-        final val = UpdatedRuleResponse(
-          objectID: $checkedConvert('objectID', (v) => v as String),
-          updatedAt: $checkedConvert('updatedAt', (v) => v as String),
-          taskID: $checkedConvert('taskID', (v) => v as int),
-        );
-        return val;
-      },
+    UpdatedRuleResponse(
+      objectID: json['objectID'] as String,
+      updatedAt: json['updatedAt'] as String,
+      taskID: json['taskID'] as int,
     );
 
 Map<String, dynamic> _$UpdatedRuleResponseToJson(

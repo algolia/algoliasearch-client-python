@@ -8,15 +8,8 @@ part of 'redirect_rule_index_metadata_data.dart';
 
 RedirectRuleIndexMetadataData _$RedirectRuleIndexMetadataDataFromJson(
         Map<String, dynamic> json) =>
-    $checkedCreate(
-      'RedirectRuleIndexMetadataData',
-      json,
-      ($checkedConvert) {
-        final val = RedirectRuleIndexMetadataData(
-          ruleObjectID: $checkedConvert('ruleObjectID', (v) => v as String),
-        );
-        return val;
-      },
+    RedirectRuleIndexMetadataData(
+      ruleObjectID: json['ruleObjectID'] as String,
     );
 
 Map<String, dynamic> _$RedirectRuleIndexMetadataDataToJson(

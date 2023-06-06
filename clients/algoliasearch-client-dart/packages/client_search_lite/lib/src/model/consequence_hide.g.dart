@@ -7,15 +7,8 @@ part of 'consequence_hide.dart';
 // **************************************************************************
 
 ConsequenceHide _$ConsequenceHideFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'ConsequenceHide',
-      json,
-      ($checkedConvert) {
-        final val = ConsequenceHide(
-          objectID: $checkedConvert('objectID', (v) => v as String),
-        );
-        return val;
-      },
+    ConsequenceHide(
+      objectID: json['objectID'] as String,
     );
 
 Map<String, dynamic> _$ConsequenceHideToJson(ConsequenceHide instance) =>

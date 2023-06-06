@@ -7,78 +7,66 @@ part of 'base_index_settings.dart';
 // **************************************************************************
 
 BaseIndexSettings _$BaseIndexSettingsFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'BaseIndexSettings',
-      json,
-      ($checkedConvert) {
-        final val = BaseIndexSettings(
-          replicas: $checkedConvert('replicas',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          paginationLimitedTo:
-              $checkedConvert('paginationLimitedTo', (v) => v as int?),
-          unretrievableAttributes: $checkedConvert('unretrievableAttributes',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          disableTypoToleranceOnWords: $checkedConvert(
-              'disableTypoToleranceOnWords',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          attributesToTransliterate: $checkedConvert(
-              'attributesToTransliterate',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          camelCaseAttributes: $checkedConvert('camelCaseAttributes',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          decompoundedAttributes:
-              $checkedConvert('decompoundedAttributes', (v) => v),
-          indexLanguages: $checkedConvert('indexLanguages',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          disablePrefixOnAttributes: $checkedConvert(
-              'disablePrefixOnAttributes',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          allowCompressionOfIntegerArray: $checkedConvert(
-              'allowCompressionOfIntegerArray', (v) => v as bool?),
-          numericAttributesForFiltering: $checkedConvert(
-              'numericAttributesForFiltering',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          separatorsToIndex:
-              $checkedConvert('separatorsToIndex', (v) => v as String?),
-          searchableAttributes: $checkedConvert('searchableAttributes',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          userData: $checkedConvert('userData', (v) => v),
-          customNormalization: $checkedConvert(
-              'customNormalization',
-              (v) => (v as Map<String, dynamic>?)?.map(
-                    (k, e) => MapEntry(k, Map<String, String>.from(e as Map)),
-                  )),
-        );
-        return val;
-      },
+    BaseIndexSettings(
+      replicas: (json['replicas'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      paginationLimitedTo: json['paginationLimitedTo'] as int?,
+      unretrievableAttributes:
+          (json['unretrievableAttributes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
+      disableTypoToleranceOnWords:
+          (json['disableTypoToleranceOnWords'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
+      attributesToTransliterate:
+          (json['attributesToTransliterate'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
+      camelCaseAttributes: (json['camelCaseAttributes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      decompoundedAttributes: json['decompoundedAttributes'],
+      indexLanguages: (json['indexLanguages'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      disablePrefixOnAttributes:
+          (json['disablePrefixOnAttributes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
+      allowCompressionOfIntegerArray:
+          json['allowCompressionOfIntegerArray'] as bool?,
+      numericAttributesForFiltering:
+          (json['numericAttributesForFiltering'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
+      separatorsToIndex: json['separatorsToIndex'] as String?,
+      searchableAttributes: (json['searchableAttributes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      userData: json['userData'],
+      customNormalization:
+          (json['customNormalization'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, Map<String, String>.from(e as Map)),
+      ),
     );
 
-Map<String, dynamic> _$BaseIndexSettingsToJson(BaseIndexSettings instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('replicas', instance.replicas);
-  writeNotNull('paginationLimitedTo', instance.paginationLimitedTo);
-  writeNotNull('unretrievableAttributes', instance.unretrievableAttributes);
-  writeNotNull(
-      'disableTypoToleranceOnWords', instance.disableTypoToleranceOnWords);
-  writeNotNull('attributesToTransliterate', instance.attributesToTransliterate);
-  writeNotNull('camelCaseAttributes', instance.camelCaseAttributes);
-  writeNotNull('decompoundedAttributes', instance.decompoundedAttributes);
-  writeNotNull('indexLanguages', instance.indexLanguages);
-  writeNotNull('disablePrefixOnAttributes', instance.disablePrefixOnAttributes);
-  writeNotNull('allowCompressionOfIntegerArray',
-      instance.allowCompressionOfIntegerArray);
-  writeNotNull(
-      'numericAttributesForFiltering', instance.numericAttributesForFiltering);
-  writeNotNull('separatorsToIndex', instance.separatorsToIndex);
-  writeNotNull('searchableAttributes', instance.searchableAttributes);
-  writeNotNull('userData', instance.userData);
-  writeNotNull('customNormalization', instance.customNormalization);
-  return val;
-}
+Map<String, dynamic> _$BaseIndexSettingsToJson(BaseIndexSettings instance) =>
+    <String, dynamic>{
+      'replicas': instance.replicas,
+      'paginationLimitedTo': instance.paginationLimitedTo,
+      'unretrievableAttributes': instance.unretrievableAttributes,
+      'disableTypoToleranceOnWords': instance.disableTypoToleranceOnWords,
+      'attributesToTransliterate': instance.attributesToTransliterate,
+      'camelCaseAttributes': instance.camelCaseAttributes,
+      'decompoundedAttributes': instance.decompoundedAttributes,
+      'indexLanguages': instance.indexLanguages,
+      'disablePrefixOnAttributes': instance.disablePrefixOnAttributes,
+      'allowCompressionOfIntegerArray': instance.allowCompressionOfIntegerArray,
+      'numericAttributesForFiltering': instance.numericAttributesForFiltering,
+      'separatorsToIndex': instance.separatorsToIndex,
+      'searchableAttributes': instance.searchableAttributes,
+      'userData': instance.userData,
+      'customNormalization': instance.customNormalization,
+    };

@@ -7,18 +7,9 @@ part of 'built_in_operation.dart';
 // **************************************************************************
 
 BuiltInOperation _$BuiltInOperationFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'BuiltInOperation',
-      json,
-      ($checkedConvert) {
-        final val = BuiltInOperation(
-          operation: $checkedConvert('_operation',
-              (v) => $enumDecode(_$BuiltInOperationTypeEnumMap, v)),
-          value: $checkedConvert('value', (v) => v as String),
-        );
-        return val;
-      },
-      fieldKeyMap: const {'operation': '_operation'},
+    BuiltInOperation(
+      operation: $enumDecode(_$BuiltInOperationTypeEnumMap, json['_operation']),
+      value: json['value'] as String,
     );
 
 Map<String, dynamic> _$BuiltInOperationToJson(BuiltInOperation instance) =>

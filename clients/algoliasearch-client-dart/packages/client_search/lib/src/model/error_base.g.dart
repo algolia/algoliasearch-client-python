@@ -16,16 +16,3 @@ ErrorBase _$ErrorBaseFromJson(Map<String, dynamic> json) => $checkedCreate(
         return val;
       },
     );
-
-Map<String, dynamic> _$ErrorBaseToJson(ErrorBase instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('message', instance.message);
-  return val;
-}

@@ -7,16 +7,9 @@ part of 'add_api_key_response.dart';
 // **************************************************************************
 
 AddApiKeyResponse _$AddApiKeyResponseFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'AddApiKeyResponse',
-      json,
-      ($checkedConvert) {
-        final val = AddApiKeyResponse(
-          key: $checkedConvert('key', (v) => v as String),
-          createdAt: $checkedConvert('createdAt', (v) => v as String),
-        );
-        return val;
-      },
+    AddApiKeyResponse(
+      key: json['key'] as String,
+      createdAt: json['createdAt'] as String,
     );
 
 Map<String, dynamic> _$AddApiKeyResponseToJson(AddApiKeyResponse instance) =>

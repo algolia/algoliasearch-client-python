@@ -7,17 +7,9 @@ part of 'snippet_result_option.dart';
 // **************************************************************************
 
 SnippetResultOption _$SnippetResultOptionFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'SnippetResultOption',
-      json,
-      ($checkedConvert) {
-        final val = SnippetResultOption(
-          value: $checkedConvert('value', (v) => v as String),
-          matchLevel: $checkedConvert(
-              'matchLevel', (v) => $enumDecode(_$MatchLevelEnumMap, v)),
-        );
-        return val;
-      },
+    SnippetResultOption(
+      value: json['value'] as String,
+      matchLevel: $enumDecode(_$MatchLevelEnumMap, json['matchLevel']),
     );
 
 Map<String, dynamic> _$SnippetResultOptionToJson(

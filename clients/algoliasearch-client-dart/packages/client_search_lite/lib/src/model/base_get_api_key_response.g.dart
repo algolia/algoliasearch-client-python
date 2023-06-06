@@ -8,29 +8,14 @@ part of 'base_get_api_key_response.dart';
 
 BaseGetApiKeyResponse _$BaseGetApiKeyResponseFromJson(
         Map<String, dynamic> json) =>
-    $checkedCreate(
-      'BaseGetApiKeyResponse',
-      json,
-      ($checkedConvert) {
-        final val = BaseGetApiKeyResponse(
-          value: $checkedConvert('value', (v) => v as String?),
-          createdAt: $checkedConvert('createdAt', (v) => v as int),
-        );
-        return val;
-      },
+    BaseGetApiKeyResponse(
+      value: json['value'] as String?,
+      createdAt: json['createdAt'] as int,
     );
 
 Map<String, dynamic> _$BaseGetApiKeyResponseToJson(
-    BaseGetApiKeyResponse instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('value', instance.value);
-  val['createdAt'] = instance.createdAt;
-  return val;
-}
+        BaseGetApiKeyResponse instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+      'createdAt': instance.createdAt,
+    };

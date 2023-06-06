@@ -8,40 +8,23 @@ part of 'highlight_result_option.dart';
 
 HighlightResultOption _$HighlightResultOptionFromJson(
         Map<String, dynamic> json) =>
-    $checkedCreate(
-      'HighlightResultOption',
-      json,
-      ($checkedConvert) {
-        final val = HighlightResultOption(
-          value: $checkedConvert('value', (v) => v as String),
-          matchLevel: $checkedConvert(
-              'matchLevel', (v) => $enumDecode(_$MatchLevelEnumMap, v)),
-          matchedWords: $checkedConvert('matchedWords',
-              (v) => (v as List<dynamic>).map((e) => e as String).toList()),
-          fullyHighlighted:
-              $checkedConvert('fullyHighlighted', (v) => v as bool?),
-        );
-        return val;
-      },
+    HighlightResultOption(
+      value: json['value'] as String,
+      matchLevel: $enumDecode(_$MatchLevelEnumMap, json['matchLevel']),
+      matchedWords: (json['matchedWords'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      fullyHighlighted: json['fullyHighlighted'] as bool?,
     );
 
 Map<String, dynamic> _$HighlightResultOptionToJson(
-    HighlightResultOption instance) {
-  final val = <String, dynamic>{
-    'value': instance.value,
-    'matchLevel': _$MatchLevelEnumMap[instance.matchLevel]!,
-    'matchedWords': instance.matchedWords,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('fullyHighlighted', instance.fullyHighlighted);
-  return val;
-}
+        HighlightResultOption instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+      'matchLevel': _$MatchLevelEnumMap[instance.matchLevel]!,
+      'matchedWords': instance.matchedWords,
+      'fullyHighlighted': instance.fullyHighlighted,
+    };
 
 const _$MatchLevelEnumMap = {
   MatchLevel.none: 'none',

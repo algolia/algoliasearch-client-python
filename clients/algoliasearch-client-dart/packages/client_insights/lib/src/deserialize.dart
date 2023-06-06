@@ -1,7 +1,7 @@
-import 'package:algolia_insights/src/model/error_base.dart';
-import 'package:algolia_insights/src/model/insight_event.dart';
-import 'package:algolia_insights/src/model/insight_events.dart';
-import 'package:algolia_insights/src/model/push_events_response.dart';
+import 'package:algolia_client_insights/src/model/error_base.dart';
+import 'package:algolia_client_insights/src/model/insight_event.dart';
+import 'package:algolia_client_insights/src/model/insight_events.dart';
+import 'package:algolia_client_insights/src/model/push_events_response.dart';
 
 final _regList = RegExp(r'^List<(.*)>$');
 final _regSet = RegExp(r'^Set<(.*)>$');

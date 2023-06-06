@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'error_base.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 final class ErrorBase extends DelegatingMap<String, dynamic> {
   /// Returns a new [ErrorBase] instance.
   const ErrorBase({

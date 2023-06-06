@@ -6,16 +6,9 @@ part of 'time_range.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TimeRange _$TimeRangeFromJson(Map<String, dynamic> json) => $checkedCreate(
-      'TimeRange',
-      json,
-      ($checkedConvert) {
-        final val = TimeRange(
-          from: $checkedConvert('from', (v) => v as int),
-          until: $checkedConvert('until', (v) => v as int),
-        );
-        return val;
-      },
+TimeRange _$TimeRangeFromJson(Map<String, dynamic> json) => TimeRange(
+      from: json['from'] as int,
+      until: json['until'] as int,
     );
 
 Map<String, dynamic> _$TimeRangeToJson(TimeRange instance) => <String, dynamic>{

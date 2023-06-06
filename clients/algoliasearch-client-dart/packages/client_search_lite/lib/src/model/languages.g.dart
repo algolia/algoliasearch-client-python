@@ -6,42 +6,23 @@ part of 'languages.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Languages _$LanguagesFromJson(Map<String, dynamic> json) => $checkedCreate(
-      'Languages',
-      json,
-      ($checkedConvert) {
-        final val = Languages(
-          plurals: $checkedConvert(
-              'plurals',
-              (v) => v == null
-                  ? null
-                  : DictionaryLanguage.fromJson(v as Map<String, dynamic>)),
-          stopwords: $checkedConvert(
-              'stopwords',
-              (v) => v == null
-                  ? null
-                  : DictionaryLanguage.fromJson(v as Map<String, dynamic>)),
-          compounds: $checkedConvert(
-              'compounds',
-              (v) => v == null
-                  ? null
-                  : DictionaryLanguage.fromJson(v as Map<String, dynamic>)),
-        );
-        return val;
-      },
+Languages _$LanguagesFromJson(Map<String, dynamic> json) => Languages(
+      plurals: json['plurals'] == null
+          ? null
+          : DictionaryLanguage.fromJson(
+              json['plurals'] as Map<String, dynamic>),
+      stopwords: json['stopwords'] == null
+          ? null
+          : DictionaryLanguage.fromJson(
+              json['stopwords'] as Map<String, dynamic>),
+      compounds: json['compounds'] == null
+          ? null
+          : DictionaryLanguage.fromJson(
+              json['compounds'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$LanguagesToJson(Languages instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('plurals', instance.plurals?.toJson());
-  writeNotNull('stopwords', instance.stopwords?.toJson());
-  writeNotNull('compounds', instance.compounds?.toJson());
-  return val;
-}
+Map<String, dynamic> _$LanguagesToJson(Languages instance) => <String, dynamic>{
+      'plurals': instance.plurals,
+      'stopwords': instance.stopwords,
+      'compounds': instance.compounds,
+    };

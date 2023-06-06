@@ -8,23 +8,13 @@ part of 'redirect_rule_index_metadata.dart';
 
 RedirectRuleIndexMetadata _$RedirectRuleIndexMetadataFromJson(
         Map<String, dynamic> json) =>
-    $checkedCreate(
-      'RedirectRuleIndexMetadata',
-      json,
-      ($checkedConvert) {
-        final val = RedirectRuleIndexMetadata(
-          source_: $checkedConvert('source', (v) => v as String),
-          dest: $checkedConvert('dest', (v) => v as String),
-          reason: $checkedConvert('reason', (v) => v as String),
-          succeed: $checkedConvert('succeed', (v) => v as bool),
-          data: $checkedConvert(
-              'data',
-              (v) => RedirectRuleIndexMetadataData.fromJson(
-                  v as Map<String, dynamic>)),
-        );
-        return val;
-      },
-      fieldKeyMap: const {'source_': 'source'},
+    RedirectRuleIndexMetadata(
+      source_: json['source'] as String,
+      dest: json['dest'] as String,
+      reason: json['reason'] as String,
+      succeed: json['succeed'] as bool,
+      data: RedirectRuleIndexMetadataData.fromJson(
+          json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RedirectRuleIndexMetadataToJson(
@@ -34,5 +24,5 @@ Map<String, dynamic> _$RedirectRuleIndexMetadataToJson(
       'dest': instance.dest,
       'reason': instance.reason,
       'succeed': instance.succeed,
-      'data': instance.data.toJson(),
+      'data': instance.data,
     };

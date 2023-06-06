@@ -6,39 +6,19 @@ part of 'params.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Params _$ParamsFromJson(Map<String, dynamic> json) => $checkedCreate(
-      'Params',
-      json,
-      ($checkedConvert) {
-        final val = Params(
-          query: $checkedConvert('query', (v) => v),
-          automaticFacetFilters:
-              $checkedConvert('automaticFacetFilters', (v) => v),
-          automaticOptionalFacetFilters:
-              $checkedConvert('automaticOptionalFacetFilters', (v) => v),
-          renderingContent: $checkedConvert(
-              'renderingContent',
-              (v) => v == null
-                  ? null
-                  : RenderingContent.fromJson(v as Map<String, dynamic>)),
-        );
-        return val;
-      },
+Params _$ParamsFromJson(Map<String, dynamic> json) => Params(
+      query: json['query'],
+      automaticFacetFilters: json['automaticFacetFilters'],
+      automaticOptionalFacetFilters: json['automaticOptionalFacetFilters'],
+      renderingContent: json['renderingContent'] == null
+          ? null
+          : RenderingContent.fromJson(
+              json['renderingContent'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$ParamsToJson(Params instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('query', instance.query);
-  writeNotNull('automaticFacetFilters', instance.automaticFacetFilters);
-  writeNotNull(
-      'automaticOptionalFacetFilters', instance.automaticOptionalFacetFilters);
-  writeNotNull('renderingContent', instance.renderingContent?.toJson());
-  return val;
-}
+Map<String, dynamic> _$ParamsToJson(Params instance) => <String, dynamic>{
+      'query': instance.query,
+      'automaticFacetFilters': instance.automaticFacetFilters,
+      'automaticOptionalFacetFilters': instance.automaticOptionalFacetFilters,
+      'renderingContent': instance.renderingContent,
+    };

@@ -8,34 +8,17 @@ part of 'search_for_hits_options.dart';
 
 SearchForHitsOptions _$SearchForHitsOptionsFromJson(
         Map<String, dynamic> json) =>
-    $checkedCreate(
-      'SearchForHitsOptions',
-      json,
-      ($checkedConvert) {
-        final val = SearchForHitsOptions(
-          indexName: $checkedConvert('indexName', (v) => v as String),
-          type: $checkedConvert('type',
-              (v) => $enumDecodeNullable(_$SearchTypeDefaultEnumMap, v)),
-        );
-        return val;
-      },
+    SearchForHitsOptions(
+      indexName: json['indexName'] as String,
+      type: $enumDecodeNullable(_$SearchTypeDefaultEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$SearchForHitsOptionsToJson(
-    SearchForHitsOptions instance) {
-  final val = <String, dynamic>{
-    'indexName': instance.indexName,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('type', _$SearchTypeDefaultEnumMap[instance.type]);
-  return val;
-}
+        SearchForHitsOptions instance) =>
+    <String, dynamic>{
+      'indexName': instance.indexName,
+      'type': _$SearchTypeDefaultEnumMap[instance.type],
+    };
 
 const _$SearchTypeDefaultEnumMap = {
   SearchTypeDefault.default_: 'default',

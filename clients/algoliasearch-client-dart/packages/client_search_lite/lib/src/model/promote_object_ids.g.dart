@@ -7,17 +7,10 @@ part of 'promote_object_ids.dart';
 // **************************************************************************
 
 PromoteObjectIDs _$PromoteObjectIDsFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'PromoteObjectIDs',
-      json,
-      ($checkedConvert) {
-        final val = PromoteObjectIDs(
-          objectIDs: $checkedConvert('objectIDs',
-              (v) => (v as List<dynamic>).map((e) => e as String).toList()),
-          position: $checkedConvert('position', (v) => v as int),
-        );
-        return val;
-      },
+    PromoteObjectIDs(
+      objectIDs:
+          (json['objectIDs'] as List<dynamic>).map((e) => e as String).toList(),
+      position: json['position'] as int,
     );
 
 Map<String, dynamic> _$PromoteObjectIDsToJson(PromoteObjectIDs instance) =>

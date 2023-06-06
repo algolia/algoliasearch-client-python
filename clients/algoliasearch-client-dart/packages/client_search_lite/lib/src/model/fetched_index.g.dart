@@ -6,50 +6,33 @@ part of 'fetched_index.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FetchedIndex _$FetchedIndexFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'FetchedIndex',
-      json,
-      ($checkedConvert) {
-        final val = FetchedIndex(
-          name: $checkedConvert('name', (v) => v as String),
-          createdAt: $checkedConvert('createdAt', (v) => v as String),
-          updatedAt: $checkedConvert('updatedAt', (v) => v as String),
-          entries: $checkedConvert('entries', (v) => v as int),
-          dataSize: $checkedConvert('dataSize', (v) => v as int),
-          fileSize: $checkedConvert('fileSize', (v) => v as int),
-          lastBuildTimeS: $checkedConvert('lastBuildTimeS', (v) => v as int),
-          numberOfPendingTasks:
-              $checkedConvert('numberOfPendingTasks', (v) => v as int),
-          pendingTask: $checkedConvert('pendingTask', (v) => v as bool),
-          primary: $checkedConvert('primary', (v) => v as String?),
-          replicas: $checkedConvert('replicas',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-        );
-        return val;
-      },
+FetchedIndex _$FetchedIndexFromJson(Map<String, dynamic> json) => FetchedIndex(
+      name: json['name'] as String,
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
+      entries: json['entries'] as int,
+      dataSize: json['dataSize'] as int,
+      fileSize: json['fileSize'] as int,
+      lastBuildTimeS: json['lastBuildTimeS'] as int,
+      numberOfPendingTasks: json['numberOfPendingTasks'] as int,
+      pendingTask: json['pendingTask'] as bool,
+      primary: json['primary'] as String?,
+      replicas: (json['replicas'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
-Map<String, dynamic> _$FetchedIndexToJson(FetchedIndex instance) {
-  final val = <String, dynamic>{
-    'name': instance.name,
-    'createdAt': instance.createdAt,
-    'updatedAt': instance.updatedAt,
-    'entries': instance.entries,
-    'dataSize': instance.dataSize,
-    'fileSize': instance.fileSize,
-    'lastBuildTimeS': instance.lastBuildTimeS,
-    'numberOfPendingTasks': instance.numberOfPendingTasks,
-    'pendingTask': instance.pendingTask,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('primary', instance.primary);
-  writeNotNull('replicas', instance.replicas);
-  return val;
-}
+Map<String, dynamic> _$FetchedIndexToJson(FetchedIndex instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
+      'entries': instance.entries,
+      'dataSize': instance.dataSize,
+      'fileSize': instance.fileSize,
+      'lastBuildTimeS': instance.lastBuildTimeS,
+      'numberOfPendingTasks': instance.numberOfPendingTasks,
+      'pendingTask': instance.pendingTask,
+      'primary': instance.primary,
+      'replicas': instance.replicas,
+    };

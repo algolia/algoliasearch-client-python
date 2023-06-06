@@ -7,55 +7,37 @@ part of 'get_api_key_response.dart';
 // **************************************************************************
 
 GetApiKeyResponse _$GetApiKeyResponseFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'GetApiKeyResponse',
-      json,
-      ($checkedConvert) {
-        final val = GetApiKeyResponse(
-          value: $checkedConvert('value', (v) => v as String?),
-          createdAt: $checkedConvert('createdAt', (v) => v as int),
-          acl: $checkedConvert(
-              'acl',
-              (v) => (v as List<dynamic>)
-                  .map((e) => $enumDecode(_$AclEnumMap, e))
-                  .toList()),
-          description: $checkedConvert('description', (v) => v as String?),
-          indexes: $checkedConvert('indexes',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          maxHitsPerQuery: $checkedConvert('maxHitsPerQuery', (v) => v as int?),
-          maxQueriesPerIPPerHour:
-              $checkedConvert('maxQueriesPerIPPerHour', (v) => v as int?),
-          queryParameters:
-              $checkedConvert('queryParameters', (v) => v as String?),
-          referers: $checkedConvert('referers',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          validity: $checkedConvert('validity', (v) => v as int?),
-        );
-        return val;
-      },
+    GetApiKeyResponse(
+      value: json['value'] as String?,
+      createdAt: json['createdAt'] as int,
+      acl: (json['acl'] as List<dynamic>)
+          .map((e) => $enumDecode(_$AclEnumMap, e))
+          .toList(),
+      description: json['description'] as String?,
+      indexes:
+          (json['indexes'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      maxHitsPerQuery: json['maxHitsPerQuery'] as int?,
+      maxQueriesPerIPPerHour: json['maxQueriesPerIPPerHour'] as int?,
+      queryParameters: json['queryParameters'] as String?,
+      referers: (json['referers'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      validity: json['validity'] as int?,
     );
 
-Map<String, dynamic> _$GetApiKeyResponseToJson(GetApiKeyResponse instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('value', instance.value);
-  val['createdAt'] = instance.createdAt;
-  val['acl'] = instance.acl.map((e) => _$AclEnumMap[e]!).toList();
-  writeNotNull('description', instance.description);
-  writeNotNull('indexes', instance.indexes);
-  writeNotNull('maxHitsPerQuery', instance.maxHitsPerQuery);
-  writeNotNull('maxQueriesPerIPPerHour', instance.maxQueriesPerIPPerHour);
-  writeNotNull('queryParameters', instance.queryParameters);
-  writeNotNull('referers', instance.referers);
-  writeNotNull('validity', instance.validity);
-  return val;
-}
+Map<String, dynamic> _$GetApiKeyResponseToJson(GetApiKeyResponse instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+      'createdAt': instance.createdAt,
+      'acl': instance.acl.map((e) => _$AclEnumMap[e]!).toList(),
+      'description': instance.description,
+      'indexes': instance.indexes,
+      'maxHitsPerQuery': instance.maxHitsPerQuery,
+      'maxQueriesPerIPPerHour': instance.maxQueriesPerIPPerHour,
+      'queryParameters': instance.queryParameters,
+      'referers': instance.referers,
+      'validity': instance.validity,
+    };
 
 const _$AclEnumMap = {
   Acl.addObject: 'addObject',

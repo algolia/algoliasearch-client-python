@@ -1,4 +1,4 @@
-# algolia_search
+# algolia_client_search
 API powering the Search feature of Algolia.
 
 ## Requirements
@@ -11,5 +11,5 @@ API powering the Search feature of Algolia.
 To use the package from [pub.dev](https://pub.dev), please include the following in pubspec.yaml
 ```yaml
 dependencies:
-  algolia_search: 0.1.0-alpha.1
+  algolia_client_search: 0.2.0-alpha.1
 ```

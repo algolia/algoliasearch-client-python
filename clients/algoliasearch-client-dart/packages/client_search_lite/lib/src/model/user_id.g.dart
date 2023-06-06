@@ -6,18 +6,11 @@ part of 'user_id.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserId _$UserIdFromJson(Map<String, dynamic> json) => $checkedCreate(
-      'UserId',
-      json,
-      ($checkedConvert) {
-        final val = UserId(
-          userID: $checkedConvert('userID', (v) => v as String),
-          clusterName: $checkedConvert('clusterName', (v) => v as String),
-          nbRecords: $checkedConvert('nbRecords', (v) => v as int),
-          dataSize: $checkedConvert('dataSize', (v) => v as int),
-        );
-        return val;
-      },
+UserId _$UserIdFromJson(Map<String, dynamic> json) => UserId(
+      userID: json['userID'] as String,
+      clusterName: json['clusterName'] as String,
+      nbRecords: json['nbRecords'] as int,
+      dataSize: json['dataSize'] as int,
     );
 
 Map<String, dynamic> _$UserIdToJson(UserId instance) => <String, dynamic>{
