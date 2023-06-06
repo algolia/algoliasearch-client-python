@@ -34,9 +34,6 @@ RUN apt-get update && apt-get install -y \
 COPY --from=go-builder /usr/local/go/ /usr/local/go/
 ENV PATH /usr/local/go/bin:$PATH
 
-# Dart
-COPY --from=dart-builder /usr/lib/dart/ /usr/lib/dart/
-ENV PATH /usr/lib/dart/bin:$PATH
 
 # Javascript (node)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
@@ -50,6 +47,14 @@ RUN sdk install java ${JAVA_VERSION}-zulu
 
 # Java formatter
 ADD https://github.com/google/google-java-format/releases/download/v1.15.0/google-java-format-1.15.0-all-deps.jar /tmp/java-formatter.jar
+
+# Dart
+COPY --from=dart-builder /usr/lib/dart/ /usr/lib/dart/
+RUN echo "export PATH=/usr/lib/dart/bin:/root/.pub-cache/bin:$PATH" >>  ~/.profile && \
+    source ~/.profile && \
+    dart pub global activate melos
+
+# use bash for subsequent commands
 
 WORKDIR /app
 

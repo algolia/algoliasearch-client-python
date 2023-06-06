@@ -1,4 +1,4 @@
-import 'package:algolia_search/algolia_search.dart';
+import 'package:algolia_client_search/algolia_client_search.dart';
 
 void main() async {
   // Creating an instance of the search client with the provided App ID and API key.

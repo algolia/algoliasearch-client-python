@@ -69,5 +69,6 @@ module.exports = {
     'clients/algoliasearch-client-dart/packages/*/lib/src/model/**',
     '!clients/algoliasearch-client-dart/packages/client_core/**',
     '!clients/algoliasearch-client-dart/packages/*/lib/src/extension.dart',
+    '!clients/algoliasearch-client-dart/packages/algoliasearch/lib/algoliasearch.dart',
   ],
 };

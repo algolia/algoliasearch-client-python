@@ -15,7 +15,7 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
   private final SchemaSupport support = new SchemaSupport();
 
   String libName;
-  boolean isLiteClient;
+  boolean isAlgoliasearchClient;
 
   @Override
   public String getName() {
@@ -25,8 +25,9 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
   @Override
   public void processOpts() {
     String client = (String) additionalProperties.get("client");
-    isLiteClient = client.equals("algoliasearch");
+    isAlgoliasearchClient = client.equals("algoliasearch");
     String version = Utils.getOpenApiToolsField("dart", client, "packageVersion");
+    additionalProperties.put("isAlgoliasearchClient", isAlgoliasearchClient);
 
     // pubspec.yaml
     setPubAuthor("Algolia");
@@ -35,25 +36,34 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     setPubVersion(version);
     String clientName;
     String packageFolder;
-    if (isLiteClient) {
-      libName = "algolia_search_lite";
-      clientName = "Algolia Search Lite";
-      packageFolder = "client_search_lite";
+    if (isAlgoliasearchClient) {
+      libName = "algoliasearch";
+      packageFolder = libName;
+      clientName = "Search Lite";
+      setPubName(libName);
+      setPubLibrary(libName);
     } else {
-      libName = "algolia_" + client;
+      libName = "algolia_client_" + client;
       clientName = "Algolia " + client;
       setApiNameSuffix(Utils.API_SUFFIX);
       packageFolder = "client_" + client;
+      setPubName(libName);
+      setPubLibrary(libName);
     }
-    setPubDescription("Dart " + clientName + " API client to interact with Algolia");
+    setPubDescription("Algolia " + clientName + " API client to interact with Algolia");
     setPubRepository("https://github.com/algolia/algoliasearch-client-dart/packages/" + packageFolder);
-    setPubLibrary(libName);
-    setPubName(libName);
 
     // configs
     additionalProperties.put(CodegenConstants.SERIALIZATION_LIBRARY, SERIALIZATION_LIBRARY_JSON_SERIALIZABLE);
 
     super.processOpts();
+
+    if (isAlgoliasearchClient) {
+      supportingFiles.removeIf(file -> file.getTemplateFile().contains("lib"));
+      supportingFiles.add(new SupportingFile("lib.mustache", libPath, "algoliasearch_lite.dart"));
+      additionalProperties.put("searchVersion", Utils.getOpenApiToolsField("dart", "search", "packageVersion"));
+      additionalProperties.put("insightsVersion", Utils.getOpenApiToolsField("dart", "insights", "packageVersion"));
+    }
 
     // disable documentation and tests
     apiTestTemplateFiles.clear();
@@ -86,7 +96,7 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
 
   @Override
   public String toApiName(String name) {
-    return isLiteClient ? "SearchClient" : super.toApiName(name);
+    return isAlgoliasearchClient ? "SearchClient" : super.toApiName(name);
   }
 
   @Override

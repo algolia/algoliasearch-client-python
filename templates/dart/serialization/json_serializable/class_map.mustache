@@ -6,7 +6,7 @@ part '{{classFilename}}.g.dart';
 {{#isDeprecated}}
 @Deprecated('{{{classname}}} has been deprecated')
 {{/isDeprecated}}
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 final class {{{classname}}} extends DelegatingMap<String, dynamic> {
   /// Returns a new [{{{classname}}}] instance.
   const {{{classname}}}({

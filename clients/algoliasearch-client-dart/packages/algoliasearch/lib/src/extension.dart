@@ -1,17 +1,16 @@
-import 'package:algolia_client_search/algolia_client_search.dart';
+import 'package:algoliasearch/algoliasearch_lite.dart';
 
 extension SearchClientExt on SearchClient {
   /// Perform a search operation targeting one index.
   Future<SearchResponse> searchIndex({
-    required String indexName,
-    required SearchParamsObject request,
+    required SearchForHits request,
     RequestOptions? requestOptions,
   }) async {
-    return searchSingleIndex(
-      searchParams: request,
+    final response = await search(
+      searchMethodParams: SearchMethodParams(requests: [request]),
       requestOptions: requestOptions,
-      indexName: indexName,
     );
+    return response.results.first;
   }
 
   /// Perform a search operation targeting one index.
@@ -19,7 +18,7 @@ extension SearchClientExt on SearchClient {
     required List<SearchForHits> queries,
     SearchStrategy? strategy,
     RequestOptions? requestOptions,
-  }) async {
+  }) {
     final request = SearchMethodParams(requests: queries, strategy: strategy);
     return search(searchMethodParams: request, requestOptions: requestOptions);
   }

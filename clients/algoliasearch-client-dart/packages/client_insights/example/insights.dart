@@ -1,4 +1,4 @@
-import 'package:algolia_insights/algolia_insights.dart';
+import 'package:algolia_client_insights/algolia_client_insights.dart';
 
 void main() async {
   // Creating an instance of the Insights client with the provided App ID and API key.
