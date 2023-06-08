@@ -10,7 +10,7 @@ dependencies {
     testImplementation 'com.algolia:algoliasearch-client-java:4.0.0-SNAPSHOT'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
     testImplementation 'org.skyscreamer:jsonassert:1.5.1'
-    testImplementation 'com.fasterxml.jackson.core:jackson-core:2.15.1'
+    testImplementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
 }
 
 group = 'com.algolia'
