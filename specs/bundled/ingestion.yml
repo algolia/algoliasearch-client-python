@@ -1341,6 +1341,7 @@ components:
       enum:
         - success
         - failure
+        - processing
     RunReasonCode:
       type: string
       description: An identifier that pairs with the outcome reason.
