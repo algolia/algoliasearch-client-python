@@ -77,7 +77,7 @@ RunStatus:
 
 RunOutcome:
   type: string
-  enum: ['success', 'failure']
+  enum: ['success', 'failure', 'processing']
 
 RunType:
   type: string
@@ -86,4 +86,5 @@ RunType:
 RunReasonCode:
   type: string
   description: 'An identifier that pairs with the outcome reason.'
-  enum: ['internal', 'critical', 'no_events', 'too_many_errors', 'ok', 'discarded']
+  enum:
+    ['internal', 'critical', 'no_events', 'too_many_errors', 'ok', 'discarded']
