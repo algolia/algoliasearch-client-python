@@ -427,9 +427,11 @@ public class IngestionClient(
    * @param taskID Filter by taskID.
    * @param sort The key by which the list should be sorted.
    * @param order The order of the returned list.
+   * @param startDate The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
+   * @param endDate The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun getRuns(itemsPerPage: Int? = null, page: Int? = null, status: List<RunStatus>? = null, taskID: String? = null, sort: RunSortKeys? = null, order: OrderKeys? = null, requestOptions: RequestOptions? = null): RunListResponse {
+  public suspend fun getRuns(itemsPerPage: Int? = null, page: Int? = null, status: List<RunStatus>? = null, taskID: String? = null, sort: RunSortKeys? = null, order: OrderKeys? = null, startDate: String? = null, endDate: String? = null, requestOptions: RequestOptions? = null): RunListResponse {
     val requestConfig = RequestConfig(
       method = RequestMethod.GET,
       path = listOf("1", "runs"),
@@ -440,6 +442,8 @@ public class IngestionClient(
         taskID?.let { put("taskID", it) }
         sort?.let { put("sort", it) }
         order?.let { put("order", it) }
+        startDate?.let { put("startDate", it) }
+        endDate?.let { put("endDate", it) }
       },
     )
     return requester.execute(

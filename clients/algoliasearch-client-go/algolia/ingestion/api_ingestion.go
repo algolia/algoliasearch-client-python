@@ -2897,6 +2897,24 @@ func (r *ApiGetRunsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
+	if v, ok := req["startDate"]; ok {
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok {
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
 
 	return nil
 }
@@ -2909,6 +2927,8 @@ type ApiGetRunsRequest struct {
 	taskID       string
 	sort         *RunSortKeys
 	order        *OrderKeys
+	startDate    string
+	endDate      string
 }
 
 // NewApiGetRunsRequest creates an instance of the ApiGetRunsRequest to be used for the API call.
@@ -2952,6 +2972,18 @@ func (r ApiGetRunsRequest) WithOrder(order *OrderKeys) ApiGetRunsRequest {
 	return r
 }
 
+// WithStartDate adds the startDate to the ApiGetRunsRequest and returns the request for chaining.
+func (r ApiGetRunsRequest) WithStartDate(startDate string) ApiGetRunsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetRunsRequest and returns the request for chaining.
+func (r ApiGetRunsRequest) WithEndDate(endDate string) ApiGetRunsRequest {
+	r.endDate = endDate
+	return r
+}
+
 /*
 GetRuns Get a list of runs. Wraps GetRunsWithContext using context.Background.
 
@@ -2965,6 +2997,8 @@ Request can be constructed by NewApiGetRunsRequest with parameters below.
 	@param taskID string - Filter by taskID.
 	@param sort RunSortKeys - The key by which the list should be sorted.
 	@param order OrderKeys - The order of the returned list.
+	@param startDate string - The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
+	@param endDate string - The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
 	@return RunListResponse
 */
 func (c *APIClient) GetRuns(r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
@@ -2984,6 +3018,8 @@ Request can be constructed by NewApiGetRunsRequest with parameters below.
 	@param taskID string - Filter by taskID.
 	@param sort RunSortKeys - The key by which the list should be sorted.
 	@param order OrderKeys - The order of the returned list.
+	@param startDate string - The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
+	@param endDate string - The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
 	@return RunListResponse
 */
 func (c *APIClient) GetRunsWithContext(ctx context.Context, r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
@@ -3014,6 +3050,12 @@ func (c *APIClient) GetRunsWithContext(ctx context.Context, r ApiGetRunsRequest,
 	}
 	if !isNilorEmpty(r.order) {
 		queryParams.Set("order", parameterToString(*r.order))
+	}
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Set("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 
 	// optional params if any
