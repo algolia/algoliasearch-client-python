@@ -25,7 +25,7 @@ BatchDictionaryEntriesRequest _$BatchDictionaryEntriesRequestFromJson(
 Map<String, dynamic> _$BatchDictionaryEntriesRequestToJson(
         BatchDictionaryEntriesRequest instance) =>
     <String, dynamic>{
-      'action': _$DictionaryActionEnumMap[instance.action]!,
+      'action': instance.action.toJson(),
       'body': instance.body.toJson(),
     };
 

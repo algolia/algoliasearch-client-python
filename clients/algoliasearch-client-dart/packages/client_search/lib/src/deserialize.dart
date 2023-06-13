@@ -61,7 +61,6 @@ import 'package:algolia_client_search/src/model/list_user_ids_response.dart';
 import 'package:algolia_client_search/src/model/log.dart';
 import 'package:algolia_client_search/src/model/log_query.dart';
 import 'package:algolia_client_search/src/model/matched_geo_location.dart';
-import 'package:algolia_client_search/src/model/model_source.dart';
 import 'package:algolia_client_search/src/model/multiple_batch_request.dart';
 import 'package:algolia_client_search/src/model/multiple_batch_response.dart';
 import 'package:algolia_client_search/src/model/operation_index_params.dart';
@@ -99,6 +98,7 @@ import 'package:algolia_client_search/src/model/search_synonyms_response.dart';
 import 'package:algolia_client_search/src/model/search_user_ids_params.dart';
 import 'package:algolia_client_search/src/model/search_user_ids_response.dart';
 import 'package:algolia_client_search/src/model/snippet_result_option.dart';
+import 'package:algolia_client_search/src/model/source.dart';
 import 'package:algolia_client_search/src/model/standard_entries.dart';
 import 'package:algolia_client_search/src/model/synonym_hit.dart';
 import 'package:algolia_client_search/src/model/time_range.dart';
@@ -318,8 +318,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return MatchedGeoLocation.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'Mode':
-    case 'ModelSource':
-      return ModelSource.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'MultipleBatchRequest':
       return MultipleBatchRequest.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -435,6 +433,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return SnippetResultOption.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'SortRemainingBy':
+    case 'Source':
+      return Source.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'StandardEntries':
       return StandardEntries.fromJson(value as Map<String, dynamic>)
           as ReturnType;

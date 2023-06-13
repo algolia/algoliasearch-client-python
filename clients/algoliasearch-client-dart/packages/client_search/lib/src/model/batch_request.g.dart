@@ -22,7 +22,7 @@ BatchRequest _$BatchRequestFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$BatchRequestToJson(BatchRequest instance) =>
     <String, dynamic>{
-      'action': _$ActionEnumMap[instance.action]!,
+      'action': instance.action.toJson(),
       'body': instance.body,
     };
 

@@ -2,11 +2,17 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum DictionaryType {
-  @JsonValue(r'plurals')
-  plurals,
-  @JsonValue(r'stopwords')
-  stopwords,
-  @JsonValue(r'compounds')
-  compounds,
+  plurals(r'plurals'),
+  stopwords(r'stopwords'),
+  compounds(r'compounds');
+
+  const DictionaryType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

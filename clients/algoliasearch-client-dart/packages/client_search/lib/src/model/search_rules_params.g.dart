@@ -36,7 +36,7 @@ Map<String, dynamic> _$SearchRulesParamsToJson(SearchRulesParams instance) {
   }
 
   writeNotNull('query', instance.query);
-  writeNotNull('anchoring', _$AnchoringEnumMap[instance.anchoring]);
+  writeNotNull('anchoring', instance.anchoring?.toJson());
   writeNotNull('context', instance.context);
   writeNotNull('page', instance.page);
   writeNotNull('hitsPerPage', instance.hitsPerPage);

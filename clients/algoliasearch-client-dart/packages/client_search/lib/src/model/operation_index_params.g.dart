@@ -29,7 +29,7 @@ OperationIndexParams _$OperationIndexParamsFromJson(
 Map<String, dynamic> _$OperationIndexParamsToJson(
     OperationIndexParams instance) {
   final val = <String, dynamic>{
-    'operation': _$OperationTypeEnumMap[instance.operation]!,
+    'operation': instance.operation.toJson(),
     'destination': instance.destination,
   };
 
@@ -39,8 +39,7 @@ Map<String, dynamic> _$OperationIndexParamsToJson(
     }
   }
 
-  writeNotNull(
-      'scope', instance.scope?.map((e) => _$ScopeTypeEnumMap[e]!).toList());
+  writeNotNull('scope', instance.scope?.map((e) => e.toJson()).toList());
   return val;
 }
 

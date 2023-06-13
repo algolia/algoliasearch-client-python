@@ -2,9 +2,16 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum TaskStatus {
-  @JsonValue(r'published')
-  published,
-  @JsonValue(r'notPublished')
-  notPublished,
+  published(r'published'),
+  notPublished(r'notPublished');
+
+  const TaskStatus(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

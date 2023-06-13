@@ -21,7 +21,7 @@ GetTaskResponse _$GetTaskResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$GetTaskResponseToJson(GetTaskResponse instance) =>
     <String, dynamic>{
-      'status': _$TaskStatusEnumMap[instance.status]!,
+      'status': instance.status.toJson(),
     };
 
 const _$TaskStatusEnumMap = {

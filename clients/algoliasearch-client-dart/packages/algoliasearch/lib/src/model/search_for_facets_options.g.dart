@@ -39,7 +39,7 @@ Map<String, dynamic> _$SearchForFacetsOptionsToJson(
 
   writeNotNull('facetQuery', instance.facetQuery);
   writeNotNull('maxFacetHits', instance.maxFacetHits);
-  val['type'] = _$SearchTypeFacetEnumMap[instance.type]!;
+  val['type'] = instance.type.toJson();
   return val;
 }
 

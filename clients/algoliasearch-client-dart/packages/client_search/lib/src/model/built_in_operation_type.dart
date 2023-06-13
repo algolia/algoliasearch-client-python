@@ -3,32 +3,34 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// The operation to apply on the attribute.
+@JsonEnum(valueField: 'raw')
 enum BuiltInOperationType {
   /// The operation to apply on the attribute.
-  @JsonValue(r'Increment')
-  increment,
+  increment(r'Increment'),
 
   /// The operation to apply on the attribute.
-  @JsonValue(r'Decrement')
-  decrement,
+  decrement(r'Decrement'),
 
   /// The operation to apply on the attribute.
-  @JsonValue(r'Add')
-  add,
+  add(r'Add'),
 
   /// The operation to apply on the attribute.
-  @JsonValue(r'Remove')
-  remove,
+  remove(r'Remove'),
 
   /// The operation to apply on the attribute.
-  @JsonValue(r'AddUnique')
-  addUnique,
+  addUnique(r'AddUnique'),
 
   /// The operation to apply on the attribute.
-  @JsonValue(r'IncrementFrom')
-  incrementFrom,
+  incrementFrom(r'IncrementFrom'),
 
   /// The operation to apply on the attribute.
-  @JsonValue(r'IncrementSet')
-  incrementSet,
+  incrementSet(r'IncrementSet');
+
+  const BuiltInOperationType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

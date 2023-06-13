@@ -32,7 +32,7 @@ InsightEvent _$InsightEventFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$InsightEventToJson(InsightEvent instance) {
   final val = <String, dynamic>{
-    'eventType': _$EventTypeEnumMap[instance.eventType]!,
+    'eventType': instance.eventType.toJson(),
     'eventName': instance.eventName,
     'index': instance.index,
     'userToken': instance.userToken,

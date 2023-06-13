@@ -3,12 +3,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// The state of the dictionary entry.
+@JsonEnum(valueField: 'raw')
 enum DictionaryEntryState {
   /// The state of the dictionary entry.
-  @JsonValue(r'enabled')
-  enabled,
+  enabled(r'enabled'),
 
   /// The state of the dictionary entry.
-  @JsonValue(r'disabled')
-  disabled,
+  disabled(r'disabled');
+
+  const DictionaryEntryState(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

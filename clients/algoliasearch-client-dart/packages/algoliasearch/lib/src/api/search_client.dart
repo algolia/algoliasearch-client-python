@@ -29,16 +29,16 @@ final class SearchClient implements ApiClient {
           appId: appId,
           apiKey: apiKey,
           options: options,
-          defaultHosts: () => [
+          defaultHosts: () =>
+              [
                 Host(url: '$appId-dsn.algolia.net', callType: CallType.read),
                 Host(url: '$appId.algolia.net', callType: CallType.write),
               ] +
-              [
+              ([
                 Host(url: '$appId-1.algolianet.com'),
                 Host(url: '$appId-2.algolianet.com'),
-                Host(url: '$appId-3.algolianet.com')
-              ]
-            ..shuffle(),
+                Host(url: '$appId-3.algolianet.com'),
+              ]..shuffle()),
         ) {
     assert(appId.isNotEmpty, '`appId` is missing.');
     assert(apiKey.isNotEmpty, '`apiKey` is missing.');

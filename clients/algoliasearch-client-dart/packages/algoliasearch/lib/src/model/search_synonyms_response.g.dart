@@ -23,3 +23,15 @@ SearchSynonymsResponse _$SearchSynonymsResponseFromJson(
         return val;
       },
     );
+
+const _$SearchSynonymsResponseFieldMap = <String, String>{
+  'hits': 'hits',
+  'nbHits': 'nbHits',
+};
+
+Map<String, dynamic> _$SearchSynonymsResponseToJson(
+        SearchSynonymsResponse instance) =>
+    <String, dynamic>{
+      'hits': instance.hits.map((e) => e.toJson()).toList(),
+      'nbHits': instance.nbHits,
+    };

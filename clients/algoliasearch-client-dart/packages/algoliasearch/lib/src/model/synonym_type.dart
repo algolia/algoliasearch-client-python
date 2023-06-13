@@ -3,24 +3,28 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Type of the synonym object.
+@JsonEnum(valueField: 'raw')
 enum SynonymType {
   /// Type of the synonym object.
-  @JsonValue(r'synonym')
-  synonym,
+  synonym(r'synonym'),
 
   /// Type of the synonym object.
-  @JsonValue(r'onewaysynonym')
-  onewaysynonym,
+  onewaysynonym(r'onewaysynonym'),
 
   /// Type of the synonym object.
-  @JsonValue(r'altcorrection1')
-  altcorrection1,
+  altcorrection1(r'altcorrection1'),
 
   /// Type of the synonym object.
-  @JsonValue(r'altcorrection2')
-  altcorrection2,
+  altcorrection2(r'altcorrection2'),
 
   /// Type of the synonym object.
-  @JsonValue(r'placeholder')
-  placeholder,
+  placeholder(r'placeholder');
+
+  const SynonymType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

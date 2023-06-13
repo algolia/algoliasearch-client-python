@@ -46,7 +46,7 @@ Map<String, dynamic> _$GetApiKeyResponseToJson(GetApiKeyResponse instance) {
 
   writeNotNull('value', instance.value);
   val['createdAt'] = instance.createdAt;
-  val['acl'] = instance.acl.map((e) => _$AclEnumMap[e]!).toList();
+  val['acl'] = instance.acl.map((e) => e.toJson()).toList();
   writeNotNull('description', instance.description);
   writeNotNull('indexes', instance.indexes);
   writeNotNull('maxHitsPerQuery', instance.maxHitsPerQuery);

@@ -31,7 +31,7 @@ SynonymHit _$SynonymHitFromJson(Map<String, dynamic> json) => $checkedCreate(
 Map<String, dynamic> _$SynonymHitToJson(SynonymHit instance) {
   final val = <String, dynamic>{
     'objectID': instance.objectID,
-    'type': _$SynonymTypeEnumMap[instance.type]!,
+    'type': instance.type.toJson(),
   };
 
   void writeNotNull(String key, dynamic value) {

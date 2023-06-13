@@ -29,7 +29,7 @@ Map<String, dynamic> _$EditToJson(Edit instance) {
     }
   }
 
-  writeNotNull('type', _$EditTypeEnumMap[instance.type]);
+  writeNotNull('type', instance.type?.toJson());
   writeNotNull('delete', instance.delete);
   writeNotNull('insert', instance.insert);
   return val;

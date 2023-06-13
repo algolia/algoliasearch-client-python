@@ -3,32 +3,34 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// type of operation.
+@JsonEnum(valueField: 'raw')
 enum Action {
   /// type of operation.
-  @JsonValue(r'addObject')
-  addObject,
+  addObject(r'addObject'),
 
   /// type of operation.
-  @JsonValue(r'updateObject')
-  updateObject,
+  updateObject(r'updateObject'),
 
   /// type of operation.
-  @JsonValue(r'partialUpdateObject')
-  partialUpdateObject,
+  partialUpdateObject(r'partialUpdateObject'),
 
   /// type of operation.
-  @JsonValue(r'partialUpdateObjectNoCreate')
-  partialUpdateObjectNoCreate,
+  partialUpdateObjectNoCreate(r'partialUpdateObjectNoCreate'),
 
   /// type of operation.
-  @JsonValue(r'deleteObject')
-  deleteObject,
+  deleteObject(r'deleteObject'),
 
   /// type of operation.
-  @JsonValue(r'delete')
-  delete,
+  delete(r'delete'),
 
   /// type of operation.
-  @JsonValue(r'clear')
-  clear,
+  clear(r'clear');
+
+  const Action(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

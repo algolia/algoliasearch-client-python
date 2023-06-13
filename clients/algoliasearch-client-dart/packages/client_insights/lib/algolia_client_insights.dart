@@ -1,8 +1,8 @@
-// Algolia Algolia insights API client to interact with Algolia
+// Algolia insights API client to interact with Algolia
 library algolia_client_insights;
 
-export 'package:algolia_client_core/algolia_client_core.dart'
-    show AgentSegment, ApiClient, CallType, ClientOptions, Host, RequestOptions;
+export 'package:algolia_client_core/algolia_client_core.dart';
+
 export 'src/api/insights_client.dart';
 
 export 'src/model/error_base.dart';

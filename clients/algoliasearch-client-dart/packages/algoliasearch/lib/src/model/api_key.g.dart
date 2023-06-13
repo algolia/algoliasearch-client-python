@@ -34,7 +34,7 @@ ApiKey _$ApiKeyFromJson(Map<String, dynamic> json) => $checkedCreate(
 
 Map<String, dynamic> _$ApiKeyToJson(ApiKey instance) {
   final val = <String, dynamic>{
-    'acl': instance.acl.map((e) => _$AclEnumMap[e]!).toList(),
+    'acl': instance.acl.map((e) => e.toJson()).toList(),
   };
 
   void writeNotNull(String key, dynamic value) {

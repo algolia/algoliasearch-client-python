@@ -24,7 +24,7 @@ Map<String, dynamic> _$SnippetResultOptionToJson(
         SnippetResultOption instance) =>
     <String, dynamic>{
       'value': instance.value,
-      'matchLevel': _$MatchLevelEnumMap[instance.matchLevel]!,
+      'matchLevel': instance.matchLevel.toJson(),
     };
 
 const _$MatchLevelEnumMap = {

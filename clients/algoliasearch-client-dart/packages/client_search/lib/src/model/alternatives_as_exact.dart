@@ -2,11 +2,17 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum AlternativesAsExact {
-  @JsonValue(r'ignorePlurals')
-  ignorePlurals,
-  @JsonValue(r'singleWordSynonym')
-  singleWordSynonym,
-  @JsonValue(r'multiWordsSynonym')
-  multiWordsSynonym,
+  ignorePlurals(r'ignorePlurals'),
+  singleWordSynonym(r'singleWordSynonym'),
+  multiWordsSynonym(r'multiWordsSynonym');
+
+  const AlternativesAsExact(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

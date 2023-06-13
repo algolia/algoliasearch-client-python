@@ -3,12 +3,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// The search mode that the index will use to query for results.
+@JsonEnum(valueField: 'raw')
 enum Mode {
   /// The search mode that the index will use to query for results.
-  @JsonValue(r'neuralSearch')
-  neuralSearch,
+  neuralSearch(r'neuralSearch'),
 
   /// The search mode that the index will use to query for results.
-  @JsonValue(r'keywordSearch')
-  keywordSearch,
+  keywordSearch(r'keywordSearch');
+
+  const Mode(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

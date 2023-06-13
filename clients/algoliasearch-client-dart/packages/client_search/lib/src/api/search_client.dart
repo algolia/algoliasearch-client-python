@@ -35,7 +35,6 @@ import 'package:algolia_client_search/src/model/list_clusters_response.dart';
 import 'package:algolia_client_search/src/model/list_indices_response.dart';
 import 'package:algolia_client_search/src/model/list_user_ids_response.dart';
 import 'package:algolia_client_search/src/model/log_type.dart';
-import 'package:algolia_client_search/src/model/model_source.dart';
 import 'package:algolia_client_search/src/model/multiple_batch_response.dart';
 import 'package:algolia_client_search/src/model/operation_index_params.dart';
 import 'package:algolia_client_search/src/model/remove_user_id_response.dart';
@@ -55,6 +54,7 @@ import 'package:algolia_client_search/src/model/search_synonyms_params.dart';
 import 'package:algolia_client_search/src/model/search_synonyms_response.dart';
 import 'package:algolia_client_search/src/model/search_user_ids_params.dart';
 import 'package:algolia_client_search/src/model/search_user_ids_response.dart';
+import 'package:algolia_client_search/src/model/source.dart';
 import 'package:algolia_client_search/src/model/synonym_hit.dart';
 import 'package:algolia_client_search/src/model/synonym_type.dart';
 import 'package:algolia_client_search/src/model/update_api_key_response.dart';
@@ -84,16 +84,16 @@ final class SearchClient implements ApiClient {
           appId: appId,
           apiKey: apiKey,
           options: options,
-          defaultHosts: () => [
+          defaultHosts: () =>
+              [
                 Host(url: '$appId-dsn.algolia.net', callType: CallType.read),
                 Host(url: '$appId.algolia.net', callType: CallType.write),
               ] +
-              [
+              ([
                 Host(url: '$appId-1.algolianet.com'),
                 Host(url: '$appId-2.algolianet.com'),
-                Host(url: '$appId-3.algolianet.com')
-              ]
-            ..shuffle(),
+                Host(url: '$appId-3.algolianet.com'),
+              ]..shuffle()),
         ) {
     assert(appId.isNotEmpty, '`appId` is missing.');
     assert(apiKey.isNotEmpty, '`apiKey` is missing.');
@@ -184,16 +184,16 @@ final class SearchClient implements ApiClient {
   /// Add a single source to the list of allowed sources.
   ///
   /// Parameters:
-  /// * [modelSource] - The source to add.
+  /// * [source] - The source to add.
   /// * [requestOptions] additional request configuration.
   Future<CreatedAtResponse> appendSource({
-    required ModelSource modelSource,
+    required Source source,
     RequestOptions? requestOptions,
   }) async {
     final request = ApiRequest(
       method: RequestMethod.post,
       path: r'/1/security/sources/append',
-      body: modelSource.toJson(),
+      body: source.toJson(),
     );
     final response = await _retryStrategy.execute(
       request: request,
@@ -368,41 +368,6 @@ final class SearchClient implements ApiClient {
     return deserialize<BrowseResponse, BrowseResponse>(
       response,
       'BrowseResponse',
-      growable: true,
-    );
-  }
-
-  /// Send requests to the Algolia REST API.
-  /// This method allow you to send requests to the Algolia REST API.
-  ///
-  /// Parameters:
-  /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
-  /// * [parameters] - Query parameters to be applied to the current query.
-  /// * [requestOptions] additional request configuration.
-  Future<Object> callGet({
-    required String path,
-    Map<String, Object>? parameters,
-    RequestOptions? requestOptions,
-  }) async {
-    assert(
-      path.isNotEmpty,
-      'Parameter `path` is required when calling `callGet`.',
-    );
-    final request = ApiRequest(
-      method: RequestMethod.get,
-      path: r'/1{path}'
-          .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
-      queryParams: {
-        ...?parameters,
-      },
-    );
-    final response = await _retryStrategy.execute(
-      request: request,
-      options: requestOptions,
-    );
-    return deserialize<Object, Object>(
-      response,
-      'Object',
       growable: true,
     );
   }
@@ -722,20 +687,20 @@ final class SearchClient implements ApiClient {
   /// Remove a single source from the list of allowed sources.
   ///
   /// Parameters:
-  /// * [source_] - The IP range of the source.
+  /// * [source] - The IP range of the source.
   /// * [requestOptions] additional request configuration.
   Future<DeleteSourceResponse> deleteSource({
-    required String source_,
+    required String source,
     RequestOptions? requestOptions,
   }) async {
     assert(
-      source_.isNotEmpty,
-      'Parameter `source_` is required when calling `deleteSource`.',
+      source.isNotEmpty,
+      'Parameter `source` is required when calling `deleteSource`.',
     );
     final request = ApiRequest(
       method: RequestMethod.delete,
       path: r'/1/security/sources/{source}'.replaceAll(
-          '{' r'source' '}', Uri.encodeComponent(source_.toString())),
+          '{' r'source' '}', Uri.encodeComponent(source.toString())),
     );
     final response = await _retryStrategy.execute(
       request: request,
@@ -788,6 +753,41 @@ final class SearchClient implements ApiClient {
     return deserialize<DeletedAtResponse, DeletedAtResponse>(
       response,
       'DeletedAtResponse',
+      growable: true,
+    );
+  }
+
+  /// Send requests to the Algolia REST API.
+  /// This method allow you to send requests to the Algolia REST API.
+  ///
+  /// Parameters:
+  /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
+  /// * [parameters] - Query parameters to be applied to the current query.
+  /// * [requestOptions] additional request configuration.
+  Future<Object> get({
+    required String path,
+    Map<String, Object>? parameters,
+    RequestOptions? requestOptions,
+  }) async {
+    assert(
+      path.isNotEmpty,
+      'Parameter `path` is required when calling `get`.',
+    );
+    final request = ApiRequest(
+      method: RequestMethod.get,
+      path: r'/1{path}'
+          .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
+      queryParams: {
+        ...?parameters,
+      },
+    );
+    final response = await _retryStrategy.execute(
+      request: request,
+      options: requestOptions,
+    );
+    return deserialize<Object, Object>(
+      response,
+      'Object',
       growable: true,
     );
   }
@@ -1052,7 +1052,7 @@ final class SearchClient implements ApiClient {
   ///
   /// Parameters:
   /// * [requestOptions] additional request configuration.
-  Future<List<ModelSource>> getSources({
+  Future<List<Source>> getSources({
     RequestOptions? requestOptions,
   }) async {
     final request = ApiRequest(
@@ -1063,9 +1063,9 @@ final class SearchClient implements ApiClient {
       request: request,
       options: requestOptions,
     );
-    return deserialize<List<ModelSource>, ModelSource>(
+    return deserialize<List<Source>, Source>(
       response,
-      'List<ModelSource>',
+      'List<Source>',
       growable: true,
     );
   }
@@ -1547,16 +1547,16 @@ final class SearchClient implements ApiClient {
   /// Replace all allowed sources.
   ///
   /// Parameters:
-  /// * [modelSource] - The sources to allow.
+  /// * [source] - The sources to allow.
   /// * [requestOptions] additional request configuration.
   Future<ReplaceSourceResponse> replaceSources({
-    required List<ModelSource> modelSource,
+    required List<Source> source,
     RequestOptions? requestOptions,
   }) async {
     final request = ApiRequest(
       method: RequestMethod.put,
       path: r'/1/security/sources',
-      body: modelSource,
+      body: source,
     );
     final response = await _retryStrategy.execute(
       request: request,

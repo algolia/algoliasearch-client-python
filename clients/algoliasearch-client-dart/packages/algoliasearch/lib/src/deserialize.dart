@@ -34,7 +34,6 @@ import 'package:algoliasearch/src/model/index_settings_as_search_params_semantic
 import 'package:algoliasearch/src/model/languages.dart';
 import 'package:algoliasearch/src/model/list_indices_response.dart';
 import 'package:algoliasearch/src/model/matched_geo_location.dart';
-import 'package:algoliasearch/src/model/model_source.dart';
 import 'package:algoliasearch/src/model/params.dart';
 import 'package:algoliasearch/src/model/personalization.dart';
 import 'package:algoliasearch/src/model/promote_object_id.dart';
@@ -57,6 +56,7 @@ import 'package:algoliasearch/src/model/search_response.dart';
 import 'package:algoliasearch/src/model/search_responses.dart';
 import 'package:algoliasearch/src/model/search_synonyms_response.dart';
 import 'package:algoliasearch/src/model/snippet_result_option.dart';
+import 'package:algoliasearch/src/model/source.dart';
 import 'package:algoliasearch/src/model/standard_entries.dart';
 import 'package:algoliasearch/src/model/synonym_hit.dart';
 import 'package:algoliasearch/src/model/time_range.dart';
@@ -195,8 +195,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return MatchedGeoLocation.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'Mode':
-    case 'ModelSource':
-      return ModelSource.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'OperationType':
     case 'Params':
       return Params.fromJson(value as Map<String, dynamic>) as ReturnType;
@@ -267,6 +265,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return SnippetResultOption.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'SortRemainingBy':
+    case 'Source':
+      return Source.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'StandardEntries':
       return StandardEntries.fromJson(value as Map<String, dynamic>)
           as ReturnType;

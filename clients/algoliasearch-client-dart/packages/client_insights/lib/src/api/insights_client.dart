@@ -17,13 +17,15 @@ final class InsightsClient implements ApiClient {
   @override
   final ClientOptions options;
 
+  final String? region;
+
   final RetryStrategy _retryStrategy;
 
   InsightsClient({
     required this.appId,
     required this.apiKey,
     this.options = const ClientOptions(),
-    String? region,
+    this.region,
   }) : _retryStrategy = RetryStrategy.create(
             segment: AgentSegment(value: "Insights", version: packageVersion),
             appId: appId,
@@ -33,7 +35,7 @@ final class InsightsClient implements ApiClient {
               final allowedRegions = ['de', 'us'];
               assert(
                 region == null || allowedRegions.contains(region),
-                '`region` must be one of the following: ${allowedRegions.join(',')}',
+                '`region` must be one of the following: ${allowedRegions.join(', ')}',
               );
               final url = region == null
                   ? 'insights.algolia.io'
@@ -52,17 +54,17 @@ final class InsightsClient implements ApiClient {
   /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
   /// * [parameters] - Query parameters to be applied to the current query.
   /// * [requestOptions] additional request configuration.
-  Future<Object> callGet({
+  Future<Object> del({
     required String path,
     Map<String, Object>? parameters,
     RequestOptions? requestOptions,
   }) async {
     assert(
       path.isNotEmpty,
-      'Parameter `path` is required when calling `callGet`.',
+      'Parameter `path` is required when calling `del`.',
     );
     final request = ApiRequest(
-      method: RequestMethod.get,
+      method: RequestMethod.delete,
       path: r'/1{path}'
           .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
       queryParams: {
@@ -87,17 +89,17 @@ final class InsightsClient implements ApiClient {
   /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
   /// * [parameters] - Query parameters to be applied to the current query.
   /// * [requestOptions] additional request configuration.
-  Future<Object> del({
+  Future<Object> get({
     required String path,
     Map<String, Object>? parameters,
     RequestOptions? requestOptions,
   }) async {
     assert(
       path.isNotEmpty,
-      'Parameter `path` is required when calling `del`.',
+      'Parameter `path` is required when calling `get`.',
     );
     final request = ApiRequest(
-      method: RequestMethod.delete,
+      method: RequestMethod.get,
       path: r'/1{path}'
           .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
       queryParams: {

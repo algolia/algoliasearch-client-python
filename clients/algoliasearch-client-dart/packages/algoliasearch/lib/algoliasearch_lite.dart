@@ -1,8 +1,8 @@
 // Algolia Search Lite API client to interact with Algolia
 library algoliasearch_lite;
 
-export 'package:algolia_client_core/algolia_client_core.dart'
-    show AgentSegment, ApiClient, CallType, ClientOptions, Host, RequestOptions;
+export 'package:algolia_client_core/algolia_client_core.dart';
+
 export 'src/api/search_client.dart';
 
 export 'src/model/acl.dart';
@@ -56,7 +56,6 @@ export 'src/model/log_type.dart';
 export 'src/model/match_level.dart';
 export 'src/model/matched_geo_location.dart';
 export 'src/model/mode.dart';
-export 'src/model/model_source.dart';
 export 'src/model/operation_type.dart';
 export 'src/model/params.dart';
 export 'src/model/personalization.dart';
@@ -87,6 +86,7 @@ export 'src/model/search_type_default.dart';
 export 'src/model/search_type_facet.dart';
 export 'src/model/snippet_result_option.dart';
 export 'src/model/sort_remaining_by.dart';
+export 'src/model/source.dart';
 export 'src/model/standard_entries.dart';
 export 'src/model/synonym_hit.dart';
 export 'src/model/synonym_type.dart';

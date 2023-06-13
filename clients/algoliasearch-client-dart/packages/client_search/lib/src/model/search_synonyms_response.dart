@@ -7,14 +7,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'search_synonyms_response.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(createFieldMap: true)
 final class SearchSynonymsResponse extends DelegatingMap<String, dynamic> {
   /// Returns a new [SearchSynonymsResponse] instance.
   const SearchSynonymsResponse({
     required this.hits,
     required this.nbHits,
-    Map<String, dynamic> json = const {},
-  }) : super(json);
+    Map<String, dynamic> additionalProperties = const {},
+  }) : super(additionalProperties);
 
   /// Array of synonym objects.
   @JsonKey(name: r'hits')
@@ -27,19 +27,34 @@ final class SearchSynonymsResponse extends DelegatingMap<String, dynamic> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      const MapEquality<String, dynamic>().equals(this, this);
+      other is SearchSynonymsResponse &&
+          other.hits == hits &&
+          other.nbHits == nbHits &&
+          const MapEquality<String, dynamic>().equals(this, this);
 
   @override
-  int get hashCode => const MapEquality<String, dynamic>().hash(this);
+  int get hashCode =>
+      hits.hashCode +
+      nbHits.hashCode +
+      const MapEquality<String, dynamic>().hash(this);
 
   factory SearchSynonymsResponse.fromJson(Map<String, dynamic> json) {
     final instance = _$SearchSynonymsResponseFromJson(json);
+    final additionalProperties = Map<String, dynamic>.from(json)
+      ..removeWhere(
+          (key, value) => _$SearchSynonymsResponseFieldMap.containsKey(key));
     return SearchSynonymsResponse(
       hits: instance.hits,
       nbHits: instance.nbHits,
-      json: json,
+      additionalProperties: additionalProperties,
     );
   }
 
-  Map<String, dynamic> toJson() => this;
+  Map<String, dynamic> toJson() =>
+      _$SearchSynonymsResponseToJson(this)..addAll(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

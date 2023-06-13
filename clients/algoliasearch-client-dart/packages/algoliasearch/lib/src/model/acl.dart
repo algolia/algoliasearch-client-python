@@ -3,60 +3,55 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
+@JsonEnum(valueField: 'raw')
 enum Acl {
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'addObject')
-  addObject,
+  addObject(r'addObject'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'analytics')
-  analytics,
+  analytics(r'analytics'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'browse')
-  browse,
+  browse(r'browse'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'deleteObject')
-  deleteObject,
+  deleteObject(r'deleteObject'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'deleteIndex')
-  deleteIndex,
+  deleteIndex(r'deleteIndex'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'editSettings')
-  editSettings,
+  editSettings(r'editSettings'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'listIndexes')
-  listIndexes,
+  listIndexes(r'listIndexes'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'logs')
-  logs,
+  logs(r'logs'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'personalization')
-  personalization,
+  personalization(r'personalization'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'recommendation')
-  recommendation,
+  recommendation(r'recommendation'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'search')
-  search,
+  search(r'search'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'seeUnretrievableAttributes')
-  seeUnretrievableAttributes,
+  seeUnretrievableAttributes(r'seeUnretrievableAttributes'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'settings')
-  settings,
+  settings(r'settings'),
 
   /// List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
-  @JsonValue(r'usage')
-  usage,
+  usage(r'usage');
+
+  const Acl(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

@@ -2,9 +2,16 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum SearchStrategy {
-  @JsonValue(r'none')
-  none,
-  @JsonValue(r'stopIfEnoughMatches')
-  stopIfEnoughMatches,
+  none(r'none'),
+  stopIfEnoughMatches(r'stopIfEnoughMatches');
+
+  const SearchStrategy(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

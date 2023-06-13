@@ -204,26 +204,20 @@ Map<String, dynamic> _$IndexSettingsToJson(IndexSettings instance) {
   writeNotNull('decompoundQuery', instance.decompoundQuery);
   writeNotNull('enableRules', instance.enableRules);
   writeNotNull('enablePersonalization', instance.enablePersonalization);
-  writeNotNull('queryType', _$QueryTypeEnumMap[instance.queryType]);
-  writeNotNull('removeWordsIfNoResults',
-      _$RemoveWordsIfNoResultsEnumMap[instance.removeWordsIfNoResults]);
-  writeNotNull('mode', _$ModeEnumMap[instance.mode]);
+  writeNotNull('queryType', instance.queryType?.toJson());
+  writeNotNull(
+      'removeWordsIfNoResults', instance.removeWordsIfNoResults?.toJson());
+  writeNotNull('mode', instance.mode?.toJson());
   writeNotNull('semanticSearch', instance.semanticSearch?.toJson());
   writeNotNull('advancedSyntax', instance.advancedSyntax);
   writeNotNull('optionalWords', instance.optionalWords);
   writeNotNull('disableExactOnAttributes', instance.disableExactOnAttributes);
-  writeNotNull('exactOnSingleWordQuery',
-      _$ExactOnSingleWordQueryEnumMap[instance.exactOnSingleWordQuery]);
   writeNotNull(
-      'alternativesAsExact',
-      instance.alternativesAsExact
-          ?.map((e) => _$AlternativesAsExactEnumMap[e]!)
-          .toList());
-  writeNotNull(
-      'advancedSyntaxFeatures',
-      instance.advancedSyntaxFeatures
-          ?.map((e) => _$AdvancedSyntaxFeaturesEnumMap[e]!)
-          .toList());
+      'exactOnSingleWordQuery', instance.exactOnSingleWordQuery?.toJson());
+  writeNotNull('alternativesAsExact',
+      instance.alternativesAsExact?.map((e) => e.toJson()).toList());
+  writeNotNull('advancedSyntaxFeatures',
+      instance.advancedSyntaxFeatures?.map((e) => e.toJson()).toList());
   writeNotNull('explain', instance.explain);
   writeNotNull('distinct', instance.distinct);
   writeNotNull('attributeForDistinct', instance.attributeForDistinct);

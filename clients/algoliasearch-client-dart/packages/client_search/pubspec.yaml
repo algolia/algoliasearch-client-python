@@ -1,6 +1,6 @@
 name: algolia_client_search
-version: 0.2.0-alpha.1
-description: Algolia Algolia search API client to interact with Algolia
+version: 0.2.0
+description: Algolia search API client to interact with Algolia
 homepage: https://www.algolia.com/doc/
 repository: https://github.com/algolia/algoliasearch-client-dart/packages/client_search
 
@@ -8,7 +8,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  algolia_client_core: ^0.1.0
+  algolia_client_core: ^0.2.0
   json_annotation: ^4.8.1
   collection: ^1.17.2
 

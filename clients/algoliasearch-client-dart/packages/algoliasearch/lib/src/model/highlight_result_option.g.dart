@@ -29,7 +29,7 @@ Map<String, dynamic> _$HighlightResultOptionToJson(
     HighlightResultOption instance) {
   final val = <String, dynamic>{
     'value': instance.value,
-    'matchLevel': _$MatchLevelEnumMap[instance.matchLevel]!,
+    'matchLevel': instance.matchLevel.toJson(),
     'matchedWords': instance.matchedWords,
   };
 

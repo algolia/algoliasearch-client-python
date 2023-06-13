@@ -2,11 +2,17 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum ScopeType {
-  @JsonValue(r'settings')
-  settings,
-  @JsonValue(r'synonyms')
-  synonyms,
-  @JsonValue(r'rules')
-  rules,
+  settings(r'settings'),
+  synonyms(r'synonyms'),
+  rules(r'rules');
+
+  const ScopeType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

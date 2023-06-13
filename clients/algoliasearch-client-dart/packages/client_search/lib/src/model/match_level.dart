@@ -3,16 +3,22 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Indicates how well the attribute matched the search query.
+@JsonEnum(valueField: 'raw')
 enum MatchLevel {
   /// Indicates how well the attribute matched the search query.
-  @JsonValue(r'none')
-  none,
+  none(r'none'),
 
   /// Indicates how well the attribute matched the search query.
-  @JsonValue(r'partial')
-  partial,
+  partial(r'partial'),
 
   /// Indicates how well the attribute matched the search query.
-  @JsonValue(r'full')
-  full,
+  full(r'full');
+
+  const MatchLevel(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

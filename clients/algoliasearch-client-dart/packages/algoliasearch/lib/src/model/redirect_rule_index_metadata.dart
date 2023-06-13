@@ -10,7 +10,7 @@ part 'redirect_rule_index_metadata.g.dart';
 final class RedirectRuleIndexMetadata {
   /// Returns a new [RedirectRuleIndexMetadata] instance.
   const RedirectRuleIndexMetadata({
-    required this.source_,
+    required this.source,
     required this.dest,
     required this.reason,
     required this.succeed,
@@ -19,7 +19,7 @@ final class RedirectRuleIndexMetadata {
 
   /// Source index for the redirect rule.
   @JsonKey(name: r'source')
-  final String source_;
+  final String source;
 
   /// Destination index for the redirect rule.
   @JsonKey(name: r'dest')
@@ -40,7 +40,7 @@ final class RedirectRuleIndexMetadata {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is RedirectRuleIndexMetadata &&
-          other.source_ == source_ &&
+          other.source == source &&
           other.dest == dest &&
           other.reason == reason &&
           other.succeed == succeed &&
@@ -48,7 +48,7 @@ final class RedirectRuleIndexMetadata {
 
   @override
   int get hashCode =>
-      source_.hashCode +
+      source.hashCode +
       dest.hashCode +
       reason.hashCode +
       succeed.hashCode +

@@ -11,5 +11,5 @@ API powering the Insights feature of Algolia.
 To use the package from [pub.dev](https://pub.dev), please include the following in pubspec.yaml
 ```yaml
 dependencies:
-  algolia_client_insights: 0.2.0-alpha.1
+  algolia_client_insights: 0.2.0
 ```

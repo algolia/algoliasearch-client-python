@@ -14,7 +14,7 @@ final class Consequence {
     this.params,
     this.promote,
     this.filterPromotes,
-    this.hide_,
+    this.hide,
     this.userData,
   });
 
@@ -31,7 +31,7 @@ final class Consequence {
 
   /// Objects to hide from hits. Each object must contain an objectID field. By default, you can hide up to 50 items per rule.
   @JsonKey(name: r'hide')
-  final List<ConsequenceHide>? hide_;
+  final List<ConsequenceHide>? hide;
 
   /// Custom JSON object that will be appended to the userData array in the response. This object isn't interpreted by the API. It's limited to 1kB of minified JSON.
   @JsonKey(name: r'userData')
@@ -44,7 +44,7 @@ final class Consequence {
           other.params == params &&
           other.promote == promote &&
           other.filterPromotes == filterPromotes &&
-          other.hide_ == hide_ &&
+          other.hide == hide &&
           other.userData == userData;
 
   @override
@@ -52,7 +52,7 @@ final class Consequence {
       params.hashCode +
       promote.hashCode +
       filterPromotes.hashCode +
-      hide_.hashCode +
+      hide.hashCode +
       userData.hashCode;
 
   factory Consequence.fromJson(Map<String, dynamic> json) =>

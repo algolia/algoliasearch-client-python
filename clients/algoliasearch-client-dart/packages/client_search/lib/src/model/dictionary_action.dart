@@ -3,12 +3,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Actions to perform.
+@JsonEnum(valueField: 'raw')
 enum DictionaryAction {
   /// Actions to perform.
-  @JsonValue(r'addEntry')
-  addEntry,
+  addEntry(r'addEntry'),
 
   /// Actions to perform.
-  @JsonValue(r'deleteEntry')
-  deleteEntry,
+  deleteEntry(r'deleteEntry');
+
+  const DictionaryAction(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

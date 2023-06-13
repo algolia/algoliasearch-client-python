@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'hit.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(createFieldMap: true)
 final class Hit extends DelegatingMap<String, dynamic> {
   /// Returns a new [Hit] instance.
   const Hit({
@@ -16,8 +16,8 @@ final class Hit extends DelegatingMap<String, dynamic> {
     this.snippetResult,
     this.rankingInfo,
     this.distinctSeqID,
-    Map<String, dynamic> json = const {},
-  }) : super(json);
+    Map<String, dynamic> additionalProperties = const {},
+  }) : super(additionalProperties);
 
   /// Unique identifier of the object.
   @JsonKey(name: r'objectID')
@@ -40,22 +40,41 @@ final class Hit extends DelegatingMap<String, dynamic> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      const MapEquality<String, dynamic>().equals(this, this);
+      other is Hit &&
+          other.objectID == objectID &&
+          other.highlightResult == highlightResult &&
+          other.snippetResult == snippetResult &&
+          other.rankingInfo == rankingInfo &&
+          other.distinctSeqID == distinctSeqID &&
+          const MapEquality<String, dynamic>().equals(this, this);
 
   @override
-  int get hashCode => const MapEquality<String, dynamic>().hash(this);
+  int get hashCode =>
+      objectID.hashCode +
+      highlightResult.hashCode +
+      snippetResult.hashCode +
+      rankingInfo.hashCode +
+      distinctSeqID.hashCode +
+      const MapEquality<String, dynamic>().hash(this);
 
   factory Hit.fromJson(Map<String, dynamic> json) {
     final instance = _$HitFromJson(json);
+    final additionalProperties = Map<String, dynamic>.from(json)
+      ..removeWhere((key, value) => _$HitFieldMap.containsKey(key));
     return Hit(
       objectID: instance.objectID,
       highlightResult: instance.highlightResult,
       snippetResult: instance.snippetResult,
       rankingInfo: instance.rankingInfo,
       distinctSeqID: instance.distinctSeqID,
-      json: json,
+      additionalProperties: additionalProperties,
     );
   }
 
-  Map<String, dynamic> toJson() => this;
+  Map<String, dynamic> toJson() => _$HitToJson(this)..addAll(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

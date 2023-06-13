@@ -25,7 +25,7 @@ MultipleBatchRequest _$MultipleBatchRequestFromJson(
 Map<String, dynamic> _$MultipleBatchRequestToJson(
         MultipleBatchRequest instance) =>
     <String, dynamic>{
-      'action': _$ActionEnumMap[instance.action]!,
+      'action': instance.action.toJson(),
       'body': instance.body,
       'indexName': instance.indexName,
     };

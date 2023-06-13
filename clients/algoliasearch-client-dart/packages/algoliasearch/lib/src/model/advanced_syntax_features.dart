@@ -2,9 +2,16 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum AdvancedSyntaxFeatures {
-  @JsonValue(r'exactPhrase')
-  exactPhrase,
-  @JsonValue(r'excludeWords')
-  excludeWords,
+  exactPhrase(r'exactPhrase'),
+  excludeWords(r'excludeWords');
+
+  const AdvancedSyntaxFeatures(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

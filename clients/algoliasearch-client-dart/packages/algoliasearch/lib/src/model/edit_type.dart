@@ -3,12 +3,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Type of edit.
+@JsonEnum(valueField: 'raw')
 enum EditType {
   /// Type of edit.
-  @JsonValue(r'remove')
-  remove,
+  remove(r'remove'),
 
   /// Type of edit.
-  @JsonValue(r'replace')
-  replace,
+  replace(r'replace');
+
+  const EditType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

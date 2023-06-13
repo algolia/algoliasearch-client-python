@@ -13,7 +13,7 @@ RedirectRuleIndexMetadata _$RedirectRuleIndexMetadataFromJson(
       json,
       ($checkedConvert) {
         final val = RedirectRuleIndexMetadata(
-          source_: $checkedConvert('source', (v) => v as String),
+          source: $checkedConvert('source', (v) => v as String),
           dest: $checkedConvert('dest', (v) => v as String),
           reason: $checkedConvert('reason', (v) => v as String),
           succeed: $checkedConvert('succeed', (v) => v as bool),
@@ -24,13 +24,12 @@ RedirectRuleIndexMetadata _$RedirectRuleIndexMetadataFromJson(
         );
         return val;
       },
-      fieldKeyMap: const {'source_': 'source'},
     );
 
 Map<String, dynamic> _$RedirectRuleIndexMetadataToJson(
         RedirectRuleIndexMetadata instance) =>
     <String, dynamic>{
-      'source': instance.source_,
+      'source': instance.source,
       'dest': instance.dest,
       'reason': instance.reason,
       'succeed': instance.succeed,

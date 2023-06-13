@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'dictionary_entry.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(createFieldMap: true)
 final class DictionaryEntry extends DelegatingMap<String, dynamic> {
   /// Returns a new [DictionaryEntry] instance.
   const DictionaryEntry({
@@ -17,8 +17,8 @@ final class DictionaryEntry extends DelegatingMap<String, dynamic> {
     this.words,
     this.decomposition,
     this.state,
-    Map<String, dynamic> json = const {},
-  }) : super(json);
+    Map<String, dynamic> additionalProperties = const {},
+  }) : super(additionalProperties);
 
   /// Unique identifier of the object.
   @JsonKey(name: r'objectID')
@@ -46,13 +46,29 @@ final class DictionaryEntry extends DelegatingMap<String, dynamic> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      const MapEquality<String, dynamic>().equals(this, this);
+      other is DictionaryEntry &&
+          other.objectID == objectID &&
+          other.language == language &&
+          other.word == word &&
+          other.words == words &&
+          other.decomposition == decomposition &&
+          other.state == state &&
+          const MapEquality<String, dynamic>().equals(this, this);
 
   @override
-  int get hashCode => const MapEquality<String, dynamic>().hash(this);
+  int get hashCode =>
+      objectID.hashCode +
+      language.hashCode +
+      word.hashCode +
+      words.hashCode +
+      decomposition.hashCode +
+      state.hashCode +
+      const MapEquality<String, dynamic>().hash(this);
 
   factory DictionaryEntry.fromJson(Map<String, dynamic> json) {
     final instance = _$DictionaryEntryFromJson(json);
+    final additionalProperties = Map<String, dynamic>.from(json)
+      ..removeWhere((key, value) => _$DictionaryEntryFieldMap.containsKey(key));
     return DictionaryEntry(
       objectID: instance.objectID,
       language: instance.language,
@@ -60,9 +76,14 @@ final class DictionaryEntry extends DelegatingMap<String, dynamic> {
       words: instance.words,
       decomposition: instance.decomposition,
       state: instance.state,
-      json: json,
+      additionalProperties: additionalProperties,
     );
   }
 
-  Map<String, dynamic> toJson() => this;
+  Map<String, dynamic> toJson() => _$DictionaryEntryToJson(this)..addAll(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

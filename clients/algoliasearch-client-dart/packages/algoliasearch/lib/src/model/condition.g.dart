@@ -31,7 +31,7 @@ Map<String, dynamic> _$ConditionToJson(Condition instance) {
   }
 
   writeNotNull('pattern', instance.pattern);
-  writeNotNull('anchoring', _$AnchoringEnumMap[instance.anchoring]);
+  writeNotNull('anchoring', instance.anchoring?.toJson());
   writeNotNull('alternatives', instance.alternatives);
   writeNotNull('context', instance.context);
   return val;

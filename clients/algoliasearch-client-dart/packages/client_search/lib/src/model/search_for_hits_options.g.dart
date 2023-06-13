@@ -33,7 +33,7 @@ Map<String, dynamic> _$SearchForHitsOptionsToJson(
     }
   }
 
-  writeNotNull('type', _$SearchTypeDefaultEnumMap[instance.type]);
+  writeNotNull('type', instance.type?.toJson());
   return val;
 }
 

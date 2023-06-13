@@ -2,13 +2,18 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum LogType {
-  @JsonValue(r'all')
-  all,
-  @JsonValue(r'query')
-  query,
-  @JsonValue(r'build')
-  build,
-  @JsonValue(r'error')
-  error,
+  all(r'all'),
+  query(r'query'),
+  build(r'build'),
+  error(r'error');
+
+  const LogType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

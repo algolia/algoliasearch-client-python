@@ -3,16 +3,22 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Controls how the exact ranking criterion is computed when the query contains only one word.
+@JsonEnum(valueField: 'raw')
 enum ExactOnSingleWordQuery {
   /// Controls how the exact ranking criterion is computed when the query contains only one word.
-  @JsonValue(r'attribute')
-  attribute,
+  attribute(r'attribute'),
 
   /// Controls how the exact ranking criterion is computed when the query contains only one word.
-  @JsonValue(r'none')
-  none,
+  none(r'none'),
 
   /// Controls how the exact ranking criterion is computed when the query contains only one word.
-  @JsonValue(r'word')
-  word,
+  word(r'word');
+
+  const ExactOnSingleWordQuery(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

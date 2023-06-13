@@ -3,16 +3,22 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Controls if and how query words are interpreted as prefixes.
+@JsonEnum(valueField: 'raw')
 enum QueryType {
   /// Controls if and how query words are interpreted as prefixes.
-  @JsonValue(r'prefixLast')
-  prefixLast,
+  prefixLast(r'prefixLast'),
 
   /// Controls if and how query words are interpreted as prefixes.
-  @JsonValue(r'prefixAll')
-  prefixAll,
+  prefixAll(r'prefixAll'),
 
   /// Controls if and how query words are interpreted as prefixes.
-  @JsonValue(r'prefixNone')
-  prefixNone,
+  prefixNone(r'prefixNone');
+
+  const QueryType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

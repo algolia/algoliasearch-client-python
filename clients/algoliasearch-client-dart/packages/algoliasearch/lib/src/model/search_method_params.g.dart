@@ -31,7 +31,7 @@ Map<String, dynamic> _$SearchMethodParamsToJson(SearchMethodParams instance) {
     }
   }
 
-  writeNotNull('strategy', _$SearchStrategyEnumMap[instance.strategy]);
+  writeNotNull('strategy', instance.strategy?.toJson());
   return val;
 }
 

@@ -2,7 +2,15 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum AroundRadiusAll {
-  @JsonValue(r'all')
-  all,
+  all(r'all');
+
+  const AroundRadiusAll(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

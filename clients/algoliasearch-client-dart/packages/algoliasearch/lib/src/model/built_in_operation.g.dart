@@ -23,7 +23,7 @@ BuiltInOperation _$BuiltInOperationFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$BuiltInOperationToJson(BuiltInOperation instance) =>
     <String, dynamic>{
-      '_operation': _$BuiltInOperationTypeEnumMap[instance.operation]!,
+      '_operation': instance.operation.toJson(),
       'value': instance.value,
     };
 

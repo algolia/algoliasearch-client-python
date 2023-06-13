@@ -32,3 +32,29 @@ Hit _$HitFromJson(Map<String, dynamic> json) => $checkedCreate(
         'distinctSeqID': '_distinctSeqID'
       },
     );
+
+const _$HitFieldMap = <String, String>{
+  'objectID': 'objectID',
+  'highlightResult': '_highlightResult',
+  'snippetResult': '_snippetResult',
+  'rankingInfo': '_rankingInfo',
+  'distinctSeqID': '_distinctSeqID',
+};
+
+Map<String, dynamic> _$HitToJson(Hit instance) {
+  final val = <String, dynamic>{
+    'objectID': instance.objectID,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('_highlightResult', instance.highlightResult);
+  writeNotNull('_snippetResult', instance.snippetResult);
+  writeNotNull('_rankingInfo', instance.rankingInfo?.toJson());
+  writeNotNull('_distinctSeqID', instance.distinctSeqID);
+  return val;
+}

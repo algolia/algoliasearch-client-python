@@ -30,8 +30,7 @@ Map<String, dynamic> _$ValueToJson(Value instance) {
   }
 
   writeNotNull('order', instance.order);
-  writeNotNull(
-      'sortRemainingBy', _$SortRemainingByEnumMap[instance.sortRemainingBy]);
+  writeNotNull('sortRemainingBy', instance.sortRemainingBy?.toJson());
   return val;
 }
 

@@ -3,16 +3,22 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+@JsonEnum(valueField: 'raw')
 enum SortRemainingBy {
   /// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
-  @JsonValue(r'count')
-  count,
+  count(r'count'),
 
   /// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
-  @JsonValue(r'alpha')
-  alpha,
+  alpha(r'alpha'),
 
   /// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
-  @JsonValue(r'hidden')
-  hidden,
+  hidden(r'hidden');
+
+  const SortRemainingBy(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

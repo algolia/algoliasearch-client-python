@@ -3,12 +3,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Type of operation to perform (move or copy).
+@JsonEnum(valueField: 'raw')
 enum OperationType {
   /// Type of operation to perform (move or copy).
-  @JsonValue(r'move')
-  move,
+  move(r'move'),
 
   /// Type of operation to perform (move or copy).
-  @JsonValue(r'copy')
-  copy,
+  copy(r'copy');
+
+  const OperationType(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

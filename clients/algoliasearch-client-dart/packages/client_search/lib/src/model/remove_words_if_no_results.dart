@@ -3,20 +3,25 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Selects a strategy to remove words from the query when it doesn't match any hits.
+@JsonEnum(valueField: 'raw')
 enum RemoveWordsIfNoResults {
   /// Selects a strategy to remove words from the query when it doesn't match any hits.
-  @JsonValue(r'none')
-  none,
+  none(r'none'),
 
   /// Selects a strategy to remove words from the query when it doesn't match any hits.
-  @JsonValue(r'lastWords')
-  lastWords,
+  lastWords(r'lastWords'),
 
   /// Selects a strategy to remove words from the query when it doesn't match any hits.
-  @JsonValue(r'firstWords')
-  firstWords,
+  firstWords(r'firstWords'),
 
   /// Selects a strategy to remove words from the query when it doesn't match any hits.
-  @JsonValue(r'allOptional')
-  allOptional,
+  allOptional(r'allOptional');
+
+  const RemoveWordsIfNoResults(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

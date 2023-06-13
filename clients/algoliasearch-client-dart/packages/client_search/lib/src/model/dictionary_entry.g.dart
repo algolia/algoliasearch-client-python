@@ -26,6 +26,34 @@ DictionaryEntry _$DictionaryEntryFromJson(Map<String, dynamic> json) =>
       },
     );
 
+const _$DictionaryEntryFieldMap = <String, String>{
+  'objectID': 'objectID',
+  'language': 'language',
+  'word': 'word',
+  'words': 'words',
+  'decomposition': 'decomposition',
+  'state': 'state',
+};
+
+Map<String, dynamic> _$DictionaryEntryToJson(DictionaryEntry instance) {
+  final val = <String, dynamic>{
+    'objectID': instance.objectID,
+    'language': instance.language,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('word', instance.word);
+  writeNotNull('words', instance.words);
+  writeNotNull('decomposition', instance.decomposition);
+  writeNotNull('state', instance.state?.toJson());
+  return val;
+}
+
 const _$DictionaryEntryStateEnumMap = {
   DictionaryEntryState.enabled: 'enabled',
   DictionaryEntryState.disabled: 'disabled',

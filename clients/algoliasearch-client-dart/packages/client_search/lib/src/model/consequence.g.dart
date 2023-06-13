@@ -18,7 +18,7 @@ Consequence _$ConsequenceFromJson(Map<String, dynamic> json) => $checkedCreate(
                   : ConsequenceParams.fromJson(v as Map<String, dynamic>)),
           promote: $checkedConvert('promote', (v) => v as List<dynamic>?),
           filterPromotes: $checkedConvert('filterPromotes', (v) => v as bool?),
-          hide_: $checkedConvert(
+          hide: $checkedConvert(
               'hide',
               (v) => (v as List<dynamic>?)
                   ?.map((e) =>
@@ -28,7 +28,6 @@ Consequence _$ConsequenceFromJson(Map<String, dynamic> json) => $checkedCreate(
         );
         return val;
       },
-      fieldKeyMap: const {'hide_': 'hide'},
     );
 
 Map<String, dynamic> _$ConsequenceToJson(Consequence instance) {
@@ -43,7 +42,7 @@ Map<String, dynamic> _$ConsequenceToJson(Consequence instance) {
   writeNotNull('params', instance.params?.toJson());
   writeNotNull('promote', instance.promote?.toList());
   writeNotNull('filterPromotes', instance.filterPromotes);
-  writeNotNull('hide', instance.hide_?.map((e) => e.toJson()).toList());
+  writeNotNull('hide', instance.hide?.map((e) => e.toJson()).toList());
   writeNotNull('userData', instance.userData);
   return val;
 }

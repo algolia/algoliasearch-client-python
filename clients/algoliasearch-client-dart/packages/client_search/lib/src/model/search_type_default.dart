@@ -3,8 +3,16 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Perform a search query with `default`, will search for facet values if `facet` is given.
+@JsonEnum(valueField: 'raw')
 enum SearchTypeDefault {
   /// Perform a search query with `default`, will search for facet values if `facet` is given.
-  @JsonValue(r'default')
-  default_,
+  default_(r'default');
+
+  const SearchTypeDefault(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

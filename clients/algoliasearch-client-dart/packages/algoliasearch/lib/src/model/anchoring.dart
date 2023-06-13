@@ -3,20 +3,25 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Whether the pattern parameter must match the beginning or the end of the query string, or both, or none.
+@JsonEnum(valueField: 'raw')
 enum Anchoring {
   /// Whether the pattern parameter must match the beginning or the end of the query string, or both, or none.
-  @JsonValue(r'is')
-  is_,
+  is_(r'is'),
 
   /// Whether the pattern parameter must match the beginning or the end of the query string, or both, or none.
-  @JsonValue(r'startsWith')
-  startsWith,
+  startsWith(r'startsWith'),
 
   /// Whether the pattern parameter must match the beginning or the end of the query string, or both, or none.
-  @JsonValue(r'endsWith')
-  endsWith,
+  endsWith(r'endsWith'),
 
   /// Whether the pattern parameter must match the beginning or the end of the query string, or both, or none.
-  @JsonValue(r'contains')
-  contains,
+  contains(r'contains');
+
+  const Anchoring(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

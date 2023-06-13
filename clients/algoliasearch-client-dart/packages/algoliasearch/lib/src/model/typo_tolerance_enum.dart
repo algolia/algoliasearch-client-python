@@ -2,9 +2,16 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(valueField: 'raw')
 enum TypoToleranceEnum {
-  @JsonValue(r'min')
-  min,
-  @JsonValue(r'strict')
-  strict,
+  min(r'min'),
+  strict(r'strict');
+
+  const TypoToleranceEnum(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }
