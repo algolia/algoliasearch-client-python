@@ -11,6 +11,8 @@ get:
     - $ref: '../../common/observabilityParameters.yml#/taskID'
     - $ref: '../../common/observabilityParameters.yml#/runSort'
     - $ref: '../../common/parameters.yml#/order'
+    - $ref: '../../common/observabilityParameters.yml#/startDate'
+    - $ref: '../../common/observabilityParameters.yml#/endDate'
   responses:
     '200':
       description: OK
