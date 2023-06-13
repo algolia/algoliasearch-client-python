@@ -7,10 +7,10 @@ final class RequestOptions {
   final Duration? readTimeout;
 
   /// Header names to their respective values to be sent with the request.
-  final Map<String, String> headers;
+  final Map<String, dynamic> headers;
 
   /// URL parameter names to their respective values to be appended to the request URL.
-  final Map<String, String> urlParameters;
+  final Map<String, dynamic> urlParameters;
 
   /// Custom request body.
   final dynamic body;

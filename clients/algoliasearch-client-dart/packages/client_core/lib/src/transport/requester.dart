@@ -1,12 +1,23 @@
 import 'package:algolia_client_core/src/config/host.dart';
 
-/// This contract allows you to run http requests and get response.
-abstract interface class Requester {
-  /// Run an http request and get the result.
+/// A contract [Requester] to define an interface for handling HTTP requests and responses.
+///
+/// The [Requester] abstract class serves as a contract that can be implemented
+/// by any class wishing to handle HTTP requests and send responses.
+abstract class Requester {
+  /// Performs an HTTP request and retrieves the response.
+  ///
+  /// The [request] is of type [HttpRequest] and is used to perform the HTTP request.
+  /// The method returns a Future that resolves to an [HttpResponse].
   Future<HttpResponse> perform(HttpRequest request);
 
-  /// Close underlying resources.
-  void close();
+  /// Closes any underlying resources that the Requester might be using.
+  ///
+  /// By default, it does nothing (no-op), but it can be implemented to handle resource cleanup
+  /// if necessary.
+  void close() {
+    // Defaults to no-op, can be overridden for resource cleanup.
+  }
 }
 
 /// Represents an Http request.
@@ -24,13 +35,13 @@ final class HttpRequest {
   final Duration timeout;
 
   /// Headers to be included in the request. Can be null if no headers are needed.
-  final Map<String, String>? headers;
+  final Map<String, dynamic>? headers;
 
   /// Body of the request. Can be any object which can be serialized to JSON.
   final dynamic body;
 
   /// Query parameters to be included in the request URL.
-  final Map<String, String> queryParameters;
+  final Map<String, dynamic> queryParameters;
 
   /// Constructs an [HttpRequest] instance with the provided parameters.
   const HttpRequest({

@@ -35,7 +35,11 @@ export async function formatter(
       cmd = `${folder}/gradlew -p ${folder} spotlessApply`;
       break;
     case 'dart':
-      cmd = `(cd ${folder} && melos bs && melos build --no-select && melos lint)`;
+      if (folder.includes('tests')) {
+        cmd = `(cd ${folder} && dart fix --apply && dart format .)`;
+      } else {
+        cmd = `(cd ${folder} && melos bs && melos build --no-select && melos lint)`;
+      }
       break;
     default:
       return;

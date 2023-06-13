@@ -1,0 +1,71 @@
+import '{{{import}}}';
+import 'package:algolia_test/algolia_test.dart';
+import 'package:test/test.dart';
+
+void main() {
+  {{#blocksRequests}}
+  {{#tests}}
+
+  // {{{operationId}}}
+  test(
+    '{{{testName}}}',
+    () => runTest(
+      builder: (requester) => {{client}}(
+        appId: 'appId', 
+        apiKey: 'apiKey',
+        {{#hasRegionalHost}}
+        region: '{{defaultRegion}}',
+        {{/hasRegionalHost}}
+        options: ClientOptions(requester: requester),
+      ),
+      call: (client) => client.{{method}}(
+        {{#parametersWithDataType}}
+        {{> request_param}}
+        {{/parametersWithDataType}}
+        {{#hasRequestOptions}}
+        requestOptions : RequestOptions(
+            {{#requestOptions.headers}}
+            headers: { 
+            {{#requestOptions.headers.parametersWithDataType}}
+                '{{{key}}}' : '{{value}}',    
+            {{/requestOptions.headers.parametersWithDataType}}
+            },
+            {{/requestOptions.headers}}
+            {{#requestOptions.queryParameters}}
+            urlParameters: {
+                {{#requestOptions.queryParameters.parametersWithDataType}}
+                '{{{key}}}' : {{> param_value}},
+                {{/requestOptions.queryParameters.parametersWithDataType}}
+            },
+            {{/requestOptions.queryParameters}}
+        ),
+        {{/hasRequestOptions}}
+      ),
+      intercept: (request) {
+        {{#request}}
+        expectPath(request.path, '{{{path}}}');
+        expect(request.method, '{{#lambda.lowercase}}{{&method}}{{/lambda.lowercase}}');
+        {{#headers}}
+        expectHeaders(request.headers, """{{{.}}}""");
+        {{/headers}}
+        {{#queryParameters}}
+        expectParams(request.queryParameters, """{{{.}}}""");
+        {{/queryParameters}}
+        {{#body}}
+        expectBody(request.body, """{{{.}}}""");
+        {{/body}}
+        {{^body}}
+        {{#assertNullBody}}
+        expect(request.body, null);
+        {{/assertNullBody}}
+        {{^assertNullBody}}
+        expect(request.body, {});
+        {{/assertNullBody}}
+        {{/body}}
+        {{/request}}
+      },
+    ),
+  );
+  {{/tests}}
+  {{/blocksRequests}}
+}

@@ -46,10 +46,11 @@ final class RetryStrategy {
     required ApiRequest request,
     RequestOptions? options,
   }) async {
-    final hosts = _callableHosts();
+    final callType = _callTypeOf(request);
+    final hosts = _callableHosts(callType);
     final List<AlgoliaException> errors = [];
     for (final host in hosts) {
-      final httpRequest = _buildRequest(host, request, options);
+      final httpRequest = _buildRequest(host, request, callType, options);
       try {
         final response = await requester.perform(httpRequest);
         return response.body ?? const {};
@@ -71,9 +72,11 @@ final class RetryStrategy {
   /// Returns a list of callable hosts.
   /// If there are hosts that are up, it returns these hosts.
   /// Otherwise, it resets all hosts and returns them.
-  Iterable<RetryableHost> _callableHosts() {
+  Iterable<RetryableHost> _callableHosts(CallType callType) {
     _expireHosts();
-    final upHosts = _hosts.where((host) => host.isUp);
+    final hostsCallType = _hosts
+        .where((e) => e.host.callType == callType || e.host.callType == null);
+    final upHosts = hostsCallType.where((host) => host.isUp);
     if (upHosts.isNotEmpty) return upHosts;
     return _hosts..forEach((host) => host.reset());
   }
@@ -91,9 +94,9 @@ final class RetryStrategy {
   HttpRequest _buildRequest(
     RetryableHost host,
     ApiRequest request,
+    CallType callType,
     RequestOptions? options,
   ) {
-    final callType = _callTypeOf(request);
     final baseTimeout = _timeoutOf(callType, options);
     final timeout = baseTimeout * (host.retryCount + 1);
     return HttpRequest(
@@ -105,7 +108,7 @@ final class RetryStrategy {
       body: options?.body ?? request.body != null
           ? request.body
           : _requiresBody(request)
-              ? "{}"
+              ? const <String, dynamic>{}
               : null,
       queryParameters: {...?request.queryParams, ...?options?.urlParameters},
     );

@@ -4,14 +4,22 @@ import 'package:json_annotation/json_annotation.dart';
 {{#isDeprecated}}
 @Deprecated('{{{classname}}} has been deprecated')
 {{/isDeprecated}}
+@JsonEnum(valueField: 'raw')
 enum {{{classname}}} {
 {{#allowableValues}}
 {{#enumVars}}
   {{#description}}
   /// {{{.}}}
   {{/description}}
-  @JsonValue({{#isString}}r{{/isString}}{{{value}}})
-  {{{name}}},
+  {{{name}}}({{#isString}}r{{/isString}}{{{value}}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
 {{/enumVars}}
 {{/allowableValues}}
+
+  const {{{classname}}}(this.raw);
+  final dynamic raw;
+
+  dynamic toJson() => raw;
+
+  @override
+  String toString() => raw.toString();
 }

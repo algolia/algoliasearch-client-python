@@ -80,6 +80,7 @@ class DioRequester implements Requester {
       data: request.body,
       options: Options(
         method: request.method,
+        headers: request.headers,
         sendTimeout: request.timeout,
         receiveTimeout: request.timeout,
       ),

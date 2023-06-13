@@ -6,15 +6,15 @@ part '{{classFilename}}.g.dart';
 {{#isDeprecated}}
 @Deprecated('{{{classname}}} has been deprecated')
 {{/isDeprecated}}
-@JsonSerializable(createToJson: false)
+@JsonSerializable(createFieldMap: true)
 final class {{{classname}}} extends DelegatingMap<String, dynamic> {
   /// Returns a new [{{{classname}}}] instance.
   const {{{classname}}}({
   {{#vars}}
     {{#required}}required{{/required}} this.{{{name}}},
   {{/vars}}
-    Map<String, dynamic> json = const {},
-  }): super(json);
+    Map<String, dynamic> additionalProperties = const {},
+  }): super(additionalProperties);
 
   {{#vars}}
     {{#description}}
@@ -47,22 +47,35 @@ final class {{{classname}}} extends DelegatingMap<String, dynamic> {
   {{/vars}}
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      const MapEquality<String, dynamic>().equals(this, this);
+  bool operator ==(Object other) => identical(this, other) || other is {{{classname}}} &&
+  {{#vars}}
+     other.{{{name}}} == {{{name}}} &&
+  {{/vars}}
+     const MapEquality<String, dynamic>().equals(this, this); 
 
   @override
-  int get hashCode => const MapEquality<String, dynamic>().hash(this);
+  int get hashCode =>
+  {{#vars}}
+    {{#isNullable}}({{{name}}} == null ? 0 : {{{name}}}.hashCode){{/isNullable}}{{^isNullable}}{{{name}}}.hashCode{{/isNullable}} +
+  {{/vars}}
+    const MapEquality<String, dynamic>().hash(this);
 
   factory {{{classname}}}.fromJson(Map<String, dynamic> json) {
      final instance = _${{{classname}}}FromJson(json);
+     final additionalProperties = Map<String, dynamic>.from(json)
+      ..removeWhere((key, value) => _${{{classname}}}FieldMap.containsKey(key));
      return {{{classname}}} (
        {{#vars}}
           {{{name}}}: instance.{{{name}}},
        {{/vars}}
-       json: json,
+       additionalProperties: additionalProperties,
      );
   }
 
-  Map<String, dynamic> toJson() => this;
+  Map<String, dynamic> toJson() => _${{{classname}}}ToJson(this)..addAll(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

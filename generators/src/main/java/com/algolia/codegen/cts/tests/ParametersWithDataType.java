@@ -203,6 +203,7 @@ public class ParametersWithDataType {
     testOutput.put("isInteger", false);
     testOutput.put("isLong", false);
     testOutput.put("isDouble", false);
+    testOutput.put("isNumber", false);
     testOutput.put("isBoolean", false);
     testOutput.put("isEnum", false);
     testOutput.put("isSimpleObject", false);
@@ -237,6 +238,7 @@ public class ParametersWithDataType {
   private void handleEnum(Object param, Map<String, Object> testOutput) {
     testOutput.put("isEnum", true);
     testOutput.put("value", param);
+    testOutput.put("valueEscaped", param + "_");
   }
 
   private void handleModel(
@@ -469,15 +471,24 @@ public class ParametersWithDataType {
         return "String";
       case "Integer":
         if (spec != null) spec.setIsNumber(true);
-        if (output != null) output.put("isInteger", true);
+        if (output != null) {
+          output.put("isInteger", true);
+          output.put("isNumber", true);
+        }
         return "Integer";
       case "Long":
         if (spec != null) spec.setIsNumber(true);
-        if (output != null) output.put("isLong", true);
+        if (output != null) {
+          output.put("isLong", true);
+          output.put("isNumber", true);
+        }
         return "Long";
       case "Double":
         if (spec != null) spec.setIsNumber(true);
-        if (output != null) output.put("isDouble", true);
+        if (output != null) {
+          output.put("isDouble", true);
+          output.put("isNumber", true);
+        }
         return "Double";
       case "Boolean":
         if (spec != null) spec.setIsBoolean(true);
@@ -510,12 +521,15 @@ public class ParametersWithDataType {
         break;
       case "Integer":
         output.put("isInteger", true);
+        output.put("isNumber", true);
         break;
       case "Long":
         output.put("isLong", true);
+        output.put("isNumber", true);
         break;
       case "Double":
         output.put("isDouble", true);
+        output.put("isNumber", true);
         break;
       case "Boolean":
         output.put("isBoolean", true);

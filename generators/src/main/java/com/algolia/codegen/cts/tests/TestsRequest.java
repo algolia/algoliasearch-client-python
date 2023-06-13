@@ -18,7 +18,7 @@ public class TestsRequest extends TestsGenerator {
     String clientName = client;
     // This special case allow us to read the `search` CTS to generated the tests for the
     // `lite` client, which is only available in JavaScript
-    if (language.equals("javascript") && client.equals("algoliasearch")) {
+    if ((language.equals("javascript") || language.equals("dart")) && client.equals("algoliasearch")) {
       clientName = "search";
     }
     return super.loadCTS("methods/requests", clientName, Request[].class);

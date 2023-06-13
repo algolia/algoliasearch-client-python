@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.CodegenOperation;
 import org.yaml.snakeyaml.Yaml;
 
@@ -55,6 +56,8 @@ public class Utils {
         return camelize(client);
       case "go":
         return client;
+      case "dart":
+        return StringUtils.lowerCase(client);
       default:
         return capitalize(camelize(client));
     }

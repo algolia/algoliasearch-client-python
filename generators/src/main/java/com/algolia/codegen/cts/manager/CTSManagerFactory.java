@@ -18,6 +18,8 @@ public class CTSManagerFactory {
         return new KotlinCTSManager(client);
       case "go":
         return new GoCTSManager();
+      case "dart":
+        return new DartCTSManager(client);
     }
     return null;
   }

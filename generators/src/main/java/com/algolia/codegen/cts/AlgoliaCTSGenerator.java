@@ -85,6 +85,8 @@ public class AlgoliaCTSGenerator extends DefaultCodegen {
     lambdas.put("escapeQuotes", new EscapeQuotesLambda());
     lambdas.put("escapeSlash", new EscapeSlashLambda());
     lambdas.put("replaceBacktick", new ReplaceBacktickLambda());
+    lambdas.put("escapeReserved", new EscapeDartLambda());
+    lambdas.put("escapeDollarSign", new EscapeDollarSignLambda());
     return lambdas;
   }
 
@@ -112,7 +114,7 @@ public class AlgoliaCTSGenerator extends DefaultCodegen {
       // This only exists for the `javascript-algoliasearch` combo, because the `lite` client is
       // nested inside `algoliasearch`.
       String importClientName = client;
-      if (language.equals("javascript") && client.equals("algoliasearch")) {
+      if ((language.equals("javascript") || language.equals("dart")) && client.equals("algoliasearch")) {
         importClientName = "lite";
       }
 

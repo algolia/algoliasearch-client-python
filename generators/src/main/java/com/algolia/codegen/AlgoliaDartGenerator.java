@@ -38,18 +38,16 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     String packageFolder;
     if (isAlgoliasearchClient) {
       libName = "algoliasearch";
-      packageFolder = libName;
       clientName = "Search Lite";
-      setPubName(libName);
-      setPubLibrary(libName);
+      packageFolder = libName;
     } else {
       libName = "algolia_client_" + client;
-      clientName = "Algolia " + client;
-      setApiNameSuffix(Utils.API_SUFFIX);
+      clientName = client;
       packageFolder = "client_" + client;
-      setPubName(libName);
-      setPubLibrary(libName);
+      setApiNameSuffix(Utils.API_SUFFIX);
     }
+    setPubName(libName);
+    setPubLibrary(libName);
     setPubDescription("Algolia " + clientName + " API client to interact with Algolia");
     setPubRepository("https://github.com/algolia/algoliasearch-client-dart/packages/" + packageFolder);
 
@@ -57,6 +55,8 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     additionalProperties.put(CodegenConstants.SERIALIZATION_LIBRARY, SERIALIZATION_LIBRARY_JSON_SERIALIZABLE);
 
     super.processOpts();
+
+    Arrays.asList("source", "get", "hide").forEach(reservedWords::remove); // reserved words from dart-keywords.txt
 
     if (isAlgoliasearchClient) {
       supportingFiles.removeIf(file -> file.getTemplateFile().contains("lib"));

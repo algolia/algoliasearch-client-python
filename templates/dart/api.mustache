@@ -22,6 +22,10 @@ final class {{classname}} implements ApiClient {
   @override
   final ClientOptions options;
 
+  {{#hasRegionalHost}}
+  final String{{#fallbackToAliasHost}}?{{/fallbackToAliasHost}} region;
+  {{/hasRegionalHost}}
+
   final RetryStrategy _retryStrategy;
 
   {{classname}}({
@@ -29,7 +33,7 @@ final class {{classname}} implements ApiClient {
     required this.apiKey,
     this.options = const ClientOptions(),
     {{#hasRegionalHost}}
-    {{#fallbackToAliasHost}}String?{{/fallbackToAliasHost}}{{^fallbackToAliasHost}}required String{{/fallbackToAliasHost}} region,
+    {{^fallbackToAliasHost}}required{{/fallbackToAliasHost}} this.region,
     {{/hasRegionalHost}}
   }) : _retryStrategy = RetryStrategy.create(
             segment: AgentSegment(value: "{{{baseName}}}", version: packageVersion),
@@ -41,20 +45,22 @@ final class {{classname}} implements ApiClient {
               Host(url: '$appId-dsn.algolia.net', callType: CallType.read),
               Host(url: '$appId.algolia.net', callType: CallType.write),
             ] +
-            [
-              Host(url: '$appId-1.algolianet.com'),
-              Host(url: '$appId-2.algolianet.com'),
-              Host(url: '$appId-3.algolianet.com')
-            ]..shuffle(),
+            (
+                [
+                  Host(url: '$appId-1.algolianet.com'),
+                  Host(url: '$appId-2.algolianet.com'),
+                  Host(url: '$appId-3.algolianet.com'),
+                ]..shuffle()
+            ),
             {{/hasRegionalHost}}
             {{#hasRegionalHost}}
             defaultHosts: () {
               final allowedRegions = [{{#allowedRegions}}'{{.}}'{{^-last}},{{/-last}}{{/allowedRegions}}];
               {{^fallbackToAliasHost}}
-              assert(allowedRegions.contains(region), '`region` is required and must be one of the following: ${allowedRegions.join(',')}',);
+              assert(allowedRegions.contains(region), '`region` is required and must be one of the following: ${allowedRegions.join(', ')}',);
               {{/fallbackToAliasHost}}
               {{#fallbackToAliasHost}}
-              assert(region == null || allowedRegions.contains(region),  '`region` must be one of the following: ${allowedRegions.join(',')}',);
+              assert(region == null || allowedRegions.contains(region),  '`region` must be one of the following: ${allowedRegions.join(', ')}',);
               {{/fallbackToAliasHost}}
               final url = {{#fallbackToAliasHost}}region == null ? '{{{hostWithFallback}}}' : {{/fallbackToAliasHost}} '{{{regionalHost}}}'.replaceAll('{region}', region);
               return [Host(url: url)];

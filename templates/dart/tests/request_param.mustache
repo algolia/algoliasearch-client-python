@@ -1,0 +1,6 @@
+{{^isAdditionalProperty}}
+{{#isKeyAllUpperCase}}{{#lambda.lowercase}}{{&key}}{{/lambda.lowercase}}{{/isKeyAllUpperCase}}{{^isKeyAllUpperCase}}{{#lambda.camelcase}}{{&key}}{{/lambda.camelcase}}{{/isKeyAllUpperCase}} : {{> param_value}},
+{{/isAdditionalProperty}}
+{{#isAdditionalProperty}}
+additionalProperties : { '{{{key}}}' : '{{{value}}}' },
+{{/isAdditionalProperty}}
