@@ -1,0 +1,9 @@
+dependency_overrides:
+  algoliasearch:
+    path: ../../clients/algoliasearch-client-dart/packages/algoliasearch
+  algolia_client_core:
+    path: ../../clients/algoliasearch-client-dart/packages/client_core
+  algolia_client_search:
+    path: ../../clients/algoliasearch-client-dart/packages/client_search
+  algolia_client_insights:
+    path: ../../clients/algoliasearch-client-dart/packages/client_insights
