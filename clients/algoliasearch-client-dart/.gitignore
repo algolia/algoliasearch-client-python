@@ -20,6 +20,7 @@ doc/api/
 pubspec.lock
 
 # IntelliJ
+.idea
 *.iml
 *.ipr
 *.iws

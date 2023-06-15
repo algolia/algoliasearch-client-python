@@ -31,6 +31,10 @@ scripts:
     exec: dart pub get
     description: Run `dart pub get` in all packages
 
+  test:
+    exec: dart test
+    description: Run `dart test` in all packages
+
   clear:
     exec: rm -rf .dart_tool
     description: Clear build folders, i.e. `.dart_tool` in all packages

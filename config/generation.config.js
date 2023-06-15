@@ -62,7 +62,6 @@ module.exports = {
     // Dart
     '!clients/algoliasearch-client-dart/**',
     'clients/algoliasearch-client-dart/packages/*/pubspec.yaml',
-    'clients/algoliasearch-client-dart/packages/*/README.md',
     'clients/algoliasearch-client-dart/packages/*/lib/*.dart',
     'clients/algoliasearch-client-dart/packages/*/lib/src/*.dart',
     'clients/algoliasearch-client-dart/packages/*/lib/src/api/**',

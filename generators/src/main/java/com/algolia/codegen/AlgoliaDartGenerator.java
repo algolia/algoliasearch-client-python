@@ -34,22 +34,19 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     setPubAuthorEmail("hey@algolia.com");
     setPubHomepage("https://www.algolia.com/doc/");
     setPubVersion(version);
-    String clientName;
     String packageFolder;
     if (isAlgoliasearchClient) {
       libName = "algoliasearch";
-      clientName = "Search Lite";
       packageFolder = libName;
     } else {
       libName = "algolia_client_" + client;
-      clientName = client;
       packageFolder = "client_" + client;
       setApiNameSuffix(Utils.API_SUFFIX);
     }
     setPubName(libName);
     setPubLibrary(libName);
-    setPubDescription("Algolia " + clientName + " API client to interact with Algolia");
-    setPubRepository("https://github.com/algolia/algoliasearch-client-dart/packages/" + packageFolder);
+    setPubDescription("Algolia " + client + " API client to interact with Algolia");
+    setPubRepository("https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/" + packageFolder);
 
     // configs
     additionalProperties.put(CodegenConstants.SERIALIZATION_LIBRARY, SERIALIZATION_LIBRARY_JSON_SERIALIZABLE);
@@ -80,6 +77,7 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("gitignore"));
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("build"));
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("analysis_options"));
+    supportingFiles.removeIf(file -> file.getTemplateFile().contains("README"));
 
     final String srcFolder = libPath + sourceFolder;
     supportingFiles.add(new SupportingFile("version.mustache", srcFolder, "version.dart"));

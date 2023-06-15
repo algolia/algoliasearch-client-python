@@ -1,0 +1,62 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - 'algoliasearch-[0-9]+.[0-9]+.[0-9]+*'
+      - 'core-[0-9]+.[0-9]+.[0-9]+*'
+      - 'search-[0-9]+.[0-9]+.[0-9]+*'
+      - 'insights-[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+
+      - name: Install Tools
+        run: dart pub global activate melos
+      - name: Bootstrap Workspace
+        run: melos bootstrap
+      - name: Install dependencies
+        run: melos get
+      - name: Check versions
+        run: melos test
+
+  publish_algoliasearch:
+    needs: check
+    name: Publish AlgoliaSearch
+    if: startsWith(github.ref, 'refs/tags/algoliasearch-')
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      environment: 'pub.dev'
+      working-directory: packages/algoliasearch
+
+  publish_core:
+    needs: check
+    name: Publish Client Core
+    if: startsWith(github.ref, 'refs/tags/core-')
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      environment: 'pub.dev'
+      working-directory: packages/client-core
+
+  publish_search:
+    needs: check
+    name: Publish Search Client
+    if: startsWith(github.ref, 'refs/tags/search-')
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      environment: 'pub.dev'
+      working-directory: packages/client-search
+
+  publish_insights:
+    needs: check
+    name: Publish Insights Client
+    if: startsWith(github.ref, 'refs/tags/insights-')
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      environment: 'pub.dev'
+      working-directory: packages/client-insights
