@@ -14,6 +14,7 @@ const (
 	RUNOUTCOME_SUCCESS    RunOutcome = "success"
 	RUNOUTCOME_FAILURE    RunOutcome = "failure"
 	RUNOUTCOME_PROCESSING RunOutcome = "processing"
+	RUNOUTCOME_BLOCKING   RunOutcome = "blocking"
 )
 
 // All allowed values of RunOutcome enum
@@ -21,6 +22,7 @@ var AllowedRunOutcomeEnumValues = []RunOutcome{
 	"success",
 	"failure",
 	"processing",
+	"blocking",
 }
 
 func (v *RunOutcome) UnmarshalJSON(src []byte) error {

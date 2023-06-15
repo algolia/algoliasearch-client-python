@@ -1362,6 +1362,7 @@ components:
         - success
         - failure
         - processing
+        - blocking
     RunReasonCode:
       type: string
       description: An identifier that pairs with the outcome reason.
