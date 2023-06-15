@@ -77,7 +77,7 @@ RunStatus:
 
 RunOutcome:
   type: string
-  enum: ['success', 'failure', 'processing']
+  enum: ['success', 'failure', 'processing', 'blocking']
 
 RunType:
   type: string
