@@ -1,3 +1,7 @@
+## [0.3.1](https://github.com/algolia/algoliasearch-client-dart/compare/0.3.0...0.3.1)
+
+- [3cdb7495](https://github.com/algolia/api-clients-automation/commit/3cdb7495) fix(specs): add blocking run outcome ([#1619](https://github.com/algolia/api-clients-automation/pull/1619)) by [@damcou](https://github.com/damcou/)
+
 ## [0.3.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.2.0...0.3.0)
 
 - [e13a145f](https://github.com/algolia/api-clients-automation/commit/e13a145f) feat(dart): prepare packages for release ([#1616](https://github.com/algolia/api-clients-automation/pull/1616)) by [@aallam](https://github.com/aallam/)
