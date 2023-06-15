@@ -1,5 +1,10 @@
 ## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
 
+- [81401eed](https://github.com/algolia/api-clients-automation/commit/81401eed) feat(specs): add `startDate` and `endDate` parameters to Ingestion API ([#1614](https://github.com/algolia/api-clients-automation/pull/1614)) by [@shortcuts](https://github.com/shortcuts/)
+- [138a35b5](https://github.com/algolia/api-clients-automation/commit/138a35b5) fix(specs): add processing run outcome ([#1613](https://github.com/algolia/api-clients-automation/pull/1613)) by [@millotp](https://github.com/millotp/)
+
+## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
+
 - [e1cb1c89](https://github.com/algolia/api-clients-automation/commit/e1cb1c89) fix(specs): add docker source input ([#1594](https://github.com/algolia/api-clients-automation/pull/1594)) by [@millotp](https://github.com/millotp/)
 
 ## [4.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-java-2/compare/4.0.0-SNAPSHOT...4.0.0-SNAPSHOT)
