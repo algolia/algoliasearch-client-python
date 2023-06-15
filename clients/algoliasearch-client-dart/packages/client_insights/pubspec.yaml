@@ -2,7 +2,10 @@ name: algolia_client_insights
 version: 0.2.0
 description: Algolia insights API client to interact with Algolia
 homepage: https://www.algolia.com/doc/
-repository: https://github.com/algolia/algoliasearch-client-dart/packages/client_insights
+repository: https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/client_insights
+topics:
+  - search
+  - discovery
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

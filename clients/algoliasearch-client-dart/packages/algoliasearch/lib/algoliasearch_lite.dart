@@ -1,4 +1,4 @@
-// Algolia Search Lite API client to interact with Algolia
+// Algolia algoliasearch API client to interact with Algolia
 library algoliasearch_lite;
 
 export 'package:algolia_client_core/algolia_client_core.dart';

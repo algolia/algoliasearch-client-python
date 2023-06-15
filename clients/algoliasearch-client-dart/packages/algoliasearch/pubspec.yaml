@@ -1,8 +1,11 @@
 name: algoliasearch
 version: 0.2.0
-description: Algolia Search Lite API client to interact with Algolia
+description: Algolia algoliasearch API client to interact with Algolia
 homepage: https://www.algolia.com/doc/
-repository: https://github.com/algolia/algoliasearch-client-dart/packages/algoliasearch
+repository: https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/algoliasearch
+topics:
+  - search
+  - discovery
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
