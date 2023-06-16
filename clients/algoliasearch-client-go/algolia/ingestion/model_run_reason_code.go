@@ -17,6 +17,7 @@ const (
 	RUNREASONCODE_TOO_MANY_ERRORS RunReasonCode = "too_many_errors"
 	RUNREASONCODE_OK              RunReasonCode = "ok"
 	RUNREASONCODE_DISCARDED       RunReasonCode = "discarded"
+	RUNREASONCODE_BLOCKING        RunReasonCode = "blocking"
 )
 
 // All allowed values of RunReasonCode enum
@@ -27,6 +28,7 @@ var AllowedRunReasonCodeEnumValues = []RunReasonCode{
 	"too_many_errors",
 	"ok",
 	"discarded",
+	"blocking",
 }
 
 func (v *RunReasonCode) UnmarshalJSON(src []byte) error {

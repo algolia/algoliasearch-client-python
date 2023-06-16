@@ -1362,7 +1362,6 @@ components:
         - success
         - failure
         - processing
-        - blocking
     RunReasonCode:
       type: string
       description: An identifier that pairs with the outcome reason.
@@ -1373,6 +1372,7 @@ components:
         - too_many_errors
         - ok
         - discarded
+        - blocking
     RunType:
       type: string
       enum:

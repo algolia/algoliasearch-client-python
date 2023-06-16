@@ -13,10 +13,7 @@ public enum class RunOutcome(public val value: kotlin.String) {
   Failure("failure"),
 
   @SerialName(value = "processing")
-  Processing("processing"),
-
-  @SerialName(value = "blocking")
-  Blocking("blocking");
+  Processing("processing");
 
   override fun toString(): kotlin.String = value
 }

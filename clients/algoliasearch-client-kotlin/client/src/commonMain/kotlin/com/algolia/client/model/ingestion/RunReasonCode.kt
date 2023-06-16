@@ -25,7 +25,10 @@ public enum class RunReasonCode(public val value: kotlin.String) {
   Ok("ok"),
 
   @SerialName(value = "discarded")
-  Discarded("discarded");
+  Discarded("discarded"),
+
+  @SerialName(value = "blocking")
+  Blocking("blocking");
 
   override fun toString(): kotlin.String = value
 }
