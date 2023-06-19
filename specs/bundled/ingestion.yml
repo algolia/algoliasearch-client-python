@@ -898,7 +898,7 @@ components:
       type: string
       enum:
         - dockerhub
-        - gcr
+        - ghcr
       description: The registry where the image is stored.
     DockerImageType:
       type: string

@@ -12,8 +12,8 @@ public enum class DockerRegistry(public val value: kotlin.String) {
   @SerialName(value = "dockerhub")
   Dockerhub("dockerhub"),
 
-  @SerialName(value = "gcr")
-  Gcr("gcr");
+  @SerialName(value = "ghcr")
+  Ghcr("ghcr");
 
   override fun toString(): kotlin.String = value
 }

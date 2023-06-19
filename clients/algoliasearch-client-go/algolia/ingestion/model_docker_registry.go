@@ -12,13 +12,13 @@ type DockerRegistry string
 // List of DockerRegistry
 const (
 	DOCKERREGISTRY_DOCKERHUB DockerRegistry = "dockerhub"
-	DOCKERREGISTRY_GCR       DockerRegistry = "gcr"
+	DOCKERREGISTRY_GHCR      DockerRegistry = "ghcr"
 )
 
 // All allowed values of DockerRegistry enum
 var AllowedDockerRegistryEnumValues = []DockerRegistry{
 	"dockerhub",
-	"gcr",
+	"ghcr",
 }
 
 func (v *DockerRegistry) UnmarshalJSON(src []byte) error {
