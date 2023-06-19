@@ -262,7 +262,7 @@ SourceDocker:
 
 DockerRegistry:
   type: string
-  enum: ['dockerhub', 'gcr']
+  enum: ['dockerhub', 'ghcr']
   description: The registry where the image is stored.
 
 DockerImageType:
