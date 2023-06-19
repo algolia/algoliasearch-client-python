@@ -32,7 +32,7 @@ import type {
   Scope,
   Changelog,
 } from './types';
-import { updateAPIVersions } from './updateAPIVersions';
+import { updateAPIVersions, updateDartPackages } from './updateAPIVersions';
 
 dotenv.config({ path: ROOT_ENV_PATH });
 
@@ -404,7 +404,9 @@ async function createReleasePR(): Promise<void> {
   const versionChanges = getVersionChangesText(versions);
 
   console.log('Creating changelogs for all languages...');
-  const changelog: Changelog = LANGUAGES.reduce((newChangelog, lang) => {
+  const changelog: Changelog = LANGUAGES.filter(
+    (lang) => lang !== 'dart'
+  ).reduce((newChangelog, lang) => {
     if (versions[lang].noCommit) {
       return newChangelog;
     }
@@ -440,6 +442,7 @@ async function createReleasePR(): Promise<void> {
 
   console.log('Updating config files...');
   await updateAPIVersions(versions, changelog);
+  await updateDartPackages();
 
   const headBranch = `chore/prepare-release-${TODAY}`;
   console.log(`Switching to branch: ${headBranch}`);

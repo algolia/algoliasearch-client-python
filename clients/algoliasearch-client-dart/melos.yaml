@@ -38,3 +38,13 @@ scripts:
   clear:
     exec: rm -rf .dart_tool
     description: Clear build folders, i.e. `.dart_tool` in all packages
+
+command:
+  version:
+    hooks:
+      post: |
+        cd packages && \
+        for dir in */ ; do \
+          version=$(grep "^version:" "$dir/pubspec.yaml" | sed 's/version: //') && \
+          sed -i '' "s/^const packageVersion = .*;$/const packageVersion = '$version';/" "$dir/lib/src/version.dart"; \
+        done

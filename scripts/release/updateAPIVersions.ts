@@ -1,6 +1,7 @@
 import fsp from 'fs/promises';
 
 import dotenv from 'dotenv';
+import yaml from 'js-yaml';
 import semver from 'semver';
 
 import clientsConfig from '../../config/clients.config.json';
@@ -202,6 +203,67 @@ export async function updateAPIVersions(
       await run(`yarn release:bump ${releaseType}`, { cwd });
     }
 
+    if (lang === 'dart') {
+      // skip dart.
+      continue;
+    }
+
     await updateChangelog(lang as Language, changelog[lang], current, next);
+  }
+}
+
+/**
+ * Updates packages versions and generates the changelog.
+ * Documentation: {@link https://melos.invertase.dev/commands/version | melos version}.
+ */
+export async function updateDartPackages(): Promise<void> {
+  const cwd = getLanguageFolder('dart');
+
+  // Generate packages versions and changelogs.
+  await run(
+    `(cd ${cwd} && melos version --no-git-tag-version --published --yes)`
+  );
+
+  for (const gen of Object.values(GENERATORS)) {
+    if (gen.language === 'dart') {
+      const { additionalProperties } = gen;
+      const newVersion = await getPubspecVersion(`${gen.output}/pubspec.yaml`);
+      if (!newVersion) {
+        throw new Error(`Failed to bump '${gen.packageName}'.`);
+      }
+      additionalProperties.packageVersion = newVersion;
+      additionalProperties.packageName = undefined;
+
+      if (gen.client === 'algoliasearch') {
+        clientsConfig.dart.packageVersion = newVersion;
+      }
+    }
+  }
+
+  // update `openapitools.json` config file
+  await writeJsonFile(
+    toAbsolutePath('config/openapitools.json'),
+    openapiConfig
+  );
+
+  // update `clients.config.json` file for the utils version
+  await writeJsonFile(
+    toAbsolutePath('config/clients.config.json'),
+    clientsConfig
+  );
+}
+
+/**
+ * Get 'version' from pubspec.yaml file.
+ */
+async function getPubspecVersion(
+  filePath: string
+): Promise<string | undefined> {
+  try {
+    const fileContent = await fsp.readFile(filePath, 'utf8');
+    const data = yaml.load(fileContent) as { version?: string };
+    return data.version;
+  } catch (error) {
+    throw new Error(`Error reading the file: ${error}`);
   }
 }
