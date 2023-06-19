@@ -26,7 +26,7 @@
     "@docusaurus/types": "2.4.1",
     "@mdx-js/react": "1.6.22",
     "clsx": "1.2.1",
-    "docusaurus-preset-shiki-twoslash": "1.1.40",
+    "docusaurus-preset-shiki-twoslash": "1.1.41",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "redocusaurus": "1.6.3"

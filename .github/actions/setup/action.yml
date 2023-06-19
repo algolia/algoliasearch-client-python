@@ -34,7 +34,7 @@ runs:
     - name: Download Java formatter
       if: inputs.type != 'minimal'
       shell: bash
-      run: curl --retry 3 -L "https://github.com/google/google-java-format/releases/download/v1.15.0/google-java-format-1.15.0-all-deps.jar" > /tmp/java-formatter.jar
+      run: curl --retry 3 -L "https://github.com/google/google-java-format/releases/download/v1.17.0/google-java-format-1.17.0-all-deps.jar" > /tmp/java-formatter.jar
 
     # JavaScript for monorepo and tooling
     - name: Install Node

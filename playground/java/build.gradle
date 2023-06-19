@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.github.cdimascio:dotenv-java:2.3.1'
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
     implementation 'com.algolia:algoliasearch-client-java:0.0.1-SNAPSHOT'
 }
 

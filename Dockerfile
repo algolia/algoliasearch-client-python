@@ -46,7 +46,7 @@ RUN source "$HOME/.sdkman/bin/sdkman-init.sh"
 RUN sdk install java ${JAVA_VERSION}-zulu
 
 # Java formatter
-ADD https://github.com/google/google-java-format/releases/download/v1.15.0/google-java-format-1.15.0-all-deps.jar /tmp/java-formatter.jar
+ADD https://github.com/google/google-java-format/releases/download/v1.17.0/google-java-format-1.17.0-all-deps.jar /tmp/java-formatter.jar
 
 # Dart
 COPY --from=dart-builder /usr/lib/dart/ /usr/lib/dart/
