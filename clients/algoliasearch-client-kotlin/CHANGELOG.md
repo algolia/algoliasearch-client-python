@@ -1,5 +1,9 @@
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
 
+- [19e99bb9](https://github.com/algolia/api-clients-automation/commit/19e99bb9) fix(specs): change github container registry name ([#1641](https://github.com/algolia/api-clients-automation/pull/1641)) by [@morganleroi](https://github.com/morganleroi/)
+
+## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
+
 - [308c7ccb](https://github.com/algolia/api-clients-automation/commit/308c7ccb) fix(specs): add blocking to reasonCode instead of outcome ([#1622](https://github.com/algolia/api-clients-automation/pull/1622)) by [@damcou](https://github.com/damcou/)
 
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
