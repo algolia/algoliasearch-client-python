@@ -43,8 +43,7 @@ command:
   version:
     hooks:
       post: |
-        cd packages && \
-        for dir in */ ; do \
-          version=$(grep "^version:" "$dir/pubspec.yaml" | sed 's/version: //') && \
-          sed -i '' "s/^const packageVersion = .*;$/const packageVersion = '$version';/" "$dir/lib/src/version.dart"; \
+        for dir in packages/*/ ; do \
+          version=$(grep "^version:" "${dir}pubspec.yaml" | sed 's/version: //') && \
+          sed -i '' -e "s/^const packageVersion = .*;$/const packageVersion = '$version';/" "${dir}/lib/src/version.dart"; \
         done
