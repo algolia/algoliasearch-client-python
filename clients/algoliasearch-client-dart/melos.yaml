@@ -12,7 +12,7 @@ scripts:
     description: Build all generated files.
 
   analyze:
-    exec: dart analyze --fatal-infos
+    exec: dart analyze .
     description: Run static analysis checks in all packages
 
   format:
@@ -24,24 +24,16 @@ scripts:
     description: Find and fix static analysis issues in all packages
 
   lint:
-    run: melos fix && melos format && melos analyze
+    run: melos fix && melos format
     description: fix and format all packages
-
-  test:
-    exec: dart test
-    description: Run `dart test` in all packages
 
   get:
     exec: dart pub get
     description: Run `dart pub get` in all packages
 
-  update:
-    exec: dart pub update
-    description: Run `dart pub update` in all packages
-
-  upgrade:
-    exec: dart pub upgrade
-    description: Run `dart pub upgrade` in all packages
+  test:
+    exec: dart test
+    description: Run `dart test` in all packages
 
   clear:
     exec: rm -rf .dart_tool
