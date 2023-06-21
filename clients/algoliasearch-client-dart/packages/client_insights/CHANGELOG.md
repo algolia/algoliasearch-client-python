@@ -1,3 +1,7 @@
+## 0.1.1+1
+
+ - **FIX**(dart): changelog and versions generation (#1625).
+
 ## 0.1.1
 
  - **FIX**(dart): changelog and versions generation (#1625).

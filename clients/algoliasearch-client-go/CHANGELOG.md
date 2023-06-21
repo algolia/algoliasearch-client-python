@@ -1,3 +1,7 @@
+## [4.0.0-alpha.19](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.18...4.0.0-alpha.19)
+
+- [19e99bb9](https://github.com/algolia/api-clients-automation/commit/19e99bb9) fix(specs): change github container registry name ([#1641](https://github.com/algolia/api-clients-automation/pull/1641)) by [@morganleroi](https://github.com/morganleroi/)
+
 ## [4.0.0-alpha.18](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.17...4.0.0-alpha.18)
 
 - [19e99bb9](https://github.com/algolia/api-clients-automation/commit/19e99bb9) fix(specs): change github container registry name ([#1641](https://github.com/algolia/api-clients-automation/pull/1641)) by [@morganleroi](https://github.com/morganleroi/)

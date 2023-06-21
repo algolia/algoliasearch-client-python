@@ -1,3 +1,8 @@
+## 0.1.1+1
+
+ - **FIX**(dart): update `dio` exceptions handling  (#1649).
+ - **FIX**(dart): changelog and versions generation (#1625).
+
 ## 0.1.1
 
  - **FIX**(dart): changelog and versions generation (#1625).

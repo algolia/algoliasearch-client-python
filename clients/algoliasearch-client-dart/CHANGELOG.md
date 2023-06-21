@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-06-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`algolia_client_core` - `v0.1.1+1`](#algolia_client_core---v0111)
+ - [`algolia_client_insights` - `v0.1.1+1`](#algolia_client_insights---v0111)
+ - [`algolia_client_search` - `v0.1.1+1`](#algolia_client_search---v0111)
+ - [`algoliasearch` - `v0.1.1+1`](#algoliasearch---v0111)
+
+---
+
+#### `algolia_client_core` - `v0.1.1+1`
+
+ - **FIX**(dart): update `dio` exceptions handling  (#1649).
+ - **FIX**(dart): changelog and versions generation (#1625).
+
+#### `algolia_client_insights` - `v0.1.1+1`
+
+ - **FIX**(dart): changelog and versions generation (#1625).
+
+#### `algolia_client_search` - `v0.1.1+1`
+
+ - **FIX**(dart): changelog and versions generation (#1625).
+
+#### `algoliasearch` - `v0.1.1+1`
+
+ - **FIX**(dart): changelog and versions generation (#1625).
+
+
 ## 2023-06-20
 
 ### Changes
