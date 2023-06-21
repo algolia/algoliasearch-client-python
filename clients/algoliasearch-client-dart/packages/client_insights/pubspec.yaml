@@ -1,5 +1,5 @@
 name: algolia_client_insights
-version: 0.1.1
+version: 0.1.1+1
 description: Algolia insights API client to interact with Algolia
 homepage: https://www.algolia.com/doc/
 repository: https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/client_insights
