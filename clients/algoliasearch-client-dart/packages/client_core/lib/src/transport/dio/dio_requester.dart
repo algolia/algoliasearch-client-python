@@ -53,21 +53,21 @@ class DioRequester implements Requester {
   Future<HttpResponse> perform(HttpRequest request) async {
     try {
       return await execute(request);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       switch (e.type) {
-        case DioErrorType.connectionTimeout:
-        case DioErrorType.sendTimeout:
-        case DioErrorType.receiveTimeout:
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.sendTimeout:
+        case DioExceptionType.receiveTimeout:
           throw AlgoliaTimeoutException(e);
-        case DioErrorType.badResponse:
+        case DioExceptionType.badResponse:
           throw AlgoliaApiException(
             e.response?.statusCode ?? 0,
             e.error ?? e.response,
           );
-        case DioErrorType.badCertificate:
-        case DioErrorType.cancel:
-        case DioErrorType.connectionError:
-        case DioErrorType.unknown:
+        case DioExceptionType.badCertificate:
+        case DioExceptionType.cancel:
+        case DioExceptionType.connectionError:
+        case DioExceptionType.unknown:
           throw AlgoliaIOException(e);
       }
     }

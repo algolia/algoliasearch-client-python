@@ -23,7 +23,7 @@ import {
 } from '../config';
 import type { Language } from '../types';
 
-import { writeJsonFile } from './common';
+import { RELEASED_TAG, writeJsonFile } from './common';
 import type { Changelog, Versions, VersionsToRelease } from './types';
 
 dotenv.config({ path: ROOT_ENV_PATH });
@@ -221,7 +221,7 @@ export async function updateDartPackages(): Promise<void> {
 
   // Generate dart packages versions and changelogs
   await run(
-    `(cd ${cwd} && melos version --no-git-tag-version --published --yes)`
+    `(cd ${cwd} && melos version --no-git-tag-version --yes --diff ${RELEASED_TAG})`
   );
 
   // Update packages configs based on generated versions
