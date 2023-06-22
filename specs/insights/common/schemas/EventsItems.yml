@@ -1,0 +1,9 @@
+oneOf:
+  - $ref: './ClickedObjectIDsAfterSearch.yml'
+  - $ref: './ConvertedObjectIDsAfterSearch.yml'
+  - $ref: './ClickedObjectIDs.yml'
+  - $ref: './ConvertedObjectIDs.yml'
+  - $ref: './ClickedFilters.yml'
+  - $ref: './ConvertedFilters.yml'
+  - $ref: './ViewedObjectIDs.yml'
+  - $ref: './ViewedFilters.yml'

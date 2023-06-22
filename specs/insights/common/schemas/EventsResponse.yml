@@ -1,0 +1,10 @@
+type: object
+description: The response of the Insights API.
+additionalProperties: false
+properties:
+  message:
+    type: string
+    description: Details about the response, such as error messages.
+  status:
+    type: integer
+    description: The HTTP status code of the response.

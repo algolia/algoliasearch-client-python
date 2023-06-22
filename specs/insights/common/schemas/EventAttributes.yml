@@ -1,0 +1,83 @@
+eventName:
+  type: string
+  minLength: 1
+  maxLength: 64
+  description: |
+    Can contain up to 64 ASCII characters. 
+
+    Consider naming events consistently—for example,
+    by adopting Segment's
+    [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework)
+    framework.
+  example: Product Clicked
+
+index:
+  type: string
+  description: Name of the Algolia index.
+  example: YourIndexName
+
+userToken:
+  type: string
+  minLength: 1
+  maxLength: 128
+  pattern: '[a-zA-Z0-9_=/+-]{1,128}'
+  description: |
+    Anonymous or pseudonymous user identifier. 
+
+    > **Note**: Never include personally identifiable information in user tokens.
+  example: test-user-1
+
+timestamp:
+  type: integer
+  format: int64
+  description: |
+    Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time).
+    By default, the Insights API uses the time it receives an event as its timestamp.
+  example: 1687193127
+
+queryID:
+  type: string
+  pattern: '[0-9a-f]{32}'
+  minLength: 32
+  maxLength: 32
+  description: |
+    Unique identifier for a search query.
+
+    The query ID is required for events related to search or browse requests.
+    If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response.
+  example: 3e48cd0616e466948dd85abf5c3fbbe2
+
+objectIDs:
+  type: array
+  description: List of object identifiers for items of an Algolia index.
+  items:
+    type: string
+  minItems: 1
+  maxItems: 20
+  example: ['object-1', 'object-2', 'object-3']
+
+filters:
+  type: array
+  description: |
+    Facet filters.
+
+    Each facet filter string must be URL-encoded, such as, `discount:10%25`.
+  items:
+    type: string
+  minItems: 1
+  maxItems: 20
+  example: ['brand:apple']
+
+positions:
+  type: array
+  items:
+    type: integer
+  minimum: 1
+  minItems: 1
+  maxItems: 20
+  description: |
+    Position of the clicked objects in the search results.
+
+    The first search result has a position of 1 (not 0).
+    You must provide 1 `position` for each `objectID`.
+  example: [1, 2, 5]

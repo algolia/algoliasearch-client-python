@@ -1,0 +1,27 @@
+type: object
+title: Converted object IDs
+description: |
+  Use this event to track when users convert on items unrelated to a previous Algolia request.
+  For example, if you don't use Algolia to build your category pages, use this event.
+
+  To track conversion events related to Algolia requests, use the "Converted object IDs after search" event.
+additionalProperties: false
+properties:
+  eventName:
+    $ref: './EventAttributes.yml#/eventName'
+  eventType:
+    $ref: './ConversionEvent.yml'
+  index:
+    $ref: './EventAttributes.yml#/index'
+  objectIDs:
+    $ref: './EventAttributes.yml#/objectIDs'
+  userToken:
+    $ref: './EventAttributes.yml#/userToken'
+  timestamp:
+    $ref: './EventAttributes.yml#/timestamp'
+required:
+  - eventName
+  - eventType
+  - index
+  - objectIDs
+  - userToken

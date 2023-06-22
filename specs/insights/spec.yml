@@ -1,7 +1,11 @@
 openapi: 3.0.2
 info:
   title: Insights API
-  description: API powering the Insights feature of Algolia.
+  description: >-
+    The Algolia Insights API lets you collect events related to your search and discovery experience.
+    Events represent actions that users take on your app or website.
+    They unlock powerful features, such as recommendations, personalization, smarter search results,
+    and analytics that help you optimize your user experience.
   version: 1.0.0
 components:
   securitySchemes:
@@ -24,7 +28,9 @@ security:
 tags:
   - name: events
     x-displayName: Events
-    description: Events operations.
+    description: >-
+      Events represent user interactions with your website or app.
+      They include details like the event's name, type, a timestamp or a user token.
 x-tagGroups:
   - name: General
     tags:

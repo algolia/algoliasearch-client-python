@@ -1,0 +1,22 @@
+type: object
+title: Converted filters
+additionalProperties: false
+properties:
+  eventName:
+    $ref: './EventAttributes.yml#/eventName'
+  eventType:
+    $ref: './ConversionEvent.yml'
+  index:
+    $ref: './EventAttributes.yml#/index'
+  filters:
+    $ref: './EventAttributes.yml#/filters'
+  userToken:
+    $ref: './EventAttributes.yml#/userToken'
+  timestamp:
+    $ref: './EventAttributes.yml#/timestamp'
+required:
+  - eventName
+  - eventType
+  - index
+  - filters
+  - userToken
