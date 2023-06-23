@@ -68,7 +68,7 @@ class InsightsTest {
     client.runTest(
       call = {
         pushEvents(
-          insightEvents = InsightEvents(
+          insightsEvents = InsightsEvents(
             events = listOf(),
           ),
         )

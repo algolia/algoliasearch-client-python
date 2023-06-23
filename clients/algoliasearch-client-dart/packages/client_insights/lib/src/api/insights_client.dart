@@ -4,8 +4,8 @@ import 'package:algolia_client_core/algolia_client_core.dart';
 import 'package:algolia_client_insights/src/deserialize.dart';
 import 'package:algolia_client_insights/src/version.dart';
 
-import 'package:algolia_client_insights/src/model/insight_events.dart';
-import 'package:algolia_client_insights/src/model/push_events_response.dart';
+import 'package:algolia_client_insights/src/model/events_response.dart';
+import 'package:algolia_client_insights/src/model/insights_events.dart';
 
 final class InsightsClient implements ApiClient {
   @override
@@ -155,28 +155,28 @@ final class InsightsClient implements ApiClient {
     );
   }
 
-  /// Push events.
-  /// This command pushes an array of events.  An event is   - an action: `eventName`   - performed in a context: `eventType`   - at some point in time provided: `timestamp`   - by an end user: `userToken`   - on something: `index`   Notes:   - To be accepted, all events sent must be valid.   - The size of the body must be *less than 2 MB*.   - When an event is tied to an Algolia search, it must also provide a `queryID`. If that event is a `click`, their absolute `positions` should also be passed.   - We consider that an `index` provides access to 2 resources: objects and filters. An event can only interact with a single resource type, but not necessarily on a single item. As such an event will accept an array of `objectIDs` or `filters`.
+  /// Send events.
+  /// Send a list of events to the Insights API.  You can include up to 1,000 events in a single request, but the request body must be smaller than 2&nbsp;MB.
   ///
   /// Parameters:
-  /// * [insightEvents]
+  /// * [insightsEvents]
   /// * [requestOptions] additional request configuration.
-  Future<PushEventsResponse> pushEvents({
-    required InsightEvents insightEvents,
+  Future<EventsResponse> pushEvents({
+    required InsightsEvents insightsEvents,
     RequestOptions? requestOptions,
   }) async {
     final request = ApiRequest(
       method: RequestMethod.post,
       path: r'/1/events',
-      body: insightEvents.toJson(),
+      body: insightsEvents.toJson(),
     );
     final response = await _retryStrategy.execute(
       request: request,
       options: requestOptions,
     );
-    return deserialize<PushEventsResponse, PushEventsResponse>(
+    return deserialize<EventsResponse, EventsResponse>(
       response,
-      'PushEventsResponse',
+      'EventsResponse',
       growable: true,
     );
   }

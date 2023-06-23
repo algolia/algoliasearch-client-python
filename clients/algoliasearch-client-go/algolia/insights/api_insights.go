@@ -581,16 +581,16 @@ func (r *ApiPushEventsRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["insightEvents"]; ok {
-		err = json.Unmarshal(v, &r.insightEvents)
+	if v, ok := req["insightsEvents"]; ok {
+		err = json.Unmarshal(v, &r.insightsEvents)
 		if err != nil {
-			err = json.Unmarshal(b, &r.insightEvents)
+			err = json.Unmarshal(b, &r.insightsEvents)
 			if err != nil {
 				return err
 			}
 		}
 	} else {
-		err = json.Unmarshal(b, &r.insightEvents)
+		err = json.Unmarshal(b, &r.insightsEvents)
 		if err != nil {
 			return err
 		}
@@ -601,78 +601,58 @@ func (r *ApiPushEventsRequest) UnmarshalJSON(b []byte) error {
 
 // ApiPushEventsRequest represents the request with all the parameters for the API call.
 type ApiPushEventsRequest struct {
-	insightEvents *InsightEvents
+	insightsEvents *InsightsEvents
 }
 
 // NewApiPushEventsRequest creates an instance of the ApiPushEventsRequest to be used for the API call.
-func (c *APIClient) NewApiPushEventsRequest(insightEvents *InsightEvents) ApiPushEventsRequest {
+func (c *APIClient) NewApiPushEventsRequest(insightsEvents *InsightsEvents) ApiPushEventsRequest {
 	return ApiPushEventsRequest{
-		insightEvents: insightEvents,
+		insightsEvents: insightsEvents,
 	}
 }
 
 /*
-PushEvents Push events. Wraps PushEventsWithContext using context.Background.
+PushEvents Send events. Wraps PushEventsWithContext using context.Background.
 
-This command pushes an array of events.
+Send a list of events to the Insights API.
 
-An event is
-  - an action: `eventName`
-  - performed in a context: `eventType`
-  - at some point in time provided: `timestamp`
-  - by an end user: `userToken`
-  - on something: `index`
-
-Notes:
-  - To be accepted, all events sent must be valid.
-  - The size of the body must be *less than 2 MB*.
-  - When an event is tied to an Algolia search, it must also provide a `queryID`. If that event is a `click`, their absolute `positions` should also be passed.
-  - We consider that an `index` provides access to 2 resources: objects and filters. An event can only interact with a single resource type, but not necessarily on a single item. As such an event will accept an array of `objectIDs` or `filters`.
+You can include up to 1,000 events in a single request,
+but the request body must be smaller than 2&nbsp;MB.
 
 Request can be constructed by NewApiPushEventsRequest with parameters below.
 
-	@param insightEvents InsightEvents
-	@return PushEventsResponse
+	@param insightsEvents InsightsEvents
+	@return EventsResponse
 */
-func (c *APIClient) PushEvents(r ApiPushEventsRequest, opts ...Option) (*PushEventsResponse, error) {
+func (c *APIClient) PushEvents(r ApiPushEventsRequest, opts ...Option) (*EventsResponse, error) {
 	return c.PushEventsWithContext(context.Background(), r, opts...)
 }
 
 /*
-PushEvents Push events.
+PushEvents Send events.
 
-This command pushes an array of events.
+Send a list of events to the Insights API.
 
-An event is
-  - an action: `eventName`
-  - performed in a context: `eventType`
-  - at some point in time provided: `timestamp`
-  - by an end user: `userToken`
-  - on something: `index`
-
-Notes:
-  - To be accepted, all events sent must be valid.
-  - The size of the body must be *less than 2 MB*.
-  - When an event is tied to an Algolia search, it must also provide a `queryID`. If that event is a `click`, their absolute `positions` should also be passed.
-  - We consider that an `index` provides access to 2 resources: objects and filters. An event can only interact with a single resource type, but not necessarily on a single item. As such an event will accept an array of `objectIDs` or `filters`.
+You can include up to 1,000 events in a single request,
+but the request body must be smaller than 2&nbsp;MB.
 
 Request can be constructed by NewApiPushEventsRequest with parameters below.
 
-	@param insightEvents InsightEvents
-	@return PushEventsResponse
+	@param insightsEvents InsightsEvents
+	@return EventsResponse
 */
-func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRequest, opts ...Option) (*PushEventsResponse, error) {
+func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRequest, opts ...Option) (*EventsResponse, error) {
 	var (
 		postBody    any
-		returnValue *PushEventsResponse
+		returnValue *EventsResponse
 	)
 
 	requestPath := "/1/events"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if r.insightEvents == nil {
-		return returnValue, reportError("insightEvents is required and must be specified")
+	if r.insightsEvents == nil {
+		return returnValue, reportError("insightsEvents is required and must be specified")
 	}
 
 	// optional params if any
@@ -686,7 +666,7 @@ func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRe
 	}
 
 	// body params
-	postBody = r.insightEvents
+	postBody = r.insightsEvents
 	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -713,7 +693,7 @@ func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRe
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 400 {
-			var v ErrorBase
+			var v string
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -722,7 +702,25 @@ func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRe
 			return returnValue, newErr
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
+			var v EventsResponse
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 404 {
+			var v EventsResponse
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 405 {
+			var v EventsResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -731,7 +729,7 @@ func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRe
 			return returnValue, newErr
 		}
 		if res.StatusCode == 413 {
-			var v ErrorBase
+			var v EventsResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -740,7 +738,7 @@ func (c *APIClient) PushEventsWithContext(ctx context.Context, r ApiPushEventsRe
 			return returnValue, newErr
 		}
 		if res.StatusCode == 422 {
-			var v ErrorBase
+			var v EventsResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()

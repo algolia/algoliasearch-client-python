@@ -403,10 +403,10 @@ class InsightsTest {
     client.runTest(
       call = {
         pushEvents(
-          insightEvents = InsightEvents(
+          insightsEvents = InsightsEvents(
             events = listOf(
-              InsightEvent(
-                eventType = EventType.values().first { it.value == "click" },
+              ClickedObjectIDsAfterSearch(
+                eventType = ClickEvent.values().first { it.value == "click" },
                 eventName = "Product Clicked",
                 index = "products",
                 userToken = "user-123456",
@@ -415,23 +415,6 @@ class InsightsTest {
                 queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
                 positions = listOf(7, 6),
               ),
-              InsightEvent(
-                eventType = EventType.values().first { it.value == "view" },
-                eventName = "Product Detail Page Viewed",
-                index = "products",
-                userToken = "user-123456",
-                timestamp = 1641290601962L,
-                objectIDs = listOf("9780545139700", "9780439784542"),
-              ),
-              InsightEvent(
-                eventType = EventType.values().first { it.value == "conversion" },
-                eventName = "Product Purchased",
-                index = "products",
-                userToken = "user-123456",
-                timestamp = 1641290601962L,
-                objectIDs = listOf("9780545139700", "9780439784542"),
-                queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
-              ),
             ),
           ),
         )
@@ -439,7 +422,7 @@ class InsightsTest {
       intercept = {
         assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]},{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}""", it.body)
+        assertJsonBody("""{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}""", it.body)
       },
     )
   }

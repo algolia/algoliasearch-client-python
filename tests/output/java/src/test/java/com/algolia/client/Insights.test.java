@@ -89,14 +89,14 @@ class InsightsClientClientTests {
   void parametersTest0() {
     InsightsClient $client = new InsightsClient("my-app-id", "my-api-key", new ClientOptions().setRequester(requester));
 
-    InsightEvents insightEvents0 = new InsightEvents();
+    InsightsEvents insightsEvents0 = new InsightsEvents();
     {
       List events1 = new ArrayList<>();
       {}
-      insightEvents0.setEvents(events1);
+      insightsEvents0.setEvents(events1);
     }
 
-    $client.pushEvents(insightEvents0);
+    $client.pushEvents(insightsEvents0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals("insights.algolia.io", result.host);

@@ -1,7 +1,7 @@
 /*
 Insights API
 
-API powering the Insights feature of Algolia.
+The Algolia Insights API lets you collect events related to your search and discovery experience. Events represent actions that users take on your app or website. They unlock powerful features, such as recommendations, personalization, smarter search results, and analytics that help you optimize your user experience.
 
 API version: 1.0.0
 */

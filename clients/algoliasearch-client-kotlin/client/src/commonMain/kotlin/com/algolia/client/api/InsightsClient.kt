@@ -97,16 +97,16 @@ public class InsightsClient(
   }
 
   /**
-   * Push events.
-   * This command pushes an array of events.  An event is   - an action: `eventName`   - performed in a context: `eventType`   - at some point in time provided: `timestamp`   - by an end user: `userToken`   - on something: `index`   Notes:   - To be accepted, all events sent must be valid.   - The size of the body must be *less than 2 MB*.   - When an event is tied to an Algolia search, it must also provide a `queryID`. If that event is a `click`, their absolute `positions` should also be passed.   - We consider that an `index` provides access to 2 resources: objects and filters. An event can only interact with a single resource type, but not necessarily on a single item. As such an event will accept an array of `objectIDs` or `filters`.
-   * @param insightEvents
+   * Send events.
+   * Send a list of events to the Insights API.  You can include up to 1,000 events in a single request, but the request body must be smaller than 2&nbsp;MB.
+   * @param insightsEvents
    * @param requestOptions additional request configuration.
    */
-  public suspend fun pushEvents(insightEvents: InsightEvents, requestOptions: RequestOptions? = null): PushEventsResponse {
+  public suspend fun pushEvents(insightsEvents: InsightsEvents, requestOptions: RequestOptions? = null): EventsResponse {
     val requestConfig = RequestConfig(
       method = RequestMethod.POST,
       path = listOf("1", "events"),
-      body = insightEvents,
+      body = insightsEvents,
     )
     return requester.execute(
       requestConfig = requestConfig,

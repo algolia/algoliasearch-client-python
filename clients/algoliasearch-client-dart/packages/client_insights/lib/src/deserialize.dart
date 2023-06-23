@@ -1,7 +1,14 @@
+import 'package:algolia_client_insights/src/model/clicked_filters.dart';
+import 'package:algolia_client_insights/src/model/clicked_object_ids.dart';
+import 'package:algolia_client_insights/src/model/clicked_object_ids_after_search.dart';
+import 'package:algolia_client_insights/src/model/converted_filters.dart';
+import 'package:algolia_client_insights/src/model/converted_object_ids.dart';
+import 'package:algolia_client_insights/src/model/converted_object_ids_after_search.dart';
 import 'package:algolia_client_insights/src/model/error_base.dart';
-import 'package:algolia_client_insights/src/model/insight_event.dart';
-import 'package:algolia_client_insights/src/model/insight_events.dart';
-import 'package:algolia_client_insights/src/model/push_events_response.dart';
+import 'package:algolia_client_insights/src/model/events_response.dart';
+import 'package:algolia_client_insights/src/model/insights_events.dart';
+import 'package:algolia_client_insights/src/model/viewed_filters.dart';
+import 'package:algolia_client_insights/src/model/viewed_object_ids.dart';
 
 final _regList = RegExp(r'^List<(.*)>$');
 final _regSet = RegExp(r'^Set<(.*)>$');
@@ -22,16 +29,40 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return (valueString == 'true' || valueString == '1') as ReturnType;
     case 'double':
       return (value is double ? value : double.parse('$value')) as ReturnType;
+    case 'ClickEvent':
+    case 'ClickedFilters':
+      return ClickedFilters.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ClickedObjectIDs':
+      return ClickedObjectIDs.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ClickedObjectIDsAfterSearch':
+      return ClickedObjectIDsAfterSearch.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ConversionEvent':
+    case 'ConvertedFilters':
+      return ConvertedFilters.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ConvertedObjectIDs':
+      return ConvertedObjectIDs.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ConvertedObjectIDsAfterSearch':
+      return ConvertedObjectIDsAfterSearch.fromJson(
+          value as Map<String, dynamic>) as ReturnType;
     case 'ErrorBase':
       return ErrorBase.fromJson(value as Map<String, dynamic>) as ReturnType;
-    case 'EventType':
-    case 'InsightEvent':
-      return InsightEvent.fromJson(value as Map<String, dynamic>) as ReturnType;
-    case 'InsightEvents':
-      return InsightEvents.fromJson(value as Map<String, dynamic>)
+    case 'EventsResponse':
+      return EventsResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
-    case 'PushEventsResponse':
-      return PushEventsResponse.fromJson(value as Map<String, dynamic>)
+    case 'InsightsEvents':
+      return InsightsEvents.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ViewEvent':
+    case 'ViewedFilters':
+      return ViewedFilters.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ViewedObjectIDs':
+      return ViewedObjectIDs.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     default:
       RegExpMatch? match;

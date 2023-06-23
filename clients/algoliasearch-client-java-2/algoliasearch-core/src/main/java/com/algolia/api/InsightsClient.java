@@ -459,68 +459,48 @@ public class InsightsClient extends ApiClient {
   }
 
   /**
-   * This command pushes an array of events. An event is - an action: `eventName` - performed in a
-   * context: `eventType` - at some point in time provided: `timestamp` - by an end user:
-   * `userToken` - on something: `index` Notes: - To be accepted, all events sent must be valid. -
-   * The size of the body must be *less than 2 MB*. - When an event is tied to an Algolia search, it
-   * must also provide a `queryID`. If that event is a `click`, their absolute `positions` should
-   * also be passed. - We consider that an `index` provides access to 2 resources: objects and
-   * filters. An event can only interact with a single resource type, but not necessarily on a
-   * single item. As such an event will accept an array of `objectIDs` or `filters`.
+   * Send a list of events to the Insights API. You can include up to 1,000 events in a single
+   * request, but the request body must be smaller than 2&nbsp;MB.
    *
-   * @param insightEvents (required)
+   * @param insightsEvents (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return PushEventsResponse
+   * @return EventsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public PushEventsResponse pushEvents(InsightEvents insightEvents, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    return LaunderThrowable.await(pushEventsAsync(insightEvents, requestOptions));
+  public EventsResponse pushEvents(InsightsEvents insightsEvents, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+    return LaunderThrowable.await(pushEventsAsync(insightsEvents, requestOptions));
   }
 
   /**
-   * This command pushes an array of events. An event is - an action: `eventName` - performed in a
-   * context: `eventType` - at some point in time provided: `timestamp` - by an end user:
-   * `userToken` - on something: `index` Notes: - To be accepted, all events sent must be valid. -
-   * The size of the body must be *less than 2 MB*. - When an event is tied to an Algolia search, it
-   * must also provide a `queryID`. If that event is a `click`, their absolute `positions` should
-   * also be passed. - We consider that an `index` provides access to 2 resources: objects and
-   * filters. An event can only interact with a single resource type, but not necessarily on a
-   * single item. As such an event will accept an array of `objectIDs` or `filters`.
+   * Send a list of events to the Insights API. You can include up to 1,000 events in a single
+   * request, but the request body must be smaller than 2&nbsp;MB.
    *
-   * @param insightEvents (required)
-   * @return PushEventsResponse
+   * @param insightsEvents (required)
+   * @return EventsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public PushEventsResponse pushEvents(InsightEvents insightEvents) throws AlgoliaRuntimeException {
-    return this.pushEvents(insightEvents, null);
+  public EventsResponse pushEvents(InsightsEvents insightsEvents) throws AlgoliaRuntimeException {
+    return this.pushEvents(insightsEvents, null);
   }
 
   /**
-   * (asynchronously) This command pushes an array of events. An event is - an action:
-   * &#x60;eventName&#x60; - performed in a context: &#x60;eventType&#x60; - at some point in time
-   * provided: &#x60;timestamp&#x60; - by an end user: &#x60;userToken&#x60; - on something:
-   * &#x60;index&#x60; Notes: - To be accepted, all events sent must be valid. - The size of the
-   * body must be *less than 2 MB*. - When an event is tied to an Algolia search, it must also
-   * provide a &#x60;queryID&#x60;. If that event is a &#x60;click&#x60;, their absolute
-   * &#x60;positions&#x60; should also be passed. - We consider that an &#x60;index&#x60; provides
-   * access to 2 resources: objects and filters. An event can only interact with a single resource
-   * type, but not necessarily on a single item. As such an event will accept an array of
-   * &#x60;objectIDs&#x60; or &#x60;filters&#x60;.
+   * (asynchronously) Send a list of events to the Insights API. You can include up to 1,000 events
+   * in a single request, but the request body must be smaller than 2&amp;nbsp;MB.
    *
-   * @param insightEvents (required)
+   * @param insightsEvents (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<PushEventsResponse> The awaitable future
+   * @return CompletableFuture<EventsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<PushEventsResponse> pushEventsAsync(InsightEvents insightEvents, RequestOptions requestOptions)
+  public CompletableFuture<EventsResponse> pushEventsAsync(InsightsEvents insightsEvents, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (insightEvents == null) {
-      throw new AlgoliaRuntimeException("Parameter `insightEvents` is required when calling `pushEvents`.");
+    if (insightsEvents == null) {
+      throw new AlgoliaRuntimeException("Parameter `insightsEvents` is required when calling `pushEvents`.");
     }
 
-    Object bodyObj = insightEvents;
+    Object bodyObj = insightsEvents;
 
     // create path and map variables
     String requestPath = "/1/events";
@@ -529,27 +509,19 @@ public class InsightsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<PushEventsResponse>() {});
+    return this.executeAsync(call, new TypeReference<EventsResponse>() {});
   }
 
   /**
-   * (asynchronously) This command pushes an array of events. An event is - an action:
-   * &#x60;eventName&#x60; - performed in a context: &#x60;eventType&#x60; - at some point in time
-   * provided: &#x60;timestamp&#x60; - by an end user: &#x60;userToken&#x60; - on something:
-   * &#x60;index&#x60; Notes: - To be accepted, all events sent must be valid. - The size of the
-   * body must be *less than 2 MB*. - When an event is tied to an Algolia search, it must also
-   * provide a &#x60;queryID&#x60;. If that event is a &#x60;click&#x60;, their absolute
-   * &#x60;positions&#x60; should also be passed. - We consider that an &#x60;index&#x60; provides
-   * access to 2 resources: objects and filters. An event can only interact with a single resource
-   * type, but not necessarily on a single item. As such an event will accept an array of
-   * &#x60;objectIDs&#x60; or &#x60;filters&#x60;.
+   * (asynchronously) Send a list of events to the Insights API. You can include up to 1,000 events
+   * in a single request, but the request body must be smaller than 2&amp;nbsp;MB.
    *
-   * @param insightEvents (required)
-   * @return CompletableFuture<PushEventsResponse> The awaitable future
+   * @param insightsEvents (required)
+   * @return CompletableFuture<EventsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<PushEventsResponse> pushEventsAsync(InsightEvents insightEvents) throws AlgoliaRuntimeException {
-    return this.pushEventsAsync(insightEvents, null);
+  public CompletableFuture<EventsResponse> pushEventsAsync(InsightsEvents insightsEvents) throws AlgoliaRuntimeException {
+    return this.pushEventsAsync(insightsEvents, null);
   }
 
   /**
