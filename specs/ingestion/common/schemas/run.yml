@@ -56,8 +56,6 @@ Run:
       $ref: '#/RunType'
     createdAt:
       $ref: './common.yml#/createdAt'
-    updatedAt:
-      $ref: './common.yml#/updatedAt'
     startedAt:
       $ref: './common.yml#/startedAt'
     finishedAt:
@@ -69,7 +67,6 @@ Run:
     - status
     - type
     - createdAt
-    - updatedAt
 
 RunStatus:
   type: string
