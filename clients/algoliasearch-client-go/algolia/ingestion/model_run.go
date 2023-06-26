@@ -22,8 +22,6 @@ type Run struct {
 	Type       RunType        `json:"type" validate:"required"`
 	// Date of creation (RFC3339 format).
 	CreatedAt string `json:"createdAt" validate:"required"`
-	// Date of last update (RFC3339 format).
-	UpdatedAt string `json:"updatedAt" validate:"required"`
 	// Date of start (RFC3339 format).
 	StartedAt *string `json:"startedAt,omitempty"`
 	// Date of finish (RFC3339 format).
@@ -72,7 +70,7 @@ func WithRunFinishedAt(val string) RunOption {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRun(runID string, appID string, taskID string, status RunStatus, type_ RunType, createdAt string, updatedAt string, opts ...RunOption) *Run {
+func NewRun(runID string, appID string, taskID string, status RunStatus, type_ RunType, createdAt string, opts ...RunOption) *Run {
 	this := &Run{}
 	this.RunID = runID
 	this.AppID = appID
@@ -80,7 +78,6 @@ func NewRun(runID string, appID string, taskID string, status RunStatus, type_ R
 	this.Status = status
 	this.Type = type_
 	this.CreatedAt = createdAt
-	this.UpdatedAt = updatedAt
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -367,30 +364,6 @@ func (o *Run) SetCreatedAt(v string) {
 	o.CreatedAt = v
 }
 
-// GetUpdatedAt returns the UpdatedAt field value
-func (o *Run) GetUpdatedAt() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.UpdatedAt
-}
-
-// GetUpdatedAtOk returns a tuple with the UpdatedAt field value
-// and a boolean to check if the value has been set.
-func (o *Run) GetUpdatedAtOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.UpdatedAt, true
-}
-
-// SetUpdatedAt sets field value
-func (o *Run) SetUpdatedAt(v string) {
-	o.UpdatedAt = v
-}
-
 // GetStartedAt returns the StartedAt field value if set, zero value otherwise.
 func (o *Run) GetStartedAt() string {
 	if o == nil || o.StartedAt == nil {
@@ -487,9 +460,6 @@ func (o Run) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
-	if true {
-		toSerialize["updatedAt"] = o.UpdatedAt
-	}
 	if o.StartedAt != nil {
 		toSerialize["startedAt"] = o.StartedAt
 	}
@@ -511,7 +481,6 @@ func (o Run) String() string {
 	out += fmt.Sprintf("  reasonCode=%v\n", o.ReasonCode)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
-	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
 	out += fmt.Sprintf("  startedAt=%v\n", o.StartedAt)
 	out += fmt.Sprintf("  finishedAt=%v\n", o.FinishedAt)
 	return fmt.Sprintf("Run {\n%s}", out)

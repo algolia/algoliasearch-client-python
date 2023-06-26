@@ -13,7 +13,6 @@ import kotlinx.serialization.json.*
  * @param status
  * @param type
  * @param createdAt Date of creation (RFC3339 format).
- * @param updatedAt Date of last update (RFC3339 format).
  * @param progress
  * @param outcome
  * @param reason Explains the result of outcome.
@@ -38,9 +37,6 @@ public data class Run(
 
   /** Date of creation (RFC3339 format). */
   @SerialName(value = "createdAt") val createdAt: String,
-
-  /** Date of last update (RFC3339 format). */
-  @SerialName(value = "updatedAt") val updatedAt: String,
 
   @SerialName(value = "progress") val progress: RunProgress? = null,
 

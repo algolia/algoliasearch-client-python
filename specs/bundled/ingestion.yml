@@ -1415,8 +1415,6 @@ components:
           $ref: '#/components/schemas/RunType'
         createdAt:
           $ref: '#/components/schemas/createdAt'
-        updatedAt:
-          $ref: '#/components/schemas/updatedAt'
         startedAt:
           $ref: '#/components/schemas/startedAt'
         finishedAt:
@@ -1428,7 +1426,6 @@ components:
         - status
         - type
         - createdAt
-        - updatedAt
     RunListResponse:
       type: object
       additionalProperties: false
