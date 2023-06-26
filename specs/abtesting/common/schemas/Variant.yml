@@ -31,6 +31,12 @@ variant:
       $ref: '../parameters.yml#/index'
     noResultCount:
       $ref: '../../../common/parameters.yml#/count'
+    outlierTrackedSearchesCount:
+      type: integer
+      description: Count of the tracked searches attributed to outlier traffic that were removed from the A/B test.
+    outlierUsersCount:
+      type: integer
+      description: Count of users attributed to outlier traffic that were removed from the A/B test.
     searchCount:
       type: integer
       description: The number of search during the A/B test.
@@ -54,3 +60,5 @@ variant:
     - clickThroughRate
     - clickCount
     - averageClickPosition
+    - outlierUsersCount
+    - outlierTrackedSearchesCount
