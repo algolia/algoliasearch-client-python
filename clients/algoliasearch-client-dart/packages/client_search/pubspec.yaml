@@ -1,6 +1,6 @@
 name: algolia_client_search
 version: 0.1.1+1
-description: Algolia search API client to interact with Algolia
+description: A sub-package of the AlgoliaSearch library, offering search-specific functionalities for enhanced search and discovery in Dart/Flutter apps.
 homepage: https://www.algolia.com/doc/
 repository: https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/client_search
 topics:

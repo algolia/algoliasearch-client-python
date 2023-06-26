@@ -1,4 +1,4 @@
-// Algolia search API client to interact with Algolia
+// A sub-package of the AlgoliaSearch library, offering search-specific functionalities for enhanced search and discovery in Dart/Flutter apps.
 library algolia_client_search;
 
 export 'package:algolia_client_core/algolia_client_core.dart';

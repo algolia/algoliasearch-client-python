@@ -1,4 +1,4 @@
-// Algolia algoliasearch API client to interact with Algolia
+// A Dart package for Algolia. Enables seamless integration for instant search, typo tolerance &amp; user insights, and more, in Dart/Flutter apps.
 library algoliasearch_lite;
 
 export 'package:algolia_client_core/algolia_client_core.dart';
