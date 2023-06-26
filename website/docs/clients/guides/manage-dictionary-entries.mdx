@@ -1,0 +1,178 @@
+---
+title: Manage dictionary entries
+---
+
+import { TabsLanguage } from '../../../src/components/TabsLanguage';
+import TabItem from '@theme/TabItem';
+
+The REST API offers [a single endpoint to manage your dictorionary](https://api-clients-automation.netlify.app/specs/search#tag/Dictionaries/operation/batchDictionaryEntries). In this guide, we will demonstrate how to manage entries for different scenarios.
+
+A `dictionaryName` can be either `stopwords`, `plurals` or `compounds`.
+
+## Append new entries to your dictionary
+
+> Useful when you have new data to add to a dictionary and don't want to impact existing entries.
+
+<TabsLanguage>
+<TabItem value="javascript">
+
+```js
+await client.batchDictionaryEntries({
+      dictionaryName: 'YOUR_DICTIONARY_NAME', // one of `stopwords`, `plurals` or `compounds`.
+      batchDictionaryEntriesParams: {
+        clearExistingDictionaryEntries: false, // here we want to append data, so we don't clear existing entries
+        requests: [
+          {
+            action: 'addEntry',
+            body: {
+              objectID: '1',
+              language: 'en',
+              word: 'fancy',
+              words: ['believe', 'algolia'],
+              decomposition: ['trust', 'algolia'],
+              state: 'enabled',
+            },
+          },
+        ],
+      },
+    })
+```
+
+</TabItem>
+<TabItem value="php">
+
+```php
+// TODO
+```
+
+</TabItem>
+<TabItem value="java">
+
+```java
+// TODO
+```
+
+</TabItem>
+</TabsLanguage>
+
+## Replace dictionary entries
+
+> Useful when you want to clear every entries of a dictionary and add new ones at the same time.
+
+<TabsLanguage>
+<TabItem value="javascript">
+
+```js
+await client.batchDictionaryEntries({
+      dictionaryName: 'YOUR_DICTIONARY_NAME', // one of `stopwords`, `plurals` or `compounds`.
+      batchDictionaryEntriesParams: {
+        clearExistingDictionaryEntries: true, // Since we replace, we will create a new dictionary from those entries
+        requests: [
+          {
+            action: 'addEntry',
+            body: {
+              objectID: '1',
+              language: 'en',
+              word: 'fancy',
+              words: ['believe', 'algolia'],
+              decomposition: ['trust', 'algolia'],
+              state: 'enabled',
+            },
+          },
+        ],
+      },
+    })
+```
+
+</TabItem>
+<TabItem value="php">
+
+```php
+// TODO
+```
+
+</TabItem>
+<TabItem value="java">
+
+```java
+// TODO
+```
+
+</TabItem>
+</TabsLanguage>
+
+## Clear dictionary
+
+> Deletes everything that exists in a dictionary.
+
+<TabsLanguage>
+<TabItem value="javascript">
+
+```js
+await client.batchDictionaryEntries({
+      dictionaryName: 'YOUR_DICTIONARY_NAME', // one of `stopwords`, `plurals` or `compounds`.
+      batchDictionaryEntriesParams: {
+        clearExistingDictionaryEntries: true,
+        requests: [], // We don't push any new entries to it
+      },
+    })
+```
+
+</TabItem>
+<TabItem value="php">
+
+```php
+// TODO
+```
+
+</TabItem>
+<TabItem value="java">
+
+```java
+// TODO
+```
+
+</TabItem>
+</TabsLanguage>
+
+## Delete entries in the dictionary
+
+> Useful when deleting one or many entries from a dictionary.
+
+<TabsLanguage>
+<TabItem value="javascript">
+
+```js
+await client.batchDictionaryEntries({
+      dictionaryName: 'YOUR_DICTIONARY_NAME', // one of `stopwords`, `plurals` or `compounds`.
+      batchDictionaryEntriesParams: {
+        clearExistingDictionaryEntries: false, // we don't want to impact other entries.
+        requests: [
+          {
+            action: 'deleteEntry', // `deleteEntry` will remove any entries in the dictionary that have the same `objectID` as the `body.objectID` field.
+            body: {
+              objectID: '1',
+            },
+          },
+        ],
+      },
+    })
+```
+
+</TabItem>
+<TabItem value="php">
+
+```php
+// TODO
+```
+
+</TabItem>
+<TabItem value="java">
+
+```java
+// TODO
+```
+
+</TabItem>
+</TabsLanguage>
+

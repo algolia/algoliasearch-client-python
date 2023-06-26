@@ -82,6 +82,7 @@ const sidebars = {
         'clients/guides/wait-for-api-key-to-be-valid',
         'clients/guides/copy-or-move-index',
         'clients/guides/copy-index-to-another-application',
+        'clients/guides/manage-dictionary-entries',
       ],
     },
   ],
