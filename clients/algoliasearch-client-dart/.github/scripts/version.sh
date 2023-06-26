@@ -4,7 +4,7 @@ current_commit=$(git rev-parse HEAD)
 previous_commit=$(git rev-parse HEAD^)
 
 declare -A packages=(
-  ["client_core"]="client"
+  ["client_core"]="core"
   ["client_search"]="search"
   ["client_insights"]="insights"
   ["algoliasearch"]="algoliasearch"
@@ -23,6 +23,7 @@ for package_dir in "${!packages[@]}"; do
         echo "Creating new tag..."
         git tag "$tag_prefix-$new_version"
         git push origin "$tag_prefix-$new_version"
+        echo "$tag_prefix=true" >> "$GITHUB_ENV"
     else
         echo "Version was not updated in $package_dir."
     fi

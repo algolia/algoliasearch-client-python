@@ -1,24 +1,20 @@
-name: Publish to pub.dev
+name: Publish
 
 on:
   push:
-    tags:
-      - 'algoliasearch-[0-9]+.[0-9]+.[0-9]+*'
-      - 'core-[0-9]+.[0-9]+.[0-9]+*'
-      - 'search-[0-9]+.[0-9]+.[0-9]+*'
-      - 'insights-[0-9]+.[0-9]+.[0-9]+*'
-
-permissions:
-  id-token: write
+    branches:
+      - main
 
 jobs:
   check:
-    name: Check
+    name: Run checks
     runs-on: ubuntu-latest
+    if: "startsWith(github.event.head_commit.message, 'chore: release')"
+
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
-
+          
       - name: Install Tools
         run: dart pub global activate melos
       - name: Bootstrap Workspace
@@ -28,38 +24,68 @@ jobs:
       - name: Check versions
         run: melos test
 
-  publish_algoliasearch:
+  version:
+    name: Tag versions
     needs: check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Run version check script
+        id: version
+        run: .github/scripts/version.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.ALGOLIA_BOT_TOKEN }}
+      
+    outputs:
+      PUBLISH_CORE: ${{ steps.version.outputs.core }}
+      PUBLISH_SEARCH: ${{ steps.version.outputs.search }}
+      PUBLISH_INSIGHTS: ${{ steps.version.outputs.insights }}
+      PUBLISH_ALGOLIASEARCH: ${{ steps.version.outputs.algoliasearch }}
+
+  publish_algoliasearch:
+    needs: version
     name: Publish AlgoliaSearch
-    if: startsWith(github.ref, 'refs/tags/algoliasearch-')
+    if: ${{ needs.version.outputs.PUBLISH_ALGOLIASEARCH == 'true' }}
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    permissions:
+      id-token: write
     with:
       environment: 'pub.dev'
       working-directory: packages/algoliasearch
 
   publish_core:
-    needs: check
+    needs: version
     name: Publish Client Core
-    if: startsWith(github.ref, 'refs/tags/core-')
+    if: ${{ needs.version.outputs.PUBLISH_CORE == 'true' }}
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    permissions:
+      id-token: write
     with:
       environment: 'pub.dev'
       working-directory: packages/client-core
 
   publish_search:
-    needs: check
+    needs: version
     name: Publish Search Client
-    if: startsWith(github.ref, 'refs/tags/search-')
+    if: ${{ needs.version.outputs.PUBLISH_SEARCH == 'true' }}
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    permissions:
+      id-token: write
     with:
       environment: 'pub.dev'
       working-directory: packages/client-search
 
   publish_insights:
-    needs: check
+    needs: version
     name: Publish Insights Client
-    if: startsWith(github.ref, 'refs/tags/insights-')
+    if: ${{ needs.version.outputs.PUBLISH_INSIGHTS == 'true' }}
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    permissions:
+      id-token: write
     with:
       environment: 'pub.dev'
       working-directory: packages/client-insights

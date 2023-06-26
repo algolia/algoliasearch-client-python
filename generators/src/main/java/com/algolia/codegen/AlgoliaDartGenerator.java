@@ -38,14 +38,23 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     if (isAlgoliasearchClient) {
       libName = "algoliasearch";
       packageFolder = libName;
+      setPubDescription(
+        "A Dart package for Algolia. Enables seamless integration for instant search, typo" +
+        " tolerance & user insights, and more, in Dart/Flutter apps."
+      );
     } else {
       libName = "algolia_client_" + client;
       packageFolder = "client_" + client;
       setApiNameSuffix(Utils.API_SUFFIX);
+      setPubDescription(
+        "A sub-package of the AlgoliaSearch library, offering " +
+        client +
+        "-specific functionalities for enhanced search and discovery in Dart/Flutter" +
+        " apps."
+      );
     }
     setPubName(libName);
     setPubLibrary(libName);
-    setPubDescription("Algolia " + client + " API client to interact with Algolia");
     setPubRepository("https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/" + packageFolder);
 
     // configs
