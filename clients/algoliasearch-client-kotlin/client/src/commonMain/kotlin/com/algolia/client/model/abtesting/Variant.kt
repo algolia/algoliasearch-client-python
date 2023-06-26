@@ -15,6 +15,8 @@ import kotlinx.serialization.json.*
  * @param description The A/B test description.
  * @param index The index performing the A/B test.
  * @param noResultCount The number of occurrences.
+ * @param outlierTrackedSearchesCount Count of the tracked searches attributed to outlier traffic that were removed from the A/B test.
+ * @param outlierUsersCount Count of users attributed to outlier traffic that were removed from the A/B test.
  * @param searchCount The number of search during the A/B test.
  * @param trackedSearchCount The number of tracked search click.
  * @param trafficPercentage The traffic percentage for the A/B test.
@@ -46,6 +48,12 @@ public data class Variant(
 
   /** The number of occurrences. */
   @SerialName(value = "noResultCount") val noResultCount: Int,
+
+  /** Count of the tracked searches attributed to outlier traffic that were removed from the A/B test. */
+  @SerialName(value = "outlierTrackedSearchesCount") val outlierTrackedSearchesCount: Int,
+
+  /** Count of users attributed to outlier traffic that were removed from the A/B test. */
+  @SerialName(value = "outlierUsersCount") val outlierUsersCount: Int,
 
   /** The number of search during the A/B test. */
   @SerialName(value = "searchCount") val searchCount: Int,

@@ -118,6 +118,16 @@ components:
           $ref: '#/components/schemas/index'
         noResultCount:
           $ref: '#/components/schemas/count'
+        outlierTrackedSearchesCount:
+          type: integer
+          description: >-
+            Count of the tracked searches attributed to outlier traffic that
+            were removed from the A/B test.
+        outlierUsersCount:
+          type: integer
+          description: >-
+            Count of users attributed to outlier traffic that were removed from
+            the A/B test.
         searchCount:
           type: integer
           description: The number of search during the A/B test.
@@ -141,6 +151,8 @@ components:
         - clickThroughRate
         - clickCount
         - averageClickPosition
+        - outlierUsersCount
+        - outlierTrackedSearchesCount
     variants:
       type: array
       description: List of A/B test variant.

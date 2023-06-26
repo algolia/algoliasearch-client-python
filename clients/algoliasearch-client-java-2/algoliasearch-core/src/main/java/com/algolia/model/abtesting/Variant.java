@@ -33,6 +33,12 @@ public class Variant {
   @JsonProperty("noResultCount")
   private Integer noResultCount;
 
+  @JsonProperty("outlierTrackedSearchesCount")
+  private Integer outlierTrackedSearchesCount;
+
+  @JsonProperty("outlierUsersCount")
+  private Integer outlierUsersCount;
+
   @JsonProperty("searchCount")
   private Integer searchCount;
 
@@ -165,6 +171,37 @@ public class Variant {
     return noResultCount;
   }
 
+  public Variant setOutlierTrackedSearchesCount(Integer outlierTrackedSearchesCount) {
+    this.outlierTrackedSearchesCount = outlierTrackedSearchesCount;
+    return this;
+  }
+
+  /**
+   * Count of the tracked searches attributed to outlier traffic that were removed from the A/B
+   * test.
+   *
+   * @return outlierTrackedSearchesCount
+   */
+  @javax.annotation.Nonnull
+  public Integer getOutlierTrackedSearchesCount() {
+    return outlierTrackedSearchesCount;
+  }
+
+  public Variant setOutlierUsersCount(Integer outlierUsersCount) {
+    this.outlierUsersCount = outlierUsersCount;
+    return this;
+  }
+
+  /**
+   * Count of users attributed to outlier traffic that were removed from the A/B test.
+   *
+   * @return outlierUsersCount
+   */
+  @javax.annotation.Nonnull
+  public Integer getOutlierUsersCount() {
+    return outlierUsersCount;
+  }
+
   public Variant setSearchCount(Integer searchCount) {
     this.searchCount = searchCount;
     return this;
@@ -243,6 +280,8 @@ public class Variant {
       Objects.equals(this.description, variant.description) &&
       Objects.equals(this.index, variant.index) &&
       Objects.equals(this.noResultCount, variant.noResultCount) &&
+      Objects.equals(this.outlierTrackedSearchesCount, variant.outlierTrackedSearchesCount) &&
+      Objects.equals(this.outlierUsersCount, variant.outlierUsersCount) &&
       Objects.equals(this.searchCount, variant.searchCount) &&
       Objects.equals(this.trackedSearchCount, variant.trackedSearchCount) &&
       Objects.equals(this.trafficPercentage, variant.trafficPercentage) &&
@@ -261,6 +300,8 @@ public class Variant {
       description,
       index,
       noResultCount,
+      outlierTrackedSearchesCount,
+      outlierUsersCount,
       searchCount,
       trackedSearchCount,
       trafficPercentage,
@@ -280,6 +321,8 @@ public class Variant {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    index: ").append(toIndentedString(index)).append("\n");
     sb.append("    noResultCount: ").append(toIndentedString(noResultCount)).append("\n");
+    sb.append("    outlierTrackedSearchesCount: ").append(toIndentedString(outlierTrackedSearchesCount)).append("\n");
+    sb.append("    outlierUsersCount: ").append(toIndentedString(outlierUsersCount)).append("\n");
     sb.append("    searchCount: ").append(toIndentedString(searchCount)).append("\n");
     sb.append("    trackedSearchCount: ").append(toIndentedString(trackedSearchCount)).append("\n");
     sb.append("    trafficPercentage: ").append(toIndentedString(trafficPercentage)).append("\n");
