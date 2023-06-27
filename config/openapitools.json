@@ -6,63 +6,63 @@
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/algoliasearch",
         "reservedWordsMappings": "queryParameters=queryParameters,requestOptions=requestOptions,delete=delete",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-search": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/client-search",
         "reservedWordsMappings": "queryParameters=queryParameters,requestOptions=requestOptions,delete=delete",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-recommend": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/recommend",
         "reservedWordsMappings": "queryParameters=queryParameters,delete=delete",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-personalization": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/client-personalization",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-analytics": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/client-analytics",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-insights": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/client-insights",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-abtesting": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/client-abtesting",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-query-suggestions": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/client-query-suggestions",
         "additionalProperties": {
-          "packageVersion": "5.0.0-alpha.72"
+          "packageVersion": "5.0.0-alpha.73"
         }
       },
       "javascript-predict": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/predict",
         "additionalProperties": {
-          "packageVersion": "1.0.0-alpha.72"
+          "packageVersion": "1.0.0-alpha.73"
         }
       },
       "javascript-ingestion": {
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/ingestion",
         "additionalProperties": {
-          "packageVersion": "1.0.0-alpha.46"
+          "packageVersion": "1.0.0-alpha.47"
         }
       },
       "java-search": {
@@ -185,7 +185,7 @@
       "dart-algoliasearch": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/algoliasearch",
         "additionalProperties": {
-          "packageVersion": "0.1.1+1"
+          "packageVersion": "0.1.1+2"
         }
       },
       "dart-search": {
@@ -197,7 +197,7 @@
       "dart-insights": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/client_insights",
         "additionalProperties": {
-          "packageVersion": "0.1.1+1"
+          "packageVersion": "0.1.1+2"
         }
       }
     }

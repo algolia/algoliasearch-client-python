@@ -1,3 +1,7 @@
+## 0.1.1+2
+
+ - **DOCS**(specs): review Insights API spec (#1647).
+
 ## 0.1.1+1
 
  - **FIX**(dart): changelog and versions generation (#1625).
