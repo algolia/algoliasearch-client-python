@@ -1,0 +1,80 @@
+---
+title: Replace All Rules and Synonyms
+---
+
+import { TabsLanguage } from '../../../src/components/TabsLanguage';
+import TabItem from '@theme/TabItem';
+
+In Algolia, you can replace all existing rules and synonyms by leveraging the appropriate methods. This guide will show you how to use `saveRules` and `saveSynonyms` methods to achieve this.
+
+## Replace All Rules
+
+To replace all existing rules in Algolia, you can use the `saveRules` method with the `clearExistingRules` parameter set to `true`.
+
+<TabsLanguage>
+<TabItem value="javascript">
+
+```javascript
+await client.saveRules({
+  indexName,
+  rules,
+  clearExistingRules: true,
+});
+```
+
+</TabItem>
+<TabItem value="php">
+
+php
+
+// TODO
+
+</TabItem>
+<TabItem value="java">
+
+java
+
+// TODO
+
+</TabItem>
+</TabsLanguage>
+
+The rules parameter should contain the array of rules you want to save.
+By executing the above code, all existing rules will be removed, and the new rules provided will be saved to your Algolia index.
+
+## Replace All Synonyms
+
+To replace all existing synonyms in Algolia, you can use the `saveSynonyms` method with the `replaceExistingSynonyms` parameter set to `true`.
+
+<TabsLanguage>
+<TabItem value="javascript">
+
+```javascript
+await client.saveSynonyms({
+  indexName,
+  synonymHit,
+  replaceExistingSynonyms: true,
+});
+```
+
+</TabItem>
+<TabItem value="php">
+
+php
+
+// TODO
+
+</TabItem>
+<TabItem value="java">
+
+java
+
+// TODO
+
+</TabItem>
+</TabsLanguage>
+
+The `synonymHit`parameter should contain the synonyms you want to save.
+By executing the above code, all existing synonyms will be replaced with the new synonyms provided.
+
+That's it! You have learned how to replace all existing rules and synonyms in Algolia using the `saveRules` and `saveSynonyms` methods respectively.

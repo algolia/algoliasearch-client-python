@@ -84,6 +84,7 @@ const sidebars = {
         'clients/guides/copy-index-to-another-application',
         'clients/guides/manage-dictionary-entries',
         'clients/guides/delete-objects',
+        'clients/guides/replace-all-rules-synonyms',
       ],
     },
   ],
