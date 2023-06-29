@@ -1,6 +1,6 @@
 name: algoliasearch
 version: 0.1.1+2
-description: A Dart package for Algolia. Enables seamless integration for instant search, typo tolerance &amp; user insights, and more, in Dart/Flutter apps.
+description: A Dart package for Algolia. Enables seamless integration for instant search, typo tolerance & user insights, and more, in Dart/Flutter apps.
 homepage: https://www.algolia.com/doc/
 repository: https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/algoliasearch
 topics:
@@ -16,7 +16,7 @@ dependencies:
   algolia_client_search: 0.1.1+1
   algolia_client_insights: 0.1.1+2
   json_annotation: ^4.8.1
-  collection: ^1.17.2
+  collection: ^1.17.1
 
 dev_dependencies:
   build_runner: ^2.4.4
