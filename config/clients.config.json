@@ -40,8 +40,8 @@
     "folder": "clients/algoliasearch-client-go",
     "gitRepoId": "algoliasearch-client-go",
     "packageVersion": "4.0.0-alpha.20",
-    "modelFolder": "algolia/models",
-    "apiFolder": "algolia/api",
+    "modelFolder": "algolia",
+    "apiFolder": "algolia",
     "customGenerator": "algolia-go",
     "tests": {
       "extension": "_test.go",
@@ -52,8 +52,8 @@
     "folder": "clients/algoliasearch-client-kotlin",
     "gitRepoId": "algoliasearch-client-kotlin",
     "packageVersion": "3.0.0-SNAPSHOT",
-    "modelFolder": "client/src/commonMain/kotlin/com/algolia/model",
-    "apiFolder": "client/src/commonMain/kotlin/com/algolia/api",
+    "modelFolder": "client/src/commonMain/kotlin/com/algolia/client/model",
+    "apiFolder": "client/src/commonMain/kotlin/com/algolia/client/api",
     "customGenerator": "algolia-kotlin",
     "tests": {
       "extension": "Test.kt",
@@ -64,7 +64,7 @@
     "folder": "clients/algoliasearch-client-dart",
     "gitRepoId": "algoliasearch-client-dart",
     "packageVersion": "0.1.1+2",
-    "modelFolder": "lib/src",
+    "modelFolder": "lib/src/model",
     "apiFolder": "lib/src/api",
     "customGenerator": "algolia-dart",
     "tests": {

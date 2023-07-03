@@ -44,9 +44,13 @@ export async function removeExistingCodegen({
         recursive: true,
       });
       break;
-    case 'dart':
-      clientModel = clientName;
-      clientApi = `${clientName}*.dart`;
+    case 'kotlin':
+      clientModel = clientName.toLowerCase();
+      clientApi = `${clientName}*.kt`;
+      break;
+    case 'go':
+      clientModel = clientName.toLowerCase();
+      clientApi = clientName.toLowerCase();
       break;
     default:
       break;
