@@ -10,6 +10,6 @@
  - **FEAT**(dart): algoliasearch with lite and umbrella libs  (#1596).
  - **FEAT**(dart): add search/insights client generation (#1577).
 
-# 0.1.0
+## 0.1.0
 
 Initial release.
