@@ -16,6 +16,7 @@
     "docker:build": "./scripts/docker/build.sh",
     "docker:clean": "docker stop api-clients-automation; docker rm -f api-clients-automation; docker image rm -f api-clients-automation",
     "docker:mount": "./scripts/docker/mount.sh",
+    "docker:release": "docker exec -e GITHUB_TOKEN=$GITHUB_TOKEN -it api-clients-automation bash -lc \"yarn release\"",
     "docker:setup": "yarn docker:clean && yarn docker:build && yarn docker:mount",
     "fix:json": "eslint --ext=json . --fix",
     "github-actions:lint": "eslint --ext=yml .github/",
