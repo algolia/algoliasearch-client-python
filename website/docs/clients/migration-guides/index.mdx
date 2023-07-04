@@ -247,7 +247,9 @@ client.waitForTask("<YOUR_INDEX_NAME>", response.getTaskID());
 
 The `operationIndex` allows you to either `copy` or `move` a `source` index to a `destination` index **within the same Algolia application**.
 
-You can also decide what `scope` of the `source` index should be copied, [read more in our dedicated guide](/docs/clients/guides/copy-or-move-index).
+You can also decide what `scope` of the `source` index should be copied, [read more in our dedicated guide](/docs/clients/guides/copy-or-move-index-rules-settings-synonyms).
+
+This method can be used as a replacement for the `copyRules`, `copySynonyms`, and `copySettings` method when using the associated `scope`.
 
 </td><td width="600px">
 

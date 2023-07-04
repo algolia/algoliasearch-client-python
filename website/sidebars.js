@@ -80,7 +80,7 @@ const sidebars = {
         'clients/guides/customized-client-usage',
         'clients/guides/wait-for-a-task-to-finish',
         'clients/guides/wait-for-api-key-to-be-valid',
-        'clients/guides/copy-or-move-index',
+        'clients/guides/copy-or-move-index-rules-settings-synonyms',
         'clients/guides/copy-index-to-another-application',
         'clients/guides/manage-dictionary-entries',
         'clients/guides/delete-objects',
