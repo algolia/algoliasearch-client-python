@@ -23,7 +23,7 @@ for package_dir in "${!packages[@]}"; do
         echo "Creating new tag..."
         git tag "$tag_prefix-$new_version"
         git push origin "$tag_prefix-$new_version"
-        echo "$tag_prefix=true" >> "$GITHUB_OUTPUT"
+        echo "publish=true" >> "$GITHUB_OUTPUT"
     else
         echo "Version was not updated in $package_dir."
     fi
