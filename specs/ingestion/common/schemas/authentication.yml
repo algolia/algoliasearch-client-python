@@ -11,6 +11,8 @@ Authentication:
       $ref: './common.yml#/name'
     platform:
       $ref: '#/Platform'
+    input:
+      $ref: '#/AuthInput'
     createdAt:
       $ref: './common.yml#/createdAt'
     updatedAt:
@@ -21,19 +23,6 @@ Authentication:
     - name
     - input
     - createdAt
-
-AuthenticationWithInput:
-  allOf:
-    - $ref: '#/Authentication'
-    - type: object
-      title: authenticationInput
-      description: The authentication input property stores the (encrypted) credentials.
-      additionalProperties: false
-      properties:
-        input:
-          $ref: '#/AuthInput'
-      required:
-        - input
 
 AuthenticationCreate:
   type: object
