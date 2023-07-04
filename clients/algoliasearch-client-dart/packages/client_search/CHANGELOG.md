@@ -1,3 +1,7 @@
+## 0.1.1+2
+
+ - **DOCS**(dart): update changelog formatting (#1684).
+
 ## 0.1.1+1
 
  - **FIX**(dart): changelog and versions generation (#1625).

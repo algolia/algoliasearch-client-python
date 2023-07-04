@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-07-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`algolia_client_core` - `v0.1.1+2`](#algolia_client_core---v0112)
+ - [`algolia_client_insights` - `v0.1.1+3`](#algolia_client_insights---v0113)
+ - [`algolia_client_search` - `v0.1.1+2`](#algolia_client_search---v0112)
+ - [`algoliasearch` - `v0.1.1+3`](#algoliasearch---v0113)
+
+---
+
+#### `algolia_client_core` - `v0.1.1+2`
+
+ - **DOCS**(dart): update changelog formatting (#1684).
+
+#### `algolia_client_insights` - `v0.1.1+3`
+
+ - **DOCS**(dart): update changelog formatting (#1684).
+
+#### `algolia_client_search` - `v0.1.1+2`
+
+ - **DOCS**(dart): update changelog formatting (#1684).
+
+#### `algoliasearch` - `v0.1.1+3`
+
+ - **DOCS**(dart): update changelog formatting (#1684).
+
+
 ## 2023-06-27
 
 ### Changes

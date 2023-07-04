@@ -195,19 +195,19 @@
       "dart-algoliasearch": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/algoliasearch",
         "additionalProperties": {
-          "packageVersion": "0.1.1+2"
+          "packageVersion": "0.1.1+3"
         }
       },
       "dart-search": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/client_search",
         "additionalProperties": {
-          "packageVersion": "0.1.1+1"
+          "packageVersion": "0.1.1+2"
         }
       },
       "dart-insights": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/client_insights",
         "additionalProperties": {
-          "packageVersion": "0.1.1+2"
+          "packageVersion": "0.1.1+3"
         }
       }
     }
