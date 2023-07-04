@@ -14,6 +14,7 @@ type Authentication struct {
 	// An human readable name describing the object.
 	Name     string    `json:"name" validate:"required"`
 	Platform *Platform `json:"platform,omitempty"`
+	Input    AuthInput `json:"input" validate:"required"`
 	// Date of creation (RFC3339 format).
 	CreatedAt string `json:"createdAt" validate:"required"`
 	// Date of last update (RFC3339 format).
@@ -38,11 +39,12 @@ func WithAuthenticationUpdatedAt(val string) AuthenticationOption {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAuthentication(authenticationID string, type_ AuthenticationType, name string, createdAt string, opts ...AuthenticationOption) *Authentication {
+func NewAuthentication(authenticationID string, type_ AuthenticationType, name string, input AuthInput, createdAt string, opts ...AuthenticationOption) *Authentication {
 	this := &Authentication{}
 	this.AuthenticationID = authenticationID
 	this.Type = type_
 	this.Name = name
+	this.Input = input
 	this.CreatedAt = createdAt
 	for _, opt := range opts {
 		opt(this)
@@ -162,6 +164,30 @@ func (o *Authentication) SetPlatform(v Platform) {
 	o.Platform = &v
 }
 
+// GetInput returns the Input field value
+func (o *Authentication) GetInput() AuthInput {
+	if o == nil {
+		var ret AuthInput
+		return ret
+	}
+
+	return o.Input
+}
+
+// GetInputOk returns a tuple with the Input field value
+// and a boolean to check if the value has been set.
+func (o *Authentication) GetInputOk() (*AuthInput, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Input, true
+}
+
+// SetInput sets field value
+func (o *Authentication) SetInput(v AuthInput) {
+	o.Input = v
+}
+
 // GetCreatedAt returns the CreatedAt field value
 func (o *Authentication) GetCreatedAt() string {
 	if o == nil {
@@ -233,6 +259,9 @@ func (o Authentication) MarshalJSON() ([]byte, error) {
 		toSerialize["platform"] = o.Platform
 	}
 	if true {
+		toSerialize["input"] = o.Input
+	}
+	if true {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
 	if o.UpdatedAt != nil {
@@ -247,6 +276,7 @@ func (o Authentication) String() string {
 	out += fmt.Sprintf("  type=%v\n", o.Type)
 	out += fmt.Sprintf("  name=%v\n", o.Name)
 	out += fmt.Sprintf("  platform=%v\n", o.Platform)
+	out += fmt.Sprintf("  input=%v\n", o.Input)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)
 	return fmt.Sprintf("Authentication {\n%s}", out)

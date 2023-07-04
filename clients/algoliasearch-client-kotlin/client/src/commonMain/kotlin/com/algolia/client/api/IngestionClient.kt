@@ -258,7 +258,7 @@ public class IngestionClient(
    * @param authenticationID The authentication UUID.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun getAuthentication(authenticationID: String, requestOptions: RequestOptions? = null): AuthenticationWithInput {
+  public suspend fun getAuthentication(authenticationID: String, requestOptions: RequestOptions? = null): Authentication {
     require(authenticationID.isNotBlank()) { "Parameter `authenticationID` is required when calling `getAuthentication`." }
     val requestConfig = RequestConfig(
       method = RequestMethod.GET,

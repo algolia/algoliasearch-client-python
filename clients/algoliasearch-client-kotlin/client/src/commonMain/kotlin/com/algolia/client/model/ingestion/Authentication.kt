@@ -10,6 +10,7 @@ import kotlinx.serialization.json.*
  * @param authenticationID The authentication UUID.
  * @param type
  * @param name An human readable name describing the object.
+ * @param input
  * @param createdAt Date of creation (RFC3339 format).
  * @param platform
  * @param updatedAt Date of last update (RFC3339 format).
@@ -24,6 +25,8 @@ public data class Authentication(
 
   /** An human readable name describing the object. */
   @SerialName(value = "name") val name: String,
+
+  @SerialName(value = "input") val input: AuthInput,
 
   /** Date of creation (RFC3339 format). */
   @SerialName(value = "createdAt") val createdAt: String,

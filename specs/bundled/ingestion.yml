@@ -370,52 +370,6 @@ components:
     name:
       type: string
       description: An human readable name describing the object.
-    createdAt:
-      type: string
-      description: Date of creation (RFC3339 format).
-    updatedAt:
-      type: string
-      description: Date of last update (RFC3339 format).
-    Authentication:
-      type: object
-      description: An authentication is used to login into a Source or a Destination.
-      additionalProperties: false
-      properties:
-        authenticationID:
-          $ref: '#/components/schemas/authenticationID'
-        type:
-          $ref: '#/components/schemas/AuthenticationType'
-        name:
-          $ref: '#/components/schemas/name'
-        platform:
-          $ref: '#/components/schemas/Platform'
-        createdAt:
-          $ref: '#/components/schemas/createdAt'
-        updatedAt:
-          $ref: '#/components/schemas/updatedAt'
-      required:
-        - authenticationID
-        - type
-        - name
-        - input
-        - createdAt
-    Pagination:
-      type: object
-      additionalProperties: false
-      properties:
-        nbPages:
-          type: integer
-        page:
-          type: integer
-        nbItems:
-          type: integer
-        itemsPerPage:
-          type: integer
-      required:
-        - nbPages
-        - page
-        - nbItems
-        - itemsPerPage
     AuthGoogleServiceAccount:
       type: object
       description: Authentication input to connect to a Google service (e.g. BigQuery).
@@ -492,6 +446,54 @@ components:
         - $ref: '#/components/schemas/AuthAPIKey'
         - $ref: '#/components/schemas/AuthOAuth'
         - $ref: '#/components/schemas/AuthAlgolia'
+    createdAt:
+      type: string
+      description: Date of creation (RFC3339 format).
+    updatedAt:
+      type: string
+      description: Date of last update (RFC3339 format).
+    Authentication:
+      type: object
+      description: An authentication is used to login into a Source or a Destination.
+      additionalProperties: false
+      properties:
+        authenticationID:
+          $ref: '#/components/schemas/authenticationID'
+        type:
+          $ref: '#/components/schemas/AuthenticationType'
+        name:
+          $ref: '#/components/schemas/name'
+        platform:
+          $ref: '#/components/schemas/Platform'
+        input:
+          $ref: '#/components/schemas/AuthInput'
+        createdAt:
+          $ref: '#/components/schemas/createdAt'
+        updatedAt:
+          $ref: '#/components/schemas/updatedAt'
+      required:
+        - authenticationID
+        - type
+        - name
+        - input
+        - createdAt
+    Pagination:
+      type: object
+      additionalProperties: false
+      properties:
+        nbPages:
+          type: integer
+        page:
+          type: integer
+        nbItems:
+          type: integer
+        itemsPerPage:
+          type: integer
+      required:
+        - nbPages
+        - page
+        - nbItems
+        - itemsPerPage
     AuthenticationCreate:
       type: object
       description: The payload when creating an authentication.
@@ -537,20 +539,6 @@ components:
             $ref: '#/components/schemas/authenticationID'
       required:
         - authenticationIDs
-    AuthenticationWithInput:
-      allOf:
-        - $ref: '#/components/schemas/Authentication'
-        - type: object
-          title: authenticationInput
-          description: >-
-            The authentication input property stores the (encrypted)
-            credentials.
-          additionalProperties: false
-          properties:
-            input:
-              $ref: '#/components/schemas/AuthInput'
-          required:
-            - input
     DeleteResponse:
       type: object
       properties:
@@ -1763,7 +1751,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthenticationWithInput'
+                $ref: '#/components/schemas/Authentication'
         '400':
           $ref: '#/components/responses/BadRequest'
     patch:

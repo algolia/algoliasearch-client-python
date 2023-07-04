@@ -1664,9 +1664,9 @@ Get the authentication of the given authenticationID.
 Request can be constructed by NewApiGetAuthenticationRequest with parameters below.
 
 	@param authenticationID string - The authentication UUID.
-	@return AuthenticationWithInput
+	@return Authentication
 */
-func (c *APIClient) GetAuthentication(r ApiGetAuthenticationRequest, opts ...Option) (*AuthenticationWithInput, error) {
+func (c *APIClient) GetAuthentication(r ApiGetAuthenticationRequest, opts ...Option) (*Authentication, error) {
 	return c.GetAuthenticationWithContext(context.Background(), r, opts...)
 }
 
@@ -1678,12 +1678,12 @@ Get the authentication of the given authenticationID.
 Request can be constructed by NewApiGetAuthenticationRequest with parameters below.
 
 	@param authenticationID string - The authentication UUID.
-	@return AuthenticationWithInput
+	@return Authentication
 */
-func (c *APIClient) GetAuthenticationWithContext(ctx context.Context, r ApiGetAuthenticationRequest, opts ...Option) (*AuthenticationWithInput, error) {
+func (c *APIClient) GetAuthenticationWithContext(ctx context.Context, r ApiGetAuthenticationRequest, opts ...Option) (*Authentication, error) {
 	var (
 		postBody    any
-		returnValue *AuthenticationWithInput
+		returnValue *Authentication
 	)
 
 	requestPath := "/1/authentications/{authenticationID}"
