@@ -41,9 +41,18 @@ php
 </TabItem>
 <TabItem value="java">
 
-java
-
-// TODO
+```java
+List<String> objectIDs = Arrays.asList("1", "2", "3", "4", "5");
+BatchWriteParams batchWriteParams = new BatchWriteParams();
+for (String objectID : objectIDs) {
+    batchWriteParams.addRequests(
+            new BatchRequest()
+                    .setAction(Action.DELETE)
+                    .setBody(Collections.singletonMap("objectID", objectID))
+    );
+}
+client.batch(indexName, batchWriteParams);
+```
 
 </TabItem>
 </TabsLanguage>

@@ -49,7 +49,23 @@ await client.batchDictionaryEntries({
 <TabItem value="java">
 
 ```java
-// TODO
+client.batchDictionaryEntriesAsync(
+        DictionaryType.fromValue("YOUR_DICTIONARY_NAME"),
+        new BatchDictionaryEntriesParams()
+                .setClearExistingDictionaryEntries(false)
+                .setRequests(Arrays.asList(
+                        new BatchDictionaryEntriesRequest()
+                                .setAction(DictionaryAction.ADD_ENTRY)
+                                .setBody(new DictionaryEntry()
+                                        .setObjectID("1")
+                                        .setLanguage("en")
+                                        .setWord("fancy")
+                                        .setWords(Arrays.asList("believe", "algolia"))
+                                        .setDecomposition(Arrays.asList("trust", "algolia"))
+                                        .setState(DictionaryEntryState.ENABLED)
+                                )
+                ))
+);
 ```
 
 </TabItem>
@@ -95,7 +111,23 @@ await client.batchDictionaryEntries({
 <TabItem value="java">
 
 ```java
-// TODO
+client.batchDictionaryEntriesAsync(
+        DictionaryType.fromValue("YOUR_DICTIONARY_NAME"), // DictionaryType.PLURALS, DictionaryType.STOPWORDS or DictionaryType.COMPOUNDS
+        new BatchDictionaryEntriesParams()
+                .setClearExistingDictionaryEntries(true) // Since we replace, we will create a new dictionary from those entries
+                .setRequests(Arrays.asList(
+                        new BatchDictionaryEntriesRequest()
+                                .setAction(DictionaryAction.ADD_ENTRY)
+                                .setBody(new DictionaryEntry()
+                                        .setObjectID("1")
+                                        .setLanguage("en")
+                                        .setWord("fancy")
+                                        .setWords(Arrays.asList("believe", "algolia"))
+                                        .setDecomposition(Arrays.asList("trust", "algolia"))
+                                        .setState(DictionaryEntryState.ENABLED)
+                                )
+                ))
+);
 ```
 
 </TabItem>
@@ -170,7 +202,16 @@ await client.batchDictionaryEntries({
 <TabItem value="java">
 
 ```java
-// TODO
+client.batchDictionaryEntriesAsync(
+        DictionaryType.fromValue("YOUR_DICTIONARY_NAME"), // DictionaryType.PLURALS, DictionaryType.STOPWORDS or DictionaryType.COMPOUNDS
+        new BatchDictionaryEntriesParams()
+                .setClearExistingDictionaryEntries(false) // we don't want to impact other entries.
+                .setRequests(Arrays.asList(
+                        new BatchDictionaryEntriesRequest()
+                                .setAction(DictionaryAction.DELETE_ENTRY)
+                                .setBody(new DictionaryEntry().setObjectID("1")))
+                )
+);
 ```
 
 </TabItem>

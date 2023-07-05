@@ -32,9 +32,14 @@ php
 </TabItem>
 <TabItem value="java">
 
-java
-
-// TODO
+```java
+client.saveRulesAsync(
+  indexName, 
+  rules, 
+  false, // forwardToReplicas (defaults to false)
+  true // clearExistingRules
+);
+```
 
 </TabItem>
 </TabsLanguage>
@@ -67,9 +72,14 @@ php
 </TabItem>
 <TabItem value="java">
 
-java
-
-// TODO
+```java
+client.saveSynonymsAsync(
+  indexName, 
+  synonymHits, 
+  false, // forwardToReplicas (defaults to false)
+  true // replaceExistingSynonyms
+);
+```
 
 </TabItem>
 </TabsLanguage>
