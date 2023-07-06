@@ -17,19 +17,19 @@ final class FacetsStats {
 
   /// The minimum value in the result set.
   @JsonKey(name: r'min')
-  final int? min;
+  final double? min;
 
   /// The maximum value in the result set.
   @JsonKey(name: r'max')
-  final int? max;
+  final double? max;
 
   /// The average facet value in the result set.
   @JsonKey(name: r'avg')
-  final int? avg;
+  final double? avg;
 
   /// The sum of all values in the result set.
   @JsonKey(name: r'sum')
-  final int? sum;
+  final double? sum;
 
   @override
   bool operator ==(Object other) =>

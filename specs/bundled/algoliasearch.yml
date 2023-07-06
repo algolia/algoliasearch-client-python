@@ -1101,16 +1101,20 @@ components:
             title: facetStats
             properties:
               min:
-                type: integer
+                type: number
+                format: double
                 description: The minimum value in the result set.
               max:
-                type: integer
+                type: number
+                format: double
                 description: The maximum value in the result set.
               avg:
-                type: integer
+                type: number
+                format: double
                 description: The average facet value in the result set.
               sum:
-                type: integer
+                type: number
+                format: double
                 description: The sum of all values in the result set.
         hitsPerPage:
           $ref: '#/components/schemas/hitsPerPage'

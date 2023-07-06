@@ -16,14 +16,14 @@ import kotlinx.serialization.json.*
 public data class FacetsStats(
 
   /** The minimum value in the result set. */
-  @SerialName(value = "min") val min: Int? = null,
+  @SerialName(value = "min") val min: Double? = null,
 
   /** The maximum value in the result set. */
-  @SerialName(value = "max") val max: Int? = null,
+  @SerialName(value = "max") val max: Double? = null,
 
   /** The average facet value in the result set. */
-  @SerialName(value = "avg") val avg: Int? = null,
+  @SerialName(value = "avg") val avg: Double? = null,
 
   /** The sum of all values in the result set. */
-  @SerialName(value = "sum") val sum: Int? = null,
+  @SerialName(value = "sum") val sum: Double? = null,
 )

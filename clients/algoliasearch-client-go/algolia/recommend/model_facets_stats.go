@@ -9,36 +9,36 @@ import (
 // FacetsStats struct for FacetsStats
 type FacetsStats struct {
 	// The minimum value in the result set.
-	Min *int32 `json:"min,omitempty"`
+	Min *float64 `json:"min,omitempty"`
 	// The maximum value in the result set.
-	Max *int32 `json:"max,omitempty"`
+	Max *float64 `json:"max,omitempty"`
 	// The average facet value in the result set.
-	Avg *int32 `json:"avg,omitempty"`
+	Avg *float64 `json:"avg,omitempty"`
 	// The sum of all values in the result set.
-	Sum *int32 `json:"sum,omitempty"`
+	Sum *float64 `json:"sum,omitempty"`
 }
 
 type FacetsStatsOption func(f *FacetsStats)
 
-func WithFacetsStatsMin(val int32) FacetsStatsOption {
+func WithFacetsStatsMin(val float64) FacetsStatsOption {
 	return func(f *FacetsStats) {
 		f.Min = &val
 	}
 }
 
-func WithFacetsStatsMax(val int32) FacetsStatsOption {
+func WithFacetsStatsMax(val float64) FacetsStatsOption {
 	return func(f *FacetsStats) {
 		f.Max = &val
 	}
 }
 
-func WithFacetsStatsAvg(val int32) FacetsStatsOption {
+func WithFacetsStatsAvg(val float64) FacetsStatsOption {
 	return func(f *FacetsStats) {
 		f.Avg = &val
 	}
 }
 
-func WithFacetsStatsSum(val int32) FacetsStatsOption {
+func WithFacetsStatsSum(val float64) FacetsStatsOption {
 	return func(f *FacetsStats) {
 		f.Sum = &val
 	}
@@ -65,9 +65,9 @@ func NewFacetsStatsWithDefaults() *FacetsStats {
 }
 
 // GetMin returns the Min field value if set, zero value otherwise.
-func (o *FacetsStats) GetMin() int32 {
+func (o *FacetsStats) GetMin() float64 {
 	if o == nil || o.Min == nil {
-		var ret int32
+		var ret float64
 		return ret
 	}
 	return *o.Min
@@ -75,7 +75,7 @@ func (o *FacetsStats) GetMin() int32 {
 
 // GetMinOk returns a tuple with the Min field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *FacetsStats) GetMinOk() (*int32, bool) {
+func (o *FacetsStats) GetMinOk() (*float64, bool) {
 	if o == nil || o.Min == nil {
 		return nil, false
 	}
@@ -91,15 +91,15 @@ func (o *FacetsStats) HasMin() bool {
 	return false
 }
 
-// SetMin gets a reference to the given int32 and assigns it to the Min field.
-func (o *FacetsStats) SetMin(v int32) {
+// SetMin gets a reference to the given float64 and assigns it to the Min field.
+func (o *FacetsStats) SetMin(v float64) {
 	o.Min = &v
 }
 
 // GetMax returns the Max field value if set, zero value otherwise.
-func (o *FacetsStats) GetMax() int32 {
+func (o *FacetsStats) GetMax() float64 {
 	if o == nil || o.Max == nil {
-		var ret int32
+		var ret float64
 		return ret
 	}
 	return *o.Max
@@ -107,7 +107,7 @@ func (o *FacetsStats) GetMax() int32 {
 
 // GetMaxOk returns a tuple with the Max field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *FacetsStats) GetMaxOk() (*int32, bool) {
+func (o *FacetsStats) GetMaxOk() (*float64, bool) {
 	if o == nil || o.Max == nil {
 		return nil, false
 	}
@@ -123,15 +123,15 @@ func (o *FacetsStats) HasMax() bool {
 	return false
 }
 
-// SetMax gets a reference to the given int32 and assigns it to the Max field.
-func (o *FacetsStats) SetMax(v int32) {
+// SetMax gets a reference to the given float64 and assigns it to the Max field.
+func (o *FacetsStats) SetMax(v float64) {
 	o.Max = &v
 }
 
 // GetAvg returns the Avg field value if set, zero value otherwise.
-func (o *FacetsStats) GetAvg() int32 {
+func (o *FacetsStats) GetAvg() float64 {
 	if o == nil || o.Avg == nil {
-		var ret int32
+		var ret float64
 		return ret
 	}
 	return *o.Avg
@@ -139,7 +139,7 @@ func (o *FacetsStats) GetAvg() int32 {
 
 // GetAvgOk returns a tuple with the Avg field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *FacetsStats) GetAvgOk() (*int32, bool) {
+func (o *FacetsStats) GetAvgOk() (*float64, bool) {
 	if o == nil || o.Avg == nil {
 		return nil, false
 	}
@@ -155,15 +155,15 @@ func (o *FacetsStats) HasAvg() bool {
 	return false
 }
 
-// SetAvg gets a reference to the given int32 and assigns it to the Avg field.
-func (o *FacetsStats) SetAvg(v int32) {
+// SetAvg gets a reference to the given float64 and assigns it to the Avg field.
+func (o *FacetsStats) SetAvg(v float64) {
 	o.Avg = &v
 }
 
 // GetSum returns the Sum field value if set, zero value otherwise.
-func (o *FacetsStats) GetSum() int32 {
+func (o *FacetsStats) GetSum() float64 {
 	if o == nil || o.Sum == nil {
-		var ret int32
+		var ret float64
 		return ret
 	}
 	return *o.Sum
@@ -171,7 +171,7 @@ func (o *FacetsStats) GetSum() int32 {
 
 // GetSumOk returns a tuple with the Sum field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *FacetsStats) GetSumOk() (*int32, bool) {
+func (o *FacetsStats) GetSumOk() (*float64, bool) {
 	if o == nil || o.Sum == nil {
 		return nil, false
 	}
@@ -187,8 +187,8 @@ func (o *FacetsStats) HasSum() bool {
 	return false
 }
 
-// SetSum gets a reference to the given int32 and assigns it to the Sum field.
-func (o *FacetsStats) SetSum(v int32) {
+// SetSum gets a reference to the given float64 and assigns it to the Sum field.
+func (o *FacetsStats) SetSum(v float64) {
 	o.Sum = &v
 }
 

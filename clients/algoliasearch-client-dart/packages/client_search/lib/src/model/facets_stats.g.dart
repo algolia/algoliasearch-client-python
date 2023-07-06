@@ -11,10 +11,10 @@ FacetsStats _$FacetsStatsFromJson(Map<String, dynamic> json) => $checkedCreate(
       json,
       ($checkedConvert) {
         final val = FacetsStats(
-          min: $checkedConvert('min', (v) => v as int?),
-          max: $checkedConvert('max', (v) => v as int?),
-          avg: $checkedConvert('avg', (v) => v as int?),
-          sum: $checkedConvert('sum', (v) => v as int?),
+          min: $checkedConvert('min', (v) => (v as num?)?.toDouble()),
+          max: $checkedConvert('max', (v) => (v as num?)?.toDouble()),
+          avg: $checkedConvert('avg', (v) => (v as num?)?.toDouble()),
+          sum: $checkedConvert('sum', (v) => (v as num?)?.toDouble()),
         );
         return val;
       },

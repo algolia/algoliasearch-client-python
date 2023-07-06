@@ -10,18 +10,18 @@ import java.util.Objects;
 public class FacetsStats {
 
   @JsonProperty("min")
-  private Integer min;
+  private Double min;
 
   @JsonProperty("max")
-  private Integer max;
+  private Double max;
 
   @JsonProperty("avg")
-  private Integer avg;
+  private Double avg;
 
   @JsonProperty("sum")
-  private Integer sum;
+  private Double sum;
 
-  public FacetsStats setMin(Integer min) {
+  public FacetsStats setMin(Double min) {
     this.min = min;
     return this;
   }
@@ -32,11 +32,11 @@ public class FacetsStats {
    * @return min
    */
   @javax.annotation.Nullable
-  public Integer getMin() {
+  public Double getMin() {
     return min;
   }
 
-  public FacetsStats setMax(Integer max) {
+  public FacetsStats setMax(Double max) {
     this.max = max;
     return this;
   }
@@ -47,11 +47,11 @@ public class FacetsStats {
    * @return max
    */
   @javax.annotation.Nullable
-  public Integer getMax() {
+  public Double getMax() {
     return max;
   }
 
-  public FacetsStats setAvg(Integer avg) {
+  public FacetsStats setAvg(Double avg) {
     this.avg = avg;
     return this;
   }
@@ -62,11 +62,11 @@ public class FacetsStats {
    * @return avg
    */
   @javax.annotation.Nullable
-  public Integer getAvg() {
+  public Double getAvg() {
     return avg;
   }
 
-  public FacetsStats setSum(Integer sum) {
+  public FacetsStats setSum(Double sum) {
     this.sum = sum;
     return this;
   }
@@ -77,7 +77,7 @@ public class FacetsStats {
    * @return sum
    */
   @javax.annotation.Nullable
-  public Integer getSum() {
+  public Double getSum() {
     return sum;
   }
 
