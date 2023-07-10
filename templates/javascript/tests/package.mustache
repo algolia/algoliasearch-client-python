@@ -2,14 +2,14 @@
   "name": "javascript-tests",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     {{#packageDependencies}}
-    "{{{npmNamespace}}}/{{{packageName}}}": "{{packageVersion}}",
+    "{{{packageName}}}": "{{{packagePath}}}",
     {{/packageDependencies}}
-    "{{{npmNamespace}}}/client-common": "{{utilsPackageVersion}}",
-    "{{{npmNamespace}}}/requester-node-http": "{{utilsPackageVersion}}"
+    "{{{npmNamespace}}}/client-common": "link:../../../clients/algoliasearch-client-javascript/packages/client-common",
+    "{{{npmNamespace}}}/requester-node-http": "link:../../../clients/algoliasearch-client-javascript/packages/requester-node-http"
   },
   "devDependencies": {
     "@types/jest": "29.5.2",

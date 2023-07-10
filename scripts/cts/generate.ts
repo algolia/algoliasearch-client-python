@@ -37,6 +37,11 @@ export async function ctsGenerateMany(generators: Generator[]): Promise<void> {
     if (!getTestOutputFolder(lang)) {
       continue;
     }
+
+    if (lang === 'javascript') {
+      await run('yarn install', { cwd: 'tests/output/javascript' });
+    }
+
     await formatter(lang, toAbsolutePath(`tests/output/${lang}`));
   }
 }
