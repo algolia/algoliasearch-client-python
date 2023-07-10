@@ -21,6 +21,9 @@ func createPredictClient() (*predict.APIClient, *echoRequester) {
 	}
 	client := predict.NewClientWithConfig(cfg)
 
+	// so that the linter doesn't complain
+	_ = jsonassert.New(nil)
+
 	return client, echo
 }
 

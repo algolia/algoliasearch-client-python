@@ -21,6 +21,9 @@ func createInsightsClient() (*insights.APIClient, *echoRequester) {
 	}
 	client := insights.NewClientWithConfig(cfg)
 
+	// so that the linter doesn't complain
+	_ = jsonassert.New(nil)
+
 	return client, echo
 }
 

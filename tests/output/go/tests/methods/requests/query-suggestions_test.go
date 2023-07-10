@@ -21,6 +21,9 @@ func createSuggestionsClient() (*suggestions.APIClient, *echoRequester) {
 	}
 	client := suggestions.NewClientWithConfig(cfg)
 
+	// so that the linter doesn't complain
+	_ = jsonassert.New(nil)
+
 	return client, echo
 }
 

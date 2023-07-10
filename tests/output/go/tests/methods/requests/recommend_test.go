@@ -20,6 +20,9 @@ func createRecommendClient() (*recommend.APIClient, *echoRequester) {
 	}
 	client := recommend.NewClientWithConfig(cfg)
 
+	// so that the linter doesn't complain
+	_ = jsonassert.New(nil)
+
 	return client, echo
 }
 

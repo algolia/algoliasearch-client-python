@@ -21,6 +21,9 @@ func createPersonalizationClient() (*personalization.APIClient, *echoRequester) 
 	}
 	client := personalization.NewClientWithConfig(cfg)
 
+	// so that the linter doesn't complain
+	_ = jsonassert.New(nil)
+
 	return client, echo
 }
 
