@@ -21,6 +21,9 @@ func create{{#lambda.titlecase}}{{clientPrefix}}{{/lambda.titlecase}}Client() (*
   }
   client := {{clientPrefix}}.NewClientWithConfig(cfg)
 
+  // so that the linter doesn't complain
+  _ = jsonassert.New(nil)
+
   return client, echo
 }
 

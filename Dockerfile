@@ -31,11 +31,6 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Go
-COPY --from=go-builder /usr/local/go/ /usr/local/go/
-ENV PATH /usr/local/go/bin:$PATH
-
-
 # Javascript (node)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 RUN nvm install ${NODE_VERSION}
@@ -48,6 +43,10 @@ RUN sdk install java ${JAVA_VERSION}-zulu
 
 # Java formatter
 ADD https://github.com/google/google-java-format/releases/download/v1.17.0/google-java-format-1.17.0-all-deps.jar /tmp/java-formatter.jar
+
+# Go
+COPY --from=go-builder /usr/local/go/ /usr/local/go/
+RUN echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile && source ~/.profile
 
 # Dart
 COPY --from=dart-builder /usr/lib/dart/ /usr/lib/dart/

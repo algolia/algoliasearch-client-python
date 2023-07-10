@@ -1,4 +1,4 @@
-import { DOCKER, run, runComposerUpdate } from './common';
+import { run, runComposerUpdate } from './common';
 import { createSpinner } from './spinners';
 
 export async function formatter(
@@ -27,9 +27,6 @@ export async function formatter(
       break;
     case 'go':
       cmd = `cd ${folder} && go fmt ./...`;
-      if (DOCKER) {
-        cmd = `cd ${folder} && /usr/local/go/bin/go fmt ./...`;
-      }
       break;
     case 'kotlin':
       cmd = `${folder}/gradlew -p ${folder} spotlessApply`;
