@@ -29,18 +29,19 @@ class PersonalizationTest extends TestCase implements HttpClientInterface
      */
     private function createClient($appId, $apiKey, $region = 'us')
     {
-        $config = PersonalizationConfig::create($appId, $apiKey, $region);
+        $config = PersonalizationConfig::create(
+            $appId,
+            $apiKey,
+            $region
+        );
         $clusterHosts = PersonalizationClient::getClusterHosts($config);
         $api = new ApiWrapper($this, $config, $clusterHosts);
 
         return new PersonalizationClient($api, $config);
     }
 
-    public function sendRequest(
-        RequestInterface $request,
-        $timeout,
-        $connectTimeout
-    ) {
+    public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
+    {
         $this->recordedRequest = [
             'request' => $request,
             'responseTimeout' => $timeout * 1000,
@@ -51,12 +52,14 @@ class PersonalizationTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : calls api with correct user agent
-     */
+    * Test case : calls api with correct user agent
+    */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->post('/test');
+        $client->post(
+            "/test",
+        );
 
         $this->assertTrue(
             (bool) preg_match(
@@ -67,73 +70,94 @@ class PersonalizationTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : calls api with default read timeouts
-     */
+    * Test case : calls api with default read timeouts
+    */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->get('/test');
+        $client->get(
+            "/test",
+        );
 
-        $this->assertEquals(2000, $this->recordedRequest['connectTimeout']);
+        $this->assertEquals(
+            2000,
+            $this->recordedRequest['connectTimeout']
+        );
 
-        $this->assertEquals(5000, $this->recordedRequest['responseTimeout']);
+        $this->assertEquals(
+            5000,
+            $this->recordedRequest['responseTimeout']
+        );
     }
 
     /**
-     * Test case : calls api with default write timeouts
-     */
+    * Test case : calls api with default write timeouts
+    */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->post('/test');
+        $client->post(
+            "/test",
+        );
 
-        $this->assertEquals(2000, $this->recordedRequest['connectTimeout']);
+        $this->assertEquals(
+            2000,
+            $this->recordedRequest['connectTimeout']
+        );
 
-        $this->assertEquals(30000, $this->recordedRequest['responseTimeout']);
+        $this->assertEquals(
+            30000,
+            $this->recordedRequest['responseTimeout']
+        );
     }
 
     /**
-     * Test case : throws when region is not given
-     */
+    * Test case : throws when region is not given
+    */
     public function test0parameters()
     {
         try {
-            $client = $this->createClient('my-app-id', 'my-api-key', '');
-        } catch (\Exception $e) {
-            $this->assertEquals(
-                $e->getMessage(),
-                '`region` is required and must be one of the following: eu, us'
+            $client = $this->createClient(
+                "my-app-id",
+                "my-api-key",
+                ""
             );
+
+        } catch (\Exception $e) {
+            $this->assertEquals($e->getMessage(), '`region` is required and must be one of the following: eu, us');
         }
     }
 
     /**
-     * Test case : throws when incorrect region is given
-     */
+    * Test case : throws when incorrect region is given
+    */
     public function test1parameters()
     {
         try {
             $client = $this->createClient(
-                'my-app-id',
-                'my-api-key',
-                'not_a_region'
+                "my-app-id",
+                "my-api-key",
+                "not_a_region"
             );
+
         } catch (\Exception $e) {
-            $this->assertEquals(
-                $e->getMessage(),
-                '`region` is required and must be one of the following: eu, us'
-            );
+            $this->assertEquals($e->getMessage(), '`region` is required and must be one of the following: eu, us');
         }
     }
 
     /**
-     * Test case : does not throw when region is given
-     */
+    * Test case : does not throw when region is given
+    */
     public function test2parameters()
     {
-        $client = $this->createClient('my-app-id', 'my-api-key', 'us');
+        $client = $this->createClient(
+            "my-app-id",
+            "my-api-key",
+            "us"
+        );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
     }
+
 }

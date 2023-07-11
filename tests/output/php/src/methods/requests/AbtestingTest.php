@@ -33,15 +33,9 @@ class AbtestingTest extends TestCase implements HttpClientInterface
         foreach ($requests as $i => $request) {
             $recordedRequest = $this->recordedRequests[$i];
 
-            $this->assertEquals(
-                $request['method'],
-                $recordedRequest->getMethod()
-            );
+            $this->assertEquals($request['method'], $recordedRequest->getMethod());
 
-            $this->assertEquals(
-                $request['path'],
-                $recordedRequest->getUri()->getPath()
-            );
+            $this->assertEquals($request['path'], $recordedRequest->getUri()->getPath());
 
             if (isset($request['body'])) {
                 $this->assertEquals(
@@ -72,11 +66,8 @@ class AbtestingTest extends TestCase implements HttpClientInterface
         }
     }
 
-    public function sendRequest(
-        RequestInterface $request,
-        $timeout,
-        $connectTimeout
-    ) {
+    public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
+    {
         $this->recordedRequests[] = $request;
 
         return new Response(200, [], '{}');
@@ -84,173 +75,183 @@ class AbtestingTest extends TestCase implements HttpClientInterface
 
     protected function getClient()
     {
-        $api = new ApiWrapper(
-            $this,
-            AbtestingConfig::create(
-                getenv('ALGOLIA_APP_ID'),
-                getenv('ALGOLIA_API_KEY')
-            ),
-            ClusterHosts::create('127.0.0.1')
-        );
+        $api = new ApiWrapper($this, AbtestingConfig::create(getenv('ALGOLIA_APP_ID'), getenv('ALGOLIA_API_KEY')), ClusterHosts::create('127.0.0.1'));
         $config = AbtestingConfig::create('foo', 'bar');
 
         return new AbtestingClient($api, $config);
     }
 
+
     /**
-     * Test case for AddABTests
-     * addABTests with minimal parameters
-     */
+    * Test case for AddABTests
+    * addABTests with minimal parameters
+    */
     public function testAddABTests0()
     {
         $client = $this->getClient();
-        $client->addABTests([
-            'endAt' => '2022-12-31T00:00:00.000Z',
-            'name' => 'myABTest',
-            'variant' => [
-                ['index' => 'AB_TEST_1', 'trafficPercentage' => 30],
+        $client->addABTests(
+            ["endAt" =>
+  "2022-12-31T00:00:00.000Z",
+"name" =>
+  "myABTest",
+"variant" =>
+  [
+  ["index" =>
+  "AB_TEST_1",
+"trafficPercentage" =>
+  30,
+],
 
-                ['index' => 'AB_TEST_2', 'trafficPercentage' => 50],
-            ],
-        ]);
+  ["index" =>
+  "AB_TEST_2",
+"trafficPercentage" =>
+  50,
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/2/abtests',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"endAt\":\"2022-12-31T00:00:00.000Z\",\"name\":\"myABTest\",\"variant\":[{\"index\":\"AB_TEST_1\",\"trafficPercentage\":30},{\"index\":\"AB_TEST_2\",\"trafficPercentage\":50}]}"
-                ),
+                "path" => "/2/abtests",
+                "method" => "POST",
+                "body" => json_decode("{\"endAt\":\"2022-12-31T00:00:00.000Z\",\"name\":\"myABTest\",\"variant\":[{\"index\":\"AB_TEST_1\",\"trafficPercentage\":30},{\"index\":\"AB_TEST_2\",\"trafficPercentage\":50}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Del
-     * allow del method for a custom path with minimal parameters
-     */
+    * Test case for Del
+    * allow del method for a custom path with minimal parameters
+    */
     public function testDel0()
     {
         $client = $this->getClient();
-        $client->del('/test/minimal');
+        $client->del(
+            "/test/minimal",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/minimal',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/test/minimal",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for Del
-     * allow del method for a custom path with all parameters
-     */
+    * Test case for Del
+    * allow del method for a custom path with all parameters
+    */
     public function testDel1()
     {
         $client = $this->getClient();
         $client->del(
-            '/test/all',
-            ['query' => 'parameters']
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'DELETE',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/all",
+                "method" => "DELETE",
+                "body" => null,
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteABTest
-     * deleteABTest
-     */
+    * Test case for DeleteABTest
+    * deleteABTest
+    */
     public function testDeleteABTest0()
     {
         $client = $this->getClient();
-        $client->deleteABTest(42);
+        $client->deleteABTest(
+            42,
+        );
 
         $this->assertRequests([
             [
-                'path' => '/2/abtests/42',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/2/abtests/42",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for Get
-     * allow get method for a custom path with minimal parameters
-     */
+    * Test case for Get
+    * allow get method for a custom path with minimal parameters
+    */
     public function testGet0()
     {
         $client = $this->getClient();
-        $client->get('/test/minimal');
+        $client->get(
+            "/test/minimal",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/minimal',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/test/minimal",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for Get
-     * allow get method for a custom path with all parameters
-     */
+    * Test case for Get
+    * allow get method for a custom path with all parameters
+    */
     public function testGet1()
     {
         $client = $this->getClient();
         $client->get(
-            '/test/all',
-            ['query' => 'parameters']
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/all",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for GetABTest
-     * getABTest
-     */
+    * Test case for GetABTest
+    * getABTest
+    */
     public function testGetABTest0()
     {
         $client = $this->getClient();
-        $client->getABTest(42);
+        $client->getABTest(
+            42,
+        );
 
         $this->assertRequests([
             [
-                'path' => '/2/abtests/42',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/2/abtests/42",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for ListABTests
-     * listABTests with minimal parameters
-     */
+    * Test case for ListABTests
+    * listABTests with minimal parameters
+    */
     public function testListABTests0()
     {
         $client = $this->getClient();
@@ -258,447 +259,478 @@ class AbtestingTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/2/abtests',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/2/abtests",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for ListABTests
-     * listABTests with parameters
-     */
+    * Test case for ListABTests
+    * listABTests with parameters
+    */
     public function testListABTests1()
     {
         $client = $this->getClient();
         $client->listABTests(
             42,
             21,
-            'foo',
-            'bar'
+            "foo",
+            "bar",
         );
 
         $this->assertRequests([
             [
-                'path' => '/2/abtests',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"offset\":\"42\",\"limit\":\"21\",\"indexPrefix\":\"foo\",\"indexSuffix\":\"bar\"}",
-                    true
-                ),
+                "path" => "/2/abtests",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"offset\":\"42\",\"limit\":\"21\",\"indexPrefix\":\"foo\",\"indexSuffix\":\"bar\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * allow post method for a custom path with minimal parameters
-     */
+    * Test case for Post
+    * allow post method for a custom path with minimal parameters
+    */
     public function testPost0()
     {
         $client = $this->getClient();
-        $client->post('/test/minimal');
+        $client->post(
+            "/test/minimal",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/minimal',
-                'method' => 'POST',
-                'body' => json_decode('{}'),
+                "path" => "/1/test/minimal",
+                "method" => "POST",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * allow post method for a custom path with all parameters
-     */
+    * Test case for Post
+    * allow post method for a custom path with all parameters
+    */
     public function testPost1()
     {
         $client = $this->getClient();
         $client->post(
-            '/test/all',
-            ['query' => 'parameters'],
-            ['body' => 'parameters']
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
+            ["body" =>
+  "parameters",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'POST',
-                'body' => json_decode("{\"body\":\"parameters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/all",
+                "method" => "POST",
+                "body" => json_decode("{\"body\":\"parameters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions can override default query parameters
-     */
+    * Test case for Post
+    * requestOptions can override default query parameters
+    */
     public function testPost2()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'query' => 'myQueryParameter',
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'query' =>   "myQueryParameter"
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"myQueryParameter\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"myQueryParameter\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions merges query parameters with default ones
-     */
+    * Test case for Post
+    * requestOptions merges query parameters with default ones
+    */
     public function testPost3()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'query2' => 'myQueryParameter',
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'query2' =>   "myQueryParameter"
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"query2\":\"myQueryParameter\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"query2\":\"myQueryParameter\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions can override default headers
-     */
+    * Test case for Post
+    * requestOptions can override default headers
+    */
     public function testPost4()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [],
-            'headers' => [
-                'x-algolia-api-key' => 'myApiKey',
-            ],
+          'queryParameters' => [
+          ],
+          'headers' => [
+              'x-algolia-api-key' => 'myApiKey',
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
-                'headers' => json_decode(
-                    "{\"x-algolia-api-key\":\"myApiKey\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
+                "headers" => json_decode("{\"x-algolia-api-key\":\"myApiKey\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions merges headers with default ones
-     */
+    * Test case for Post
+    * requestOptions merges headers with default ones
+    */
     public function testPost5()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [],
-            'headers' => [
-                'x-algolia-api-key' => 'myApiKey',
-            ],
+          'queryParameters' => [
+          ],
+          'headers' => [
+              'x-algolia-api-key' => 'myApiKey',
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
-                'headers' => json_decode(
-                    "{\"x-algolia-api-key\":\"myApiKey\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
+                "headers" => json_decode("{\"x-algolia-api-key\":\"myApiKey\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts booleans
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts booleans
+    */
     public function testPost6()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'isItWorking' => true,
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'isItWorking' =>   true
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"isItWorking\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"isItWorking\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts integers
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts integers
+    */
     public function testPost7()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => 2,
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   2
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"2\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"2\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts list of string
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts list of string
+    */
     public function testPost8()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => ['c', 'd'],
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   [  "c"
+,  "d"
+]
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"c,d\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"c,d\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts list of booleans
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts list of booleans
+    */
     public function testPost9()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => [true, true, false],
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   [  true
+,  true
+,  false
+]
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"true,true,false\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"true,true,false\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts list of integers
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts list of integers
+    */
     public function testPost10()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => [1, 2],
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   [  1
+,  2
+]
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"1,2\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"1,2\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Put
-     * allow put method for a custom path with minimal parameters
-     */
+    * Test case for Put
+    * allow put method for a custom path with minimal parameters
+    */
     public function testPut0()
     {
         $client = $this->getClient();
-        $client->put('/test/minimal');
-
-        $this->assertRequests([
-            [
-                'path' => '/1/test/minimal',
-                'method' => 'PUT',
-                'body' => json_decode('{}'),
-            ],
-        ]);
-    }
-
-    /**
-     * Test case for Put
-     * allow put method for a custom path with all parameters
-     */
-    public function testPut1()
-    {
-        $client = $this->getClient();
         $client->put(
-            '/test/all',
-            ['query' => 'parameters'],
-            ['body' => 'parameters']
+            "/test/minimal",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'PUT',
-                'body' => json_decode("{\"body\":\"parameters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/minimal",
+                "method" => "PUT",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for StopABTest
-     * stopABTest
-     */
-    public function testStopABTest0()
+    * Test case for Put
+    * allow put method for a custom path with all parameters
+    */
+    public function testPut1()
     {
         $client = $this->getClient();
-        $client->stopABTest(42);
+        $client->put(
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
+            ["body" =>
+  "parameters",
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/2/abtests/42/stop',
-                'method' => 'POST',
-                'body' => json_decode(''),
+                "path" => "/1/test/all",
+                "method" => "PUT",
+                "body" => json_decode("{\"body\":\"parameters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
+            ],
+        ]);
+    }
+
+    /**
+    * Test case for StopABTest
+    * stopABTest
+    */
+    public function testStopABTest0()
+    {
+        $client = $this->getClient();
+        $client->stopABTest(
+            42,
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/2/abtests/42/stop",
+                "method" => "POST",
+                "body" => json_decode(""),
             ],
         ]);
     }

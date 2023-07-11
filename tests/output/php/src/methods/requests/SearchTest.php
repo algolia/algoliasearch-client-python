@@ -33,15 +33,9 @@ class SearchTest extends TestCase implements HttpClientInterface
         foreach ($requests as $i => $request) {
             $recordedRequest = $this->recordedRequests[$i];
 
-            $this->assertEquals(
-                $request['method'],
-                $recordedRequest->getMethod()
-            );
+            $this->assertEquals($request['method'], $recordedRequest->getMethod());
 
-            $this->assertEquals(
-                $request['path'],
-                $recordedRequest->getUri()->getPath()
-            );
+            $this->assertEquals($request['path'], $recordedRequest->getUri()->getPath());
 
             if (isset($request['body'])) {
                 $this->assertEquals(
@@ -72,11 +66,8 @@ class SearchTest extends TestCase implements HttpClientInterface
         }
     }
 
-    public function sendRequest(
-        RequestInterface $request,
-        $timeout,
-        $connectTimeout
-    ) {
+    public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
+    {
         $this->recordedRequests[] = $request;
 
         return new Response(200, [], '{}');
@@ -84,818 +75,909 @@ class SearchTest extends TestCase implements HttpClientInterface
 
     protected function getClient()
     {
-        $api = new ApiWrapper(
-            $this,
-            SearchConfig::create(
-                getenv('ALGOLIA_APP_ID'),
-                getenv('ALGOLIA_API_KEY')
-            ),
-            ClusterHosts::create('127.0.0.1')
-        );
+        $api = new ApiWrapper($this, SearchConfig::create(getenv('ALGOLIA_APP_ID'), getenv('ALGOLIA_API_KEY')), ClusterHosts::create('127.0.0.1'));
         $config = SearchConfig::create('foo', 'bar');
 
         return new SearchClient($api, $config);
     }
 
+
     /**
-     * Test case for AddApiKey
-     * addApiKey
-     */
+    * Test case for AddApiKey
+    * addApiKey
+    */
     public function testAddApiKey0()
     {
         $client = $this->getClient();
-        $client->addApiKey([
-            'acl' => ['search', 'addObject'],
-            'description' => 'my new api key',
-            'validity' => 300,
-            'maxQueriesPerIPPerHour' => 100,
-            'maxHitsPerQuery' => 20,
-        ]);
+        $client->addApiKey(
+            ["acl" =>
+  [
+  "search",
+
+  "addObject",
+],
+"description" =>
+  "my new api key",
+"validity" =>
+  300,
+"maxQueriesPerIPPerHour" =>
+  100,
+"maxHitsPerQuery" =>
+  20,
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/keys',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"acl\":[\"search\",\"addObject\"],\"description\":\"my new api key\",\"validity\":300,\"maxQueriesPerIPPerHour\":100,\"maxHitsPerQuery\":20}"
-                ),
+                "path" => "/1/keys",
+                "method" => "POST",
+                "body" => json_decode("{\"acl\":[\"search\",\"addObject\"],\"description\":\"my new api key\",\"validity\":300,\"maxQueriesPerIPPerHour\":100,\"maxHitsPerQuery\":20}"),
             ],
         ]);
     }
 
     /**
-     * Test case for AddOrUpdateObject
-     * addOrUpdateObject
-     */
+    * Test case for AddOrUpdateObject
+    * addOrUpdateObject
+    */
     public function testAddOrUpdateObject0()
     {
         $client = $this->getClient();
         $client->addOrUpdateObject(
-            'indexName',
-            'uniqueID',
-            ['key' => 'value']
+            "indexName",
+            "uniqueID",
+            ["key" =>
+  "value",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/uniqueID',
-                'method' => 'PUT',
-                'body' => json_decode("{\"key\":\"value\"}"),
+                "path" => "/1/indexes/indexName/uniqueID",
+                "method" => "PUT",
+                "body" => json_decode("{\"key\":\"value\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for AppendSource
-     * appendSource
-     */
+    * Test case for AppendSource
+    * appendSource
+    */
     public function testAppendSource0()
     {
         $client = $this->getClient();
-        $client->appendSource([
-            'source' => 'theSource',
-            'description' => 'theDescription',
-        ]);
+        $client->appendSource(
+            ["source" =>
+  "theSource",
+"description" =>
+  "theDescription",
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/security/sources/append',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"source\":\"theSource\",\"description\":\"theDescription\"}"
-                ),
+                "path" => "/1/security/sources/append",
+                "method" => "POST",
+                "body" => json_decode("{\"source\":\"theSource\",\"description\":\"theDescription\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for AssignUserId
-     * assignUserId
-     */
+    * Test case for AssignUserId
+    * assignUserId
+    */
     public function testAssignUserId0()
     {
         $client = $this->getClient();
         $client->assignUserId(
-            'userID',
-            ['cluster' => 'theCluster']
+            "userID",
+            ["cluster" =>
+  "theCluster",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping',
-                'method' => 'POST',
-                'body' => json_decode("{\"cluster\":\"theCluster\"}"),
-                'headers' => json_decode(
-                    "{\"x-algolia-user-id\":\"userID\"}",
-                    true
-                ),
+                "path" => "/1/clusters/mapping",
+                "method" => "POST",
+                "body" => json_decode("{\"cluster\":\"theCluster\"}"),
+                "headers" => json_decode("{\"x-algolia-user-id\":\"userID\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Batch
-     * allows batch method with `addObject` action
-     */
+    * Test case for Batch
+    * allows batch method with `addObject` action
+    */
     public function testBatch0()
     {
         $client = $this->getClient();
         $client->batch(
-            'theIndexName',
-            [
-                'requests' => [
-                    ['action' => 'addObject', 'body' => ['key' => 'value']],
-                ],
-            ]
+            "theIndexName",
+            ["requests" =>
+  [
+  ["action" =>
+  "addObject",
+"body" =>
+  ["key" =>
+  "value",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"addObject\",\"body\":{\"key\":\"value\"}}]}"
-                ),
+                "path" => "/1/indexes/theIndexName/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"addObject\",\"body\":{\"key\":\"value\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Batch
-     * allows batch method with `clear` action
-     */
+    * Test case for Batch
+    * allows batch method with `clear` action
+    */
     public function testBatch1()
     {
         $client = $this->getClient();
         $client->batch(
-            'theIndexName',
-            [
-                'requests' => [
-                    ['action' => 'clear', 'body' => ['key' => 'value']],
-                ],
-            ]
+            "theIndexName",
+            ["requests" =>
+  [
+  ["action" =>
+  "clear",
+"body" =>
+  ["key" =>
+  "value",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"clear\",\"body\":{\"key\":\"value\"}}]}"
-                ),
+                "path" => "/1/indexes/theIndexName/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"clear\",\"body\":{\"key\":\"value\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Batch
-     * allows batch method with `delete` action
-     */
+    * Test case for Batch
+    * allows batch method with `delete` action
+    */
     public function testBatch2()
     {
         $client = $this->getClient();
         $client->batch(
-            'theIndexName',
-            [
-                'requests' => [
-                    ['action' => 'delete', 'body' => ['key' => 'value']],
-                ],
-            ]
+            "theIndexName",
+            ["requests" =>
+  [
+  ["action" =>
+  "delete",
+"body" =>
+  ["key" =>
+  "value",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"delete\",\"body\":{\"key\":\"value\"}}]}"
-                ),
+                "path" => "/1/indexes/theIndexName/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"delete\",\"body\":{\"key\":\"value\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Batch
-     * allows batch method with `deleteObject` action
-     */
+    * Test case for Batch
+    * allows batch method with `deleteObject` action
+    */
     public function testBatch3()
     {
         $client = $this->getClient();
         $client->batch(
-            'theIndexName',
-            [
-                'requests' => [
-                    ['action' => 'deleteObject', 'body' => ['key' => 'value']],
-                ],
-            ]
+            "theIndexName",
+            ["requests" =>
+  [
+  ["action" =>
+  "deleteObject",
+"body" =>
+  ["key" =>
+  "value",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"deleteObject\",\"body\":{\"key\":\"value\"}}]}"
-                ),
+                "path" => "/1/indexes/theIndexName/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"deleteObject\",\"body\":{\"key\":\"value\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Batch
-     * allows batch method with `partialUpdateObject` action
-     */
+    * Test case for Batch
+    * allows batch method with `partialUpdateObject` action
+    */
     public function testBatch4()
     {
         $client = $this->getClient();
         $client->batch(
-            'theIndexName',
-            [
-                'requests' => [
-                    [
-                        'action' => 'partialUpdateObject',
-                        'body' => ['key' => 'value'],
-                    ],
-                ],
-            ]
+            "theIndexName",
+            ["requests" =>
+  [
+  ["action" =>
+  "partialUpdateObject",
+"body" =>
+  ["key" =>
+  "value",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"partialUpdateObject\",\"body\":{\"key\":\"value\"}}]}"
-                ),
+                "path" => "/1/indexes/theIndexName/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"partialUpdateObject\",\"body\":{\"key\":\"value\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Batch
-     * allows batch method with `partialUpdateObjectNoCreate` action
-     */
+    * Test case for Batch
+    * allows batch method with `partialUpdateObjectNoCreate` action
+    */
     public function testBatch5()
     {
         $client = $this->getClient();
         $client->batch(
-            'theIndexName',
-            [
-                'requests' => [
-                    [
-                        'action' => 'partialUpdateObjectNoCreate',
-                        'body' => ['key' => 'value'],
-                    ],
-                ],
-            ]
+            "theIndexName",
+            ["requests" =>
+  [
+  ["action" =>
+  "partialUpdateObjectNoCreate",
+"body" =>
+  ["key" =>
+  "value",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"partialUpdateObjectNoCreate\",\"body\":{\"key\":\"value\"}}]}"
-                ),
+                "path" => "/1/indexes/theIndexName/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"partialUpdateObjectNoCreate\",\"body\":{\"key\":\"value\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Batch
-     * allows batch method with `updateObject` action
-     */
+    * Test case for Batch
+    * allows batch method with `updateObject` action
+    */
     public function testBatch6()
     {
         $client = $this->getClient();
         $client->batch(
-            'theIndexName',
-            [
-                'requests' => [
-                    ['action' => 'updateObject', 'body' => ['key' => 'value']],
-                ],
-            ]
+            "theIndexName",
+            ["requests" =>
+  [
+  ["action" =>
+  "updateObject",
+"body" =>
+  ["key" =>
+  "value",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"updateObject\",\"body\":{\"key\":\"value\"}}]}"
-                ),
+                "path" => "/1/indexes/theIndexName/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"updateObject\",\"body\":{\"key\":\"value\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for BatchAssignUserIds
-     * batchAssignUserIds
-     */
+    * Test case for BatchAssignUserIds
+    * batchAssignUserIds
+    */
     public function testBatchAssignUserIds0()
     {
         $client = $this->getClient();
         $client->batchAssignUserIds(
-            'userID',
-            ['cluster' => 'theCluster', 'users' => ['user1', 'user2']]
+            "userID",
+            ["cluster" =>
+  "theCluster",
+"users" =>
+  [
+  "user1",
+
+  "user2",
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"cluster\":\"theCluster\",\"users\":[\"user1\",\"user2\"]}"
-                ),
-                'headers' => json_decode(
-                    "{\"x-algolia-user-id\":\"userID\"}",
-                    true
-                ),
+                "path" => "/1/clusters/mapping/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"cluster\":\"theCluster\",\"users\":[\"user1\",\"user2\"]}"),
+                "headers" => json_decode("{\"x-algolia-user-id\":\"userID\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for BatchDictionaryEntries
-     * get batchDictionaryEntries results with minimal parameters
-     */
+    * Test case for BatchDictionaryEntries
+    * get batchDictionaryEntries results with minimal parameters
+    */
     public function testBatchDictionaryEntries0()
     {
         $client = $this->getClient();
         $client->batchDictionaryEntries(
-            'compounds',
-            [
-                'requests' => [
-                    [
-                        'action' => 'addEntry',
-                        'body' => ['objectID' => '1', 'language' => 'en'],
-                    ],
+            "compounds",
+            ["requests" =>
+  [
+  ["action" =>
+  "addEntry",
+"body" =>
+  ["objectID" =>
+  "1",
+"language" =>
+  "en",
+],
+],
 
-                    [
-                        'action' => 'deleteEntry',
-                        'body' => ['objectID' => '2', 'language' => 'fr'],
-                    ],
-                ],
-            ]
+  ["action" =>
+  "deleteEntry",
+"body" =>
+  ["objectID" =>
+  "2",
+"language" =>
+  "fr",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/compounds/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"addEntry\",\"body\":{\"objectID\":\"1\",\"language\":\"en\"}},{\"action\":\"deleteEntry\",\"body\":{\"objectID\":\"2\",\"language\":\"fr\"}}]}"
-                ),
+                "path" => "/1/dictionaries/compounds/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"addEntry\",\"body\":{\"objectID\":\"1\",\"language\":\"en\"}},{\"action\":\"deleteEntry\",\"body\":{\"objectID\":\"2\",\"language\":\"fr\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for BatchDictionaryEntries
-     * get batchDictionaryEntries results with all parameters
-     */
+    * Test case for BatchDictionaryEntries
+    * get batchDictionaryEntries results with all parameters
+    */
     public function testBatchDictionaryEntries1()
     {
         $client = $this->getClient();
         $client->batchDictionaryEntries(
-            'compounds',
-            [
-                'clearExistingDictionaryEntries' => false,
-                'requests' => [
-                    [
-                        'action' => 'addEntry',
-                        'body' => [
-                            'objectID' => '1',
-                            'language' => 'en',
-                            'word' => 'fancy',
-                            'words' => ['believe', 'algolia'],
-                            'decomposition' => ['trust', 'algolia'],
-                            'state' => 'enabled',
-                        ],
-                    ],
+            "compounds",
+            ["clearExistingDictionaryEntries" =>
+  false,
+"requests" =>
+  [
+  ["action" =>
+  "addEntry",
+"body" =>
+  ["objectID" =>
+  "1",
+"language" =>
+  "en",
+"word" =>
+  "fancy",
+"words" =>
+  [
+  "believe",
 
-                    [
-                        'action' => 'deleteEntry',
-                        'body' => [
-                            'objectID' => '2',
-                            'language' => 'fr',
-                            'word' => 'humility',
-                            'words' => ['candor', 'algolia'],
-                            'decomposition' => ['grit', 'algolia'],
-                            'state' => 'enabled',
-                        ],
-                    ],
-                ],
-            ]
+  "algolia",
+],
+"decomposition" =>
+  [
+  "trust",
+
+  "algolia",
+],
+"state" =>
+  "enabled",
+],
+],
+
+  ["action" =>
+  "deleteEntry",
+"body" =>
+  ["objectID" =>
+  "2",
+"language" =>
+  "fr",
+"word" =>
+  "humility",
+"words" =>
+  [
+  "candor",
+
+  "algolia",
+],
+"decomposition" =>
+  [
+  "grit",
+
+  "algolia",
+],
+"state" =>
+  "enabled",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/compounds/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"clearExistingDictionaryEntries\":false,\"requests\":[{\"action\":\"addEntry\",\"body\":{\"objectID\":\"1\",\"language\":\"en\",\"word\":\"fancy\",\"words\":[\"believe\",\"algolia\"],\"decomposition\":[\"trust\",\"algolia\"],\"state\":\"enabled\"}},{\"action\":\"deleteEntry\",\"body\":{\"objectID\":\"2\",\"language\":\"fr\",\"word\":\"humility\",\"words\":[\"candor\",\"algolia\"],\"decomposition\":[\"grit\",\"algolia\"],\"state\":\"enabled\"}}]}"
-                ),
+                "path" => "/1/dictionaries/compounds/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"clearExistingDictionaryEntries\":false,\"requests\":[{\"action\":\"addEntry\",\"body\":{\"objectID\":\"1\",\"language\":\"en\",\"word\":\"fancy\",\"words\":[\"believe\",\"algolia\"],\"decomposition\":[\"trust\",\"algolia\"],\"state\":\"enabled\"}},{\"action\":\"deleteEntry\",\"body\":{\"objectID\":\"2\",\"language\":\"fr\",\"word\":\"humility\",\"words\":[\"candor\",\"algolia\"],\"decomposition\":[\"grit\",\"algolia\"],\"state\":\"enabled\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for BatchDictionaryEntries
-     * get batchDictionaryEntries results additional properties
-     */
+    * Test case for BatchDictionaryEntries
+    * get batchDictionaryEntries results additional properties
+    */
     public function testBatchDictionaryEntries2()
     {
         $client = $this->getClient();
         $client->batchDictionaryEntries(
-            'compounds',
-            [
-                'requests' => [
-                    [
-                        'action' => 'addEntry',
-                        'body' => [
-                            'objectID' => '1',
-                            'language' => 'en',
-                            'additional' => 'try me',
-                        ],
-                    ],
-                ],
-            ]
+            "compounds",
+            ["requests" =>
+  [
+  ["action" =>
+  "addEntry",
+"body" =>
+  ["objectID" =>
+  "1",
+"language" =>
+  "en",
+"additional" =>
+  "try me",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/compounds/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"addEntry\",\"body\":{\"objectID\":\"1\",\"language\":\"en\",\"additional\":\"try me\"}}]}"
-                ),
+                "path" => "/1/dictionaries/compounds/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"addEntry\",\"body\":{\"objectID\":\"1\",\"language\":\"en\",\"additional\":\"try me\"}}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Browse
-     * browse with minimal parameters
-     */
+    * Test case for Browse
+    * browse with minimal parameters
+    */
     public function testBrowse0()
     {
         $client = $this->getClient();
-        $client->browse('indexName');
+        $client->browse(
+            "indexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/browse',
-                'method' => 'POST',
-                'body' => json_decode('{}'),
+                "path" => "/1/indexes/indexName/browse",
+                "method" => "POST",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Browse
-     * browse with search parameters
-     */
+    * Test case for Browse
+    * browse with search parameters
+    */
     public function testBrowse1()
     {
         $client = $this->getClient();
         $client->browse(
-            'indexName',
-            ['query' => 'myQuery', 'facetFilters' => ['tags:algolia']]
+            "indexName",
+            ["query" =>
+  "myQuery",
+"facetFilters" =>
+  [
+  "tags:algolia",
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/browse',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"query\":\"myQuery\",\"facetFilters\":[\"tags:algolia\"]}"
-                ),
+                "path" => "/1/indexes/indexName/browse",
+                "method" => "POST",
+                "body" => json_decode("{\"query\":\"myQuery\",\"facetFilters\":[\"tags:algolia\"]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Browse
-     * browse allow a cursor in parameters
-     */
+    * Test case for Browse
+    * browse allow a cursor in parameters
+    */
     public function testBrowse2()
     {
         $client = $this->getClient();
         $client->browse(
-            'indexName',
-            ['cursor' => 'test']
+            "indexName",
+            ["cursor" =>
+  "test",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/browse',
-                'method' => 'POST',
-                'body' => json_decode("{\"cursor\":\"test\"}"),
+                "path" => "/1/indexes/indexName/browse",
+                "method" => "POST",
+                "body" => json_decode("{\"cursor\":\"test\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for ClearAllSynonyms
-     * clearAllSynonyms
-     */
+    * Test case for ClearAllSynonyms
+    * clearAllSynonyms
+    */
     public function testClearAllSynonyms0()
     {
         $client = $this->getClient();
-        $client->clearAllSynonyms('indexName');
+        $client->clearAllSynonyms(
+            "indexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/synonyms/clear',
-                'method' => 'POST',
-                'body' => json_decode(''),
+                "path" => "/1/indexes/indexName/synonyms/clear",
+                "method" => "POST",
+                "body" => json_decode(""),
             ],
         ]);
     }
 
     /**
-     * Test case for ClearObjects
-     * clearObjects
-     */
+    * Test case for ClearObjects
+    * clearObjects
+    */
     public function testClearObjects0()
     {
         $client = $this->getClient();
-        $client->clearObjects('theIndexName');
+        $client->clearObjects(
+            "theIndexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/clear',
-                'method' => 'POST',
-                'body' => json_decode(''),
+                "path" => "/1/indexes/theIndexName/clear",
+                "method" => "POST",
+                "body" => json_decode(""),
             ],
         ]);
     }
 
     /**
-     * Test case for ClearRules
-     * clearRules
-     */
+    * Test case for ClearRules
+    * clearRules
+    */
     public function testClearRules0()
     {
         $client = $this->getClient();
-        $client->clearRules('indexName');
+        $client->clearRules(
+            "indexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/clear',
-                'method' => 'POST',
-                'body' => json_decode(''),
+                "path" => "/1/indexes/indexName/rules/clear",
+                "method" => "POST",
+                "body" => json_decode(""),
             ],
         ]);
     }
 
     /**
-     * Test case for Del
-     * allow del method for a custom path with minimal parameters
-     */
+    * Test case for Del
+    * allow del method for a custom path with minimal parameters
+    */
     public function testDel0()
     {
         $client = $this->getClient();
-        $client->del('/test/minimal');
+        $client->del(
+            "/test/minimal",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/minimal',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/test/minimal",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for Del
-     * allow del method for a custom path with all parameters
-     */
+    * Test case for Del
+    * allow del method for a custom path with all parameters
+    */
     public function testDel1()
     {
         $client = $this->getClient();
         $client->del(
-            '/test/all',
-            ['query' => 'parameters']
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'DELETE',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/all",
+                "method" => "DELETE",
+                "body" => null,
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteApiKey
-     * deleteApiKey
-     */
+    * Test case for DeleteApiKey
+    * deleteApiKey
+    */
     public function testDeleteApiKey0()
     {
         $client = $this->getClient();
-        $client->deleteApiKey('myTestApiKey');
+        $client->deleteApiKey(
+            "myTestApiKey",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/keys/myTestApiKey',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/keys/myTestApiKey",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteBy
-     * deleteBy
-     */
+    * Test case for DeleteBy
+    * deleteBy
+    */
     public function testDeleteBy0()
     {
         $client = $this->getClient();
         $client->deleteBy(
-            'theIndexName',
-            ['filters' => 'brand:brandName']
+            "theIndexName",
+            ["filters" =>
+  "brand:brandName",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/deleteByQuery',
-                'method' => 'POST',
-                'body' => json_decode("{\"filters\":\"brand:brandName\"}"),
+                "path" => "/1/indexes/theIndexName/deleteByQuery",
+                "method" => "POST",
+                "body" => json_decode("{\"filters\":\"brand:brandName\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteIndex
-     * deleteIndex
-     */
+    * Test case for DeleteIndex
+    * deleteIndex
+    */
     public function testDeleteIndex0()
     {
         $client = $this->getClient();
-        $client->deleteIndex('theIndexName');
+        $client->deleteIndex(
+            "theIndexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/indexes/theIndexName",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteObject
-     * deleteObject
-     */
+    * Test case for DeleteObject
+    * deleteObject
+    */
     public function testDeleteObject0()
     {
         $client = $this->getClient();
         $client->deleteObject(
-            'theIndexName',
-            'uniqueID'
+            "theIndexName",
+            "uniqueID",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/uniqueID',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/indexes/theIndexName/uniqueID",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteRule
-     * deleteRule
-     */
+    * Test case for DeleteRule
+    * deleteRule
+    */
     public function testDeleteRule0()
     {
         $client = $this->getClient();
         $client->deleteRule(
-            'indexName',
-            'id1'
+            "indexName",
+            "id1",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/id1',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/indexes/indexName/rules/id1",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteSource
-     * deleteSource
-     */
+    * Test case for DeleteSource
+    * deleteSource
+    */
     public function testDeleteSource0()
     {
         $client = $this->getClient();
-        $client->deleteSource('theSource');
+        $client->deleteSource(
+            "theSource",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/security/sources/theSource',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/security/sources/theSource",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for DeleteSynonym
-     * deleteSynonym
-     */
+    * Test case for DeleteSynonym
+    * deleteSynonym
+    */
     public function testDeleteSynonym0()
     {
         $client = $this->getClient();
         $client->deleteSynonym(
-            'indexName',
-            'id1'
+            "indexName",
+            "id1",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/synonyms/id1',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/indexes/indexName/synonyms/id1",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for Get
-     * allow get method for a custom path with minimal parameters
-     */
+    * Test case for Get
+    * allow get method for a custom path with minimal parameters
+    */
     public function testGet0()
     {
         $client = $this->getClient();
-        $client->get('/test/minimal');
+        $client->get(
+            "/test/minimal",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/minimal',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/test/minimal",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for Get
-     * allow get method for a custom path with all parameters
-     */
+    * Test case for Get
+    * allow get method for a custom path with all parameters
+    */
     public function testGet1()
     {
         $client = $this->getClient();
         $client->get(
-            '/test/all',
-            ['query' => 'parameters']
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/all",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for GetApiKey
-     * getApiKey
-     */
+    * Test case for GetApiKey
+    * getApiKey
+    */
     public function testGetApiKey0()
     {
         $client = $this->getClient();
-        $client->getApiKey('myTestApiKey');
+        $client->getApiKey(
+            "myTestApiKey",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/keys/myTestApiKey',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/keys/myTestApiKey",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetDictionaryLanguages
-     * get getDictionaryLanguages
-     */
+    * Test case for GetDictionaryLanguages
+    * get getDictionaryLanguages
+    */
     public function testGetDictionaryLanguages0()
     {
         $client = $this->getClient();
@@ -903,17 +985,17 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/*/languages',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/dictionaries/*/languages",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetDictionarySettings
-     * get getDictionarySettings results
-     */
+    * Test case for GetDictionarySettings
+    * get getDictionarySettings results
+    */
     public function testGetDictionarySettings0()
     {
         $client = $this->getClient();
@@ -921,17 +1003,17 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/*/settings',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/dictionaries/*/settings",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetLogs
-     * getLogs with minimal parameters
-     */
+    * Test case for GetLogs
+    * getLogs with minimal parameters
+    */
     public function testGetLogs0()
     {
         $client = $this->getClient();
@@ -939,137 +1021,143 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/logs',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/logs",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetLogs
-     * getLogs with parameters
-     */
+    * Test case for GetLogs
+    * getLogs with parameters
+    */
     public function testGetLogs1()
     {
         $client = $this->getClient();
         $client->getLogs(
             5,
             10,
-            'theIndexName',
-            'all'
+            "theIndexName",
+            "all",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/logs',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"offset\":\"5\",\"length\":\"10\",\"indexName\":\"theIndexName\",\"type\":\"all\"}",
-                    true
-                ),
+                "path" => "/1/logs",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"offset\":\"5\",\"length\":\"10\",\"indexName\":\"theIndexName\",\"type\":\"all\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for GetObject
-     * getObject
-     */
+    * Test case for GetObject
+    * getObject
+    */
     public function testGetObject0()
     {
         $client = $this->getClient();
         $client->getObject(
-            'theIndexName',
-            'uniqueID',
-            ['attr1', 'attr2']
+            "theIndexName",
+            "uniqueID",
+            [
+  "attr1",
+
+  "attr2",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/uniqueID',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"attributesToRetrieve\":\"attr1,attr2\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/uniqueID",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"attributesToRetrieve\":\"attr1,attr2\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for GetObjects
-     * getObjects
-     */
+    * Test case for GetObjects
+    * getObjects
+    */
     public function testGetObjects0()
     {
         $client = $this->getClient();
-        $client->getObjects([
-            'requests' => [
-                [
-                    'attributesToRetrieve' => ['attr1', 'attr2'],
-                    'objectID' => 'uniqueID',
-                    'indexName' => 'theIndexName',
-                ],
-            ],
-        ]);
+        $client->getObjects(
+            ["requests" =>
+  [
+  ["attributesToRetrieve" =>
+  [
+  "attr1",
+
+  "attr2",
+],
+"objectID" =>
+  "uniqueID",
+"indexName" =>
+  "theIndexName",
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/objects',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"attributesToRetrieve\":[\"attr1\",\"attr2\"],\"objectID\":\"uniqueID\",\"indexName\":\"theIndexName\"}]}"
-                ),
+                "path" => "/1/indexes/*/objects",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"attributesToRetrieve\":[\"attr1\",\"attr2\"],\"objectID\":\"uniqueID\",\"indexName\":\"theIndexName\"}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for GetRule
-     * getRule
-     */
+    * Test case for GetRule
+    * getRule
+    */
     public function testGetRule0()
     {
         $client = $this->getClient();
         $client->getRule(
-            'indexName',
-            'id1'
+            "indexName",
+            "id1",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/id1',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/indexes/indexName/rules/id1",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetSettings
-     * getSettings
-     */
+    * Test case for GetSettings
+    * getSettings
+    */
     public function testGetSettings0()
     {
         $client = $this->getClient();
-        $client->getSettings('theIndexName');
+        $client->getSettings(
+            "theIndexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetSources
-     * getSources
-     */
+    * Test case for GetSources
+    * getSources
+    */
     public function testGetSources0()
     {
         $client = $this->getClient();
@@ -1077,59 +1165,59 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/security/sources',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/security/sources",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetSynonym
-     * getSynonym
-     */
+    * Test case for GetSynonym
+    * getSynonym
+    */
     public function testGetSynonym0()
     {
         $client = $this->getClient();
         $client->getSynonym(
-            'indexName',
-            'id1'
+            "indexName",
+            "id1",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/synonyms/id1',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/indexes/indexName/synonyms/id1",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetTask
-     * getTask
-     */
+    * Test case for GetTask
+    * getTask
+    */
     public function testGetTask0()
     {
         $client = $this->getClient();
         $client->getTask(
-            'theIndexName',
-            123
+            "theIndexName",
+            123,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/task/123',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/indexes/theIndexName/task/123",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetTopUserIds
-     * getTopUserIds
-     */
+    * Test case for GetTopUserIds
+    * getTopUserIds
+    */
     public function testGetTopUserIds0()
     {
         $client = $this->getClient();
@@ -1137,35 +1225,37 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping/top',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/clusters/mapping/top",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for GetUserId
-     * getUserId
-     */
+    * Test case for GetUserId
+    * getUserId
+    */
     public function testGetUserId0()
     {
         $client = $this->getClient();
-        $client->getUserId('uniqueID');
+        $client->getUserId(
+            "uniqueID",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping/uniqueID',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/clusters/mapping/uniqueID",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for HasPendingMappings
-     * hasPendingMappings with minimal parameters
-     */
+    * Test case for HasPendingMappings
+    * hasPendingMappings with minimal parameters
+    */
     public function testHasPendingMappings0()
     {
         $client = $this->getClient();
@@ -1173,39 +1263,38 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping/pending',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/clusters/mapping/pending",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for HasPendingMappings
-     * hasPendingMappings with parameters
-     */
+    * Test case for HasPendingMappings
+    * hasPendingMappings with parameters
+    */
     public function testHasPendingMappings1()
     {
         $client = $this->getClient();
-        $client->hasPendingMappings(true);
+        $client->hasPendingMappings(
+            true,
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping/pending',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"getClusters\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/clusters/mapping/pending",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"getClusters\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for ListApiKeys
-     * listApiKeys
-     */
+    * Test case for ListApiKeys
+    * listApiKeys
+    */
     public function testListApiKeys0()
     {
         $client = $this->getClient();
@@ -1213,17 +1302,17 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/keys',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/keys",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for ListClusters
-     * listClusters
-     */
+    * Test case for ListClusters
+    * listClusters
+    */
     public function testListClusters0()
     {
         $client = $this->getClient();
@@ -1231,17 +1320,17 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/clusters",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for ListIndices
-     * listIndices with minimal parameters
-     */
+    * Test case for ListIndices
+    * listIndices with minimal parameters
+    */
     public function testListIndices0()
     {
         $client = $this->getClient();
@@ -1249,36 +1338,38 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/indexes",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for ListIndices
-     * listIndices with parameters
-     */
+    * Test case for ListIndices
+    * listIndices with parameters
+    */
     public function testListIndices1()
     {
         $client = $this->getClient();
-        $client->listIndices(8);
+        $client->listIndices(
+            8,
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode("{\"page\":\"8\"}", true),
+                "path" => "/1/indexes",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"page\":\"8\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for ListUserIds
-     * listUserIds with minimal parameters
-     */
+    * Test case for ListUserIds
+    * listUserIds with minimal parameters
+    */
     public function testListUserIds0()
     {
         $client = $this->getClient();
@@ -1286,1865 +1377,2364 @@ class SearchTest extends TestCase implements HttpClientInterface
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping',
-                'method' => 'GET',
-                'body' => null,
+                "path" => "/1/clusters/mapping",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for ListUserIds
-     * listUserIds with parameters
-     */
+    * Test case for ListUserIds
+    * listUserIds with parameters
+    */
     public function testListUserIds1()
     {
         $client = $this->getClient();
         $client->listUserIds(
             8,
-            100
+            100,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping',
-                'method' => 'GET',
-                'body' => null,
-                'queryParameters' => json_decode(
-                    "{\"page\":\"8\",\"hitsPerPage\":\"100\"}",
-                    true
-                ),
+                "path" => "/1/clusters/mapping",
+                "method" => "GET",
+                "body" => null,
+                "queryParameters" => json_decode("{\"page\":\"8\",\"hitsPerPage\":\"100\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for MultipleBatch
-     * multipleBatch
-     */
+    * Test case for MultipleBatch
+    * multipleBatch
+    */
     public function testMultipleBatch0()
     {
         $client = $this->getClient();
-        $client->multipleBatch([
-            'requests' => [
-                [
-                    'action' => 'addObject',
-                    'body' => ['key' => 'value'],
-                    'indexName' => 'theIndexName',
-                ],
-            ],
-        ]);
+        $client->multipleBatch(
+            ["requests" =>
+  [
+  ["action" =>
+  "addObject",
+"body" =>
+  ["key" =>
+  "value",
+],
+"indexName" =>
+  "theIndexName",
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"action\":\"addObject\",\"body\":{\"key\":\"value\"},\"indexName\":\"theIndexName\"}]}"
-                ),
+                "path" => "/1/indexes/*/batch",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"action\":\"addObject\",\"body\":{\"key\":\"value\"},\"indexName\":\"theIndexName\"}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for OperationIndex
-     * operationIndex
-     */
+    * Test case for OperationIndex
+    * operationIndex
+    */
     public function testOperationIndex0()
     {
         $client = $this->getClient();
         $client->operationIndex(
-            'theIndexName',
-            [
-                'operation' => 'copy',
-                'destination' => 'dest',
-                'scope' => ['rules', 'settings'],
-            ]
+            "theIndexName",
+            ["operation" =>
+  "copy",
+"destination" =>
+  "dest",
+"scope" =>
+  [
+  "rules",
+
+  "settings",
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/operation',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"operation\":\"copy\",\"destination\":\"dest\",\"scope\":[\"rules\",\"settings\"]}"
-                ),
+                "path" => "/1/indexes/theIndexName/operation",
+                "method" => "POST",
+                "body" => json_decode("{\"operation\":\"copy\",\"destination\":\"dest\",\"scope\":[\"rules\",\"settings\"]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for PartialUpdateObject
-     * partialUpdateObject
-     */
+    * Test case for PartialUpdateObject
+    * partialUpdateObject
+    */
     public function testPartialUpdateObject0()
     {
         $client = $this->getClient();
         $client->partialUpdateObject(
-            'theIndexName',
-            'uniqueID',
-            [
-                'id1' => 'test',
-                'id2' => ['_operation' => 'AddUnique', 'value' => 'test2'],
-            ],
-            true
+            "theIndexName",
+            "uniqueID",
+            ["id1" =>
+  "test",
+"id2" =>
+  ["_operation" =>
+  "AddUnique",
+"value" =>
+  "test2",
+],
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/uniqueID/partial',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"id1\":\"test\",\"id2\":{\"_operation\":\"AddUnique\",\"value\":\"test2\"}}"
-                ),
-                'queryParameters' => json_decode(
-                    "{\"createIfNotExists\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/uniqueID/partial",
+                "method" => "POST",
+                "body" => json_decode("{\"id1\":\"test\",\"id2\":{\"_operation\":\"AddUnique\",\"value\":\"test2\"}}"),
+                "queryParameters" => json_decode("{\"createIfNotExists\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * allow post method for a custom path with minimal parameters
-     */
+    * Test case for Post
+    * allow post method for a custom path with minimal parameters
+    */
     public function testPost0()
     {
         $client = $this->getClient();
-        $client->post('/test/minimal');
+        $client->post(
+            "/test/minimal",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/minimal',
-                'method' => 'POST',
-                'body' => json_decode('{}'),
+                "path" => "/1/test/minimal",
+                "method" => "POST",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * allow post method for a custom path with all parameters
-     */
+    * Test case for Post
+    * allow post method for a custom path with all parameters
+    */
     public function testPost1()
     {
         $client = $this->getClient();
         $client->post(
-            '/test/all',
-            ['query' => 'parameters'],
-            ['body' => 'parameters']
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
+            ["body" =>
+  "parameters",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'POST',
-                'body' => json_decode("{\"body\":\"parameters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/all",
+                "method" => "POST",
+                "body" => json_decode("{\"body\":\"parameters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions can override default query parameters
-     */
+    * Test case for Post
+    * requestOptions can override default query parameters
+    */
     public function testPost2()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'query' => 'myQueryParameter',
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'query' =>   "myQueryParameter"
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"myQueryParameter\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"myQueryParameter\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions merges query parameters with default ones
-     */
+    * Test case for Post
+    * requestOptions merges query parameters with default ones
+    */
     public function testPost3()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'query2' => 'myQueryParameter',
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'query2' =>   "myQueryParameter"
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"query2\":\"myQueryParameter\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"query2\":\"myQueryParameter\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions can override default headers
-     */
+    * Test case for Post
+    * requestOptions can override default headers
+    */
     public function testPost4()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [],
-            'headers' => [
-                'x-algolia-api-key' => 'myApiKey',
-            ],
+          'queryParameters' => [
+          ],
+          'headers' => [
+              'x-algolia-api-key' => 'myApiKey',
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
-                'headers' => json_decode(
-                    "{\"x-algolia-api-key\":\"myApiKey\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
+                "headers" => json_decode("{\"x-algolia-api-key\":\"myApiKey\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions merges headers with default ones
-     */
+    * Test case for Post
+    * requestOptions merges headers with default ones
+    */
     public function testPost5()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [],
-            'headers' => [
-                'x-algolia-api-key' => 'myApiKey',
-            ],
+          'queryParameters' => [
+          ],
+          'headers' => [
+              'x-algolia-api-key' => 'myApiKey',
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
-                'headers' => json_decode(
-                    "{\"x-algolia-api-key\":\"myApiKey\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
+                "headers" => json_decode("{\"x-algolia-api-key\":\"myApiKey\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts booleans
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts booleans
+    */
     public function testPost6()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'isItWorking' => true,
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'isItWorking' =>   true
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"isItWorking\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"isItWorking\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts integers
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts integers
+    */
     public function testPost7()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => 2,
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   2
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"2\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"2\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts list of string
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts list of string
+    */
     public function testPost8()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => ['c', 'd'],
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   [  "c"
+,  "d"
+]
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"c,d\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"c,d\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts list of booleans
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts list of booleans
+    */
     public function testPost9()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => [true, true, false],
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   [  true
+,  true
+,  false
+]
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"true,true,false\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"true,true,false\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Post
-     * requestOptions queryParameters accepts list of integers
-     */
+    * Test case for Post
+    * requestOptions queryParameters accepts list of integers
+    */
     public function testPost10()
     {
         $client = $this->getClient();
         $requestOptions = [
-            'queryParameters' => [
-                'myParam' => [1, 2],
-            ],
-            'headers' => [],
+          'queryParameters' => [
+              'myParam' =>   [  1
+,  2
+]
+,
+          ],
+          'headers' => [
+          ]
         ];
         $client->post(
-            '/test/requestOptions',
-            ['query' => 'parameters'],
-            ['facet' => 'filters'],
+            "/test/requestOptions",
+            ["query" =>
+  "parameters",
+],
+            ["facet" =>
+  "filters",
+],
             $requestOptions
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/requestOptions',
-                'method' => 'POST',
-                'body' => json_decode("{\"facet\":\"filters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\",\"myParam\":\"1,2\"}",
-                    true
-                ),
+                "path" => "/1/test/requestOptions",
+                "method" => "POST",
+                "body" => json_decode("{\"facet\":\"filters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\",\"myParam\":\"1,2\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Put
-     * allow put method for a custom path with minimal parameters
-     */
+    * Test case for Put
+    * allow put method for a custom path with minimal parameters
+    */
     public function testPut0()
     {
         $client = $this->getClient();
-        $client->put('/test/minimal');
+        $client->put(
+            "/test/minimal",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/minimal',
-                'method' => 'PUT',
-                'body' => json_decode('{}'),
+                "path" => "/1/test/minimal",
+                "method" => "PUT",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Put
-     * allow put method for a custom path with all parameters
-     */
+    * Test case for Put
+    * allow put method for a custom path with all parameters
+    */
     public function testPut1()
     {
         $client = $this->getClient();
         $client->put(
-            '/test/all',
-            ['query' => 'parameters'],
-            ['body' => 'parameters']
+            "/test/all",
+            ["query" =>
+  "parameters",
+],
+            ["body" =>
+  "parameters",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/test/all',
-                'method' => 'PUT',
-                'body' => json_decode("{\"body\":\"parameters\"}"),
-                'queryParameters' => json_decode(
-                    "{\"query\":\"parameters\"}",
-                    true
-                ),
+                "path" => "/1/test/all",
+                "method" => "PUT",
+                "body" => json_decode("{\"body\":\"parameters\"}"),
+                "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for RemoveUserId
-     * removeUserId
-     */
+    * Test case for RemoveUserId
+    * removeUserId
+    */
     public function testRemoveUserId0()
     {
         $client = $this->getClient();
-        $client->removeUserId('uniqueID');
+        $client->removeUserId(
+            "uniqueID",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping/uniqueID',
-                'method' => 'DELETE',
-                'body' => null,
+                "path" => "/1/clusters/mapping/uniqueID",
+                "method" => "DELETE",
+                "body" => null,
             ],
         ]);
     }
 
     /**
-     * Test case for ReplaceSources
-     * replaceSources
-     */
+    * Test case for ReplaceSources
+    * replaceSources
+    */
     public function testReplaceSources0()
     {
         $client = $this->getClient();
-        $client->replaceSources([
-            ['source' => 'theSource', 'description' => 'theDescription'],
-        ]);
+        $client->replaceSources(
+            [
+  ["source" =>
+  "theSource",
+"description" =>
+  "theDescription",
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/security/sources',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "[{\"source\":\"theSource\",\"description\":\"theDescription\"}]"
-                ),
+                "path" => "/1/security/sources",
+                "method" => "PUT",
+                "body" => json_decode("[{\"source\":\"theSource\",\"description\":\"theDescription\"}]"),
             ],
         ]);
     }
 
     /**
-     * Test case for RestoreApiKey
-     * restoreApiKey
-     */
+    * Test case for RestoreApiKey
+    * restoreApiKey
+    */
     public function testRestoreApiKey0()
     {
         $client = $this->getClient();
-        $client->restoreApiKey('myApiKey');
+        $client->restoreApiKey(
+            "myApiKey",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/keys/myApiKey/restore',
-                'method' => 'POST',
-                'body' => json_decode(''),
+                "path" => "/1/keys/myApiKey/restore",
+                "method" => "POST",
+                "body" => json_decode(""),
             ],
         ]);
     }
 
     /**
-     * Test case for SaveObject
-     * saveObject
-     */
+    * Test case for SaveObject
+    * saveObject
+    */
     public function testSaveObject0()
     {
         $client = $this->getClient();
         $client->saveObject(
-            'theIndexName',
-            ['objectID' => 'id', 'test' => 'val']
+            "theIndexName",
+            ["objectID" =>
+  "id",
+"test" =>
+  "val",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName',
-                'method' => 'POST',
-                'body' => json_decode("{\"objectID\":\"id\",\"test\":\"val\"}"),
+                "path" => "/1/indexes/theIndexName",
+                "method" => "POST",
+                "body" => json_decode("{\"objectID\":\"id\",\"test\":\"val\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SaveRule
-     * saveRule with minimal parameters
-     */
+    * Test case for SaveRule
+    * saveRule with minimal parameters
+    */
     public function testSaveRule0()
     {
         $client = $this->getClient();
         $client->saveRule(
-            'indexName',
-            'id1',
-            [
-                'objectID' => 'id1',
-                'conditions' => [
-                    ['pattern' => 'apple', 'anchoring' => 'contains'],
-                ],
-            ]
+            "indexName",
+            "id1",
+            ["objectID" =>
+  "id1",
+"conditions" =>
+  [
+  ["pattern" =>
+  "apple",
+"anchoring" =>
+  "contains",
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/id1',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "{\"objectID\":\"id1\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\"}]}"
-                ),
+                "path" => "/1/indexes/indexName/rules/id1",
+                "method" => "PUT",
+                "body" => json_decode("{\"objectID\":\"id1\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\"}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SaveRule
-     * saveRule with all parameters
-     */
+    * Test case for SaveRule
+    * saveRule with all parameters
+    */
     public function testSaveRule1()
     {
         $client = $this->getClient();
         $client->saveRule(
-            'indexName',
-            'id1',
-            [
-                'objectID' => 'id1',
-                'conditions' => [
-                    [
-                        'pattern' => 'apple',
-                        'anchoring' => 'contains',
-                        'alternatives' => false,
-                        'context' => 'search',
-                    ],
-                ],
-                'consequence' => [
-                    'params' => [
-                        'filters' => 'brand:apple',
-                        'query' => [
-                            'remove' => ['algolia'],
-                            'edits' => [
-                                [
-                                    'type' => 'remove',
-                                    'delete' => 'abc',
-                                    'insert' => 'cde',
-                                ],
+            "indexName",
+            "id1",
+            ["objectID" =>
+  "id1",
+"conditions" =>
+  [
+  ["pattern" =>
+  "apple",
+"anchoring" =>
+  "contains",
+"alternatives" =>
+  false,
+"context" =>
+  "search",
+],
+],
+"consequence" =>
+  ["params" =>
+  ["filters" =>
+  "brand:apple",
+"query" =>
+  ["remove" =>
+  [
+  "algolia",
+],
+"edits" =>
+  [
+  ["type" =>
+  "remove",
+"delete" =>
+  "abc",
+"insert" =>
+  "cde",
+],
 
-                                [
-                                    'type' => 'replace',
-                                    'delete' => 'abc',
-                                    'insert' => 'cde',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'hide' => [['objectID' => '321']],
-                    'filterPromotes' => false,
-                    'userData' => ['algolia' => 'aloglia'],
-                    'promote' => [
-                        ['objectID' => 'abc', 'position' => 3],
+  ["type" =>
+  "replace",
+"delete" =>
+  "abc",
+"insert" =>
+  "cde",
+],
+],
+],
+],
+"hide" =>
+  [
+  ["objectID" =>
+  "321",
+],
+],
+"filterPromotes" =>
+  false,
+"userData" =>
+  ["algolia" =>
+  "aloglia",
+],
+"promote" =>
+  [
+  ["objectID" =>
+  "abc",
+"position" =>
+  3,
+],
 
-                        ['objectIDs' => ['abc', 'def'], 'position' => 1],
-                    ],
-                ],
-                'description' => 'test',
-                'enabled' => true,
-                'validity' => [['from' => 1656670273, 'until' => 1656670277]],
-            ],
-            true
+  ["objectIDs" =>
+  [
+  "abc",
+
+  "def",
+],
+"position" =>
+  1,
+],
+],
+],
+"description" =>
+  "test",
+"enabled" =>
+  true,
+"validity" =>
+  [
+  ["from" =>
+  1656670273,
+"until" =>
+  1656670277,
+],
+],
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/id1',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "{\"objectID\":\"id1\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\",\"alternatives\":false,\"context\":\"search\"}],\"consequence\":{\"params\":{\"filters\":\"brand:apple\",\"query\":{\"remove\":[\"algolia\"],\"edits\":[{\"type\":\"remove\",\"delete\":\"abc\",\"insert\":\"cde\"},{\"type\":\"replace\",\"delete\":\"abc\",\"insert\":\"cde\"}]}},\"hide\":[{\"objectID\":\"321\"}],\"filterPromotes\":false,\"userData\":{\"algolia\":\"aloglia\"},\"promote\":[{\"objectID\":\"abc\",\"position\":3},{\"objectIDs\":[\"abc\",\"def\"],\"position\":1}]},\"description\":\"test\",\"enabled\":true,\"validity\":[{\"from\":1656670273,\"until\":1656670277}]}"
-                ),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/indexName/rules/id1",
+                "method" => "PUT",
+                "body" => json_decode("{\"objectID\":\"id1\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\",\"alternatives\":false,\"context\":\"search\"}],\"consequence\":{\"params\":{\"filters\":\"brand:apple\",\"query\":{\"remove\":[\"algolia\"],\"edits\":[{\"type\":\"remove\",\"delete\":\"abc\",\"insert\":\"cde\"},{\"type\":\"replace\",\"delete\":\"abc\",\"insert\":\"cde\"}]}},\"hide\":[{\"objectID\":\"321\"}],\"filterPromotes\":false,\"userData\":{\"algolia\":\"aloglia\"},\"promote\":[{\"objectID\":\"abc\",\"position\":3},{\"objectIDs\":[\"abc\",\"def\"],\"position\":1}]},\"description\":\"test\",\"enabled\":true,\"validity\":[{\"from\":1656670273,\"until\":1656670277}]}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SaveRules
-     * saveRules with minimal parameters
-     */
+    * Test case for SaveRules
+    * saveRules with minimal parameters
+    */
     public function testSaveRules0()
     {
         $client = $this->getClient();
         $client->saveRules(
-            'indexName',
+            "indexName",
             [
-                [
-                    'objectID' => 'a-rule-id',
-                    'conditions' => [
-                        ['pattern' => 'smartphone', 'anchoring' => 'contains'],
-                    ],
-                ],
+  ["objectID" =>
+  "a-rule-id",
+"conditions" =>
+  [
+  ["pattern" =>
+  "smartphone",
+"anchoring" =>
+  "contains",
+],
+],
+],
 
-                [
-                    'objectID' => 'a-second-rule-id',
-                    'conditions' => [
-                        ['pattern' => 'apple', 'anchoring' => 'contains'],
-                    ],
-                ],
-            ]
+  ["objectID" =>
+  "a-second-rule-id",
+"conditions" =>
+  [
+  ["pattern" =>
+  "apple",
+"anchoring" =>
+  "contains",
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "[{\"objectID\":\"a-rule-id\",\"conditions\":[{\"pattern\":\"smartphone\",\"anchoring\":\"contains\"}]},{\"objectID\":\"a-second-rule-id\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\"}]}]"
-                ),
+                "path" => "/1/indexes/indexName/rules/batch",
+                "method" => "POST",
+                "body" => json_decode("[{\"objectID\":\"a-rule-id\",\"conditions\":[{\"pattern\":\"smartphone\",\"anchoring\":\"contains\"}]},{\"objectID\":\"a-second-rule-id\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\"}]}]"),
             ],
         ]);
     }
 
     /**
-     * Test case for SaveRules
-     * saveRules with all parameters
-     */
+    * Test case for SaveRules
+    * saveRules with all parameters
+    */
     public function testSaveRules1()
     {
         $client = $this->getClient();
         $client->saveRules(
-            'indexName',
+            "indexName",
             [
-                [
-                    'objectID' => 'id1',
-                    'conditions' => [
-                        [
-                            'pattern' => 'apple',
-                            'anchoring' => 'contains',
-                            'alternatives' => false,
-                            'context' => 'search',
-                        ],
-                    ],
-                    'consequence' => [
-                        'params' => [
-                            'filters' => 'brand:apple',
-                            'query' => [
-                                'remove' => ['algolia'],
-                                'edits' => [
-                                    [
-                                        'type' => 'remove',
-                                        'delete' => 'abc',
-                                        'insert' => 'cde',
-                                    ],
+  ["objectID" =>
+  "id1",
+"conditions" =>
+  [
+  ["pattern" =>
+  "apple",
+"anchoring" =>
+  "contains",
+"alternatives" =>
+  false,
+"context" =>
+  "search",
+],
+],
+"consequence" =>
+  ["params" =>
+  ["filters" =>
+  "brand:apple",
+"query" =>
+  ["remove" =>
+  [
+  "algolia",
+],
+"edits" =>
+  [
+  ["type" =>
+  "remove",
+"delete" =>
+  "abc",
+"insert" =>
+  "cde",
+],
 
-                                    [
-                                        'type' => 'replace',
-                                        'delete' => 'abc',
-                                        'insert' => 'cde',
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'hide' => [['objectID' => '321']],
-                        'filterPromotes' => false,
-                        'userData' => ['algolia' => 'aloglia'],
-                        'promote' => [
-                            ['objectID' => 'abc', 'position' => 3],
+  ["type" =>
+  "replace",
+"delete" =>
+  "abc",
+"insert" =>
+  "cde",
+],
+],
+],
+],
+"hide" =>
+  [
+  ["objectID" =>
+  "321",
+],
+],
+"filterPromotes" =>
+  false,
+"userData" =>
+  ["algolia" =>
+  "aloglia",
+],
+"promote" =>
+  [
+  ["objectID" =>
+  "abc",
+"position" =>
+  3,
+],
 
-                            ['objectIDs' => ['abc', 'def'], 'position' => 1],
-                        ],
-                    ],
-                    'description' => 'test',
-                    'enabled' => true,
-                    'validity' => [
-                        ['from' => 1656670273, 'until' => 1656670277],
-                    ],
-                ],
-            ],
+  ["objectIDs" =>
+  [
+  "abc",
+
+  "def",
+],
+"position" =>
+  1,
+],
+],
+],
+"description" =>
+  "test",
+"enabled" =>
+  true,
+"validity" =>
+  [
+  ["from" =>
+  1656670273,
+"until" =>
+  1656670277,
+],
+],
+],
+],
             true,
-            true
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "[{\"objectID\":\"id1\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\",\"alternatives\":false,\"context\":\"search\"}],\"consequence\":{\"params\":{\"filters\":\"brand:apple\",\"query\":{\"remove\":[\"algolia\"],\"edits\":[{\"type\":\"remove\",\"delete\":\"abc\",\"insert\":\"cde\"},{\"type\":\"replace\",\"delete\":\"abc\",\"insert\":\"cde\"}]}},\"hide\":[{\"objectID\":\"321\"}],\"filterPromotes\":false,\"userData\":{\"algolia\":\"aloglia\"},\"promote\":[{\"objectID\":\"abc\",\"position\":3},{\"objectIDs\":[\"abc\",\"def\"],\"position\":1}]},\"description\":\"test\",\"enabled\":true,\"validity\":[{\"from\":1656670273,\"until\":1656670277}]}]"
-                ),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\",\"clearExistingRules\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/indexName/rules/batch",
+                "method" => "POST",
+                "body" => json_decode("[{\"objectID\":\"id1\",\"conditions\":[{\"pattern\":\"apple\",\"anchoring\":\"contains\",\"alternatives\":false,\"context\":\"search\"}],\"consequence\":{\"params\":{\"filters\":\"brand:apple\",\"query\":{\"remove\":[\"algolia\"],\"edits\":[{\"type\":\"remove\",\"delete\":\"abc\",\"insert\":\"cde\"},{\"type\":\"replace\",\"delete\":\"abc\",\"insert\":\"cde\"}]}},\"hide\":[{\"objectID\":\"321\"}],\"filterPromotes\":false,\"userData\":{\"algolia\":\"aloglia\"},\"promote\":[{\"objectID\":\"abc\",\"position\":3},{\"objectIDs\":[\"abc\",\"def\"],\"position\":1}]},\"description\":\"test\",\"enabled\":true,\"validity\":[{\"from\":1656670273,\"until\":1656670277}]}]"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\",\"clearExistingRules\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SaveSynonym
-     * saveSynonym
-     */
+    * Test case for SaveSynonym
+    * saveSynonym
+    */
     public function testSaveSynonym0()
     {
         $client = $this->getClient();
         $client->saveSynonym(
-            'indexName',
-            'id1',
-            [
-                'objectID' => 'id1',
-                'type' => 'synonym',
-                'synonyms' => ['car', 'vehicule', 'auto'],
-            ],
-            true
+            "indexName",
+            "id1",
+            ["objectID" =>
+  "id1",
+"type" =>
+  "synonym",
+"synonyms" =>
+  [
+  "car",
+
+  "vehicule",
+
+  "auto",
+],
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/synonyms/id1',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "{\"objectID\":\"id1\",\"type\":\"synonym\",\"synonyms\":[\"car\",\"vehicule\",\"auto\"]}"
-                ),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/indexName/synonyms/id1",
+                "method" => "PUT",
+                "body" => json_decode("{\"objectID\":\"id1\",\"type\":\"synonym\",\"synonyms\":[\"car\",\"vehicule\",\"auto\"]}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SaveSynonyms
-     * saveSynonyms
-     */
+    * Test case for SaveSynonyms
+    * saveSynonyms
+    */
     public function testSaveSynonyms0()
     {
         $client = $this->getClient();
         $client->saveSynonyms(
-            'indexName',
+            "indexName",
             [
-                [
-                    'objectID' => 'id1',
-                    'type' => 'synonym',
-                    'synonyms' => ['car', 'vehicule', 'auto'],
-                ],
+  ["objectID" =>
+  "id1",
+"type" =>
+  "synonym",
+"synonyms" =>
+  [
+  "car",
 
-                [
-                    'objectID' => 'id2',
-                    'type' => 'onewaysynonym',
-                    'input' => 'iphone',
-                    'synonyms' => ['ephone', 'aphone', 'yphone'],
-                ],
-            ],
+  "vehicule",
+
+  "auto",
+],
+],
+
+  ["objectID" =>
+  "id2",
+"type" =>
+  "onewaysynonym",
+"input" =>
+  "iphone",
+"synonyms" =>
+  [
+  "ephone",
+
+  "aphone",
+
+  "yphone",
+],
+],
+],
             true,
-            false
+            false,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/synonyms/batch',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "[{\"objectID\":\"id1\",\"type\":\"synonym\",\"synonyms\":[\"car\",\"vehicule\",\"auto\"]},{\"objectID\":\"id2\",\"type\":\"onewaysynonym\",\"input\":\"iphone\",\"synonyms\":[\"ephone\",\"aphone\",\"yphone\"]}]"
-                ),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\",\"replaceExistingSynonyms\":\"false\"}",
-                    true
-                ),
+                "path" => "/1/indexes/indexName/synonyms/batch",
+                "method" => "POST",
+                "body" => json_decode("[{\"objectID\":\"id1\",\"type\":\"synonym\",\"synonyms\":[\"car\",\"vehicule\",\"auto\"]},{\"objectID\":\"id2\",\"type\":\"onewaysynonym\",\"input\":\"iphone\",\"synonyms\":[\"ephone\",\"aphone\",\"yphone\"]}]"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\",\"replaceExistingSynonyms\":\"false\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search for a single hits request with minimal parameters
-     */
+    * Test case for Search
+    * search for a single hits request with minimal parameters
+    */
     public function testSearch0()
     {
         $client = $this->getClient();
-        $client->search(['requests' => [['indexName' => 'theIndexName']]]);
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\"}]}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\"}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search for a single facet request with minimal parameters
-     */
+    * Test case for Search
+    * search for a single facet request with minimal parameters
+    */
     public function testSearch1()
     {
         $client = $this->getClient();
-        $client->search([
-            'requests' => [
-                [
-                    'indexName' => 'theIndexName',
-                    'type' => 'facet',
-                    'facet' => 'theFacet',
-                ],
-            ],
-            'strategy' => 'stopIfEnoughMatches',
-        ]);
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+"type" =>
+  "facet",
+"facet" =>
+  "theFacet",
+],
+],
+"strategy" =>
+  "stopIfEnoughMatches",
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\",\"type\":\"facet\",\"facet\":\"theFacet\"}],\"strategy\":\"stopIfEnoughMatches\"}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\",\"type\":\"facet\",\"facet\":\"theFacet\"}],\"strategy\":\"stopIfEnoughMatches\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search for a single hits request with all parameters
-     */
+    * Test case for Search
+    * search for a single hits request with all parameters
+    */
     public function testSearch2()
     {
         $client = $this->getClient();
-        $client->search([
-            'requests' => [
-                [
-                    'indexName' => 'theIndexName',
-                    'query' => 'myQuery',
-                    'hitsPerPage' => 50,
-                    'type' => 'default',
-                ],
-            ],
-        ]);
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+"query" =>
+  "myQuery",
+"hitsPerPage" =>
+  50,
+"type" =>
+  "default",
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\",\"query\":\"myQuery\",\"hitsPerPage\":50,\"type\":\"default\"}]}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\",\"query\":\"myQuery\",\"hitsPerPage\":50,\"type\":\"default\"}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search for a single facet request with all parameters
-     */
+    * Test case for Search
+    * search for a single facet request with all parameters
+    */
     public function testSearch3()
     {
         $client = $this->getClient();
-        $client->search([
-            'requests' => [
-                [
-                    'indexName' => 'theIndexName',
-                    'type' => 'facet',
-                    'facet' => 'theFacet',
-                    'facetQuery' => 'theFacetQuery',
-                    'query' => 'theQuery',
-                    'maxFacetHits' => 50,
-                ],
-            ],
-            'strategy' => 'stopIfEnoughMatches',
-        ]);
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+"type" =>
+  "facet",
+"facet" =>
+  "theFacet",
+"facetQuery" =>
+  "theFacetQuery",
+"query" =>
+  "theQuery",
+"maxFacetHits" =>
+  50,
+],
+],
+"strategy" =>
+  "stopIfEnoughMatches",
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\",\"type\":\"facet\",\"facet\":\"theFacet\",\"facetQuery\":\"theFacetQuery\",\"query\":\"theQuery\",\"maxFacetHits\":50}],\"strategy\":\"stopIfEnoughMatches\"}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\",\"type\":\"facet\",\"facet\":\"theFacet\",\"facetQuery\":\"theFacetQuery\",\"query\":\"theQuery\",\"maxFacetHits\":50}],\"strategy\":\"stopIfEnoughMatches\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search for multiple mixed requests in multiple indices with minimal parameters
-     */
+    * Test case for Search
+    * search for multiple mixed requests in multiple indices with minimal parameters
+    */
     public function testSearch4()
     {
         $client = $this->getClient();
-        $client->search([
-            'requests' => [
-                ['indexName' => 'theIndexName'],
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+],
 
-                [
-                    'indexName' => 'theIndexName2',
-                    'type' => 'facet',
-                    'facet' => 'theFacet',
-                ],
+  ["indexName" =>
+  "theIndexName2",
+"type" =>
+  "facet",
+"facet" =>
+  "theFacet",
+],
 
-                ['indexName' => 'theIndexName', 'type' => 'default'],
-            ],
-            'strategy' => 'stopIfEnoughMatches',
-        ]);
+  ["indexName" =>
+  "theIndexName",
+"type" =>
+  "default",
+],
+],
+"strategy" =>
+  "stopIfEnoughMatches",
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\"},{\"indexName\":\"theIndexName2\",\"type\":\"facet\",\"facet\":\"theFacet\"},{\"indexName\":\"theIndexName\",\"type\":\"default\"}],\"strategy\":\"stopIfEnoughMatches\"}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\"},{\"indexName\":\"theIndexName2\",\"type\":\"facet\",\"facet\":\"theFacet\"},{\"indexName\":\"theIndexName\",\"type\":\"default\"}],\"strategy\":\"stopIfEnoughMatches\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search for multiple mixed requests in multiple indices with all parameters
-     */
+    * Test case for Search
+    * search for multiple mixed requests in multiple indices with all parameters
+    */
     public function testSearch5()
     {
         $client = $this->getClient();
-        $client->search([
-            'requests' => [
-                [
-                    'indexName' => 'theIndexName',
-                    'type' => 'facet',
-                    'facet' => 'theFacet',
-                    'facetQuery' => 'theFacetQuery',
-                    'query' => 'theQuery',
-                    'maxFacetHits' => 50,
-                ],
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+"type" =>
+  "facet",
+"facet" =>
+  "theFacet",
+"facetQuery" =>
+  "theFacetQuery",
+"query" =>
+  "theQuery",
+"maxFacetHits" =>
+  50,
+],
 
-                [
-                    'indexName' => 'theIndexName',
-                    'query' => 'myQuery',
-                    'hitsPerPage' => 50,
-                    'type' => 'default',
-                ],
-            ],
-            'strategy' => 'stopIfEnoughMatches',
-        ]);
+  ["indexName" =>
+  "theIndexName",
+"query" =>
+  "myQuery",
+"hitsPerPage" =>
+  50,
+"type" =>
+  "default",
+],
+],
+"strategy" =>
+  "stopIfEnoughMatches",
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\",\"type\":\"facet\",\"facet\":\"theFacet\",\"facetQuery\":\"theFacetQuery\",\"query\":\"theQuery\",\"maxFacetHits\":50},{\"indexName\":\"theIndexName\",\"query\":\"myQuery\",\"hitsPerPage\":50,\"type\":\"default\"}],\"strategy\":\"stopIfEnoughMatches\"}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\",\"type\":\"facet\",\"facet\":\"theFacet\",\"facetQuery\":\"theFacetQuery\",\"query\":\"theQuery\",\"maxFacetHits\":50},{\"indexName\":\"theIndexName\",\"query\":\"myQuery\",\"hitsPerPage\":50,\"type\":\"default\"}],\"strategy\":\"stopIfEnoughMatches\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search filters accept all of the possible shapes
-     */
+    * Test case for Search
+    * search filters accept all of the possible shapes
+    */
     public function testSearch6()
     {
         $client = $this->getClient();
-        $client->search([
-            'requests' => [
-                [
-                    'indexName' => 'theIndexName',
-                    'facetFilters' => 'mySearch:filters',
-                    'reRankingApplyFilter' => 'mySearch:filters',
-                    'tagFilters' => 'mySearch:filters',
-                    'numericFilters' => 'mySearch:filters',
-                    'optionalFilters' => 'mySearch:filters',
-                ],
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+"facetFilters" =>
+  "mySearch:filters",
+"reRankingApplyFilter" =>
+  "mySearch:filters",
+"tagFilters" =>
+  "mySearch:filters",
+"numericFilters" =>
+  "mySearch:filters",
+"optionalFilters" =>
+  "mySearch:filters",
+],
 
-                [
-                    'indexName' => 'theIndexName',
-                    'facetFilters' => [
-                        'mySearch:filters',
+  ["indexName" =>
+  "theIndexName",
+"facetFilters" =>
+  [
+  "mySearch:filters",
 
-                        ['mySearch:filters'],
-                    ],
-                    'reRankingApplyFilter' => [
-                        'mySearch:filters',
+  [
+  "mySearch:filters",
+],
+],
+"reRankingApplyFilter" =>
+  [
+  "mySearch:filters",
 
-                        ['mySearch:filters'],
-                    ],
-                    'tagFilters' => ['mySearch:filters', ['mySearch:filters']],
-                    'numericFilters' => [
-                        'mySearch:filters',
+  [
+  "mySearch:filters",
+],
+],
+"tagFilters" =>
+  [
+  "mySearch:filters",
 
-                        ['mySearch:filters'],
-                    ],
-                    'optionalFilters' => [
-                        'mySearch:filters',
+  [
+  "mySearch:filters",
+],
+],
+"numericFilters" =>
+  [
+  "mySearch:filters",
 
-                        ['mySearch:filters'],
-                    ],
-                ],
-            ],
-        ]);
+  [
+  "mySearch:filters",
+],
+],
+"optionalFilters" =>
+  [
+  "mySearch:filters",
+
+  [
+  "mySearch:filters",
+],
+],
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\",\"facetFilters\":\"mySearch:filters\",\"reRankingApplyFilter\":\"mySearch:filters\",\"tagFilters\":\"mySearch:filters\",\"numericFilters\":\"mySearch:filters\",\"optionalFilters\":\"mySearch:filters\"},{\"indexName\":\"theIndexName\",\"facetFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"reRankingApplyFilter\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"tagFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"numericFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"optionalFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]]}]}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\",\"facetFilters\":\"mySearch:filters\",\"reRankingApplyFilter\":\"mySearch:filters\",\"tagFilters\":\"mySearch:filters\",\"numericFilters\":\"mySearch:filters\",\"optionalFilters\":\"mySearch:filters\"},{\"indexName\":\"theIndexName\",\"facetFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"reRankingApplyFilter\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"tagFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"numericFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]],\"optionalFilters\":[\"mySearch:filters\",[\"mySearch:filters\"]]}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for Search
-     * search with all search parameters
-     */
+    * Test case for Search
+    * search with all search parameters
+    */
     public function testSearch7()
     {
         $client = $this->getClient();
-        $client->search([
-            'requests' => [
-                [
-                    'indexName' => 'theIndexName',
-                    'query' => '',
-                    'similarQuery' => '',
-                    'filters' => '',
-                    'facetFilters' => [''],
-                    'optionalFilters' => [''],
-                    'numericFilters' => [''],
-                    'tagFilters' => [''],
-                    'sumOrFiltersScores' => true,
-                    'facets' => [''],
-                    'maxValuesPerFacet' => 0,
-                    'facetingAfterDistinct' => true,
-                    'sortFacetValuesBy' => '',
-                    'page' => 0,
-                    'offset' => 0,
-                    'length' => 0,
-                    'aroundLatLng' => '',
-                    'aroundLatLngViaIP' => true,
-                    'aroundRadius' => 'all',
-                    'aroundPrecision' => 0,
-                    'minimumAroundRadius' => 0,
-                    'insideBoundingBox' => [47.3165, 4.9665],
-                    'insidePolygon' => [47.3165, 4.9665],
-                    'naturalLanguages' => [''],
-                    'ruleContexts' => [''],
-                    'personalizationImpact' => 0,
-                    'userToken' => '',
-                    'getRankingInfo' => true,
-                    'clickAnalytics' => true,
-                    'analytics' => true,
-                    'analyticsTags' => [''],
-                    'percentileComputation' => true,
-                    'enableABTest' => true,
-                    'enableReRanking' => true,
-                    'reRankingApplyFilter' => [''],
-                    'attributesForFaceting' => [''],
-                    'attributesToRetrieve' => [''],
-                    'restrictSearchableAttributes' => [''],
-                    'ranking' => [''],
-                    'customRanking' => [''],
-                    'relevancyStrictness' => 0,
-                    'attributesToHighlight' => [''],
-                    'attributesToSnippet' => [''],
-                    'highlightPreTag' => '',
-                    'highlightPostTag' => '',
-                    'snippetEllipsisText' => '',
-                    'restrictHighlightAndSnippetArrays' => true,
-                    'hitsPerPage' => 0,
-                    'minWordSizefor1Typo' => 0,
-                    'minWordSizefor2Typos' => 0,
-                    'typoTolerance' => 'min',
-                    'allowTyposOnNumericTokens' => true,
-                    'disableTypoToleranceOnAttributes' => [''],
-                    'ignorePlurals' => false,
-                    'removeStopWords' => true,
-                    'keepDiacriticsOnCharacters' => '',
-                    'queryLanguages' => [''],
-                    'decompoundQuery' => true,
-                    'enableRules' => true,
-                    'enablePersonalization' => true,
-                    'queryType' => 'prefixAll',
-                    'removeWordsIfNoResults' => 'allOptional',
-                    'advancedSyntax' => true,
-                    'optionalWords' => [''],
-                    'disableExactOnAttributes' => [''],
-                    'exactOnSingleWordQuery' => 'attribute',
-                    'alternativesAsExact' => ['multiWordsSynonym'],
-                    'advancedSyntaxFeatures' => ['exactPhrase'],
-                    'distinct' => 0,
-                    'synonyms' => true,
-                    'replaceSynonymsInHighlight' => true,
-                    'minProximity' => 0,
-                    'responseFields' => [''],
-                    'attributeCriteriaComputedByMinProximity' => true,
-                    'renderingContent' => [
-                        'facetOrdering' => [
-                            'facets' => ['order' => ['a', 'b']],
-                            'values' => [
-                                'a' => [
-                                    'order' => ['b'],
-                                    'sortRemainingBy' => 'count',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'type' => 'default',
-                ],
-            ],
-        ]);
+        $client->search(
+            ["requests" =>
+  [
+  ["indexName" =>
+  "theIndexName",
+"query" =>
+  "",
+"similarQuery" =>
+  "",
+"filters" =>
+  "",
+"facetFilters" =>
+  [
+  "",
+],
+"optionalFilters" =>
+  [
+  "",
+],
+"numericFilters" =>
+  [
+  "",
+],
+"tagFilters" =>
+  [
+  "",
+],
+"sumOrFiltersScores" =>
+  true,
+"facets" =>
+  [
+  "",
+],
+"maxValuesPerFacet" =>
+  0,
+"facetingAfterDistinct" =>
+  true,
+"sortFacetValuesBy" =>
+  "",
+"page" =>
+  0,
+"offset" =>
+  0,
+"length" =>
+  0,
+"aroundLatLng" =>
+  "",
+"aroundLatLngViaIP" =>
+  true,
+"aroundRadius" =>
+  "all",
+"aroundPrecision" =>
+  0,
+"minimumAroundRadius" =>
+  0,
+"insideBoundingBox" =>
+  [
+  47.3165,
+
+  4.9665,
+],
+"insidePolygon" =>
+  [
+  47.3165,
+
+  4.9665,
+],
+"naturalLanguages" =>
+  [
+  "",
+],
+"ruleContexts" =>
+  [
+  "",
+],
+"personalizationImpact" =>
+  0,
+"userToken" =>
+  "",
+"getRankingInfo" =>
+  true,
+"clickAnalytics" =>
+  true,
+"analytics" =>
+  true,
+"analyticsTags" =>
+  [
+  "",
+],
+"percentileComputation" =>
+  true,
+"enableABTest" =>
+  true,
+"enableReRanking" =>
+  true,
+"reRankingApplyFilter" =>
+  [
+  "",
+],
+"attributesForFaceting" =>
+  [
+  "",
+],
+"attributesToRetrieve" =>
+  [
+  "",
+],
+"restrictSearchableAttributes" =>
+  [
+  "",
+],
+"ranking" =>
+  [
+  "",
+],
+"customRanking" =>
+  [
+  "",
+],
+"relevancyStrictness" =>
+  0,
+"attributesToHighlight" =>
+  [
+  "",
+],
+"attributesToSnippet" =>
+  [
+  "",
+],
+"highlightPreTag" =>
+  "",
+"highlightPostTag" =>
+  "",
+"snippetEllipsisText" =>
+  "",
+"restrictHighlightAndSnippetArrays" =>
+  true,
+"hitsPerPage" =>
+  0,
+"minWordSizefor1Typo" =>
+  0,
+"minWordSizefor2Typos" =>
+  0,
+"typoTolerance" =>
+  "min",
+"allowTyposOnNumericTokens" =>
+  true,
+"disableTypoToleranceOnAttributes" =>
+  [
+  "",
+],
+"ignorePlurals" =>
+  false,
+"removeStopWords" =>
+  true,
+"keepDiacriticsOnCharacters" =>
+  "",
+"queryLanguages" =>
+  [
+  "",
+],
+"decompoundQuery" =>
+  true,
+"enableRules" =>
+  true,
+"enablePersonalization" =>
+  true,
+"queryType" =>
+  "prefixAll",
+"removeWordsIfNoResults" =>
+  "allOptional",
+"advancedSyntax" =>
+  true,
+"optionalWords" =>
+  [
+  "",
+],
+"disableExactOnAttributes" =>
+  [
+  "",
+],
+"exactOnSingleWordQuery" =>
+  "attribute",
+"alternativesAsExact" =>
+  [
+  "multiWordsSynonym",
+],
+"advancedSyntaxFeatures" =>
+  [
+  "exactPhrase",
+],
+"distinct" =>
+  0,
+"synonyms" =>
+  true,
+"replaceSynonymsInHighlight" =>
+  true,
+"minProximity" =>
+  0,
+"responseFields" =>
+  [
+  "",
+],
+"attributeCriteriaComputedByMinProximity" =>
+  true,
+"renderingContent" =>
+  ["facetOrdering" =>
+  ["facets" =>
+  ["order" =>
+  [
+  "a",
+
+  "b",
+],
+],
+"values" =>
+  ["a" =>
+  ["order" =>
+  [
+  "b",
+],
+"sortRemainingBy" =>
+  "count",
+],
+],
+],
+],
+"type" =>
+  "default",
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/*/queries',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"requests\":[{\"indexName\":\"theIndexName\",\"query\":\"\",\"similarQuery\":\"\",\"filters\":\"\",\"facetFilters\":[\"\"],\"optionalFilters\":[\"\"],\"numericFilters\":[\"\"],\"tagFilters\":[\"\"],\"sumOrFiltersScores\":true,\"facets\":[\"\"],\"maxValuesPerFacet\":0,\"facetingAfterDistinct\":true,\"sortFacetValuesBy\":\"\",\"page\":0,\"offset\":0,\"length\":0,\"aroundLatLng\":\"\",\"aroundLatLngViaIP\":true,\"aroundRadius\":\"all\",\"aroundPrecision\":0,\"minimumAroundRadius\":0,\"insideBoundingBox\":[47.3165,4.9665],\"insidePolygon\":[47.3165,4.9665],\"naturalLanguages\":[\"\"],\"ruleContexts\":[\"\"],\"personalizationImpact\":0,\"userToken\":\"\",\"getRankingInfo\":true,\"clickAnalytics\":true,\"analytics\":true,\"analyticsTags\":[\"\"],\"percentileComputation\":true,\"enableABTest\":true,\"enableReRanking\":true,\"reRankingApplyFilter\":[\"\"],\"attributesForFaceting\":[\"\"],\"attributesToRetrieve\":[\"\"],\"restrictSearchableAttributes\":[\"\"],\"ranking\":[\"\"],\"customRanking\":[\"\"],\"relevancyStrictness\":0,\"attributesToHighlight\":[\"\"],\"attributesToSnippet\":[\"\"],\"highlightPreTag\":\"\",\"highlightPostTag\":\"\",\"snippetEllipsisText\":\"\",\"restrictHighlightAndSnippetArrays\":true,\"hitsPerPage\":0,\"minWordSizefor1Typo\":0,\"minWordSizefor2Typos\":0,\"typoTolerance\":\"min\",\"allowTyposOnNumericTokens\":true,\"disableTypoToleranceOnAttributes\":[\"\"],\"ignorePlurals\":false,\"removeStopWords\":true,\"keepDiacriticsOnCharacters\":\"\",\"queryLanguages\":[\"\"],\"decompoundQuery\":true,\"enableRules\":true,\"enablePersonalization\":true,\"queryType\":\"prefixAll\",\"removeWordsIfNoResults\":\"allOptional\",\"advancedSyntax\":true,\"optionalWords\":[\"\"],\"disableExactOnAttributes\":[\"\"],\"exactOnSingleWordQuery\":\"attribute\",\"alternativesAsExact\":[\"multiWordsSynonym\"],\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"distinct\":0,\"synonyms\":true,\"replaceSynonymsInHighlight\":true,\"minProximity\":0,\"responseFields\":[\"\"],\"attributeCriteriaComputedByMinProximity\":true,\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}},\"type\":\"default\"}]}"
-                ),
+                "path" => "/1/indexes/*/queries",
+                "method" => "POST",
+                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\",\"query\":\"\",\"similarQuery\":\"\",\"filters\":\"\",\"facetFilters\":[\"\"],\"optionalFilters\":[\"\"],\"numericFilters\":[\"\"],\"tagFilters\":[\"\"],\"sumOrFiltersScores\":true,\"facets\":[\"\"],\"maxValuesPerFacet\":0,\"facetingAfterDistinct\":true,\"sortFacetValuesBy\":\"\",\"page\":0,\"offset\":0,\"length\":0,\"aroundLatLng\":\"\",\"aroundLatLngViaIP\":true,\"aroundRadius\":\"all\",\"aroundPrecision\":0,\"minimumAroundRadius\":0,\"insideBoundingBox\":[47.3165,4.9665],\"insidePolygon\":[47.3165,4.9665],\"naturalLanguages\":[\"\"],\"ruleContexts\":[\"\"],\"personalizationImpact\":0,\"userToken\":\"\",\"getRankingInfo\":true,\"clickAnalytics\":true,\"analytics\":true,\"analyticsTags\":[\"\"],\"percentileComputation\":true,\"enableABTest\":true,\"enableReRanking\":true,\"reRankingApplyFilter\":[\"\"],\"attributesForFaceting\":[\"\"],\"attributesToRetrieve\":[\"\"],\"restrictSearchableAttributes\":[\"\"],\"ranking\":[\"\"],\"customRanking\":[\"\"],\"relevancyStrictness\":0,\"attributesToHighlight\":[\"\"],\"attributesToSnippet\":[\"\"],\"highlightPreTag\":\"\",\"highlightPostTag\":\"\",\"snippetEllipsisText\":\"\",\"restrictHighlightAndSnippetArrays\":true,\"hitsPerPage\":0,\"minWordSizefor1Typo\":0,\"minWordSizefor2Typos\":0,\"typoTolerance\":\"min\",\"allowTyposOnNumericTokens\":true,\"disableTypoToleranceOnAttributes\":[\"\"],\"ignorePlurals\":false,\"removeStopWords\":true,\"keepDiacriticsOnCharacters\":\"\",\"queryLanguages\":[\"\"],\"decompoundQuery\":true,\"enableRules\":true,\"enablePersonalization\":true,\"queryType\":\"prefixAll\",\"removeWordsIfNoResults\":\"allOptional\",\"advancedSyntax\":true,\"optionalWords\":[\"\"],\"disableExactOnAttributes\":[\"\"],\"exactOnSingleWordQuery\":\"attribute\",\"alternativesAsExact\":[\"multiWordsSynonym\"],\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"distinct\":0,\"synonyms\":true,\"replaceSynonymsInHighlight\":true,\"minProximity\":0,\"responseFields\":[\"\"],\"attributeCriteriaComputedByMinProximity\":true,\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}},\"type\":\"default\"}]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchDictionaryEntries
-     * get searchDictionaryEntries results with minimal parameters
-     */
+    * Test case for SearchDictionaryEntries
+    * get searchDictionaryEntries results with minimal parameters
+    */
     public function testSearchDictionaryEntries0()
     {
         $client = $this->getClient();
         $client->searchDictionaryEntries(
-            'compounds',
-            ['query' => 'foo']
+            "compounds",
+            ["query" =>
+  "foo",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/compounds/search',
-                'method' => 'POST',
-                'body' => json_decode("{\"query\":\"foo\"}"),
+                "path" => "/1/dictionaries/compounds/search",
+                "method" => "POST",
+                "body" => json_decode("{\"query\":\"foo\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchDictionaryEntries
-     * get searchDictionaryEntries results with all parameters
-     */
+    * Test case for SearchDictionaryEntries
+    * get searchDictionaryEntries results with all parameters
+    */
     public function testSearchDictionaryEntries1()
     {
         $client = $this->getClient();
         $client->searchDictionaryEntries(
-            'compounds',
-            [
-                'query' => 'foo',
-                'page' => 4,
-                'hitsPerPage' => 2,
-                'language' => 'fr',
-            ]
+            "compounds",
+            ["query" =>
+  "foo",
+"page" =>
+  4,
+"hitsPerPage" =>
+  2,
+"language" =>
+  "fr",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/compounds/search',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"query\":\"foo\",\"page\":4,\"hitsPerPage\":2,\"language\":\"fr\"}"
-                ),
+                "path" => "/1/dictionaries/compounds/search",
+                "method" => "POST",
+                "body" => json_decode("{\"query\":\"foo\",\"page\":4,\"hitsPerPage\":2,\"language\":\"fr\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchForFacetValues
-     * get searchForFacetValues results with minimal parameters
-     */
+    * Test case for SearchForFacetValues
+    * get searchForFacetValues results with minimal parameters
+    */
     public function testSearchForFacetValues0()
     {
         $client = $this->getClient();
         $client->searchForFacetValues(
-            'indexName',
-            'facetName'
+            "indexName",
+            "facetName",
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/facets/facetName/query',
-                'method' => 'POST',
-                'body' => json_decode('{}'),
+                "path" => "/1/indexes/indexName/facets/facetName/query",
+                "method" => "POST",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchForFacetValues
-     * get searchForFacetValues results with all parameters
-     */
+    * Test case for SearchForFacetValues
+    * get searchForFacetValues results with all parameters
+    */
     public function testSearchForFacetValues1()
     {
         $client = $this->getClient();
         $client->searchForFacetValues(
-            'indexName',
-            'facetName',
-            [
-                'params' => "query=foo&facetFilters=['bar']",
-                'facetQuery' => 'foo',
-                'maxFacetHits' => 42,
-            ]
+            "indexName",
+            "facetName",
+            ["params" =>
+  "query=foo&facetFilters=['bar']",
+"facetQuery" =>
+  "foo",
+"maxFacetHits" =>
+  42,
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/facets/facetName/query',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"params\":\"query=foo&facetFilters=['bar']\",\"facetQuery\":\"foo\",\"maxFacetHits\":42}"
-                ),
+                "path" => "/1/indexes/indexName/facets/facetName/query",
+                "method" => "POST",
+                "body" => json_decode("{\"params\":\"query=foo&facetFilters=['bar']\",\"facetQuery\":\"foo\",\"maxFacetHits\":42}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchRules
-     * searchRules
-     */
+    * Test case for SearchRules
+    * searchRules
+    */
     public function testSearchRules0()
     {
         $client = $this->getClient();
         $client->searchRules(
-            'indexName',
-            ['query' => 'something']
+            "indexName",
+            ["query" =>
+  "something",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/rules/search',
-                'method' => 'POST',
-                'body' => json_decode("{\"query\":\"something\"}"),
+                "path" => "/1/indexes/indexName/rules/search",
+                "method" => "POST",
+                "body" => json_decode("{\"query\":\"something\"}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchSingleIndex
-     * search with minimal parameters
-     */
+    * Test case for SearchSingleIndex
+    * search with minimal parameters
+    */
     public function testSearchSingleIndex0()
     {
         $client = $this->getClient();
-        $client->searchSingleIndex('indexName');
+        $client->searchSingleIndex(
+            "indexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/query',
-                'method' => 'POST',
-                'body' => json_decode('{}'),
+                "path" => "/1/indexes/indexName/query",
+                "method" => "POST",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchSingleIndex
-     * search with searchParams
-     */
+    * Test case for SearchSingleIndex
+    * search with searchParams
+    */
     public function testSearchSingleIndex1()
     {
         $client = $this->getClient();
         $client->searchSingleIndex(
-            'indexName',
-            ['query' => 'myQuery', 'facetFilters' => ['tags:algolia']]
+            "indexName",
+            ["query" =>
+  "myQuery",
+"facetFilters" =>
+  [
+  "tags:algolia",
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/query',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"query\":\"myQuery\",\"facetFilters\":[\"tags:algolia\"]}"
-                ),
+                "path" => "/1/indexes/indexName/query",
+                "method" => "POST",
+                "body" => json_decode("{\"query\":\"myQuery\",\"facetFilters\":[\"tags:algolia\"]}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchSynonyms
-     * searchSynonyms with minimal parameters
-     */
+    * Test case for SearchSynonyms
+    * searchSynonyms with minimal parameters
+    */
     public function testSearchSynonyms0()
     {
         $client = $this->getClient();
-        $client->searchSynonyms('indexName');
+        $client->searchSynonyms(
+            "indexName",
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/synonyms/search',
-                'method' => 'POST',
-                'body' => json_decode('{}'),
+                "path" => "/1/indexes/indexName/synonyms/search",
+                "method" => "POST",
+                "body" => json_decode("{}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchSynonyms
-     * searchSynonyms with all parameters
-     */
+    * Test case for SearchSynonyms
+    * searchSynonyms with all parameters
+    */
     public function testSearchSynonyms1()
     {
         $client = $this->getClient();
         $client->searchSynonyms(
-            'indexName',
-            'altcorrection1',
+            "indexName",
+            "altcorrection1",
             10,
             10,
-            ['query' => 'myQuery']
+            ["query" =>
+  "myQuery",
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/indexName/synonyms/search',
-                'method' => 'POST',
-                'body' => json_decode("{\"query\":\"myQuery\"}"),
-                'queryParameters' => json_decode(
-                    "{\"type\":\"altcorrection1\",\"page\":\"10\",\"hitsPerPage\":\"10\"}",
-                    true
-                ),
+                "path" => "/1/indexes/indexName/synonyms/search",
+                "method" => "POST",
+                "body" => json_decode("{\"query\":\"myQuery\"}"),
+                "queryParameters" => json_decode("{\"type\":\"altcorrection1\",\"page\":\"10\",\"hitsPerPage\":\"10\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SearchUserIds
-     * searchUserIds
-     */
+    * Test case for SearchUserIds
+    * searchUserIds
+    */
     public function testSearchUserIds0()
     {
         $client = $this->getClient();
-        $client->searchUserIds([
-            'query' => 'test',
-            'clusterName' => 'theClusterName',
-            'page' => 5,
-            'hitsPerPage' => 10,
-        ]);
+        $client->searchUserIds(
+            ["query" =>
+  "test",
+"clusterName" =>
+  "theClusterName",
+"page" =>
+  5,
+"hitsPerPage" =>
+  10,
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/clusters/mapping/search',
-                'method' => 'POST',
-                'body' => json_decode(
-                    "{\"query\":\"test\",\"clusterName\":\"theClusterName\",\"page\":5,\"hitsPerPage\":10}"
-                ),
+                "path" => "/1/clusters/mapping/search",
+                "method" => "POST",
+                "body" => json_decode("{\"query\":\"test\",\"clusterName\":\"theClusterName\",\"page\":5,\"hitsPerPage\":10}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SetDictionarySettings
-     * get setDictionarySettings results with minimal parameters
-     */
+    * Test case for SetDictionarySettings
+    * get setDictionarySettings results with minimal parameters
+    */
     public function testSetDictionarySettings0()
     {
         $client = $this->getClient();
-        $client->setDictionarySettings([
-            'disableStandardEntries' => [
-                'plurals' => ['fr' => false, 'en' => false, 'ru' => true],
-            ],
-        ]);
+        $client->setDictionarySettings(
+            ["disableStandardEntries" =>
+  ["plurals" =>
+  ["fr" =>
+  false,
+"en" =>
+  false,
+"ru" =>
+  true,
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/*/settings',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "{\"disableStandardEntries\":{\"plurals\":{\"fr\":false,\"en\":false,\"ru\":true}}}"
-                ),
+                "path" => "/1/dictionaries/*/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"disableStandardEntries\":{\"plurals\":{\"fr\":false,\"en\":false,\"ru\":true}}}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SetDictionarySettings
-     * get setDictionarySettings results with all parameters
-     */
+    * Test case for SetDictionarySettings
+    * get setDictionarySettings results with all parameters
+    */
     public function testSetDictionarySettings1()
     {
         $client = $this->getClient();
-        $client->setDictionarySettings([
-            'disableStandardEntries' => [
-                'plurals' => ['fr' => false, 'en' => false, 'ru' => true],
-                'stopwords' => ['fr' => false],
-                'compounds' => ['ru' => true],
-            ],
-        ]);
+        $client->setDictionarySettings(
+            ["disableStandardEntries" =>
+  ["plurals" =>
+  ["fr" =>
+  false,
+"en" =>
+  false,
+"ru" =>
+  true,
+],
+"stopwords" =>
+  ["fr" =>
+  false,
+],
+"compounds" =>
+  ["ru" =>
+  true,
+],
+],
+],
+        );
 
         $this->assertRequests([
             [
-                'path' => '/1/dictionaries/*/settings',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "{\"disableStandardEntries\":{\"plurals\":{\"fr\":false,\"en\":false,\"ru\":true},\"stopwords\":{\"fr\":false},\"compounds\":{\"ru\":true}}}"
-                ),
+                "path" => "/1/dictionaries/*/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"disableStandardEntries\":{\"plurals\":{\"fr\":false,\"en\":false,\"ru\":true},\"stopwords\":{\"fr\":false},\"compounds\":{\"ru\":true}}}"),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings with minimal parameters
-     */
+    * Test case for SetSettings
+    * setSettings with minimal parameters
+    */
     public function testSetSettings0()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['paginationLimitedTo' => 10],
-            true
+            "theIndexName",
+            ["paginationLimitedTo" =>
+  10,
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"paginationLimitedTo\":10}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"paginationLimitedTo\":10}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow boolean `typoTolerance`
-     */
+    * Test case for SetSettings
+    * setSettings allow boolean `typoTolerance`
+    */
     public function testSetSettings1()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['typoTolerance' => true],
-            true
+            "theIndexName",
+            ["typoTolerance" =>
+  true,
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"typoTolerance\":true}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"typoTolerance\":true}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow enum `typoTolerance`
-     */
+    * Test case for SetSettings
+    * setSettings allow enum `typoTolerance`
+    */
     public function testSetSettings2()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['typoTolerance' => 'min'],
-            true
+            "theIndexName",
+            ["typoTolerance" =>
+  "min",
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"typoTolerance\":\"min\"}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"typoTolerance\":\"min\"}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow boolean `ignorePlurals`
-     */
+    * Test case for SetSettings
+    * setSettings allow boolean `ignorePlurals`
+    */
     public function testSetSettings3()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['ignorePlurals' => true],
-            true
+            "theIndexName",
+            ["ignorePlurals" =>
+  true,
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"ignorePlurals\":true}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"ignorePlurals\":true}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow list of string `ignorePlurals`
-     */
+    * Test case for SetSettings
+    * setSettings allow list of string `ignorePlurals`
+    */
     public function testSetSettings4()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['ignorePlurals' => ['algolia']],
-            true
+            "theIndexName",
+            ["ignorePlurals" =>
+  [
+  "algolia",
+],
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"ignorePlurals\":[\"algolia\"]}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"ignorePlurals\":[\"algolia\"]}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow boolean `removeStopWords`
-     */
+    * Test case for SetSettings
+    * setSettings allow boolean `removeStopWords`
+    */
     public function testSetSettings5()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['removeStopWords' => true],
-            true
+            "theIndexName",
+            ["removeStopWords" =>
+  true,
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"removeStopWords\":true}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"removeStopWords\":true}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow list of string `removeStopWords`
-     */
+    * Test case for SetSettings
+    * setSettings allow list of string `removeStopWords`
+    */
     public function testSetSettings6()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['removeStopWords' => ['algolia']],
-            true
+            "theIndexName",
+            ["removeStopWords" =>
+  [
+  "algolia",
+],
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"removeStopWords\":[\"algolia\"]}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"removeStopWords\":[\"algolia\"]}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow boolean `distinct`
-     */
+    * Test case for SetSettings
+    * setSettings allow boolean `distinct`
+    */
     public function testSetSettings7()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['distinct' => true],
-            true
+            "theIndexName",
+            ["distinct" =>
+  true,
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"distinct\":true}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"distinct\":true}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow integers for `distinct`
-     */
+    * Test case for SetSettings
+    * setSettings allow integers for `distinct`
+    */
     public function testSetSettings8()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            ['distinct' => 1],
-            true
+            "theIndexName",
+            ["distinct" =>
+  1,
+],
+            true,
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode("{\"distinct\":1}"),
-                'queryParameters' => json_decode(
-                    "{\"forwardToReplicas\":\"true\"}",
-                    true
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"distinct\":1}"),
+                "queryParameters" => json_decode("{\"forwardToReplicas\":\"true\"}", true),
             ],
         ]);
     }
 
     /**
-     * Test case for SetSettings
-     * setSettings allow all `indexSettings`
-     */
+    * Test case for SetSettings
+    * setSettings allow all `indexSettings`
+    */
     public function testSetSettings9()
     {
         $client = $this->getClient();
         $client->setSettings(
-            'theIndexName',
-            [
-                'replicas' => [''],
-                'paginationLimitedTo' => 0,
-                'disableTypoToleranceOnWords' => ['algolia'],
-                'attributesToTransliterate' => ['algolia'],
-                'camelCaseAttributes' => ['algolia'],
-                'decompoundedAttributes' => ['algolia' => 'aloglia'],
-                'indexLanguages' => ['algolia'],
-                'disablePrefixOnAttributes' => ['algolia'],
-                'allowCompressionOfIntegerArray' => true,
-                'numericAttributesForFiltering' => ['algolia'],
-                'separatorsToIndex' => 'algolia',
-                'searchableAttributes' => ['algolia'],
-                'userData' => ['user' => 'data'],
-                'customNormalization' => [
-                    'algolia' => ['aloglia' => 'aglolia'],
-                ],
-                'attributesForFaceting' => ['algolia'],
-                'unretrievableAttributes' => ['algolia'],
-                'attributesToRetrieve' => ['algolia'],
-                'restrictSearchableAttributes' => ['algolia'],
-                'ranking' => ['geo'],
-                'customRanking' => ['algolia'],
-                'relevancyStrictness' => 10,
-                'attributesToHighlight' => ['algolia'],
-                'attributesToSnippet' => ['algolia'],
-                'highlightPreTag' => '<span>',
-                'highlightPostTag' => '</span>',
-                'snippetEllipsisText' => '---',
-                'restrictHighlightAndSnippetArrays' => true,
-                'hitsPerPage' => 10,
-                'minWordSizefor1Typo' => 5,
-                'minWordSizefor2Typos' => 11,
-                'typoTolerance' => false,
-                'allowTyposOnNumericTokens' => true,
-                'disableTypoToleranceOnAttributes' => ['algolia'],
-                'ignorePlurals' => false,
-                'removeStopWords' => false,
-                'keepDiacriticsOnCharacters' => 'abc',
-                'queryLanguages' => ['algolia'],
-                'decompoundQuery' => false,
-                'enableRules' => false,
-                'enablePersonalization' => true,
-                'queryType' => 'prefixLast',
-                'removeWordsIfNoResults' => 'lastWords',
-                'advancedSyntax' => true,
-                'optionalWords' => ['algolia'],
-                'disableExactOnAttributes' => ['algolia'],
-                'exactOnSingleWordQuery' => 'attribute',
-                'alternativesAsExact' => ['singleWordSynonym'],
-                'advancedSyntaxFeatures' => ['exactPhrase'],
-                'distinct' => 3,
-                'attributeForDistinct' => 'test',
-                'synonyms' => false,
-                'replaceSynonymsInHighlight' => true,
-                'minProximity' => 6,
-                'responseFields' => ['algolia'],
-                'maxFacetHits' => 50,
-                'attributeCriteriaComputedByMinProximity' => true,
-                'renderingContent' => [
-                    'facetOrdering' => [
-                        'facets' => ['order' => ['a', 'b']],
-                        'values' => [
-                            'a' => [
-                                'order' => ['b'],
-                                'sortRemainingBy' => 'count',
-                            ],
-                        ],
-                    ],
-                ],
-            ]
+            "theIndexName",
+            ["replicas" =>
+  [
+  "",
+],
+"paginationLimitedTo" =>
+  0,
+"disableTypoToleranceOnWords" =>
+  [
+  "algolia",
+],
+"attributesToTransliterate" =>
+  [
+  "algolia",
+],
+"camelCaseAttributes" =>
+  [
+  "algolia",
+],
+"decompoundedAttributes" =>
+  ["algolia" =>
+  "aloglia",
+],
+"indexLanguages" =>
+  [
+  "algolia",
+],
+"disablePrefixOnAttributes" =>
+  [
+  "algolia",
+],
+"allowCompressionOfIntegerArray" =>
+  true,
+"numericAttributesForFiltering" =>
+  [
+  "algolia",
+],
+"separatorsToIndex" =>
+  "algolia",
+"searchableAttributes" =>
+  [
+  "algolia",
+],
+"userData" =>
+  ["user" =>
+  "data",
+],
+"customNormalization" =>
+  ["algolia" =>
+  ["aloglia" =>
+  "aglolia",
+],
+],
+"attributesForFaceting" =>
+  [
+  "algolia",
+],
+"unretrievableAttributes" =>
+  [
+  "algolia",
+],
+"attributesToRetrieve" =>
+  [
+  "algolia",
+],
+"restrictSearchableAttributes" =>
+  [
+  "algolia",
+],
+"ranking" =>
+  [
+  "geo",
+],
+"customRanking" =>
+  [
+  "algolia",
+],
+"relevancyStrictness" =>
+  10,
+"attributesToHighlight" =>
+  [
+  "algolia",
+],
+"attributesToSnippet" =>
+  [
+  "algolia",
+],
+"highlightPreTag" =>
+  "<span>",
+"highlightPostTag" =>
+  "</span>",
+"snippetEllipsisText" =>
+  "---",
+"restrictHighlightAndSnippetArrays" =>
+  true,
+"hitsPerPage" =>
+  10,
+"minWordSizefor1Typo" =>
+  5,
+"minWordSizefor2Typos" =>
+  11,
+"typoTolerance" =>
+  false,
+"allowTyposOnNumericTokens" =>
+  true,
+"disableTypoToleranceOnAttributes" =>
+  [
+  "algolia",
+],
+"ignorePlurals" =>
+  false,
+"removeStopWords" =>
+  false,
+"keepDiacriticsOnCharacters" =>
+  "abc",
+"queryLanguages" =>
+  [
+  "algolia",
+],
+"decompoundQuery" =>
+  false,
+"enableRules" =>
+  false,
+"enablePersonalization" =>
+  true,
+"queryType" =>
+  "prefixLast",
+"removeWordsIfNoResults" =>
+  "lastWords",
+"advancedSyntax" =>
+  true,
+"optionalWords" =>
+  [
+  "algolia",
+],
+"disableExactOnAttributes" =>
+  [
+  "algolia",
+],
+"exactOnSingleWordQuery" =>
+  "attribute",
+"alternativesAsExact" =>
+  [
+  "singleWordSynonym",
+],
+"advancedSyntaxFeatures" =>
+  [
+  "exactPhrase",
+],
+"distinct" =>
+  3,
+"attributeForDistinct" =>
+  "test",
+"synonyms" =>
+  false,
+"replaceSynonymsInHighlight" =>
+  true,
+"minProximity" =>
+  6,
+"responseFields" =>
+  [
+  "algolia",
+],
+"maxFacetHits" =>
+  50,
+"attributeCriteriaComputedByMinProximity" =>
+  true,
+"renderingContent" =>
+  ["facetOrdering" =>
+  ["facets" =>
+  ["order" =>
+  [
+  "a",
+
+  "b",
+],
+],
+"values" =>
+  ["a" =>
+  ["order" =>
+  [
+  "b",
+],
+"sortRemainingBy" =>
+  "count",
+],
+],
+],
+],
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/indexes/theIndexName/settings',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "{\"replicas\":[\"\"],\"paginationLimitedTo\":0,\"disableTypoToleranceOnWords\":[\"algolia\"],\"attributesToTransliterate\":[\"algolia\"],\"camelCaseAttributes\":[\"algolia\"],\"decompoundedAttributes\":{\"algolia\":\"aloglia\"},\"indexLanguages\":[\"algolia\"],\"disablePrefixOnAttributes\":[\"algolia\"],\"allowCompressionOfIntegerArray\":true,\"numericAttributesForFiltering\":[\"algolia\"],\"separatorsToIndex\":\"algolia\",\"searchableAttributes\":[\"algolia\"],\"userData\":{\"user\":\"data\"},\"customNormalization\":{\"algolia\":{\"aloglia\":\"aglolia\"}},\"attributesForFaceting\":[\"algolia\"],\"unretrievableAttributes\":[\"algolia\"],\"attributesToRetrieve\":[\"algolia\"],\"restrictSearchableAttributes\":[\"algolia\"],\"ranking\":[\"geo\"],\"customRanking\":[\"algolia\"],\"relevancyStrictness\":10,\"attributesToHighlight\":[\"algolia\"],\"attributesToSnippet\":[\"algolia\"],\"highlightPreTag\":\"<span>\",\"highlightPostTag\":\"</span>\",\"snippetEllipsisText\":\"---\",\"restrictHighlightAndSnippetArrays\":true,\"hitsPerPage\":10,\"minWordSizefor1Typo\":5,\"minWordSizefor2Typos\":11,\"typoTolerance\":false,\"allowTyposOnNumericTokens\":true,\"disableTypoToleranceOnAttributes\":[\"algolia\"],\"ignorePlurals\":false,\"removeStopWords\":false,\"keepDiacriticsOnCharacters\":\"abc\",\"queryLanguages\":[\"algolia\"],\"decompoundQuery\":false,\"enableRules\":false,\"enablePersonalization\":true,\"queryType\":\"prefixLast\",\"removeWordsIfNoResults\":\"lastWords\",\"advancedSyntax\":true,\"optionalWords\":[\"algolia\"],\"disableExactOnAttributes\":[\"algolia\"],\"exactOnSingleWordQuery\":\"attribute\",\"alternativesAsExact\":[\"singleWordSynonym\"],\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"distinct\":3,\"attributeForDistinct\":\"test\",\"synonyms\":false,\"replaceSynonymsInHighlight\":true,\"minProximity\":6,\"responseFields\":[\"algolia\"],\"maxFacetHits\":50,\"attributeCriteriaComputedByMinProximity\":true,\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}}}"
-                ),
+                "path" => "/1/indexes/theIndexName/settings",
+                "method" => "PUT",
+                "body" => json_decode("{\"replicas\":[\"\"],\"paginationLimitedTo\":0,\"disableTypoToleranceOnWords\":[\"algolia\"],\"attributesToTransliterate\":[\"algolia\"],\"camelCaseAttributes\":[\"algolia\"],\"decompoundedAttributes\":{\"algolia\":\"aloglia\"},\"indexLanguages\":[\"algolia\"],\"disablePrefixOnAttributes\":[\"algolia\"],\"allowCompressionOfIntegerArray\":true,\"numericAttributesForFiltering\":[\"algolia\"],\"separatorsToIndex\":\"algolia\",\"searchableAttributes\":[\"algolia\"],\"userData\":{\"user\":\"data\"},\"customNormalization\":{\"algolia\":{\"aloglia\":\"aglolia\"}},\"attributesForFaceting\":[\"algolia\"],\"unretrievableAttributes\":[\"algolia\"],\"attributesToRetrieve\":[\"algolia\"],\"restrictSearchableAttributes\":[\"algolia\"],\"ranking\":[\"geo\"],\"customRanking\":[\"algolia\"],\"relevancyStrictness\":10,\"attributesToHighlight\":[\"algolia\"],\"attributesToSnippet\":[\"algolia\"],\"highlightPreTag\":\"<span>\",\"highlightPostTag\":\"</span>\",\"snippetEllipsisText\":\"---\",\"restrictHighlightAndSnippetArrays\":true,\"hitsPerPage\":10,\"minWordSizefor1Typo\":5,\"minWordSizefor2Typos\":11,\"typoTolerance\":false,\"allowTyposOnNumericTokens\":true,\"disableTypoToleranceOnAttributes\":[\"algolia\"],\"ignorePlurals\":false,\"removeStopWords\":false,\"keepDiacriticsOnCharacters\":\"abc\",\"queryLanguages\":[\"algolia\"],\"decompoundQuery\":false,\"enableRules\":false,\"enablePersonalization\":true,\"queryType\":\"prefixLast\",\"removeWordsIfNoResults\":\"lastWords\",\"advancedSyntax\":true,\"optionalWords\":[\"algolia\"],\"disableExactOnAttributes\":[\"algolia\"],\"exactOnSingleWordQuery\":\"attribute\",\"alternativesAsExact\":[\"singleWordSynonym\"],\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"distinct\":3,\"attributeForDistinct\":\"test\",\"synonyms\":false,\"replaceSynonymsInHighlight\":true,\"minProximity\":6,\"responseFields\":[\"algolia\"],\"maxFacetHits\":50,\"attributeCriteriaComputedByMinProximity\":true,\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}}}"),
             ],
         ]);
     }
 
     /**
-     * Test case for UpdateApiKey
-     * updateApiKey
-     */
+    * Test case for UpdateApiKey
+    * updateApiKey
+    */
     public function testUpdateApiKey0()
     {
         $client = $this->getClient();
         $client->updateApiKey(
-            'myApiKey',
-            [
-                'acl' => ['search', 'addObject'],
-                'validity' => 300,
-                'maxQueriesPerIPPerHour' => 100,
-                'maxHitsPerQuery' => 20,
-            ]
+            "myApiKey",
+            ["acl" =>
+  [
+  "search",
+
+  "addObject",
+],
+"validity" =>
+  300,
+"maxQueriesPerIPPerHour" =>
+  100,
+"maxHitsPerQuery" =>
+  20,
+],
         );
 
         $this->assertRequests([
             [
-                'path' => '/1/keys/myApiKey',
-                'method' => 'PUT',
-                'body' => json_decode(
-                    "{\"acl\":[\"search\",\"addObject\"],\"validity\":300,\"maxQueriesPerIPPerHour\":100,\"maxHitsPerQuery\":20}"
-                ),
+                "path" => "/1/keys/myApiKey",
+                "method" => "PUT",
+                "body" => json_decode("{\"acl\":[\"search\",\"addObject\"],\"validity\":300,\"maxQueriesPerIPPerHour\":100,\"maxHitsPerQuery\":20}"),
             ],
         ]);
     }

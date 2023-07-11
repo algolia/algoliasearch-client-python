@@ -36,11 +36,8 @@ class MonitoringTest extends TestCase implements HttpClientInterface
         return new MonitoringClient($api, $config);
     }
 
-    public function sendRequest(
-        RequestInterface $request,
-        $timeout,
-        $connectTimeout
-    ) {
+    public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
+    {
         $this->recordedRequest = [
             'request' => $request,
             'responseTimeout' => $timeout * 1000,
@@ -51,12 +48,14 @@ class MonitoringTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : calls api with correct user agent
-     */
+    * Test case : calls api with correct user agent
+    */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->post('/test');
+        $client->post(
+            "/test",
+        );
 
         $this->assertTrue(
             (bool) preg_match(
@@ -67,39 +66,60 @@ class MonitoringTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : calls api with default read timeouts
-     */
+    * Test case : calls api with default read timeouts
+    */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->get('/test');
+        $client->get(
+            "/test",
+        );
 
-        $this->assertEquals(2000, $this->recordedRequest['connectTimeout']);
+        $this->assertEquals(
+            2000,
+            $this->recordedRequest['connectTimeout']
+        );
 
-        $this->assertEquals(5000, $this->recordedRequest['responseTimeout']);
+        $this->assertEquals(
+            5000,
+            $this->recordedRequest['responseTimeout']
+        );
     }
 
     /**
-     * Test case : calls api with default write timeouts
-     */
+    * Test case : calls api with default write timeouts
+    */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->post('/test');
+        $client->post(
+            "/test",
+        );
 
-        $this->assertEquals(2000, $this->recordedRequest['connectTimeout']);
+        $this->assertEquals(
+            2000,
+            $this->recordedRequest['connectTimeout']
+        );
 
-        $this->assertEquals(30000, $this->recordedRequest['responseTimeout']);
+        $this->assertEquals(
+            30000,
+            $this->recordedRequest['responseTimeout']
+        );
     }
 
     /**
-     * Test case : uses the correct region
-     */
+    * Test case : uses the correct region
+    */
     public function test0parameters()
     {
-        $client = $this->createClient('my-app-id', 'my-api-key', null);
+        $client = $this->createClient(
+            "my-app-id",
+            "my-api-key",
+            null
+        );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
     }
+
 }

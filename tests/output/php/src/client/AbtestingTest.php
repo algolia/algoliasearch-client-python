@@ -29,18 +29,19 @@ class AbtestingTest extends TestCase implements HttpClientInterface
      */
     private function createClient($appId, $apiKey, $region = 'us')
     {
-        $config = AbtestingConfig::create($appId, $apiKey, $region);
+        $config = AbtestingConfig::create(
+            $appId,
+            $apiKey,
+            $region
+        );
         $clusterHosts = AbtestingClient::getClusterHosts($config);
         $api = new ApiWrapper($this, $config, $clusterHosts);
 
         return new AbtestingClient($api, $config);
     }
 
-    public function sendRequest(
-        RequestInterface $request,
-        $timeout,
-        $connectTimeout
-    ) {
+    public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
+    {
         $this->recordedRequest = [
             'request' => $request,
             'responseTimeout' => $timeout * 1000,
@@ -51,12 +52,14 @@ class AbtestingTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : calls api with correct user agent
-     */
+    * Test case : calls api with correct user agent
+    */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->post('/test');
+        $client->post(
+            "/test",
+        );
 
         $this->assertTrue(
             (bool) preg_match(
@@ -67,41 +70,63 @@ class AbtestingTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : calls api with default read timeouts
-     */
+    * Test case : calls api with default read timeouts
+    */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->get('/test');
+        $client->get(
+            "/test",
+        );
 
-        $this->assertEquals(2000, $this->recordedRequest['connectTimeout']);
+        $this->assertEquals(
+            2000,
+            $this->recordedRequest['connectTimeout']
+        );
 
-        $this->assertEquals(5000, $this->recordedRequest['responseTimeout']);
+        $this->assertEquals(
+            5000,
+            $this->recordedRequest['responseTimeout']
+        );
     }
 
     /**
-     * Test case : calls api with default write timeouts
-     */
+    * Test case : calls api with default write timeouts
+    */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
-        $client->post('/test');
+        $client->post(
+            "/test",
+        );
 
-        $this->assertEquals(2000, $this->recordedRequest['connectTimeout']);
+        $this->assertEquals(
+            2000,
+            $this->recordedRequest['connectTimeout']
+        );
 
-        $this->assertEquals(30000, $this->recordedRequest['responseTimeout']);
+        $this->assertEquals(
+            30000,
+            $this->recordedRequest['responseTimeout']
+        );
     }
 
     /**
-     * Test case : fallbacks to the alias when region is not given
-     */
+    * Test case : fallbacks to the alias when region is not given
+    */
     public function test0parameters()
     {
-        $client = $this->createClient('my-app-id', 'my-api-key', null);
+        $client = $this->createClient(
+            "my-app-id",
+            "my-api-key",
+            null
+        );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
-        $client->getABTest(123);
+        $client->getABTest(
+            123,
+        );
 
         $this->assertEquals(
             'analytics.algolia.com',
@@ -110,15 +135,21 @@ class AbtestingTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : uses the correct region
-     */
+    * Test case : uses the correct region
+    */
     public function test1parameters()
     {
-        $client = $this->createClient('my-app-id', 'my-api-key', 'us');
+        $client = $this->createClient(
+            "my-app-id",
+            "my-api-key",
+            "us"
+        );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
-        $client->getABTest(123);
+        $client->getABTest(
+            123,
+        );
 
         $this->assertEquals(
             'analytics.us.algolia.com',
@@ -127,21 +158,20 @@ class AbtestingTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case : throws when incorrect region is given
-     */
+    * Test case : throws when incorrect region is given
+    */
     public function test2parameters()
     {
         try {
             $client = $this->createClient(
-                'my-app-id',
-                'my-api-key',
-                'not_a_region'
+                "my-app-id",
+                "my-api-key",
+                "not_a_region"
             );
+
         } catch (\Exception $e) {
-            $this->assertEquals(
-                $e->getMessage(),
-                '`region` must be one of the following: de, us'
-            );
+            $this->assertEquals($e->getMessage(), '`region` must be one of the following: de, us');
         }
     }
+
 }
