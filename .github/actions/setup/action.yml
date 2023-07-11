@@ -131,17 +131,20 @@ runs:
 
     # Dart deps
     - name: Get Dart version
+      if: ${{ inputs.language == 'dart' }}
       id: dart-version
       shell: bash
       run: |
         echo "DART_VERSION=$(cat config/.dart-version)" >> $GITHUB_OUTPUT
 
     - name: Install dart   
+      if: ${{ inputs.language == 'dart' }}
       uses: dart-lang/setup-dart@v1  
       with:
         sdk: ${{ steps.dart-version.outputs.DART_VERSION }}
 
     - name: Setup dart tools
+      if: ${{ inputs.language == 'dart' }}
       shell: bash
       run: dart pub global activate melos    
 
