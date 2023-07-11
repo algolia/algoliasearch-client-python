@@ -37,28 +37,31 @@ export const ROOT_ENV_PATH = path.resolve(ROOT_DIR, '.env');
 // Build `GENERATORS` from the openapitools file
 export const GENERATORS = Object.entries(
   openapiConfig['generator-cli'].generators
-).reduce((current, [key, { output, ...gen }]) => {
-  const language = key.slice(0, key.indexOf('-')) as Language;
+).reduce(
+  (current, [key, { output, ...gen }]) => {
+    const language = key.slice(0, key.indexOf('-')) as Language;
 
-  // eslint-disable-next-line no-param-reassign
-  current[key] = {
-    additionalProperties: {},
-    ...gen,
-    output: output.replace('#{cwd}/', ''),
-    client: key.slice(key.indexOf('-') + 1),
-    language,
-    key,
-  };
-
-  if (language === 'javascript') {
     // eslint-disable-next-line no-param-reassign
-    current[key].additionalProperties.packageName = output.substring(
-      output.lastIndexOf('/') + 1
-    );
-  }
+    current[key] = {
+      additionalProperties: {},
+      ...gen,
+      output: output.replace('#{cwd}/', ''),
+      client: key.slice(key.indexOf('-') + 1),
+      language,
+      key,
+    };
 
-  return current;
-}, {} as Record<string, Generator>);
+    if (language === 'javascript') {
+      // eslint-disable-next-line no-param-reassign
+      current[key].additionalProperties.packageName = output.substring(
+        output.lastIndexOf('/') + 1
+      );
+    }
+
+    return current;
+  },
+  {} as Record<string, Generator>
+);
 
 export const LANGUAGES = [
   ...new Set(Object.values(GENERATORS).map((gen) => gen.language)),

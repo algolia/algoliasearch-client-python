@@ -40,16 +40,19 @@ async function buildClient(
 
 export async function buildClients(generators: Generator[]): Promise<void> {
   const langs = [...new Set(generators.map((gen) => gen.language))];
-  const generatorsMap = generators.reduce((map, gen) => {
-    if (!(gen.language in map)) {
-      // eslint-disable-next-line no-param-reassign
-      map[gen.language] = [];
-    }
+  const generatorsMap = generators.reduce(
+    (map, gen) => {
+      if (!(gen.language in map)) {
+        // eslint-disable-next-line no-param-reassign
+        map[gen.language] = [];
+      }
 
-    map[gen.language].push(gen);
+      map[gen.language].push(gen);
 
-    return map;
-  }, {} as Record<Language, Generator[]>);
+      return map;
+    },
+    {} as Record<Language, Generator[]>
+  );
 
   await Promise.all(
     langs.map((lang) => buildClient(lang, generatorsMap[lang]))

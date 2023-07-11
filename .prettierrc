@@ -1,13 +1,8 @@
 {
   "trailingComma": "es5",
   "singleQuote": true,
+  "plugins":["prettier-plugin-java"],
   "overrides": [
-    {
-      "files": "*.php",
-      "options": {
-        "tabWidth": 4
-      }
-    },
     {
       "files": "*.java",
       "options": {
