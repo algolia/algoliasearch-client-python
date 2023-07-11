@@ -1,0 +1,10 @@
+[
+  {
+    "testName": "getInventory",
+    "parameters": {},
+    "request": {
+      "path": "/1/inventory/servers",
+      "method": "GET"
+    }
+  }
+]

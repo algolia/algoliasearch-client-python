@@ -1,0 +1,78 @@
+description: OK
+content:
+  application/json:
+    schema:
+      title: InfrastructureResponse
+      type: object
+      additionalProperties: false
+      properties:
+        metrics:
+          type: object
+          additionalProperties: false
+          properties:
+            cpu_usage:
+              type: object
+              description: CPU idleness in %.
+              additionalProperties:
+                x-additionalPropertiesName: probes
+                $ref: '../schemas/InfraProbes.yml'
+            ram_indexing_usage:
+              type: object
+              description: RAM used for indexing in MB.
+              additionalProperties:
+                x-additionalPropertiesName: probes
+                $ref: '../schemas/InfraProbes.yml'
+            ram_search_usage:
+              type: object
+              description: RAM used for search in MB.
+              additionalProperties:
+                x-additionalPropertiesName: probes
+                $ref: '../schemas/InfraProbes.yml'
+            ssd_usage:
+              type: object
+              description: >
+                Solid-state disk (SSD) usage expressed as % of RAM. 
+
+                0% means no SSD usage. A value of 50% indicates 32&nbsp;GB SSD
+                usage for a machine with 64&nbsp;RAM.
+              additionalProperties:
+                x-additionalPropertiesName: probes
+                $ref: '../schemas/InfraProbes.yml'
+            avg_build_time:
+              type: object
+              description: Average build time of the indices in seconds.
+              additionalProperties:
+                x-additionalPropertiesName: probes
+                $ref: '../schemas/InfraProbes.yml'
+    examples:
+      success:
+        value:
+          metrics:
+            cpu_usage:
+              s4-fr:
+                - t: 1455101280
+                  v: 46
+                - t: 1455101290
+                  v: 46
+                - t: 1455101300
+                  v: 46
+              c3-use-1:
+                - t: 1455101280
+                  v: 42
+                - t: 1455101290
+                  v: 42
+                - t: 1455101300
+                  v: 42
+                - t: 1455101310
+                  v: 37
+              c3-use-2:
+                - t: 1455101280
+                  v: 56
+                - t: 1455101290
+                  v: 56
+                - t: 1455101300
+                  v: 56
+                - t: 1455101310
+                  v: 56
+                - t: 1455101320
+                  v: 51

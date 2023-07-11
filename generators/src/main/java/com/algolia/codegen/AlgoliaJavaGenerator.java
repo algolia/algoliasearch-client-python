@@ -125,6 +125,13 @@ public class AlgoliaJavaGenerator extends JavaClientCodegen {
       return super.toEnumVarName(value, datatype);
     }
 
+    // In some cases, the API might accept characters instead of the textual notation, we will
+    // replace it internally so that it doesn't output the character itself.
+    switch (value) {
+      case "*":
+        return "ALL";
+    }
+
     if (!value.matches("[A-Z0-9_]+")) {
       // convert camelCase77String to CAMEL_CASE_77_STRING
       return value.replaceAll("-", "_").replaceAll("(.+?)([A-Z]|[0-9])", "$1_$2").toUpperCase(Locale.ROOT);

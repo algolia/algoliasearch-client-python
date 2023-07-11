@@ -1,0 +1,13 @@
+description: Forbidden
+content:
+  application/json:
+    schema:
+      type: object
+      additionalProperties: false
+      properties:
+        reason:
+          type: string
+    examples:
+      Forbidden:
+        value:
+          reason: invalid credentials

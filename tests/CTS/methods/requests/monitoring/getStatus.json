@@ -1,0 +1,10 @@
+[
+  {
+    "testName": "getStatus",
+    "parameters": {},
+    "request": {
+      "path": "/1/status",
+      "method": "GET"
+    }
+  }
+]

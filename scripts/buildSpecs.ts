@@ -70,8 +70,15 @@ async function transformBundle({
 
       // Checks that specified tags are well defined at root level
       for (const tag of docMethod.tags) {
-        if (tag === clientName || (alias && tag === alias)) {
-          return;
+        if (tag === clientName) {
+          throw new Error(
+            `Tag name "${tag}" must be different from client name ${clientName}`
+          );
+        }
+        if (alias && tag === alias) {
+          throw new Error(
+            `Tag name "${tag} must be different from alias ${alias}`
+          );
         }
 
         const tagExists = tagsDefinitions

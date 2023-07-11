@@ -1,0 +1,23 @@
+get:
+  summary: List servers.
+  operationId: getInventory
+  security:
+    - appId: []
+    - apiKey: []
+  description: |
+    List the servers belonging to clusters.
+
+    The response depends on whether you authenticate your API request:
+
+    - With authentication, the response lists the servers assigned to your
+    Algolia application's cluster.
+
+    - Without authentication, the response lists the servers for all Algolia
+    clusters.
+  tags:
+    - monitoring-tag
+  responses:
+    '200':
+      $ref: '../common/responses/InventoryResponse.yml'
+    '403':
+      $ref: '../common/responses/ForbiddenResponse.yml'

@@ -1,0 +1,23 @@
+get:
+  operationId: getStatus
+  summary: List cluster statuses.
+  tags:
+    - status
+  security:
+    - appId: []
+    - apiKey: []
+  description: |
+    Report whether clusters are operational.
+
+    The response depends on whether you authenticate your API request.
+
+    - With authentication, the response includes the status of the cluster
+    assigned to your Algolia application.
+
+    - Without authentication, the response lists the statuses of all public
+    Algolia clusters.
+  responses:
+    '200':
+      $ref: '../common/responses/StatusResponse.yml'
+    '401':
+      $ref: '../common/responses/UnauthorizedResponse.yml'

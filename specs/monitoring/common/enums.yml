@@ -1,0 +1,64 @@
+Metric:
+  type: string
+  enum:
+    - avg_build_time
+    - ssd_usage
+    - ram_search_usage
+    - ram_indexing_usage
+    - cpu_usage
+    - '*'
+  example: '*'
+
+Period:
+  type: string
+  enum:
+    - minute
+    - hour
+    - day
+    - week
+    - month
+  example: week
+
+Region:
+  title: region
+  type: string
+  description: The region where the cluster is located.
+  enum:
+    - au
+    - br
+    - ca
+    - de
+    - eu
+    - hk
+    - in
+    - jp
+    - sg
+    - uae
+    - uk
+    - usc
+    - use
+    - usw
+    - za
+  example: de
+
+Status:
+  title: status
+  type: string
+  description: Status of the cluster.
+  enum:
+    - operational
+    - degraded_performance
+    - partial_outage
+    - major_outage
+
+ServerStatus:
+  title: status
+  type: string
+  enum:
+    - PRODUCTION
+
+Type:
+  title: type
+  type: string
+  enum:
+    - cluster

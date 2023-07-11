@@ -1,0 +1,15 @@
+description: Unauthorized
+content:
+  application/json:
+    schema:
+      type: object
+      additionalProperties: false
+      properties:
+        reason:
+          type: string
+    examples:
+      Unauthorized:
+        value:
+          reason: >-
+            The infrastructure usage API is only available on Enterprise plans.
+            Please contact enterprise@algolia.com for more detail.

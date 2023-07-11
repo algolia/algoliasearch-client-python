@@ -1,0 +1,27 @@
+description: OK
+content:
+  application/json:
+    schema:
+      title: IndexingTimeResponse
+      type: object
+      properties:
+        metrics:
+          type: object
+          additionalProperties: false
+          properties:
+            indexing:
+              additionalProperties:
+                x-additionalPropertiesName: times
+                $ref: '../schemas/Time.yml'
+    examples:
+      Success:
+        value:
+          metrics:
+            indexing:
+              c16-de:
+                - t: 1688056200000
+                  v: 1562
+                - t: 1688056800000
+                  v: 1637
+                - t: 1688057400000
+                  v: 1754

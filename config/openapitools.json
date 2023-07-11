@@ -75,6 +75,13 @@
           "packageName": "ingestion"
         }
       },
+      "javascript-monitoring": {
+        "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/monitoring",
+        "additionalProperties": {
+          "packageVersion": "1.0.0-alpha.1",
+          "packageName": "monitoring"
+        }
+      },
       "java-search": {
         "output": "#{cwd}/clients/algoliasearch-client-java-2"
       },
@@ -96,6 +103,9 @@
       "java-query-suggestions": {
         "output": "#{cwd}/clients/algoliasearch-client-java-2"
       },
+      "java-monitoring": {
+        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+      },
       "php-search": {
         "output": "#{cwd}/clients/algoliasearch-client-php"
       },
@@ -115,6 +125,9 @@
         "output": "#{cwd}/clients/algoliasearch-client-php"
       },
       "php-query-suggestions": {
+        "output": "#{cwd}/clients/algoliasearch-client-php"
+      },
+      "php-monitoring": {
         "output": "#{cwd}/clients/algoliasearch-client-php"
       },
       "go-analytics": {
@@ -165,6 +178,12 @@
           "packageName": "predict"
         }
       },
+      "go-monitoring": {
+        "output": "#{cwd}/clients/algoliasearch-client-go",
+        "additionalProperties": {
+          "packageName": "monitoring"
+        }
+      },
       "kotlin-search": {
         "output": "#{cwd}/clients/algoliasearch-client-kotlin"
       },
@@ -190,6 +209,9 @@
         "output": "#{cwd}/clients/algoliasearch-client-kotlin"
       },
       "kotlin-ingestion": {
+        "output": "#{cwd}/clients/algoliasearch-client-kotlin"
+      },
+      "kotlin-monitoring": {
         "output": "#{cwd}/clients/algoliasearch-client-kotlin"
       },
       "dart-algoliasearch": {

@@ -1,0 +1,10 @@
+description: Unauthorized
+content:
+  text/plain:
+    schema:
+      type: string
+    examples:
+      Unauthorized:
+        summary: Invalid credentials.
+        description: Make sure to use the Monitoring API key if you authenticate your API requests.
+        value: Invalid credentials

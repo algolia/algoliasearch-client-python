@@ -1,0 +1,12 @@
+[
+  {
+    "testName": "getLatency",
+    "parameters": {
+      "clusters": "c1-de"
+    },
+    "request": {
+      "path": "/1/latency/c1-de",
+      "method": "GET"
+    }
+  }
+]

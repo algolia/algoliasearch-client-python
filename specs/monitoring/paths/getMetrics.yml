@@ -1,0 +1,14 @@
+get:
+  summary: Get metrics for a given period.
+  description: Report the aggregate value of a metric for a selected period of time.
+  operationId: getMetrics
+  tags:
+    - infrastructure
+  parameters:
+    - $ref: '../common/parameters.yml#/MetricInPath'
+    - $ref: '../common/parameters.yml#/PeriodInPath'
+  responses:
+    '200':
+      $ref: '../common/responses/InfrastructureResponse.yml'
+    '401':
+      $ref: '../common/responses/InfrastructureAPIUnauthorized.yml'

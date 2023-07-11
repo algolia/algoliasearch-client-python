@@ -1,0 +1,14 @@
+get:
+  summary: Test the reachability of clusters.
+  description: Test whether clusters are reachable or not.
+  operationId: getReachability
+  security: []
+  tags:
+    - monitoring-tag
+  parameters:
+    - $ref: '../common/parameters.yml#/Clusters'
+  responses:
+    '200':
+      $ref: '../common/responses/ReachabilityResponse.yml'
+    '400':
+      $ref: '../common/responses/BadRequestResponse.yml'

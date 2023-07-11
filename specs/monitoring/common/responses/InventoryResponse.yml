@@ -1,0 +1,36 @@
+description: OK
+content:
+  application/json:
+    schema:
+      title: InventoryResponse
+      type: object
+      properties:
+        inventory:
+          type: array
+          items:
+            $ref: '../schemas/Server.yml'
+    examples:
+      Success:
+        value:
+          inventory:
+            - name: c16-de-3
+              region: de
+              is_slave: false
+              is_replica: false
+              cluster: c16-de
+              status: PRODUCTION
+              type: cluster
+            - name: c16-de-2
+              region: de
+              is_slave: false
+              is_replica: false
+              cluster: c16-de
+              status: PRODUCTION
+              type: cluster
+            - name: c16-de-1
+              region: de
+              is_slave: false
+              is_replica: false
+              cluster: c16-de
+              status: PRODUCTION
+              type: cluster

@@ -1,0 +1,10 @@
+[
+  {
+    "testName": "getIncidents",
+    "parameters": {},
+    "request": {
+      "path": "/1/incidents",
+      "method": "GET"
+    }
+  }
+]

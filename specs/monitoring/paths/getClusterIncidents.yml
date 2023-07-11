@@ -1,0 +1,16 @@
+get:
+  summary: List incidents for selected clusters.
+  description: List known incidents for selected clusters.
+  operationId: getClusterIncidents
+  tags:
+    - incidents
+  security: []
+  parameters:
+    - $ref: '../common/parameters.yml#/Clusters'
+  responses:
+    '200':
+      $ref: '../common/responses/IncidentsResponse.yml'
+    '401':
+      $ref: '../common/responses/UnauthorizedResponse.yml'
+    '404':
+      $ref: '../common/responses/NotFoundResponse.yml'

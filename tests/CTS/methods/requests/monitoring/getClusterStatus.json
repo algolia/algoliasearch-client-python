@@ -1,0 +1,12 @@
+[
+  {
+    "testName": "getClusterStatus",
+    "parameters": {
+      "clusters": "c1-de"
+    },
+    "request": {
+      "path": "/1/status/c1-de",
+      "method": "GET"
+    }
+  }
+]

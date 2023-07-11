@@ -1,0 +1,9 @@
+title: incident
+description: Incident details.
+type: object
+properties:
+  title:
+    type: string
+    description: Description of the incident.
+  status:
+    $ref: '../enums.yml#/Status'

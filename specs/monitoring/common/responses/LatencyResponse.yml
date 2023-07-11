@@ -1,0 +1,27 @@
+description: OK
+content:
+  application/json:
+    schema:
+      title: LatencyResponse
+      type: object
+      properties:
+        metrics:
+          type: object
+          additionalProperties: false
+          properties:
+            latency:
+              additionalProperties:
+                x-additionalPropertiesName: latencies
+                $ref: '../schemas/Time.yml'
+    examples:
+      Success:
+        value:
+          metrics:
+            latency:
+              c16-de:
+                - t: 1688056200000
+                  v: 64
+                - t: 1688056800000
+                  v: 59
+                - t: 1688057400000
+                  v: 55

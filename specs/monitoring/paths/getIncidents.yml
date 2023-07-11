@@ -1,0 +1,12 @@
+get:
+  summary: List incidents.
+  description: List known incidents for all clusters.
+  operationId: getIncidents
+  security: []
+  tags:
+    - incidents
+  responses:
+    '200':
+      $ref: '../common/responses/IncidentsResponse.yml'
+    '401':
+      $ref: '../common/responses/UnauthorizedResponse.yml'

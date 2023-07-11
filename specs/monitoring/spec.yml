@@ -1,0 +1,72 @@
+openapi: 3.0.2
+info:
+  title: Algolia Monitoring API
+  description: |
+    The Monitoring API lets you check the status and performance of your Algolia
+    infrastructure.
+
+    > **Note**: The Monitoring API is available on [Premium
+    plans](https://www.algolia.com/pricing/) and plans including the Enterprise
+    add-on.
+  version: 1.0.0
+servers:
+  - url: https://status.algolia.com
+components:
+  securitySchemes:
+    appId:
+      type: apiKey
+      in: header
+      name: X-Algolia-Application-Id
+      description: Your Algolia application ID.
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-Algolia-API-Key
+      description: Your Algolia API key. Make sure to use your Monitoring API key.
+tags:
+  - name: incidents
+    description: List the known incidents.
+    x-displayName: Incidents
+  - name: infrastructure
+    description: Return information about the Algolia infrastructure used by your application.
+    x-displayName: Infrastructure
+  - name: monitoring-tag
+    description: Report search and indexing times for your clusters, and get a list of servers.
+    x-displayName: Monitoring
+  - name: status
+    description: |
+      Report the status of your clusters.
+
+      At Algolia, your application is hosted on a [cluster with three
+      servers](https://www.algolia.com/doc/guides/scaling/servers-clusters/).
+
+      Cluster names follow a pattern: `c{[0-9]+}-{region}` where `{region}` is
+      one of the supported Algolia regions.
+
+      Server names follow the pattern: `{cluster-name}-{1|2|3}`.
+    x-displayName: Status
+paths:
+  # ######################
+  # ### Custom request ###
+  # ######################
+  /1{path}:
+    $ref: '../common/paths/customRequest.yml'
+
+  /1/status:
+    $ref: 'paths/getStatus.yml'
+  /1/status/{clusters}:
+    $ref: 'paths/getClusterStatus.yml'
+  /1/incidents:
+    $ref: 'paths/getIncidents.yml'
+  /1/incidents/{clusters}:
+    $ref: 'paths/getClusterIncidents.yml'
+  /1/inventory/servers:
+    $ref: 'paths/getInventory.yml'
+  /1/latency/{clusters}:
+    $ref: 'paths/getLatency.yml'
+  /1/indexing/{clusters}:
+    $ref: 'paths/getIndexingTime.yml'
+  /1/reachability/{clusters}/probes:
+    $ref: 'paths/getReachability.yml'
+  /1/infrastructure/{metric}/period/{period}:
+    $ref: 'paths/getMetrics.yml'

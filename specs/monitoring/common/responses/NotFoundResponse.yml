@@ -1,0 +1,8 @@
+description: Not Found.
+content:
+  text/plain:
+    schema:
+      type: string
+    examples:
+      NotFound:
+        value: Unknown cluster "test"
