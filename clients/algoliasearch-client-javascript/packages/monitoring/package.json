@@ -5,6 +5,7 @@
   "repository": "algolia/algoliasearch-client-javascript",
   "license": "MIT",
   "author": "Algolia",
+  "type": "module",
   "exports": {
     ".": {
       "node": {
