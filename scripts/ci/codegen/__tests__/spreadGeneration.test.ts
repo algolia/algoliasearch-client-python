@@ -1,5 +1,5 @@
-import { cleanUpCommitMessage } from '../spreadGeneration';
-import text from '../text';
+import { cleanUpCommitMessage } from '../spreadGeneration.js';
+import text from '../text.js';
 
 describe('spread generation', () => {
   describe('cleanUpCommitMessage', () => {

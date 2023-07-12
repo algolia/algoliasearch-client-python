@@ -1,14 +1,10 @@
-import { gitAuthor } from '../../../config/release.config.json';
-import * as common from '../../common';
-import {
-  parseCommit,
-  getVersionChangesText,
-  getSkippedCommitsText,
-  decideReleaseStrategy,
-  readVersions,
-  getNextVersion,
-} from '../createReleasePR';
-import type { PassedCommit } from '../types';
+import { jest } from '@jest/globals';
+
+import releaseConfig from '../../../config/release.config.json' assert { type: 'json' };
+import * as common from '../../common.js';
+import type { PassedCommit } from '../types.js';
+
+const gitAuthor = releaseConfig.gitAuthor;
 
 const buildTestCommit = (
   options: Partial<{
@@ -24,26 +20,36 @@ const buildTestCommit = (
   return `${baseTestCommit}|${typeAndScope}: ${message}`;
 };
 
-describe('createReleasePR', () => {
-  beforeAll(() => {
-    // Mock `getOctokit` to bypass the API call and credential requirements
-    jest.spyOn(common, 'getOctokit').mockImplementation((): any => {
-      return {
-        pulls: {
-          get: (): any => ({
-            data: {
-              user: {
-                login: gitAuthor.name,
-              },
+// Mock `getOctokit` to bypass the API call and credential requirements
+jest.unstable_mockModule('../../common.js', () => ({
+  ...common,
+  getOctokit: jest.fn(() => {
+    return {
+      pulls: {
+        get: (): any => ({
+          data: {
+            user: {
+              login: gitAuthor.name,
             },
-          }),
-        },
-      };
-    });
-  });
+          },
+        }),
+      },
+    };
+  }),
+}));
 
+const {
+  parseCommit,
+  getVersionChangesText,
+  getSkippedCommitsText,
+  decideReleaseStrategy,
+  readVersions,
+  getNextVersion,
+} = await import('../createReleasePR.js');
+
+describe('createReleasePR', () => {
   afterAll(() => {
-    jest.spyOn(common, 'getOctokit').mockRestore();
+    jest.clearAllMocks();
   });
 
   it('reads versions of the current language', () => {

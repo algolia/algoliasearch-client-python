@@ -2,5 +2,5 @@
   "generators/**/*.java": "docker exec -t api-clients-automation bash -lc \"yarn cli format java generators\"",
   ".github/**/*.yml": "yarn github-actions:lint --fix",
   "*.json": "yarn fix:json",
-  "scripts/**/*.(js|ts)": "yarn scripts:lint --fix"
+  "scripts/**/*.(js|ts|mjs|cjs)": "yarn scripts:lint --fix"
 }

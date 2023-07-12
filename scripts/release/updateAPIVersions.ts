@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 import yaml from 'js-yaml';
 import semver from 'semver';
 
-import clientsConfig from '../../config/clients.config.json';
-import openapiConfig from '../../config/openapitools.json';
+import clientsConfig from '../../config/clients.config.json' assert { type: 'json' };
+import openapiConfig from '../../config/openapitools.json' assert { type: 'json' };
 import {
   ROOT_ENV_PATH,
   toAbsolutePath,

@@ -1,5 +1,6 @@
-// eslint-disable-next-line import/no-commonjs
 module.exports = {
+  root: true,
+
   ignorePatterns: [
     '**/node_modules',
     '**/build',
@@ -83,6 +84,11 @@ module.exports = {
 
       parser: '@typescript-eslint/parser',
 
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: './**/tsconfig.json',
+      },
+
       settings: {
         'import/extensions': ['.js', '.ts'],
         'import/parsers': {
@@ -100,6 +106,7 @@ module.exports = {
         'no-continue': 0,
         '@typescript-eslint/prefer-enum-initializers': 0,
         '@typescript-eslint/no-namespace': 0,
+        'import/dynamic-import-chunkname': 0,
 
         'unused-imports/no-unused-imports-ts': 2,
         '@typescript-eslint/no-unused-vars': 2,
@@ -130,6 +137,12 @@ module.exports = {
     // JS client rules
     {
       files: ['clients/algoliasearch-client-javascript/packages/**/*.ts'],
+
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: './clients/algoliasearch-client-javascript/tsconfig.json'
+      },
+
       rules: {
         // For a wider browser support (IE>=11), we forbid those two
         'no-restricted-syntax': [

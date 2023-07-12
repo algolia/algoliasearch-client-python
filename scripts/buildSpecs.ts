@@ -8,9 +8,9 @@ import {
   exists,
   run,
   toAbsolutePath,
-} from './common';
-import { createSpinner } from './spinners';
-import type { Spec } from './types';
+} from './common.js';
+import { createSpinner } from './spinners.js';
+import type { Spec } from './types.js';
 
 const ALGOLIASEARCH_LITE_OPERATIONS = ['search', 'post'];
 

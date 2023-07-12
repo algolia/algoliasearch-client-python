@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-./scripts/husky/pre-commit.js
+node --no-warnings ./scripts/husky/pre-commit.mjs
 yarn lint-staged

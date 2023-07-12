@@ -1,10 +1,10 @@
 import { writeFile } from 'fs/promises';
 
-import clientsConfig from '../../config/clients.config.json';
-import openapiConfig from '../../config/openapitools.json';
-import { toAbsolutePath } from '../common';
-import { getClientsConfigField } from '../config';
-import type { Generator } from '../types';
+import clientsConfig from '../../config/clients.config.json' assert { type: 'json' };
+import openapiConfig from '../../config/openapitools.json' assert { type: 'json' };
+import { toAbsolutePath } from '../common.js';
+import { getClientsConfigField } from '../config.js';
+import type { Generator } from '../types.js';
 
 const AVAILABLE_CUSTOM_GEN = Object.values(clientsConfig)
   .map((gen) => ('customGenerator' in gen ? gen.customGenerator : null))

@@ -499,7 +499,7 @@ async function createReleasePR(): Promise<void> {
   console.log(`  > ${data.url}`);
 }
 
-if (require.main === module) {
+if (import.meta.url.endsWith(process.argv[1])) {
   setVerbose(false);
   createReleasePR();
 }

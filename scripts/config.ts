@@ -1,7 +1,7 @@
-import clientsConfig from '../config/clients.config.json';
-import openapiConfig from '../config/openapitools.json';
+import clientsConfig from '../config/clients.config.json' assert { type: 'json' };
+import openapiConfig from '../config/openapitools.json' assert { type: 'json' };
 
-import type { Language, LanguageConfig } from './types';
+import type { Language, LanguageConfig } from './types.js';
 
 export function getClientsConfigField(
   language: Language,

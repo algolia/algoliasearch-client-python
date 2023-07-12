@@ -4,10 +4,10 @@ import {
   ensureGitHubToken,
   MAIN_BRANCH,
   run,
-} from '../../common';
-import { getNbGitDiff } from '../utils';
+} from '../../common.js';
+import { getNbGitDiff } from '../utils.js';
 
-import text, { commitStartPrepareRelease } from './text';
+import text, { commitStartPrepareRelease } from './text.js';
 
 const PR_NUMBER = parseInt(process.env.PR_NUMBER || '0', 10);
 
@@ -95,6 +95,6 @@ Co-authored-by: %an <%ae>
   }
 }
 
-if (require.main === module) {
+if (import.meta.url.endsWith(process.argv[1])) {
   pushGeneratedCode();
 }

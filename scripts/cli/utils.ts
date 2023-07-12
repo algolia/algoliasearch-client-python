@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 
-import { CLIENTS, GENERATORS, LANGUAGES } from '../common';
-import type { Generator, Language } from '../types';
+import { CLIENTS, GENERATORS, LANGUAGES } from '../common.js';
+import type { Generator, Language } from '../types.js';
 
 export const ALL = 'all';
 export const PROMPT_LANGUAGES = [ALL, ...LANGUAGES];

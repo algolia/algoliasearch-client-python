@@ -4,8 +4,8 @@ import crypto from 'crypto';
 import * as core from '@actions/core';
 import { hashElement } from 'folder-hash';
 
-import { toAbsolutePath } from '../../common';
-import { getNbGitDiff } from '../utils';
+import { toAbsolutePath } from '../../common.js';
+import { getNbGitDiff } from '../utils.js';
 /**
  * This cache key holds the hash of the common dependencies of all the clients.
  */

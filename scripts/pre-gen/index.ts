@@ -1,2 +1,2 @@
-export * from './removeExistingCodegen';
-export * from './generateOpenapitools';
+export * from './removeExistingCodegen.js';
+export * from './generateOpenapitools.js';

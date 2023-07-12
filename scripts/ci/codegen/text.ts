@@ -1,4 +1,4 @@
-import { MAIN_BRANCH, REPO_URL, TODAY } from '../../common';
+import { MAIN_BRANCH, REPO_URL, TODAY } from '../../common.js';
 
 export const commitStartPrepareRelease = 'chore: prepare release';
 export const commitStartRelease = 'chore: release';

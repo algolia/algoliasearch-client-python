@@ -1,10 +1,10 @@
 import fsp from 'fs/promises';
 import { resolve } from 'path';
 
-import { run } from '../common';
-import { getGitHubUrl } from '../config';
-import { getTargetBranch } from '../release/common';
-import type { Language } from '../types';
+import { run } from '../common.js';
+import { getGitHubUrl } from '../config.js';
+import { getTargetBranch } from '../release/common.js';
+import type { Language } from '../types.js';
 
 /**
  * Returns the number of diff between a `branch` and its `HEAD` for the given `path`.

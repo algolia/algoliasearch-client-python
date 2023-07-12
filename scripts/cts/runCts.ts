@@ -1,5 +1,5 @@
-import { DOCKER, run, runComposerUpdate } from '../common';
-import { createSpinner } from '../spinners';
+import { DOCKER, run, runComposerUpdate } from '../common.js';
+import { createSpinner } from '../spinners.js';
 
 async function runCtsOne(language: string): Promise<void> {
   const spinner = createSpinner(`running cts for '${language}'`);

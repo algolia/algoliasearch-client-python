@@ -1,15 +1,15 @@
 import { Argument, program } from 'commander';
 
-import { buildClients } from '../buildClients';
-import { buildSpecs } from '../buildSpecs';
-import { CI, DOCKER, LANGUAGES, setVerbose } from '../common';
-import { ctsGenerateMany } from '../cts/generate';
-import { runCts } from '../cts/runCts';
-import { formatter } from '../formatter';
-import { generate } from '../generate';
-import { playground } from '../playground';
+import { buildClients } from '../buildClients.js';
+import { buildSpecs } from '../buildSpecs.js';
+import { CI, DOCKER, LANGUAGES, setVerbose } from '../common.js';
+import { ctsGenerateMany } from '../cts/generate.js';
+import { runCts } from '../cts/runCts.js';
+import { formatter } from '../formatter.js';
+import { generate } from '../generate.js';
+import { playground } from '../playground.js';
 
-import type { LangArg } from './utils';
+import type { LangArg } from './utils.js';
 import {
   ALL,
   getClientChoices,
@@ -17,7 +17,7 @@ import {
   prompt,
   PROMPT_CLIENTS,
   PROMPT_LANGUAGES,
-} from './utils';
+} from './utils.js';
 
 if (!CI && !DOCKER) {
   // eslint-disable-next-line no-console

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { gitBranchExists, run } from '../../common';
+import { gitBranchExists, run } from '../../common.js';
 
 /**
  * Deletes a branch for its `generated/${headRef}` name on origin.
@@ -26,7 +26,7 @@ export async function cleanGeneratedBranch(headRef: string): Promise<void> {
   await run(`git push -d origin ${generatedCodeBranch}`);
 }
 
-if (require.main === module) {
+if (import.meta.url.endsWith(process.argv[1])) {
   const args = process.argv.slice(2);
   cleanGeneratedBranch(args[0]);
 }

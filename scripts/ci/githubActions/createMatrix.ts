@@ -1,25 +1,30 @@
 /* eslint-disable no-case-declarations */
 import * as core from '@actions/core';
 
-import { CLIENTS, createClientName, GENERATORS, LANGUAGES } from '../../common';
+import {
+  CLIENTS,
+  createClientName,
+  GENERATORS,
+  LANGUAGES,
+} from '../../common.js';
 import {
   getClientsConfigField,
   getLanguageFolder,
   getTestExtension,
   getTestOutputFolder,
-} from '../../config';
-import type { Language } from '../../types';
-import { getNbGitDiff } from '../utils';
+} from '../../config.js';
+import type { Language } from '../../types.js';
+import { getNbGitDiff } from '../utils.js';
 
-import { DEPENDENCIES, COMMON_DEPENDENCIES } from './setRunVariables';
+import { DEPENDENCIES, COMMON_DEPENDENCIES } from './setRunVariables.js';
 import type {
   ClientMatrix,
   CreateMatrix,
   Matrix,
   SpecMatrix,
   ToRunMatrix,
-} from './types';
-import { computeCacheKey, isBaseChanged } from './utils';
+} from './types.js';
+import { computeCacheKey, isBaseChanged } from './utils.js';
 
 // This empty matrix is required by the CI, otherwise it throws
 const EMPTY_MATRIX = { client: ['no-run'] };
@@ -135,6 +140,8 @@ async function getClientMatrix(baseBranch: string): Promise<void> {
         buildCommand = `cd ${
           matrix[language].path
         } && yarn build:many '{${packageNames.join(',')},}'`;
+
+        testsToStore = `${testsToStore} ${testsRootFolder}/package.json`;
         break;
       default:
         break;
@@ -205,7 +212,7 @@ async function createMatrix(opts: CreateMatrix): Promise<void> {
   return await getSpecMatrix();
 }
 
-if (require.main === module) {
+if (import.meta.url.endsWith(process.argv[1])) {
   const args = process.argv.slice(2);
 
   createMatrix({

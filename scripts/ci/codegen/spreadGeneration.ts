@@ -11,12 +11,12 @@ import {
   ensureGitHubToken,
   configureGitHubAuthor,
   setVerbose,
-} from '../../common';
-import { getLanguageFolder, getPackageVersionDefault } from '../../config';
-import { RELEASED_TAG } from '../../release/common';
-import { cloneRepository, getNbGitDiff } from '../utils';
+} from '../../common.js';
+import { getLanguageFolder, getPackageVersionDefault } from '../../config.js';
+import { RELEASED_TAG } from '../../release/common.js';
+import { cloneRepository, getNbGitDiff } from '../utils.js';
 
-import text, { commitStartRelease } from './text';
+import text, { commitStartRelease } from './text.js';
 
 export function cleanUpCommitMessage(
   commitMessage: string,
@@ -154,7 +154,7 @@ async function spreadGeneration(): Promise<void> {
   }
 }
 
-if (require.main === module) {
+if (import.meta.url.endsWith(process.argv[1])) {
   setVerbose(false);
   spreadGeneration();
 }

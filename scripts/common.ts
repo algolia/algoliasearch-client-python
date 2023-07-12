@@ -2,22 +2,23 @@ import fsp from 'fs/promises';
 import path from 'path';
 
 import { Octokit } from '@octokit/rest';
-import execa from 'execa'; // https://github.com/sindresorhus/execa/tree/v5.1.1
+import { execaCommand } from 'execa';
+import type { ExecaError } from 'execa';
 import { hashElement } from 'folder-hash';
 import { remove } from 'fs-extra';
 
-import openapiConfig from '../config/openapitools.json';
-import releaseConfig from '../config/release.config.json';
+import openapiConfig from '../config/openapitools.json' assert { type: 'json' };
+import releaseConfig from '../config/release.config.json' assert { type: 'json' };
 
-import { getGitAuthor } from './release/common';
-import { createSpinner } from './spinners';
+import { getGitAuthor } from './release/common.js';
+import { createSpinner } from './spinners.js';
 import type {
   CheckForCache,
   CheckForCacheOptions,
   Generator,
   Language,
   RunOptions,
-} from './types';
+} from './types.js';
 
 export const MAIN_BRANCH = releaseConfig.mainBranch;
 export const OWNER = releaseConfig.owner;
@@ -87,7 +88,7 @@ export async function run(
     if (isVerbose()) {
       return (
         (
-          await execa.command(command, {
+          await execaCommand(command, {
             stdout: 'inherit',
             stderr: 'inherit',
             stdin: 'inherit',
@@ -99,7 +100,7 @@ export async function run(
       );
     }
     return (
-      (await execa.command(command, { shell: 'bash', all: true, cwd: realCwd }))
+      (await execaCommand(command, { shell: 'bash', all: true, cwd: realCwd }))
         .all ?? ''
     );
   } catch (err) {
@@ -109,7 +110,7 @@ export async function run(
       // it's already logged in the verbose case
       if (!isVerbose()) {
         // eslint-disable-next-line no-console
-        console.log((err as execa.ExecaError).all);
+        console.log((err as ExecaError).all);
       }
       throw new Error(`command failed: ${command}`);
     }
@@ -153,9 +154,7 @@ export async function gitCommit({
     ? `${message}\n\n\n${coAuthors.join('\n')}`
     : message;
 
-  await execa('git', ['commit', '-m', messageWithCoAuthors], {
-    cwd,
-  });
+  await execaCommand(`git commit -m "${messageWithCoAuthors}"`, { cwd });
 }
 
 export async function checkForCache({

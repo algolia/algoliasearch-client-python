@@ -1,8 +1,8 @@
 /* eslint-disable no-case-declarations */
-import { run } from './common';
-import { getClientsConfigField, getLanguageFolder } from './config';
-import { createSpinner } from './spinners';
-import type { Generator, Language } from './types';
+import { run } from './common.js';
+import { getClientsConfigField, getLanguageFolder } from './config.js';
+import { createSpinner } from './spinners.js';
+import type { Generator, Language } from './types.js';
 
 /**
  * Build client for a language at the same time, for those who live in the same folder.

@@ -1,10 +1,13 @@
-import { buildSpecs } from './buildSpecs';
-import { buildCustomGenerators, CI, run } from './common';
-import { getCustomGenerator, getLanguageFolder } from './config';
-import { formatter } from './formatter';
-import { generateOpenapitools, removeExistingCodegen } from './pre-gen';
-import { createSpinner } from './spinners';
-import type { Generator } from './types';
+import { buildSpecs } from './buildSpecs.js';
+import { buildCustomGenerators, CI, run } from './common.js';
+import { getCustomGenerator, getLanguageFolder } from './config.js';
+import { formatter } from './formatter.js';
+import {
+  generateOpenapitools,
+  removeExistingCodegen,
+} from './pre-gen/index.js';
+import { createSpinner } from './spinners.js';
+import type { Generator } from './types.js';
 
 async function preGen(gen: Generator): Promise<void> {
   await removeExistingCodegen(gen);

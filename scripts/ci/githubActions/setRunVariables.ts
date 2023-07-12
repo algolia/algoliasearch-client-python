@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import * as core from '@actions/core';
 
-import { CLIENTS_JS_UTILS } from '../../common';
-import { getLanguageFolder } from '../../config';
+import { CLIENTS_JS_UTILS } from '../../common.js';
+import { getLanguageFolder } from '../../config.js';
 
-import { isBaseChanged } from './utils';
+import { isBaseChanged } from './utils.js';
 
 const JS_CLIENT_FOLDER = getLanguageFolder('javascript');
 const JAVA_CLIENT_FOLDER = getLanguageFolder('java');
@@ -112,7 +112,7 @@ async function setRunVariables({
   await isBaseChanged(originBranch, DEPENDENCIES, true);
 }
 
-if (require.main === module) {
+if (import.meta.url.endsWith(process.argv[1])) {
   const [originBranch] = process.argv.slice(2);
 
   if (!originBranch) {

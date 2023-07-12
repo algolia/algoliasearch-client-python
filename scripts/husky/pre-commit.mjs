@@ -1,21 +1,29 @@
-#!/usr/bin/env node
-/* eslint-disable no-console, import/no-commonjs, @typescript-eslint/no-var-requires */
-const chalk = require('chalk');
-const micromatch = require('micromatch');
+/* eslint-disable no-console */
+import chalk from 'chalk';
+import { execaCommand } from 'execa';
+import micromatch from 'micromatch';
 
-const clientConfig = require('../../config/clients.config.json');
-const GENERATED_FILE_PATTERNS =
-  require('../../config/generation.config').patterns;
+import clientConfig from '../../config/clients.config.json' assert { type: 'json' };
+import { patterns } from '../../config/generation.config.mjs';
 
-const { run } = require('./utils');
+async function run(command) {
+  return (
+    (
+      await execaCommand(command, {
+        shell: 'bash',
+        all: true,
+      })
+    ).all ?? ''
+  );
+}
 
-function getPatterns() {
-  const patterns = GENERATED_FILE_PATTERNS;
+export function getPatterns() {
+  const entries = patterns;
   for (const [language, { tests }] of Object.entries(clientConfig)) {
-    patterns.push(`tests/output/${language}/${tests.outputFolder}/client/**`);
-    patterns.push(`tests/output/${language}/${tests.outputFolder}/methods/**`);
+    entries.push(`tests/output/${language}/${tests.outputFolder}/client/**`);
+    entries.push(`tests/output/${language}/${tests.outputFolder}/methods/**`);
   }
-  return patterns;
+  return entries;
 }
 
 async function preCommit(log) {
@@ -49,11 +57,9 @@ async function preCommit(log) {
   await run(`git restore --staged ${toUnstage.join(' ')}`);
 }
 
-if (require.main === module && process.env.CI !== 'true') {
+if (import.meta.url.endsWith(process.argv[1]) && process.env.CI !== 'true') {
   preCommit(true).then(() => {
     // Run it twice because of renamed files, the first one delete the renamed one and leaves the deleted file, which is removed by this second pass
     preCommit(false);
   });
 }
-
-module.exports = { getPatterns };

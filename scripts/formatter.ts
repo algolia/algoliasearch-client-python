@@ -1,5 +1,5 @@
-import { run, runComposerUpdate } from './common';
-import { createSpinner } from './spinners';
+import { run, runComposerUpdate } from './common.js';
+import { createSpinner } from './spinners.js';
 
 export async function formatter(
   language: string,

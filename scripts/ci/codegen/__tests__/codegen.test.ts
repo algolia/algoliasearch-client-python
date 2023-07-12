@@ -1,11 +1,21 @@
-import * as common from '../../../common';
-import { cleanGeneratedBranch } from '../cleanGeneratedBranch';
-import { pushGeneratedCode } from '../pushGeneratedCode';
-import commentText from '../text';
-import {
-  upsertGenerationComment,
-  getCommentBody,
-} from '../upsertGenerationComment';
+import { jest } from '@jest/globals';
+
+import * as common from '../../../common.js';
+import { cleanGeneratedBranch } from '../cleanGeneratedBranch.js';
+import { pushGeneratedCode } from '../pushGeneratedCode.js';
+import commentText from '../text.js';
+
+const mockedRun = jest.fn(() => {
+  return Promise.resolve('');
+});
+
+jest.unstable_mockModule('../../../common.js', () => ({
+  ...common,
+  run: mockedRun,
+}));
+const { upsertGenerationComment, getCommentBody } = await import(
+  '../upsertGenerationComment.js'
+);
 
 describe('codegen', () => {
   describe('cleanGeneratedBranch', () => {
@@ -50,37 +60,31 @@ describe('codegen', () => {
   });
 
   describe('getCommentBody', () => {
-    it('returns the right comment for a `notification` trigger', async () => {
-      expect(await getCommentBody('notification')).toMatchInlineSnapshot(`
-        "### 🔨 The codegen job will run at the end of the CI.
+    describe('setup', () => {
+      it('returns the right comment for a `notification` trigger', async () => {
+        expect(await getCommentBody('notification')).toMatchInlineSnapshot(`
+          "### 🔨 The codegen job will run at the end of the CI.
 
-        _Make sure your last commit does not contain generated code, it will be automatically pushed by our CI._"
-      `);
-    });
+          _Make sure your last commit does not contain generated code, it will be automatically pushed by our CI._"
+        `);
+      });
 
-    it('returns the right comment for a `noGen` trigger', async () => {
-      expect(await getCommentBody('noGen')).toMatchInlineSnapshot(`
-        "### ✗ No code generated.
+      it('returns the right comment for a `noGen` trigger', async () => {
+        expect(await getCommentBody('noGen')).toMatchInlineSnapshot(`
+          "### ✗ No code generated.
 
-        _If you believe this is an issue on our side, please [open an issue](https://github.com/algolia/api-clients-automation/issues/new?template=Bug_report.md)._"
-      `);
+          _If you believe this is an issue on our side, please [open an issue](https://github.com/algolia/api-clients-automation/issues/new?template=Bug_report.md)._"
+        `);
+      });
     });
 
     describe('cleanup', () => {
-      let mockedResolvedValue: string;
-      beforeEach(() => {
-        jest.spyOn(common, 'run').mockImplementation(() => {
-          return Promise.resolve(mockedResolvedValue);
-        });
-      });
-
       afterEach(() => {
-        jest.spyOn(common, 'run').mockRestore();
+        jest.clearAllMocks();
       });
 
-      afterEach(() => {});
       it('returns the right comment for a `cleanup` trigger', async () => {
-        mockedResolvedValue = 'mocked';
+        mockedRun.mockResolvedValue('mocked');
 
         expect(await getCommentBody('cleanup')).toMatchInlineSnapshot(`
           "### ✗ The generated branch has been deleted.
@@ -92,7 +96,7 @@ describe('codegen', () => {
 
       it('fallbacks to the env variable HEAD_BRANCH if found when we are on `main`', async () => {
         process.env.HEAD_BRANCH = 'myFakeBranch';
-        mockedResolvedValue = 'main';
+        mockedRun.mockResolvedValue('main');
 
         expect(await getCommentBody('cleanup')).toMatchInlineSnapshot(`
           "### ✗ The generated branch has been deleted.

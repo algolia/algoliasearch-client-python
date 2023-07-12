@@ -1,6 +1,6 @@
 import fsp from 'fs/promises';
 
-import config from '../../config/release.config.json';
+import config from '../../config/release.config.json' assert { type: 'json' };
 
 export const RELEASED_TAG = config.releasedTag;
 export const TEAM_SLUG = config.teamSlug;

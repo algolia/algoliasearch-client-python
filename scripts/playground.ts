@@ -1,5 +1,5 @@
-import type { AllLanguage } from './cli/utils';
-import { createClientName, run } from './common';
+import type { AllLanguage } from './cli/utils.js';
+import { createClientName, run } from './common.js';
 
 export async function playground({
   language,

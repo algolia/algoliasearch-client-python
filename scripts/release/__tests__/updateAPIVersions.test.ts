@@ -1,5 +1,5 @@
-import { getNextVersion } from '../createReleasePR';
-import { getVersionsToRelease } from '../updateAPIVersions';
+import { getNextVersion } from '../createReleasePR.js';
+import { getVersionsToRelease } from '../updateAPIVersions.js';
 
 describe('updateAPIversions', () => {
   it('gets versions to release', () => {

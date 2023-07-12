@@ -1,21 +1,28 @@
-import execa from 'execa';
+import { jest } from '@jest/globals';
 
-import { capitalize, createClientName, gitCommit } from '../common';
-import { getClientsConfigField } from '../config';
+import { getClientsConfigField } from '../config.js';
 
-jest.mock('execa');
+jest.unstable_mockModule('execa', () => {
+  return {
+    execaCommand: jest.fn(),
+  };
+});
+
+const { capitalize, createClientName, gitCommit } = await import(
+  '../common.js'
+);
+const { execaCommand } = await import('execa');
 
 describe('gitCommit', () => {
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('commits with message', () => {
     gitCommit({ message: 'chore: does something' });
-    expect(execa).toHaveBeenCalledTimes(1);
-    expect(execa).toHaveBeenCalledWith(
-      'git',
-      ['commit', '-m', 'chore: does something'],
+    expect(execaCommand).toHaveBeenCalledTimes(1);
+    expect(execaCommand).toHaveBeenCalledWith(
+      'git commit -m "chore: does something"',
       { cwd: expect.any(String) }
     );
   });
@@ -40,14 +47,9 @@ describe('gitCommit', () => {
       message: 'chore: does something',
       coAuthors: [author, ...coAuthors],
     });
-    expect(execa).toHaveBeenCalledTimes(1);
-    expect(execa).toHaveBeenCalledWith(
-      'git',
-      [
-        'commit',
-        '-m',
-        'chore: does something\n\n\nCo-authored-by: them <them@algolia.com>\nCo-authored-by: me <me@algolia.com>\nCo-authored-by: you <you@algolia.com>',
-      ],
+    expect(execaCommand).toHaveBeenCalledTimes(1);
+    expect(execaCommand).toHaveBeenCalledWith(
+      'git commit -m "chore: does something\n\n\nCo-authored-by: them <them@algolia.com>\nCo-authored-by: me <me@algolia.com>\nCo-authored-by: you <you@algolia.com>"',
       { cwd: expect.any(String) }
     );
   });
