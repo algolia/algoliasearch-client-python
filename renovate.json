@@ -160,11 +160,9 @@
     "**/predict/**",
     "**/recommend/**",
     "clients/algoliasearch-client-php/composer.json",
-    "tests/output/**"
-  ],
-  "includePaths": [
-    "tests/output/javascript/.yarn/**",
-    "tests/output/kotlin/gradle/**"
+    "tests/output/dart/**",
+    "tests/output/java/**",
+    "tests/output/javascript/package.json"
   ],
   "prHourlyLimit": 20,
   "prConcurrentLimit": 50
