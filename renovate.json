@@ -47,7 +47,7 @@
         "package.mustache"
       ],
       "matchStrings": [
-        "\"devDependencies\":\\s*{[^}]*}",
+        "\"(dev)?[dD]ependencies\":\\s*{[^}]*}",
         "\\s\"(?<depName>.*?)\": \"(?<currentValue>.*?)\",?\\s"
       ],
       "matchStringsStrategy": "recursive",
@@ -83,6 +83,69 @@
       ],
       "depNameTemplate": "yarnpkg/berry",
       "datasourceTemplate": "github-releases"
+    },
+    {
+      "description": "Update composer.json for PHP",
+      "fileMatch": "composer.mustache",
+      "matchStrings": [
+        "\"require(-dev)?\":\\s*{[^}]*}",
+        "\"(?<depName>.*?)\": \"(?<currentValue>.*?)\",?\\s"
+      ],
+      "matchStringsStrategy": "recursive",
+      "datasourceTemplate": "packagist"
+    },
+    {
+      "description": "Update pubspec.yaml for Dart",
+      "fileMatch": "pubspec.mustache",
+      "matchStrings": [
+        "(dev_)?dependencies:\\s*{[^}]*}",
+        "\\s(?<depName>.*?):\\s*(?<currentValue>.*?)"
+      ],
+      "matchStringsStrategy": "recursive",
+      "datasourceTemplate": "dart"
+    },
+    {
+      "description": "Update libs.versions.toml for Kotlin",
+      "fileMatch": "libs.versions.toml",
+      "matchStrings": [
+        "(?<depName>.*?):.*?(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "maven"
+    },
+    {
+      "description": "Update .java-version",
+      "fileMatch": ".java-version",
+      "matchStrings": [
+        "(?<currentValue>.*?)"
+      ],
+      "datasourceTemplate": "java-version",
+      "depNameTemplate": "java"
+    },
+    {
+      "description": "Update .dart-version",
+      "fileMatch": ".dart-version",
+      "matchStrings": [
+        "(?<currentValue>.*?)"
+      ],
+      "datasourceTemplate": "dart-version",
+      "depNameTemplate": "dart"
+    },
+    {
+      "description": "Update .go-version",
+      "fileMatch": ".go-version",
+      "matchStrings": [
+        "(?<currentValue>.*?)"
+      ],
+      "datasourceTemplate": "golang-version",
+      "depNameTemplate": "golang"
+    },
+    {
+      "description": "update Dockerfile",
+      "fileMatch": "^Dockerfile$",
+      "matchStrings": [
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sARG .*?_VERSION=(?<currentValue>.*)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
   "ignorePaths": [
@@ -98,6 +161,10 @@
     "**/recommend/**",
     "clients/algoliasearch-client-php/composer.json",
     "tests/output/**"
+  ],
+  "includePaths": [
+    "tests/output/javascript/.yarn/**",
+    "tests/output/kotlin/gradle/**"
   ],
   "prHourlyLimit": 20,
   "prConcurrentLimit": 50

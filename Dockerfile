@@ -1,8 +1,13 @@
-ARG NODE_VERSION=18.14.2
-ARG JAVA_VERSION=11.0.18
-ARG PHP_VERSION=8.1.16
-ARG GO_VERSION=1.19.7
-ARG DART_VERSION=3.0.0
+# renovate: datasource=github-tags depName=nodejs/node versioning=node
+ARG NODE_VERSION=18.16.1
+# renovate: datasource=java-version depName=java
+ARG JAVA_VERSION=11.0.19
+# renovate: datasource=github-tags depName=php/php-sec
+ARG PHP_VERSION=8.2.8
+# renovate: datasource=golang-version depName=golang
+ARG GO_VERSION=1.20.6
+# renovate: datasource=dart-version depName=dart
+ARG DART_VERSION=3.0.2
 
 FROM golang:${GO_VERSION}-bullseye as go-builder
 
