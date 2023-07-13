@@ -75,3 +75,12 @@ Java is not located in your PATH, either source the right `.bash_profile`, `.zsh
 ```bash
 echo 'export PATH="/usr/local/opt/openjdk/bin:$PATH"' > .bash_profile && source .bash_profile
 ```
+
+### Running renovate locally
+
+Running renovate on github can be tidious because it only works on the branch `main`, but you can run it locally with the CLI:
+```sh
+npm install -g renovate
+
+LOG_LEVEL=debug renovate --dry-run --platform local
+```

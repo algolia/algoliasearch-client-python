@@ -2,15 +2,19 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:js-app",
-    "algolia",
+    "github>algolia/renovate-config-algolia",
     ":preserveSemverRanges"
   ],
   "enabledManagers": [
+    "dockerfile",
+    "github-actions",
     "npm",
     "nvm",
     "gradle",
-    "composer",
-    "regex"
+    "regex",
+    "pub",
+    "gomod",
+    "gradle-wrapper"
   ],
   "baseBranches": [
     "chore/renovateBaseBranch"
@@ -85,6 +89,15 @@
       "datasourceTemplate": "github-releases"
     },
     {
+      "description": "Update yarn for netlify",
+      "fileMatch": "netlify.toml",
+      "matchStrings": [
+        "YARN_VERSION\\s*=\\s*\"(?<currentValue>.*?)\""
+      ],
+      "depNameTemplate": "yarnpkg/berry",
+      "datasourceTemplate": "github-releases"
+    },
+    {
       "description": "Update composer.json for PHP",
       "fileMatch": "composer.mustache",
       "matchStrings": [
@@ -98,25 +111,18 @@
       "description": "Update pubspec.yaml for Dart",
       "fileMatch": "pubspec.mustache",
       "matchStrings": [
-        "(dev_)?dependencies:\\s*{[^}]*}",
-        "\\s(?<depName>.*?):\\s*(?<currentValue>.*?)"
+        "(dev_)?dependencies:\\s*[^$]*",
+        "  (?<depName>[a-z_]+?): (?<currentValue>.*?)\n"
       ],
       "matchStringsStrategy": "recursive",
-      "datasourceTemplate": "dart"
-    },
-    {
-      "description": "Update libs.versions.toml for Kotlin",
-      "fileMatch": "libs.versions.toml",
-      "matchStrings": [
-        "(?<depName>.*?):.*?(?<currentValue>\\d+\\.\\d+\\.\\d+)"
-      ],
-      "datasourceTemplate": "maven"
+      "datasourceTemplate": "dart",
+      "versioningTemplate": "npm"
     },
     {
       "description": "Update .java-version",
       "fileMatch": ".java-version",
       "matchStrings": [
-        "(?<currentValue>.*?)"
+        "(?<currentValue>.*)"
       ],
       "datasourceTemplate": "java-version",
       "depNameTemplate": "java"
@@ -125,7 +131,7 @@
       "description": "Update .dart-version",
       "fileMatch": ".dart-version",
       "matchStrings": [
-        "(?<currentValue>.*?)"
+        "(?<currentValue>.*)"
       ],
       "datasourceTemplate": "dart-version",
       "depNameTemplate": "dart"
@@ -134,13 +140,22 @@
       "description": "Update .go-version",
       "fileMatch": ".go-version",
       "matchStrings": [
-        "(?<currentValue>.*?)"
+        "(?<currentValue>.*)"
       ],
       "datasourceTemplate": "golang-version",
       "depNameTemplate": "golang"
     },
     {
-      "description": "update Dockerfile",
+      "description": "Update .php-version",
+      "fileMatch": ".php-version",
+      "matchStrings": [
+        "(?<currentValue>.*)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "php/php-src"
+    },
+    {
+      "description": "Update Dockerfile",
       "fileMatch": "^Dockerfile$",
       "matchStrings": [
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sARG .*?_VERSION=(?<currentValue>.*)\\s"
@@ -148,14 +163,21 @@
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
+  "github-actions": {
+    "fileMatch": [
+      "\\.github/workflows/.*\\.ya?ml$"
+    ]
+  },
   "ignorePaths": [
     "**/algoliasearch/**",
     "**/client-abtesting/**",
     "**/client-analytics/**",
     "**/client-insights/**",
+    "**/client_insights/**",
     "**/client-personalization/**",
     "**/client-query-suggestions/**",
     "**/client-search/**",
+    "**/client_search/**",
     "**/ingestion/**",
     "**/predict/**",
     "**/recommend/**",
