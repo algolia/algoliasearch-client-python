@@ -19,6 +19,9 @@
   "baseBranches": [
     "chore/renovateBaseBranch"
   ],
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
   "packageRules": [
     {
       "matchDepTypes": [

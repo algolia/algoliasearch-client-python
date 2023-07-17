@@ -125,7 +125,7 @@ runs:
 
     - name: Install golang
       if: ${{ inputs.language == 'go' }}
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v4
       with:
         go-version: ${{ steps.go-version.outputs.GO_VERSION }}
 

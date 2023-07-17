@@ -20,6 +20,7 @@ const CLIENTS_COMMON_FILES = [
   'generators/src/main/java/com/algolia/codegen/Utils.java',
   'generators/src/main/java/com/algolia/codegen/cts',
   'tests/CTS',
+  '.nvmrc',
   ':!**node_modules',
 ];
 
@@ -86,12 +87,15 @@ export const DEPENDENCIES = {
   KOTLIN_CLIENT_CHANGED: [
     ...CLIENTS_COMMON_FILES,
     KOTLIN_CLIENT_FOLDER,
+    'config/.java-version',
     'templates/kotlin',
     'generators/src/main/java/com/algolia/codegen/AlgoliaKotlinGenerator.java',
+    'tests/output/kotlin/gradle/libs.versions.toml',
   ],
   DART_CLIENT_CHANGED: [
     ...CLIENTS_COMMON_FILES,
     DART_CLIENT_FOLDER,
+    'config/.dart-version',
     'templates/dart',
     'generators/src/main/java/com/algolia/codegen/AlgoliaDartGenerator.java',
   ],
