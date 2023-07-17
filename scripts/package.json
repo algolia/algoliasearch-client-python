@@ -11,6 +11,7 @@
     "pushGeneratedCode": "ts-node ci/codegen/pushGeneratedCode.ts",
     "setRunVariables": "ts-node ci/githubActions/setRunVariables.ts",
     "spreadGeneration": "ts-node ci/codegen/spreadGeneration.ts",
+    "start": "NODE_NO_WARNINGS=1 ts-node --transpile-only ./cli/index.ts",
     "test": "yarn node --no-warnings --experimental-vm-modules $(yarn bin jest)",
     "upsertGenerationComment": "ts-node ci/codegen/upsertGenerationComment.ts"
   },

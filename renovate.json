@@ -153,14 +153,6 @@
       ],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "php/php-src"
-    },
-    {
-      "description": "Update Dockerfile",
-      "fileMatch": "^Dockerfile$",
-      "matchStrings": [
-        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sARG .*?_VERSION=(?<currentValue>.*)\\s"
-      ],
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
   "github-actions": {

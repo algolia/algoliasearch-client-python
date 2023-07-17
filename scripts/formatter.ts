@@ -32,9 +32,9 @@ export async function formatter(
       break;
     case 'dart':
       if (folder.includes('tests')) {
-        cmd = `(cd ${folder} && dart fix --apply && dart format .)`;
+        cmd = `(cd ${folder} && dart pub get && dart fix --apply && dart format .)`;
       } else {
-        cmd = `(cd ${folder} && melos bs && melos build --no-select && melos lint)`;
+        cmd = `(cd ${folder} && dart pub get && melos bs && melos build --no-select && melos lint)`;
       }
       break;
     default:
