@@ -24,6 +24,7 @@ jobs:
         uses: ./.github/actions/setup
         with:
           type: minimal
+          language: dart # we need the dart deps because we use melos to bump dependencies for its client
 
       - run: yarn release
         env:
