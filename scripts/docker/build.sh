@@ -2,6 +2,10 @@
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)/../.."
 
+if ! test -f ".env"; then
+    cp .env.example .env
+fi
+
 cd $ROOT
 
 JAVA_VERSION=$(cat config/.java-version | awk -F '.' '{ print $1 }')

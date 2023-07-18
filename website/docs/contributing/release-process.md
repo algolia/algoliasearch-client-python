@@ -15,7 +15,8 @@ GITHUB_TOKEN=<YOUR-PERSONAL-ACCESS-TOKEN>
 Once setup, you can run:
 
 ```bash
-yarn release
+# make sure to run `yarn docker:setup` first
+yarn docker:release
 ```
 
 It will create [a release PR](https://github.com/algolia/api-clients-automation/pull/545).
