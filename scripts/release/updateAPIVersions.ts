@@ -15,16 +15,16 @@ import {
   LANGUAGES,
   CI,
   setVerbose,
-} from '../common';
+} from '../common.js';
 import {
   getClientsConfigField,
   getGitHubUrl,
   getLanguageFolder,
-} from '../config';
-import type { Language } from '../types';
+} from '../config.js';
+import type { Language } from '../types.js';
 
-import { RELEASED_TAG, writeJsonFile } from './common';
-import type { Changelog, Versions, VersionsToRelease } from './types';
+import { RELEASED_TAG, writeJsonFile } from './common.js';
+import type { Changelog, Versions, VersionsToRelease } from './types.js';
 
 dotenv.config({ path: ROOT_ENV_PATH });
 

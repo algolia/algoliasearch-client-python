@@ -3,8 +3,8 @@ import chalk from 'chalk';
 import dotenv from 'dotenv';
 import semver from 'semver';
 
-import generationCommitText from '../ci/codegen/text';
-import { getNbGitDiff } from '../ci/utils';
+import generationCommitText from '../ci/codegen/text.js';
+import { getNbGitDiff } from '../ci/utils.js';
 import {
   LANGUAGES,
   ROOT_ENV_PATH,
@@ -19,11 +19,11 @@ import {
   gitBranchExists,
   setVerbose,
   configureGitHubAuthor,
-} from '../common';
-import { getPackageVersionDefault } from '../config';
+} from '../common.js';
+import { getPackageVersionDefault } from '../config.js';
 
-import { RELEASED_TAG } from './common';
-import TEXT from './text';
+import { RELEASED_TAG } from './common.js';
+import TEXT from './text.js';
 import type {
   Versions,
   VersionsBeforeBump,
@@ -31,8 +31,8 @@ import type {
   Commit,
   Scope,
   Changelog,
-} from './types';
-import { updateAPIVersions, updateDartPackages } from './updateAPIVersions';
+} from './types.js';
+import { updateAPIVersions, updateDartPackages } from './updateAPIVersions.js';
 
 dotenv.config({ path: ROOT_ENV_PATH });
 
