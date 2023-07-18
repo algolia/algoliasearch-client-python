@@ -5,7 +5,7 @@
   "scripts": {
     "cleanGeneratedBranch": "ts-node ci/codegen/cleanGeneratedBranch.ts",
     "createMatrix": "ts-node ci/githubActions/createMatrix.ts",
-    "createReleasePR": "ts-node release/createReleasePR.ts",
+    "createReleasePR": "NODE_NO_WARNINGS=1 ts-node release/createReleasePR.ts",
     "lint": "eslint --ext=ts,js,mjs,cjs .",
     "pre-commit": "node ./ci/husky/pre-commit.mjs",
     "pushGeneratedCode": "ts-node ci/codegen/pushGeneratedCode.ts",

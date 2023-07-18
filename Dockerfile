@@ -16,7 +16,7 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 # Global
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl zip unzip git \
+    curl zip unzip git openssh-server \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

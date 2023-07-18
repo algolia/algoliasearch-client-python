@@ -246,7 +246,7 @@ export function ensureGitHubToken(): string {
   if (!process.env.GITHUB_TOKEN) {
     throw new Error('Environment variable `GITHUB_TOKEN` does not exist.');
   }
-  return process.env.GITHUB_TOKEN;
+  return process.env.GITHUB_TOKEN.replaceAll('"', '');
 }
 
 export function getOctokit(): Octokit {
