@@ -6,7 +6,7 @@ getTopFilterAttributesResponse:
   properties:
     attributes:
       type: array
-      description: A list of attributes with their count.
+      description: Filterable attributes.
       items:
         $ref: '#/getTopFilterAttribute'
 

@@ -4,23 +4,25 @@ post:
   operationId: getObjects
   x-use-read-transporter: true
   x-cacheable: true
-  summary: Retrieve one or more objects.
-  description: Retrieve one or more objects, potentially from different indices, in a single API call.
+  summary: Get multiple records.
+  description: >
+    Retrieve one or more records, potentially from different indices, in a single API operation.
+    Results will be received in the same order as the requests.
   requestBody:
     required: true
-    description: The Algolia object.
+    description: Request object.
     content:
       application/json:
         schema:
           title: getObjectsParams
-          description: The `getObjects` parameters.
+          description: Request parameters.
           type: object
           additionalProperties: false
           properties:
             requests:
               type: array
               items:
-                description: getObjects operation on an index.
+                description: Record retrieval operation.
                 title: getObjectsRequest
                 type: object
                 additionalProperties: false
@@ -32,13 +34,16 @@ post:
                     type: array
                     items:
                       type: string
-                    description: List of attributes to retrieve. By default, all retrievable attributes are returned.
+                    description: Attributes to retrieve. If not specified, all retrievable attributes are returned.
+                    example: ['author','title','content']
                   objectID:
                     type: string
-                    description: ID of the object within that index.
+                    description: Record's objectID.
+                    example: '8b9b7619230b1950f653b962fb0dfd6b'
                   indexName:
                     type: string
-                    description: name of the index containing the object.
+                    description: Name of the index containing the required records.
+                    example: books
           required:
             - requests
   responses:
@@ -53,7 +58,7 @@ post:
             properties:
               results:
                 type: array
-                description: List of results fetched.
+                description: Retrieved results.
                 items:
                   type: object
                   description: Fetched object.

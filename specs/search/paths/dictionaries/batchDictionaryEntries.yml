@@ -2,7 +2,7 @@ post:
   tags:
     - Dictionaries
   operationId: batchDictionaryEntries
-  description: Send a batch of dictionary entries.
+  description: Add or remove a batch of dictionary entries.
   summary: Batch dictionary entries.
   parameters:
     - $ref: 'common/parameters.yml#/DictionaryName'
@@ -12,7 +12,8 @@ post:
       application/json:
         schema:
           title: batchDictionaryEntriesParams
-          description: The `batchDictionaryEntries` parameters.
+          description: >
+            `batchDictionaryEntries` parameters.
           type: object
           required:
             - requests
@@ -21,10 +22,10 @@ post:
             clearExistingDictionaryEntries:
               type: boolean
               default: false
-              description: When `true`, start the batch by removing all the custom entries from the dictionary.
+              description: Incidates whether to replace all custom entries in the dictionary with the ones sent with this request.
             requests:
               type: array
-              description: List of operations to batch. Each operation is described by an `action` and a `body`.
+              description: Operations to batch.
               items:
                 title: batchDictionaryEntriesRequest
                 type: object

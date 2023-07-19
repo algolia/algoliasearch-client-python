@@ -1,7 +1,10 @@
 openapi: 3.0.2
 info:
   title: Analytics API
-  description: API powering the Analytics feature of Algolia.
+  description: >
+    The Analytics API lets you review your search, and click and conversion analytics.
+
+    > **Note**: The API key in the `X-Algolia-API-Key` header requires the [`analytics` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).
   version: 1.0.0
 components:
   securitySchemes:

@@ -6,7 +6,7 @@ topHitsResponse:
   properties:
     hits:
       type: array
-      description: A list of top hits with their count.
+      description: Top hits.
       items:
         type: object
         title: topHit
@@ -28,7 +28,7 @@ topHitsResponseWithAnalytics:
   properties:
     hits:
       type: array
-      description: A list of top hits with their count and analytics.
+      description: Top hits.
       items:
         type: object
         title: topHitWithAnalytics

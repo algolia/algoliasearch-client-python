@@ -2,8 +2,8 @@ get:
   tags:
     - Vaults
   operationId: getSources
-  description: List all allowed sources.
-  summary: List all allowed sources.
+  description: Get all allowed sources (IP addresses).
+  summary: Get all allowed IP addresses.
   responses:
     '200':
       description: OK
@@ -25,10 +25,10 @@ put:
     - Vaults
   operationId: replaceSources
   description: Replace all allowed sources.
-  summary: Replace all allowed sources.
+  summary: Replace all sources.
   requestBody:
     required: true
-    description: The sources to allow.
+    description: Allowed sources.
     content:
       application/json:
         schema:

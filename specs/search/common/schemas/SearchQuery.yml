@@ -18,7 +18,7 @@ searchForFacetsOptions:
   properties:
     facet:
       type: string
-      description: The `facet` name.
+      description: Facet name.
     indexName:
       $ref: '../../../common/parameters.yml#/indexName'
     facetQuery:
@@ -35,6 +35,7 @@ searchForFacetsOptions:
 facetQuery:
   type: string
   description: Text to search inside the facet's values.
+  example: 'george'
   default: ''
 
 searchForHitsOptions:
@@ -54,10 +55,14 @@ searchTypeFacet:
   type: string
   enum: [facet]
   default: facet
-  description: Perform a search query with `default`, will search for facet values if `facet` is given.
+  description: >
+    - `default`: perform a search query
+    - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
 
 searchTypeDefault:
   type: string
   enum: [default]
   default: default
-  description: Perform a search query with `default`, will search for facet values if `facet` is given.
+  description: >
+    - `default`: perform a search query
+    - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).

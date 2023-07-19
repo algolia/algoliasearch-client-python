@@ -2,33 +2,30 @@ post:
   tags:
     - Records
   operationId: partialUpdateObject
-  summary: Partially update an object.
+  summary: Update record attributes.
   x-codegen-request-body-name: attributesToUpdate
   description: >
-    Update one or more attributes of an existing object.
+    Add new attributes or update current ones in an existing record.
 
-    This method lets you update only a part of an existing object, either by adding new attributes or updating existing ones.
-
-    You can partially update several objects in a single method call.
-
-    If the index targeted by this operation doesn't exist yet, it's automatically created.
+    You can use any first-level attribute but not nested attributes. If you specify a [nested attribute](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/creating-and-using-nested-attributes/), the engine treats it as a replacement for its first-level ancestor.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ObjectID'
     - name: createIfNotExists
-      description: Creates the record if it does not exist yet.
+      description: >
+        Indicates whether to create a new record if it doesn't exist yet.
       in: query
       schema:
         type: boolean
         default: true
   requestBody:
     required: true
-    description: Map of attribute(s) to update.
+    description: Object with attributes to update.
     content:
       application/json:
         schema:
           type: object
-          description: Attribute(s) to update.
+          description: Attributes to update.
           additionalProperties:
             $ref: 'common/schemas.yml#/attributeToUpdate'
   responses:

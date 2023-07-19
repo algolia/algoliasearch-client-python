@@ -3,7 +3,7 @@ get:
     - click
   operationId: getConversationRate
   summary: Get conversion rate (CR).
-  description: Returns a conversion rate (CR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of conversion and searches used to compute the rates.
+  description: Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
   parameters:
     - $ref: '../../../common/parameters.yml#/Index'
     - $ref: '../../../common/parameters.yml#/StartDate'
@@ -32,7 +32,7 @@ get:
                 $ref: '../../common/parameters.yml#/conversionCount'
               dates:
                 type: array
-                description: A list of conversion events with their date.
+                description: Conversion events.
                 items:
                   type: object
                   title: conversionRateEvent

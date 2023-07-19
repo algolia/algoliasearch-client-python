@@ -1,6 +1,6 @@
 cluster:
   type: object
-  description: A cluster.
+  description: Cluster.
   properties:
     clusterName:
       $ref: '#/clusterName'
@@ -30,5 +30,5 @@ dataSize:
 
 clusterName:
   type: string
-  description: Name of the cluster.
+  description: Cluster name.
   example: c11-test

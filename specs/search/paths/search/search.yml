@@ -6,10 +6,10 @@ post:
   x-cacheable: true
   x-legacy-signature: true
   summary: Search multiple indices.
-  description: Perform a search operation targeting one or many indices.
+  description: Send multiple search queries to one or more indices.
   requestBody:
     required: true
-    description: The `search` requests and strategy.
+    description: Query requests and strategies. Results will be received in the same order as the queries.
     content:
       application/json:
         schema:

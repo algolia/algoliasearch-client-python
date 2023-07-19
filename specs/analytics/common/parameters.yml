@@ -2,10 +2,11 @@
 Attribute:
   in: path
   name: attribute
-  description: The exact name of the attribute.
+  description: Attribute name.
   required: true
   schema:
     type: string
+    example: 'brand'
 
 # query
 OrderBy:
@@ -18,13 +19,18 @@ OrderBy:
 # private
 orderBy:
   type: string
+  description: >
+    Method for ordering results.
+
+    `clickThroughRate`, `conversionRate` and `averageClickPosition` are only available if the `clickAnalytics` parameter is `true`.
   enum: [searchCount, clickThroughRate, conversionRate, averageClickPosition]
   default: searchCount
 
 Direction:
   in: query
   name: direction
-  description: The sorting of the result.
+  description: >
+    Sorting direction of the results: ascending or descending.
   schema:
     $ref: '#/direction'
 
@@ -37,22 +43,34 @@ direction:
 ClickAnalytics:
   in: query
   name: clickAnalytics
-  description: Whether to include the click-through and conversion rates for a search.
+  description: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
   schema:
     type: boolean
     default: false
 
+count:
+  description: Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
+  type: integer
+  example: 504
+
+noResultCount:
+  description: Number of occurences.
+  type: integer
+  example: 54
+
 Search:
   in: query
   name: search
-  description: The query term to search for. Must match the exact user input.
+  description: User query.
+  example: 'enable ab test'
   schema:
     type: string
 
 Tags:
   name: tags
   in: query
-  description: Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+  description: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+  example: 'device:mobile%20phone'
   schema:
     type: string
 
@@ -60,50 +78,66 @@ Tags:
 average:
   type: number
   format: double
-  description: The average of all the click count event.
+  description: Average count of all click events.
+  example: 2.3344634550185286
 
 averageClickPosition:
   type: integer
-  description: The average position of all the click count event.
+  description: Average [position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position) of clicked search result.
+  example: 1
 
 clickCount:
   type: integer
-  description: The number of click event.
+  description: Number of click events.
+  example: 162
 
 date:
   type: string
-  description: Date of the event.
+  description: Date of the event in the format YYYY-MM-DD.
+  example: '2023-06-14'
 
 rate:
   type: number
   format: double
-  description: The click-through rate.
+  description: >
+    [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+  minimum: 0
+  maximum: 1
+  example: 0.14634193523426317
 
 conversionRate:
   type: number
   format: double
-  description: The conversion rate.
+  description: >
+    [Conversion rate (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+  example: 0
 
 conversionCount:
   type: integer
-  description: The number of converted clicks.
+  description: Number of converted clicks.
+  example: 0
 
 attribute:
-  description: The attribute.
+  description: Attribute name.
   type: string
+  example: 'url'
 
 operator:
-  description: The operator.
+  description: Operator.
   type: string
+  example: ':'
 
 value:
-  description: The value of the attribute.
+  description: Attribute value.
   type: string
+  example: 'integration'
 
 search:
-  description: The search query.
+  description: User query.
+  example: 'separator'
   type: string
 
 hit:
-  description: The hit.
+  description: Hit.
   type: string
+  example: 'method-export-rules-php'

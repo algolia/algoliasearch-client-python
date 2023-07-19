@@ -3,7 +3,7 @@ content:
   application/json:
     schema:
       title: updatedAtWithObjectIdResponse
-      description: The response with a taskID, an objectID and an updatedAt timestamp.
+      description: Response, taskID, unique object identifier, and an update timestamp.
       additionalProperties: false
       type: object
       properties:

@@ -1,6 +1,6 @@
 languages:
   type: object
-  description: A dictionary language.
+  description: Dictionary language.
   additionalProperties: false
   required:
     - plurals
@@ -20,6 +20,9 @@ dictionaryLanguage:
   nullable: true
   description: Custom entries for a dictionary.
   properties:
-    nbCustomEntires:
-      description: "When nbCustomEntries is set to 0, the user didn't customize the dictionary. The dictionary is still supported with standard, Algolia-provided entries."
+    nbCustomEntries:
+      description: >
+        If `0`, the dictionary hasn't been customized and only contains standard entries provided by Algolia.
+
+        If `null`, that feature isn't available or isn't supported for that language.
       type: integer

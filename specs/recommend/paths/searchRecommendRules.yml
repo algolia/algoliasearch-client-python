@@ -1,39 +1,38 @@
 post:
   tags:
-    - Rules
-  operationId: searchRules
+    - recommendations
+  operationId: searchRecommendRules
   x-use-read-transporter: true
   x-cacheable: true
-  summary: Search for rules.
-  description: Search for rules in your index. You can control the search with parameters. To list all rules, send an empty request body.
+  summary: List Recommend rules.
+  description: List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
   parameters:
-    - $ref: '../../../common/parameters.yml#/IndexName'
+    - $ref: '../../common/parameters.yml#/IndexName'
+    - $ref: '../common/parameters.yml#/Models'
   requestBody:
     content:
       application/json:
         schema:
           type: object
-          title: searchRulesParams
-          description: Rules search parameters.
+          title: searchRecommendRulesParams
+          description: Recommend rules search parameters.
           additionalProperties: false
           properties:
             query:
-              $ref: 'common/parameters.yml#/query'
-            anchoring:
-              $ref: 'common/schemas.yml#/anchoring'
+              $ref: '../../common/parameters.yml#/query'
             context:
               type: string
               description: Restricts responses to the specified [contextual rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules).
               example: 'mobile'
             page:
-              $ref: '../../../common/parameters.yml#/page'
+              $ref: '../../common/parameters.yml#/page'
             hitsPerPage:
-              $ref: '../../../common/parameters.yml#/hitsPerPage'
+              $ref: '../../common/parameters.yml#/hitsPerPage'
             enabled:
               type: boolean
               nullable: true
               default: null
-              description: Restricts responses to enabled rules. When not specified (default), _all_ rules are retrieved.
+              description: Restricts responses to enabled rules. When absent (default), _all_ rules are retrieved.
             requestOptions:
               type: array
               description: Request options to send with the API call.
@@ -48,7 +47,7 @@ post:
       content:
         application/json:
           schema:
-            title: searchRulesResponse
+            title: searchRecommendRulesResponse
             type: object
             additionalProperties: false
             required:
@@ -61,7 +60,7 @@ post:
                 type: array
                 description: Fetched rules.
                 items:
-                  $ref: 'common/schemas.yml#/rule'
+                  $ref: '../common/schemas/RecommendationsResponse.yml#/ruleResponse'
               nbHits:
                 type: integer
                 description: Number of fetched rules.
@@ -72,10 +71,10 @@ post:
                 type: integer
                 description: Number of pages.
     '400':
-      $ref: '../../../common/responses/BadRequest.yml'
+      $ref: '../../common/responses/BadRequest.yml'
     '402':
-      $ref: '../../../common/responses/FeatureNotEnabled.yml'
+      $ref: '../../common/responses/FeatureNotEnabled.yml'
     '403':
-      $ref: '../../../common/responses/MethodNotAllowed.yml'
+      $ref: '../../common/responses/MethodNotAllowed.yml'
     '404':
-      $ref: '../../../common/responses/IndexNotFound.yml'
+      $ref: '../../common/responses/IndexNotFound.yml'

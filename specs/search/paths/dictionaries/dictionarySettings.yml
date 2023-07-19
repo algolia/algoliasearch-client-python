@@ -2,8 +2,8 @@ get:
   tags:
     - Dictionaries
   operationId: getDictionarySettings
-  description: Retrieve dictionaries settings. The API stores languages whose standard entries are disabled. Fetch settings does not return false values.
-  summary: Retrieve dictionaries settings.
+  description: Get the languages for which [stop words are turned off](#tag/Dictionaries/operation/setDictionarySettings).
+  summary: Get stop word settings.
   responses:
     '200':
       description: OK
@@ -31,8 +31,8 @@ put:
   tags:
     - Dictionaries
   operationId: setDictionarySettings
-  description: Set dictionaries settings.
-  summary: Set dictionaries settings.
+  description: Set stop word settings for a specific language.
+  summary: Set stop word settings.
   requestBody:
     required: true
     content:
@@ -41,7 +41,7 @@ put:
           title: dictionarySettingsParams
           type: object
           additionalProperties: false
-          description: Disable the builtin Algolia entries for a type of dictionary per language.
+          description: Enable or turn off the built-in Algolia stop words for a specific language.
           required:
             - disableStandardEntries
           properties:

@@ -2,8 +2,8 @@ get:
   tags:
     - Indices
   operationId: getSettings
-  description: Retrieve settings of an index.
-  summary: Retrieve settings of an index.
+  description: Return an object containing an index's [configuration settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
+  summary: Get index settings.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
   responses:
@@ -26,8 +26,8 @@ put:
   tags:
     - Indices
   operationId: setSettings
-  description: Update settings of an index. Only specified settings are overridden; unspecified settings are left unchanged. Specifying null for a setting resets it to its default value.
-  summary: Update settings of an index.
+  description: Update the specified [index settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/). Specifying null for a setting resets it to its default value.
+  summary: Update index settings.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'

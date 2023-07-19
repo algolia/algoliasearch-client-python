@@ -3,12 +3,12 @@ ReplaceExistingSynonyms:
   name: replaceExistingSynonyms
   schema:
     type: boolean
-  description: Replace all synonyms of the index with the ones sent with this request.
+  description: Indicates whether to replace all synonyms in the index with the ones sent with this request.
 
 Query:
   in: query
   name: query
-  description: Search for specific synonyms matching this string.
+  description: Search for synonyms that match this string.
   schema:
     type: string
     default: ''
@@ -16,16 +16,26 @@ Query:
 Type:
   in: query
   name: type
-  description: Only search for specific types of synonyms.
+  description: Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
   schema:
     $ref: '#/SynonymType'
 
 SynonymType:
   type: string
-  description: Type of the synonym object.
+  description: Synonym type.
+  example: onewaysynonym
   enum:
     - synonym
     - onewaysynonym
     - altcorrection1
     - altcorrection2
     - placeholder
+
+ObjectID:
+  name: objectID
+  in: path
+  description: Unique identifier of a synonym object.
+  required: true
+  schema:
+    type: string
+    example: 'synonymID'

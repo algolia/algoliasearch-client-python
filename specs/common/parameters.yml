@@ -2,7 +2,7 @@
 IndexName:
   name: indexName
   in: path
-  description: The index in which to perform the request.
+  description: Index on which to perform the request.
   required: true
   schema:
     type: string
@@ -11,7 +11,7 @@ IndexName:
 ObjectID:
   name: objectID
   in: path
-  description: Unique identifier of an object.
+  description: Unique record (object) identifier.
   required: true
   schema:
     type: string
@@ -21,58 +21,63 @@ ObjectID:
 Index:
   in: query
   name: index
-  description: The index name to target.
+  description: Index name to target.
   required: true
   schema:
     type: string
+    example: YourIndexName
 
 StartDate:
   in: query
   name: startDate
-  description: The lower bound timestamp (a date, a string like "2006-01-02") of the period to analyze.
+  description: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
   schema:
     type: string
-    example: 1999-09-19
+    example: 2022-09-19
     pattern: ^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
 
 EndDate:
   in: query
   name: endDate
-  description: The upper bound timestamp (a date, a string like "2006-01-02") of the period to analyze.
+  description: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
   schema:
     type: string
-    example: 2000-01-21
+    example: 2023-01-21
     pattern: ^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
 
 ForwardToReplicas:
   in: query
   name: forwardToReplicas
-  description: When true, changes are also propagated to replicas of the given indexName.
+  description: Indicates whether changed index settings are forwarded to the replica indices.
   schema:
     type: boolean
 
 Page:
   in: query
   name: page
-  description: Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+  description: >
+    Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
   schema:
     type: integer
+    minimum: 0
     nullable: true
     default: null
 
 PageDefault0:
   in: query
   name: page
-  description: Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+  description: >
+    Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination.
   schema:
     type: integer
     nullable: true
+    minimum: 0
     default: 0
 
 HitsPerPage:
   in: query
   name: hitsPerPage
-  description: Maximum number of objects to retrieve.
+  description: Maximum number of hits per page.
   schema:
     type: integer
     default: 100
@@ -88,7 +93,7 @@ Offset:
 Limit:
   in: query
   name: limit
-  description: Number of records to return. Limit is the size of the page.
+  description: Number of records to return (page size).
   schema:
     type: integer
     default: 10
@@ -96,36 +101,42 @@ Limit:
 # misc
 objectID:
   type: string
-  description: Unique identifier of the object.
+  description: Unique object identifier.
+  example: 'product-1'
 
 id:
   type: string
-  description: objectID of the inserted object.
+  example: '12'
+  description: Unique identifier of a synonym object.
 
 indexName:
   type: string
   example: products
-  description: The Algolia index name.
+  description: Algolia index name.
 
 hitsPerPage:
   type: integer
   default: 20
-  description: Maximum number of hits in a page. Minimum is 1, maximum is 1000.
+  minimum: 1
+  maximum: 1000
+  description: Maximum number of hits per page.
 
 query:
   type: string
-  description: Full text query.
+  description: Full-text query.
   default: ''
 
 page:
   type: integer
-  default: 0
-  description: Requested page (zero-based).
+  minimum: 0
+  description: Requested page (the first page is page 0).
 
 trackedSearchCount:
   type: integer
-  description: The number of tracked search click.
+  example: 2
+  description: Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
 
 count:
-  description: The number of occurrences.
+  description: Number of occurrences.
+  example: 2
   type: integer

@@ -2,14 +2,21 @@ get:
   tags:
     - Records
   operationId: getObject
-  summary: Retrieve an object.
-  description: Retrieve one object from the index.
+  summary: Get a record.
+  description: To get more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ObjectID'
     - name: attributesToRetrieve
       in: query
-      description: List of attributes to retrieve. If not specified, all retrievable attributes are returned.
+      description: >
+        Attributes to include with the records in the response.
+        This is useful to reduce the size of the API response.
+        By default, all retrievable attributes are returned.
+
+        `objectID` is always retrieved, even when not specified.
+
+        [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key.
       schema:
         type: array
         items:
@@ -38,17 +45,19 @@ put:
   tags:
     - Records
   operationId: addOrUpdateObject
-  summary: Add or replace an object.
+  summary: Add or update a record (using objectID).
   description: |
-    Add or replace an object with a given object ID.
-    If the object does not exist, it will be created.
-    If it already exists, it will be replaced.
+    If you use an existing `objectID`, the existing record will be replaced with the new one.
+    
+    To update only some attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead.
+
+    To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ObjectID'
   requestBody:
     required: true
-    description: The Algolia object.
+    description: Algolia record.
     content:
       application/json:
         schema:
@@ -69,8 +78,8 @@ delete:
   tags:
     - Records
   operationId: deleteObject
-  summary: Delete an object.
-  description: Delete an existing object.
+  summary: Delete a record.
+  description: To delete a set of records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy) instead.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ObjectID'

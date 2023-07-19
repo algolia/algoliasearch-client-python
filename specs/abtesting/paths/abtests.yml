@@ -2,11 +2,8 @@ post:
   tags:
     - abtest
   operationId: addABTests
-  summary: Create a test.
-  description: >
-    Creates a new A/B test with provided configuration.
-
-    You can set an A/B test on two different indices with different settings, or on the same index with different search parameters by providing a customSearchParameters setting on one of the variants.
+  summary: Create an A/B test.
+  description: Creates an A/B test.
   requestBody:
     required: true
     content:
@@ -18,9 +15,9 @@ post:
           properties:
             name:
               $ref: '../common/parameters.yml#/name'
-            variant:
+            variants:
               type: array
-              description: List of 2 variants for the A/B test.
+              description: A/B test variants.
               minItems: 2
               maxItems: 2
               items:
@@ -29,7 +26,7 @@ post:
               $ref: '../common/parameters.yml#/endAt'
           required:
             - name
-            - variant
+            - variants
             - endAt
   responses:
     '200':
@@ -51,22 +48,21 @@ get:
   tags:
     - abtest
   operationId: listABTests
-  summary: List all tests.
-  description: >
-    Fetch all existing A/B tests for App that are available for the current API Key.
-
-    When no data has been processed, the metrics will be returned as null.
+  summary: List all A/B tests.
+  description: List all A/B tests.
   parameters:
     - $ref: '../../common/parameters.yml#/Offset'
     - $ref: '../../common/parameters.yml#/Limit'
     - name: indexPrefix
       in: query
-      description: Filters the returned ab tests by any indices starting with the provided prefix that are assigned to either variant of an ab test.
+      description: Only return A/B tests for indices starting with this prefix.
+      example: 'dev_'
       schema:
         type: string
     - name: indexSuffix
       in: query
-      description: Filters the returned ab tests by any indices ending with the provided suffix that are assigned to either variant of an ab test.
+      description: Only return A/B tests for indices ending with this suffix.
+      example: '_development'
       schema:
         type: string
   responses:
@@ -83,10 +79,12 @@ get:
                 $ref: '../common/schemas/ABTest.yml#/ABTests'
               count:
                 type: integer
-                description: Number of A/B tests found for the app.
+                description: Number of A/B tests implemented.
+                example: 10
               total:
                 type: integer
-                description: Number of A/B tests retrievable.
+                description: Number of retrievable A/B tests.
+                example: 12
             required:
               - abtests
               - count

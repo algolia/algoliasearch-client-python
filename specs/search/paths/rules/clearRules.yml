@@ -2,8 +2,8 @@ post:
   tags:
     - Rules
   operationId: clearRules
-  summary: Clear Rules.
-  description: Delete all Rules in the index.
+  summary: Delete all rules.
+  description: Delete all rules in the index.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'

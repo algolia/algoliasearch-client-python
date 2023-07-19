@@ -4,12 +4,15 @@ post:
   operationId: searchForFacetValues
   x-use-read-transporter: true
   x-cacheable: true
-  summary: Search for values of a given facet.
-  description: Search for values of a given facet, optionally restricting the returned values to those contained in objects matching other search criteria.
+  summary: Search for facet values.
+  description: >
+    [Search for a facet's values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values), optionally restricting the returned values to those contained in records matching other search criteria.
+
+    > **Note**: Pagination isn't supported (`page` and `hitsPerPage` are ignored). By default, the engine returns a maximum of 10 values but you can adjust this with `maxFacetHits`.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - name: facetName
-      description: The facet name.
+      description: Facet name.
       in: path
       required: true
       schema:
@@ -52,12 +55,13 @@ post:
                     - count
                   properties:
                     value:
-                      description: Raw value of the facet.
+                      description: Facet value.
+                      example: 'Mobile phone'
                       type: string
                     highlighted:
                       $ref: '../../common/schemas/Hit.yml#/highlightedValue'
                     count:
-                      description: How many objects contain this facet value. This takes into account the extra search parameters specified in the query. Like for a regular search query, the counts may not be exhaustive.
+                      description: Number of records containing this facet value. This takes into account the extra search parameters specified in the query. Like for a regular search query, the [counts may not be exhaustive](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).
                       type: integer
     '400':
       $ref: '../../../common/responses/BadRequest.yml'

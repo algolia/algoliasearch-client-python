@@ -1,7 +1,11 @@
 openapi: 3.0.2
 info:
   title: Recommend API
-  description: API powering the Recommend feature of Algolia.
+  description: |-
+    The Recommend API lets you generate recommendations with several AI models.
+    
+    > **Note**: You should use Algolia's [libraries and tools](https://www.algolia.com/doc/guides/getting-started/how-algolia-works/in-depth/ecosystem/) to interact with the Recommend API. Using the HTTP endpoints directly is not covered by the [SLA](https://www.algolia.com/policies/sla/).
+    
   version: 1.0.0
 components:
   securitySchemes:
@@ -35,7 +39,7 @@ security:
     apiKey: []
 tags:
   - name: recommendations
-    x-displayName: Recommendations & Trending
+    x-displayName: Recommend
     description: Manage recommendations.
 x-tagGroups:
   - name: General
@@ -50,3 +54,12 @@ paths:
 
   /1/indexes/*/recommendations:
     $ref: 'paths/getRecommendations.yml'
+
+  /1/indexes/{indexName}/{model}/recommend/rules/{objectID}:
+    $ref: 'paths/recommendRule.yml'
+
+  /1/indexes/{indexName}/{model}/task/{taskID}:
+    $ref: 'paths/getRecommendStatus.yml'
+
+  /1/indexes/{indexName}/{model}/recommend/rules/search:
+    $ref: 'paths/searchRecommendRules.yml'

@@ -6,7 +6,7 @@ getTopFilterForAttributeResponse:
   properties:
     values:
       type: array
-      description: A list of filters for the given attributes.
+      description: Filter values for an attribute.
       items:
         $ref: '#/getTopFilterForAttribute'
 

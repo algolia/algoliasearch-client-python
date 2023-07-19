@@ -2,11 +2,11 @@ post:
   tags:
     - Vaults
   operationId: appendSource
-  description: Add a single source to the list of allowed sources.
-  summary: Add a single source.
+  description: Add a source to the list of allowed sources.
+  summary: Add a source.
   requestBody:
     required: true
-    description: The source to add.
+    description: Source to add.
     content:
       application/json:
         schema:

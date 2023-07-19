@@ -1,18 +1,19 @@
 sources:
-  description: A list of sources.
+  description: Sources.
   type: array
   items:
     $ref: '#/source'
 
 source:
-  description: The source.
+  description: Source.
   required:
     - source
   properties:
     source:
-      description: The IP range of the source.
+      description: IP address range of the source.
       type: string
       example: 10.0.0.1/32
     description:
-      description: The description of the source.
+      description: Source description.
       type: string
+      example: 'Server subnet'

@@ -29,26 +29,28 @@ baseSearchResponse:
   properties:
     abTestID:
       type: integer
-      description: If a search encounters an index that is being A/B tested, abTestID reports the ongoing A/B test ID.
+      description: A/B test ID. This is only included in the response for indices that are part of an A/B test.
     abTestVariantID:
       type: integer
-      description: If a search encounters an index that is being A/B tested, abTestVariantID reports the variant ID of the index used (starting at 1).
+      minimum: 1
+      description: Variant ID. This is only included in the response for indices that are part of an A/B test.
     aroundLatLng:
       type: string
-      description: The computed geo location.
+      description: Computed geographical location.
+      example: '40.71,-74.01'
       pattern: ^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$
     automaticRadius:
       type: string
-      description: The automatically computed radius. For legacy reasons, this parameter is a string and not an integer.
+      description: Automatically-computed radius.
     exhaustiveFacetsCount:
       type: boolean
-      description: Whether the facet count is exhaustive or approximate.
+      description: Indicates whether the facet count is exhaustive (exact) or approximate.
     exhaustiveNbHits:
       type: boolean
-      description: Indicate if the nbHits count was exhaustive or approximate.
+      description: Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
     exhaustiveTypo:
       type: boolean
-      description: Indicate if the typo-tolerance search was exhaustive or approximate (only included when typo-tolerance is enabled).
+      description: Indicates whether the search for typos was exhaustive (exact) or approximate.
     facets:
       title: facets
       type: object
@@ -56,7 +58,7 @@ baseSearchResponse:
         type: object
         additionalProperties:
           type: integer
-      description: A mapping of each facet name to the corresponding facet counts.
+      description: Mapping of each facet name to the corresponding facet counts.
       example:
         category:
           food: 1
@@ -72,19 +74,19 @@ baseSearchResponse:
           min:
             type: number
             format: double
-            description: The minimum value in the result set.
+            description: Minimum value in the results.
           max:
             type: number
             format: double
-            description: The maximum value in the result set.
+            description: Maximum value in the results.
           avg:
             type: number
             format: double
-            description: The average facet value in the result set.
+            description: Average facet value in the results.
           sum:
             type: number
             format: double
-            description: The sum of all values in the result set.
+            description: Sum of all values in the results.
     hitsPerPage:
       $ref: '../../../common/schemas/IndexSettings.yml#/hitsPerPage'
     index:
@@ -93,28 +95,29 @@ baseSearchResponse:
       description: Index name used for the query.
     indexUsed:
       type: string
-      description: Index name used for the query. In the case of an A/B test, the targeted index isn't always the index used by the query.
+      description: Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query.
       example: indexNameAlt
     message:
       type: string
-      description: Used to return warnings about the query.
+      description: Warnings about the query.
     nbHits:
       $ref: '#/nbHits'
     nbPages:
       $ref: '#/nbPages'
     nbSortedHits:
       type: integer
-      description: The number of hits selected and sorted by the relevant sort algorithm.
+      description: Number of hits selected and sorted by the relevant sort algorithm.
       example: 20
     page:
       $ref: '../../../common/schemas/SearchParams.yml#/page'
     params:
       type: string
-      description: A url-encoded string of all search parameters.
+      description: URL-encoded string of all search parameters.
       example: query=a&hitsPerPage=20
     redirect:
       type: object
-      description: This parameter is for internal use only.
+      description: >
+        [Redirect results to a URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
       properties:
         index:
           type: array
@@ -122,7 +125,8 @@ baseSearchResponse:
             $ref: '#/RedirectRuleIndexMetadata'
     parsedQuery:
       type: string
-      description: The query string that will be searched, after normalization.
+      description: Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
+      example: 'george clo'
     processingTimeMS:
       type: integer
       description: Time the server took to process the request, in milliseconds.
@@ -131,10 +135,11 @@ baseSearchResponse:
       $ref: '../../../common/schemas/SearchParams.yml#/query'
     queryAfterRemoval:
       type: string
-      description: A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set.
+      description: Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
     serverUsed:
       type: string
-      description: Actual host name of the server that processed the request.
+      description: Host name of the server that processed the request.
+      example: 'c2-uk-3.algolia.net'
     userData:
       $ref: '../../../common/schemas/IndexSettings.yml#/userData'
     renderingContent:
@@ -142,12 +147,12 @@ baseSearchResponse:
 
 nbHits:
   type: integer
-  description: Number of hits that the search query matched.
+  description: Number of hits the search query matched.
   example: 20
 
 nbPages:
   type: integer
-  description: Number of pages available for the current query.
+  description: Number of pages of results for the current query.
   example: 1
 
 RedirectRuleIndexMetadata:
@@ -164,10 +169,10 @@ RedirectRuleIndexMetadata:
       description: Reason for the redirect rule.
     succeed:
       type: boolean
-      description: Status for the redirect rule.
+      description: Redirect rule status.
     data:
       type: object
-      description: Data for the redirect rule.
+      description: Redirect rule data.
       required:
         - ruleObjectID
       properties:

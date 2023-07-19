@@ -4,8 +4,8 @@ post:
   operationId: searchSingleIndex
   x-use-read-transporter: true
   x-cacheable: true
-  summary: Search in a single index.
-  description: Perform a search operation targeting one specific index.
+  summary: Search an index.
+  description: Return records that match the query.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
   requestBody:

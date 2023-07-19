@@ -2,8 +2,12 @@ post:
   tags:
     - Records
   operationId: batch
-  summary: Batch operations to one index.
-  description: Perform multiple write operations targeting one index, in a single API call.
+  summary: Batch write operations on one index.
+  description: >
+    To reduce the time spent on network round trips, you can perform several write actions in a single API call.
+    Actions are applied in the order they are specified.
+    
+    The supported `action`s are equivalent to the individual operations of the same name.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
   requestBody:
@@ -12,7 +16,7 @@ post:
       application/json:
         schema:
           title: batchWriteParams
-          description: The `batch` parameters.
+          description: Batch parameters.
           type: object
           additionalProperties: false
           properties:
@@ -27,7 +31,8 @@ post:
                     $ref: 'common/schemas.yml#/action'
                   body:
                     type: object
-                    description: arguments to the operation (depends on the type of the operation).
+                    description: Operation arguments (varies with specified `action`).
+                    example: {'name': 'Betty Jane McCamey','company': 'Vita Foods Inc.','email': 'betty@mccamey.com'}
                 required:
                   - action
                   - body

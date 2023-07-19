@@ -3,10 +3,7 @@ get:
     - Clusters
   operationId: listClusters
   summary: List clusters.
-  description: >
-    List the clusters available in a multi-clusters setup for a single appID.
-
-    Upon success, the response is 200 OK and contains the following clusters.
+  description: List the available clusters in a multi-cluster setup.
   responses:
     '200':
       description: OK
@@ -15,11 +12,11 @@ get:
           schema:
             title: listClustersResponse
             type: object
-            description: Array of clusters.
+            description: Clusters.
             properties:
               topUsers:
                 type: array
-                description: Mapping of cluster names to top users.
+                description: Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values.
                 items:
                   $ref: '../../common/schemas/Cluster.yml#/clusterName'
             required:

@@ -4,7 +4,7 @@
     "parameters": {
       "endAt": "2022-12-31T00:00:00.000Z",
       "name": "myABTest",
-      "variant": [
+      "variants": [
         {
           "index": "AB_TEST_1",
           "trafficPercentage": 30
@@ -21,7 +21,7 @@
       "body": {
         "endAt": "2022-12-31T00:00:00.000Z",
         "name": "myABTest",
-        "variant": [
+        "variants": [
           {
             "index": "AB_TEST_1",
             "trafficPercentage": 30

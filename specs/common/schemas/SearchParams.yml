@@ -26,7 +26,7 @@ baseSearchParamsWithoutQuery:
   properties:
     similarQuery:
       type: string
-      description: Overrides the query parameter and performs a more generic search that can be used to find "similar" results.
+      description: Overrides the query parameter and performs a more generic search.
       default: ''
       x-categories:
         - Search
@@ -42,7 +42,12 @@ baseSearchParamsWithoutQuery:
       $ref: '#/tagFilters'
     sumOrFiltersScores:
       type: boolean
-      description: Determines how to calculate the total score for filtering.
+      description: >
+        Determines how to calculate [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores).
+
+        If `false`, maximum score is kept.
+
+        If `true`, score is summed.
       default: false
       x-categories:
         - Filtering
@@ -50,19 +55,20 @@ baseSearchParamsWithoutQuery:
       type: array
       items:
         type: string
-      description: Retrieve facets and their facet values.
+      description: Returns [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts), their facet values, and the number of matching facet values.
       default: []
       x-categories:
         - Faceting
     maxValuesPerFacet:
       type: integer
-      description: Maximum number of facet values to return for each facet during a regular search.
+      description: Maximum number of facet values to return for each facet.
       default: 100
       x-categories:
         - Faceting
     facetingAfterDistinct:
       type: boolean
-      description: Force faceting to be applied after de-duplication (via the Distinct setting).
+      description: >
+        Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control.
       default: false
       x-categories:
         - Faceting
@@ -76,12 +82,18 @@ baseSearchParamsWithoutQuery:
       $ref: '#/page'
     offset:
       type: integer
-      description: Specify the offset of the first hit to return.
+      description: >
+        Specifies the offset of the first hit to return.
+
+        > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
       x-categories:
         - Pagination
     length:
       type: integer
-      description: Set the number of hits to retrieve (used only with offset).
+      description: >
+        Sets the number of hits to retrieve (for use with `offset`).
+
+        > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
       minimum: 1
       maximum: 1000
       x-categories:
@@ -94,13 +106,13 @@ baseSearchParamsWithoutQuery:
       $ref: '#/aroundRadius'
     aroundPrecision:
       type: integer
-      description: Precision of geo search (in meters), to add grouping by geo location to the ranking formula.
+      description: Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
       default: 10
       x-categories:
         - Geo-Search
     minimumAroundRadius:
       type: integer
-      description: Minimum radius (in meters) used for a geo search when aroundRadius is not set.
+      description: Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
       minimum: 1
       x-categories:
         - Geo-Search
@@ -112,7 +124,7 @@ baseSearchParamsWithoutQuery:
       type: array
       items:
         type: string
-      description: This parameter changes the default values of certain parameters and settings that work best for a natural language query, such as ignorePlurals, removeStopWords, removeWordsIfNoResults, analyticsTags and ruleContexts. These parameters and settings work well together when the query is formatted in natural language instead of keywords, for example when your user performs a voice search.
+      description: Changes the default values of parameters that work best for a natural language query, such as `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and `ruleContexts`. These parameters work well together when the query consists of fuller natural language strings instead of keywords, for example when processing voice search queries.
       default: []
       x-categories:
         - Languages
@@ -120,36 +132,37 @@ baseSearchParamsWithoutQuery:
       type: array
       items:
         type: string
-      description: Enables contextual rules.
+      description: Assigns [rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context) to search queries.
       default: []
       x-categories:
         - Rules
     personalizationImpact:
       type: integer
-      description: Define the impact of the Personalization feature.
+      description: Defines how much [Personalization affects results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
       default: 100
       x-categories:
         - Personalization
     userToken:
       type: string
-      description: Associates a certain user token with the current search.
+      description: Associates a [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current search.
+      example: '123456'
       x-categories:
         - Personalization
     getRankingInfo:
       type: boolean
-      description: Retrieve detailed ranking information.
+      description: Incidates whether the search response includes [detailed ranking information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
       default: false
       x-categories:
         - Advanced
     clickAnalytics:
       type: boolean
-      description: Enable the Click Analytics feature.
+      description: Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
       default: false
       x-categories:
         - Analytics
     analytics:
       type: boolean
-      description: Whether the current query will be taken into account in the Analytics.
+      description: Indicates whether this query will be included in [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
       default: true
       x-categories:
         - Analytics
@@ -157,7 +170,7 @@ baseSearchParamsWithoutQuery:
       type: array
       items:
         type: string
-      description: List of tags to apply to the query for analytics purposes.
+      description: Tags to apply to the query for [segmenting analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
       default: []
       x-categories:
         - Analytics
@@ -169,13 +182,13 @@ baseSearchParamsWithoutQuery:
         - Advanced
     enableABTest:
       type: boolean
-      description: Whether this search should participate in running AB tests.
+      description: Incidates whether this search will be considered in A/B testing.
       default: true
       x-categories:
         - Advanced
     enableReRanking:
       type: boolean
-      description: Whether this search should use AI Re-Ranking.
+      description: Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
       default: true
       x-categories:
         - Advanced
@@ -190,26 +203,28 @@ searchParamsString:
       $ref: '#/paramsAsString'
 
 paramsAsString:
-  description: Search parameters as URL-encoded query string.
+  description: Search parameters as a URL-encoded query string.
+  example: 'hitsPerPage=2&getRankingInfo=1'
   type: string
   default: ''
 
 query:
   type: string
-  description: The text to search in the index.
+  description: Text to search for in an index.
   default: ''
   x-categories:
     - Search
 
 page:
   type: integer
-  description: Specify the page to retrieve.
+  description: Page to retrieve (the first page is `0`, not `1`).
   default: 0
   x-categories:
     - Pagination
 
 aroundRadius:
-  description: Define the maximum radius for a geo search (in meters).
+  description: >
+    [Maximum radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius) for a geographical search (in meters).
   oneOf:
     - type: integer
       minimum: 1
@@ -223,14 +238,15 @@ aroundRadiusAll:
 
 aroundLatLng:
   type: string
-  description: Search for entries around a central geolocation, enabling a geo search within a circular area.
+  description: Search for entries [around a central location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point), enabling a geographical search within a circular area.
+  example: '40.71,-74.01'
   default: ''
   x-categories:
     - Geo-Search
 
 aroundLatLngViaIP:
   type: boolean
-  description: Search for entries around a given location automatically computed from the requester's IP address.
+  description: Search for entries around a location. The location is automatically computed from the requester's IP address.
   default: false
   x-categories:
     - Geo-Search
@@ -240,7 +256,8 @@ insideBoundingBox:
   items:
     type: number
     format: double
-  description: Search inside a rectangular area (in geo coordinates).
+  description: Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
+  example: [46.650828100116044,7.123046875,45.17210966999772,1.009765625]
   x-categories:
     - Geo-Search
 
@@ -249,7 +266,8 @@ insidePolygon:
   items:
     type: number
     format: double
-  description: Search inside a polygon (in geo coordinates).
+  description: Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
+  example: [46.650828100116044,7.123046875,45.17210966999772,1.009765625,49.62625916704081,4.6181640625]
   x-categories:
     - Geo-Search
 
@@ -272,13 +290,17 @@ listOfSearchFilters:
 
 filters:
   type: string
-  description: Filter the query with numeric, facet and/or tag filters.
+  description: >
+    [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the query with numeric, facet, or tag filters.
+  example: '(category:Book OR category:Ebook) AND _tags:published'
   default: ''
   x-categories:
     - Filtering
 
 facetFilters:
-  description: Filter hits by facet value.
+  description: >
+    [Filter hits by facet value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
+  example: ['category:Book','author:John Doe']
   oneOf:
     - $ref: '#/listOfSearchFilters'
     - type: string
@@ -286,7 +308,7 @@ facetFilters:
     - Filtering
 
 reRankingApplyFilter:
-  description: When Dynamic Re-Ranking is enabled, only records that match these filters will be impacted by Dynamic Re-Ranking.
+  description: When [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) is enabled, only records that match these filters will be affected by Dynamic Re-Ranking.
   nullable: true
   oneOf:
     - $ref: '#/listOfSearchFilters'
@@ -295,7 +317,9 @@ reRankingApplyFilter:
     - Filtering
 
 tagFilters:
-  description: Filter hits by tags.
+  description: >
+    [Filter hits by tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/).
+  example: [['Book','Movie'],'SciFi']
   oneOf:
     - $ref: '#/listOfSearchFilters'
     - type: string
@@ -303,7 +327,9 @@ tagFilters:
     - Filtering
 
 numericFilters:
-  description: Filter on numeric attributes.
+  description: >
+    [Filter on numeric attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
+  example: [['inStock = 1','deliveryDate < 1441755506'],'price < 1000']
   oneOf:
     - $ref: '#/listOfSearchFilters'
     - type: string
@@ -311,7 +337,11 @@ numericFilters:
     - Filtering
 
 optionalFilters:
-  description: Create filters for ranking purposes, where records that match the filter are ranked higher, or lower in the case of a negative optional filter.
+  description: |
+    Create filters to boost or demote records. 
+    
+    Records that match the filter are ranked higher for positive and lower for negative optional filters. In contrast to regular filters, records that don't match the optional filter are still included in the results, only their ranking is affected.
+  example: ['category:Book','author:John Doe']
   oneOf:
     - $ref: '#/listOfSearchFilters'
     - type: string

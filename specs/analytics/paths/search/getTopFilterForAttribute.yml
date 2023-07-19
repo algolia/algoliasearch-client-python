@@ -2,8 +2,8 @@ get:
   tags:
     - search
   operationId: getTopFilterForAttribute
-  summary: Get top filters for the an attribute.
-  description: Returns top filters for the given attribute. Limited to the 1000 most used filters.
+  summary: Get top filter values for an attribute.
+  description: Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
   parameters:
     - $ref: '../../common/parameters.yml#/Attribute'
     - $ref: '../../../common/parameters.yml#/Index'

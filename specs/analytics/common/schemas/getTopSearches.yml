@@ -6,7 +6,7 @@ topSearchesResponse:
   properties:
     searches:
       type: array
-      description: A list of top searches with their count.
+      description: Top searches with their hits count.
       items:
         type: object
         title: topSearch
@@ -19,7 +19,7 @@ topSearchesResponse:
           search:
             $ref: '../parameters.yml#/search'
           count:
-            $ref: '../../../common/parameters.yml#/count'
+            $ref: '../parameters.yml#/count'
           nbHits:
             $ref: '../../../search/common/schemas/SearchResponse.yml#/nbHits'
 
@@ -31,7 +31,7 @@ topSearchesResponseWithAnalytics:
   properties:
     searches:
       type: array
-      description: A list of top searches with their count and analytics.
+      description: Top searches with their hits count and analytics.
       items:
         type: object
         title: topSearchWithAnalytics
@@ -50,7 +50,7 @@ topSearchesResponseWithAnalytics:
           search:
             $ref: '../parameters.yml#/search'
           count:
-            $ref: '../../../common/parameters.yml#/count'
+            $ref: '../parameters.yml#/count'
           clickThroughRate:
             $ref: '../parameters.yml#/rate'
           averageClickPosition:

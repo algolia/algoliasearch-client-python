@@ -1,5 +1,5 @@
 indexSettings:
-  description: The Algolia index settings.
+  description: Algolia index settings.
   allOf:
     - $ref: '#/baseIndexSettings'
     - $ref: '#/indexSettingsAsSearchParams'
@@ -12,19 +12,22 @@ baseIndexSettings:
       type: array
       items:
         type: string
-      description: Creates replicas, exact copies of an index.
+      example: [virtual(prod_products_price_asc),dev_products_replica]
+      description: Creates [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/), which are copies of a primary index with the same records but different settings.
       default: []
       x-categories:
         - Ranking
     paginationLimitedTo:
       type: integer
-      description: Set the maximum number of hits accessible via pagination.
+      example: 20
+      description: Maximum number of hits accessible through pagination.
       default: 1000
     unretrievableAttributes:
       type: array
       items:
         type: string
-      description: List of attributes that can't be retrieved at query time.
+      example: [popularity]
+      description: Attributes that can't be retrieved at query time.
       default: []
       x-categories:
         - Attributes
@@ -32,28 +35,32 @@ baseIndexSettings:
       type: array
       items:
         type: string
-      description: A list of words for which you want to turn off typo tolerance.
+      example: ['wheel','1X2BCD']
+      description: Words for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
       default: []
       x-categories:
         - Typos
     attributesToTransliterate:
-      description: Specify on which attributes in your index Algolia should apply Japanese transliteration to make words indexed in Katakana or Kanji searchable in Hiragana.
+      description: Attributes in your index to which [Japanese transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead) applies. This will ensure that words indexed in Katakana or Kanji can also be searched in Hiragana.
       type: array
       items:
         type: string
+      example: ['name','description']
       x-categories:
         - Languages
     camelCaseAttributes:
       type: array
       items:
         type: string
-      description: List of attributes on which to do a decomposition of camel case words.
+      example: ['description']
+      description: Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words.
       default: []
       x-categories:
         - Languages
     decompoundedAttributes:
       type: object
-      description: Specify on which attributes in your index Algolia should apply word segmentation, also known as decompounding.
+      example: {de: ['name']}
+      description: Attributes in your index to which [word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) (decompounding) applies.
       default: {}
       x-categories:
         - Languages
@@ -61,7 +68,8 @@ baseIndexSettings:
       type: array
       items:
         type: string
-      description: Sets the languages at the index level for language-specific processing such as tokenization and normalization.
+      example: ['ja']
+      description: Set the languages of your index, for language-specific processing steps such as [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/) and [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
       default: []
       x-categories:
         - Languages
@@ -69,13 +77,17 @@ baseIndexSettings:
       type: array
       items:
         type: string
-      description: List of attributes on which you want to disable prefix matching.
+      example: ['sku']
+      description: Attributes for which you want to turn off [prefix matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search).
       default: []
       x-categories:
         - Query strategy
     allowCompressionOfIntegerArray:
       type: boolean
-      description: Enables compression of large integer arrays.
+      description: >
+        Incidates whether the engine compresses arrays with exclusively non-negative integers.
+
+        When enabled, the compressed arrays may be reordered.
       default: false
       x-categories:
         - Performance
@@ -83,13 +95,15 @@ baseIndexSettings:
       type: array
       items:
         type: string
-      description: List of numeric attributes that can be used as numerical filters.
+      description: Numeric attributes that can be used as [numerical filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters).
+      example: ['quantity','popularity']
       default: []
       x-categories:
         - Performance
     separatorsToIndex:
       type: string
-      description: Control which separators are indexed.
+      example: +#
+      description: Controls which separators are added to an Algolia index as part of [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean). Separators are all non-letter characters except spaces and currency characters, such as $€£¥.
       default: ''
       x-categories:
         - Typos
@@ -97,15 +111,19 @@ baseIndexSettings:
       type: array
       items:
         type: string
-      description: The complete list of attributes used for searching.
+      example: ['title,alternative_title','author','unordered(text)','emails.personal']
+      description: >
+        [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
       default: []
       x-categories:
         - Attributes
     userData:
       $ref: '#/userData'
     customNormalization:
-      description: Overrides Algolia's default normalization.
+      description: A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
       type: object
+      example: > 
+        {default: {'ä': 'ae', 'ü': 'ue'}}
       additionalProperties:
         type: object
         additionalProperties:
@@ -121,7 +139,9 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: The complete list of attributes that will be used for faceting.
+      example: ['author','filterOnly(isbn)','searchable(edition)','afterDistinct(category)','afterDistinct(searchable(publisher))']
+      description: >
+        Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
       default: []
       x-categories:
         - Faceting
@@ -129,7 +149,8 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: This parameter controls which attributes to retrieve and which not to retrieve.
+      example: ['author','title','content']
+      description: Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
       default: ['*']
       x-categories:
         - Attributes
@@ -137,7 +158,8 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: Restricts a given query to look in only a subset of your searchable attributes.
+      example: ['title','author']
+      description: Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
       default: []
       x-categories:
         - Attributes
@@ -145,7 +167,7 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: Controls how Algolia should sort your results.
+      description: Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
       default:
         - typo
         - geo
@@ -161,13 +183,16 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: Specifies the custom ranking criterion.
+      example: ['desc(popularity)','asc(price)']
+      description: >
+        Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
       default: []
       x-categories:
         - Ranking
     relevancyStrictness:
       type: integer
-      description: Controls the relevancy threshold below which less relevant results aren't included in the results.
+      example: 90
+      description: Relevancy threshold below which less relevant results aren't included in the results.
       default: 100
       x-categories:
         - Ranking
@@ -175,26 +200,29 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: List of attributes to highlight.
+      example: ['author','title','content']
+      description: Attributes to highlight. Strings that match the search query in the attributes are highlighted by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).
       x-categories:
         - Highlighting and Snippeting
     attributesToSnippet:
       type: array
       items:
         type: string
-      description: List of attributes to snippet, with an optional maximum number of words to snippet.
+      example: ['content:80','description']
+      description: >
+        Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words. If not specified, the attribute is shortened to the 10 words around the matching string but you can specify the number. For example: `body:20`.
       default: []
       x-categories:
         - Highlighting and Snippeting
     highlightPreTag:
       type: string
-      description: The HTML string to insert before the highlighted parts in all highlight and snippet results.
+      description: HTML string to insert before the highlighted parts in all highlight and snippet results.
       default: <em>
       x-categories:
         - Highlighting and Snippeting
     highlightPostTag:
       type: string
-      description: The HTML string to insert after the highlighted parts in all highlight and snippet results.
+      description: HTML string to insert after the highlighted parts in all highlight and snippet results.
       default: </em>
       x-categories:
         - Highlighting and Snippeting
@@ -214,13 +242,13 @@ indexSettingsAsSearchParams:
       $ref: '#/hitsPerPage'
     minWordSizefor1Typo:
       type: integer
-      description: Minimum number of characters a word in the query string must contain to accept matches with 1 typo.
+      description: Minimum number of characters a word in the query string must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
       default: 4
       x-categories:
         - Typos
     minWordSizefor2Typos:
       type: integer
-      description: Minimum number of characters a word in the query string must contain to accept matches with 2 typos.
+      description: Minimum number of characters a word in the query string must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
       default: 8
       x-categories:
         - Typos
@@ -236,7 +264,8 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: List of attributes on which you want to disable typo tolerance.
+      example: ['sku']
+      description: Attributes for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
       default: []
       x-categories:
         - Typos
@@ -246,7 +275,8 @@ indexSettingsAsSearchParams:
       $ref: '#/removeStopWords'
     keepDiacriticsOnCharacters:
       type: string
-      description: List of characters that the engine shouldn't automatically normalize.
+      example: øé
+      description: Characters that the engine shouldn't automatically [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
       default: ''
       x-categories:
         - Languages
@@ -254,25 +284,27 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: Sets the languages to be used by language-specific settings and functionalities such as ignorePlurals, removeStopWords, and CJK word-detection.
+      example: ['es']
+      description: Sets your user's search language. This adjusts language-specific settings and features such as `ignorePlurals`, `removeStopWords`, and [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk) word detection.
       default: []
       x-categories:
         - Languages
     decompoundQuery:
       type: boolean
-      description: Splits compound words into their composing atoms in the query.
+      description: >
+        [Splits compound words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words) into their component word parts in the query.
       default: true
       x-categories:
         - Languages
     enableRules:
       type: boolean
-      description: Whether Rules should be globally enabled.
+      description: Incidates whether [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
       default: true
       x-categories:
         - Rules
     enablePersonalization:
       type: boolean
-      description: Enable the Personalization feature.
+      description: Incidates whether [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/) is enabled.
       default: false
       x-categories:
         - Personalization
@@ -285,11 +317,11 @@ indexSettingsAsSearchParams:
     semanticSearch:
       type: object
       description: >
-        The settings relevant for configuration of the semantic search engine.
-        These settings are only used when the mode is set to 'neuralSearch'.
+        Settings for the semantic search part of NeuralSearch.
+        Only used when `mode` is _neuralSearch_.
       properties:
         eventSources:
-          description: When null, the current index / replica group will be used as the event source.
+          description: Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.
           nullable: true
           type: array
           items:
@@ -297,7 +329,7 @@ indexSettingsAsSearchParams:
 
     advancedSyntax:
       type: boolean
-      description: Enables the advanced query syntax.
+      description: Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
       default: false
       x-categories:
         - Query strategy
@@ -305,7 +337,8 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: A list of words that should be considered as optional when found in the query.
+      example: ['blue','iphone case']
+      description: Words which should be considered [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words) when found in a query.
       default: []
       x-categories:
         - Query strategy
@@ -313,7 +346,8 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: List of attributes on which you want to disable the exact ranking criterion.
+      example: ['description']
+      description: Attributes for which you want to [turn off the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
       default: []
       x-categories:
         - Query strategy
@@ -323,7 +357,7 @@ indexSettingsAsSearchParams:
       type: array
       items:
         $ref: '#/alternativesAsExact'
-      description: List of alternatives that should be considered an exact match by the exact ranking criterion.
+      description: Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
       default: [ignorePlurals, singleWordSynonym]
       x-categories:
         - Query strategy
@@ -331,7 +365,7 @@ indexSettingsAsSearchParams:
       type: array
       items:
         $ref: '#/advancedSyntaxFeatures'
-      description: Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is enabled.
+      description: Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
       default: [exactPhrase, excludeWords]
       x-categories:
         - Query strategy
@@ -339,14 +373,15 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: Enriches the API’s response with meta-information as to how the query was processed.
+      description: Enriches the API's response with information about how the query was processed.
       default: []
       x-categories:
         - Query strategy
     distinct:
       $ref: '#/distinct'
     attributeForDistinct:
-      description: Name of the de-duplication attribute to be used with the distinct feature.
+      description: Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+      example: 'url'
       type: string
     synonyms:
       type: boolean
@@ -364,7 +399,7 @@ indexSettingsAsSearchParams:
       type: integer
       minimum: 1
       maximum: 7
-      description: Precision of the proximity ranking criterion.
+      description: Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
       default: 1
       x-categories:
         - Advanced
@@ -372,7 +407,7 @@ indexSettingsAsSearchParams:
       type: array
       items:
         type: string
-      description: Choose which fields to return in the API response. This parameters applies to search and browse queries.
+      description: Attributes to include in the API response for search and browse queries.
       default: []
       x-categories:
         - Advanced
@@ -380,7 +415,7 @@ indexSettingsAsSearchParams:
       $ref: '#/maxFacetHits'
     attributeCriteriaComputedByMinProximity:
       type: boolean
-      description: When attribute is ranked above proximity in your ranking formula, proximity is used to select which searchable attribute is matched in the attribute ranking stage.
+      description: When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
       default: false
       x-categories:
         - Advanced
@@ -389,7 +424,7 @@ indexSettingsAsSearchParams:
 
 maxFacetHits:
   type: integer
-  description: Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
+  description: Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
   maximum: 100
   default: 10
   x-categories:
@@ -397,13 +432,16 @@ maxFacetHits:
 
 hitsPerPage:
   type: integer
-  description: Set the number of hits per page.
+  description: Number of hits per page.
   default: 20
+  minimum: 1
+  maximum: 1000
   x-categories:
     - Pagination
 
 userData:
   type: object
+  example: {'settingID': 'f2a7b51e3503acc6a39b3784ffb84300','pluginVersion': '1.6.0'}
   description: Lets you store custom data in your indices.
   default: {}
   x-categories:
@@ -412,7 +450,7 @@ userData:
 queryType:
   type: string
   enum: [prefixLast, prefixAll, prefixNone]
-  description: Controls if and how query words are interpreted as prefixes.
+  description: Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
   default: prefixLast
   x-categories:
     - Query strategy
@@ -420,7 +458,7 @@ queryType:
 mode:
   type: string
   enum: ['neuralSearch', 'keywordSearch']
-  description: The search mode that the index will use to query for results.
+  description: Search mode the index will use to query for results.
   default: keywordSearch
   x-categories:
     - Query strategy
@@ -428,7 +466,8 @@ mode:
 removeWordsIfNoResults:
   type: string
   enum: [none, lastWords, firstWords, allOptional]
-  description: Selects a strategy to remove words from the query when it doesn't match any hits.
+  example: firstWords
+  description: Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   default: none
   x-categories:
     - Query strategy
@@ -436,7 +475,7 @@ removeWordsIfNoResults:
 exactOnSingleWordQuery:
   type: string
   enum: [attribute, none, word]
-  description: Controls how the exact ranking criterion is computed when the query contains only one word.
+  description: Determines how the [Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes) is computed when the query contains only one word.
   default: attribute
   x-categories:
     - Query strategy
@@ -454,7 +493,8 @@ advancedSyntaxFeatures:
     - Query strategy
 
 distinct:
-  description: Enables de-duplication or grouping of results.
+  description: Enables [deduplication or grouping of results (Algolia's _distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
+  example: 1
   oneOf:
     - type: boolean
     - type: integer
@@ -465,7 +505,7 @@ distinct:
     - Advanced
 
 typoTolerance:
-  description: Controls whether typo tolerance is enabled and how it is applied.
+  description: Controls whether [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) is enabled and how it is applied.
   oneOf:
     - type: boolean
       default: true
@@ -481,11 +521,12 @@ ignorePlurals:
   description: >
     Treats singular, plurals, and other forms of declensions as matching terms.
 
-    ignorePlurals is used in conjunction with the queryLanguages setting.
+    `ignorePlurals` is used in conjunction with the `queryLanguages` setting.
 
-    list: language ISO codes for which ignoring plurals should be enabled. This list will override any values that you may have set in queryLanguages.
-    true: enables the ignore plurals functionality, where singulars and plurals are considered equivalent (foot = feet). The languages supported here are either every language (this is the default, see list of languages below), or those set by queryLanguages.
-    false: disables ignore plurals, where singulars and plurals are not considered the same for matching purposes (foot will not find feet).
+    _list_: language ISO codes for which ignoring plurals should be enabled. This list will override any values that you may have set in `queryLanguages`.
+    _true_: enables the ignore plurals feature, where singulars and plurals are considered equivalent ("foot" = "feet"). The languages supported here are either [every language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) (this is the default) or those set by `queryLanguages`.
+    _false_: turns off the ignore plurals feature, so that singulars and plurals aren't considered to be the same ("foot" will not find "feet").
+  example: ['ca','es']
   oneOf:
     - type: array
       items:
@@ -499,11 +540,12 @@ removeStopWords:
   description: >
     Removes stop (common) words from the query before executing it.
 
-    removeStopWords is used in conjunction with the queryLanguages setting.
+    `removeStopWords` is used in conjunction with the `queryLanguages` setting.
 
-    list: language ISO codes for which ignoring plurals should be enabled. This list will override any values that you may have set in queryLanguages.
-    true: enables the stop word functionality, ensuring that stop words are removed from consideration in a search. The languages supported here are either every language, or those set by queryLanguages.
-    false: disables stop word functionality, allowing stop words to be taken into account in a search.
+    _list_: language ISO codes for which stop words should be enabled. This list will override any values that you may have set in `queryLanguages`.
+    _true_: enables the stop words feature, ensuring that stop words are removed from consideration in a search. The languages supported here are either [every language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) (this is the default) or those set by `queryLanguages`.
+    _false_: turns off the stop words feature, allowing stop words to be taken into account in a search.
+  example: ['ca','es']
   oneOf:
     - type: array
       items:
@@ -514,7 +556,7 @@ removeStopWords:
     - Languages
 
 renderingContent:
-  description: Content defining how the search interface should be rendered. Can be set via the settings for a default value and can be overridden via rules.
+  description: Extra content for the search UI, for example, to control the [ordering and display of facets](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/merchandising-facets/#merchandise-facets-and-their-values-in-the-manual-editor). You can set a default value and dynamically override it with [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/).
   type: object
   additionalProperties: false
   properties:
@@ -524,7 +566,7 @@ renderingContent:
     - Advanced
 
 facetOrdering:
-  description: Defining how facets should be ordered.
+  description: Defines the ordering of facets (widgets).
   type: object
   additionalProperties: false
   properties:
@@ -534,7 +576,7 @@ facetOrdering:
       $ref: '#/values'
 
 facets:
-  description: The ordering of facets (widgets).
+  description: Ordering of facets (widgets).
   type: object
   additionalProperties: false
   properties:
@@ -542,7 +584,7 @@ facets:
       $ref: '#/order'
 
 values:
-  description: The ordering of facet values, within an individual list.
+  description: Ordering of facet values within an individual facet.
   type: object
   additionalProperties:
     $ref: '#/value'
@@ -564,7 +606,8 @@ order:
 
 sortRemainingBy:
   description: >
-    How to display the remaining items.
+    How to display the remaining items:
+    
       - `count`: facet count (descending).
       - `alpha`: alphabetical (ascending).
       - `hidden`: show only pinned values.

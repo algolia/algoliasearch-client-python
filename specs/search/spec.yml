@@ -1,7 +1,11 @@
 openapi: 3.0.2
 info:
   title: Search API
-  description: API powering the Search feature of Algolia.
+  description: |-
+    Use the Search REST API  to manage your data (indices and records), implement search, and improve relevance (with Rules, synonyms, and language dictionaries).
+
+    Although Algolia provides a REST API, you should use the official open source API [clients, libraries, and tools](https://www.algolia.com/doc/guides/getting-started/how-algolia-works/in-depth/ecosystem/) instead.
+    There's no [SLA](https://www.algolia.com/policies/sla/) if you use the REST API directly.
   version: 1.0.0
 components:
   securitySchemes:
@@ -37,29 +41,44 @@ tags:
   - name: Advanced
     description: Advanced operations.
   - name: Api Keys
-    description: Manage your Api Keys.
+    description: Manage your API keys.
   - name: Clusters
-    description: Clusters operations.
+    description: >
+      Multi-cluster operations.
+
+      Algolia no longer offers [multi-cluster management](https://www.algolia.com/doc/guides/scaling/managing-multiple-clusters-mcm/).
+
+      - If you want to partition your data per user, use facets and secured API keys instead.
+      - If you need more data, consider upgrading to a bigger cluster to suit your needs. Contact [Algolia's support team](https://support.algolia.com/hc/en-us/requests/new) for details.
   - name: Dictionaries
-    description: Dictionaries operations.
+    description: Dictionary operations allow you to customize linguistic features such as [stop words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), and [segmentation (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/).
   - name: Indices
-    description: Manage indices.
+    description: Manage indices, including listing them, checking and updating settings, deleting, copying, and renaming.
   - name: Records
-    description: Records operations.
+    description: Record operations.
   - name: Rules
     description: Rules operations.
   - name: Search
-    description: Perform search operations.
+    description: Search operations.
   - name: Synonyms
-    description: Synonyms operations.
+    description: Synonym operations.
   - name: Vaults
-    description: Vault operations.
+    description: >
+      Vault operations.
+      
+      Algolia Vault allows you to restrict network-level access to your cluster to a specific set of IP addresses: for non-authorized IP addresses, the cluster is invisible.
+
+      You should authorize the IP addresses of team members who need to access the Alglolia dashboard, as it's also affected by the restricted list you set up.
+      
+      To access this feature, [Algolia Vault](https://www.algolia.com/doc/guides/security/algolia-vault/) must be enabled on your server. Contact [Algolia's support team](https://support.algolia.com/hc/en-us/requests/new) for details.
+
+      > **Note**: The maximum number of allowed sources is 1,000.
   - name: _model_index_settings
-    x-displayName: Index Settings
+    x-displayName: Index settings
     description: |
       <SchemaDefinition schemaRef="#/components/schemas/indexSettings" />.
 x-tagGroups:
-  - name: Search and Indexing
+  - name: Search and indexing
     tags:
       - Indices
       - Records

@@ -10,13 +10,15 @@
   {
     "testName": "listIndices with parameters",
     "parameters": {
-      "page": 8
+      "page": 8,
+      "hitsPerPage": 3
     },
     "request": {
       "path": "/1/indexes",
       "method": "GET",
       "queryParameters": {
-        "page": "8"
+        "page": "8",
+        "hitsPerPage": "3"
       }
     }
   }

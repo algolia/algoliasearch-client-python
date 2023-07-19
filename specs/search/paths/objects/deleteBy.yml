@@ -2,13 +2,11 @@ post:
   tags:
     - Records
   operationId: deleteBy
-  summary: Delete all records matching the query.
+  summary: Delete all records matching a query.
   description: >
-    Remove all objects matching a filter (including geo filters).
+    This operation doesn't support all the query options, only its filters (numeric, facet, or tag) and geo queries.
 
-    This method enables you to delete one or more objects based on filters (numeric, facet, tag or geo queries).
-
-    It doesn't accept empty filters or a query.
+    It doesn't accept empty filters or queries.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
   requestBody:

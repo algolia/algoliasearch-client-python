@@ -33,6 +33,7 @@ highlightResultOption:
     matchedWords:
       type: array
       description: List of words from the query that matched the object.
+      example: ['action']
       items:
         type: string
     fullyHighlighted:
@@ -135,8 +136,8 @@ rankingInfo:
 
 highlightedValue:
   type: string
-  description: Markup text with occurrences highlighted.
-  example: <em>George</em> <em>Clo</em>oney
+  description: Markup text with `facetQuery` matches highlighted.
+  example: '<em>George</em> <em>Clo</em>oney'
 
 matchLevel:
   type: string

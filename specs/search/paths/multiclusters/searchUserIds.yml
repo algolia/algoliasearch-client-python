@@ -4,15 +4,12 @@ post:
   operationId: searchUserIds
   x-use-read-transporter: true
   x-cacheable: true
-  summary: Search userID.
+  summary: Search for a user ID.
   description: >
-    Search for userIDs.
-
-    The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds propagate to the different clusters.
-
-    To keep updates moving quickly, the index of userIDs isn't built synchronously with the mapping. Instead, the index is built once every 12h, at the same time as the update of userID usage. For example, when you perform a modification like adding or moving a userID, the search will report an outdated value until the next rebuild of the mapping, which takes place every 12h.
-
-    Upon success, the response is 200 OK and contains the following userIDs data.
+    Since it can take up to a few seconds to get the data from the different clusters,
+    the response isn't real-time.
+    
+    To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours). 
   requestBody:
     required: true
     content:
@@ -25,7 +22,7 @@ post:
           properties:
             query:
               type: string
-              description: Query to search. The search is a prefix search with typoTolerance. Use empty query to retrieve all users.
+              description: Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users.
             clusterName:
               $ref: '../../common/schemas/Cluster.yml#/clusterName'
             page:
@@ -46,7 +43,7 @@ post:
             properties:
               hits:
                 type: array
-                description: List of user object matching the query.
+                description: User objects that match the query.
                 items:
                   title: userHit
                   type: object

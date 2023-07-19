@@ -3,7 +3,7 @@ content:
   application/json:
     schema:
       title: createdAtResponse
-      description: The response with a createdAt timestamp.
+      description: Response and creation timestamp.
       additionalProperties: false
       type: object
       required:

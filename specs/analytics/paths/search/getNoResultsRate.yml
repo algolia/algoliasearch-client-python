@@ -3,7 +3,7 @@ get:
     - search
   operationId: getNoResultsRate
   summary: Get no results rate.
-  description: Returns the rate at which searches didn't return any results. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without results used to compute the rates.
+  description: Returns the rate at which searches didn't return any results. 
   parameters:
     - $ref: '../../../common/parameters.yml#/Index'
     - $ref: '../../../common/parameters.yml#/StartDate'
@@ -32,7 +32,7 @@ get:
                 $ref: '../../../common/parameters.yml#/count'
               dates:
                 type: array
-                description: A list of searches without results with their date, rate and counts.
+                description: Overall count of searches without results plus a daily breakdown.
                 items:
                   type: object
                   title: noResultsRateEvent
@@ -46,9 +46,9 @@ get:
                     date:
                       $ref: '../../common/parameters.yml#/date'
                     noResultCount:
-                      $ref: '../../../common/parameters.yml#/count'
+                      $ref: '../../common/parameters.yml#/noResultCount'
                     count:
-                      $ref: '../../../common/parameters.yml#/count'
+                      $ref: '../../common/parameters.yml#/count'
                     rate:
                       $ref: '../../common/parameters.yml#/rate'
     '400':

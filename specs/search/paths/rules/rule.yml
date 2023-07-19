@@ -3,10 +3,10 @@ get:
     - Rules
   operationId: getRule
   summary: Get a rule.
-  description: Retrieve the Rule with the specified objectID.
+  description: Get a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
-    - $ref: '../../../common/parameters.yml#/ObjectID'
+    - $ref: 'common/parameters.yml#/ObjectID'
   responses:
     '200':
       description: OK
@@ -27,11 +27,11 @@ put:
   tags:
     - Rules
   operationId: saveRule
-  summary: Save/Update a rule.
-  description: Create or update the Rule with the specified objectID.
+  summary: Create or update a rule.
+  description: To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
-    - $ref: '../../../common/parameters.yml#/ObjectID'
+    - $ref: 'common/parameters.yml#/ObjectID'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'
   requestBody:
     required: true
@@ -60,10 +60,10 @@ delete:
     - Rules
   operationId: deleteRule
   summary: Delete a rule.
-  description: Delete the Rule with the specified objectID.
+  description: Delete a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
-    - $ref: '../../../common/parameters.yml#/ObjectID'
+    - $ref: 'common/parameters.yml#/ObjectID'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'
   responses:
     '200':

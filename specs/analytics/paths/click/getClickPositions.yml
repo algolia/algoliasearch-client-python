@@ -2,12 +2,12 @@ get:
   tags:
     - click
   operationId: getClickPositions
-  summary: Get clicks per positions.
+  summary: Get click positions.
   description: |
-    Returns the distribution of clicks per range of positions.
+    Show the number of clicks events and their associated position in the search results.
 
-    If the groups all have a count of 0, it means Algolia didn’t receive any click events for the queries with the clickAnalytics search parameter set to true.
-    The count is 0 until Algolia receives at least one click event.
+    > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+
   parameters:
     - $ref: '../../../common/parameters.yml#/Index'
     - $ref: '../../../common/parameters.yml#/StartDate'
@@ -27,7 +27,7 @@ get:
             properties:
               positions:
                 type: array
-                description: A list of the click positions with their click count.
+                description: Click positions.
                 minItems: 2
                 maxItems: 2
                 items:
@@ -42,12 +42,11 @@ get:
                       description: >
                         Range of positions with the following pattern:
 
-                        - Positions from 1 to 10 included are displayed in separated groups.
-
-                        - Positions from 11 to 20 included are grouped together.
-
-                        - Positions from 21 and up are grouped together.
+                        - For positions 1 to 10, the number of click events are shown for each position
+                        - For positions 11 to 20, all click events are grouped
+                        - For positions 21 and up, all click events are grouped.
                       type: array
+                      example: [10,10]
                       items:
                         type: integer
                     clickCount:

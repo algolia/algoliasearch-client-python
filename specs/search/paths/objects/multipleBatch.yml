@@ -2,15 +2,20 @@ post:
   tags:
     - Records
   operationId: multipleBatch
-  description: Perform multiple write operations, potentially targeting multiple indices, in a single API call.
-  summary: Batch operations to many indices.
+  description: >
+    To reduce the time spent on network round trips, you can perform several write actions in a single request.
+    It's a multi-index version of the [`batch` operation](#tag/Records/operation/batch).
+    Actions are applied in the order they are specified.
+    
+    The supported actions are equivalent to the individual operations of the same name.
+  summary: Batch write operations on multiple indices.
   requestBody:
     required: true
     content:
       application/json:
         schema:
           title: batchParams
-          description: The `multipleBatch` parameters.
+          description: Batch parameters.
           type: object
           additionalProperties: false
           properties:
@@ -25,10 +30,13 @@ post:
                     $ref: 'common/schemas.yml#/action'
                   body:
                     type: object
-                    description: arguments to the operation (depends on the type of the operation).
+                    description: Operation arguments (varies with specified `action`).
+                    example: >
+                      {'requests':[{'action':'addObject','indexName':'contacts','body':{'name':'Betty Jane McCamey','company':'Vita Foods Inc.','email':'betty@mccamey.com'}},{'action':'addObject','indexName':'public_contacts','body':{'name':'Gayla Geimer','company': "Ortman McCain Co','email':'gayla@geimer.com'}}]}
                   indexName:
                     type: string
                     description: Index to target for this operation.
+                    example: 'index1'
                 required:
                   - action
                   - body
@@ -47,7 +55,7 @@ post:
             properties:
               taskID:
                 type: object
-                description: List of tasksIDs per index.
+                description: TaskIDs per index.
                 additionalProperties:
                   $ref: '../../../common/responses/common.yml#/taskID'
               objectIDs:

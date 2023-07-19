@@ -2,7 +2,7 @@ get:
   tags:
     - Dictionaries
   operationId: getDictionaryLanguages
-  description: List dictionaries supported per language.
+  description: Lists Algolia's [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and any customizations applied to each language's [stop word](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plural](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), and [segmentation (compound)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) features.
   summary: List available languages.
   responses:
     '200':

@@ -1,0 +1,12 @@
+[
+  {
+    "parameters": {
+      "indexName": "indexName",
+      "model": "related-products"
+    },
+    "request": {
+      "path": "/1/indexes/indexName/related-products/recommend/rules/search",
+      "method": "POST"
+    }
+  }
+]

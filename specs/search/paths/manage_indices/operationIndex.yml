@@ -2,8 +2,18 @@ post:
   tags:
     - Indices
   operationId: operationIndex
-  summary: Copy/move index.
-  description: Performs a copy or a move operation on a index.
+  summary: Copy, move, or rename an index.
+  description: |-
+    This `operation`, _copy_ or _move_, will copy or move a source index's (`IndexName`) records, settings, synonyms, and rules to a `destination` index.
+    If the destination index exists, it will be replaced, except for index-specific API keys and analytics data.
+    If the destination index doesn't exist, it will be created.
+
+    The choice between moving or copying an index depends on your needs. Choose:
+
+    - **Move** to rename an index.
+    - **Copy** to create a new index with the same records and configuration as an existing one.
+
+    > **Note**: When considering copying or moving, be aware of the [rate limitations](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits) on these processes and the [impact on your analytics data](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/concepts/indices-analytics/).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
   requestBody:
@@ -23,7 +33,12 @@ post:
               type: array
               items:
                 $ref: '../../common/enums.yml#/scopeType'
-              description: Scope of the data to copy. When absent, a full copy is performed. When present, only the selected scopes are copied.
+              description: |-
+                **This only applies to the _copy_ operation.**
+                
+                If you omit `scope`, the copy command copies all records, settings, synonyms, and rules.
+                
+                If you specify `scope`, only the specified scopes are copied.
           required:
             - operation
             - destination

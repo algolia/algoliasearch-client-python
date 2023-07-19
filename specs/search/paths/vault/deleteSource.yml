@@ -2,13 +2,13 @@ delete:
   tags:
     - Vaults
   operationId: deleteSource
-  description: Remove a single source from the list of allowed sources.
-  summary: Remove a single source.
+  description: Remove a source from the list of allowed sources.
+  summary: Remove a source.
   parameters:
     - name: source
       in: path
       required: true
-      description: The IP range of the source.
+      description: IP address range of the source.
       schema:
         type: string
         example: 10.0.0.1/32

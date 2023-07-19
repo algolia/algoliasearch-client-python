@@ -4,7 +4,7 @@ listIndicesResponse:
   properties:
     items:
       type: array
-      description: List of the fetched indices.
+      description: All indices in your Algolia application.
       items:
         $ref: '#/fetchedIndex'
     nbPages:
@@ -21,23 +21,29 @@ fetchedIndex:
     name:
       type: string
       description: Index name.
+      example: 'movies'
     createdAt:
       type: string
       description: Index creation date. An empty string means that the index has no records.
+      example: '2022-09-19T16:36:44.471Z'
     updatedAt:
       $ref: '../../../common/responses/common.yml#/updatedAt'
     entries:
       type: integer
       description: Number of records contained in the index.
+      example: 100
     dataSize:
       type: integer
       description: Number of bytes of the index in minified format.
+      example: 48450
     fileSize:
       type: integer
       description: Number of bytes of the index binary file.
+      example: 112927
     lastBuildTimeS:
       type: integer
       description: Last build time.
+      example: 3
     numberOfPendingTasks:
       type: integer
       default: 0
@@ -49,11 +55,13 @@ fetchedIndex:
     primary:
       type: string
       description: Only present if the index is a replica. Contains the name of the related primary index.
+      example: 'T02'
     replicas:
       type: array
       items:
         type: string
       description: Only present if the index is a primary index with replicas. Contains the names of all linked replicas.
+      example: ['T02_push','T2replica']
   required:
     - name
     - createdAt

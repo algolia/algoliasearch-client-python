@@ -3,7 +3,7 @@ content:
   application/json:
     schema:
       title: deletedAtResponse
-      description: The response with a taskID and a deletedAt timestamp.
+      description: Response, taskID, and deletion timestamp.
       additionalProperties: false
       type: object
       required:

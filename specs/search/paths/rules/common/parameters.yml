@@ -4,4 +4,18 @@ ClearExistingRules:
   required: false
   schema:
     type: boolean
-  description: When true, existing Rules are cleared before adding this batch. When false, existing Rules are kept.
+  description: Indicates whether existing rules should be deleted before adding this batch.
+
+ObjectID:
+  in: path
+  name: objectID
+  description: Unique identifier of a rule object.
+  example: 'a-rule-id'
+  required: true
+  schema:
+    type: string
+
+query:
+  type: string
+  description: Rule object query.
+  default: ''

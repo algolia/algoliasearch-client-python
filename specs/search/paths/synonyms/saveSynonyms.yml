@@ -3,7 +3,7 @@ post:
     - Synonyms
   operationId: saveSynonyms
   summary: Save a batch of synonyms.
-  description: Create/update multiple synonym objects at once, potentially replacing the entire list of synonyms if replaceExistingSynonyms is true.
+  description: Create or update multiple synonyms.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'

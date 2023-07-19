@@ -6,7 +6,7 @@ getTopFiltersNoResultsResponse:
   properties:
     values:
       type: array
-      description: A list of filters without results.
+      description: Filters with no results.
       items:
         $ref: '#/getTopFiltersNoResultsValues'
 
@@ -21,7 +21,7 @@ getTopFiltersNoResultsValues:
       $ref: '../../../common/parameters.yml#/count'
     values:
       type: array
-      description: A list of filters without results.
+      description: Filters with no results.
       items:
         $ref: '#/getTopFiltersNoResultsValue'
 

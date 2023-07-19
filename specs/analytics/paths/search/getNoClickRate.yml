@@ -3,7 +3,7 @@ get:
     - search
   operationId: getNoClickRate
   summary: Get no click rate.
-  description: Returns the rate at which searches didn't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+  description: Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
   parameters:
     - $ref: '../../../common/parameters.yml#/Index'
     - $ref: '../../../common/parameters.yml#/StartDate'
@@ -32,7 +32,7 @@ get:
                 $ref: '../../common/parameters.yml#/clickCount'
               dates:
                 type: array
-                description: A list of searches without clicks with their date, rate and counts.
+                description: Overall count of searches without clicks plus a daily breakdown.
                 items:
                   type: object
                   title: noClickRateEvent
@@ -46,7 +46,7 @@ get:
                     rate:
                       $ref: '../../common/parameters.yml#/rate'
                     count:
-                      $ref: '../../common/parameters.yml#/clickCount'
+                      $ref: '../../common/parameters.yml#/count'
                     noClickCount:
                       $ref: '../../common/parameters.yml#/clickCount'
                     date:

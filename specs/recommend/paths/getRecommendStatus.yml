@@ -1,0 +1,39 @@
+get:
+  tags:
+    - recommendations
+  operationId: getRecommendStatus
+  summary: Get a Recommend task's status.
+  description: Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+  parameters:
+    - $ref: '../../common/parameters.yml#/IndexName'
+    - $ref: '../common/parameters.yml#/Models'
+    - name: taskID
+      in: path
+      description: Unique identifier of a task. Numeric value (up to 64bits).
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 13235
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: getRecommendTaskResponse
+            type: object
+            additionalProperties: false
+            properties:
+              status:
+                $ref: '../../search/common/enums.yml#/taskStatus'
+            required:
+              - status
+    '400':
+      $ref: '../../common/responses/BadRequest.yml'
+    '402':
+      $ref: '../../common/responses/FeatureNotEnabled.yml'
+    '403':
+      $ref: '../../common/responses/MethodNotAllowed.yml'
+    '404':
+      $ref: '../../common/responses/IndexNotFound.yml'

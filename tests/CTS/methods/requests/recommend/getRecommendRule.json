@@ -1,0 +1,13 @@
+[
+  {
+    "parameters": {
+      "indexName": "indexName",
+      "model": "related-products",
+      "objectID": "objectID"
+    },
+    "request": {
+      "path": "/1/indexes/indexName/related-products/recommend/rules/objectID",
+      "method": "GET"
+    }
+  }
+]

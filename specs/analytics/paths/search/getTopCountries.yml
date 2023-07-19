@@ -3,7 +3,7 @@ get:
     - search
   operationId: getTopCountries
   summary: Get top countries.
-  description: Returns top countries. Limited to the 1000 most frequent ones.
+  description: Returns top countries. Limited to the 1,000 most frequent ones.
   parameters:
     - $ref: '../../../common/parameters.yml#/Index'
     - $ref: '../../../common/parameters.yml#/StartDate'
@@ -25,7 +25,7 @@ get:
             properties:
               countries:
                 type: array
-                description: A list of countries with their count.
+                description: Countries
                 items:
                   type: object
                   title: topCountry
@@ -35,8 +35,9 @@ get:
                     - count
                   properties:
                     country:
-                      description: The country.
+                      description: Country.
                       type: string
+                      example: 'UK'
                     count:
                       $ref: '../../../common/parameters.yml#/count'
     '400':

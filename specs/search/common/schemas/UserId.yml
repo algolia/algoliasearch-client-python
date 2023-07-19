@@ -1,13 +1,13 @@
 userId:
   title: userID
   type: object
-  description: A userID.
+  description: Unique user ID.
   properties:
     userID:
       $ref: '../../common/parameters.yml#/userID'
     clusterName:
       type: string
-      description: Cluster on which the user is assigned.
+      description: Cluster to which the user is assigned.
       example: c1-test
     nbRecords:
       type: integer

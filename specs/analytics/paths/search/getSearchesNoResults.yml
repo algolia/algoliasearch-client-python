@@ -3,7 +3,7 @@ get:
     - search
   operationId: getSearchesNoResults
   summary: Get top searches with no results.
-  description: Returns top searches that didn't return any results. Limited to the 1000 most frequent ones.
+  description: Returns the most popular of the latest 1,000 searches that didn't return any results.
   parameters:
     - $ref: '../../../common/parameters.yml#/Index'
     - $ref: '../../../common/parameters.yml#/StartDate'
@@ -25,7 +25,7 @@ get:
             properties:
               searches:
                 type: array
-                description: A list of searches with no results and their count.
+                description: Searches with no results.
                 items:
                   type: object
                   title: searchNoResultEvent

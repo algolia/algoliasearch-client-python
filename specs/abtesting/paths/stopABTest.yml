@@ -2,13 +2,14 @@ post:
   tags:
     - abtest
   operationId: stopABTest
-  summary: Stop a test.
+  summary: Stop an A/B test.
   description: >
-    Marks the A/B test as stopped.
+    If stopped, the test is over and can't be restarted.
+    There is now only one index, receiving 100% of all search requests.
+    
+    The data gathered for stopped A/B tests is retained.
 
-    At this point, the test is over and cannot be restarted.
-    As a result, your application is back to normal: index A will perform as usual, receiving 100% of all search requests.
-    Associated metadata and metrics are still stored.
+    To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
   parameters:
     - $ref: '../common/parameters.yml#/ID'
   responses:

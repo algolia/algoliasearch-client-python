@@ -23,8 +23,8 @@ security:
     apiKey: []
 tags:
   - name: abtest
-    x-displayName: A/B Testing
-    description: Manage A/B Tests.
+    x-displayName: A/B testing
+    description: Manage A/B tests.
 x-tagGroups:
   - name: General
     tags:

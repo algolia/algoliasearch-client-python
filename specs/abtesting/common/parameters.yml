@@ -2,40 +2,49 @@
 ID:
   in: path
   name: id
-  description: The A/B test ID.
+  description: Unique A/B test ID.
   required: true
   schema:
     type: integer
+    example: 390
 
 # misc
 index:
   type: string
-  description: The index performing the A/B test.
+  description: A/B test index.
+  example: 'delcourt_production'
 
 abTestID:
   type: integer
-  description: The A/B test ID.
+  description: Unique A/B test ID.
+  example: 224
 
 endAt:
   type: string
-  description: End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+  description: End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+  example: '2023-06-17T00:00:00Z'
 
 createdAt:
   type: string
-  description: Creation date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+  description: Creation date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+  example: '2023-06-15T15:06:04.249906Z'
 
 updatedAt:
   type: string
-  description: Update date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+  description: Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+  example: '2023-06-15T15:06:44.400601Z'
 
 name:
   type: string
   description: A/B test name.
+  example: 'Custom ranking sales rank test'
 
 description:
   type: string
-  description: The A/B test description.
+  description: A/B test description.
+  example: 'Current production index'
 
 trafficPercentage:
   type: integer
-  description: The traffic percentage for the A/B test.
+  description: A/B test traffic percentage.
+  example: 60

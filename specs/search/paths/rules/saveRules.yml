@@ -3,7 +3,7 @@ post:
     - Rules
   operationId: saveRules
   summary: Save a batch of rules.
-  description: Create/update multiple rules objects at once.
+  description: Create or update multiple rules.
   x-codegen-request-body-name: rules
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'

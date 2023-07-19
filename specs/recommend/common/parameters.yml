@@ -1,0 +1,20 @@
+Models:
+  in: path
+  name: model
+  required: true
+  description: >
+    [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+  schema:
+    $ref: '#/recommendModels'
+
+recommendModels:
+  type: string
+  enum: [related-products, bought-together, trending-facets, trending-items]
+
+ObjectID:
+  in: path
+  name: objectID
+  required: true
+  type: string
+  description: Unique Recommend rule identifier.
+  example: 'a-recommend-rule-id'

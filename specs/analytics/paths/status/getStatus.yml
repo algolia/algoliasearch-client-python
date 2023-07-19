@@ -3,7 +3,10 @@ get:
     - advanced
   operationId: getStatus
   summary: Get Analytics API status.
-  description: Returns the latest update time of the analytics API for a given index. If the index has been recently created and/or no search has been performed yet the updated time will be null.
+  description: >
+    Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`.
+
+    > **Note**: The Analytics API is updated every 5&nbsp;minutes.
   parameters:
     - $ref: '../../../common/parameters.yml#/Index'
   responses:

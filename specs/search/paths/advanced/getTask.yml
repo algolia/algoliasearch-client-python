@@ -2,18 +2,18 @@ get:
   tags:
     - Indices
   operationId: getTask
-  description: Check the current status of a given task.
-  summary: Check the status of a task.
+  description: Some operations, such as copying an index, will respond with a `taskID` value. Use this value here to check the status of that task.
+  summary: Check a task's status.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - name: taskID
       in: path
-      description: Unique identifier of an task. Numeric value (up to 64bits).
+      description: Unique task identifier.
       required: true
       schema:
         type: integer
         format: int64
-        example: 13235
+        example: 1506303845001
   responses:
     '200':
       description: OK

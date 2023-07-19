@@ -16,7 +16,7 @@ recommendHits:
 
 recommendHit:
   type: object
-  description: A Recommend hit.
+  description: Recommend hit.
   additionalProperties: true
   required:
     - objectID
@@ -37,4 +37,37 @@ recommendHit:
       format: double
       minimum: 0
       maximum: 100
-      description: The recommendation score.
+      description: Recommendation score.
+
+ruleResponse:
+  type: object
+  description: Rule object.
+  additionalProperties: false
+  properties:
+    _metadata:
+      type: object
+      properties:
+        lastUpdate:
+          $ref: '../../../common/responses/common.yml#/updatedAt'
+    objectID:
+      type: string
+      description: Unique identifier for a rule object.
+      example: 'hide-12345'
+    conditions:
+      type: array
+      description: >
+        [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions) required to activate a rule. You can use up to 25 conditions per rule.
+      items:
+        $ref: '../../../search/paths/rules/common/schemas.yml#/condition'
+    consequence:
+      $ref: '../../../search/paths/rules/common/schemas.yml#//consequence'
+    description:
+      type: string
+      description: Description of the rule's purpose. This can be helpful for display in the Algolia dashboard.
+      example: 'Display a promotional banner'
+    enabled:
+      type: boolean
+      default: true
+      description: Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time.
+  required:
+    - objectID

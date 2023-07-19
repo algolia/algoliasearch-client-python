@@ -8,7 +8,7 @@ action:
     - deleteObject
     - delete
     - clear
-  description: type of operation.
+  description: Type of batch operation.
 
 builtInOperationType:
   type: string
@@ -20,7 +20,7 @@ builtInOperationType:
     - AddUnique
     - IncrementFrom
     - IncrementSet
-  description: The operation to apply on the attribute.
+  description: Operation to apply to the attribute.
 
 attribute:
   type: string
@@ -35,7 +35,7 @@ builtInOperation:
       $ref: '#/builtInOperationType'
     value:
       type: string
-      description: the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove.
+      description: Value that corresponds to the operation, for example an `Increment` or `Decrement` step, `Add` or `Remove` value.
   required:
     - _operation
     - value

@@ -4,8 +4,8 @@ post:
   operationId: searchDictionaryEntries
   x-use-read-transporter: true
   x-cacheable: true
-  description: Search the dictionary entries.
-  summary: Search a dictionary entries.
+  description: Search for standard and [custom](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/) entries in the [stop words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), or [segmentation (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) dictionaries.
+  summary: Search dictionary entries.
   parameters:
     - $ref: 'common/parameters.yml#/DictionaryName'
   requestBody:
@@ -14,7 +14,8 @@ post:
       application/json:
         schema:
           title: searchDictionaryEntriesParams
-          description: The `searchDictionaryEntries` parameters.
+          description: >
+            `searchDictionaryEntries` parameters.
           type: object
           required:
             - query

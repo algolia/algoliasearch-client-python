@@ -13,10 +13,10 @@ trendingRequest:
           $ref: '#/trendingModels'
         facetName:
           type: string
-          description: The facet name to use for trending models.
+          description: Facet name for trending models.
         facetValue:
           type: string
-          description: The facet value to use for trending models.
+          description: Facet value for trending models.
       required:
         - model
     - $ref: '#/baseRecommendRequest'
@@ -46,11 +46,14 @@ baseRecommendRequest:
       type: integer
       minimum: 0
       maximum: 100
-      description: The threshold to use when filtering recommendations by their score.
+      description: >
+        Recommendations with a confidence score lower than `threshold` won't appear in results.
+
+        > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
     maxRecommendations:
       type: integer
       default: 0
-      description: The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the objectID may be returned.
+      description: Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
     queryParameters:
       $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
     fallbackParameters:
@@ -60,11 +63,11 @@ baseRecommendRequest:
     - threshold
 
 trendingModels:
-  description: The trending model to use.
+  description: Trending model.
   type: string
   enum: [trending-facets, trending-items]
 
 recommendationModels:
-  description: The recommendation model to use.
+  description: Recommendation model.
   type: string
   enum: [related-products, bought-together]

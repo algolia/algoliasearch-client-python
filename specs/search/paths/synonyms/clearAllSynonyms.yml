@@ -2,8 +2,8 @@ post:
   tags:
     - Synonyms
   operationId: clearAllSynonyms
-  summary: Clear all synonyms.
-  description: Remove all synonyms from an index.
+  summary: Delete all synonyms.
+  description: Delete all synonyms in the index.
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'
