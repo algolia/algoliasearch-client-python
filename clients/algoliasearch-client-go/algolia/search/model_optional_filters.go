@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// OptionalFilters - Create filters for ranking purposes, where records that match the filter are ranked higher, or lower in the case of a negative optional filter.
+// OptionalFilters - Create filters to boost or demote records.   Records that match the filter are ranked higher for positive and lower for negative optional filters. In contrast to regular filters, records that don't match the optional filter are still included in the results, only their ranking is affected.
 type OptionalFilters struct {
 	ArrayOfMixedSearchFilters *[]MixedSearchFilters
 	String                    *string

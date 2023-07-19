@@ -7,7 +7,10 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Perform a search query with `default`, will search for facet values if `facet` is given. */
+/**
+ * - `default`: perform a search query - `facet` [searches for facet
+ * values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+ */
 public enum SearchTypeDefault {
   DEFAULT("default");
 

@@ -8,7 +8,7 @@ import (
 
 // ListApiKeysResponse struct for ListApiKeysResponse
 type ListApiKeysResponse struct {
-	// List of api keys.
+	// API keys.
 	Keys []GetApiKeyResponse `json:"keys" validate:"required"`
 }
 

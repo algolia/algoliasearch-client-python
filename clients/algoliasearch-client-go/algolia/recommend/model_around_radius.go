@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// AroundRadius - Define the maximum radius for a geo search (in meters).
+// AroundRadius - [Maximum radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius) for a geographical search (in meters).
 type AroundRadius struct {
 	AroundRadiusAll *AroundRadiusAll
 	Int32           *int32

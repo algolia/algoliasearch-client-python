@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// NumericFilters - Filter on numeric attributes.
+// NumericFilters - [Filter on numeric attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
 type NumericFilters struct {
 	ArrayOfMixedSearchFilters *[]MixedSearchFilters
 	String                    *string

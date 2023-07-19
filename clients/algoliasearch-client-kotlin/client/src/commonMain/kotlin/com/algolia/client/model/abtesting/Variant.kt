@@ -7,63 +7,63 @@ import kotlinx.serialization.json.*
 /**
  * Variant
  *
- * @param averageClickPosition Average click position for the variant.
- * @param clickCount Distinct click count for the variant.
- * @param clickThroughRate Click through rate for the variant.
- * @param conversionCount Distinct conversion count for the variant.
- * @param conversionRate Conversion rate for the variant.
- * @param description The A/B test description.
- * @param index The index performing the A/B test.
- * @param noResultCount The number of occurrences.
- * @param outlierTrackedSearchesCount Count of the tracked searches attributed to outlier traffic that were removed from the A/B test.
- * @param outlierUsersCount Count of users attributed to outlier traffic that were removed from the A/B test.
- * @param searchCount The number of search during the A/B test.
- * @param trackedSearchCount The number of tracked search click.
- * @param trafficPercentage The traffic percentage for the A/B test.
- * @param userCount The number of user during the A/B test.
+ * @param averageClickPosition Variant's [average click position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position).
+ * @param clickCount Number of click events for this variant.
+ * @param clickThroughRate Variant's [click-through rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+ * @param conversionCount Number of click events for this variant.
+ * @param conversionRate Variant's [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+ * @param description A/B test description.
+ * @param index A/B test index.
+ * @param noResultCount Number of [searches without results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results) for that variant.
+ * @param outlierTrackedSearchesCount Number of tracked searches attributed to [outlier traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off) that were removed from the A/B test. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+ * @param outlierUsersCount Number of users attributed to [outlier traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off) that were removed from the A/B test.
+ * @param searchCount Number of searches carried out during the A/B test.
+ * @param trackedSearchCount Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
+ * @param trafficPercentage A/B test traffic percentage.
+ * @param userCount Number of users during the A/B test.
  */
 @Serializable
 public data class Variant(
 
-  /** Average click position for the variant. */
+  /** Variant's [average click position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position). */
   @SerialName(value = "averageClickPosition") val averageClickPosition: Int,
 
-  /** Distinct click count for the variant. */
+  /** Number of click events for this variant. */
   @SerialName(value = "clickCount") val clickCount: Int,
 
-  /** Click through rate for the variant. */
+  /** Variant's [click-through rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate). */
   @SerialName(value = "clickThroughRate") val clickThroughRate: Double,
 
-  /** Distinct conversion count for the variant. */
+  /** Number of click events for this variant. */
   @SerialName(value = "conversionCount") val conversionCount: Int,
 
-  /** Conversion rate for the variant. */
+  /** Variant's [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate). */
   @SerialName(value = "conversionRate") val conversionRate: Double,
 
-  /** The A/B test description. */
+  /** A/B test description. */
   @SerialName(value = "description") val description: String,
 
-  /** The index performing the A/B test. */
+  /** A/B test index. */
   @SerialName(value = "index") val index: String,
 
-  /** The number of occurrences. */
+  /** Number of [searches without results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results) for that variant. */
   @SerialName(value = "noResultCount") val noResultCount: Int,
 
-  /** Count of the tracked searches attributed to outlier traffic that were removed from the A/B test. */
+  /** Number of tracked searches attributed to [outlier traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off) that were removed from the A/B test. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`. */
   @SerialName(value = "outlierTrackedSearchesCount") val outlierTrackedSearchesCount: Int,
 
-  /** Count of users attributed to outlier traffic that were removed from the A/B test. */
+  /** Number of users attributed to [outlier traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off) that were removed from the A/B test. */
   @SerialName(value = "outlierUsersCount") val outlierUsersCount: Int,
 
-  /** The number of search during the A/B test. */
+  /** Number of searches carried out during the A/B test. */
   @SerialName(value = "searchCount") val searchCount: Int,
 
-  /** The number of tracked search click. */
+  /** Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`. */
   @SerialName(value = "trackedSearchCount") val trackedSearchCount: Int,
 
-  /** The traffic percentage for the A/B test. */
+  /** A/B test traffic percentage. */
   @SerialName(value = "trafficPercentage") val trafficPercentage: Int,
 
-  /** The number of user during the A/B test. */
+  /** Number of users during the A/B test. */
   @SerialName(value = "userCount") val userCount: Int,
 )

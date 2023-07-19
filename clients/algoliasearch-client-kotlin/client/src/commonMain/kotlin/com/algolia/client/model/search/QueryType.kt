@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * Controls if and how query words are interpreted as prefixes.
+ * Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
  */
 @Serializable
 public enum class QueryType(public val value: kotlin.String) {

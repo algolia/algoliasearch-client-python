@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * TopCountry
  *
- * @param country The country.
- * @param count The number of occurrences.
+ * @param country Country.
+ * @param count Number of occurrences.
  */
 @Serializable
 public data class TopCountry(
 
-  /** The country. */
+  /** Country. */
   @SerialName(value = "country") val country: String,
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "count") val count: Int,
 )

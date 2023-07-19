@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * Assign userID parameters.
  *
- * @param cluster Name of the cluster.
+ * @param cluster Cluster name.
  */
 @Serializable
 public data class AssignUserIdParams(
 
-  /** Name of the cluster. */
+  /** Cluster name. */
   @SerialName(value = "cluster") val cluster: String,
 )

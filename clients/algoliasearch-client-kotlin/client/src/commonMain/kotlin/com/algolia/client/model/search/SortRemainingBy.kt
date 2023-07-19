@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+ * How to display the remaining items:    - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
  */
 @Serializable
 public enum class SortRemainingBy(public val value: kotlin.String) {

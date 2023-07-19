@@ -8,7 +8,7 @@ import kotlinx.serialization.json.*
  * UserHit
  *
  * @param userID userID of the user.
- * @param clusterName Name of the cluster.
+ * @param clusterName Cluster name.
  * @param nbRecords Number of records in the cluster.
  * @param dataSize Data size taken by all the users assigned to the cluster.
  * @param objectID userID of the requested user. Same as userID.
@@ -20,7 +20,7 @@ public data class UserHit(
   /** userID of the user. */
   @SerialName(value = "userID") val userID: String,
 
-  /** Name of the cluster. */
+  /** Cluster name. */
   @SerialName(value = "clusterName") val clusterName: String,
 
   /** Number of records in the cluster. */

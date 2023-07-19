@@ -14,7 +14,7 @@ final class ListIndicesResponse {
     this.nbPages,
   });
 
-  /// List of the fetched indices.
+  /// All indices in your Algolia application.
   @JsonKey(name: r'items')
   final List<FetchedIndex> items;
 

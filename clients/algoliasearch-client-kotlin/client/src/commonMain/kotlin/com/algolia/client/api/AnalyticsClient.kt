@@ -31,8 +31,8 @@ public class AnalyticsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun del(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -53,8 +53,8 @@ public class AnalyticsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun get(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -74,11 +74,11 @@ public class AnalyticsClient(
 
   /**
    * Get average click position.
-   * Returns the average click position. The endpoint returns a value for the complete given time range, as well as a value per day.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Return the average click position for the complete time range and for individual days. > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getAverageClickPosition(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetAverageClickPositionResponse {
@@ -100,12 +100,12 @@ public class AnalyticsClient(
   }
 
   /**
-   * Get clicks per positions.
-   * Returns the distribution of clicks per range of positions.  If the groups all have a count of 0, it means Algolia didn’t receive any click events for the queries with the clickAnalytics search parameter set to true. The count is 0 until Algolia receives at least one click event.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Get click positions.
+   * Show the number of clicks events and their associated position in the search results.  > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getClickPositions(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetClickPositionsResponse {
@@ -128,11 +128,11 @@ public class AnalyticsClient(
 
   /**
    * Get click-through rate (CTR).
-   * Returns a click-through rate (CTR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of clicks and searches used to compute the rates.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getClickThroughRate(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetClickThroughRateResponse {
@@ -155,11 +155,11 @@ public class AnalyticsClient(
 
   /**
    * Get conversion rate (CR).
-   * Returns a conversion rate (CR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of conversion and searches used to compute the rates.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getConversationRate(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetConversationRateResponse {
@@ -182,11 +182,11 @@ public class AnalyticsClient(
 
   /**
    * Get no click rate.
-   * Returns the rate at which searches didn't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getNoClickRate(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetNoClickRateResponse {
@@ -209,11 +209,11 @@ public class AnalyticsClient(
 
   /**
    * Get no results rate.
-   * Returns the rate at which searches didn't return any results. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without results used to compute the rates.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Returns the rate at which searches didn't return any results.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getNoResultsRate(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetNoResultsRateResponse {
@@ -235,12 +235,12 @@ public class AnalyticsClient(
   }
 
   /**
-   * Get searches count.
-   * Returns the number of searches across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Get number of searches.
+   * Returns the number of searches within a time range.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getSearchesCount(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetSearchesCountResponse {
@@ -263,13 +263,13 @@ public class AnalyticsClient(
 
   /**
    * Get top searches with no clicks.
-   * Returns top searches that didn't lead to any clicks. Limited to the 1000 most frequent ones. For each search, also returns the average number of found hits.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * Return the most popular of the last 1,000 searches that didn't lead to any clicks.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getSearchesNoClicks(index: String, startDate: String? = null, endDate: String? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetSearchesNoClicksResponse {
@@ -294,13 +294,13 @@ public class AnalyticsClient(
 
   /**
    * Get top searches with no results.
-   * Returns top searches that didn't return any results. Limited to the 1000 most frequent ones.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * Returns the most popular of the latest 1,000 searches that didn't return any results.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getSearchesNoResults(index: String, startDate: String? = null, endDate: String? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetSearchesNoResultsResponse {
@@ -325,8 +325,8 @@ public class AnalyticsClient(
 
   /**
    * Get Analytics API status.
-   * Returns the latest update time of the analytics API for a given index. If the index has been recently created and/or no search has been performed yet the updated time will be null.
-   * @param index The index name to target.
+   * Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every 5&nbsp;minutes.
+   * @param index Index name to target.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getStatus(index: String, requestOptions: RequestOptions? = null): GetStatusResponse {
@@ -346,13 +346,13 @@ public class AnalyticsClient(
 
   /**
    * Get top countries.
-   * Returns top countries. Limited to the 1000 most frequent ones.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * Returns top countries. Limited to the 1,000 most frequent ones.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getTopCountries(index: String, startDate: String? = null, endDate: String? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetTopCountriesResponse {
@@ -376,15 +376,15 @@ public class AnalyticsClient(
   }
 
   /**
-   * Get top filter attributes.
-   * Returns top filter attributes. Limited to the 1000 most used filters.
-   * @param index The index name to target.
-   * @param search The query term to search for. Must match the exact user input.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * Get top filterable attributes.
+   * Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
+   * @param index Index name to target.
+   * @param search User query.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getTopFilterAttributes(index: String, search: String? = null, startDate: String? = null, endDate: String? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetTopFilterAttributesResponse {
@@ -409,16 +409,16 @@ public class AnalyticsClient(
   }
 
   /**
-   * Get top filters for the an attribute.
-   * Returns top filters for the given attribute. Limited to the 1000 most used filters.
-   * @param attribute The exact name of the attribute.
-   * @param index The index name to target.
-   * @param search The query term to search for. Must match the exact user input.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * Get top filter values for an attribute.
+   * Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
+   * @param attribute Attribute name.
+   * @param index Index name to target.
+   * @param search User query.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getTopFilterForAttribute(attribute: String, index: String, search: String? = null, startDate: String? = null, endDate: String? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetTopFilterForAttributeResponse {
@@ -445,14 +445,14 @@ public class AnalyticsClient(
 
   /**
    * Get top filters for a no result search.
-   * Returns top filters with no results. Limited to the 1000 most used filters.
-   * @param index The index name to target.
-   * @param search The query term to search for. Must match the exact user input.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
+   * @param index Index name to target.
+   * @param search User query.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getTopFiltersNoResults(index: String, search: String? = null, startDate: String? = null, endDate: String? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetTopFiltersNoResultsResponse {
@@ -478,15 +478,15 @@ public class AnalyticsClient(
 
   /**
    * Get top hits.
-   * Returns top hits. Limited to the 1000 most frequent ones.
-   * @param index The index name to target.
-   * @param search The query term to search for. Must match the exact user input.
-   * @param clickAnalytics Whether to include the click-through and conversion rates for a search. (default to false)
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * Return the most popular clicked results in the last 1,000 searches.
+   * @param index Index name to target.
+   * @param search User query.
+   * @param clickAnalytics Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search. (default to false)
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getTopHits(index: String, search: String? = null, clickAnalytics: Boolean? = null, startDate: String? = null, endDate: String? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetTopHitsResponse {
@@ -513,16 +513,16 @@ public class AnalyticsClient(
 
   /**
    * Get top searches.
-   * Returns top searches. Limited to the 1000 most frequent ones. For each search, also returns the average number of hits returned.
-   * @param index The index name to target.
-   * @param clickAnalytics Whether to include the click-through and conversion rates for a search. (default to false)
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+   * Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
+   * @param index Index name to target.
+   * @param clickAnalytics Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search. (default to false)
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
    * @param orderBy Reorder the results. (default to searchCount)
-   * @param direction The sorting of the result. (default to asc)
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
+   * @param direction Sorting direction of the results: ascending or descending.  (default to asc)
+   * @param limit Number of records to return (page size). (default to 10)
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getTopSearches(index: String, clickAnalytics: Boolean? = null, startDate: String? = null, endDate: String? = null, orderBy: OrderBy? = null, direction: Direction? = null, limit: Int? = null, offset: Int? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetTopSearchesResponse {
@@ -549,12 +549,12 @@ public class AnalyticsClient(
   }
 
   /**
-   * Get users count.
-   * Returns the distinct count of users across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
-   * @param index The index name to target.
-   * @param startDate The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param endDate The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-   * @param tags Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+   * Get user count.
+   * Return the count of unique users.
+   * @param index Index name to target.
+   * @param startDate Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param endDate End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+   * @param tags Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getUsersCount(index: String, startDate: String? = null, endDate: String? = null, tags: String? = null, requestOptions: RequestOptions? = null): GetUsersCountResponse {
@@ -578,9 +578,9 @@ public class AnalyticsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun post(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -602,9 +602,9 @@ public class AnalyticsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun put(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {

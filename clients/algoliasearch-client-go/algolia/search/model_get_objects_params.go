@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// GetObjectsParams The `getObjects` parameters.
+// GetObjectsParams Request parameters.
 type GetObjectsParams struct {
 	Requests []GetObjectsRequest `json:"requests" validate:"required"`
 }

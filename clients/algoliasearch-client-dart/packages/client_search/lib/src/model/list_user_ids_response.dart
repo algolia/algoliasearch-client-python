@@ -13,7 +13,7 @@ final class ListUserIdsResponse {
     required this.userIDs,
   });
 
-  /// List of userIDs.
+  /// User IDs.
   @JsonKey(name: r'userIDs')
   final List<UserId> userIDs;
 

@@ -6,11 +6,11 @@ import (
 	"fmt"
 )
 
-// UserId A userID.
+// UserId Unique user ID.
 type UserId struct {
 	// userID of the user.
 	UserID string `json:"userID" validate:"required"`
-	// Cluster on which the user is assigned.
+	// Cluster to which the user is assigned.
 	ClusterName string `json:"clusterName" validate:"required"`
 	// Number of records belonging to the user.
 	NbRecords int32 `json:"nbRecords" validate:"required"`

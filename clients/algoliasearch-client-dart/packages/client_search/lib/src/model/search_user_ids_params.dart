@@ -15,19 +15,21 @@ final class SearchUserIdsParams {
     this.hitsPerPage,
   });
 
-  /// Query to search. The search is a prefix search with typoTolerance. Use empty query to retrieve all users.
+  /// Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users.
   @JsonKey(name: r'query')
   final String query;
 
-  /// Name of the cluster.
+  /// Cluster name.
   @JsonKey(name: r'clusterName')
   final String? clusterName;
 
-  /// Specify the page to retrieve.
+  /// Page to retrieve (the first page is `0`, not `1`).
   @JsonKey(name: r'page')
   final int? page;
 
-  /// Set the number of hits per page.
+  /// Number of hits per page.
+  // minimum: 1
+  // maximum: 1000
   @JsonKey(name: r'hitsPerPage')
   final int? hitsPerPage;
 

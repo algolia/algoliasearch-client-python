@@ -22,7 +22,7 @@ final class LogQuery {
   @JsonKey(name: r'user_token')
   final String? userToken;
 
-  /// QueryID for the given query.
+  /// Unique query identifier.
   @JsonKey(name: r'query_id')
   final String? queryId;
 

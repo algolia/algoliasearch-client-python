@@ -54,7 +54,7 @@ public class LogQuery {
   }
 
   /**
-   * QueryID for the given query.
+   * Unique query identifier.
    *
    * @return queryId
    */

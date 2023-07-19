@@ -8,11 +8,11 @@ import (
 
 // SearchForFacetValuesRequest struct for SearchForFacetValuesRequest
 type SearchForFacetValuesRequest struct {
-	// Search parameters as URL-encoded query string.
+	// Search parameters as a URL-encoded query string.
 	Params *string `json:"params,omitempty"`
 	// Text to search inside the facet's values.
 	FacetQuery *string `json:"facetQuery,omitempty"`
-	// Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
+	// Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
 	MaxFacetHits *int32 `json:"maxFacetHits,omitempty"`
 }
 

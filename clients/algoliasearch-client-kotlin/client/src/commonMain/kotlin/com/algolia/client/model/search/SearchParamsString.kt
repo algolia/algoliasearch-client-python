@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * SearchParamsString
  *
- * @param params Search parameters as URL-encoded query string.
+ * @param params Search parameters as a URL-encoded query string.
  */
 @Serializable
 public data class SearchParamsString(
 
-  /** Search parameters as URL-encoded query string. */
+  /** Search parameters as a URL-encoded query string. */
   @SerialName(value = "params") val params: String? = null,
 ) : SearchParams, BrowseParams

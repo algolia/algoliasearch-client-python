@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// RecommendHit A Recommend hit.
+// RecommendHit Recommend hit.
 type RecommendHit struct {
-	// Unique identifier of the object.
+	// Unique object identifier.
 	ObjectID string `json:"objectID" validate:"required"`
 	// Show highlighted section and words matched on a query.
 	HighlightResult *map[string]HighlightResult `json:"_highlightResult,omitempty"`
@@ -16,7 +16,7 @@ type RecommendHit struct {
 	SnippetResult *map[string]SnippetResult `json:"_snippetResult,omitempty"`
 	RankingInfo   *RankingInfo              `json:"_rankingInfo,omitempty"`
 	DistinctSeqID *int32                    `json:"_distinctSeqID,omitempty"`
-	// The recommendation score.
+	// Recommendation score.
 	Score                float64 `json:"_score" validate:"required"`
 	AdditionalProperties map[string]any
 }

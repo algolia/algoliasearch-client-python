@@ -12,7 +12,7 @@ final class ReplaceSourceResponse {
     required this.updatedAt,
   });
 
-  /// Date of last update (ISO-8601 format).
+  /// Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
   @JsonKey(name: r'updatedAt')
   final String updatedAt;
 

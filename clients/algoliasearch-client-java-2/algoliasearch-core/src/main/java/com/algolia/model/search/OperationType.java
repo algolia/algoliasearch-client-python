@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Type of operation to perform (move or copy). */
+/** Operation to perform (_move_ or _copy_). */
 public enum OperationType {
   MOVE("move"),
 

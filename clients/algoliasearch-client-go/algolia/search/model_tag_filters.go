@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// TagFilters - Filter hits by tags.
+// TagFilters - [Filter hits by tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/).
 type TagFilters struct {
 	ArrayOfMixedSearchFilters *[]MixedSearchFilters
 	String                    *string

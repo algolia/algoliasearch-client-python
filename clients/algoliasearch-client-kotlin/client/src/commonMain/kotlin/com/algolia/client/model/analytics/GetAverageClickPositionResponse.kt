@@ -7,19 +7,19 @@ import kotlinx.serialization.json.*
 /**
  * GetAverageClickPositionResponse
  *
- * @param average The average of all the click count event.
- * @param clickCount The number of click event.
- * @param dates A list of average click position with their date.
+ * @param average Average count of all click events.
+ * @param clickCount Number of click events.
+ * @param dates Average click positions.
  */
 @Serializable
 public data class GetAverageClickPositionResponse(
 
-  /** The average of all the click count event. */
+  /** Average count of all click events. */
   @SerialName(value = "average") val average: Double,
 
-  /** The number of click event. */
+  /** Number of click events. */
   @SerialName(value = "clickCount") val clickCount: Int,
 
-  /** A list of average click position with their date. */
+  /** Average click positions. */
   @SerialName(value = "dates") val dates: List<AverageClickEvent>,
 )

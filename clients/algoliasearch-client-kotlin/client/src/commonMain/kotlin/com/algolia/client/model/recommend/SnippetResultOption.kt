@@ -7,13 +7,13 @@ import kotlinx.serialization.json.*
 /**
  * Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
  *
- * @param `value` Markup text with occurrences highlighted.
+ * @param `value` Markup text with `facetQuery` matches highlighted.
  * @param matchLevel
  */
 @Serializable
 public data class SnippetResultOption(
 
-  /** Markup text with occurrences highlighted. */
+  /** Markup text with `facetQuery` matches highlighted. */
   @SerialName(value = "value") val `value`: String,
 
   @SerialName(value = "matchLevel") val matchLevel: MatchLevel,

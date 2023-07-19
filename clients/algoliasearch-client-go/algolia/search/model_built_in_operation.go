@@ -9,7 +9,7 @@ import (
 // BuiltInOperation To update an attribute without pushing the entire record, you can use these built-in operations.
 type BuiltInOperation struct {
 	Operation BuiltInOperationType `json:"_operation" validate:"required"`
-	// the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove.
+	// Value that corresponds to the operation, for example an `Increment` or `Decrement` step, `Add` or `Remove` value.
 	Value string `json:"value" validate:"required"`
 }
 

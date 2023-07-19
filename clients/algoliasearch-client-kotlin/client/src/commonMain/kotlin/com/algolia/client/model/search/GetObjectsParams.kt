@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The `getObjects` parameters.
+ * Request parameters.
  *
  * @param requests
  */

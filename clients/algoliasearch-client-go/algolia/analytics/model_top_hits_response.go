@@ -8,7 +8,7 @@ import (
 
 // TopHitsResponse struct for TopHitsResponse
 type TopHitsResponse struct {
-	// A list of top hits with their count.
+	// Top hits.
 	Hits []TopHit `json:"hits" validate:"required"`
 }
 

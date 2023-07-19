@@ -8,7 +8,7 @@ import (
 
 // GetTopCountriesResponse struct for GetTopCountriesResponse
 type GetTopCountriesResponse struct {
-	// A list of countries with their count.
+	// Countries
 	Countries []TopCountry `json:"countries" validate:"required"`
 }
 

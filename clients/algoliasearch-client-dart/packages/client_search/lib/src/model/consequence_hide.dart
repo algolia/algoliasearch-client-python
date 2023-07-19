@@ -12,7 +12,7 @@ final class ConsequenceHide {
     required this.objectID,
   });
 
-  /// Unique identifier of the object.
+  /// Unique object identifier.
   @JsonKey(name: r'objectID')
   final String objectID;
 

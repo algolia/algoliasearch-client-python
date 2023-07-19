@@ -2,13 +2,13 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// Type of operation to perform (move or copy).
+/// Operation to perform (_move_ or _copy_).
 @JsonEnum(valueField: 'raw')
 enum OperationType {
-  /// Type of operation to perform (move or copy).
+  /// Operation to perform (_move_ or _copy_).
   move(r'move'),
 
-  /// Type of operation to perform (move or copy).
+  /// Operation to perform (_move_ or _copy_).
   copy(r'copy');
 
   const OperationType(this.raw);

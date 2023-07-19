@@ -8,9 +8,9 @@ import (
 
 // SuccessResponse struct for SuccessResponse
 type SuccessResponse struct {
-	// The status code.
+	// Status code.
 	Status int32 `json:"status" validate:"required"`
-	// Message of the response.
+	// Response message.
 	Message string `json:"message" validate:"required"`
 }
 

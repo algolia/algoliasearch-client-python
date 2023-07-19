@@ -25,7 +25,7 @@ public class TopHitsResponseWithAnalytics {
   }
 
   /**
-   * A list of top hits with their count and analytics.
+   * Top hits.
    *
    * @return hits
    */

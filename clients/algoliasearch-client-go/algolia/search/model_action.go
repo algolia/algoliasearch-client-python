@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// Action type of operation.
+// Action Type of batch operation.
 type Action string
 
 // List of action

@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * GetTopFiltersNoResultsValues
  *
- * @param count The number of occurrences.
- * @param values A list of filters without results.
+ * @param count Number of occurrences.
+ * @param values Filters with no results.
  */
 @Serializable
 public data class GetTopFiltersNoResultsValues(
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "count") val count: Int,
 
-  /** A list of filters without results. */
+  /** Filters with no results. */
   @SerialName(value = "values") val values: List<GetTopFiltersNoResultsValue>,
 )

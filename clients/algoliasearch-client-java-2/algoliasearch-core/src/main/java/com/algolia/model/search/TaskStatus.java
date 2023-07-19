@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Gets or Sets taskStatus */
+/** _published_ if the task has been processed, _notPublished_ otherwise. */
 public enum TaskStatus {
   PUBLISHED("published"),
 

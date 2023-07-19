@@ -42,7 +42,7 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The search query.
+   * User query.
    *
    * @return search
    */
@@ -57,7 +57,7 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The number of occurrences.
+   * Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
    *
    * @return count
    */
@@ -72,7 +72,9 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The click-through rate.
+   * [Click-through rate
+   * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+   * minimum: 0 maximum: 1
    *
    * @return clickThroughRate
    */
@@ -87,7 +89,9 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The average position of all the click count event.
+   * Average
+   * [position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position)
+   * of clicked search result.
    *
    * @return averageClickPosition
    */
@@ -102,7 +106,8 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The conversion rate.
+   * [Conversion rate
+   * (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
    *
    * @return conversionRate
    */
@@ -117,7 +122,8 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The number of tracked search click.
+   * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
+   * parameter is `true`.
    *
    * @return trackedSearchCount
    */
@@ -132,7 +138,7 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The number of click event.
+   * Number of click events.
    *
    * @return clickCount
    */
@@ -147,7 +153,7 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * The number of converted clicks.
+   * Number of converted clicks.
    *
    * @return conversionCount
    */
@@ -162,7 +168,7 @@ public class TopSearchWithAnalytics {
   }
 
   /**
-   * Number of hits that the search query matched.
+   * Number of hits the search query matched.
    *
    * @return nbHits
    */

@@ -26,7 +26,7 @@ public class GetAverageClickPositionResponse {
   }
 
   /**
-   * The average of all the click count event.
+   * Average count of all click events.
    *
    * @return average
    */
@@ -41,7 +41,7 @@ public class GetAverageClickPositionResponse {
   }
 
   /**
-   * The number of click event.
+   * Number of click events.
    *
    * @return clickCount
    */
@@ -61,7 +61,7 @@ public class GetAverageClickPositionResponse {
   }
 
   /**
-   * A list of average click position with their date.
+   * Average click positions.
    *
    * @return dates
    */

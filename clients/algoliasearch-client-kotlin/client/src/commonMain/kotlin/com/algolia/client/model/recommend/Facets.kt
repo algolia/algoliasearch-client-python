@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The ordering of facets (widgets).
+ * Ordering of facets (widgets).
  *
  * @param order Pinned order of facet lists.
  */

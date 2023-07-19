@@ -49,8 +49,8 @@ public class QuerySuggestionsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun del(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -71,7 +71,7 @@ public class QuerySuggestionsClient(
   /**
    * Delete a configuration.
    * Delete a configuration of a Query Suggestion's index. By deleting a configuration, you stop all updates to the underlying query suggestion index. Note that when doing this, the underlying index does not change - existing suggestions remain untouched.
-   * @param indexName The index in which to perform the request.
+   * @param indexName Index on which to perform the request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun deleteConfig(indexName: String, requestOptions: RequestOptions? = null): SuccessResponse {
@@ -89,8 +89,8 @@ public class QuerySuggestionsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun get(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -127,7 +127,7 @@ public class QuerySuggestionsClient(
   /**
    * Get a single configuration.
    * Get the configuration of a single Query Suggestions index.
-   * @param indexName The index in which to perform the request.
+   * @param indexName Index on which to perform the request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getConfig(indexName: String, requestOptions: RequestOptions? = null): QuerySuggestionsIndex {
@@ -145,7 +145,7 @@ public class QuerySuggestionsClient(
   /**
    * Get configuration status.
    * Get the status of a Query Suggestion's index. The status includes whether the Query Suggestions index is currently in the process of being built, and the last build time.
-   * @param indexName The index in which to perform the request.
+   * @param indexName Index on which to perform the request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getConfigStatus(indexName: String, requestOptions: RequestOptions? = null): Status {
@@ -163,7 +163,7 @@ public class QuerySuggestionsClient(
   /**
    * Get a log file.
    * Get the log file of the last build of a single Query Suggestion index.
-   * @param indexName The index in which to perform the request.
+   * @param indexName Index on which to perform the request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getLogFile(indexName: String, requestOptions: RequestOptions? = null): List<LogFile> {
@@ -181,9 +181,9 @@ public class QuerySuggestionsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun post(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -205,9 +205,9 @@ public class QuerySuggestionsClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun put(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -229,7 +229,7 @@ public class QuerySuggestionsClient(
   /**
    * Update a configuration.
    * Update the configuration of a Query Suggestions index.
-   * @param indexName The index in which to perform the request.
+   * @param indexName Index on which to perform the request.
    * @param querySuggestionsIndexParam
    * @param requestOptions additional request configuration.
    */

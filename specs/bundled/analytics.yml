@@ -1,7 +1,13 @@
 openapi: 3.0.2
 info:
   title: Analytics API
-  description: API powering the Analytics feature of Algolia.
+  description: >
+    The Analytics API lets you review your search, and click and conversion
+    analytics.
+
+    > **Note**: The API key in the `X-Algolia-API-Key` header requires the
+    [`analytics`
+    ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).
   version: 1.0.0
 components:
   securitySchemes:
@@ -17,9 +23,7 @@ components:
     PathInPath:
       name: path
       in: path
-      description: >-
-        The path of the API endpoint to target, anything after the /1 needs to
-        be specified.
+      description: Path of the endpoint, anything after "/1" must be specified.
       required: true
       schema:
         type: string
@@ -27,21 +31,25 @@ components:
     Parameters:
       name: parameters
       in: query
-      description: Query parameters to be applied to the current query.
+      description: Query parameters to apply to the current query.
       schema:
         type: object
         additionalProperties: true
     Index:
       in: query
       name: index
-      description: The index name to target.
+      description: Index name to target.
       required: true
       schema:
         type: string
+        example: YourIndexName
     ClickAnalytics:
       in: query
       name: clickAnalytics
-      description: Whether to include the click-through and conversion rates for a search.
+      description: >-
+        Whether to include [click and
+        conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/)
+        rates for a search.
       schema:
         type: boolean
         default: false
@@ -49,21 +57,19 @@ components:
       in: query
       name: startDate
       description: >-
-        The lower bound timestamp (a date, a string like "2006-01-02") of the
-        period to analyze.
+        Start date (a string in the format `YYYY-MM-DD`) of the period to
+        analyze.
       schema:
         type: string
-        example: '1999-09-19'
+        example: '2022-09-19'
         pattern: ^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
     EndDate:
       in: query
       name: endDate
-      description: >-
-        The upper bound timestamp (a date, a string like "2006-01-02") of the
-        period to analyze.
+      description: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
       schema:
         type: string
-        example: '2000-01-21'
+        example: '2023-01-21'
         pattern: ^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
     OrderBy:
       in: query
@@ -74,13 +80,14 @@ components:
     Direction:
       in: query
       name: direction
-      description: The sorting of the result.
+      description: |
+        Sorting direction of the results: ascending or descending.
       schema:
         $ref: '#/components/schemas/direction'
     Limit:
       in: query
       name: limit
-      description: Number of records to return. Limit is the size of the page.
+      description: Number of records to return (page size).
       schema:
         type: integer
         default: 10
@@ -95,25 +102,29 @@ components:
       name: tags
       in: query
       description: >-
-        Filter metrics on the provided tags. Each tag must correspond to an
-        analyticsTags set at search time. Multiple tags can be combined with the
-        operators OR and AND. If a tag contains characters like spaces or
-        parentheses, it should be URL encoded.
+        Filter analytics on the
+        [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
+        set at search time. Multiple tags can be combined with the operators OR
+        and AND. If a tag contains characters like spaces or parentheses, it
+        must be URL-encoded.
+      example: device:mobile%20phone
       schema:
         type: string
     Search:
       in: query
       name: search
-      description: The query term to search for. Must match the exact user input.
+      description: User query.
+      example: enable ab test
       schema:
         type: string
     Attribute:
       in: path
       name: attribute
-      description: The exact name of the attribute.
+      description: Attribute name.
       required: true
       schema:
         type: string
+        example: brand
   schemas:
     ErrorBase:
       description: Error.
@@ -125,6 +136,11 @@ components:
           example: Invalid Application-Id or API-Key
     orderBy:
       type: string
+      description: >
+        Method for ordering results.
+
+        `clickThroughRate`, `conversionRate` and `averageClickPosition` are only
+        available if the `clickAnalytics` parameter is `true`.
       enum:
         - searchCount
         - clickThroughRate
@@ -138,14 +154,18 @@ components:
         - desc
       default: asc
     search:
-      description: The search query.
+      description: User query.
+      example: separator
       type: string
     count:
-      description: The number of occurrences.
+      description: >-
+        Number of tracked _and_ untracked searches (where the `clickAnalytics`
+        parameter isn't `true`).
       type: integer
+      example: 504
     nbHits:
       type: integer
-      description: Number of hits that the search query matched.
+      description: Number of hits the search query matched.
       example: 20
     topSearchesResponse:
       type: object
@@ -155,7 +175,7 @@ components:
       properties:
         searches:
           type: array
-          description: A list of top searches with their count.
+          description: Top searches with their hits count.
           items:
             type: object
             title: topSearch
@@ -174,23 +194,40 @@ components:
     rate:
       type: number
       format: double
-      description: The click-through rate.
+      description: >
+        [Click-through rate
+        (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+      minimum: 0
+      maximum: 1
+      example: 0.14634193523426317
     averageClickPosition:
       type: integer
-      description: The average position of all the click count event.
+      description: >-
+        Average
+        [position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position)
+        of clicked search result.
+      example: 1
     conversionRate:
       type: number
       format: double
-      description: The conversion rate.
+      description: >
+        [Conversion rate
+        (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+      example: 0
     trackedSearchCount:
       type: integer
-      description: The number of tracked search click.
+      example: 2
+      description: >-
+        Number of tracked searches. This is the number of search requests where
+        the `clickAnalytics` parameter is `true`.
     clickCount:
       type: integer
-      description: The number of click event.
+      description: Number of click events.
+      example: 162
     conversionCount:
       type: integer
-      description: The number of converted clicks.
+      description: Number of converted clicks.
+      example: 0
     topSearchesResponseWithAnalytics:
       type: object
       additionalProperties: false
@@ -199,7 +236,7 @@ components:
       properties:
         searches:
           type: array
-          description: A list of top searches with their count and analytics.
+          description: Top searches with their hits count and analytics.
           items:
             type: object
             title: topSearchWithAnalytics
@@ -237,12 +274,22 @@ components:
       oneOf:
         - $ref: '#/components/schemas/topSearchesResponse'
         - $ref: '#/components/schemas/topSearchesResponseWithAnalytics'
+    parameters_count:
+      description: Number of occurrences.
+      example: 2
+      type: integer
     date:
       type: string
-      description: Date of the event.
+      description: Date of the event in the format YYYY-MM-DD.
+      example: '2023-06-14'
+    noResultCount:
+      description: Number of occurences.
+      type: integer
+      example: 54
     hit:
-      description: The hit.
+      description: Hit.
       type: string
+      example: method-export-rules-php
     topHitsResponse:
       type: object
       additionalProperties: false
@@ -251,7 +298,7 @@ components:
       properties:
         hits:
           type: array
-          description: A list of top hits with their count.
+          description: Top hits.
           items:
             type: object
             title: topHit
@@ -263,7 +310,7 @@ components:
               hit:
                 $ref: '#/components/schemas/hit'
               count:
-                $ref: '#/components/schemas/count'
+                $ref: '#/components/schemas/parameters_count'
     topHitsResponseWithAnalytics:
       type: object
       additionalProperties: false
@@ -272,7 +319,7 @@ components:
       properties:
         hits:
           type: array
-          description: A list of top hits with their count and analytics.
+          description: Top hits.
           items:
             type: object
             title: topHitWithAnalytics
@@ -289,7 +336,7 @@ components:
               hit:
                 $ref: '#/components/schemas/hit'
               count:
-                $ref: '#/components/schemas/count'
+                $ref: '#/components/schemas/parameters_count'
               clickThroughRate:
                 $ref: '#/components/schemas/rate'
               conversionRate:
@@ -305,8 +352,9 @@ components:
         - $ref: '#/components/schemas/topHitsResponse'
         - $ref: '#/components/schemas/topHitsResponseWithAnalytics'
     attribute:
-      description: The attribute.
+      description: Attribute name.
       type: string
+      example: url
     getTopFilterAttribute:
       type: object
       additionalProperties: false
@@ -317,7 +365,7 @@ components:
         attribute:
           $ref: '#/components/schemas/attribute'
         count:
-          $ref: '#/components/schemas/count'
+          $ref: '#/components/schemas/parameters_count'
     getTopFilterAttributesResponse:
       type: object
       additionalProperties: false
@@ -326,15 +374,17 @@ components:
       properties:
         attributes:
           type: array
-          description: A list of attributes with their count.
+          description: Filterable attributes.
           items:
             $ref: '#/components/schemas/getTopFilterAttribute'
     operator:
-      description: The operator.
+      description: Operator.
       type: string
+      example: ':'
     value:
-      description: The value of the attribute.
+      description: Attribute value.
       type: string
+      example: integration
     getTopFilterForAttribute:
       type: object
       additionalProperties: false
@@ -351,7 +401,7 @@ components:
         value:
           $ref: '#/components/schemas/value'
         count:
-          $ref: '#/components/schemas/count'
+          $ref: '#/components/schemas/parameters_count'
     getTopFilterForAttributeResponse:
       type: object
       additionalProperties: false
@@ -360,7 +410,7 @@ components:
       properties:
         values:
           type: array
-          description: A list of filters for the given attributes.
+          description: Filter values for an attribute.
           items:
             $ref: '#/components/schemas/getTopFilterForAttribute'
     getTopFiltersNoResultsValue:
@@ -385,10 +435,10 @@ components:
         - count
       properties:
         count:
-          $ref: '#/components/schemas/count'
+          $ref: '#/components/schemas/parameters_count'
         values:
           type: array
-          description: A list of filters without results.
+          description: Filters with no results.
           items:
             $ref: '#/components/schemas/getTopFiltersNoResultsValue'
     getTopFiltersNoResultsResponse:
@@ -399,16 +449,20 @@ components:
       properties:
         values:
           type: array
-          description: A list of filters without results.
+          description: Filters with no results.
           items:
             $ref: '#/components/schemas/getTopFiltersNoResultsValues'
     average:
       type: number
       format: double
-      description: The average of all the click count event.
+      description: Average count of all click events.
+      example: 2.3344634550185286
     updatedAt:
       type: string
-      description: Date of last update (ISO-8601 format).
+      example: '2023-07-04T12:49:15Z'
+      description: >-
+        Timestamp of the last update in [ISO
+        8601](https://wikipedia.org/wiki/ISO_8601) format.
   responses:
     BadRequest:
       description: Bad request or request arguments.
@@ -493,7 +547,7 @@ paths:
     post:
       operationId: post
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:
@@ -523,7 +577,7 @@ paths:
     put:
       operationId: put
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:
@@ -581,8 +635,8 @@ paths:
       operationId: getTopSearches
       summary: Get top searches.
       description: >-
-        Returns top searches. Limited to the 1000 most frequent ones. For each
-        search, also returns the average number of hits returned.
+        Returns the most popular of the latest 1,000 searches. For each search,
+        also returns the number of hits.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/ClickAnalytics'
@@ -613,11 +667,8 @@ paths:
       tags:
         - analytics
       operationId: getSearchesCount
-      summary: Get searches count.
-      description: >-
-        Returns the number of searches across the given time range. The endpoint
-        returns a value for the complete given time range, as well as a value
-        per day.
+      summary: Get number of searches.
+      description: Returns the number of searches within a time range.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -637,10 +688,10 @@ paths:
                   - count
                 properties:
                   count:
-                    $ref: '#/components/schemas/count'
+                    $ref: '#/components/schemas/parameters_count'
                   dates:
                     type: array
-                    description: A list of search events with their date and count.
+                    description: Search events with their associated dates and hit counts.
                     items:
                       type: object
                       title: searchEvent
@@ -652,7 +703,7 @@ paths:
                         date:
                           $ref: '#/components/schemas/date'
                         count:
-                          $ref: '#/components/schemas/count'
+                          $ref: '#/components/schemas/parameters_count'
         '400':
           $ref: '#/components/responses/BadRequest'
         '402':
@@ -668,8 +719,8 @@ paths:
       operationId: getSearchesNoResults
       summary: Get top searches with no results.
       description: >-
-        Returns top searches that didn't return any results. Limited to the 1000
-        most frequent ones.
+        Returns the most popular of the latest 1,000 searches that didn't return
+        any results.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -691,7 +742,7 @@ paths:
                 properties:
                   searches:
                     type: array
-                    description: A list of searches with no results and their count.
+                    description: Searches with no results.
                     items:
                       type: object
                       title: searchNoResultEvent
@@ -704,7 +755,7 @@ paths:
                         search:
                           $ref: '#/components/schemas/search'
                         count:
-                          $ref: '#/components/schemas/count'
+                          $ref: '#/components/schemas/parameters_count'
                         nbHits:
                           $ref: '#/components/schemas/nbHits'
         '400':
@@ -722,9 +773,8 @@ paths:
       operationId: getSearchesNoClicks
       summary: Get top searches with no clicks.
       description: >-
-        Returns top searches that didn't lead to any clicks. Limited to the 1000
-        most frequent ones. For each search, also returns the average number of
-        found hits.
+        Return the most popular of the last 1,000 searches that didn't lead to
+        any clicks.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -746,7 +796,7 @@ paths:
                 properties:
                   searches:
                     type: array
-                    description: A list of searches with no clicks and their count.
+                    description: Searches with no clicks.
                     items:
                       type: object
                       title: searchNoClickEvent
@@ -759,9 +809,9 @@ paths:
                         search:
                           $ref: '#/components/schemas/search'
                         count:
-                          $ref: '#/components/schemas/count'
+                          $ref: '#/components/schemas/parameters_count'
                         withFilterCount:
-                          $ref: '#/components/schemas/count'
+                          $ref: '#/components/schemas/parameters_count'
         '400':
           $ref: '#/components/responses/BadRequest'
         '402':
@@ -776,11 +826,7 @@ paths:
         - analytics
       operationId: getNoResultsRate
       summary: Get no results rate.
-      description: >-
-        Returns the rate at which searches didn't return any results. The
-        endpoint returns a value for the complete given time range, as well as a
-        value per day. It also returns the count of searches and searches
-        without results used to compute the rates.
+      description: Returns the rate at which searches didn't return any results.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -804,14 +850,14 @@ paths:
                   rate:
                     $ref: '#/components/schemas/rate'
                   count:
-                    $ref: '#/components/schemas/count'
+                    $ref: '#/components/schemas/parameters_count'
                   noResultCount:
-                    $ref: '#/components/schemas/count'
+                    $ref: '#/components/schemas/parameters_count'
                   dates:
                     type: array
                     description: >-
-                      A list of searches without results with their date, rate
-                      and counts.
+                      Overall count of searches without results plus a daily
+                      breakdown.
                     items:
                       type: object
                       title: noResultsRateEvent
@@ -825,7 +871,7 @@ paths:
                         date:
                           $ref: '#/components/schemas/date'
                         noResultCount:
-                          $ref: '#/components/schemas/count'
+                          $ref: '#/components/schemas/noResultCount'
                         count:
                           $ref: '#/components/schemas/count'
                         rate:
@@ -845,7 +891,7 @@ paths:
       operationId: getNoClickRate
       summary: Get no click rate.
       description: >-
-        Returns the rate at which searches didn't lead to any clicks. The
+        Returns the rate at which searches don't lead to any clicks. The
         endpoint returns a value for the complete given time range, as well as a
         value per day. It also returns the count of searches and searches
         without clicks.
@@ -878,8 +924,8 @@ paths:
                   dates:
                     type: array
                     description: >-
-                      A list of searches without clicks with their date, rate
-                      and counts.
+                      Overall count of searches without clicks plus a daily
+                      breakdown.
                     items:
                       type: object
                       title: noClickRateEvent
@@ -893,7 +939,7 @@ paths:
                         rate:
                           $ref: '#/components/schemas/rate'
                         count:
-                          $ref: '#/components/schemas/clickCount'
+                          $ref: '#/components/schemas/count'
                         noClickCount:
                           $ref: '#/components/schemas/clickCount'
                         date:
@@ -912,7 +958,7 @@ paths:
         - analytics
       operationId: getTopHits
       summary: Get top hits.
-      description: Returns top hits. Limited to the 1000 most frequent ones.
+      description: Return the most popular clicked results in the last 1,000 searches.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/Search'
@@ -942,11 +988,8 @@ paths:
       tags:
         - analytics
       operationId: getUsersCount
-      summary: Get users count.
-      description: >-
-        Returns the distinct count of users across the given time range. The
-        endpoint returns a value for the complete given time range, as well as a
-        value per day.
+      summary: Get user count.
+      description: Return the count of unique users.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -966,10 +1009,10 @@ paths:
                   - count
                 properties:
                   count:
-                    $ref: '#/components/schemas/count'
+                    $ref: '#/components/schemas/parameters_count'
                   dates:
                     type: array
-                    description: A list of users count with their date.
+                    description: User count.
                     items:
                       type: object
                       title: userWithDate
@@ -981,7 +1024,7 @@ paths:
                         date:
                           $ref: '#/components/schemas/date'
                         count:
-                          $ref: '#/components/schemas/count'
+                          $ref: '#/components/schemas/parameters_count'
         '400':
           $ref: '#/components/responses/BadRequest'
         '402':
@@ -995,8 +1038,11 @@ paths:
       tags:
         - analytics
       operationId: getTopFilterAttributes
-      summary: Get top filter attributes.
-      description: Returns top filter attributes. Limited to the 1000 most used filters.
+      summary: Get top filterable attributes.
+      description: >-
+        Return the most popular [filterable
+        attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/)
+        in the 1,000 most recently used filters.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/Search'
@@ -1025,10 +1071,10 @@ paths:
       tags:
         - analytics
       operationId: getTopFilterForAttribute
-      summary: Get top filters for the an attribute.
+      summary: Get top filter values for an attribute.
       description: >-
-        Returns top filters for the given attribute. Limited to the 1000 most
-        used filters.
+        Returns the most popular filter values for an attribute in the 1,000
+        most recently used filters.
       parameters:
         - $ref: '#/components/parameters/Attribute'
         - $ref: '#/components/parameters/Index'
@@ -1060,8 +1106,8 @@ paths:
       operationId: getTopFiltersNoResults
       summary: Get top filters for a no result search.
       description: >-
-        Returns top filters with no results. Limited to the 1000 most used
-        filters.
+        Returns top filters for filter-enabled searches that don't return
+        results. Limited to the 1,000 most recently used filters.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/Search'
@@ -1091,7 +1137,7 @@ paths:
         - analytics
       operationId: getTopCountries
       summary: Get top countries.
-      description: Returns top countries. Limited to the 1000 most frequent ones.
+      description: Returns top countries. Limited to the 1,000 most frequent ones.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -1113,7 +1159,7 @@ paths:
                 properties:
                   countries:
                     type: array
-                    description: A list of countries with their count.
+                    description: Countries
                     items:
                       type: object
                       title: topCountry
@@ -1123,10 +1169,11 @@ paths:
                         - count
                       properties:
                         country:
-                          description: The country.
+                          description: Country.
                           type: string
+                          example: UK
                         count:
-                          $ref: '#/components/schemas/count'
+                          $ref: '#/components/schemas/parameters_count'
         '400':
           $ref: '#/components/responses/BadRequest'
         '402':
@@ -1141,9 +1188,14 @@ paths:
         - analytics
       operationId: getAverageClickPosition
       summary: Get average click position.
-      description: >-
-        Returns the average click position. The endpoint returns a value for the
-        complete given time range, as well as a value per day.
+      description: >
+        Return the average click position for the complete time range and for
+        individual days.
+
+        > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it
+        means Algolia didn't receive any click events for tracked searches. A
+        _tracked_ search is a search request where the `clickAnalytics`
+        parameter is `true`.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -1169,7 +1221,7 @@ paths:
                     $ref: '#/components/schemas/clickCount'
                   dates:
                     type: array
-                    description: A list of average click position with their date.
+                    description: Average click positions.
                     items:
                       type: object
                       title: averageClickEvent
@@ -1198,16 +1250,16 @@ paths:
       tags:
         - analytics
       operationId: getClickPositions
-      summary: Get clicks per positions.
+      summary: Get click positions.
       description: >
-        Returns the distribution of clicks per range of positions.
+        Show the number of clicks events and their associated position in the
+        search results.
 
 
-        If the groups all have a count of 0, it means Algolia didn’t receive any
-        click events for the queries with the clickAnalytics search parameter
-        set to true.
-
-        The count is 0 until Algolia receives at least one click event.
+        > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it
+        means Algolia didn't receive any click events for tracked searches. A
+        _tracked_ search is a search request where the `clickAnalytics`
+        parameter is `true`.
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -1227,7 +1279,7 @@ paths:
                 properties:
                   positions:
                     type: array
-                    description: A list of the click positions with their click count.
+                    description: Click positions.
                     minItems: 2
                     maxItems: 2
                     items:
@@ -1242,14 +1294,14 @@ paths:
                           description: >
                             Range of positions with the following pattern:
 
-                            - Positions from 1 to 10 included are displayed in
-                            separated groups.
-
-                            - Positions from 11 to 20 included are grouped
-                            together.
-
-                            - Positions from 21 and up are grouped together.
+                            - For positions 1 to 10, the number of click events
+                            are shown for each position - For positions 11 to
+                            20, all click events are grouped - For positions 21
+                            and up, all click events are grouped.
                           type: array
+                          example:
+                            - 10
+                            - 10
                           items:
                             type: integer
                         clickCount:
@@ -1269,9 +1321,8 @@ paths:
       operationId: getClickThroughRate
       summary: Get click-through rate (CTR).
       description: >-
-        Returns a click-through rate (CTR). The endpoint returns a value for the
-        complete given time range, as well as a value per day. It also returns
-        the count of clicks and searches used to compute the rates.
+        Returns a [click-through rate
+        (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -1300,7 +1351,7 @@ paths:
                     $ref: '#/components/schemas/trackedSearchCount'
                   dates:
                     type: array
-                    description: A list of click-through rate events with their date.
+                    description: Click-through rate events.
                     items:
                       type: object
                       title: clickThroughRateEvent
@@ -1334,9 +1385,8 @@ paths:
       operationId: getConversationRate
       summary: Get conversion rate (CR).
       description: >-
-        Returns a conversion rate (CR). The endpoint returns a value for the
-        complete given time range, as well as a value per day. It also returns
-        the count of conversion and searches used to compute the rates.
+        Return a [conversion
+        rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
       parameters:
         - $ref: '#/components/parameters/Index'
         - $ref: '#/components/parameters/StartDate'
@@ -1365,7 +1415,7 @@ paths:
                     $ref: '#/components/schemas/conversionCount'
                   dates:
                     type: array
-                    description: A list of conversion events with their date.
+                    description: Conversion events.
                     items:
                       type: object
                       title: conversionRateEvent
@@ -1398,10 +1448,12 @@ paths:
         - analytics
       operationId: getStatus
       summary: Get Analytics API status.
-      description: >-
-        Returns the latest update time of the analytics API for a given index.
-        If the index has been recently created and/or no search has been
-        performed yet the updated time will be null.
+      description: >
+        Return the latest update time of the Analytics API for an index. If the
+        index has been recently created or no search has been performed yet,
+        `updatedAt` will be `null`.
+
+        > **Note**: The Analytics API is updated every 5&nbsp;minutes.
       parameters:
         - $ref: '#/components/parameters/Index'
       responses:

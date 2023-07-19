@@ -15,7 +15,10 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.util.List;
 
-/** Filter hits by facet value. */
+/**
+ * [Filter hits by facet
+ * value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
+ */
 @JsonDeserialize(using = FacetFilters.FacetFiltersDeserializer.class)
 @JsonSerialize(using = FacetFilters.FacetFiltersSerializer.class)
 public abstract class FacetFilters implements CompoundType {

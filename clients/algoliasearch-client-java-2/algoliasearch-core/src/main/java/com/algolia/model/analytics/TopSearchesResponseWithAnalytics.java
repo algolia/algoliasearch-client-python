@@ -25,7 +25,7 @@ public class TopSearchesResponseWithAnalytics {
   }
 
   /**
-   * A list of top searches with their count and analytics.
+   * Top searches with their hits count and analytics.
    *
    * @return searches
    */

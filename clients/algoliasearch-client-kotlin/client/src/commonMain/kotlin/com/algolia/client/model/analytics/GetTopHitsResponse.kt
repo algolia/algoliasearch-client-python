@@ -20,7 +20,7 @@ public sealed interface GetTopHitsResponse {
     /**
      * TopHitsResponse
      *
-     * @param hits A list of top hits with their count.
+     * @param hits Top hits.
      */
     public fun TopHitsResponse(
       hits: List<TopHit>,
@@ -31,7 +31,7 @@ public sealed interface GetTopHitsResponse {
     /**
      * TopHitsResponseWithAnalytics
      *
-     * @param hits A list of top hits with their count and analytics.
+     * @param hits Top hits.
      */
     public fun TopHitsResponseWithAnalytics(
       hits: List<TopHitWithAnalytics>,

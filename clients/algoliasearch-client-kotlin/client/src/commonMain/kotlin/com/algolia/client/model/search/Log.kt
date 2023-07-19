@@ -7,26 +7,26 @@ import kotlinx.serialization.json.*
 /**
  * Log
  *
- * @param timestamp Timestamp in ISO-8601 format.
+ * @param timestamp Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
  * @param method HTTP method of the performed request.
  * @param answerCode HTTP response code.
- * @param queryBody Request body. Truncated after 1000 characters.
- * @param answer Answer body. Truncated after 1000 characters.
+ * @param queryBody Request body. Truncated after 1,000 characters.
+ * @param answer Answer body. Truncated after 1,000 characters.
  * @param url Request URL.
- * @param ip IP of the client which performed the request.
- * @param queryHeaders Request Headers (API Key is obfuscated).
+ * @param ip IP address of the client that performed the request.
+ * @param queryHeaders Request headers (API key is obfuscated).
  * @param sha1 SHA1 signature of the log entry.
  * @param nbApiCalls Number of API calls.
- * @param processingTimeMs Processing time for the query. It doesn't include network time.
+ * @param processingTimeMs Processing time for the query. Doesn't include network time.
  * @param index Index targeted by the query.
  * @param queryParams Query parameters sent with the request.
  * @param queryNbHits Number of hits returned for the query.
- * @param innerQueries Array of all performed queries for the given request.
+ * @param innerQueries Performed queries for the given request.
  */
 @Serializable
 public data class Log(
 
-  /** Timestamp in ISO-8601 format. */
+  /** Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "timestamp") val timestamp: String,
 
   /** HTTP method of the performed request. */
@@ -35,19 +35,19 @@ public data class Log(
   /** HTTP response code. */
   @SerialName(value = "answer_code") val answerCode: String,
 
-  /** Request body. Truncated after 1000 characters. */
+  /** Request body. Truncated after 1,000 characters. */
   @SerialName(value = "query_body") val queryBody: String,
 
-  /** Answer body. Truncated after 1000 characters. */
+  /** Answer body. Truncated after 1,000 characters. */
   @SerialName(value = "answer") val answer: String,
 
   /** Request URL. */
   @SerialName(value = "url") val url: String,
 
-  /** IP of the client which performed the request. */
+  /** IP address of the client that performed the request. */
   @SerialName(value = "ip") val ip: String,
 
-  /** Request Headers (API Key is obfuscated). */
+  /** Request headers (API key is obfuscated). */
   @SerialName(value = "query_headers") val queryHeaders: String,
 
   /** SHA1 signature of the log entry. */
@@ -56,7 +56,7 @@ public data class Log(
   /** Number of API calls. */
   @SerialName(value = "nb_api_calls") val nbApiCalls: String,
 
-  /** Processing time for the query. It doesn't include network time. */
+  /** Processing time for the query. Doesn't include network time. */
   @SerialName(value = "processing_time_ms") val processingTimeMs: String,
 
   /** Index targeted by the query. */
@@ -68,6 +68,6 @@ public data class Log(
   /** Number of hits returned for the query. */
   @SerialName(value = "query_nb_hits") val queryNbHits: String? = null,
 
-  /** Array of all performed queries for the given request. */
+  /** Performed queries for the given request. */
   @SerialName(value = "inner_queries") val innerQueries: List<LogQuery>? = null,
 )

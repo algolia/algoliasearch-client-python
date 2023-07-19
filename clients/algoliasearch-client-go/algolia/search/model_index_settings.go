@@ -6,116 +6,116 @@ import (
 	"fmt"
 )
 
-// IndexSettings The Algolia index settings.
+// IndexSettings Algolia index settings.
 type IndexSettings struct {
-	// Creates replicas, exact copies of an index.
+	// Creates [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/), which are copies of a primary index with the same records but different settings.
 	Replicas []string `json:"replicas,omitempty"`
-	// Set the maximum number of hits accessible via pagination.
+	// Maximum number of hits accessible through pagination.
 	PaginationLimitedTo *int32 `json:"paginationLimitedTo,omitempty"`
-	// List of attributes that can't be retrieved at query time.
+	// Attributes that can't be retrieved at query time.
 	UnretrievableAttributes []string `json:"unretrievableAttributes,omitempty"`
-	// A list of words for which you want to turn off typo tolerance.
+	// Words for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
 	DisableTypoToleranceOnWords []string `json:"disableTypoToleranceOnWords,omitempty"`
-	// Specify on which attributes in your index Algolia should apply Japanese transliteration to make words indexed in Katakana or Kanji searchable in Hiragana.
+	// Attributes in your index to which [Japanese transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead) applies. This will ensure that words indexed in Katakana or Kanji can also be searched in Hiragana.
 	AttributesToTransliterate []string `json:"attributesToTransliterate,omitempty"`
-	// List of attributes on which to do a decomposition of camel case words.
+	// Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words.
 	CamelCaseAttributes []string `json:"camelCaseAttributes,omitempty"`
-	// Specify on which attributes in your index Algolia should apply word segmentation, also known as decompounding.
+	// Attributes in your index to which [word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) (decompounding) applies.
 	DecompoundedAttributes map[string]interface{} `json:"decompoundedAttributes,omitempty"`
-	// Sets the languages at the index level for language-specific processing such as tokenization and normalization.
+	// Set the languages of your index, for language-specific processing steps such as [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/) and [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
 	IndexLanguages []string `json:"indexLanguages,omitempty"`
-	// List of attributes on which you want to disable prefix matching.
+	// Attributes for which you want to turn off [prefix matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search).
 	DisablePrefixOnAttributes []string `json:"disablePrefixOnAttributes,omitempty"`
-	// Enables compression of large integer arrays.
+	// Incidates whether the engine compresses arrays with exclusively non-negative integers. When enabled, the compressed arrays may be reordered.
 	AllowCompressionOfIntegerArray *bool `json:"allowCompressionOfIntegerArray,omitempty"`
-	// List of numeric attributes that can be used as numerical filters.
+	// Numeric attributes that can be used as [numerical filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters).
 	NumericAttributesForFiltering []string `json:"numericAttributesForFiltering,omitempty"`
-	// Control which separators are indexed.
+	// Controls which separators are added to an Algolia index as part of [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean). Separators are all non-letter characters except spaces and currency characters, such as $€£¥.
 	SeparatorsToIndex *string `json:"separatorsToIndex,omitempty"`
-	// The complete list of attributes used for searching.
+	// [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
 	SearchableAttributes []string `json:"searchableAttributes,omitempty"`
 	// Lets you store custom data in your indices.
 	UserData map[string]interface{} `json:"userData,omitempty"`
-	// Overrides Algolia's default normalization.
+	// A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
 	CustomNormalization *map[string]map[string]string `json:"customNormalization,omitempty"`
-	// The complete list of attributes that will be used for faceting.
+	// Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
 	AttributesForFaceting []string `json:"attributesForFaceting,omitempty"`
-	// This parameter controls which attributes to retrieve and which not to retrieve.
+	// Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
 	AttributesToRetrieve []string `json:"attributesToRetrieve,omitempty"`
-	// Restricts a given query to look in only a subset of your searchable attributes.
+	// Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
 	RestrictSearchableAttributes []string `json:"restrictSearchableAttributes,omitempty"`
-	// Controls how Algolia should sort your results.
+	// Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
 	Ranking []string `json:"ranking,omitempty"`
-	// Specifies the custom ranking criterion.
+	// Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
 	CustomRanking []string `json:"customRanking,omitempty"`
-	// Controls the relevancy threshold below which less relevant results aren't included in the results.
+	// Relevancy threshold below which less relevant results aren't included in the results.
 	RelevancyStrictness *int32 `json:"relevancyStrictness,omitempty"`
-	// List of attributes to highlight.
+	// Attributes to highlight. Strings that match the search query in the attributes are highlighted by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).
 	AttributesToHighlight []string `json:"attributesToHighlight,omitempty"`
-	// List of attributes to snippet, with an optional maximum number of words to snippet.
+	// Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words. If not specified, the attribute is shortened to the 10 words around the matching string but you can specify the number. For example: `body:20`.
 	AttributesToSnippet []string `json:"attributesToSnippet,omitempty"`
-	// The HTML string to insert before the highlighted parts in all highlight and snippet results.
+	// HTML string to insert before the highlighted parts in all highlight and snippet results.
 	HighlightPreTag *string `json:"highlightPreTag,omitempty"`
-	// The HTML string to insert after the highlighted parts in all highlight and snippet results.
+	// HTML string to insert after the highlighted parts in all highlight and snippet results.
 	HighlightPostTag *string `json:"highlightPostTag,omitempty"`
 	// String used as an ellipsis indicator when a snippet is truncated.
 	SnippetEllipsisText *string `json:"snippetEllipsisText,omitempty"`
 	// Restrict highlighting and snippeting to items that matched the query.
 	RestrictHighlightAndSnippetArrays *bool `json:"restrictHighlightAndSnippetArrays,omitempty"`
-	// Set the number of hits per page.
+	// Number of hits per page.
 	HitsPerPage *int32 `json:"hitsPerPage,omitempty"`
-	// Minimum number of characters a word in the query string must contain to accept matches with 1 typo.
+	// Minimum number of characters a word in the query string must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
 	MinWordSizefor1Typo *int32 `json:"minWordSizefor1Typo,omitempty"`
-	// Minimum number of characters a word in the query string must contain to accept matches with 2 typos.
+	// Minimum number of characters a word in the query string must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
 	MinWordSizefor2Typos *int32         `json:"minWordSizefor2Typos,omitempty"`
 	TypoTolerance        *TypoTolerance `json:"typoTolerance,omitempty"`
 	// Whether to allow typos on numbers (\"numeric tokens\") in the query string.
 	AllowTyposOnNumericTokens *bool `json:"allowTyposOnNumericTokens,omitempty"`
-	// List of attributes on which you want to disable typo tolerance.
+	// Attributes for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
 	DisableTypoToleranceOnAttributes []string         `json:"disableTypoToleranceOnAttributes,omitempty"`
 	IgnorePlurals                    *IgnorePlurals   `json:"ignorePlurals,omitempty"`
 	RemoveStopWords                  *RemoveStopWords `json:"removeStopWords,omitempty"`
-	// List of characters that the engine shouldn't automatically normalize.
+	// Characters that the engine shouldn't automatically [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
 	KeepDiacriticsOnCharacters *string `json:"keepDiacriticsOnCharacters,omitempty"`
-	// Sets the languages to be used by language-specific settings and functionalities such as ignorePlurals, removeStopWords, and CJK word-detection.
+	// Sets your user's search language. This adjusts language-specific settings and features such as `ignorePlurals`, `removeStopWords`, and [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk) word detection.
 	QueryLanguages []string `json:"queryLanguages,omitempty"`
-	// Splits compound words into their composing atoms in the query.
+	// [Splits compound words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words) into their component word parts in the query.
 	DecompoundQuery *bool `json:"decompoundQuery,omitempty"`
-	// Whether Rules should be globally enabled.
+	// Incidates whether [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
 	EnableRules *bool `json:"enableRules,omitempty"`
-	// Enable the Personalization feature.
+	// Incidates whether [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/) is enabled.
 	EnablePersonalization  *bool                                      `json:"enablePersonalization,omitempty"`
 	QueryType              *QueryType                                 `json:"queryType,omitempty"`
 	RemoveWordsIfNoResults *RemoveWordsIfNoResults                    `json:"removeWordsIfNoResults,omitempty"`
 	Mode                   *Mode                                      `json:"mode,omitempty"`
 	SemanticSearch         *IndexSettingsAsSearchParamsSemanticSearch `json:"semanticSearch,omitempty"`
-	// Enables the advanced query syntax.
+	// Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
 	AdvancedSyntax *bool `json:"advancedSyntax,omitempty"`
-	// A list of words that should be considered as optional when found in the query.
+	// Words which should be considered [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words) when found in a query.
 	OptionalWords []string `json:"optionalWords,omitempty"`
-	// List of attributes on which you want to disable the exact ranking criterion.
+	// Attributes for which you want to [turn off the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
 	DisableExactOnAttributes []string                `json:"disableExactOnAttributes,omitempty"`
 	ExactOnSingleWordQuery   *ExactOnSingleWordQuery `json:"exactOnSingleWordQuery,omitempty"`
-	// List of alternatives that should be considered an exact match by the exact ranking criterion.
+	// Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
 	AlternativesAsExact []AlternativesAsExact `json:"alternativesAsExact,omitempty"`
-	// Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is enabled.
+	// Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
 	AdvancedSyntaxFeatures []AdvancedSyntaxFeatures `json:"advancedSyntaxFeatures,omitempty"`
-	// Enriches the API’s response with meta-information as to how the query was processed.
+	// Enriches the API's response with information about how the query was processed.
 	Explain  []string  `json:"explain,omitempty"`
 	Distinct *Distinct `json:"distinct,omitempty"`
-	// Name of the de-duplication attribute to be used with the distinct feature.
+	// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
 	AttributeForDistinct *string `json:"attributeForDistinct,omitempty"`
 	// Whether to take into account an index's synonyms for a particular search.
 	Synonyms *bool `json:"synonyms,omitempty"`
 	// Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
 	ReplaceSynonymsInHighlight *bool `json:"replaceSynonymsInHighlight,omitempty"`
-	// Precision of the proximity ranking criterion.
+	// Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
 	MinProximity *int32 `json:"minProximity,omitempty"`
-	// Choose which fields to return in the API response. This parameters applies to search and browse queries.
+	// Attributes to include in the API response for search and browse queries.
 	ResponseFields []string `json:"responseFields,omitempty"`
-	// Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
+	// Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
 	MaxFacetHits *int32 `json:"maxFacetHits,omitempty"`
-	// When attribute is ranked above proximity in your ranking formula, proximity is used to select which searchable attribute is matched in the attribute ranking stage.
+	// When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
 	AttributeCriteriaComputedByMinProximity *bool             `json:"attributeCriteriaComputedByMinProximity,omitempty"`
 	RenderingContent                        *RenderingContent `json:"renderingContent,omitempty"`
 }

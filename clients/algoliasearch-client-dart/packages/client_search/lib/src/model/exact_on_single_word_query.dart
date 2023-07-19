@@ -2,16 +2,16 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// Controls how the exact ranking criterion is computed when the query contains only one word.
+/// Determines how the [Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes) is computed when the query contains only one word.
 @JsonEnum(valueField: 'raw')
 enum ExactOnSingleWordQuery {
-  /// Controls how the exact ranking criterion is computed when the query contains only one word.
+  /// Determines how the [Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes) is computed when the query contains only one word.
   attribute(r'attribute'),
 
-  /// Controls how the exact ranking criterion is computed when the query contains only one word.
+  /// Determines how the [Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes) is computed when the query contains only one word.
   none(r'none'),
 
-  /// Controls how the exact ranking criterion is computed when the query contains only one word.
+  /// Determines how the [Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes) is computed when the query contains only one word.
   word(r'word');
 
   const ExactOnSingleWordQuery(this.raw);

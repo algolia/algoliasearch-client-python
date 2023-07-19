@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * Type of operation to perform (move or copy).
+ * Operation to perform (_move_ or _copy_).
  */
 @Serializable
 public enum class OperationType(public val value: kotlin.String) {

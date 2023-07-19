@@ -2,19 +2,19 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// Selects a strategy to remove words from the query when it doesn't match any hits.
+/// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
 @JsonEnum(valueField: 'raw')
 enum RemoveWordsIfNoResults {
-  /// Selects a strategy to remove words from the query when it doesn't match any hits.
+  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   none(r'none'),
 
-  /// Selects a strategy to remove words from the query when it doesn't match any hits.
+  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   lastWords(r'lastWords'),
 
-  /// Selects a strategy to remove words from the query when it doesn't match any hits.
+  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   firstWords(r'firstWords'),
 
-  /// Selects a strategy to remove words from the query when it doesn't match any hits.
+  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   allOptional(r'allOptional');
 
   const RemoveWordsIfNoResults(this.raw);

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Parameters for the search. */
+/** Rules search parameters. */
 public class SearchRulesParams {
 
   @JsonProperty("query")
@@ -38,7 +38,7 @@ public class SearchRulesParams {
   }
 
   /**
-   * Full text query.
+   * Rule object query.
    *
    * @return query
    */
@@ -68,7 +68,8 @@ public class SearchRulesParams {
   }
 
   /**
-   * Restricts matches to contextual rules with a specific context (exact match).
+   * Restricts responses to the specified [contextual
+   * rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules).
    *
    * @return context
    */
@@ -83,7 +84,7 @@ public class SearchRulesParams {
   }
 
   /**
-   * Requested page (zero-based).
+   * Requested page (the first page is page 0). minimum: 0
    *
    * @return page
    */
@@ -98,7 +99,7 @@ public class SearchRulesParams {
   }
 
   /**
-   * Maximum number of hits in a page. Minimum is 1, maximum is 1000.
+   * Maximum number of hits per page. minimum: 1 maximum: 1000
    *
    * @return hitsPerPage
    */
@@ -113,8 +114,7 @@ public class SearchRulesParams {
   }
 
   /**
-   * When specified, restricts matches to rules with a specific enabled status. When absent
-   * (default), all rules are retrieved, regardless of their enabled status.
+   * Restricts responses to enabled rules. When not specified (default), _all_ rules are retrieved.
    *
    * @return enabled
    */
@@ -137,7 +137,7 @@ public class SearchRulesParams {
   }
 
   /**
-   * A mapping of requestOptions to send along with the request.
+   * Request options to send with the API call.
    *
    * @return requestOptions
    */

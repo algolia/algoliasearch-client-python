@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * A dictionary language.
+ * Dictionary language.
  *
  * @param plurals
  * @param stopwords

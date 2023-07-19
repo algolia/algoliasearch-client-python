@@ -62,7 +62,7 @@ public class Log {
   }
 
   /**
-   * Timestamp in ISO-8601 format.
+   * Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return timestamp
    */
@@ -107,7 +107,7 @@ public class Log {
   }
 
   /**
-   * Request body. Truncated after 1000 characters.
+   * Request body. Truncated after 1,000 characters.
    *
    * @return queryBody
    */
@@ -122,7 +122,7 @@ public class Log {
   }
 
   /**
-   * Answer body. Truncated after 1000 characters.
+   * Answer body. Truncated after 1,000 characters.
    *
    * @return answer
    */
@@ -152,7 +152,7 @@ public class Log {
   }
 
   /**
-   * IP of the client which performed the request.
+   * IP address of the client that performed the request.
    *
    * @return ip
    */
@@ -167,7 +167,7 @@ public class Log {
   }
 
   /**
-   * Request Headers (API Key is obfuscated).
+   * Request headers (API key is obfuscated).
    *
    * @return queryHeaders
    */
@@ -212,7 +212,7 @@ public class Log {
   }
 
   /**
-   * Processing time for the query. It doesn't include network time.
+   * Processing time for the query. Doesn't include network time.
    *
    * @return processingTimeMs
    */
@@ -280,7 +280,7 @@ public class Log {
   }
 
   /**
-   * Array of all performed queries for the given request.
+   * Performed queries for the given request.
    *
    * @return innerQueries
    */

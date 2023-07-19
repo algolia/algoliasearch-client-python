@@ -38,8 +38,8 @@ public class BuiltInOperation {
   }
 
   /**
-   * the right-hand side argument to the operation, for example, increment or decrement step, value
-   * to add or remove.
+   * Value that corresponds to the operation, for example an `Increment` or `Decrement` step, `Add`
+   * or `Remove` value.
    *
    * @return value
    */

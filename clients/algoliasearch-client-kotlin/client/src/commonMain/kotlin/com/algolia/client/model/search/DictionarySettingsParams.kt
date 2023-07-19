@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Disable the builtin Algolia entries for a type of dictionary per language.
+ * Enable or turn off the built-in Algolia stop words for a specific language.
  *
  * @param disableStandardEntries
  */

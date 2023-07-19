@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * SearchEvent
  *
- * @param date Date of the event.
- * @param count The number of occurrences.
+ * @param date Date of the event in the format YYYY-MM-DD.
+ * @param count Number of occurrences.
  */
 @Serializable
 public data class SearchEvent(
 
-  /** Date of the event. */
+  /** Date of the event in the format YYYY-MM-DD. */
   @SerialName(value = "date") val date: String,
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "count") val count: Int,
 )

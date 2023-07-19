@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// SortRemainingBy How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+// SortRemainingBy How to display the remaining items:    - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
 type SortRemainingBy string
 
 // List of sortRemainingBy

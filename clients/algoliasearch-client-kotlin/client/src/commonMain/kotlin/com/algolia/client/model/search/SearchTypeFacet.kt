@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * Perform a search query with `default`, will search for facet values if `facet` is given.
+ * - `default`: perform a search query - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
  */
 @Serializable
 public enum class SearchTypeFacet(public val value: kotlin.String) {

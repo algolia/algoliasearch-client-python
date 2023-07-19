@@ -160,7 +160,11 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * The complete list of attributes that will be used for faceting.
+   * Attributes used for
+   * [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and
+   * the
+   * [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
+   * that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
    *
    * @return attributesForFaceting
    */
@@ -183,7 +187,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * This parameter controls which attributes to retrieve and which not to retrieve.
+   * Attributes to include in the API response. To reduce the size of your response, you can
+   * retrieve only some of the attributes. By default, the response includes all attributes.
    *
    * @return attributesToRetrieve
    */
@@ -206,7 +211,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Restricts a given query to look in only a subset of your searchable attributes.
+   * Restricts a query to only look at a subset of your [searchable
+   * attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
    *
    * @return restrictSearchableAttributes
    */
@@ -229,7 +235,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Controls how Algolia should sort your results.
+   * Determines the order in which Algolia [returns your
+   * results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
    *
    * @return ranking
    */
@@ -252,7 +259,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Specifies the custom ranking criterion.
+   * Specifies the [Custom ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use
+   * the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
    *
    * @return customRanking
    */
@@ -267,8 +276,7 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Controls the relevancy threshold below which less relevant results aren't included in the
-   * results.
+   * Relevancy threshold below which less relevant results aren't included in the results.
    *
    * @return relevancyStrictness
    */
@@ -291,7 +299,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * List of attributes to highlight.
+   * Attributes to highlight. Strings that match the search query in the attributes are highlighted
+   * by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).
    *
    * @return attributesToHighlight
    */
@@ -314,7 +323,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * List of attributes to snippet, with an optional maximum number of words to snippet.
+   * Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words.
+   * If not specified, the attribute is shortened to the 10 words around the matching string but you
+   * can specify the number. For example: `body:20`.
    *
    * @return attributesToSnippet
    */
@@ -329,7 +340,7 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * The HTML string to insert before the highlighted parts in all highlight and snippet results.
+   * HTML string to insert before the highlighted parts in all highlight and snippet results.
    *
    * @return highlightPreTag
    */
@@ -344,7 +355,7 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * The HTML string to insert after the highlighted parts in all highlight and snippet results.
+   * HTML string to insert after the highlighted parts in all highlight and snippet results.
    *
    * @return highlightPostTag
    */
@@ -389,7 +400,7 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Set the number of hits per page.
+   * Number of hits per page. minimum: 1 maximum: 1000
    *
    * @return hitsPerPage
    */
@@ -404,8 +415,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Minimum number of characters a word in the query string must contain to accept matches with 1
-   * typo.
+   * Minimum number of characters a word in the query string must contain to accept matches with
+   * [one
+   * typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
    *
    * @return minWordSizefor1Typo
    */
@@ -420,8 +432,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Minimum number of characters a word in the query string must contain to accept matches with 2
-   * typos.
+   * Minimum number of characters a word in the query string must contain to accept matches with
+   * [two
+   * typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
    *
    * @return minWordSizefor2Typos
    */
@@ -474,7 +487,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * List of attributes on which you want to disable typo tolerance.
+   * Attributes for which you want to turn off [typo
+   * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
    *
    * @return disableTypoToleranceOnAttributes
    */
@@ -519,7 +533,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * List of characters that the engine shouldn't automatically normalize.
+   * Characters that the engine shouldn't automatically
+   * [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
    *
    * @return keepDiacriticsOnCharacters
    */
@@ -542,8 +557,10 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Sets the languages to be used by language-specific settings and functionalities such as
-   * ignorePlurals, removeStopWords, and CJK word-detection.
+   * Sets your user's search language. This adjusts language-specific settings and features such as
+   * `ignorePlurals`, `removeStopWords`, and
+   * [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk)
+   * word detection.
    *
    * @return queryLanguages
    */
@@ -558,7 +575,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Splits compound words into their composing atoms in the query.
+   * [Splits compound
+   * words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words)
+   * into their component word parts in the query.
    *
    * @return decompoundQuery
    */
@@ -573,7 +592,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Whether Rules should be globally enabled.
+   * Incidates whether
+   * [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
    *
    * @return enableRules
    */
@@ -588,7 +608,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Enable the Personalization feature.
+   * Incidates whether
+   * [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/)
+   * is enabled.
    *
    * @return enablePersonalization
    */
@@ -663,7 +685,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Enables the advanced query syntax.
+   * Enables the [advanced query
+   * syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
    *
    * @return advancedSyntax
    */
@@ -686,7 +709,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * A list of words that should be considered as optional when found in the query.
+   * Words which should be considered
+   * [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words)
+   * when found in a query.
    *
    * @return optionalWords
    */
@@ -709,7 +734,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * List of attributes on which you want to disable the exact ranking criterion.
+   * Attributes for which you want to [turn off the exact ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
    *
    * @return disableExactOnAttributes
    */
@@ -747,7 +773,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * List of alternatives that should be considered an exact match by the exact ranking criterion.
+   * Alternatives that should be considered an exact match by [the exact ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
    *
    * @return alternativesAsExact
    */
@@ -770,7 +797,7 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is
+   * Allows you to specify which advanced syntax features are active when `advancedSyntax` is
    * enabled.
    *
    * @return advancedSyntaxFeatures
@@ -794,7 +821,7 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Enriches the API’s response with meta-information as to how the query was processed.
+   * Enriches the API's response with information about how the query was processed.
    *
    * @return explain
    */
@@ -824,7 +851,8 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Name of the de-duplication attribute to be used with the distinct feature.
+   * Name of the deduplication attribute to be used with Algolia's [_distinct_
+   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
    *
    * @return attributeForDistinct
    */
@@ -870,7 +898,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Precision of the proximity ranking criterion. minimum: 1 maximum: 7
+   * Precision of the [proximity ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
+   * minimum: 1 maximum: 7
    *
    * @return minProximity
    */
@@ -893,8 +923,7 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Choose which fields to return in the API response. This parameters applies to search and browse
-   * queries.
+   * Attributes to include in the API response for search and browse queries.
    *
    * @return responseFields
    */
@@ -909,8 +938,9 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * Maximum number of facet hits to return during a search for facet values. For performance
-   * reasons, the maximum allowed number of returned values is 100. maximum: 100
+   * Maximum number of facet hits to return when [searching for facet
+   * values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+   * maximum: 100
    *
    * @return maxFacetHits
    */
@@ -925,8 +955,10 @@ public class IndexSettingsAsSearchParams {
   }
 
   /**
-   * When attribute is ranked above proximity in your ranking formula, proximity is used to select
-   * which searchable attribute is matched in the attribute ranking stage.
+   * When the [Attribute criterion is ranked above
+   * Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations)
+   * in your ranking formula, Proximity is used to select which searchable attribute is matched in
+   * the Attribute ranking stage.
    *
    * @return attributeCriteriaComputedByMinProximity
    */

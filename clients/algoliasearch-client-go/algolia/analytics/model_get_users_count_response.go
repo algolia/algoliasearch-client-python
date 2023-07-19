@@ -8,9 +8,9 @@ import (
 
 // GetUsersCountResponse struct for GetUsersCountResponse
 type GetUsersCountResponse struct {
-	// The number of occurrences.
+	// Number of occurrences.
 	Count int32 `json:"count" validate:"required"`
-	// A list of users count with their date.
+	// User count.
 	Dates []UserWithDate `json:"dates" validate:"required"`
 }
 

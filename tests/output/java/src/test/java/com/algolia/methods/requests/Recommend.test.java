@@ -88,6 +88,23 @@ class RecommendClientRequestsTests {
   }
 
   @Test
+  @DisplayName("deleteRecommendRule")
+  void deleteRecommendRuleTest0() {
+    String indexName0 = "indexName";
+    RecommendModels model0 = RecommendModels.fromValue("related-products");
+    String objectID0 = "objectID";
+
+    assertDoesNotThrow(() -> {
+      client.deleteRecommendRule(indexName0, model0, objectID0);
+    });
+    EchoResponse req = echo.getLastResponse();
+
+    assertEquals(req.path, "/1/indexes/indexName/related-products/recommend/rules/objectID");
+    assertEquals(req.method, "DELETE");
+    assertNull(req.body);
+  }
+
+  @Test
   @DisplayName("allow get method for a custom path with minimal parameters")
   void getTest0() {
     String path0 = "/test/minimal";
@@ -132,6 +149,40 @@ class RecommendClientRequestsTests {
     } catch (JsonProcessingException e) {
       fail("failed to parse queryParameters json");
     }
+  }
+
+  @Test
+  @DisplayName("getRecommendRule")
+  void getRecommendRuleTest0() {
+    String indexName0 = "indexName";
+    RecommendModels model0 = RecommendModels.fromValue("related-products");
+    String objectID0 = "objectID";
+
+    assertDoesNotThrow(() -> {
+      client.getRecommendRule(indexName0, model0, objectID0);
+    });
+    EchoResponse req = echo.getLastResponse();
+
+    assertEquals(req.path, "/1/indexes/indexName/related-products/recommend/rules/objectID");
+    assertEquals(req.method, "GET");
+    assertNull(req.body);
+  }
+
+  @Test
+  @DisplayName("getRecommendStatus")
+  void getRecommendStatusTest0() {
+    String indexName0 = "indexName";
+    RecommendModels model0 = RecommendModels.fromValue("related-products");
+    long taskID0 = 12345L;
+
+    assertDoesNotThrow(() -> {
+      client.getRecommendStatus(indexName0, model0, taskID0);
+    });
+    EchoResponse req = echo.getLastResponse();
+
+    assertEquals(req.path, "/1/indexes/indexName/related-products/task/12345");
+    assertEquals(req.method, "GET");
+    assertNull(req.body);
   }
 
   @Test
@@ -1072,5 +1123,23 @@ class RecommendClientRequestsTests {
     } catch (JsonProcessingException e) {
       fail("failed to parse queryParameters json");
     }
+  }
+
+  @Test
+  @DisplayName("searchRecommendRules")
+  void searchRecommendRulesTest0() {
+    String indexName0 = "indexName";
+    RecommendModels model0 = RecommendModels.fromValue("related-products");
+
+    assertDoesNotThrow(() -> {
+      client.searchRecommendRules(indexName0, model0);
+    });
+    EchoResponse req = echo.getLastResponse();
+
+    assertEquals(req.path, "/1/indexes/indexName/related-products/recommend/rules/search");
+    assertEquals(req.method, "POST");
+    assertDoesNotThrow(() -> {
+      JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT);
+    });
   }
 }

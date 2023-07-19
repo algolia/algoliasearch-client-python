@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** The response with a taskID, an objectID and an updatedAt timestamp. */
+/** Response, taskID, unique object identifier, and an update timestamp. */
 public class UpdatedAtWithObjectIdResponse {
 
   @JsonProperty("taskID")
@@ -24,7 +24,9 @@ public class UpdatedAtWithObjectIdResponse {
   }
 
   /**
-   * taskID of the task to wait for.
+   * Unique identifier of a task. A successful API response means that a task was added to a queue.
+   * It might not run immediately. You can check the task's progress with the `task` operation and
+   * this `taskID`.
    *
    * @return taskID
    */
@@ -39,7 +41,7 @@ public class UpdatedAtWithObjectIdResponse {
   }
 
   /**
-   * Date of last update (ISO-8601 format).
+   * Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return updatedAt
    */
@@ -54,7 +56,7 @@ public class UpdatedAtWithObjectIdResponse {
   }
 
   /**
-   * Unique identifier of the object.
+   * Unique object identifier.
    *
    * @return objectID
    */

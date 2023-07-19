@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** Additional search parameters. Any valid search parameter is allowed. */
+/** Additional search parameters. */
 public class Params {
 
   @JsonProperty("query")

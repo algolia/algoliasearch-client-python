@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// GetTopUserIdsResponse Array of userIDs and clusters.
+// GetTopUserIdsResponse User IDs and clusters.
 type GetTopUserIdsResponse struct {
-	// Mapping of cluster names to top users.
+	// Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values.
 	TopUsers []map[string][]UserId `json:"topUsers" validate:"required"`
 }
 

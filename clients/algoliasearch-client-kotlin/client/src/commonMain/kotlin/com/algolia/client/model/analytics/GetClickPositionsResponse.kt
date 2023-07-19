@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * GetClickPositionsResponse
  *
- * @param positions A list of the click positions with their click count.
+ * @param positions Click positions.
  */
 @Serializable
 public data class GetClickPositionsResponse(
 
-  /** A list of the click positions with their click count. */
+  /** Click positions. */
   @SerialName(value = "positions") val positions: List<ClickPosition>,
 )

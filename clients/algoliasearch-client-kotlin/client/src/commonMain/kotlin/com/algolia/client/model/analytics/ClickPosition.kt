@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * ClickPosition
  *
- * @param position Range of positions with the following pattern: - Positions from 1 to 10 included are displayed in separated groups. - Positions from 11 to 20 included are grouped together. - Positions from 21 and up are grouped together.
- * @param clickCount The number of click event.
+ * @param position Range of positions with the following pattern: - For positions 1 to 10, the number of click events are shown for each position - For positions 11 to 20, all click events are grouped - For positions 21 and up, all click events are grouped.
+ * @param clickCount Number of click events.
  */
 @Serializable
 public data class ClickPosition(
 
-  /** Range of positions with the following pattern: - Positions from 1 to 10 included are displayed in separated groups. - Positions from 11 to 20 included are grouped together. - Positions from 21 and up are grouped together.  */
+  /** Range of positions with the following pattern: - For positions 1 to 10, the number of click events are shown for each position - For positions 11 to 20, all click events are grouped - For positions 21 and up, all click events are grouped.  */
   @SerialName(value = "position") val position: List<Int>,
 
-  /** The number of click event. */
+  /** Number of click events. */
   @SerialName(value = "clickCount") val clickCount: Int,
 )

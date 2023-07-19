@@ -25,7 +25,7 @@ public class TopSearchesResponse {
   }
 
   /**
-   * A list of top searches with their count.
+   * Top searches with their hits count.
    *
    * @return searches
    */

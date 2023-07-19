@@ -8,13 +8,13 @@ import kotlinx.serialization.json.*
  * BatchRequest
  *
  * @param action
- * @param body arguments to the operation (depends on the type of the operation).
+ * @param body Operation arguments (varies with specified `action`).
  */
 @Serializable
 public data class BatchRequest(
 
   @SerialName(value = "action") val action: Action,
 
-  /** arguments to the operation (depends on the type of the operation). */
+  /** Operation arguments (varies with specified `action`). */
   @SerialName(value = "body") val body: JsonObject,
 )

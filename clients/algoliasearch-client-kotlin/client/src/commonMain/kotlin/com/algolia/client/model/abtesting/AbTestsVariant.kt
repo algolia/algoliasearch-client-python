@@ -7,19 +7,19 @@ import kotlinx.serialization.json.*
 /**
  * AbTestsVariant
  *
- * @param index The index performing the A/B test.
- * @param trafficPercentage The traffic percentage for the A/B test.
- * @param description The A/B test description.
+ * @param index A/B test index.
+ * @param trafficPercentage A/B test traffic percentage.
+ * @param description A/B test description.
  */
 @Serializable
 public data class AbTestsVariant(
 
-  /** The index performing the A/B test. */
+  /** A/B test index. */
   @SerialName(value = "index") val index: String,
 
-  /** The traffic percentage for the A/B test. */
+  /** A/B test traffic percentage. */
   @SerialName(value = "trafficPercentage") val trafficPercentage: Int,
 
-  /** The A/B test description. */
+  /** A/B test description. */
   @SerialName(value = "description") val description: String? = null,
 ) : AddABTestsVariant

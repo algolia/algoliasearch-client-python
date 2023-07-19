@@ -70,9 +70,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Creates a new A/B test with provided configuration. You can set an A/B test on two different
-   * indices with different settings, or on the same index with different search parameters by
-   * providing a customSearchParameters setting on one of the variants.
+   * Creates an A/B test.
    *
    * @param addABTestsRequest (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
@@ -85,9 +83,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Creates a new A/B test with provided configuration. You can set an A/B test on two different
-   * indices with different settings, or on the same index with different search parameters by
-   * providing a customSearchParameters setting on one of the variants.
+   * Creates an A/B test.
    *
    * @param addABTestsRequest (required)
    * @return ABTestResponse
@@ -98,9 +94,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Creates a new A/B test with provided configuration. You can set an A/B test on
-   * two different indices with different settings, or on the same index with different search
-   * parameters by providing a customSearchParameters setting on one of the variants.
+   * (asynchronously) Creates an A/B test.
    *
    * @param addABTestsRequest (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
@@ -127,9 +121,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Creates a new A/B test with provided configuration. You can set an A/B test on
-   * two different indices with different settings, or on the same index with different search
-   * parameters by providing a customSearchParameters setting on one of the variants.
+   * (asynchronously) Creates an A/B test.
    *
    * @param addABTestsRequest (required)
    * @return CompletableFuture<ABTestResponse> The awaitable future
@@ -142,9 +134,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -157,9 +148,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -170,8 +160,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -184,8 +173,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -196,9 +184,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -231,9 +218,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -244,8 +230,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -258,8 +243,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -268,9 +252,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Delete a test.
+   * Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests`
+   * operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return ABTestResponse
@@ -281,9 +266,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Delete a test.
+   * Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests`
+   * operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @return ABTestResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -292,9 +278,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Delete a test.
+   * (asynchronously) Delete an A/B test. To determine the &#x60;id&#x60; for an A/B test, use the
+   * [&#x60;listABTests&#x60; operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<ABTestResponse> The awaitable future
@@ -318,9 +305,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Delete a test.
+   * (asynchronously) Delete an A/B test. To determine the &#x60;id&#x60; for an A/B test, use the
+   * [&#x60;listABTests&#x60; operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @return CompletableFuture<ABTestResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -331,9 +319,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -346,9 +333,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -359,8 +345,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -373,8 +358,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -385,9 +369,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -420,9 +403,8 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -433,8 +415,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -447,8 +428,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -457,9 +437,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Returns metadata and metrics for an A/B test.
+   * Get specific details for an A/B test. To determine the `id` for an A/B test, use the
+   * [`listABTests` operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return ABTest
@@ -470,9 +451,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Returns metadata and metrics for an A/B test.
+   * Get specific details for an A/B test. To determine the `id` for an A/B test, use the
+   * [`listABTests` operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @return ABTest
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -481,9 +463,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Returns metadata and metrics for an A/B test.
+   * (asynchronously) Get specific details for an A/B test. To determine the &#x60;id&#x60; for an
+   * A/B test, use the [&#x60;listABTests&#x60; operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<ABTest> The awaitable future
@@ -507,9 +490,10 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Returns metadata and metrics for an A/B test.
+   * (asynchronously) Get specific details for an A/B test. To determine the &#x60;id&#x60; for an
+   * A/B test, use the [&#x60;listABTests&#x60; operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @return CompletableFuture<ABTest> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -518,17 +502,13 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Fetch all existing A/B tests for App that are available for the current API Key. When no data
-   * has been processed, the metrics will be returned as null.
+   * List all A/B tests.
    *
    * @param offset Position of the starting record. Used for paging. 0 is the first record.
    *     (optional, default to 0)
-   * @param limit Number of records to return. Limit is the size of the page. (optional, default to
-   *     10)
-   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
-   *     prefix that are assigned to either variant of an ab test. (optional)
-   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
-   *     that are assigned to either variant of an ab test. (optional)
+   * @param limit Number of records to return (page size). (optional, default to 10)
+   * @param indexPrefix Only return A/B tests for indices starting with this prefix. (optional)
+   * @param indexSuffix Only return A/B tests for indices ending with this suffix. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return ListABTestsResponse
@@ -545,17 +525,13 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Fetch all existing A/B tests for App that are available for the current API Key. When no data
-   * has been processed, the metrics will be returned as null.
+   * List all A/B tests.
    *
    * @param offset Position of the starting record. Used for paging. 0 is the first record.
    *     (optional, default to 0)
-   * @param limit Number of records to return. Limit is the size of the page. (optional, default to
-   *     10)
-   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
-   *     prefix that are assigned to either variant of an ab test. (optional)
-   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
-   *     that are assigned to either variant of an ab test. (optional)
+   * @param limit Number of records to return (page size). (optional, default to 10)
+   * @param indexPrefix Only return A/B tests for indices starting with this prefix. (optional)
+   * @param indexSuffix Only return A/B tests for indices ending with this suffix. (optional)
    * @return ListABTestsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -565,8 +541,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Fetch all existing A/B tests for App that are available for the current API Key. When no data
-   * has been processed, the metrics will be returned as null.
+   * List all A/B tests.
    *
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
@@ -578,8 +553,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Fetch all existing A/B tests for App that are available for the current API Key. When no data
-   * has been processed, the metrics will be returned as null.
+   * List all A/B tests.
    *
    * @return ListABTestsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
@@ -589,17 +563,13 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Fetch all existing A/B tests for App that are available for the current API
-   * Key. When no data has been processed, the metrics will be returned as null.
+   * (asynchronously) List all A/B tests.
    *
    * @param offset Position of the starting record. Used for paging. 0 is the first record.
    *     (optional, default to 0)
-   * @param limit Number of records to return. Limit is the size of the page. (optional, default to
-   *     10)
-   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
-   *     prefix that are assigned to either variant of an ab test. (optional)
-   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
-   *     that are assigned to either variant of an ab test. (optional)
+   * @param limit Number of records to return (page size). (optional, default to 10)
+   * @param indexPrefix Only return A/B tests for indices starting with this prefix. (optional)
+   * @param indexSuffix Only return A/B tests for indices ending with this suffix. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<ListABTestsResponse> The awaitable future
@@ -641,17 +611,13 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Fetch all existing A/B tests for App that are available for the current API
-   * Key. When no data has been processed, the metrics will be returned as null.
+   * (asynchronously) List all A/B tests.
    *
    * @param offset Position of the starting record. Used for paging. 0 is the first record.
    *     (optional, default to 0)
-   * @param limit Number of records to return. Limit is the size of the page. (optional, default to
-   *     10)
-   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided
-   *     prefix that are assigned to either variant of an ab test. (optional)
-   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix
-   *     that are assigned to either variant of an ab test. (optional)
+   * @param limit Number of records to return (page size). (optional, default to 10)
+   * @param indexPrefix Only return A/B tests for indices starting with this prefix. (optional)
+   * @param indexSuffix Only return A/B tests for indices ending with this suffix. (optional)
    * @return CompletableFuture<ListABTestsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -661,8 +627,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Fetch all existing A/B tests for App that are available for the current API
-   * Key. When no data has been processed, the metrics will be returned as null.
+   * (asynchronously) List all A/B tests.
    *
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
@@ -674,8 +639,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Fetch all existing A/B tests for App that are available for the current API
-   * Key. When no data has been processed, the metrics will be returned as null.
+   * (asynchronously) List all A/B tests.
    *
    * @return CompletableFuture<ListABTestsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
@@ -687,10 +651,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -704,10 +667,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -718,8 +680,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -732,8 +693,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -744,10 +704,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -780,10 +739,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -794,8 +752,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -808,8 +765,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -820,10 +776,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -837,10 +792,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -851,8 +805,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -865,8 +818,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -877,10 +829,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -913,10 +864,9 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -927,8 +877,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -941,8 +890,7 @@ public class AbtestingClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -951,11 +899,11 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Marks the A/B test as stopped. At this point, the test is over and cannot be restarted. As a
-   * result, your application is back to normal: index A will perform as usual, receiving 100% of
-   * all search requests. Associated metadata and metrics are still stored.
+   * If stopped, the test is over and can't be restarted. There is now only one index, receiving
+   * 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine
+   * the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return ABTestResponse
@@ -966,11 +914,11 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * Marks the A/B test as stopped. At this point, the test is over and cannot be restarted. As a
-   * result, your application is back to normal: index A will perform as usual, receiving 100% of
-   * all search requests. Associated metadata and metrics are still stored.
+   * If stopped, the test is over and can't be restarted. There is now only one index, receiving
+   * 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine
+   * the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @return ABTestResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -979,11 +927,12 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Marks the A/B test as stopped. At this point, the test is over and cannot be
-   * restarted. As a result, your application is back to normal: index A will perform as usual,
-   * receiving 100% of all search requests. Associated metadata and metrics are still stored.
+   * (asynchronously) If stopped, the test is over and can&#39;t be restarted. There is now only one
+   * index, receiving 100% of all search requests. The data gathered for stopped A/B tests is
+   * retained. To determine the &#x60;id&#x60; for an A/B test, use the [&#x60;listABTests&#x60;
+   * operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<ABTestResponse> The awaitable future
@@ -1007,11 +956,12 @@ public class AbtestingClient extends ApiClient {
   }
 
   /**
-   * (asynchronously) Marks the A/B test as stopped. At this point, the test is over and cannot be
-   * restarted. As a result, your application is back to normal: index A will perform as usual,
-   * receiving 100% of all search requests. Associated metadata and metrics are still stored.
+   * (asynchronously) If stopped, the test is over and can&#39;t be restarted. There is now only one
+   * index, receiving 100% of all search requests. The data gathered for stopped A/B tests is
+   * retained. To determine the &#x60;id&#x60; for an A/B test, use the [&#x60;listABTests&#x60;
+   * operation](#tag/abtest/operation/listABTests).
    *
-   * @param id The A/B test ID. (required)
+   * @param id Unique A/B test ID. (required)
    * @return CompletableFuture<ABTestResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */

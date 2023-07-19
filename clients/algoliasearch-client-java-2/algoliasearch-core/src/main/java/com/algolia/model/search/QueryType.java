@@ -7,7 +7,10 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Controls if and how query words are interpreted as prefixes. */
+/**
+ * Determines how query words are [interpreted as
+ * prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
+ */
 public enum QueryType {
   PREFIX_LAST("prefixLast"),
 

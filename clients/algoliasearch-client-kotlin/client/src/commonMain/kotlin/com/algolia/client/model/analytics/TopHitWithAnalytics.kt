@@ -7,35 +7,35 @@ import kotlinx.serialization.json.*
 /**
  * TopHitWithAnalytics
  *
- * @param hit The hit.
- * @param count The number of occurrences.
- * @param clickThroughRate The click-through rate.
- * @param conversionRate The conversion rate.
- * @param trackedSearchCount The number of tracked search click.
- * @param clickCount The number of click event.
- * @param conversionCount The number of converted clicks.
+ * @param hit Hit.
+ * @param count Number of occurrences.
+ * @param clickThroughRate [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+ * @param conversionRate [Conversion rate (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+ * @param trackedSearchCount Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
+ * @param clickCount Number of click events.
+ * @param conversionCount Number of converted clicks.
  */
 @Serializable
 public data class TopHitWithAnalytics(
 
-  /** The hit. */
+  /** Hit. */
   @SerialName(value = "hit") val hit: String,
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "count") val count: Int,
 
-  /** The click-through rate. */
+  /** [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).  */
   @SerialName(value = "clickThroughRate") val clickThroughRate: Double,
 
-  /** The conversion rate. */
+  /** [Conversion rate (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).  */
   @SerialName(value = "conversionRate") val conversionRate: Double,
 
-  /** The number of tracked search click. */
+  /** Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`. */
   @SerialName(value = "trackedSearchCount") val trackedSearchCount: Int,
 
-  /** The number of click event. */
+  /** Number of click events. */
   @SerialName(value = "clickCount") val clickCount: Int,
 
-  /** The number of converted clicks. */
+  /** Number of converted clicks. */
   @SerialName(value = "conversionCount") val conversionCount: Int,
 )

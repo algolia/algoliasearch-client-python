@@ -2,9 +2,13 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
+/// - `none`: executes all queries. - `stopIfEnoughMatches`: executes queries one by one, stopping further query execution as soon as a query matches at least the `hitsPerPage` number of results.
 @JsonEnum(valueField: 'raw')
 enum SearchStrategy {
+  /// - `none`: executes all queries. - `stopIfEnoughMatches`: executes queries one by one, stopping further query execution as soon as a query matches at least the `hitsPerPage` number of results.
   none(r'none'),
+
+  /// - `none`: executes all queries. - `stopIfEnoughMatches`: executes queries one by one, stopping further query execution as soon as a query matches at least the `hitsPerPage` number of results.
   stopIfEnoughMatches(r'stopIfEnoughMatches');
 
   const SearchStrategy(this.raw);

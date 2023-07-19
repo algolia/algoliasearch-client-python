@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// IndexSettingsAsSearchParamsSemanticSearch The settings relevant for configuration of the semantic search engine. These settings are only used when the mode is set to 'neuralSearch'.
+// IndexSettingsAsSearchParamsSemanticSearch Settings for the semantic search part of NeuralSearch. Only used when `mode` is _neuralSearch_.
 type IndexSettingsAsSearchParamsSemanticSearch struct {
-	// When null, the current index / replica group will be used as the event source.
+	// Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.
 	EventSources []string `json:"eventSources,omitempty"`
 }
 

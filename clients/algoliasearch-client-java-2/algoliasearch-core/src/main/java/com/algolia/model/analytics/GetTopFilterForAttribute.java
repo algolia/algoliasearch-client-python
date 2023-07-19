@@ -27,7 +27,7 @@ public class GetTopFilterForAttribute {
   }
 
   /**
-   * The attribute.
+   * Attribute name.
    *
    * @return attribute
    */
@@ -42,7 +42,7 @@ public class GetTopFilterForAttribute {
   }
 
   /**
-   * The operator.
+   * Operator.
    *
    * @return operator
    */
@@ -57,7 +57,7 @@ public class GetTopFilterForAttribute {
   }
 
   /**
-   * The value of the attribute.
+   * Attribute value.
    *
    * @return value
    */
@@ -72,7 +72,7 @@ public class GetTopFilterForAttribute {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */

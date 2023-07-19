@@ -21,7 +21,7 @@ public class BaseGetApiKeyResponse {
   }
 
   /**
-   * The API key.
+   * API key.
    *
    * @return value
    */
@@ -36,7 +36,8 @@ public class BaseGetApiKeyResponse {
   }
 
   /**
-   * Time of the event expressed in milliseconds since the Unix epoch.
+   * Timestamp of creation in milliseconds in [Unix epoch
+   * time](https://wikipedia.org/wiki/Unix_time).
    *
    * @return createdAt
    */

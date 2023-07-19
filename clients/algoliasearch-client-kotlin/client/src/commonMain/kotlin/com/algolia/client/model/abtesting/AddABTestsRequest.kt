@@ -8,8 +8,8 @@ import kotlinx.serialization.json.*
  * AddABTestsRequest
  *
  * @param name A/B test name.
- * @param variant List of 2 variants for the A/B test.
- * @param endAt End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+ * @param variants A/B test variants.
+ * @param endAt End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
  */
 @Serializable
 public data class AddABTestsRequest(
@@ -17,9 +17,9 @@ public data class AddABTestsRequest(
   /** A/B test name. */
   @SerialName(value = "name") val name: String,
 
-  /** List of 2 variants for the A/B test. */
-  @SerialName(value = "variant") val variant: List<AddABTestsVariant>,
+  /** A/B test variants. */
+  @SerialName(value = "variants") val variants: List<AddABTestsVariant>,
 
-  /** End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ. */
+  /** End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "endAt") val endAt: String,
 )

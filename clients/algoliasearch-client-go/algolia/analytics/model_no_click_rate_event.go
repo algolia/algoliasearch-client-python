@@ -8,13 +8,13 @@ import (
 
 // NoClickRateEvent struct for NoClickRateEvent
 type NoClickRateEvent struct {
-	// The click-through rate.
+	// [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
 	Rate float64 `json:"rate" validate:"required"`
-	// The number of click event.
+	// Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
 	Count int32 `json:"count" validate:"required"`
-	// The number of click event.
+	// Number of click events.
 	NoClickCount int32 `json:"noClickCount" validate:"required"`
-	// Date of the event.
+	// Date of the event in the format YYYY-MM-DD.
 	Date string `json:"date" validate:"required"`
 }
 

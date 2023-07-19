@@ -9,7 +9,7 @@ import kotlinx.serialization.json.*
  *
  * @param indexName Index targeted by the query.
  * @param userToken User identifier.
- * @param queryId QueryID for the given query.
+ * @param queryId Unique query identifier.
  */
 @Serializable
 public data class LogQuery(
@@ -20,6 +20,6 @@ public data class LogQuery(
   /** User identifier. */
   @SerialName(value = "user_token") val userToken: String? = null,
 
-  /** QueryID for the given query. */
+  /** Unique query identifier. */
   @SerialName(value = "query_id") val queryId: String? = null,
 )

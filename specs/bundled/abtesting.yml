@@ -17,9 +17,7 @@ components:
     PathInPath:
       name: path
       in: path
-      description: >-
-        The path of the API endpoint to target, anything after the /1 needs to
-        be specified.
+      description: Path of the endpoint, anything after "/1" must be specified.
       required: true
       schema:
         type: string
@@ -27,7 +25,7 @@ components:
     Parameters:
       name: parameters
       in: query
-      description: Query parameters to be applied to the current query.
+      description: Query parameters to apply to the current query.
       schema:
         type: object
         additionalProperties: true
@@ -41,17 +39,18 @@ components:
     Limit:
       in: query
       name: limit
-      description: Number of records to return. Limit is the size of the page.
+      description: Number of records to return (page size).
       schema:
         type: integer
         default: 10
     ID:
       in: path
       name: id
-      description: The A/B test ID.
+      description: Unique A/B test ID.
       required: true
       schema:
         type: integer
+        example: 390
   schemas:
     ErrorBase:
       description: Error.
@@ -63,81 +62,118 @@ components:
           example: Invalid Application-Id or API-Key
     abTestID:
       type: integer
-      description: The A/B test ID.
+      description: Unique A/B test ID.
+      example: 224
     endAt:
       type: string
-      description: End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+      description: >-
+        End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601)
+        format.
+      example: '2023-06-17T00:00:00Z'
     updatedAt:
       type: string
-      description: Update date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+      description: >-
+        Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601)
+        format.
+      example: '2023-06-15T15:06:44.400601Z'
     createdAt:
       type: string
-      description: Creation date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+      description: >-
+        Creation date timestamp in
+        [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+      example: '2023-06-15T15:06:04.249906Z'
     name:
       type: string
       description: A/B test name.
+      example: Custom ranking sales rank test
     description:
       type: string
-      description: The A/B test description.
+      description: A/B test description.
+      example: Current production index
     index:
       type: string
-      description: The index performing the A/B test.
-    count:
-      description: The number of occurrences.
-      type: integer
+      description: A/B test index.
+      example: delcourt_production
     trackedSearchCount:
       type: integer
-      description: The number of tracked search click.
+      example: 2
+      description: >-
+        Number of tracked searches. This is the number of search requests where
+        the `clickAnalytics` parameter is `true`.
     trafficPercentage:
       type: integer
-      description: The traffic percentage for the A/B test.
+      description: A/B test traffic percentage.
+      example: 60
     variant:
       type: object
       additionalProperties: false
       properties:
         averageClickPosition:
           type: integer
-          description: Average click position for the variant.
+          description: >-
+            Variant's [average click
+            position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position).
+          example: 0
         clickCount:
           type: integer
-          description: Distinct click count for the variant.
+          description: Number of click events for this variant.
+          example: 65131
         clickThroughRate:
           type: number
           format: double
-          description: Click through rate for the variant.
+          description: >-
+            Variant's [click-through
+            rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+          example: 0.22219857724813036
         conversionCount:
           type: integer
-          description: Distinct conversion count for the variant.
+          description: Number of click events for this variant.
+          example: 4785
         conversionRate:
           type: number
           format: double
-          description: Conversion rate for the variant.
+          description: >-
+            Variant's [conversion
+            rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+          example: 0.14546725846658964
         description:
           $ref: '#/components/schemas/description'
         index:
           $ref: '#/components/schemas/index'
         noResultCount:
-          $ref: '#/components/schemas/count'
+          type: integer
+          description: >-
+            Number of [searches without
+            results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results)
+            for that variant.
+          example: 0
         outlierTrackedSearchesCount:
           type: integer
           description: >-
-            Count of the tracked searches attributed to outlier traffic that
-            were removed from the A/B test.
+            Number of tracked searches attributed to [outlier
+            traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
+            that were removed from the A/B test. A _tracked_ search is a search
+            request where the `clickAnalytics` parameter is `true`.
+          example: 0
         outlierUsersCount:
           type: integer
           description: >-
-            Count of users attributed to outlier traffic that were removed from
-            the A/B test.
+            Number of users attributed to [outlier
+            traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
+            that were removed from the A/B test.
+          example: 0
         searchCount:
           type: integer
-          description: The number of search during the A/B test.
+          description: Number of searches carried out during the A/B test.
+          example: 86269
         trackedSearchCount:
           $ref: '#/components/schemas/trackedSearchCount'
         trafficPercentage:
           $ref: '#/components/schemas/trafficPercentage'
         userCount:
           type: integer
-          description: The number of user during the A/B test.
+          description: Number of users during the A/B test.
+          example: 55501
       required:
         - userCount
         - trafficPercentage
@@ -155,7 +191,7 @@ components:
         - outlierTrackedSearchesCount
     variants:
       type: array
-      description: List of A/B test variant.
+      description: A/B test variants.
       items:
         $ref: '#/components/schemas/variant'
     ABTest:
@@ -167,16 +203,20 @@ components:
         clickSignificance:
           type: number
           format: double
-          description: >-
-            A/B test significance based on click data. Should be > 0.95 to be
-            considered significant (no matter which variant is winning).
+          description: >
+            [A/B test
+            significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+            based on click data. A value of 0.95 or over is considered to be
+            _significant_.
+          example: 1
         conversionSignificance:
           type: number
           format: double
-          description: >-
-            A/B test significance based on conversion data. Should be > 0.95 to
-            be considered significant (no matter which variant is winning).
-        endAt:
+          description: >
+            [A/B test
+            significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+            based on conversion. A value of 0.95 or over is considered to be
+            _significant_.
           $ref: '#/components/schemas/endAt'
         updatedAt:
           $ref: '#/components/schemas/updatedAt'
@@ -186,7 +226,8 @@ components:
           $ref: '#/components/schemas/name'
         status:
           type: string
-          description: status of the A/B test.
+          description: A/B test status.
+          example: running
         variants:
           $ref: '#/components/schemas/variants'
       required:
@@ -201,7 +242,7 @@ components:
         - variants
     ABTests:
       type: array
-      description: List of A/B tests.
+      description: A/B tests.
       items:
         $ref: '#/components/schemas/ABTest'
     abTestsVariant:
@@ -219,6 +260,13 @@ components:
         - trafficPercentage
     customSearchParams:
       type: object
+      description: >-
+        Applies search parameters from [a restricted set of
+        options](https://www.algolia.com/doc/api-reference/api-methods/add-ab-test/#method-param-customsearchparameters).
+        Only use this parameter if the two variants use the same index.
+      example:
+        typoTolerance: false
+        synonyms: false
       additionalProperties: false
       properties:
         customSearchParameters:
@@ -236,7 +284,13 @@ components:
     taskID:
       type: integer
       format: int64
-      description: taskID of the task to wait for.
+      example: 1514562690001
+      description: >
+        Unique identifier of a task.
+
+        A successful API response means that a task was added to a queue. It
+        might not run immediately. You can check the task's progress with the
+        `task` operation and this `taskID`.
     ABTestResponse:
       type: object
       additionalProperties: false
@@ -290,8 +344,8 @@ security:
     apiKey: []
 tags:
   - name: abtest
-    x-displayName: A/B Testing
-    description: Manage A/B Tests.
+    x-displayName: A/B testing
+    description: Manage A/B tests.
 x-tagGroups:
   - name: General
     tags:
@@ -325,7 +379,7 @@ paths:
     post:
       operationId: post
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:
@@ -355,7 +409,7 @@ paths:
     put:
       operationId: put
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:
@@ -411,13 +465,8 @@ paths:
       tags:
         - abtesting
       operationId: addABTests
-      summary: Create a test.
-      description: >
-        Creates a new A/B test with provided configuration.
-
-        You can set an A/B test on two different indices with different
-        settings, or on the same index with different search parameters by
-        providing a customSearchParameters setting on one of the variants.
+      summary: Create an A/B test.
+      description: Creates an A/B test.
       requestBody:
         required: true
         content:
@@ -429,9 +478,9 @@ paths:
               properties:
                 name:
                   $ref: '#/components/schemas/name'
-                variant:
+                variants:
                   type: array
-                  description: List of 2 variants for the A/B test.
+                  description: A/B test variants.
                   minItems: 2
                   maxItems: 2
                   items:
@@ -440,7 +489,7 @@ paths:
                   $ref: '#/components/schemas/endAt'
               required:
                 - name
-                - variant
+                - variants
                 - endAt
       responses:
         '200':
@@ -461,27 +510,21 @@ paths:
       tags:
         - abtesting
       operationId: listABTests
-      summary: List all tests.
-      description: >
-        Fetch all existing A/B tests for App that are available for the current
-        API Key.
-
-        When no data has been processed, the metrics will be returned as null.
+      summary: List all A/B tests.
+      description: List all A/B tests.
       parameters:
         - $ref: '#/components/parameters/Offset'
         - $ref: '#/components/parameters/Limit'
         - name: indexPrefix
           in: query
-          description: >-
-            Filters the returned ab tests by any indices starting with the
-            provided prefix that are assigned to either variant of an ab test.
+          description: Only return A/B tests for indices starting with this prefix.
+          example: dev_
           schema:
             type: string
         - name: indexSuffix
           in: query
-          description: >-
-            Filters the returned ab tests by any indices ending with the
-            provided suffix that are assigned to either variant of an ab test.
+          description: Only return A/B tests for indices ending with this suffix.
+          example: _development
           schema:
             type: string
       responses:
@@ -498,10 +541,12 @@ paths:
                     $ref: '#/components/schemas/ABTests'
                   count:
                     type: integer
-                    description: Number of A/B tests found for the app.
+                    description: Number of A/B tests implemented.
+                    example: 10
                   total:
                     type: integer
-                    description: Number of A/B tests retrievable.
+                    description: Number of retrievable A/B tests.
+                    example: 12
                 required:
                   - abtests
                   - count
@@ -519,9 +564,12 @@ paths:
       tags:
         - abtesting
       operationId: getABTest
-      summary: Get a test.
-      description: |
-        Returns metadata and metrics for an A/B test.
+      summary: Get A/B test details.
+      description: >
+        Get specific details for an A/B test.
+
+        To determine the `id` for an A/B test, use the [`listABTests`
+        operation](#tag/abtest/operation/listABTests).
       parameters:
         - $ref: '#/components/parameters/ID'
       responses:
@@ -543,8 +591,12 @@ paths:
       tags:
         - abtesting
       operationId: deleteABTest
-      summary: Delete a test.
-      description: Delete a test.
+      summary: Delete an A/B test.
+      description: >
+        Delete an A/B test.
+
+        To determine the `id` for an A/B test, use the [`listABTests`
+        operation](#tag/abtest/operation/listABTests).
       parameters:
         - $ref: '#/components/parameters/ID'
       responses:
@@ -567,14 +619,15 @@ paths:
       tags:
         - abtesting
       operationId: stopABTest
-      summary: Stop a test.
+      summary: Stop an A/B test.
       description: >
-        Marks the A/B test as stopped.
+        If stopped, the test is over and can't be restarted. There is now only
+        one index, receiving 100% of all search requests.
 
-        At this point, the test is over and cannot be restarted. As a result,
-        your application is back to normal: index A will perform as usual,
-        receiving 100% of all search requests. Associated metadata and metrics
-        are still stored.
+        The data gathered for stopped A/B tests is retained.
+
+        To determine the `id` for an A/B test, use the [`listABTests`
+        operation](#tag/abtest/operation/listABTests).
       parameters:
         - $ref: '#/components/parameters/ID'
       responses:

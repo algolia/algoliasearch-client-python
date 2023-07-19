@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// ListUserIdsResponse UserIDs data.
+// ListUserIdsResponse User ID data.
 type ListUserIdsResponse struct {
-	// List of userIDs.
+	// User IDs.
 	UserIDs []UserId `json:"userIDs" validate:"required"`
 }
 

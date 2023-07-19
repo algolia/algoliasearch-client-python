@@ -24,7 +24,7 @@ public class SearchNoClickEvent {
   }
 
   /**
-   * The search query.
+   * User query.
    *
    * @return search
    */
@@ -39,7 +39,7 @@ public class SearchNoClickEvent {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */
@@ -54,7 +54,7 @@ public class SearchNoClickEvent {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return withFilterCount
    */

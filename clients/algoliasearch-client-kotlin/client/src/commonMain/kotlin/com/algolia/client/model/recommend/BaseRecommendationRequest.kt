@@ -8,13 +8,13 @@ import kotlinx.serialization.json.*
  * BaseRecommendationRequest
  *
  * @param model
- * @param objectID Unique identifier of the object.
+ * @param objectID Unique object identifier.
  */
 @Serializable
 public data class BaseRecommendationRequest(
 
   @SerialName(value = "model") val model: RecommendationModels,
 
-  /** Unique identifier of the object. */
+  /** Unique object identifier. */
   @SerialName(value = "objectID") val objectID: String,
 )

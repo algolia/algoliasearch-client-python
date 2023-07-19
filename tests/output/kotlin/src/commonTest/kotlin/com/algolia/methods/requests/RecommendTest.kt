@@ -54,6 +54,26 @@ class RecommendTest {
     )
   }
 
+  // deleteRecommendRule
+
+  @Test
+  fun `deleteRecommendRule`() = runTest {
+    client.runTest(
+      call = {
+        deleteRecommendRule(
+          indexName = "indexName",
+          model = RecommendModels.values().first { it.value == "related-products" },
+          objectID = "objectID",
+        )
+      },
+      intercept = {
+        assertEquals("/1/indexes/indexName/related-products/recommend/rules/objectID".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("DELETE"), it.method)
+        assertNoBody(it.body)
+      },
+    )
+  }
+
   // get
 
   @Test
@@ -85,6 +105,46 @@ class RecommendTest {
         assertEquals("/1/test/all".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("GET"), it.method)
         assertContainsAll("""{"query":"parameters"}""", it.url.parameters)
+        assertNoBody(it.body)
+      },
+    )
+  }
+
+  // getRecommendRule
+
+  @Test
+  fun `getRecommendRule`() = runTest {
+    client.runTest(
+      call = {
+        getRecommendRule(
+          indexName = "indexName",
+          model = RecommendModels.values().first { it.value == "related-products" },
+          objectID = "objectID",
+        )
+      },
+      intercept = {
+        assertEquals("/1/indexes/indexName/related-products/recommend/rules/objectID".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("GET"), it.method)
+        assertNoBody(it.body)
+      },
+    )
+  }
+
+  // getRecommendStatus
+
+  @Test
+  fun `getRecommendStatus`() = runTest {
+    client.runTest(
+      call = {
+        getRecommendStatus(
+          indexName = "indexName",
+          model = RecommendModels.values().first { it.value == "related-products" },
+          taskID = 12345L,
+        )
+      },
+      intercept = {
+        assertEquals("/1/indexes/indexName/related-products/task/12345".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("GET"), it.method)
         assertNoBody(it.body)
       },
     )
@@ -658,6 +718,25 @@ class RecommendTest {
         assertEquals(HttpMethod.parse("PUT"), it.method)
         assertContainsAll("""{"query":"parameters"}""", it.url.parameters)
         assertJsonBody("""{"body":"parameters"}""", it.body)
+      },
+    )
+  }
+
+  // searchRecommendRules
+
+  @Test
+  fun `searchRecommendRules`() = runTest {
+    client.runTest(
+      call = {
+        searchRecommendRules(
+          indexName = "indexName",
+          model = RecommendModels.values().first { it.value == "related-products" },
+        )
+      },
+      intercept = {
+        assertEquals("/1/indexes/indexName/related-products/recommend/rules/search".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("POST"), it.method)
+        assertJsonBody("""{}""", it.body)
       },
     )
   }

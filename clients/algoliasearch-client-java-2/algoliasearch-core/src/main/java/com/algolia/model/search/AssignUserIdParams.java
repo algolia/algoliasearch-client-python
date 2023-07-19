@@ -18,7 +18,7 @@ public class AssignUserIdParams {
   }
 
   /**
-   * Name of the cluster.
+   * Cluster name.
    *
    * @return cluster
    */

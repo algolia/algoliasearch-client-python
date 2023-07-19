@@ -67,8 +67,8 @@ public class PredictClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun del(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -219,8 +219,8 @@ public class PredictClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun get(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -329,9 +329,9 @@ public class PredictClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun post(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -353,9 +353,9 @@ public class PredictClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun put(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {

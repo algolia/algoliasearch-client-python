@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** The search mode that the index will use to query for results. */
+/** Search mode the index will use to query for results. */
 public enum Mode {
   NEURAL_SEARCH("neuralSearch"),
 

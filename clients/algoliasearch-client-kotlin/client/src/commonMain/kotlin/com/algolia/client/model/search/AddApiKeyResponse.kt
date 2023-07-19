@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * AddApiKeyResponse
  *
- * @param key The API key.
- * @param createdAt Date of creation (ISO-8601 format).
+ * @param key API key.
+ * @param createdAt Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
  */
 @Serializable
 public data class AddApiKeyResponse(
 
-  /** The API key. */
+  /** API key. */
   @SerialName(value = "key") val key: String,
 
-  /** Date of creation (ISO-8601 format). */
+  /** Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "createdAt") val createdAt: String,
 )

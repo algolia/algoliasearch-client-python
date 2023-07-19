@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// Facets The ordering of facets (widgets).
+// Facets Ordering of facets (widgets).
 type Facets struct {
 	// Pinned order of facet lists.
 	Order []string `json:"order,omitempty"`

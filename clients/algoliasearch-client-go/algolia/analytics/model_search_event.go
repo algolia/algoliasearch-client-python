@@ -8,9 +8,9 @@ import (
 
 // SearchEvent struct for SearchEvent
 type SearchEvent struct {
-	// Date of the event.
+	// Date of the event in the format YYYY-MM-DD.
 	Date string `json:"date" validate:"required"`
-	// The number of occurrences.
+	// Number of occurrences.
 	Count int32 `json:"count" validate:"required"`
 }
 

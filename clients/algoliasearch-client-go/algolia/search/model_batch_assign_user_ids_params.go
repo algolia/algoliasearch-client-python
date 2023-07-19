@@ -8,9 +8,9 @@ import (
 
 // BatchAssignUserIdsParams Assign userID parameters.
 type BatchAssignUserIdsParams struct {
-	// Name of the cluster.
+	// Cluster name.
 	Cluster string `json:"cluster" validate:"required"`
-	// userIDs to assign. Note you cannot move users with this method.
+	// User IDs to assign.
 	Users []string `json:"users" validate:"required"`
 }
 

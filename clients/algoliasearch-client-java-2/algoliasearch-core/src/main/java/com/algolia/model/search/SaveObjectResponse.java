@@ -24,7 +24,7 @@ public class SaveObjectResponse {
   }
 
   /**
-   * Get createdAt
+   * Date of creation (ISO-8601 format).
    *
    * @return createdAt
    */
@@ -39,7 +39,9 @@ public class SaveObjectResponse {
   }
 
   /**
-   * taskID of the task to wait for.
+   * Unique identifier of a task. A successful API response means that a task was added to a queue.
+   * It might not run immediately. You can check the task's progress with the `task` operation and
+   * this `taskID`.
    *
    * @return taskID
    */
@@ -54,7 +56,7 @@ public class SaveObjectResponse {
   }
 
   /**
-   * Unique identifier of the object.
+   * Unique object identifier.
    *
    * @return objectID
    */

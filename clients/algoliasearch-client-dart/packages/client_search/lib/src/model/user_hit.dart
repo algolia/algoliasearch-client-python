@@ -22,7 +22,7 @@ final class UserHit {
   @JsonKey(name: r'userID')
   final String userID;
 
-  /// Name of the cluster.
+  /// Cluster name.
   @JsonKey(name: r'clusterName')
   final String clusterName;
 

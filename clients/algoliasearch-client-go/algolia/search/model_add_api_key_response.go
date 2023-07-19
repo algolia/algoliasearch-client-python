@@ -8,9 +8,9 @@ import (
 
 // AddApiKeyResponse struct for AddApiKeyResponse
 type AddApiKeyResponse struct {
-	// The API key.
+	// API key.
 	Key string `json:"key" validate:"required"`
-	// Date of creation (ISO-8601 format).
+	// Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
 	CreatedAt string `json:"createdAt" validate:"required"`
 }
 

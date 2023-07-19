@@ -14,7 +14,7 @@ final class SearchForFacetValuesRequest {
     this.maxFacetHits,
   });
 
-  /// Search parameters as URL-encoded query string.
+  /// Search parameters as a URL-encoded query string.
   @JsonKey(name: r'params')
   final String? params;
 
@@ -22,7 +22,7 @@ final class SearchForFacetValuesRequest {
   @JsonKey(name: r'facetQuery')
   final String? facetQuery;
 
-  /// Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
+  /// Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
   // maximum: 100
   @JsonKey(name: r'maxFacetHits')
   final int? maxFacetHits;

@@ -12,7 +12,7 @@ final class CreatedAtResponse {
     required this.createdAt,
   });
 
-  /// Date of creation (ISO-8601 format).
+  /// Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
   @JsonKey(name: r'createdAt')
   final String createdAt;
 

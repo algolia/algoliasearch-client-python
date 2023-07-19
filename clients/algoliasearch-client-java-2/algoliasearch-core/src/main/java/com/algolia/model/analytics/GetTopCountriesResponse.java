@@ -25,7 +25,7 @@ public class GetTopCountriesResponse {
   }
 
   /**
-   * A list of countries with their count.
+   * Countries
    *
    * @return countries
    */

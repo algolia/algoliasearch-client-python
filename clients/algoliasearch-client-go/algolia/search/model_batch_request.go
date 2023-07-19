@@ -9,7 +9,7 @@ import (
 // BatchRequest struct for BatchRequest
 type BatchRequest struct {
 	Action Action `json:"action" validate:"required"`
-	// arguments to the operation (depends on the type of the operation).
+	// Operation arguments (varies with specified `action`).
 	Body map[string]interface{} `json:"body" validate:"required"`
 }
 

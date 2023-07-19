@@ -7,43 +7,39 @@ import kotlinx.serialization.json.*
 /**
  * ABTest
  *
- * @param abTestID The A/B test ID.
- * @param clickSignificance A/B test significance based on click data. Should be > 0.95 to be considered significant (no matter which variant is winning).
- * @param conversionSignificance A/B test significance based on conversion data. Should be > 0.95 to be considered significant (no matter which variant is winning).
- * @param endAt End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
- * @param updatedAt Update date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
- * @param createdAt Creation date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+ * @param abTestID Unique A/B test ID.
+ * @param clickSignificance [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on click data. A value of 0.95 or over is considered to be _significant_.
+ * @param conversionSignificance End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+ * @param updatedAt Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+ * @param createdAt Creation date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
  * @param name A/B test name.
- * @param status status of the A/B test.
- * @param variants List of A/B test variant.
+ * @param status A/B test status.
+ * @param variants A/B test variants.
  */
 @Serializable
 public data class ABTest(
 
-  /** The A/B test ID. */
+  /** Unique A/B test ID. */
   @SerialName(value = "abTestID") val abTestID: Int,
 
-  /** A/B test significance based on click data. Should be > 0.95 to be considered significant (no matter which variant is winning). */
+  /** [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on click data. A value of 0.95 or over is considered to be _significant_.  */
   @SerialName(value = "clickSignificance") val clickSignificance: Double,
 
-  /** A/B test significance based on conversion data. Should be > 0.95 to be considered significant (no matter which variant is winning). */
-  @SerialName(value = "conversionSignificance") val conversionSignificance: Double,
+  /** End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
+  @SerialName(value = "conversionSignificance") val conversionSignificance: String,
 
-  /** End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ. */
-  @SerialName(value = "endAt") val endAt: String,
-
-  /** Update date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ. */
+  /** Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String,
 
-  /** Creation date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ. */
+  /** Creation date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "createdAt") val createdAt: String,
 
   /** A/B test name. */
   @SerialName(value = "name") val name: String,
 
-  /** status of the A/B test. */
+  /** A/B test status. */
   @SerialName(value = "status") val status: String,
 
-  /** List of A/B test variant. */
+  /** A/B test variants. */
   @SerialName(value = "variants") val variants: List<Variant>,
 )

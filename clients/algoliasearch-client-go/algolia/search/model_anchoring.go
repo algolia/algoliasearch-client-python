@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// Anchoring Whether the pattern parameter must match the beginning or the end of the query string, or both, or none.
+// Anchoring Whether the pattern parameter matches the beginning (`startsWith`) or end (`endsWith`) of the query string, is an exact match (`is`), or a partial match (`contains`).
 type Anchoring string
 
 // List of anchoring

@@ -23,7 +23,7 @@ public class GetSearchesCountResponse {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */
@@ -43,7 +43,7 @@ public class GetSearchesCountResponse {
   }
 
   /**
-   * A list of search events with their date and count.
+   * Search events with their associated dates and hit counts.
    *
    * @return dates
    */

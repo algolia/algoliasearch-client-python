@@ -8,13 +8,13 @@ import kotlinx.serialization.json.*
  * To update an attribute without pushing the entire record, you can use these built-in operations.
  *
  * @param operation
- * @param `value` the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove.
+ * @param `value` Value that corresponds to the operation, for example an `Increment` or `Decrement` step, `Add` or `Remove` value.
  */
 @Serializable
 public data class BuiltInOperation(
 
   @SerialName(value = "_operation") val operation: BuiltInOperationType,
 
-  /** the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove. */
+  /** Value that corresponds to the operation, for example an `Increment` or `Decrement` step, `Add` or `Remove` value. */
   @SerialName(value = "value") val `value`: String,
 ) : AttributeToUpdate

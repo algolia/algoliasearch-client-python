@@ -29,7 +29,7 @@ public class HighlightResultOption {
   }
 
   /**
-   * Markup text with occurrences highlighted.
+   * Markup text with `facetQuery` matches highlighted.
    *
    * @return value
    */

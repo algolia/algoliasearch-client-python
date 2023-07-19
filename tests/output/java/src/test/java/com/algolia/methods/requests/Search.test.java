@@ -1348,9 +1348,10 @@ class SearchClientRequestsTests {
   @DisplayName("listIndices with parameters")
   void listIndicesTest1() {
     int page0 = 8;
+    int hitsPerPage0 = 3;
 
     assertDoesNotThrow(() -> {
-      client.listIndices(page0);
+      client.listIndices(page0, hitsPerPage0);
     });
     EchoResponse req = echo.getLastResponse();
 
@@ -1359,7 +1360,10 @@ class SearchClientRequestsTests {
     assertNull(req.body);
 
     try {
-      Map<String, String> expectedQuery = json.readValue("{\"page\":\"8\"}", new TypeReference<HashMap<String, String>>() {});
+      Map<String, String> expectedQuery = json.readValue(
+        "{\"page\":\"8\",\"hitsPerPage\":\"3\"}",
+        new TypeReference<HashMap<String, String>>() {}
+      );
       Map<String, Object> actualQuery = req.queryParameters;
 
       assertEquals(expectedQuery.size(), actualQuery.size());

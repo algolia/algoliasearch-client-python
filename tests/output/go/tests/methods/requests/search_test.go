@@ -1516,7 +1516,7 @@ func TestSearch_ListIndices(t *testing.T) {
 		{
 			name: "listIndices with parameters",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"page":8}`
+				parametersStr := `{"page":8,"hitsPerPage":3}`
 				req := search.ApiListIndicesRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.ListIndices(req)
@@ -1529,7 +1529,7 @@ func TestSearch_ListIndices(t *testing.T) {
 
 				require.Nil(t, echo.body)
 				queryParams := map[string]string{}
-				require.NoError(t, json.Unmarshal([]byte(`{"page":"8"}`), &queryParams))
+				require.NoError(t, json.Unmarshal([]byte(`{"page":"8","hitsPerPage":"3"}`), &queryParams))
 				for k, v := range queryParams {
 					require.Equal(t, v, echo.query.Get(k))
 				}

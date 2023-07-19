@@ -22,7 +22,7 @@ final class DeleteByParams {
   @JsonKey(name: r'facetFilters')
   final dynamic facetFilters;
 
-  /// Filter the query with numeric, facet and/or tag filters.
+  /// [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the query with numeric, facet, or tag filters.
   @JsonKey(name: r'filters')
   final String? filters;
 
@@ -32,18 +32,18 @@ final class DeleteByParams {
   @JsonKey(name: r'tagFilters')
   final dynamic tagFilters;
 
-  /// Search for entries around a central geolocation, enabling a geo search within a circular area.
+  /// Search for entries [around a central location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point), enabling a geographical search within a circular area.
   @JsonKey(name: r'aroundLatLng')
   final String? aroundLatLng;
 
   @JsonKey(name: r'aroundRadius')
   final dynamic aroundRadius;
 
-  /// Search inside a rectangular area (in geo coordinates).
+  /// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insideBoundingBox')
   final List<double>? insideBoundingBox;
 
-  /// Search inside a polygon (in geo coordinates).
+  /// Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insidePolygon')
   final List<double>? insidePolygon;
 

@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * SearchSynonymsParams
  *
- * @param query The text to search in the index.
+ * @param query Text to search for in an index.
  */
 @Serializable
 public data class SearchSynonymsParams(
 
-  /** The text to search in the index. */
+  /** Text to search for in an index. */
   @SerialName(value = "query") val query: String? = null,
 )

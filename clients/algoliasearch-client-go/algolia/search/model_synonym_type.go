@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// SynonymType Type of the synonym object.
+// SynonymType Synonym type.
 type SynonymType string
 
 // List of SynonymType

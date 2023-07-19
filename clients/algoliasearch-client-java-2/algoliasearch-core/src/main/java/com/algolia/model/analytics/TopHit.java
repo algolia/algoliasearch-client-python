@@ -21,7 +21,7 @@ public class TopHit {
   }
 
   /**
-   * The hit.
+   * Hit.
    *
    * @return hit
    */
@@ -36,7 +36,7 @@ public class TopHit {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */

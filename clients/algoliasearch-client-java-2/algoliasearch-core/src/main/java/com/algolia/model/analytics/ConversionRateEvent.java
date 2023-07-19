@@ -27,7 +27,9 @@ public class ConversionRateEvent {
   }
 
   /**
-   * The click-through rate.
+   * [Click-through rate
+   * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+   * minimum: 0 maximum: 1
    *
    * @return rate
    */
@@ -42,7 +44,8 @@ public class ConversionRateEvent {
   }
 
   /**
-   * The number of tracked search click.
+   * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
+   * parameter is `true`.
    *
    * @return trackedSearchCount
    */
@@ -57,7 +60,7 @@ public class ConversionRateEvent {
   }
 
   /**
-   * The number of converted clicks.
+   * Number of converted clicks.
    *
    * @return conversionCount
    */
@@ -72,7 +75,7 @@ public class ConversionRateEvent {
   }
 
   /**
-   * Date of the event.
+   * Date of the event in the format YYYY-MM-DD.
    *
    * @return date
    */

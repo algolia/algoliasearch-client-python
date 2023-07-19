@@ -24,7 +24,7 @@ public class TopSearch {
   }
 
   /**
-   * The search query.
+   * User query.
    *
    * @return search
    */
@@ -39,7 +39,7 @@ public class TopSearch {
   }
 
   /**
-   * The number of occurrences.
+   * Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
    *
    * @return count
    */
@@ -54,7 +54,7 @@ public class TopSearch {
   }
 
   /**
-   * Number of hits that the search query matched.
+   * Number of hits the search query matched.
    *
    * @return nbHits
    */

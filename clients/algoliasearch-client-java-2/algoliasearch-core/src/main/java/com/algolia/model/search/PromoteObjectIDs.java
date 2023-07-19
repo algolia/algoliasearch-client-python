@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Multiple objectIDs to promote as hits. */
+/** Records to promote. */
 public class PromoteObjectIDs {
 
   @JsonProperty("objectIDs")
@@ -28,7 +28,7 @@ public class PromoteObjectIDs {
   }
 
   /**
-   * Array of unique identifiers of the objects to promote.
+   * Unique identifiers of the records to promote.
    *
    * @return objectIDs
    */
@@ -43,9 +43,9 @@ public class PromoteObjectIDs {
   }
 
   /**
-   * The position to promote the objects to (zero-based). If you pass objectIDs, the objects are
-   * placed at this position as a group. For example, if you pass four objectIDs to position 0, the
-   * objects take the first four positions.
+   * The position to promote the records to. If you pass objectIDs, the records are placed at this
+   * position as a group. For example, if you pronmote four objectIDs to position 0, the records
+   * take the first four positions.
    *
    * @return position
    */

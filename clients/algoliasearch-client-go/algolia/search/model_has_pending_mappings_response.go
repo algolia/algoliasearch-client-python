@@ -8,9 +8,9 @@ import (
 
 // HasPendingMappingsResponse struct for HasPendingMappingsResponse
 type HasPendingMappingsResponse struct {
-	// If there is any clusters with pending mapping state.
+	// Indicates whether there are clusters undergoing migration, creation, or deletion.
 	Pending bool `json:"pending" validate:"required"`
-	// Describe cluster pending (migrating, creating, deleting) mapping state.
+	// Cluster pending mapping state: migrating, creating, deleting.
 	Clusters *map[string][]string `json:"clusters,omitempty"`
 }
 

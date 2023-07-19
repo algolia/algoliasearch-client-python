@@ -39,7 +39,7 @@ public class BaseTrendingRequest {
   }
 
   /**
-   * The facet name to use for trending models.
+   * Facet name for trending models.
    *
    * @return facetName
    */
@@ -54,7 +54,7 @@ public class BaseTrendingRequest {
   }
 
   /**
-   * The facet value to use for trending models.
+   * Facet value for trending models.
    *
    * @return facetValue
    */

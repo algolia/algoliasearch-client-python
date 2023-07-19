@@ -24,7 +24,7 @@ public class GetTopFiltersNoResultsValue {
   }
 
   /**
-   * The attribute.
+   * Attribute name.
    *
    * @return attribute
    */
@@ -39,7 +39,7 @@ public class GetTopFiltersNoResultsValue {
   }
 
   /**
-   * The operator.
+   * Operator.
    *
    * @return operator
    */
@@ -54,7 +54,7 @@ public class GetTopFiltersNoResultsValue {
   }
 
   /**
-   * The value of the attribute.
+   * Attribute value.
    *
    * @return value
    */

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** The trending model to use. */
+/** Trending model. */
 public enum TrendingModels {
   FACETS("trending-facets"),
 

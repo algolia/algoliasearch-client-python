@@ -20,22 +20,22 @@ final class SynonymHit {
     this.replacements,
   });
 
-  /// Unique identifier of the synonym object to be created or updated.
+  /// Unique identifier of a synonym object.
   @JsonKey(name: r'objectID')
   final String objectID;
 
   @JsonKey(name: r'type')
   final SynonymType type;
 
-  /// Words or phrases to be considered equivalent.
+  /// Words or phrases considered equivalent.
   @JsonKey(name: r'synonyms')
   final List<String>? synonyms;
 
-  /// Word or phrase to appear in query strings (for onewaysynonym).
+  /// Word or phrase to appear in query strings (for [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)).
   @JsonKey(name: r'input')
   final String? input;
 
-  /// Word or phrase to appear in query strings (for altcorrection1 and altcorrection2).
+  /// Word or phrase to appear in query strings (for [`altcorrection1` and `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)).
   @JsonKey(name: r'word')
   final String? word;
 
@@ -43,11 +43,11 @@ final class SynonymHit {
   @JsonKey(name: r'corrections')
   final List<String>? corrections;
 
-  /// Token to be put inside records.
+  /// [Placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/) to be put inside records.
   @JsonKey(name: r'placeholder')
   final String? placeholder;
 
-  /// List of query words that will match the token.
+  /// Query words that will match the [placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/).
   @JsonKey(name: r'replacements')
   final List<String>? replacements;
 

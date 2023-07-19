@@ -14,15 +14,15 @@ final class StandardEntries {
     this.compounds,
   });
 
-  /// Language ISO code.
+  /// Key-value pair of a language ISO code and a boolean value.
   @JsonKey(name: r'plurals')
   final Map<String, bool>? plurals;
 
-  /// Language ISO code.
+  /// Key-value pair of a language ISO code and a boolean value.
   @JsonKey(name: r'stopwords')
   final Map<String, bool>? stopwords;
 
-  /// Language ISO code.
+  /// Key-value pair of a language ISO code and a boolean value.
   @JsonKey(name: r'compounds')
   final Map<String, bool>? compounds;
 

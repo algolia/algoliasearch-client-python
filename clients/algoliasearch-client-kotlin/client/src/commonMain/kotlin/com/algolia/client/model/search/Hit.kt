@@ -10,7 +10,7 @@ import kotlinx.serialization.json.*
 /**
  * A single hit.
  *
- * @param objectID Unique identifier of the object.
+ * @param objectID Unique object identifier.
  * @param highlightResult Show highlighted section and words matched on a query.
  * @param snippetResult Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
  * @param rankingInfo
@@ -19,7 +19,7 @@ import kotlinx.serialization.json.*
 @Serializable(HitSerializer::class)
 public data class Hit(
 
-  /** Unique identifier of the object. */
+  /** Unique object identifier. */
   val objectID: String,
 
   /** Show highlighted section and words matched on a query. */

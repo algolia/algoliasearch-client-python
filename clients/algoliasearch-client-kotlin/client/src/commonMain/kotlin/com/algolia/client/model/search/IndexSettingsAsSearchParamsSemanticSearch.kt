@@ -5,13 +5,13 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The settings relevant for configuration of the semantic search engine. These settings are only used when the mode is set to 'neuralSearch'.
+ * Settings for the semantic search part of NeuralSearch. Only used when `mode` is _neuralSearch_.
  *
- * @param eventSources When null, the current index / replica group will be used as the event source.
+ * @param eventSources Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.
  */
 @Serializable
 public data class IndexSettingsAsSearchParamsSemanticSearch(
 
-  /** When null, the current index / replica group will be used as the event source. */
+  /** Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source. */
   @SerialName(value = "eventSources") val eventSources: List<String>? = null,
 )

@@ -127,6 +127,28 @@ class RecommendTest extends TestCase implements HttpClientInterface
     }
 
     /**
+    * Test case for DeleteRecommendRule
+    * deleteRecommendRule
+    */
+    public function testDeleteRecommendRule0()
+    {
+        $client = $this->getClient();
+        $client->deleteRecommendRule(
+            "indexName",
+            "related-products",
+            "objectID",
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/1/indexes/indexName/related-products/recommend/rules/objectID",
+                "method" => "DELETE",
+                "body" => null,
+            ],
+        ]);
+    }
+
+    /**
     * Test case for Get
     * allow get method for a custom path with minimal parameters
     */
@@ -166,6 +188,50 @@ class RecommendTest extends TestCase implements HttpClientInterface
                 "method" => "GET",
                 "body" => null,
                 "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
+            ],
+        ]);
+    }
+
+    /**
+    * Test case for GetRecommendRule
+    * getRecommendRule
+    */
+    public function testGetRecommendRule0()
+    {
+        $client = $this->getClient();
+        $client->getRecommendRule(
+            "indexName",
+            "related-products",
+            "objectID",
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/1/indexes/indexName/related-products/recommend/rules/objectID",
+                "method" => "GET",
+                "body" => null,
+            ],
+        ]);
+    }
+
+    /**
+    * Test case for GetRecommendStatus
+    * getRecommendStatus
+    */
+    public function testGetRecommendStatus0()
+    {
+        $client = $this->getClient();
+        $client->getRecommendStatus(
+            "indexName",
+            "related-products",
+            12345,
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/1/indexes/indexName/related-products/task/12345",
+                "method" => "GET",
+                "body" => null,
             ],
         ]);
     }
@@ -907,6 +973,27 @@ class RecommendTest extends TestCase implements HttpClientInterface
                 "method" => "PUT",
                 "body" => json_decode("{\"body\":\"parameters\"}"),
                 "queryParameters" => json_decode("{\"query\":\"parameters\"}", true),
+            ],
+        ]);
+    }
+
+    /**
+    * Test case for SearchRecommendRules
+    * searchRecommendRules
+    */
+    public function testSearchRecommendRules0()
+    {
+        $client = $this->getClient();
+        $client->searchRecommendRules(
+            "indexName",
+            "related-products",
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/1/indexes/indexName/related-products/recommend/rules/search",
+                "method" => "POST",
+                "body" => json_decode("{}"),
             ],
         ]);
     }

@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** The source. */
+/** Source. */
 public class Source {
 
   @JsonProperty("source")
@@ -21,7 +21,7 @@ public class Source {
   }
 
   /**
-   * The IP range of the source.
+   * IP address range of the source.
    *
    * @return source
    */
@@ -36,7 +36,7 @@ public class Source {
   }
 
   /**
-   * The description of the source.
+   * Source description.
    *
    * @return description
    */

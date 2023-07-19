@@ -81,6 +81,39 @@ func TestRecommend_Del(t *testing.T) {
 	}
 }
 
+func TestRecommend_DeleteRecommendRule(t *testing.T) {
+	client, echo := createRecommendClient()
+
+	tests := []struct {
+		name     string
+		testFunc func(t *testing.T)
+	}{
+		{
+			name: "deleteRecommendRule",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"indexName":"indexName","model":"related-products","objectID":"objectID"}`
+				req := recommend.ApiDeleteRecommendRuleRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.DeleteRecommendRule(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/indexes/indexName/related-products/recommend/rules/objectID")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "DELETE", echo.method)
+
+				require.Nil(t, echo.body)
+			},
+		},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			test.testFunc(t)
+		})
+	}
+}
+
 func TestRecommend_Get(t *testing.T) {
 	client, echo := createRecommendClient()
 
@@ -125,6 +158,72 @@ func TestRecommend_Get(t *testing.T) {
 				for k, v := range queryParams {
 					require.Equal(t, v, echo.query.Get(k))
 				}
+			},
+		},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			test.testFunc(t)
+		})
+	}
+}
+
+func TestRecommend_GetRecommendRule(t *testing.T) {
+	client, echo := createRecommendClient()
+
+	tests := []struct {
+		name     string
+		testFunc func(t *testing.T)
+	}{
+		{
+			name: "getRecommendRule",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"indexName":"indexName","model":"related-products","objectID":"objectID"}`
+				req := recommend.ApiGetRecommendRuleRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.GetRecommendRule(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/indexes/indexName/related-products/recommend/rules/objectID")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "GET", echo.method)
+
+				require.Nil(t, echo.body)
+			},
+		},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			test.testFunc(t)
+		})
+	}
+}
+
+func TestRecommend_GetRecommendStatus(t *testing.T) {
+	client, echo := createRecommendClient()
+
+	tests := []struct {
+		name     string
+		testFunc func(t *testing.T)
+	}{
+		{
+			name: "getRecommendStatus",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"indexName":"indexName","model":"related-products","taskID":12345}`
+				req := recommend.ApiGetRecommendStatusRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.GetRecommendStatus(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/indexes/indexName/related-products/task/12345")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "GET", echo.method)
+
+				require.Nil(t, echo.body)
 			},
 		},
 	}
@@ -652,6 +751,40 @@ func TestRecommend_Put(t *testing.T) {
 				for k, v := range queryParams {
 					require.Equal(t, v, echo.query.Get(k))
 				}
+			},
+		},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			test.testFunc(t)
+		})
+	}
+}
+
+func TestRecommend_SearchRecommendRules(t *testing.T) {
+	client, echo := createRecommendClient()
+
+	tests := []struct {
+		name     string
+		testFunc func(t *testing.T)
+	}{
+		{
+			name: "searchRecommendRules",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"indexName":"indexName","model":"related-products"}`
+				req := recommend.ApiSearchRecommendRulesRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.SearchRecommendRules(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/indexes/indexName/related-products/recommend/rules/search")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "POST", echo.method)
+
+				ja := jsonassert.New(t)
+				ja.Assertf(*echo.body, `{}`)
 			},
 		},
 	}

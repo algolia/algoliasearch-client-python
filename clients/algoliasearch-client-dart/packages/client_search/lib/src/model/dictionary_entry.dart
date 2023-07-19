@@ -20,23 +20,23 @@ final class DictionaryEntry extends DelegatingMap<String, dynamic> {
     Map<String, dynamic> additionalProperties = const {},
   }) : super(additionalProperties);
 
-  /// Unique identifier of the object.
+  /// Unique identifier for a dictionary object.
   @JsonKey(name: r'objectID')
   final String objectID;
 
-  /// Language ISO code supported by the dictionary (e.g., \"en\" for English).
+  /// [Supported language ISO code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
   @JsonKey(name: r'language')
   final String language;
 
-  /// The word of the dictionary entry.
+  /// Dictionary entry word. Usage depends on the type of dictionary entry. **`stopwordEntry`** The stop word you want to add or update. If the entry already exists in Algolia's standard dictionary, you can override its behavior by adding it to the custom dictionary and setting its `state` to `disabled`. **`compoundEntry`** When `decomposition` is empty: adds `word` as a compound atom. For example, atom “kino” decomposes the query “kopfkino” into \"kopf\" and \"kino\". When `decomposition` isn't empty: creates a decomposition exception. For example, when decomposition is set to the [\"hund\", \"hutte\"] exception, \"hundehutte\" decomposes into “hund” and “hutte”, discarding the linking \"e\".
   @JsonKey(name: r'word')
   final String? word;
 
-  /// The words of the dictionary entry.
+  /// Compound dictionary [word declensions](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/). If the entry already exists in Algolia's standard dictionary, you can override its behavior by adding it to the custom dictionary and setting its `state` to `disabled`.
   @JsonKey(name: r'words')
   final List<String>? words;
 
-  /// A decomposition of the word of the dictionary entry.
+  /// For compound entries, governs the behavior of the `word` parameter.
   @JsonKey(name: r'decomposition')
   final List<String>? decomposition;
 

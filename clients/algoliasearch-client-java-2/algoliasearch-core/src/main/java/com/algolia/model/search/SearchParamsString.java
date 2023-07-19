@@ -18,7 +18,7 @@ public class SearchParamsString {
   }
 
   /**
-   * Search parameters as URL-encoded query string.
+   * Search parameters as a URL-encoded query string.
    *
    * @return params
    */

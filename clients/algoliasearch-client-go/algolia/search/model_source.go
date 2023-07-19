@@ -6,11 +6,11 @@ import (
 	"fmt"
 )
 
-// Source The source.
+// Source Source.
 type Source struct {
-	// The IP range of the source.
+	// IP address range of the source.
 	Source string `json:"source" validate:"required"`
-	// The description of the source.
+	// Source description.
 	Description *string `json:"description,omitempty"`
 }
 

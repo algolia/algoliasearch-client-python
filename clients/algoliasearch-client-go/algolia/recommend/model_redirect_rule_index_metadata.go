@@ -14,7 +14,7 @@ type RedirectRuleIndexMetadata struct {
 	Dest string `json:"dest" validate:"required"`
 	// Reason for the redirect rule.
 	Reason string `json:"reason" validate:"required"`
-	// Status for the redirect rule.
+	// Redirect rule status.
 	Succeed bool                          `json:"succeed" validate:"required"`
 	Data    RedirectRuleIndexMetadataData `json:"data" validate:"required"`
 }

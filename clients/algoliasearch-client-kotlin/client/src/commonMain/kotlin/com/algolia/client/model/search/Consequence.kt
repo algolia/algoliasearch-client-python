@@ -5,12 +5,12 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Consequence of the Rule.
+ * [Consequences](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#consequences) of a rule.
  *
  * @param params
- * @param promote Objects to promote as hits.
- * @param filterPromotes Only use in combination with the promote consequence. When true, promoted results will be restricted to match the filters of the current search. When false, the promoted results will show up regardless of the filters.
- * @param hide Objects to hide from hits. Each object must contain an objectID field. By default, you can hide up to 50 items per rule.
+ * @param promote Records to promote.
+ * @param filterPromotes Only use in combination with the `promote` consequence. When `true`, promoted results will be restricted to match the filters of the current search. When `false`, the promoted results will show up regardless of the filters.
+ * @param hide Records to hide. By default, you can hide up to 50 records per rule.
  * @param userData Custom JSON object that will be appended to the userData array in the response. This object isn't interpreted by the API. It's limited to 1kB of minified JSON.
  */
 @Serializable
@@ -18,13 +18,13 @@ public data class Consequence(
 
   @SerialName(value = "params") val params: ConsequenceParams? = null,
 
-  /** Objects to promote as hits. */
+  /** Records to promote. */
   @SerialName(value = "promote") val promote: List<Promote>? = null,
 
-  /** Only use in combination with the promote consequence. When true, promoted results will be restricted to match the filters of the current search. When false, the promoted results will show up regardless of the filters. */
+  /** Only use in combination with the `promote` consequence. When `true`, promoted results will be restricted to match the filters of the current search. When `false`, the promoted results will show up regardless of the filters. */
   @SerialName(value = "filterPromotes") val filterPromotes: Boolean? = null,
 
-  /** Objects to hide from hits. Each object must contain an objectID field. By default, you can hide up to 50 items per rule. */
+  /** Records to hide. By default, you can hide up to 50 records per rule. */
   @SerialName(value = "hide") val hide: List<ConsequenceHide>? = null,
 
   /** Custom JSON object that will be appended to the userData array in the response. This object isn't interpreted by the API. It's limited to 1kB of minified JSON. */

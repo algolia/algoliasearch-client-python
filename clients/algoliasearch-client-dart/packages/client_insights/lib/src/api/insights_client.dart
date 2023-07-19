@@ -51,8 +51,8 @@ final class InsightsClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
-  /// * [parameters] - Query parameters to be applied to the current query.
+  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] - Query parameters to apply to the current query.
   /// * [requestOptions] additional request configuration.
   Future<Object> del({
     required String path,
@@ -85,8 +85,8 @@ final class InsightsClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
-  /// * [parameters] - Query parameters to be applied to the current query.
+  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] - Query parameters to apply to the current query.
   /// * [requestOptions] additional request configuration.
   Future<Object> get({
     required String path,
@@ -119,9 +119,9 @@ final class InsightsClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
-  /// * [parameters] - Query parameters to be applied to the current query.
-  /// * [body] - The parameters to send with the custom request.
+  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] - Query parameters to apply to the current query.
+  /// * [body] - Parameters to send with the custom request.
   /// * [requestOptions] additional request configuration.
   Future<Object> post({
     required String path,
@@ -182,9 +182,9 @@ final class InsightsClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - The path of the API endpoint to target, anything after the /1 needs to be specified.
-  /// * [parameters] - Query parameters to be applied to the current query.
-  /// * [body] - The parameters to send with the custom request.
+  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] - Query parameters to apply to the current query.
+  /// * [body] - Parameters to send with the custom request.
   /// * [requestOptions] additional request configuration.
   Future<Object> put({
     required String path,

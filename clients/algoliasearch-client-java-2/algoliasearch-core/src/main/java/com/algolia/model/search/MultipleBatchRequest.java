@@ -39,7 +39,7 @@ public class MultipleBatchRequest {
   }
 
   /**
-   * arguments to the operation (depends on the type of the operation).
+   * Operation arguments (varies with specified `action`).
    *
    * @return body
    */

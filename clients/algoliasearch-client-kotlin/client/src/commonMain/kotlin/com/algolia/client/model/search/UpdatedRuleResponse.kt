@@ -7,19 +7,19 @@ import kotlinx.serialization.json.*
 /**
  * UpdatedRuleResponse
  *
- * @param objectID Unique identifier of the object.
- * @param updatedAt Date of last update (ISO-8601 format).
- * @param taskID taskID of the task to wait for.
+ * @param objectID Unique object identifier.
+ * @param updatedAt Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
+ * @param taskID Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.
  */
 @Serializable
 public data class UpdatedRuleResponse(
 
-  /** Unique identifier of the object. */
+  /** Unique object identifier. */
   @SerialName(value = "objectID") val objectID: String,
 
-  /** Date of last update (ISO-8601 format). */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String,
 
-  /** taskID of the task to wait for. */
+  /** Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.  */
   @SerialName(value = "taskID") val taskID: Long,
 )

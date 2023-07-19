@@ -29,7 +29,9 @@ public class GetNoResultsRateResponse {
   }
 
   /**
-   * The click-through rate.
+   * [Click-through rate
+   * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+   * minimum: 0 maximum: 1
    *
    * @return rate
    */
@@ -44,7 +46,7 @@ public class GetNoResultsRateResponse {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */
@@ -59,7 +61,7 @@ public class GetNoResultsRateResponse {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return noResultCount
    */
@@ -79,7 +81,7 @@ public class GetNoResultsRateResponse {
   }
 
   /**
-   * A list of searches without results with their date, rate and counts.
+   * Overall count of searches without results plus a daily breakdown.
    *
    * @return dates
    */

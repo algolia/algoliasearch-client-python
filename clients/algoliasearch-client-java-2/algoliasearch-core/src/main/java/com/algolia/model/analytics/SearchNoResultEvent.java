@@ -24,7 +24,7 @@ public class SearchNoResultEvent {
   }
 
   /**
-   * The search query.
+   * User query.
    *
    * @return search
    */
@@ -39,7 +39,7 @@ public class SearchNoResultEvent {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */
@@ -54,7 +54,7 @@ public class SearchNoResultEvent {
   }
 
   /**
-   * Number of hits that the search query matched.
+   * Number of hits the search query matched.
    *
    * @return nbHits
    */

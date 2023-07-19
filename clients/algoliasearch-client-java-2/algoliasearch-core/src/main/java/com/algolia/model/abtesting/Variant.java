@@ -57,7 +57,8 @@ public class Variant {
   }
 
   /**
-   * Average click position for the variant.
+   * Variant's [average click
+   * position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position).
    *
    * @return averageClickPosition
    */
@@ -72,7 +73,7 @@ public class Variant {
   }
 
   /**
-   * Distinct click count for the variant.
+   * Number of click events for this variant.
    *
    * @return clickCount
    */
@@ -87,7 +88,8 @@ public class Variant {
   }
 
   /**
-   * Click through rate for the variant.
+   * Variant's [click-through
+   * rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
    *
    * @return clickThroughRate
    */
@@ -102,7 +104,7 @@ public class Variant {
   }
 
   /**
-   * Distinct conversion count for the variant.
+   * Number of click events for this variant.
    *
    * @return conversionCount
    */
@@ -117,7 +119,8 @@ public class Variant {
   }
 
   /**
-   * Conversion rate for the variant.
+   * Variant's [conversion
+   * rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
    *
    * @return conversionRate
    */
@@ -132,7 +135,7 @@ public class Variant {
   }
 
   /**
-   * The A/B test description.
+   * A/B test description.
    *
    * @return description
    */
@@ -147,7 +150,7 @@ public class Variant {
   }
 
   /**
-   * The index performing the A/B test.
+   * A/B test index.
    *
    * @return index
    */
@@ -162,7 +165,9 @@ public class Variant {
   }
 
   /**
-   * The number of occurrences.
+   * Number of [searches without
+   * results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results)
+   * for that variant.
    *
    * @return noResultCount
    */
@@ -177,8 +182,10 @@ public class Variant {
   }
 
   /**
-   * Count of the tracked searches attributed to outlier traffic that were removed from the A/B
-   * test.
+   * Number of tracked searches attributed to [outlier
+   * traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
+   * that were removed from the A/B test. A _tracked_ search is a search request where the
+   * `clickAnalytics` parameter is `true`.
    *
    * @return outlierTrackedSearchesCount
    */
@@ -193,7 +200,9 @@ public class Variant {
   }
 
   /**
-   * Count of users attributed to outlier traffic that were removed from the A/B test.
+   * Number of users attributed to [outlier
+   * traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
+   * that were removed from the A/B test.
    *
    * @return outlierUsersCount
    */
@@ -208,7 +217,7 @@ public class Variant {
   }
 
   /**
-   * The number of search during the A/B test.
+   * Number of searches carried out during the A/B test.
    *
    * @return searchCount
    */
@@ -223,7 +232,8 @@ public class Variant {
   }
 
   /**
-   * The number of tracked search click.
+   * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
+   * parameter is `true`.
    *
    * @return trackedSearchCount
    */
@@ -238,7 +248,7 @@ public class Variant {
   }
 
   /**
-   * The traffic percentage for the A/B test.
+   * A/B test traffic percentage.
    *
    * @return trafficPercentage
    */
@@ -253,7 +263,7 @@ public class Variant {
   }
 
   /**
-   * The number of user during the A/B test.
+   * Number of users during the A/B test.
    *
    * @return userCount
    */

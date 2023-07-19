@@ -8,17 +8,17 @@ import kotlinx.serialization.json.*
  * OperationIndexParams
  *
  * @param operation
- * @param destination The Algolia index name.
- * @param scope Scope of the data to copy. When absent, a full copy is performed. When present, only the selected scopes are copied.
+ * @param destination Algolia index name.
+ * @param scope **This only applies to the _copy_ operation.**  If you omit `scope`, the copy command copies all records, settings, synonyms, and rules.  If you specify `scope`, only the specified scopes are copied.
  */
 @Serializable
 public data class OperationIndexParams(
 
   @SerialName(value = "operation") val operation: OperationType,
 
-  /** The Algolia index name. */
+  /** Algolia index name. */
   @SerialName(value = "destination") val destination: String,
 
-  /** Scope of the data to copy. When absent, a full copy is performed. When present, only the selected scopes are copied. */
+  /** **This only applies to the _copy_ operation.**  If you omit `scope`, the copy command copies all records, settings, synonyms, and rules.  If you specify `scope`, only the specified scopes are copied. */
   @SerialName(value = "scope") val scope: List<ScopeType>? = null,
 )

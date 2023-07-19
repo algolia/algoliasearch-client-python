@@ -6,11 +6,11 @@ import (
 	"fmt"
 )
 
-// PromoteObjectID Single objectID to promote as hits.
+// PromoteObjectID Record to promote.
 type PromoteObjectID struct {
-	// Unique identifier of the object to promote.
+	// Unique identifier of the record to promote.
 	ObjectID string `json:"objectID" validate:"required"`
-	// The position to promote the objects to (zero-based). If you pass objectIDs, the objects are placed at this position as a group. For example, if you pass four objectIDs to position 0, the objects take the first four positions.
+	// The position to promote the records to. If you pass objectIDs, the records are placed at this position as a group. For example, if you pronmote four objectIDs to position 0, the records take the first four positions.
 	Position int32 `json:"position" validate:"required"`
 }
 

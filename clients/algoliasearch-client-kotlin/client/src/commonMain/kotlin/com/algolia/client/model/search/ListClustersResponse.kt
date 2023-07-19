@@ -5,13 +5,13 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Array of clusters.
+ * Clusters.
  *
- * @param topUsers Mapping of cluster names to top users.
+ * @param topUsers Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values.
  */
 @Serializable
 public data class ListClustersResponse(
 
-  /** Mapping of cluster names to top users. */
+  /** Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values. */
   @SerialName(value = "topUsers") val topUsers: List<String>,
 )

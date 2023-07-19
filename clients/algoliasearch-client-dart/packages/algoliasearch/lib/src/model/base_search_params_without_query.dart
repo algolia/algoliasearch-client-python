@@ -44,11 +44,11 @@ final class BaseSearchParamsWithoutQuery {
     this.reRankingApplyFilter,
   });
 
-  /// Overrides the query parameter and performs a more generic search that can be used to find \"similar\" results.
+  /// Overrides the query parameter and performs a more generic search.
   @JsonKey(name: r'similarQuery')
   final String? similarQuery;
 
-  /// Filter the query with numeric, facet and/or tag filters.
+  /// [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the query with numeric, facet, or tag filters.
   @JsonKey(name: r'filters')
   final String? filters;
 
@@ -64,19 +64,19 @@ final class BaseSearchParamsWithoutQuery {
   @JsonKey(name: r'tagFilters')
   final dynamic tagFilters;
 
-  /// Determines how to calculate the total score for filtering.
+  /// Determines how to calculate [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores). If `false`, maximum score is kept. If `true`, score is summed.
   @JsonKey(name: r'sumOrFiltersScores')
   final bool? sumOrFiltersScores;
 
-  /// Retrieve facets and their facet values.
+  /// Returns [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts), their facet values, and the number of matching facet values.
   @JsonKey(name: r'facets')
   final List<String>? facets;
 
-  /// Maximum number of facet values to return for each facet during a regular search.
+  /// Maximum number of facet values to return for each facet.
   @JsonKey(name: r'maxValuesPerFacet')
   final int? maxValuesPerFacet;
 
-  /// Force faceting to be applied after de-duplication (via the Distinct setting).
+  /// Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control.
   @JsonKey(name: r'facetingAfterDistinct')
   final bool? facetingAfterDistinct;
 
@@ -84,77 +84,77 @@ final class BaseSearchParamsWithoutQuery {
   @JsonKey(name: r'sortFacetValuesBy')
   final String? sortFacetValuesBy;
 
-  /// Specify the page to retrieve.
+  /// Page to retrieve (the first page is `0`, not `1`).
   @JsonKey(name: r'page')
   final int? page;
 
-  /// Specify the offset of the first hit to return.
+  /// Specifies the offset of the first hit to return. > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
   @JsonKey(name: r'offset')
   final int? offset;
 
-  /// Set the number of hits to retrieve (used only with offset).
+  /// Sets the number of hits to retrieve (for use with `offset`). > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
   // minimum: 1
   // maximum: 1000
   @JsonKey(name: r'length')
   final int? length;
 
-  /// Search for entries around a central geolocation, enabling a geo search within a circular area.
+  /// Search for entries [around a central location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point), enabling a geographical search within a circular area.
   @JsonKey(name: r'aroundLatLng')
   final String? aroundLatLng;
 
-  /// Search for entries around a given location automatically computed from the requester's IP address.
+  /// Search for entries around a location. The location is automatically computed from the requester's IP address.
   @JsonKey(name: r'aroundLatLngViaIP')
   final bool? aroundLatLngViaIP;
 
   @JsonKey(name: r'aroundRadius')
   final dynamic aroundRadius;
 
-  /// Precision of geo search (in meters), to add grouping by geo location to the ranking formula.
+  /// Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
   @JsonKey(name: r'aroundPrecision')
   final int? aroundPrecision;
 
-  /// Minimum radius (in meters) used for a geo search when aroundRadius is not set.
+  /// Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
   // minimum: 1
   @JsonKey(name: r'minimumAroundRadius')
   final int? minimumAroundRadius;
 
-  /// Search inside a rectangular area (in geo coordinates).
+  /// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insideBoundingBox')
   final List<double>? insideBoundingBox;
 
-  /// Search inside a polygon (in geo coordinates).
+  /// Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insidePolygon')
   final List<double>? insidePolygon;
 
-  /// This parameter changes the default values of certain parameters and settings that work best for a natural language query, such as ignorePlurals, removeStopWords, removeWordsIfNoResults, analyticsTags and ruleContexts. These parameters and settings work well together when the query is formatted in natural language instead of keywords, for example when your user performs a voice search.
+  /// Changes the default values of parameters that work best for a natural language query, such as `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and `ruleContexts`. These parameters work well together when the query consists of fuller natural language strings instead of keywords, for example when processing voice search queries.
   @JsonKey(name: r'naturalLanguages')
   final List<String>? naturalLanguages;
 
-  /// Enables contextual rules.
+  /// Assigns [rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context) to search queries.
   @JsonKey(name: r'ruleContexts')
   final List<String>? ruleContexts;
 
-  /// Define the impact of the Personalization feature.
+  /// Defines how much [Personalization affects results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
   @JsonKey(name: r'personalizationImpact')
   final int? personalizationImpact;
 
-  /// Associates a certain user token with the current search.
+  /// Associates a [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current search.
   @JsonKey(name: r'userToken')
   final String? userToken;
 
-  /// Retrieve detailed ranking information.
+  /// Incidates whether the search response includes [detailed ranking information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
   @JsonKey(name: r'getRankingInfo')
   final bool? getRankingInfo;
 
-  /// Enable the Click Analytics feature.
+  /// Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
   @JsonKey(name: r'clickAnalytics')
   final bool? clickAnalytics;
 
-  /// Whether the current query will be taken into account in the Analytics.
+  /// Indicates whether this query will be included in [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
   @JsonKey(name: r'analytics')
   final bool? analytics;
 
-  /// List of tags to apply to the query for analytics purposes.
+  /// Tags to apply to the query for [segmenting analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
   @JsonKey(name: r'analyticsTags')
   final List<String>? analyticsTags;
 
@@ -162,11 +162,11 @@ final class BaseSearchParamsWithoutQuery {
   @JsonKey(name: r'percentileComputation')
   final bool? percentileComputation;
 
-  /// Whether this search should participate in running AB tests.
+  /// Incidates whether this search will be considered in A/B testing.
   @JsonKey(name: r'enableABTest')
   final bool? enableABTest;
 
-  /// Whether this search should use AI Re-Ranking.
+  /// Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
   @JsonKey(name: r'enableReRanking')
   final bool? enableReRanking;
 

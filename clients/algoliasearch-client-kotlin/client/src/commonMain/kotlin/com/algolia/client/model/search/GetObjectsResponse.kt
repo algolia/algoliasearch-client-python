@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * GetObjectsResponse
  *
- * @param results List of results fetched.
+ * @param results Retrieved results.
  */
 @Serializable
 public data class GetObjectsResponse(
 
-  /** List of results fetched. */
+  /** Retrieved results. */
   @SerialName(value = "results") val results: List<JsonObject>,
 )

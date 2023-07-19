@@ -41,7 +41,7 @@ public class SynonymHit {
   }
 
   /**
-   * Unique identifier of the synonym object to be created or updated.
+   * Unique identifier of a synonym object.
    *
    * @return objectID
    */
@@ -79,7 +79,7 @@ public class SynonymHit {
   }
 
   /**
-   * Words or phrases to be considered equivalent.
+   * Words or phrases considered equivalent.
    *
    * @return synonyms
    */
@@ -94,7 +94,8 @@ public class SynonymHit {
   }
 
   /**
-   * Word or phrase to appear in query strings (for onewaysynonym).
+   * Word or phrase to appear in query strings (for
+   * [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)).
    *
    * @return input
    */
@@ -109,7 +110,8 @@ public class SynonymHit {
   }
 
   /**
-   * Word or phrase to appear in query strings (for altcorrection1 and altcorrection2).
+   * Word or phrase to appear in query strings (for [`altcorrection1` and
+   * `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)).
    *
    * @return word
    */
@@ -147,7 +149,9 @@ public class SynonymHit {
   }
 
   /**
-   * Token to be put inside records.
+   * [Placeholder
+   * token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/)
+   * to be put inside records.
    *
    * @return placeholder
    */
@@ -170,7 +174,8 @@ public class SynonymHit {
   }
 
   /**
-   * List of query words that will match the token.
+   * Query words that will match the [placeholder
+   * token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/).
    *
    * @return replacements
    */

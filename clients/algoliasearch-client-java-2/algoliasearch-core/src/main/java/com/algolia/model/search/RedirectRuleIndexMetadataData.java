@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** Data for the redirect rule. */
+/** Redirect rule data. */
 public class RedirectRuleIndexMetadataData {
 
   @JsonProperty("ruleObjectID")

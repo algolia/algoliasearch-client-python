@@ -34,8 +34,8 @@ public class RecommendClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun del(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -54,10 +54,31 @@ public class RecommendClient(
   }
 
   /**
+   * Delete a Recommend rule.
+   * Delete a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+   * @param indexName Index on which to perform the request.
+   * @param model [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+   * @param objectID Unique record (object) identifier.
+   * @param requestOptions additional request configuration.
+   */
+  public suspend fun deleteRecommendRule(indexName: String, model: RecommendModels, objectID: String, requestOptions: RequestOptions? = null): DeletedAtResponse {
+    require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `deleteRecommendRule`." }
+    require(objectID.isNotBlank()) { "Parameter `objectID` is required when calling `deleteRecommendRule`." }
+    val requestConfig = RequestConfig(
+      method = RequestMethod.DELETE,
+      path = listOf("1", "indexes", "$indexName", "$model", "recommend", "rules", "$objectID"),
+    )
+    return requester.execute(
+      requestConfig = requestConfig,
+      requestOptions = requestOptions,
+    )
+  }
+
+  /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun get(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -76,8 +97,49 @@ public class RecommendClient(
   }
 
   /**
-   * Get results.
-   * Returns recommendations or trending results, for a specific model and `objectID`.
+   * Get a Recommend rule.
+   * Return a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+   * @param indexName Index on which to perform the request.
+   * @param model [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+   * @param objectID Unique record (object) identifier.
+   * @param requestOptions additional request configuration.
+   */
+  public suspend fun getRecommendRule(indexName: String, model: RecommendModels, objectID: String, requestOptions: RequestOptions? = null): RuleResponse {
+    require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `getRecommendRule`." }
+    require(objectID.isNotBlank()) { "Parameter `objectID` is required when calling `getRecommendRule`." }
+    val requestConfig = RequestConfig(
+      method = RequestMethod.GET,
+      path = listOf("1", "indexes", "$indexName", "$model", "recommend", "rules", "$objectID"),
+    )
+    return requester.execute(
+      requestConfig = requestConfig,
+      requestOptions = requestOptions,
+    )
+  }
+
+  /**
+   * Get a Recommend task's status.
+   * Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+   * @param indexName Index on which to perform the request.
+   * @param model [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+   * @param taskID Unique identifier of a task. Numeric value (up to 64bits).
+   * @param requestOptions additional request configuration.
+   */
+  public suspend fun getRecommendStatus(indexName: String, model: RecommendModels, taskID: Long, requestOptions: RequestOptions? = null): GetRecommendTaskResponse {
+    require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `getRecommendStatus`." }
+    val requestConfig = RequestConfig(
+      method = RequestMethod.GET,
+      path = listOf("1", "indexes", "$indexName", "$model", "task", "$taskID"),
+    )
+    return requester.execute(
+      requestConfig = requestConfig,
+      requestOptions = requestOptions,
+    )
+  }
+
+  /**
+   * Get recommendations and trending items.
+   * Returns results from either recommendation or trending models:    - **Recommendations** are provided by the [Related Products](https://www.algolia.com/doc/guides/algolia-recommend/overview/#related-products-and-related-content) and [Frequently Bought Together](https://www.algolia.com/doc/guides/algolia-recommend/overview/#frequently-bought-together) models   - **Trending** models are [Trending Items and Trending Facet Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
    * @param getRecommendationsParams
    * @param requestOptions additional request configuration.
    */
@@ -97,9 +159,9 @@ public class RecommendClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun post(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -121,9 +183,9 @@ public class RecommendClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun put(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -135,6 +197,28 @@ public class RecommendClient(
         parameters?.let { putAll(it) }
       },
       body = body,
+    )
+    return requester.execute(
+      requestConfig = requestConfig,
+      requestOptions = requestOptions,
+    )
+  }
+
+  /**
+   * List Recommend rules.
+   * List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+   * @param indexName Index on which to perform the request.
+   * @param model [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+   * @param searchRecommendRulesParams
+   * @param requestOptions additional request configuration.
+   */
+  public suspend fun searchRecommendRules(indexName: String, model: RecommendModels, searchRecommendRulesParams: SearchRecommendRulesParams? = null, requestOptions: RequestOptions? = null): SearchRecommendRulesResponse {
+    require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `searchRecommendRules`." }
+    val requestConfig = RequestConfig(
+      method = RequestMethod.POST,
+      path = listOf("1", "indexes", "$indexName", "$model", "recommend", "rules", "search"),
+      isRead = true,
+      body = searchRecommendRulesParams,
     )
     return requester.execute(
       requestConfig = requestConfig,

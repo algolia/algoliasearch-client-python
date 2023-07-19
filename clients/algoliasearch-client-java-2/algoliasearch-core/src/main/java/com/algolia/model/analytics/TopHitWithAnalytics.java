@@ -36,7 +36,7 @@ public class TopHitWithAnalytics {
   }
 
   /**
-   * The hit.
+   * Hit.
    *
    * @return hit
    */
@@ -51,7 +51,7 @@ public class TopHitWithAnalytics {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */
@@ -66,7 +66,9 @@ public class TopHitWithAnalytics {
   }
 
   /**
-   * The click-through rate.
+   * [Click-through rate
+   * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+   * minimum: 0 maximum: 1
    *
    * @return clickThroughRate
    */
@@ -81,7 +83,8 @@ public class TopHitWithAnalytics {
   }
 
   /**
-   * The conversion rate.
+   * [Conversion rate
+   * (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
    *
    * @return conversionRate
    */
@@ -96,7 +99,8 @@ public class TopHitWithAnalytics {
   }
 
   /**
-   * The number of tracked search click.
+   * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
+   * parameter is `true`.
    *
    * @return trackedSearchCount
    */
@@ -111,7 +115,7 @@ public class TopHitWithAnalytics {
   }
 
   /**
-   * The number of click event.
+   * Number of click events.
    *
    * @return clickCount
    */
@@ -126,7 +130,7 @@ public class TopHitWithAnalytics {
   }
 
   /**
-   * The number of converted clicks.
+   * Number of converted clicks.
    *
    * @return conversionCount
    */

@@ -4,7 +4,7 @@ package com.algolia.client.model.recommend
 import kotlinx.serialization.*
 
 /**
- * The search mode that the index will use to query for results.
+ * Search mode the index will use to query for results.
  */
 @Serializable
 public enum class Mode(public val value: kotlin.String) {

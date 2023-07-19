@@ -8,10 +8,10 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
 /**
- * A Recommend hit.
+ * Recommend hit.
  *
- * @param objectID Unique identifier of the object.
- * @param score The recommendation score.
+ * @param objectID Unique object identifier.
+ * @param score Recommendation score.
  * @param highlightResult Show highlighted section and words matched on a query.
  * @param snippetResult Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
  * @param rankingInfo
@@ -20,10 +20,10 @@ import kotlinx.serialization.json.*
 @Serializable(RecommendHitSerializer::class)
 public data class RecommendHit(
 
-  /** Unique identifier of the object. */
+  /** Unique object identifier. */
   val objectID: String,
 
-  /** The recommendation score. */
+  /** Recommendation score. */
   val score: Double,
 
   /** Show highlighted section and words matched on a query. */

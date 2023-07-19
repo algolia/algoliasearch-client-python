@@ -6,10 +6,10 @@ import (
 	"fmt"
 )
 
-// FacetOrdering Defining how facets should be ordered.
+// FacetOrdering Defines the ordering of facets (widgets).
 type FacetOrdering struct {
 	Facets *Facets `json:"facets,omitempty"`
-	// The ordering of facet values, within an individual list.
+	// Ordering of facet values within an individual facet.
 	Values *map[string]Value `json:"values,omitempty"`
 }
 

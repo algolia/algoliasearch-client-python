@@ -17,7 +17,7 @@ final class BatchRequest {
   @JsonKey(name: r'action')
   final Action action;
 
-  /// arguments to the operation (depends on the type of the operation).
+  /// Operation arguments (varies with specified `action`).
   @JsonKey(name: r'body')
   final Object body;
 

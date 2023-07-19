@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** The response with a taskID and a deletedAt timestamp. */
+/** Response, taskID, and deletion timestamp. */
 public class DeletedAtResponse {
 
   @JsonProperty("taskID")
@@ -21,7 +21,9 @@ public class DeletedAtResponse {
   }
 
   /**
-   * taskID of the task to wait for.
+   * Unique identifier of a task. A successful API response means that a task was added to a queue.
+   * It might not run immediately. You can check the task's progress with the `task` operation and
+   * this `taskID`.
    *
    * @return taskID
    */
@@ -36,7 +38,7 @@ public class DeletedAtResponse {
   }
 
   /**
-   * Date of deletion (ISO-8601 format).
+   * Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return deletedAt
    */

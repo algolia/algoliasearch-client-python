@@ -6,7 +6,11 @@ package com.algolia.model.abtesting;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** CustomSearchParams */
+/**
+ * Applies search parameters from [a restricted set of
+ * options](https://www.algolia.com/doc/api-reference/api-methods/add-ab-test/#method-param-customsearchparameters).
+ * Only use this parameter if the two variants use the same index.
+ */
 public class CustomSearchParams {
 
   @JsonProperty("customSearchParameters")

@@ -6,20 +6,20 @@ import (
 	"fmt"
 )
 
-// SearchRulesParams Parameters for the search.
+// SearchRulesParams Rules search parameters.
 type SearchRulesParams struct {
-	// Full text query.
+	// Rule object query.
 	Query     *string    `json:"query,omitempty"`
 	Anchoring *Anchoring `json:"anchoring,omitempty"`
-	// Restricts matches to contextual rules with a specific context (exact match).
+	// Restricts responses to the specified [contextual rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules).
 	Context *string `json:"context,omitempty"`
-	// Requested page (zero-based).
+	// Requested page (the first page is page 0).
 	Page *int32 `json:"page,omitempty"`
-	// Maximum number of hits in a page. Minimum is 1, maximum is 1000.
+	// Maximum number of hits per page.
 	HitsPerPage *int32 `json:"hitsPerPage,omitempty"`
-	// When specified, restricts matches to rules with a specific enabled status. When absent (default), all rules are retrieved, regardless of their enabled status.
+	// Restricts responses to enabled rules. When not specified (default), _all_ rules are retrieved.
 	Enabled NullableBool `json:"enabled,omitempty"`
-	// A mapping of requestOptions to send along with the request.
+	// Request options to send with the API call.
 	RequestOptions []map[string]interface{} `json:"requestOptions,omitempty"`
 }
 
@@ -86,8 +86,6 @@ func NewSearchRulesParamsWithDefaults() *SearchRulesParams {
 	this := &SearchRulesParams{}
 	var query string = ""
 	this.Query = &query
-	var page int32 = 0
-	this.Page = &page
 	var hitsPerPage int32 = 20
 	this.HitsPerPage = &hitsPerPage
 	return this

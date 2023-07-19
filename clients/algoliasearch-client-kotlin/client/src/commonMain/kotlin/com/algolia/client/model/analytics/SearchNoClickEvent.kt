@@ -7,19 +7,19 @@ import kotlinx.serialization.json.*
 /**
  * SearchNoClickEvent
  *
- * @param search The search query.
- * @param count The number of occurrences.
- * @param withFilterCount The number of occurrences.
+ * @param search User query.
+ * @param count Number of occurrences.
+ * @param withFilterCount Number of occurrences.
  */
 @Serializable
 public data class SearchNoClickEvent(
 
-  /** The search query. */
+  /** User query. */
   @SerialName(value = "search") val search: String,
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "count") val count: Int,
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "withFilterCount") val withFilterCount: Int,
 )

@@ -18,10 +18,7 @@ public class ABTest {
   private Double clickSignificance;
 
   @JsonProperty("conversionSignificance")
-  private Double conversionSignificance;
-
-  @JsonProperty("endAt")
-  private String endAt;
+  private String conversionSignificance;
 
   @JsonProperty("updatedAt")
   private String updatedAt;
@@ -44,7 +41,7 @@ public class ABTest {
   }
 
   /**
-   * The A/B test ID.
+   * Unique A/B test ID.
    *
    * @return abTestID
    */
@@ -59,8 +56,9 @@ public class ABTest {
   }
 
   /**
-   * A/B test significance based on click data. Should be > 0.95 to be considered significant (no
-   * matter which variant is winning).
+   * [A/B test
+   * significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+   * based on click data. A value of 0.95 or over is considered to be _significant_.
    *
    * @return clickSignificance
    */
@@ -69,35 +67,19 @@ public class ABTest {
     return clickSignificance;
   }
 
-  public ABTest setConversionSignificance(Double conversionSignificance) {
+  public ABTest setConversionSignificance(String conversionSignificance) {
     this.conversionSignificance = conversionSignificance;
     return this;
   }
 
   /**
-   * A/B test significance based on conversion data. Should be > 0.95 to be considered significant
-   * (no matter which variant is winning).
+   * End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return conversionSignificance
    */
   @javax.annotation.Nonnull
-  public Double getConversionSignificance() {
+  public String getConversionSignificance() {
     return conversionSignificance;
-  }
-
-  public ABTest setEndAt(String endAt) {
-    this.endAt = endAt;
-    return this;
-  }
-
-  /**
-   * End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
-   *
-   * @return endAt
-   */
-  @javax.annotation.Nonnull
-  public String getEndAt() {
-    return endAt;
   }
 
   public ABTest setUpdatedAt(String updatedAt) {
@@ -106,7 +88,7 @@ public class ABTest {
   }
 
   /**
-   * Update date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+   * Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return updatedAt
    */
@@ -121,7 +103,7 @@ public class ABTest {
   }
 
   /**
-   * Creation date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+   * Creation date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return createdAt
    */
@@ -151,7 +133,7 @@ public class ABTest {
   }
 
   /**
-   * status of the A/B test.
+   * A/B test status.
    *
    * @return status
    */
@@ -171,7 +153,7 @@ public class ABTest {
   }
 
   /**
-   * List of A/B test variant.
+   * A/B test variants.
    *
    * @return variants
    */
@@ -193,7 +175,6 @@ public class ABTest {
       Objects.equals(this.abTestID, abTest.abTestID) &&
       Objects.equals(this.clickSignificance, abTest.clickSignificance) &&
       Objects.equals(this.conversionSignificance, abTest.conversionSignificance) &&
-      Objects.equals(this.endAt, abTest.endAt) &&
       Objects.equals(this.updatedAt, abTest.updatedAt) &&
       Objects.equals(this.createdAt, abTest.createdAt) &&
       Objects.equals(this.name, abTest.name) &&
@@ -204,7 +185,7 @@ public class ABTest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(abTestID, clickSignificance, conversionSignificance, endAt, updatedAt, createdAt, name, status, variants);
+    return Objects.hash(abTestID, clickSignificance, conversionSignificance, updatedAt, createdAt, name, status, variants);
   }
 
   @Override
@@ -214,7 +195,6 @@ public class ABTest {
     sb.append("    abTestID: ").append(toIndentedString(abTestID)).append("\n");
     sb.append("    clickSignificance: ").append(toIndentedString(clickSignificance)).append("\n");
     sb.append("    conversionSignificance: ").append(toIndentedString(conversionSignificance)).append("\n");
-    sb.append("    endAt: ").append(toIndentedString(endAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");

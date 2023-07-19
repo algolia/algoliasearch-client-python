@@ -8,15 +8,15 @@ import (
 
 // DictionaryLanguage Custom entries for a dictionary.
 type DictionaryLanguage struct {
-	// When nbCustomEntries is set to 0, the user didn't customize the dictionary. The dictionary is still supported with standard, Algolia-provided entries.
-	NbCustomEntires *int32 `json:"nbCustomEntires,omitempty"`
+	// If `0`, the dictionary hasn't been customized and only contains standard entries provided by Algolia. If `null`, that feature isn't available or isn't supported for that language.
+	NbCustomEntries *int32 `json:"nbCustomEntries,omitempty"`
 }
 
 type DictionaryLanguageOption func(f *DictionaryLanguage)
 
-func WithDictionaryLanguageNbCustomEntires(val int32) DictionaryLanguageOption {
+func WithDictionaryLanguageNbCustomEntries(val int32) DictionaryLanguageOption {
 	return func(f *DictionaryLanguage) {
-		f.NbCustomEntires = &val
+		f.NbCustomEntries = &val
 	}
 }
 
@@ -40,49 +40,49 @@ func NewDictionaryLanguageWithDefaults() *DictionaryLanguage {
 	return this
 }
 
-// GetNbCustomEntires returns the NbCustomEntires field value if set, zero value otherwise.
-func (o *DictionaryLanguage) GetNbCustomEntires() int32 {
-	if o == nil || o.NbCustomEntires == nil {
+// GetNbCustomEntries returns the NbCustomEntries field value if set, zero value otherwise.
+func (o *DictionaryLanguage) GetNbCustomEntries() int32 {
+	if o == nil || o.NbCustomEntries == nil {
 		var ret int32
 		return ret
 	}
-	return *o.NbCustomEntires
+	return *o.NbCustomEntries
 }
 
-// GetNbCustomEntiresOk returns a tuple with the NbCustomEntires field value if set, nil otherwise
+// GetNbCustomEntriesOk returns a tuple with the NbCustomEntries field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DictionaryLanguage) GetNbCustomEntiresOk() (*int32, bool) {
-	if o == nil || o.NbCustomEntires == nil {
+func (o *DictionaryLanguage) GetNbCustomEntriesOk() (*int32, bool) {
+	if o == nil || o.NbCustomEntries == nil {
 		return nil, false
 	}
-	return o.NbCustomEntires, true
+	return o.NbCustomEntries, true
 }
 
-// HasNbCustomEntires returns a boolean if a field has been set.
-func (o *DictionaryLanguage) HasNbCustomEntires() bool {
-	if o != nil && o.NbCustomEntires != nil {
+// HasNbCustomEntries returns a boolean if a field has been set.
+func (o *DictionaryLanguage) HasNbCustomEntries() bool {
+	if o != nil && o.NbCustomEntries != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetNbCustomEntires gets a reference to the given int32 and assigns it to the NbCustomEntires field.
-func (o *DictionaryLanguage) SetNbCustomEntires(v int32) {
-	o.NbCustomEntires = &v
+// SetNbCustomEntries gets a reference to the given int32 and assigns it to the NbCustomEntries field.
+func (o *DictionaryLanguage) SetNbCustomEntries(v int32) {
+	o.NbCustomEntries = &v
 }
 
 func (o DictionaryLanguage) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
-	if o.NbCustomEntires != nil {
-		toSerialize["nbCustomEntires"] = o.NbCustomEntires
+	if o.NbCustomEntries != nil {
+		toSerialize["nbCustomEntries"] = o.NbCustomEntries
 	}
 	return json.Marshal(toSerialize)
 }
 
 func (o DictionaryLanguage) String() string {
 	out := ""
-	out += fmt.Sprintf("  nbCustomEntires=%v\n", o.NbCustomEntires)
+	out += fmt.Sprintf("  nbCustomEntries=%v\n", o.NbCustomEntries)
 	return fmt.Sprintf("DictionaryLanguage {\n%s}", out)
 }
 

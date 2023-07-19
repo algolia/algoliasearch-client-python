@@ -13,11 +13,11 @@ final class MultipleBatchResponse {
     required this.objectIDs,
   });
 
-  /// List of tasksIDs per index.
+  /// TaskIDs per index.
   @JsonKey(name: r'taskID')
   final Map<String, int> taskID;
 
-  /// List of objectID.
+  /// Unique object (record) identifiers.
   @JsonKey(name: r'objectIDs')
   final List<String> objectIDs;
 

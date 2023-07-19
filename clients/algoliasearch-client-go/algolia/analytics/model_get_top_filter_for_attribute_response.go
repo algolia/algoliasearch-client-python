@@ -8,7 +8,7 @@ import (
 
 // GetTopFilterForAttributeResponse struct for GetTopFilterForAttributeResponse
 type GetTopFilterForAttributeResponse struct {
-	// A list of filters for the given attributes.
+	// Filter values for an attribute.
 	Values []GetTopFilterForAttribute `json:"values" validate:"required"`
 }
 

@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * The state of the dictionary entry.
+ * Indicates whether a dictionary entry is active (`enabled`) or inactive (`disabled`).
  */
 @Serializable
 public enum class DictionaryEntryState(public val value: kotlin.String) {

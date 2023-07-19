@@ -1,7 +1,19 @@
 openapi: 3.0.2
 info:
   title: Search API
-  description: API powering the Search feature of Algolia.
+  description: >-
+    Use the Search REST API  to manage your data (indices and records),
+    implement search, and improve relevance (with Rules, synonyms, and language
+    dictionaries).
+
+
+    Although Algolia provides a REST API, you should use the official open
+    source API [clients, libraries, and
+    tools](https://www.algolia.com/doc/guides/getting-started/how-algolia-works/in-depth/ecosystem/)
+    instead.
+
+    There's no [SLA](https://www.algolia.com/policies/sla/) if you use the REST
+    API directly.
   version: 1.0.0
 components:
   securitySchemes:
@@ -17,9 +29,7 @@ components:
     PathInPath:
       name: path
       in: path
-      description: >-
-        The path of the API endpoint to target, anything after the /1 needs to
-        be specified.
+      description: Path of the endpoint, anything after "/1" must be specified.
       required: true
       schema:
         type: string
@@ -27,14 +37,14 @@ components:
     Parameters:
       name: parameters
       in: query
-      description: Query parameters to be applied to the current query.
+      description: Query parameters to apply to the current query.
       schema:
         type: object
         additionalProperties: true
     IndexName:
       name: indexName
       in: path
-      description: The index in which to perform the request.
+      description: Index on which to perform the request.
       required: true
       schema:
         type: string
@@ -42,7 +52,7 @@ components:
     ObjectID:
       name: objectID
       in: path
-      description: Unique identifier of an object.
+      description: Unique record (object) identifier.
       required: true
       schema:
         type: string
@@ -51,37 +61,49 @@ components:
       in: query
       name: forwardToReplicas
       description: >-
-        When true, changes are also propagated to replicas of the given
-        indexName.
+        Indicates whether changed index settings are forwarded to the replica
+        indices.
       schema:
         type: boolean
+    parameters_ObjectID:
+      name: objectID
+      in: path
+      description: Unique identifier of a synonym object.
+      required: true
+      schema:
+        type: string
+        example: synonymID
     ReplaceExistingSynonyms:
       in: query
       name: replaceExistingSynonyms
       schema:
         type: boolean
-      description: Replace all synonyms of the index with the ones sent with this request.
+      description: >-
+        Indicates whether to replace all synonyms in the index with the ones
+        sent with this request.
     Type:
       in: query
       name: type
-      description: Only search for specific types of synonyms.
+      description: >-
+        Search for specific [types of
+        synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
       schema:
         $ref: '#/components/schemas/SynonymType'
     PageDefault0:
       in: query
       name: page
-      description: >-
-        Requested page (zero-based). When specified, will retrieve a specific
-        page; the page size is implicitly set to 100. When null, will retrieve
-        all indices (no pagination).
+      description: >
+        Returns the requested page number (the first page is 0). Page size is
+        set by `hitsPerPage`. When null, there's no pagination.
       schema:
         type: integer
         nullable: true
+        minimum: 0
         default: 0
     HitsPerPage:
       in: query
       name: hitsPerPage
-      description: Maximum number of objects to retrieve.
+      description: Maximum number of hits per page.
       schema:
         type: integer
         default: 100
@@ -91,8 +113,16 @@ components:
       required: true
       schema:
         type: string
-        example: myAPIKey
-      description: API Key string.
+        example: YourAPIKey
+      description: API key.
+    parameters_ObjectID-2:
+      in: path
+      name: objectID
+      description: Unique identifier of a rule object.
+      example: a-rule-id
+      required: true
+      schema:
+        type: string
     ClearExistingRules:
       in: query
       name: clearExistingRules
@@ -100,24 +130,26 @@ components:
       schema:
         type: boolean
       description: >-
-        When true, existing Rules are cleared before adding this batch. When
-        false, existing Rules are kept.
+        Indicates whether existing rules should be deleted before adding this
+        batch.
     DictionaryName:
       in: path
       name: dictionaryName
-      description: The dictionary to search in.
+      description: Dictionary to search in.
       required: true
       schema:
         $ref: '#/components/schemas/dictionaryType'
     Page:
       in: query
       name: page
-      description: >-
-        Requested page (zero-based). When specified, will retrieve a specific
-        page; the page size is implicitly set to 100. When null, will retrieve
-        all indices (no pagination).
+      description: >
+        Returns the requested page number. The page size is determined by the
+        `hitsPerPage` parameter. You can see the number of available pages in
+        the `nbPages` response attribute. When `page` is null, the API response
+        is not paginated.
       schema:
         type: integer
+        minimum: 0
         nullable: true
         default: null
     UserIDInHeader:
@@ -146,7 +178,8 @@ components:
           type: string
           example: Invalid Application-Id or API-Key
     paramsAsString:
-      description: Search parameters as URL-encoded query string.
+      description: Search parameters as a URL-encoded query string.
+      example: hitsPerPage=2&getRankingInfo=1
       type: string
       default: ''
     searchParamsString:
@@ -157,7 +190,7 @@ components:
           $ref: '#/components/schemas/paramsAsString'
     query:
       type: string
-      description: The text to search in the index.
+      description: Text to search for in an index.
       default: ''
       x-categories:
         - Search
@@ -169,7 +202,10 @@ components:
           $ref: '#/components/schemas/query'
     filters:
       type: string
-      description: Filter the query with numeric, facet and/or tag filters.
+      description: >
+        [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/)
+        the query with numeric, facet, or tag filters.
+      example: (category:Book OR category:Ebook) AND _tags:published
       default: ''
       x-categories:
         - Filtering
@@ -186,30 +222,57 @@ components:
       items:
         $ref: '#/components/schemas/mixedSearchFilters'
     facetFilters:
-      description: Filter hits by facet value.
+      description: >
+        [Filter hits by facet
+        value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
+      example:
+        - category:Book
+        - author:John Doe
       oneOf:
         - $ref: '#/components/schemas/listOfSearchFilters'
         - type: string
       x-categories:
         - Filtering
     optionalFilters:
-      description: >-
-        Create filters for ranking purposes, where records that match the filter
-        are ranked higher, or lower in the case of a negative optional filter.
+      description: >
+        Create filters to boost or demote records. 
+
+
+        Records that match the filter are ranked higher for positive and lower
+        for negative optional filters. In contrast to regular filters, records
+        that don't match the optional filter are still included in the results,
+        only their ranking is affected.
+      example:
+        - category:Book
+        - author:John Doe
       oneOf:
         - $ref: '#/components/schemas/listOfSearchFilters'
         - type: string
       x-categories:
         - Filtering
     numericFilters:
-      description: Filter on numeric attributes.
+      description: >
+        [Filter on numeric
+        attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
+      example:
+        -
+          - inStock = 1
+          - deliveryDate < 1441755506
+        - price < 1000
       oneOf:
         - $ref: '#/components/schemas/listOfSearchFilters'
         - type: string
       x-categories:
         - Filtering
     tagFilters:
-      description: Filter hits by tags.
+      description: >
+        [Filter hits by
+        tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/).
+      example:
+        -
+          - Book
+          - Movie
+        - SciFi
       oneOf:
         - $ref: '#/components/schemas/listOfSearchFilters'
         - type: string
@@ -217,23 +280,25 @@ components:
         - Filtering
     page:
       type: integer
-      description: Specify the page to retrieve.
+      description: Page to retrieve (the first page is `0`, not `1`).
       default: 0
       x-categories:
         - Pagination
     aroundLatLng:
       type: string
       description: >-
-        Search for entries around a central geolocation, enabling a geo search
-        within a circular area.
+        Search for entries [around a central
+        location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point),
+        enabling a geographical search within a circular area.
+      example: 40.71,-74.01
       default: ''
       x-categories:
         - Geo-Search
     aroundLatLngViaIP:
       type: boolean
       description: >-
-        Search for entries around a given location automatically computed from
-        the requester's IP address.
+        Search for entries around a location. The location is automatically
+        computed from the requester's IP address.
       default: false
       x-categories:
         - Geo-Search
@@ -242,7 +307,10 @@ components:
       enum:
         - all
     aroundRadius:
-      description: Define the maximum radius for a geo search (in meters).
+      description: >
+        [Maximum
+        radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius)
+        for a geographical search (in meters).
       oneOf:
         - type: integer
           minimum: 1
@@ -254,7 +322,15 @@ components:
       items:
         type: number
         format: double
-      description: Search inside a rectangular area (in geo coordinates).
+      description: >-
+        Search inside a [rectangular
+        area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
+        (in geographical coordinates).
+      example:
+        - 46.650828100116044
+        - 7.123046875
+        - 45.17210966999772
+        - 1.009765625
       x-categories:
         - Geo-Search
     insidePolygon:
@@ -262,13 +338,25 @@ components:
       items:
         type: number
         format: double
-      description: Search inside a polygon (in geo coordinates).
+      description: >-
+        Search inside a
+        [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
+        (in geographical coordinates).
+      example:
+        - 46.650828100116044
+        - 7.123046875
+        - 45.17210966999772
+        - 1.009765625
+        - 49.62625916704081
+        - 4.6181640625
       x-categories:
         - Geo-Search
     reRankingApplyFilter:
       description: >-
-        When Dynamic Re-Ranking is enabled, only records that match these
-        filters will be impacted by Dynamic Re-Ranking.
+        When [Dynamic
+        Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/)
+        is enabled, only records that match these filters will be affected by
+        Dynamic Re-Ranking.
       nullable: true
       oneOf:
         - $ref: '#/components/schemas/listOfSearchFilters'
@@ -281,9 +369,7 @@ components:
       properties:
         similarQuery:
           type: string
-          description: >-
-            Overrides the query parameter and performs a more generic search
-            that can be used to find "similar" results.
+          description: Overrides the query parameter and performs a more generic search.
           default: ''
           x-categories:
             - Search
@@ -299,7 +385,13 @@ components:
           $ref: '#/components/schemas/tagFilters'
         sumOrFiltersScores:
           type: boolean
-          description: Determines how to calculate the total score for filtering.
+          description: >
+            Determines how to calculate [filter
+            scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores).
+
+            If `false`, maximum score is kept.
+
+            If `true`, score is summed.
           default: false
           x-categories:
             - Filtering
@@ -307,23 +399,27 @@ components:
           type: array
           items:
             type: string
-          description: Retrieve facets and their facet values.
+          description: >-
+            Returns
+            [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts),
+            their facet values, and the number of matching facet values.
           default: []
           x-categories:
             - Faceting
         maxValuesPerFacet:
           type: integer
-          description: >-
-            Maximum number of facet values to return for each facet during a
-            regular search.
+          description: Maximum number of facet values to return for each facet.
           default: 100
           x-categories:
             - Faceting
         facetingAfterDistinct:
           type: boolean
-          description: >-
-            Force faceting to be applied after de-duplication (via the Distinct
-            setting).
+          description: >
+            Forces faceting to be applied after
+            [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/)
+            (with the distinct feature). Alternatively, the `afterDistinct`
+            [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
+            of `attributesForFaceting` allows for more granular control.
           default: false
           x-categories:
             - Faceting
@@ -337,12 +433,28 @@ components:
           $ref: '#/components/schemas/page'
         offset:
           type: integer
-          description: Specify the offset of the first hit to return.
+          description: >
+            Specifies the offset of the first hit to return.
+
+            > **Note**: Using `page` and `hitsPerPage` is the recommended method
+            for [paging
+            results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/).
+            However, you can use `offset` and `length` to implement [an
+            alternative approach to
+            paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
           x-categories:
             - Pagination
         length:
           type: integer
-          description: Set the number of hits to retrieve (used only with offset).
+          description: >
+            Sets the number of hits to retrieve (for use with `offset`).
+
+            > **Note**: Using `page` and `hitsPerPage` is the recommended method
+            for [paging
+            results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/).
+            However, you can use `offset` and `length` to implement [an
+            alternative approach to
+            paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
           minimum: 1
           maximum: 1000
           x-categories:
@@ -356,16 +468,17 @@ components:
         aroundPrecision:
           type: integer
           description: >-
-            Precision of geo search (in meters), to add grouping by geo location
-            to the ranking formula.
+            Precision of a geographical search (in meters), to [group results
+            that are more or less the same distance from a central
+            point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
           default: 10
           x-categories:
             - Geo-Search
         minimumAroundRadius:
           type: integer
           description: >-
-            Minimum radius (in meters) used for a geo search when aroundRadius
-            is not set.
+            Minimum radius (in meters) used for a geographical search when
+            `aroundRadius` isn't set.
           minimum: 1
           x-categories:
             - Geo-Search
@@ -378,13 +491,12 @@ components:
           items:
             type: string
           description: >-
-            This parameter changes the default values of certain parameters and
-            settings that work best for a natural language query, such as
-            ignorePlurals, removeStopWords, removeWordsIfNoResults,
-            analyticsTags and ruleContexts. These parameters and settings work
-            well together when the query is formatted in natural language
-            instead of keywords, for example when your user performs a voice
-            search.
+            Changes the default values of parameters that work best for a
+            natural language query, such as `ignorePlurals`, `removeStopWords`,
+            `removeWordsIfNoResults`, `analyticsTags`, and `ruleContexts`. These
+            parameters work well together when the query consists of fuller
+            natural language strings instead of keywords, for example when
+            processing voice search queries.
           default: []
           x-categories:
             - Languages
@@ -392,38 +504,52 @@ components:
           type: array
           items:
             type: string
-          description: Enables contextual rules.
+          description: >-
+            Assigns [rule
+            contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context)
+            to search queries.
           default: []
           x-categories:
             - Rules
         personalizationImpact:
           type: integer
-          description: Define the impact of the Personalization feature.
+          description: >-
+            Defines how much [Personalization affects
+            results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
           default: 100
           x-categories:
             - Personalization
         userToken:
           type: string
-          description: Associates a certain user token with the current search.
+          description: >-
+            Associates a [user
+            token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/)
+            with the current search.
+          example: '123456'
           x-categories:
             - Personalization
         getRankingInfo:
           type: boolean
-          description: Retrieve detailed ranking information.
+          description: >-
+            Incidates whether the search response includes [detailed ranking
+            information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
           default: false
           x-categories:
             - Advanced
         clickAnalytics:
           type: boolean
-          description: Enable the Click Analytics feature.
+          description: >-
+            Indicates whether a query ID parameter is included in the search
+            response. This is required for [tracking click and conversion
+            events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
           default: false
           x-categories:
             - Analytics
         analytics:
           type: boolean
           description: >-
-            Whether the current query will be taken into account in the
-            Analytics.
+            Indicates whether this query will be included in
+            [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
           default: true
           x-categories:
             - Analytics
@@ -431,7 +557,9 @@ components:
           type: array
           items:
             type: string
-          description: List of tags to apply to the query for analytics purposes.
+          description: >-
+            Tags to apply to the query for [segmenting analytics
+            data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
           default: []
           x-categories:
             - Analytics
@@ -445,13 +573,15 @@ components:
             - Advanced
         enableABTest:
           type: boolean
-          description: Whether this search should participate in running AB tests.
+          description: Incidates whether this search will be considered in A/B testing.
           default: true
           x-categories:
             - Advanced
         enableReRanking:
           type: boolean
-          description: Whether this search should use AI Re-Ranking.
+          description: >-
+            Indicates whether this search will use [Dynamic
+            Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
           default: true
           x-categories:
             - Advanced
@@ -463,8 +593,10 @@ components:
         - $ref: '#/components/schemas/baseSearchParamsWithoutQuery'
     hitsPerPage:
       type: integer
-      description: Set the number of hits per page.
+      description: Number of hits per page.
       default: 20
+      minimum: 1
+      maximum: 1000
       x-categories:
         - Pagination
     typoToleranceEnum:
@@ -473,7 +605,10 @@ components:
         - min
         - strict
     typoTolerance:
-      description: Controls whether typo tolerance is enabled and how it is applied.
+      description: >-
+        Controls whether [typo
+        tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/)
+        is enabled and how it is applied.
       oneOf:
         - type: boolean
           default: true
@@ -485,16 +620,21 @@ components:
         Treats singular, plurals, and other forms of declensions as matching
         terms.
 
-        ignorePlurals is used in conjunction with the queryLanguages setting.
+        `ignorePlurals` is used in conjunction with the `queryLanguages`
+        setting.
 
-        list: language ISO codes for which ignoring plurals should be enabled.
+        _list_: language ISO codes for which ignoring plurals should be enabled.
         This list will override any values that you may have set in
-        queryLanguages. true: enables the ignore plurals functionality, where
-        singulars and plurals are considered equivalent (foot = feet). The
-        languages supported here are either every language (this is the default,
-        see list of languages below), or those set by queryLanguages. false:
-        disables ignore plurals, where singulars and plurals are not considered
-        the same for matching purposes (foot will not find feet).
+        `queryLanguages`. _true_: enables the ignore plurals feature, where
+        singulars and plurals are considered equivalent ("foot" = "feet"). The
+        languages supported here are either [every
+        language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/)
+        (this is the default) or those set by `queryLanguages`. _false_: turns
+        off the ignore plurals feature, so that singulars and plurals aren't
+        considered to be the same ("foot" will not find "feet").
+      example:
+        - ca
+        - es
       oneOf:
         - type: array
           items:
@@ -507,15 +647,21 @@ components:
       description: >
         Removes stop (common) words from the query before executing it.
 
-        removeStopWords is used in conjunction with the queryLanguages setting.
+        `removeStopWords` is used in conjunction with the `queryLanguages`
+        setting.
 
-        list: language ISO codes for which ignoring plurals should be enabled.
-        This list will override any values that you may have set in
-        queryLanguages. true: enables the stop word functionality, ensuring that
-        stop words are removed from consideration in a search. The languages
-        supported here are either every language, or those set by
-        queryLanguages. false: disables stop word functionality, allowing stop
-        words to be taken into account in a search.
+        _list_: language ISO codes for which stop words should be enabled. This
+        list will override any values that you may have set in `queryLanguages`.
+        _true_: enables the stop words feature, ensuring that stop words are
+        removed from consideration in a search. The languages supported here are
+        either [every
+        language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/)
+        (this is the default) or those set by `queryLanguages`. _false_: turns
+        off the stop words feature, allowing stop words to be taken into account
+        in a search.
+      example:
+        - ca
+        - es
       oneOf:
         - type: array
           items:
@@ -530,7 +676,9 @@ components:
         - prefixLast
         - prefixAll
         - prefixNone
-      description: Controls if and how query words are interpreted as prefixes.
+      description: >-
+        Determines how query words are [interpreted as
+        prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
       default: prefixLast
       x-categories:
         - Query strategy
@@ -541,9 +689,11 @@ components:
         - lastWords
         - firstWords
         - allOptional
+      example: firstWords
       description: >-
-        Selects a strategy to remove words from the query when it doesn't match
-        any hits.
+        Strategy to [remove
+        words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/)
+        from the query when it doesn't match any hits.
       default: none
       x-categories:
         - Query strategy
@@ -552,7 +702,7 @@ components:
       enum:
         - neuralSearch
         - keywordSearch
-      description: The search mode that the index will use to query for results.
+      description: Search mode the index will use to query for results.
       default: keywordSearch
       x-categories:
         - Query strategy
@@ -563,8 +713,9 @@ components:
         - none
         - word
       description: >-
-        Controls how the exact ranking criterion is computed when the query
-        contains only one word.
+        Determines how the [Exact ranking
+        criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes)
+        is computed when the query contains only one word.
       default: attribute
       x-categories:
         - Query strategy
@@ -584,7 +735,10 @@ components:
       x-categories:
         - Query strategy
     distinct:
-      description: Enables de-duplication or grouping of results.
+      description: >-
+        Enables [deduplication or grouping of results (Algolia's _distinct_
+        feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
+      example: 1
       oneOf:
         - type: boolean
         - type: integer
@@ -596,9 +750,8 @@ components:
     maxFacetHits:
       type: integer
       description: >-
-        Maximum number of facet hits to return during a search for facet values.
-        For performance reasons, the maximum allowed number of returned values
-        is 100.
+        Maximum number of facet hits to return when [searching for facet
+        values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
       maximum: 100
       default: 10
       x-categories:
@@ -609,7 +762,7 @@ components:
       items:
         type: string
     facets:
-      description: The ordering of facets (widgets).
+      description: Ordering of facets (widgets).
       type: object
       additionalProperties: false
       properties:
@@ -617,7 +770,8 @@ components:
           $ref: '#/components/schemas/order'
     sortRemainingBy:
       description: |
-        How to display the remaining items.
+        How to display the remaining items:
+
           - `count`: facet count (descending).
           - `alpha`: alphabetical (ascending).
           - `hidden`: show only pinned values.
@@ -635,12 +789,12 @@ components:
         sortRemainingBy:
           $ref: '#/components/schemas/sortRemainingBy'
     values:
-      description: The ordering of facet values, within an individual list.
+      description: Ordering of facet values within an individual facet.
       type: object
       additionalProperties:
         $ref: '#/components/schemas/value'
     facetOrdering:
-      description: Defining how facets should be ordered.
+      description: Defines the ordering of facets (widgets).
       type: object
       additionalProperties: false
       properties:
@@ -650,8 +804,11 @@ components:
           $ref: '#/components/schemas/values'
     renderingContent:
       description: >-
-        Content defining how the search interface should be rendered. Can be set
-        via the settings for a default value and can be overridden via rules.
+        Extra content for the search UI, for example, to control the [ordering
+        and display of
+        facets](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/merchandising-facets/#merchandise-facets-and-their-values-in-the-manual-editor).
+        You can set a default value and dynamically override it with
+        [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/).
       type: object
       additionalProperties: false
       properties:
@@ -667,7 +824,19 @@ components:
           type: array
           items:
             type: string
-          description: The complete list of attributes that will be used for faceting.
+          example:
+            - author
+            - filterOnly(isbn)
+            - searchable(edition)
+            - afterDistinct(category)
+            - afterDistinct(searchable(publisher))
+          description: >
+            Attributes used for
+            [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/)
+            and the
+            [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
+            that can be applied: `filterOnly`, `searchable`, and
+            `afterDistinct`.
           default: []
           x-categories:
             - Faceting
@@ -675,9 +844,14 @@ components:
           type: array
           items:
             type: string
+          example:
+            - author
+            - title
+            - content
           description: >-
-            This parameter controls which attributes to retrieve and which not
-            to retrieve.
+            Attributes to include in the API response. To reduce the size of
+            your response, you can retrieve only some of the attributes. By
+            default, the response includes all attributes.
           default:
             - '*'
           x-categories:
@@ -686,9 +860,12 @@ components:
           type: array
           items:
             type: string
+          example:
+            - title
+            - author
           description: >-
-            Restricts a given query to look in only a subset of your searchable
-            attributes.
+            Restricts a query to only look at a subset of your [searchable
+            attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
           default: []
           x-categories:
             - Attributes
@@ -696,7 +873,9 @@ components:
           type: array
           items:
             type: string
-          description: Controls how Algolia should sort your results.
+          description: >-
+            Determines the order in which Algolia [returns your
+            results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
           default:
             - typo
             - geo
@@ -712,15 +891,23 @@ components:
           type: array
           items:
             type: string
-          description: Specifies the custom ranking criterion.
+          example:
+            - desc(popularity)
+            - asc(price)
+          description: >
+            Specifies the [Custom ranking
+            criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/).
+            Use the `asc` and `desc` modifiers to specify the ranking order:
+            ascending or descending.
           default: []
           x-categories:
             - Ranking
         relevancyStrictness:
           type: integer
+          example: 90
           description: >-
-            Controls the relevancy threshold below which less relevant results
-            aren't included in the results.
+            Relevancy threshold below which less relevant results aren't
+            included in the results.
           default: 100
           x-categories:
             - Ranking
@@ -728,32 +915,44 @@ components:
           type: array
           items:
             type: string
-          description: List of attributes to highlight.
+          example:
+            - author
+            - title
+            - content
+          description: >-
+            Attributes to highlight. Strings that match the search query in the
+            attributes are highlighted by surrounding them with HTML tags
+            (`highlightPreTag` and `highlightPostTag`).
           x-categories:
             - Highlighting and Snippeting
         attributesToSnippet:
           type: array
           items:
             type: string
-          description: >-
-            List of attributes to snippet, with an optional maximum number of
-            words to snippet.
+          example:
+            - content:80
+            - description
+          description: >
+            Attributes to _snippet_. 'Snippeting' is shortening the attribute to
+            a certain number of words. If not specified, the attribute is
+            shortened to the 10 words around the matching string but you can
+            specify the number. For example: `body:20`.
           default: []
           x-categories:
             - Highlighting and Snippeting
         highlightPreTag:
           type: string
           description: >-
-            The HTML string to insert before the highlighted parts in all
-            highlight and snippet results.
+            HTML string to insert before the highlighted parts in all highlight
+            and snippet results.
           default: <em>
           x-categories:
             - Highlighting and Snippeting
         highlightPostTag:
           type: string
           description: >-
-            The HTML string to insert after the highlighted parts in all
-            highlight and snippet results.
+            HTML string to insert after the highlighted parts in all highlight
+            and snippet results.
           default: </em>
           x-categories:
             - Highlighting and Snippeting
@@ -777,7 +976,8 @@ components:
           type: integer
           description: >-
             Minimum number of characters a word in the query string must contain
-            to accept matches with 1 typo.
+            to accept matches with [one
+            typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
           default: 4
           x-categories:
             - Typos
@@ -785,7 +985,8 @@ components:
           type: integer
           description: >-
             Minimum number of characters a word in the query string must contain
-            to accept matches with 2 typos.
+            to accept matches with [two
+            typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
           default: 8
           x-categories:
             - Typos
@@ -803,7 +1004,11 @@ components:
           type: array
           items:
             type: string
-          description: List of attributes on which you want to disable typo tolerance.
+          example:
+            - sku
+          description: >-
+            Attributes for which you want to turn off [typo
+            tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
           default: []
           x-categories:
             - Typos
@@ -813,9 +1018,10 @@ components:
           $ref: '#/components/schemas/removeStopWords'
         keepDiacriticsOnCharacters:
           type: string
+          example: øé
           description: >-
-            List of characters that the engine shouldn't automatically
-            normalize.
+            Characters that the engine shouldn't automatically
+            [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
           default: ''
           x-categories:
             - Languages
@@ -823,28 +1029,41 @@ components:
           type: array
           items:
             type: string
+          example:
+            - es
           description: >-
-            Sets the languages to be used by language-specific settings and
-            functionalities such as ignorePlurals, removeStopWords, and CJK
-            word-detection.
+            Sets your user's search language. This adjusts language-specific
+            settings and features such as `ignorePlurals`, `removeStopWords`,
+            and
+            [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk)
+            word detection.
           default: []
           x-categories:
             - Languages
         decompoundQuery:
           type: boolean
-          description: Splits compound words into their composing atoms in the query.
+          description: >
+            [Splits compound
+            words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words)
+            into their component word parts in the query.
           default: true
           x-categories:
             - Languages
         enableRules:
           type: boolean
-          description: Whether Rules should be globally enabled.
+          description: >-
+            Incidates whether
+            [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/)
+            are enabled.
           default: true
           x-categories:
             - Rules
         enablePersonalization:
           type: boolean
-          description: Enable the Personalization feature.
+          description: >-
+            Incidates whether
+            [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/)
+            is enabled.
           default: false
           x-categories:
             - Personalization
@@ -857,13 +1076,13 @@ components:
         semanticSearch:
           type: object
           description: >
-            The settings relevant for configuration of the semantic search
-            engine. These settings are only used when the mode is set to
-            'neuralSearch'.
+            Settings for the semantic search part of NeuralSearch. Only used
+            when `mode` is _neuralSearch_.
           properties:
             eventSources:
               description: >-
-                When null, the current index / replica group will be used as the
+                Indices from which to collect click and conversion events. If
+                null, the current index and replica group will be used as the
                 event source.
               nullable: true
               type: array
@@ -871,7 +1090,9 @@ components:
                 type: string
         advancedSyntax:
           type: boolean
-          description: Enables the advanced query syntax.
+          description: >-
+            Enables the [advanced query
+            syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
           default: false
           x-categories:
             - Query strategy
@@ -879,9 +1100,13 @@ components:
           type: array
           items:
             type: string
+          example:
+            - blue
+            - iphone case
           description: >-
-            A list of words that should be considered as optional when found in
-            the query.
+            Words which should be considered
+            [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words)
+            when found in a query.
           default: []
           x-categories:
             - Query strategy
@@ -889,9 +1114,11 @@ components:
           type: array
           items:
             type: string
+          example:
+            - description
           description: >-
-            List of attributes on which you want to disable the exact ranking
-            criterion.
+            Attributes for which you want to [turn off the exact ranking
+            criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
           default: []
           x-categories:
             - Query strategy
@@ -902,8 +1129,9 @@ components:
           items:
             $ref: '#/components/schemas/alternativesAsExact'
           description: >-
-            List of alternatives that should be considered an exact match by the
-            exact ranking criterion.
+            Alternatives that should be considered an exact match by [the exact
+            ranking
+            criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
           default:
             - ignorePlurals
             - singleWordSynonym
@@ -915,7 +1143,7 @@ components:
             $ref: '#/components/schemas/advancedSyntaxFeatures'
           description: >-
             Allows you to specify which advanced syntax features are active when
-            ‘advancedSyntax' is enabled.
+            `advancedSyntax` is enabled.
           default:
             - exactPhrase
             - excludeWords
@@ -926,8 +1154,8 @@ components:
           items:
             type: string
           description: >-
-            Enriches the API’s response with meta-information as to how the
-            query was processed.
+            Enriches the API's response with information about how the query was
+            processed.
           default: []
           x-categories:
             - Query strategy
@@ -935,8 +1163,10 @@ components:
           $ref: '#/components/schemas/distinct'
         attributeForDistinct:
           description: >-
-            Name of the de-duplication attribute to be used with the distinct
-            feature.
+            Name of the deduplication attribute to be used with Algolia's
+            [_distinct_
+            feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+          example: url
           type: string
         synonyms:
           type: boolean
@@ -958,7 +1188,9 @@ components:
           type: integer
           minimum: 1
           maximum: 7
-          description: Precision of the proximity ranking criterion.
+          description: >-
+            Precision of the [proximity ranking
+            criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
           default: 1
           x-categories:
             - Advanced
@@ -967,8 +1199,8 @@ components:
           items:
             type: string
           description: >-
-            Choose which fields to return in the API response. This parameters
-            applies to search and browse queries.
+            Attributes to include in the API response for search and browse
+            queries.
           default: []
           x-categories:
             - Advanced
@@ -977,9 +1209,10 @@ components:
         attributeCriteriaComputedByMinProximity:
           type: boolean
           description: >-
-            When attribute is ranked above proximity in your ranking formula,
-            proximity is used to select which searchable attribute is matched in
-            the attribute ranking stage.
+            When the [Attribute criterion is ranked above
+            Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations)
+            in your ranking formula, Proximity is used to select which
+            searchable attribute is matched in the Attribute ranking stage.
           default: false
           x-categories:
             - Advanced
@@ -995,11 +1228,11 @@ components:
         - $ref: '#/components/schemas/searchParamsObject'
     nbHits:
       type: integer
-      description: Number of hits that the search query matched.
+      description: Number of hits the search query matched.
       example: 20
     nbPages:
       type: integer
-      description: Number of pages available for the current query.
+      description: Number of pages of results for the current query.
       example: 1
     RedirectRuleIndexMetadata:
       type: object
@@ -1015,10 +1248,10 @@ components:
           description: Reason for the redirect rule.
         succeed:
           type: boolean
-          description: Status for the redirect rule.
+          description: Redirect rule status.
         data:
           type: object
-          description: Data for the redirect rule.
+          description: Redirect rule data.
           required:
             - ruleObjectID
           properties:
@@ -1032,6 +1265,9 @@ components:
         - source
     userData:
       type: object
+      example:
+        settingID: f2a7b51e3503acc6a39b3784ffb84300
+        pluginVersion: 1.6.0
       description: Lets you store custom data in your indices.
       default: {}
       x-categories:
@@ -1052,34 +1288,37 @@ components:
         abTestID:
           type: integer
           description: >-
-            If a search encounters an index that is being A/B tested, abTestID
-            reports the ongoing A/B test ID.
+            A/B test ID. This is only included in the response for indices that
+            are part of an A/B test.
         abTestVariantID:
           type: integer
+          minimum: 1
           description: >-
-            If a search encounters an index that is being A/B tested,
-            abTestVariantID reports the variant ID of the index used (starting
-            at 1).
+            Variant ID. This is only included in the response for indices that
+            are part of an A/B test.
         aroundLatLng:
           type: string
-          description: The computed geo location.
+          description: Computed geographical location.
+          example: 40.71,-74.01
           pattern: ^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$
         automaticRadius:
           type: string
-          description: >-
-            The automatically computed radius. For legacy reasons, this
-            parameter is a string and not an integer.
+          description: Automatically-computed radius.
         exhaustiveFacetsCount:
           type: boolean
-          description: Whether the facet count is exhaustive or approximate.
+          description: >-
+            Indicates whether the facet count is exhaustive (exact) or
+            approximate.
         exhaustiveNbHits:
           type: boolean
-          description: Indicate if the nbHits count was exhaustive or approximate.
+          description: >-
+            Indicates whether the number of hits `nbHits` is exhaustive (exact)
+            or approximate.
         exhaustiveTypo:
           type: boolean
           description: >-
-            Indicate if the typo-tolerance search was exhaustive or approximate
-            (only included when typo-tolerance is enabled).
+            Indicates whether the search for typos was exhaustive (exact) or
+            approximate.
         facets:
           title: facets
           type: object
@@ -1087,7 +1326,7 @@ components:
             type: object
             additionalProperties:
               type: integer
-          description: A mapping of each facet name to the corresponding facet counts.
+          description: Mapping of each facet name to the corresponding facet counts.
           example:
             category:
               food: 1
@@ -1103,19 +1342,19 @@ components:
               min:
                 type: number
                 format: double
-                description: The minimum value in the result set.
+                description: Minimum value in the results.
               max:
                 type: number
                 format: double
-                description: The maximum value in the result set.
+                description: Maximum value in the results.
               avg:
                 type: number
                 format: double
-                description: The average facet value in the result set.
+                description: Average facet value in the results.
               sum:
                 type: number
                 format: double
-                description: The sum of all values in the result set.
+                description: Sum of all values in the results.
         hitsPerPage:
           $ref: '#/components/schemas/hitsPerPage'
         index:
@@ -1125,31 +1364,31 @@ components:
         indexUsed:
           type: string
           description: >-
-            Index name used for the query. In the case of an A/B test, the
-            targeted index isn't always the index used by the query.
+            Index name used for the query. During A/B testing, the targeted
+            index isn't always the index used by the query.
           example: indexNameAlt
         message:
           type: string
-          description: Used to return warnings about the query.
+          description: Warnings about the query.
         nbHits:
           $ref: '#/components/schemas/nbHits'
         nbPages:
           $ref: '#/components/schemas/nbPages'
         nbSortedHits:
           type: integer
-          description: >-
-            The number of hits selected and sorted by the relevant sort
-            algorithm.
+          description: Number of hits selected and sorted by the relevant sort algorithm.
           example: 20
         page:
           $ref: '#/components/schemas/page'
         params:
           type: string
-          description: A url-encoded string of all search parameters.
+          description: URL-encoded string of all search parameters.
           example: query=a&hitsPerPage=20
         redirect:
           type: object
-          description: This parameter is for internal use only.
+          description: >
+            [Redirect results to a
+            URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
           properties:
             index:
               type: array
@@ -1157,7 +1396,10 @@ components:
                 $ref: '#/components/schemas/RedirectRuleIndexMetadata'
         parsedQuery:
           type: string
-          description: The query string that will be searched, after normalization.
+          description: >-
+            Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean)
+            query string that will be searched.
+          example: george clo
         processingTimeMS:
           type: integer
           description: Time the server took to process the request, in milliseconds.
@@ -1167,21 +1409,23 @@ components:
         queryAfterRemoval:
           type: string
           description: >-
-            A markup text indicating which parts of the original query have been
-            removed in order to retrieve a non-empty result set.
+            Markup text indicating which parts of the original query have been
+            removed to retrieve a non-empty result set.
         serverUsed:
           type: string
-          description: Actual host name of the server that processed the request.
+          description: Host name of the server that processed the request.
+          example: c2-uk-3.algolia.net
         userData:
           $ref: '#/components/schemas/userData'
         renderingContent:
           $ref: '#/components/schemas/renderingContent'
     objectID:
       type: string
-      description: Unique identifier of the object.
+      description: Unique object identifier.
+      example: product-1
     highlightedValue:
       type: string
-      description: Markup text with occurrences highlighted.
+      description: Markup text with `facetQuery` matches highlighted.
       example: <em>George</em> <em>Clo</em>oney
     matchLevel:
       type: string
@@ -1202,6 +1446,8 @@ components:
         matchedWords:
           type: array
           description: List of words from the query that matched the object.
+          example:
+            - action
           items:
             type: string
         fullyHighlighted:
@@ -1371,15 +1617,15 @@ components:
     indexName:
       type: string
       example: products
-      description: The Algolia index name.
+      description: Algolia index name.
     searchTypeDefault:
       type: string
       enum:
         - default
       default: default
-      description: >-
-        Perform a search query with `default`, will search for facet values if
-        `facet` is given.
+      description: >
+        - `default`: perform a search query - `facet` [searches for facet
+        values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
     searchForHitsOptions:
       x-is-SearchForHitsOptions: true
       type: object
@@ -1397,21 +1643,22 @@ components:
     facetQuery:
       type: string
       description: Text to search inside the facet's values.
+      example: george
       default: ''
     searchTypeFacet:
       type: string
       enum:
         - facet
       default: facet
-      description: >-
-        Perform a search query with `default`, will search for facet values if
-        `facet` is given.
+      description: >
+        - `default`: perform a search query - `facet` [searches for facet
+        values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
     searchForFacetsOptions:
       type: object
       properties:
         facet:
           type: string
-          description: The `facet` name.
+          description: Facet name.
         indexName:
           $ref: '#/components/schemas/indexName'
         facetQuery:
@@ -1437,15 +1684,25 @@ components:
       enum:
         - none
         - stopIfEnoughMatches
+      description: >
+        - `none`: executes all queries. - `stopIfEnoughMatches`: executes
+        queries one by one, stopping further query execution as soon as a query
+        matches at least the `hitsPerPage` number of results. 
     cursor:
       type: object
       additionalProperties: false
       properties:
         cursor:
           type: string
-          description: >-
+          description: >
             Cursor indicating the location to resume browsing from. Must match
             the value returned by the previous call.
+
+            Pass this value to the subsequent browse call to get the next page
+            of results.
+
+            When the end of the index has been reached, `cursor` is absent from
+            the response.
           example: jMDY3M2MwM2QwMWUxMmQwYWI0ZTN
     browseParamsObject:
       allOf:
@@ -1463,16 +1720,28 @@ components:
     taskID:
       type: integer
       format: int64
-      description: taskID of the task to wait for.
+      example: 1514562690001
+      description: >
+        Unique identifier of a task.
+
+        A successful API response means that a task was added to a queue. It
+        might not run immediately. You can check the task's progress with the
+        `task` operation and this `taskID`.
     deletedAt:
       type: string
-      description: Date of deletion (ISO-8601 format).
+      example: '2023-06-27T14:42:38.831Z'
+      description: >-
+        Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601)
+        format.
     attribute:
       type: string
       description: Value of the attribute to be updated.
     updatedAt:
       type: string
-      description: Date of last update (ISO-8601 format).
+      example: '2023-07-04T12:49:15Z'
+      description: >-
+        Timestamp of the last update in [ISO
+        8601](https://wikipedia.org/wiki/ISO_8601) format.
     deleteByParams:
       type: object
       additionalProperties: false
@@ -1503,7 +1772,7 @@ components:
         - AddUnique
         - IncrementFrom
         - IncrementSet
-      description: The operation to apply on the attribute.
+      description: Operation to apply to the attribute.
     builtInOperation:
       type: object
       description: >-
@@ -1516,8 +1785,8 @@ components:
         value:
           type: string
           description: >-
-            the right-hand side argument to the operation, for example,
-            increment or decrement step, value to add or remove.
+            Value that corresponds to the operation, for example an `Increment`
+            or `Decrement` step, `Add` or `Remove` value.
       required:
         - _operation
         - value
@@ -1535,12 +1804,15 @@ components:
         - deleteObject
         - delete
         - clear
-      description: type of operation.
+      description: Type of batch operation.
     objectIDs:
       type: array
       items:
         type: string
-      description: List of objectID.
+      example:
+        - record-1
+        - record-2
+      description: Unique object (record) identifiers.
     baseIndexSettings:
       type: object
       additionalProperties: false
@@ -1549,19 +1821,29 @@ components:
           type: array
           items:
             type: string
-          description: Creates replicas, exact copies of an index.
+          example:
+            - virtual(prod_products_price_asc)
+            - dev_products_replica
+          description: >-
+            Creates
+            [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/),
+            which are copies of a primary index with the same records but
+            different settings.
           default: []
           x-categories:
             - Ranking
         paginationLimitedTo:
           type: integer
-          description: Set the maximum number of hits accessible via pagination.
+          example: 20
+          description: Maximum number of hits accessible through pagination.
           default: 1000
         unretrievableAttributes:
           type: array
           items:
             type: string
-          description: List of attributes that can't be retrieved at query time.
+          example:
+            - popularity
+          description: Attributes that can't be retrieved at query time.
           default: []
           x-categories:
             - Attributes
@@ -1569,35 +1851,50 @@ components:
           type: array
           items:
             type: string
-          description: A list of words for which you want to turn off typo tolerance.
+          example:
+            - wheel
+            - 1X2BCD
+          description: >-
+            Words for which you want to turn off [typo
+            tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
           default: []
           x-categories:
             - Typos
         attributesToTransliterate:
           description: >-
-            Specify on which attributes in your index Algolia should apply
-            Japanese transliteration to make words indexed in Katakana or Kanji
-            searchable in Hiragana.
+            Attributes in your index to which [Japanese
+            transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead)
+            applies. This will ensure that words indexed in Katakana or Kanji
+            can also be searched in Hiragana.
           type: array
           items:
             type: string
+          example:
+            - name
+            - description
           x-categories:
             - Languages
         camelCaseAttributes:
           type: array
           items:
             type: string
+          example:
+            - description
           description: >-
-            List of attributes on which to do a decomposition of camel case
-            words.
+            Attributes on which to split [camel
+            case](https://wikipedia.org/wiki/Camel_case) words.
           default: []
           x-categories:
             - Languages
         decompoundedAttributes:
           type: object
+          example:
+            de:
+              - name
           description: >-
-            Specify on which attributes in your index Algolia should apply word
-            segmentation, also known as decompounding.
+            Attributes in your index to which [word
+            segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/)
+            (decompounding) applies.
           default: {}
           x-categories:
             - Languages
@@ -1605,9 +1902,14 @@ components:
           type: array
           items:
             type: string
+          example:
+            - ja
           description: >-
-            Sets the languages at the index level for language-specific
-            processing such as tokenization and normalization.
+            Set the languages of your index, for language-specific processing
+            steps such as
+            [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/)
+            and
+            [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
           default: []
           x-categories:
             - Languages
@@ -1615,13 +1917,21 @@ components:
           type: array
           items:
             type: string
-          description: List of attributes on which you want to disable prefix matching.
+          example:
+            - sku
+          description: >-
+            Attributes for which you want to turn off [prefix
+            matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search).
           default: []
           x-categories:
             - Query strategy
         allowCompressionOfIntegerArray:
           type: boolean
-          description: Enables compression of large integer arrays.
+          description: >
+            Incidates whether the engine compresses arrays with exclusively
+            non-negative integers.
+
+            When enabled, the compressed arrays may be reordered.
           default: false
           x-categories:
             - Performance
@@ -1629,13 +1939,23 @@ components:
           type: array
           items:
             type: string
-          description: List of numeric attributes that can be used as numerical filters.
+          description: >-
+            Numeric attributes that can be used as [numerical
+            filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters).
+          example:
+            - quantity
+            - popularity
           default: []
           x-categories:
             - Performance
         separatorsToIndex:
           type: string
-          description: Control which separators are indexed.
+          example: +#
+          description: >-
+            Controls which separators are added to an Algolia index as part of
+            [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean).
+            Separators are all non-letter characters except spaces and currency
+            characters, such as $€£¥.
           default: ''
           x-categories:
             - Typos
@@ -1643,15 +1963,30 @@ components:
           type: array
           items:
             type: string
-          description: The complete list of attributes used for searching.
+          example:
+            - title,alternative_title
+            - author
+            - unordered(text)
+            - emails.personal
+          description: >
+            [Attributes used for
+            searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/),
+            including determining [if matches at the beginning of a word are
+            important (ordered) or not
+            (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
           default: []
           x-categories:
             - Attributes
         userData:
           $ref: '#/components/schemas/userData'
         customNormalization:
-          description: Overrides Algolia's default normalization.
+          description: >-
+            A list of characters and their normalized replacements to override
+            Algolia's default
+            [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
           type: object
+          example: |
+            {default: {'ä': 'ae', 'ü': 'ue'}}
           additionalProperties:
             type: object
             additionalProperties:
@@ -1659,13 +1994,14 @@ components:
           x-categories:
             - Languages
     indexSettings:
-      description: The Algolia index settings.
+      description: Algolia index settings.
       allOf:
         - $ref: '#/components/schemas/baseIndexSettings'
         - $ref: '#/components/schemas/indexSettingsAsSearchParams'
     SynonymType:
       type: string
-      description: Type of the synonym object.
+      description: Synonym type.
+      example: onewaysynonym
       enum:
         - synonym
         - onewaysynonym
@@ -1679,44 +2015,65 @@ components:
       properties:
         objectID:
           type: string
-          description: Unique identifier of the synonym object to be created or updated.
+          description: Unique identifier of a synonym object.
+          example: synonymID
         type:
           $ref: '#/components/schemas/SynonymType'
         synonyms:
           type: array
           items:
             type: string
-          description: Words or phrases to be considered equivalent.
+          description: Words or phrases considered equivalent.
+          example:
+            - vehicle
+            - auto
         input:
           type: string
-          description: Word or phrase to appear in query strings (for onewaysynonym).
+          description: >-
+            Word or phrase to appear in query strings (for
+            [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)).
+          example: car
         word:
           type: string
           description: >-
-            Word or phrase to appear in query strings (for altcorrection1 and
-            altcorrection2).
+            Word or phrase to appear in query strings (for [`altcorrection1` and
+            `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)).
+          example: car
         corrections:
           type: array
           items:
             type: string
           description: Words to be matched in records.
+          example:
+            - vehicle
+            - auto
         placeholder:
           type: string
-          description: Token to be put inside records.
+          description: >
+            [Placeholder
+            token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/)
+            to be put inside records.
+          example: <Street>
         replacements:
           type: array
           items:
             type: string
-          description: List of query words that will match the token.
+          description: >-
+            Query words that will match the [placeholder
+            token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/).
+          example:
+            - street
+            - st
       required:
         - objectID
         - type
     id:
       type: string
-      description: objectID of the inserted object.
+      example: '12'
+      description: Unique identifier of a synonym object.
     synonymHits:
       type: array
-      description: Array of synonym objects.
+      description: Synonym objects.
       items:
         $ref: '#/components/schemas/synonymHit'
     searchSynonymsResponse:
@@ -1732,11 +2089,15 @@ components:
         - nbHits
     keyString:
       type: string
-      description: The API key.
+      description: API key.
+      example: 13ad45b4d0a2f6ea65ecbddf6aa260f2
     createdAtTimestamp:
       type: integer
       format: int64
-      description: Time of the event expressed in milliseconds since the Unix epoch.
+      example: 1656345570000
+      description: >-
+        Timestamp of creation in milliseconds in [Unix epoch
+        time](https://wikipedia.org/wiki/Unix_time).
     baseGetApiKeyResponse:
       type: object
       additionalProperties: false
@@ -1750,35 +2111,35 @@ components:
         - createdAt
     acl:
       description: >
-        List of rights for the API key. The following rights can be used:
+        API key permissions:
 
 
-        addObject: allows to add/update an object in the index (copy/move index
-        are also allowed with this right).
+        `addObject`: required to add or update records, copy or move an index.
 
-        analytics: allows to retrieve the analytics through the Analytics API.
+        `analytics`: required to access the Analytics API.
 
-        browse: allows to retrieve all index content via the browse API.
+        `browse`: required to view records
 
-        deleteIndex: allows to delete or clear index content.
+        `deleteIndex`: required to delete indices.
 
-        deleteObject: allows to delete objects from the index.
+        `deleteObject`: required to delete records.
 
-        editSettings: allows to change index settings.
+        `editSettings`: required to change index settings.
 
-        listIndexes: allows to list all accessible indices.
+        `listIndexes`: required to list indices.
 
-        logs: allows to get the logs.
+        `logs`: required to access logs of search and indexing operations.
 
-        recommendation: Allows usage of the Personalization dashboard and the
-        Recommendation API.
+        `recommendation`: required to access the Personalization and Recommend
+        APIs.
 
-        search: allows to search the index.
+        `search`: required to search records
 
-        seeUnretrievableAttributes: disable unretrievableAttributes feature for
-        all operations returning records.
+        `seeUnretrievableAttributes`: required to retrieve
+        [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/)
+        for all operations that return records.
 
-        settings: allows to get index settings.
+        `settings`: required to examine index settings.
       type: string
       enum:
         - addObject
@@ -1797,60 +2158,114 @@ components:
         - usage
     apiKey:
       type: object
-      description: Api Key object.
+      description: API key object.
       additionalProperties: false
       properties:
         acl:
           type: array
-          description: Set of permissions associated with the key.
+          description: >
+            [Permissions](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl)
+            associated with the key.
+          example:
+            - search
+            - addObject
           default: []
           items:
             $ref: '#/components/schemas/acl'
         description:
           type: string
-          description: >-
-            A comment used to identify a key more easily in the dashboard. It is
-            not interpreted by the API.
+          description: Description of an API key for you and your team members.
+          example: Browse-restricted key
           default: ''
         indexes:
           type: array
-          description: >-
-            Restrict this new API key to a list of indices or index patterns. If
+          description: >
+            Restricts this API key to a list of indices or index patterns. If
             the list is empty, all indices are allowed.
+
+            Specify either an exact index name or a pattern with a leading or
+            trailing wildcard character (or both). For example:
+
+            - `dev_*` matches all indices starting with "dev_" - `*_dev` matches
+            all indices ending with "_dev" - `*_products_*` matches all indices
+            containing "_products_".
+          example:
+            - dev_*
+            - prod_products
           default: []
           items:
             type: string
         maxHitsPerQuery:
           type: integer
-          description: >-
+          description: >
             Maximum number of hits this API key can retrieve in one query. If
             zero, no limit is enforced.
+
+            > **Note**: Use this parameter to protect you from third-party
+            attempts to retrieve your entire content by massively querying the
+            index.
           default: 0
         maxQueriesPerIPPerHour:
           type: integer
-          description: >-
+          description: >
             Maximum number of API calls per hour allowed from a given IP address
-            or a user token.
+            or [user
+            token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).
+
+            Each time an API call is performed with this key, a check is
+            performed. If there were more than the specified number of calls
+            within the last hour, the API returns an error with the status code
+            `429` (Too Many Requests).
+
+
+            > **Note**: Use this parameter to protect you from third-party
+            attempts to retrieve your entire content by massively querying the
+            index.
           default: 0
         queryParameters:
           type: string
-          description: >-
-            URL-encoded query string. Force some query parameters to be applied
-            for each query made with this API key.
+          description: >
+            Force some [query
+            parameters](https://www.algolia.com/doc/api-reference/api-parameters/)
+            to be applied for each query made with this API key.
+
+            It's a URL-encoded query string.
+          example: >-
+            typoTolerance%3Dstrict%26ignorePlurals%3Dfalse%26filters%3Drights%3Apublic
           default: ''
         referers:
           type: array
-          description: >-
-            Restrict this new API key to specific referers. If empty or blank,
-            defaults to all referers.
+          description: >
+            Restrict this API key to specific
+            [referrers](https://www.algolia.com/doc/guides/security/api-keys/in-depth/api-key-restrictions/#http-referrers).
+            If empty, all referrers are allowed.
+
+            For example:
+
+            - `https://algolia.com/*` matches all referrers starting with
+            "https://algolia.com/" - `*.algolia.com` matches all referrers
+            ending with ".algolia.com" - `*algolia.com*` allows everything in
+            the domain "algolia.com".
+          example:
+            - '*algolia.com*'
           default: []
           items:
             type: string
         validity:
           type: integer
-          description: >-
-            Validity limit for this key in seconds. The key will automatically
-            be removed after this period of time.
+          description: >
+            Validity duration of a key (in seconds).  The key will automatically
+            be removed after this time has expired. The default value of 0 never
+            expires.
+
+            Short-lived API keys are useful to grant temporary access to your
+            data. For example, in mobile apps, you can't [control when users
+            update your
+            app](https://www.algolia.com/doc/guides/security/security-best-practices/#use-secured-api-keys-in-mobile-apps).
+            So instead of encoding keys into your app as you would for a web
+            app, you should dynamically fetch them from your mobile app's
+            backend.
+          example: 86400
           default: 0
       required:
         - acl
@@ -1860,7 +2275,10 @@ components:
         - $ref: '#/components/schemas/apiKey'
     createdAt:
       type: string
-      description: Date of creation (ISO-8601 format).
+      example: '2023-07-04T12:49:15Z'
+      description: >-
+        Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601)
+        format.
     addApiKeyResponse:
       type: object
       additionalProperties: false
@@ -1875,8 +2293,9 @@ components:
     anchoring:
       type: string
       description: >-
-        Whether the pattern parameter must match the beginning or the end of the
-        query string, or both, or none.
+        Whether the pattern parameter matches the beginning (`startsWith`) or
+        end (`endsWith`) of the query string, is an exact match (`is`), or a
+        partial match (`contains`).
       enum:
         - is
         - startsWith
@@ -1889,6 +2308,7 @@ components:
         pattern:
           type: string
           description: Query pattern syntax.
+          example: '{facet:brand}'
         anchoring:
           $ref: '#/components/schemas/anchoring'
         alternatives:
@@ -1898,6 +2318,7 @@ components:
         context:
           type: string
           description: 'Rule context format: [A-Za-z0-9_-]+).'
+          example: trackedFilters
     editType:
       description: Type of edit.
       type: string
@@ -1975,7 +2396,7 @@ components:
             type: string
     params:
       type: object
-      description: Additional search parameters. Any valid search parameter is allowed.
+      description: Additional search parameters.
       additionalProperties: false
       properties:
         query:
@@ -1994,18 +2415,22 @@ components:
     promotePosition:
       type: integer
       description: >-
-        The position to promote the objects to (zero-based). If you pass
-        objectIDs, the objects are placed at this position as a group. For
-        example, if you pass four objectIDs to position 0, the objects take the
-        first four positions.
+        The position to promote the records to. If you pass objectIDs, the
+        records are placed at this position as a group. For example, if you
+        pronmote four objectIDs to position 0, the records take the first four
+        positions.
+      example: 0
     promoteObjectIDs:
-      description: Multiple objectIDs to promote as hits.
+      description: Records to promote.
       type: object
       additionalProperties: false
       properties:
         objectIDs:
           type: array
-          description: Array of unique identifiers of the objects to promote.
+          description: Unique identifiers of the records to promote.
+          example:
+            - 3f31c087763a2ceec359b318fc3edef3
+            - 63c3c871e31a152d67df7720192fd752
           items:
             type: string
         position:
@@ -2014,13 +2439,14 @@ components:
         - position
         - objectIDs
     promoteObjectID:
-      description: Single objectID to promote as hits.
+      description: Record to promote.
       type: object
       additionalProperties: false
       properties:
         objectID:
           type: string
-          description: Unique identifier of the object to promote.
+          example: 2b642cf64c587f50388eb1b8d047bf56
+          description: Unique identifier of the record to promote.
         position:
           $ref: '#/components/schemas/promotePosition'
       required:
@@ -2032,33 +2458,33 @@ components:
         - $ref: '#/components/schemas/promoteObjectID'
     consequence:
       type: object
-      description: Consequence of the Rule.
+      description: >
+        [Consequences](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#consequences)
+        of a rule.
       additionalProperties: false
       properties:
         params:
           $ref: '#/components/schemas/consequenceParams'
         promote:
           type: array
-          description: Objects to promote as hits.
+          description: Records to promote.
           items:
             $ref: '#/components/schemas/promote'
         filterPromotes:
           type: boolean
           default: false
           description: >-
-            Only use in combination with the promote consequence. When true,
+            Only use in combination with the `promote` consequence. When `true`,
             promoted results will be restricted to match the filters of the
-            current search. When false, the promoted results will show up
+            current search. When `false`, the promoted results will show up
             regardless of the filters.
         hide:
           type: array
-          description: >-
-            Objects to hide from hits. Each object must contain an objectID
-            field. By default, you can hide up to 50 items per rule.
+          description: Records to hide. By default, you can hide up to 50 records per rule.
           items:
             title: consequenceHide
             type: object
-            description: Unique identifier of the object to hide.
+            description: Unique identifier of the record to hide.
             additionalProperties: false
             properties:
               objectID:
@@ -2071,6 +2497,9 @@ components:
             Custom JSON object that will be appended to the userData array in
             the response. This object isn't interpreted by the API. It's limited
             to 1kB of minified JSON.
+          example:
+            settingID: f2a7b51e3503acc6a39b3784ffb84300
+            pluginVersion: 1.6.0
     timeRange:
       type: object
       additionalProperties: false
@@ -2090,12 +2519,15 @@ components:
       additionalProperties: false
       properties:
         objectID:
-          $ref: '#/components/schemas/objectID'
+          type: string
+          description: Unique identifier for a rule object.
+          example: hide-12345
         conditions:
           type: array
-          description: >-
-            A list of conditions that should apply to activate a Rule. You can
-            use up to 25 conditions per Rule.
+          description: >
+            [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions)
+            required to activate a rule. You can use up to 25 conditions per
+            rule.
           items:
             $ref: '#/components/schemas/condition'
         consequence:
@@ -2103,21 +2535,20 @@ components:
         description:
           type: string
           description: >-
-            This field is intended for Rule management purposes, in particular
-            to ease searching for Rules and presenting them to human readers.
-            It's not interpreted by the API.
+            Description of the rule's purpose. This can be helpful for display
+            in the Algolia dashboard.
+          example: Display a promotional banner
         enabled:
           type: boolean
           default: true
           description: >-
-            Whether the Rule is enabled. Disabled Rules remain in the index, but
-            aren't applied at query time.
+            Indicates whether to enable the rule. If it isn't enabled, it isn't
+            applied at query time.
         validity:
           type: array
           description: >-
-            By default, Rules are permanently valid. When validity periods are
-            specified, the Rule applies only during those periods; it's ignored
-            the rest of the time. The list must not be empty.
+            If you specify a validity period, the rule _only_ applies only
+            during that period. If specified, the array must not be empty.
           items:
             $ref: '#/components/schemas/timeRange'
       required:
@@ -2138,16 +2569,18 @@ components:
         - taskID
     parameters_query:
       type: string
-      description: Full text query.
+      description: Rule object query.
       default: ''
     parameters_page:
       type: integer
-      default: 0
-      description: Requested page (zero-based).
+      minimum: 0
+      description: Requested page (the first page is page 0).
     parameters_hitsPerPage:
       type: integer
       default: 20
-      description: Maximum number of hits in a page. Minimum is 1, maximum is 1000.
+      minimum: 1
+      maximum: 1000
+      description: Maximum number of hits per page.
     dictionaryType:
       type: string
       enum:
@@ -2166,51 +2599,95 @@ components:
         - enabled
         - disabled
       default: enabled
-      description: The state of the dictionary entry.
+      description: >-
+        Indicates whether a dictionary entry is active (`enabled`) or inactive
+        (`disabled`).
     dictionaryEntry:
       type: object
-      description: A dictionary entry.
+      description: Dictionary entry.
       additionalProperties: true
       required:
         - objectID
         - language
       properties:
         objectID:
-          $ref: '#/components/schemas/objectID'
+          type: string
+          description: Unique identifier for a dictionary object.
+          example: under
         language:
           type: string
-          description: >-
-            Language ISO code supported by the dictionary (e.g., "en" for
-            English).
+          description: >
+            [Supported language ISO
+            code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
+          example: de
         word:
           type: string
-          description: The word of the dictionary entry.
+          description: >
+            Dictionary entry word. Usage depends on the type of dictionary
+            entry.
+
+            **`stopwordEntry`**
+
+            The stop word you want to add or update. If the entry already exists
+            in Algolia's standard dictionary, you can override its behavior by
+            adding it to the custom dictionary and setting its `state` to
+            `disabled`.
+
+            **`compoundEntry`**
+
+            When `decomposition` is empty: adds `word` as a compound atom. For
+            example, atom “kino” decomposes the query “kopfkino” into "kopf" and
+            "kino".
+
+            When `decomposition` isn't empty: creates a decomposition exception.
+            For example, when decomposition is set to the ["hund", "hutte"]
+            exception, "hundehutte" decomposes into “hund” and “hutte”,
+            discarding the linking "e".
+          example: down
         words:
           type: array
-          description: The words of the dictionary entry.
+          description: >
+            Compound dictionary [word
+            declensions](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/).
+
+            If the entry already exists in Algolia's standard dictionary, you
+            can override its behavior by adding it to the custom dictionary and
+            setting its `state` to `disabled`.
+          example:
+            - cheval
+            - chevaux
           items:
             type: string
         decomposition:
           type: array
-          description: A decomposition of the word of the dictionary entry.
+          description: For compound entries, governs the behavior of the `word` parameter.
+          example:
+            - kopf
+            - schmerz
+            - tablette
           items:
             type: string
         state:
           $ref: '#/components/schemas/dictionaryEntryState'
     language:
-      description: Language ISO code supported by the dictionary (e.g., "en" for English).
+      description: >
+        [Supported language ISO
+        code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
+      example: en
       type: string
     standardEntry:
-      description: Language ISO code.
+      description: Key-value pair of a language ISO code and a boolean value.
+      example: |
+        {'fr': false}
       type: object
       nullable: true
       additionalProperties:
         type: boolean
     standardEntries:
-      description: >-
-        Map of language ISO code supported by the dictionary (e.g., "en" for
-        English) to a boolean value.
-      type: object
+      description: >
+        Key-value pairs of [supported language ISO
+        codes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/)
+        and boolean values.
       additionalProperties: false
       properties:
         plurals:
@@ -2225,15 +2702,17 @@ components:
       nullable: true
       description: Custom entries for a dictionary.
       properties:
-        nbCustomEntires:
-          description: >-
-            When nbCustomEntries is set to 0, the user didn't customize the
-            dictionary. The dictionary is still supported with standard,
-            Algolia-provided entries.
+        nbCustomEntries:
+          description: >
+            If `0`, the dictionary hasn't been customized and only contains
+            standard entries provided by Algolia.
+
+            If `null`, that feature isn't available or isn't supported for that
+            language.
           type: integer
     languages:
       type: object
-      description: A dictionary language.
+      description: Dictionary language.
       additionalProperties: false
       required:
         - plurals
@@ -2254,13 +2733,13 @@ components:
     userId:
       title: userID
       type: object
-      description: A userID.
+      description: Unique user ID.
       properties:
         userID:
           $ref: '#/components/schemas/userID'
         clusterName:
           type: string
-          description: Cluster on which the user is assigned.
+          description: Cluster to which the user is assigned.
           example: c1-test
         nbRecords:
           type: integer
@@ -2277,7 +2756,7 @@ components:
         - dataSize
     clusterName:
       type: string
-      description: Name of the cluster.
+      description: Cluster name.
       example: c11-test
     nbRecords:
       type: integer
@@ -2288,19 +2767,20 @@ components:
       description: Data size taken by all the users assigned to the cluster.
       example: 481
     source:
-      description: The source.
+      description: Source.
       required:
         - source
       properties:
         source:
-          description: The IP range of the source.
+          description: IP address range of the source.
           type: string
           example: 10.0.0.1/32
         description:
-          description: The description of the source.
+          description: Source description.
           type: string
+          example: Server subnet
     sources:
-      description: A list of sources.
+      description: Sources.
       type: array
       items:
         $ref: '#/components/schemas/source'
@@ -2317,12 +2797,14 @@ components:
       enum:
         - published
         - notPublished
+      description: _published_ if the task has been processed, _notPublished_ otherwise.
     operationType:
       type: string
       enum:
         - move
         - copy
-      description: Type of operation to perform (move or copy).
+      example: copy
+      description: Operation to perform (_move_ or _copy_).
     scopeType:
       type: string
       enum:
@@ -2336,25 +2818,31 @@ components:
         name:
           type: string
           description: Index name.
+          example: movies
         createdAt:
           type: string
           description: >-
             Index creation date. An empty string means that the index has no
             records.
+          example: '2022-09-19T16:36:44.471Z'
         updatedAt:
           $ref: '#/components/schemas/updatedAt'
         entries:
           type: integer
           description: Number of records contained in the index.
+          example: 100
         dataSize:
           type: integer
           description: Number of bytes of the index in minified format.
+          example: 48450
         fileSize:
           type: integer
           description: Number of bytes of the index binary file.
+          example: 112927
         lastBuildTimeS:
           type: integer
           description: Last build time.
+          example: 3
         numberOfPendingTasks:
           type: integer
           default: 0
@@ -2372,6 +2860,7 @@ components:
           description: >-
             Only present if the index is a replica. Contains the name of the
             related primary index.
+          example: T02
         replicas:
           type: array
           items:
@@ -2379,6 +2868,9 @@ components:
           description: >-
             Only present if the index is a primary index with replicas. Contains
             the names of all linked replicas.
+          example:
+            - T02_push
+            - T2replica
       required:
         - name
         - createdAt
@@ -2395,7 +2887,7 @@ components:
       properties:
         items:
           type: array
-          description: List of the fetched indices.
+          description: All indices in your Algolia application.
           items:
             $ref: '#/components/schemas/fetchedIndex'
         nbPages:
@@ -2435,7 +2927,7 @@ components:
         application/json:
           schema:
             title: deletedAtResponse
-            description: The response with a taskID and a deletedAt timestamp.
+            description: Response, taskID, and deletion timestamp.
             additionalProperties: false
             type: object
             required:
@@ -2453,7 +2945,7 @@ components:
           schema:
             title: updatedAtWithObjectIdResponse
             description: >-
-              The response with a taskID, an objectID and an updatedAt
+              Response, taskID, unique object identifier, and an update
               timestamp.
             additionalProperties: false
             type: object
@@ -2470,7 +2962,7 @@ components:
         application/json:
           schema:
             title: updatedAtResponse
-            description: The response with a taskID and an updatedAt timestamp.
+            description: Response, taskID, and update timestamp.
             additionalProperties: false
             type: object
             required:
@@ -2487,7 +2979,7 @@ components:
         application/json:
           schema:
             title: createdAtResponse
-            description: The response with a createdAt timestamp.
+            description: Response and creation timestamp.
             additionalProperties: false
             type: object
             required:
@@ -2523,29 +3015,62 @@ tags:
   - name: Advanced
     description: Advanced operations.
   - name: Api Keys
-    description: Manage your Api Keys.
+    description: Manage your API keys.
   - name: Clusters
-    description: Clusters operations.
+    description: >
+      Multi-cluster operations.
+
+      Algolia no longer offers [multi-cluster
+      management](https://www.algolia.com/doc/guides/scaling/managing-multiple-clusters-mcm/).
+
+      - If you want to partition your data per user, use facets and secured API
+      keys instead. - If you need more data, consider upgrading to a bigger
+      cluster to suit your needs. Contact [Algolia's support
+      team](https://support.algolia.com/hc/en-us/requests/new) for details.
   - name: Dictionaries
-    description: Dictionaries operations.
+    description: >-
+      Dictionary operations allow you to customize linguistic features such as
+      [stop
+      words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/),
+      [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/),
+      and [segmentation
+      (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/).
   - name: Indices
-    description: Manage indices.
+    description: >-
+      Manage indices, including listing them, checking and updating settings,
+      deleting, copying, and renaming.
   - name: Records
-    description: Records operations.
+    description: Record operations.
   - name: Rules
     description: Rules operations.
   - name: Search
-    description: Perform search operations.
+    description: Search operations.
   - name: Synonyms
-    description: Synonyms operations.
+    description: Synonym operations.
   - name: Vaults
-    description: Vault operations.
+    description: >
+      Vault operations.
+
+      Algolia Vault allows you to restrict network-level access to your cluster
+      to a specific set of IP addresses: for non-authorized IP addresses, the
+      cluster is invisible.
+
+      You should authorize the IP addresses of team members who need to access
+      the Alglolia dashboard, as it's also affected by the restricted list you
+      set up.
+
+      To access this feature, [Algolia
+      Vault](https://www.algolia.com/doc/guides/security/algolia-vault/) must be
+      enabled on your server. Contact [Algolia's support
+      team](https://support.algolia.com/hc/en-us/requests/new) for details.
+
+      > **Note**: The maximum number of allowed sources is 1,000.
   - name: _model_index_settings
-    x-displayName: Index Settings
+    x-displayName: Index settings
     description: |
       <SchemaDefinition schemaRef="#/components/schemas/indexSettings" />.
 x-tagGroups:
-  - name: Search and Indexing
+  - name: Search and indexing
     tags:
       - Indices
       - Records
@@ -2593,7 +3118,7 @@ paths:
     post:
       operationId: post
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:
@@ -2623,7 +3148,7 @@ paths:
     put:
       operationId: put
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:
@@ -2681,8 +3206,8 @@ paths:
       operationId: searchSingleIndex
       x-use-read-transporter: true
       x-cacheable: true
-      summary: Search in a single index.
-      description: Perform a search operation targeting one specific index.
+      summary: Search an index.
+      description: Return records that match the query.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       requestBody:
@@ -2714,10 +3239,12 @@ paths:
       x-cacheable: true
       x-legacy-signature: true
       summary: Search multiple indices.
-      description: Perform a search operation targeting one or many indices.
+      description: Send multiple search queries to one or more indices.
       requestBody:
         required: true
-        description: The `search` requests and strategy.
+        description: >-
+          Query requests and strategies. Results will be received in the same
+          order as the queries.
         content:
           application/json:
             schema:
@@ -2764,14 +3291,20 @@ paths:
       operationId: searchForFacetValues
       x-use-read-transporter: true
       x-cacheable: true
-      summary: Search for values of a given facet.
-      description: >-
-        Search for values of a given facet, optionally restricting the returned
-        values to those contained in objects matching other search criteria.
+      summary: Search for facet values.
+      description: >
+        [Search for a facet's
+        values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values),
+        optionally restricting the returned values to those contained in records
+        matching other search criteria.
+
+        > **Note**: Pagination isn't supported (`page` and `hitsPerPage` are
+        ignored). By default, the engine returns a maximum of 10 values but you
+        can adjust this with `maxFacetHits`.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - name: facetName
-          description: The facet name.
+          description: Facet name.
           in: path
           required: true
           schema:
@@ -2814,16 +3347,18 @@ paths:
                         - count
                       properties:
                         value:
-                          description: Raw value of the facet.
+                          description: Facet value.
+                          example: Mobile phone
                           type: string
                         highlighted:
                           $ref: '#/components/schemas/highlightedValue'
                         count:
                           description: >-
-                            How many objects contain this facet value. This
+                            Number of records containing this facet value. This
                             takes into account the extra search parameters
                             specified in the query. Like for a regular search
-                            query, the counts may not be exhaustive.
+                            query, the [counts may not be
+                            exhaustive](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).
                           type: integer
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2838,18 +3373,15 @@ paths:
       tags:
         - search
       operationId: browse
-      summary: Retrieve all index content.
+      summary: Get all records from an index.
       description: >
-        This method allows you to retrieve all index content. It can retrieve up
-        to 1,000 records per call and supports full text search and filters.
+        Retrieve up to 1,000 records per call.
 
-        For performance reasons, some features are not supported, including
-        `distinct`, sorting by `typos`, `words` or `geo distance`.
+        Supports full-text search and filters. For better performance, it
+        doesn't support:
 
-        When there is more content to be browsed, the response contains a cursor
-        field. This cursor has to be passed to the subsequent call to browse in
-        order to get the next page of results. When the end of the index has
-        been reached, the cursor field is absent from the response.
+        - The `distinct` query parameter - Sorting by typos, proximity, words,
+        or geographical distance.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       requestBody:
@@ -2877,8 +3409,18 @@ paths:
       tags:
         - search
       operationId: saveObject
-      description: Add an object to the index, automatically assigning it an object ID.
-      summary: Add an object to the index.
+      description: >
+        Add a record (object) to an index or replace it.
+
+        If the record doesn't contain an `objectID`, Algolia automatically adds
+        it.
+
+        If you use an existing `objectID`, the existing record is replaced with
+        the new one.
+
+        To add multiple records to your index in a single API request, use the
+        [`batch` operation](#tag/Records/operation/batch).
+      summary: Add or update a record.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       requestBody:
@@ -2900,6 +3442,8 @@ paths:
                 properties:
                   createdAt:
                     type: string
+                    description: Date of creation (ISO-8601 format).
+                    example: '2023-06-29T15:15:40.747Z'
                   taskID:
                     $ref: '#/components/schemas/taskID'
                   objectID:
@@ -2939,16 +3483,25 @@ paths:
       tags:
         - search
       operationId: getObject
-      summary: Retrieve an object.
-      description: Retrieve one object from the index.
+      summary: Get a record.
+      description: >-
+        To get more than one record, use the [`objects`
+        operation](#tag/Records/operation/getObjects).
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ObjectID'
         - name: attributesToRetrieve
           in: query
-          description: >-
-            List of attributes to retrieve. If not specified, all retrievable
-            attributes are returned.
+          description: >
+            Attributes to include with the records in the response. This is
+            useful to reduce the size of the API response. By default, all
+            retrievable attributes are returned.
+
+            `objectID` is always retrieved, even when not specified.
+
+            [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/)
+            won't be retrieved unless the request is authenticated with the
+            admin API key.
           schema:
             type: array
             items:
@@ -2976,17 +3529,24 @@ paths:
       tags:
         - search
       operationId: addOrUpdateObject
-      summary: Add or replace an object.
-      description: |
-        Add or replace an object with a given object ID.
-        If the object does not exist, it will be created.
-        If it already exists, it will be replaced.
+      summary: Add or update a record (using objectID).
+      description: >
+        If you use an existing `objectID`, the existing record will be replaced
+        with the new one.
+
+
+        To update only some attributes of an existing record, use the [`partial`
+        operation](#tag/Records/operation/partialUpdateObject) instead.
+
+
+        To add multiple records to your index in a single API request, use the
+        [`batch` operation](#tag/Records/operation/batch).
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ObjectID'
       requestBody:
         required: true
-        description: The Algolia object.
+        description: Algolia record.
         content:
           application/json:
             schema:
@@ -3006,8 +3566,10 @@ paths:
       tags:
         - search
       operationId: deleteObject
-      summary: Delete an object.
-      description: Delete an existing object.
+      summary: Delete a record.
+      description: >-
+        To delete a set of records matching a query, use the [`deleteByQuery`
+        operation](#tag/Records/operation/deleteBy) instead.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ObjectID'
@@ -3027,14 +3589,12 @@ paths:
       tags:
         - search
       operationId: deleteBy
-      summary: Delete all records matching the query.
+      summary: Delete all records matching a query.
       description: >
-        Remove all objects matching a filter (including geo filters).
+        This operation doesn't support all the query options, only its filters
+        (numeric, facet, or tag) and geo queries.
 
-        This method enables you to delete one or more objects based on filters
-        (numeric, facet, tag or geo queries).
-
-        It doesn't accept empty filters or a query.
+        It doesn't accept empty filters or queries.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       requestBody:
@@ -3059,10 +3619,10 @@ paths:
       tags:
         - search
       operationId: clearObjects
-      summary: Clear all objects from an index.
+      summary: Delete all records from an index.
       description: >-
-        Delete an index's content, but leave settings and index-specific API
-        keys untouched.
+        Delete the records but leave settings and index-specific API keys
+        untouched.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       responses:
@@ -3081,35 +3641,33 @@ paths:
       tags:
         - search
       operationId: partialUpdateObject
-      summary: Partially update an object.
+      summary: Update record attributes.
       x-codegen-request-body-name: attributesToUpdate
       description: >
-        Update one or more attributes of an existing object.
+        Add new attributes or update current ones in an existing record.
 
-        This method lets you update only a part of an existing object, either by
-        adding new attributes or updating existing ones.
-
-        You can partially update several objects in a single method call.
-
-        If the index targeted by this operation doesn't exist yet, it's
-        automatically created.
+        You can use any first-level attribute but not nested attributes. If you
+        specify a [nested
+        attribute](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/creating-and-using-nested-attributes/),
+        the engine treats it as a replacement for its first-level ancestor.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ObjectID'
         - name: createIfNotExists
-          description: Creates the record if it does not exist yet.
+          description: |
+            Indicates whether to create a new record if it doesn't exist yet.
           in: query
           schema:
             type: boolean
             default: true
       requestBody:
         required: true
-        description: Map of attribute(s) to update.
+        description: Object with attributes to update.
         content:
           application/json:
             schema:
               type: object
-              description: Attribute(s) to update.
+              description: Attributes to update.
               additionalProperties:
                 $ref: '#/components/schemas/attributeToUpdate'
       responses:
@@ -3128,10 +3686,14 @@ paths:
       tags:
         - search
       operationId: batch
-      summary: Batch operations to one index.
-      description: >-
-        Perform multiple write operations targeting one index, in a single API
-        call.
+      summary: Batch write operations on one index.
+      description: >
+        To reduce the time spent on network round trips, you can perform several
+        write actions in a single API call. Actions are applied in the order
+        they are specified.
+
+        The supported `action`s are equivalent to the individual operations of
+        the same name.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       requestBody:
@@ -3140,7 +3702,7 @@ paths:
           application/json:
             schema:
               title: batchWriteParams
-              description: The `batch` parameters.
+              description: Batch parameters.
               type: object
               additionalProperties: false
               properties:
@@ -3155,9 +3717,11 @@ paths:
                         $ref: '#/components/schemas/action'
                       body:
                         type: object
-                        description: >-
-                          arguments to the operation (depends on the type of the
-                          operation).
+                        description: Operation arguments (varies with specified `action`).
+                        example:
+                          name: Betty Jane McCamey
+                          company: Vita Foods Inc.
+                          email: betty@mccamey.com
                     required:
                       - action
                       - body
@@ -3193,17 +3757,22 @@ paths:
       tags:
         - search
       operationId: multipleBatch
-      description: >-
-        Perform multiple write operations, potentially targeting multiple
-        indices, in a single API call.
-      summary: Batch operations to many indices.
+      description: >
+        To reduce the time spent on network round trips, you can perform several
+        write actions in a single request. It's a multi-index version of the
+        [`batch` operation](#tag/Records/operation/batch). Actions are applied
+        in the order they are specified.
+
+        The supported actions are equivalent to the individual operations of the
+        same name.
+      summary: Batch write operations on multiple indices.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               title: batchParams
-              description: The `multipleBatch` parameters.
+              description: Batch parameters.
               type: object
               additionalProperties: false
               properties:
@@ -3218,12 +3787,17 @@ paths:
                         $ref: '#/components/schemas/action'
                       body:
                         type: object
-                        description: >-
-                          arguments to the operation (depends on the type of the
-                          operation).
+                        description: Operation arguments (varies with specified `action`).
+                        example: >
+                          {'requests':[{'action':'addObject','indexName':'contacts','body':{'name':'Betty
+                          Jane McCamey','company':'Vita Foods
+                          Inc.','email':'betty@mccamey.com'}},{'action':'addObject','indexName':'public_contacts','body':{'name':'Gayla
+                          Geimer','company': "Ortman McCain
+                          Co','email':'gayla@geimer.com'}}]}
                       indexName:
                         type: string
                         description: Index to target for this operation.
+                        example: index1
                     required:
                       - action
                       - body
@@ -3242,7 +3816,7 @@ paths:
                 properties:
                   taskID:
                     type: object
-                    description: List of tasksIDs per index.
+                    description: TaskIDs per index.
                     additionalProperties:
                       $ref: '#/components/schemas/taskID'
                   objectIDs:
@@ -3265,25 +3839,26 @@ paths:
       operationId: getObjects
       x-use-read-transporter: true
       x-cacheable: true
-      summary: Retrieve one or more objects.
-      description: >-
-        Retrieve one or more objects, potentially from different indices, in a
-        single API call.
+      summary: Get multiple records.
+      description: >
+        Retrieve one or more records, potentially from different indices, in a
+        single API operation. Results will be received in the same order as the
+        requests.
       requestBody:
         required: true
-        description: The Algolia object.
+        description: Request object.
         content:
           application/json:
             schema:
               title: getObjectsParams
-              description: The `getObjects` parameters.
+              description: Request parameters.
               type: object
               additionalProperties: false
               properties:
                 requests:
                   type: array
                   items:
-                    description: getObjects operation on an index.
+                    description: Record retrieval operation.
                     title: getObjectsRequest
                     type: object
                     additionalProperties: false
@@ -3296,14 +3871,20 @@ paths:
                         items:
                           type: string
                         description: >-
-                          List of attributes to retrieve. By default, all
+                          Attributes to retrieve. If not specified, all
                           retrievable attributes are returned.
+                        example:
+                          - author
+                          - title
+                          - content
                       objectID:
                         type: string
-                        description: ID of the object within that index.
+                        description: Record's objectID.
+                        example: 8b9b7619230b1950f653b962fb0dfd6b
                       indexName:
                         type: string
-                        description: name of the index containing the object.
+                        description: Name of the index containing the required records.
+                        example: books
               required:
                 - requests
       responses:
@@ -3318,7 +3899,7 @@ paths:
                 properties:
                   results:
                     type: array
-                    description: List of results fetched.
+                    description: Retrieved results.
                     items:
                       type: object
                       description: Fetched object.
@@ -3338,8 +3919,10 @@ paths:
       tags:
         - search
       operationId: getSettings
-      description: Retrieve settings of an index.
-      summary: Retrieve settings of an index.
+      description: >-
+        Return an object containing an index's [configuration
+        settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
+      summary: Get index settings.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       responses:
@@ -3362,10 +3945,10 @@ paths:
         - search
       operationId: setSettings
       description: >-
-        Update settings of an index. Only specified settings are overridden;
-        unspecified settings are left unchanged. Specifying null for a setting
-        resets it to its default value.
-      summary: Update settings of an index.
+        Update the specified [index
+        settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
+        Specifying null for a setting resets it to its default value.
+      summary: Update index settings.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ForwardToReplicas'
@@ -3391,11 +3974,14 @@ paths:
       tags:
         - search
       operationId: getSynonym
-      summary: Get synonym.
-      description: Fetch a synonym object identified by its objectID.
+      summary: Get a synonym object.
+      description: >-
+        Get a syonym by its `objectID`. To find the object IDs for your
+        synonyms, use the [`search`
+        operation](#tag/Synonyms/operation/searchSynonyms).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/ObjectID'
+        - $ref: '#/components/parameters/parameters_ObjectID'
       responses:
         '200':
           description: OK
@@ -3415,13 +4001,22 @@ paths:
       tags:
         - search
       operationId: saveSynonym
-      summary: Save synonym.
-      description: >-
-        Create a new synonym object or update the existing synonym object with
-        the given object ID.
+      summary: Save a synonym.
+      description: >
+        Add a
+        [synonym](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms)
+        to an index or replace it.
+
+        If the synonym `objectID` doesn't exist, Algolia adds a new one.
+
+        If you use an existing synonym `objectID`, the existing synonym is
+        replaced with the new one.
+
+        To add multiple synonyms in a single API request, use the [`batch`
+        operation](#tag/Synonyms/operation/saveSynonyms).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/ObjectID'
+        - $ref: '#/components/parameters/parameters_ObjectID'
         - $ref: '#/components/parameters/ForwardToReplicas'
       requestBody:
         required: true
@@ -3461,11 +4056,14 @@ paths:
       tags:
         - search
       operationId: deleteSynonym
-      summary: Delete synonym.
-      description: Delete a single synonyms set, identified by the given objectID.
+      summary: Delete a synonym.
+      description: >-
+        Delete a synonym by its `objectID`. To find the object IDs of your
+        synonyms, use the [`search`
+        operation](#tag/Synonyms/operation/searchSynonyms).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/ObjectID'
+        - $ref: '#/components/parameters/parameters_ObjectID'
         - $ref: '#/components/parameters/ForwardToReplicas'
       responses:
         '200':
@@ -3484,9 +4082,7 @@ paths:
         - search
       operationId: saveSynonyms
       summary: Save a batch of synonyms.
-      description: >-
-        Create/update multiple synonym objects at once, potentially replacing
-        the entire list of synonyms if replaceExistingSynonyms is true.
+      description: Create or update multiple synonyms.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ForwardToReplicas'
@@ -3513,8 +4109,8 @@ paths:
       tags:
         - search
       operationId: clearAllSynonyms
-      summary: Clear all synonyms.
-      description: Remove all synonyms from an index.
+      summary: Delete all synonyms.
+      description: Delete all synonyms in the index.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ForwardToReplicas'
@@ -3536,15 +4132,17 @@ paths:
       operationId: searchSynonyms
       x-use-read-transporter: true
       x-cacheable: true
-      summary: Search synonyms.
-      description: Search or browse all synonyms, optionally filtering them by type.
+      summary: Search for synonyms.
+      description: >-
+        Search for synonyms in your index. You can control and filter the search
+        with parameters. To get all synonyms, send an empty request body.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/Type'
         - $ref: '#/components/parameters/PageDefault0'
         - $ref: '#/components/parameters/HitsPerPage'
       requestBody:
-        description: The body of the the `searchSynonyms` method.
+        description: Body of the `searchSynonyms` operation.
         content:
           application/json:
             schema:
@@ -3574,8 +4172,10 @@ paths:
       tags:
         - search
       operationId: listApiKeys
-      summary: List API Keys.
-      description: List API keys, along with their associated rights.
+      summary: List API keys.
+      description: >-
+        List all API keys associated with your Algolia application, including
+        their permissions and restrictions.
       responses:
         '200':
           description: OK
@@ -3590,7 +4190,7 @@ paths:
                 properties:
                   keys:
                     type: array
-                    description: List of api keys.
+                    description: API keys.
                     items:
                       $ref: '#/components/schemas/getApiKeyResponse'
         '400':
@@ -3605,8 +4205,11 @@ paths:
       tags:
         - search
       operationId: addApiKey
-      summary: Create an API key.
-      description: Add a new API Key with specific permissions/restrictions.
+      summary: Add API key.
+      description: |
+        Add a new API key with specific permissions and restrictions.
+        The request must be authenticated with the admin API key.
+        The response returns an API key string.
       requestBody:
         required: true
         content:
@@ -3633,8 +4236,13 @@ paths:
       tags:
         - search
       operationId: getApiKey
-      summary: Get an API key.
-      description: Get the permissions of an API key.
+      summary: Get API key permissions.
+      description: >
+        Get the permissions and restrictions of a specific API key.
+
+        When authenticating with the admin API key, you can request information
+        for any of your application's keys. When authenticating with other API
+        keys, you can only retrieve information for that key.
       parameters:
         - $ref: '#/components/parameters/KeyString'
       responses:
@@ -3657,7 +4265,10 @@ paths:
         - search
       operationId: updateApiKey
       summary: Update an API key.
-      description: Replace every permission of an existing API key.
+      description: |
+        Replace the permissions of an existing API key.
+        Any unspecified parameter resets that permission to its default value.
+        The request must be authenticated with the admin API key.
       parameters:
         - $ref: '#/components/parameters/KeyString'
       requestBody:
@@ -3695,8 +4306,10 @@ paths:
       tags:
         - search
       operationId: deleteApiKey
-      summary: Delete an API key.
-      description: Delete an existing API Key.
+      summary: Delete API key.
+      description: |
+        Delete an existing API key.
+        The request must be authenticated with the admin API key.
       parameters:
         - $ref: '#/components/parameters/KeyString'
       responses:
@@ -3726,8 +4339,10 @@ paths:
       tags:
         - search
       operationId: restoreApiKey
-      summary: Restore an API key.
-      description: Restore a deleted API key, along with its associated rights.
+      summary: Restore API key.
+      description: |
+        Restore a deleted API key, along with its associated permissions.
+        The request must be authenticated with the admin API key.
       parameters:
         - $ref: '#/components/parameters/KeyString'
       responses:
@@ -3751,10 +4366,12 @@ paths:
         - search
       operationId: getRule
       summary: Get a rule.
-      description: Retrieve the Rule with the specified objectID.
+      description: >-
+        Get a rule by its `objectID`. To find the `objectID` for rules, use the
+        [`search` operation](#tag/Rules/operation/searchRules).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/ObjectID'
+        - $ref: '#/components/parameters/parameters_ObjectID-2'
       responses:
         '200':
           description: OK
@@ -3774,11 +4391,13 @@ paths:
       tags:
         - search
       operationId: saveRule
-      summary: Save/Update a rule.
-      description: Create or update the Rule with the specified objectID.
+      summary: Create or update a rule.
+      description: >-
+        To create or update more than one rule, use the [`batch`
+        operation](#tag/Rules/operation/saveRules).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/ObjectID'
+        - $ref: '#/components/parameters/parameters_ObjectID-2'
         - $ref: '#/components/parameters/ForwardToReplicas'
       requestBody:
         required: true
@@ -3806,10 +4425,12 @@ paths:
         - search
       operationId: deleteRule
       summary: Delete a rule.
-      description: Delete the Rule with the specified objectID.
+      description: >-
+        Delete a rule by its `objectID`. To find the `objectID` for rules, use
+        the [`search` operation](#tag/Rules/operation/searchRules).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/ObjectID'
+        - $ref: '#/components/parameters/parameters_ObjectID-2'
         - $ref: '#/components/parameters/ForwardToReplicas'
       responses:
         '200':
@@ -3828,7 +4449,7 @@ paths:
         - search
       operationId: saveRules
       summary: Save a batch of rules.
-      description: Create/update multiple rules objects at once.
+      description: Create or update multiple rules.
       x-codegen-request-body-name: rules
       parameters:
         - $ref: '#/components/parameters/IndexName'
@@ -3859,8 +4480,8 @@ paths:
       tags:
         - search
       operationId: clearRules
-      summary: Clear Rules.
-      description: Delete all Rules in the index.
+      summary: Delete all rules.
+      description: Delete all rules in the index.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - $ref: '#/components/parameters/ForwardToReplicas'
@@ -3883,7 +4504,9 @@ paths:
       x-use-read-transporter: true
       x-cacheable: true
       summary: Search for rules.
-      description: Search for rules matching various criteria.
+      description: >-
+        Search for rules in your index. You can control the search with
+        parameters. To list all rules, send an empty request body.
       parameters:
         - $ref: '#/components/parameters/IndexName'
       requestBody:
@@ -3892,7 +4515,7 @@ paths:
             schema:
               type: object
               title: searchRulesParams
-              description: Parameters for the search.
+              description: Rules search parameters.
               additionalProperties: false
               properties:
                 query:
@@ -3902,8 +4525,9 @@ paths:
                 context:
                   type: string
                   description: >-
-                    Restricts matches to contextual rules with a specific
-                    context (exact match).
+                    Restricts responses to the specified [contextual
+                    rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules).
+                  example: mobile
                 page:
                   $ref: '#/components/schemas/parameters_page'
                 hitsPerPage:
@@ -3913,15 +4537,16 @@ paths:
                   nullable: true
                   default: null
                   description: >-
-                    When specified, restricts matches to rules with a specific
-                    enabled status. When absent (default), all rules are
-                    retrieved, regardless of their enabled status.
+                    Restricts responses to enabled rules. When not specified
+                    (default), _all_ rules are retrieved.
                 requestOptions:
                   type: array
-                  description: A mapping of requestOptions to send along with the request.
+                  description: Request options to send with the API call.
+                  example: |
+                    {timeouts:{read:20}}
                   items:
                     type: object
-                    description: Request Option.
+                    description: Request option.
       responses:
         '200':
           description: OK
@@ -3964,7 +4589,7 @@ paths:
       tags:
         - search
       operationId: batchDictionaryEntries
-      description: Send a batch of dictionary entries.
+      description: Add or remove a batch of dictionary entries.
       summary: Batch dictionary entries.
       parameters:
         - $ref: '#/components/parameters/DictionaryName'
@@ -3974,7 +4599,8 @@ paths:
           application/json:
             schema:
               title: batchDictionaryEntriesParams
-              description: The `batchDictionaryEntries` parameters.
+              description: |
+                `batchDictionaryEntries` parameters.
               type: object
               required:
                 - requests
@@ -3984,13 +4610,11 @@ paths:
                   type: boolean
                   default: false
                   description: >-
-                    When `true`, start the batch by removing all the custom
-                    entries from the dictionary.
+                    Incidates whether to replace all custom entries in the
+                    dictionary with the ones sent with this request.
                 requests:
                   type: array
-                  description: >-
-                    List of operations to batch. Each operation is described by
-                    an `action` and a `body`.
+                  description: Operations to batch.
                   items:
                     title: batchDictionaryEntriesRequest
                     type: object
@@ -4021,8 +4645,16 @@ paths:
       operationId: searchDictionaryEntries
       x-use-read-transporter: true
       x-cacheable: true
-      description: Search the dictionary entries.
-      summary: Search a dictionary entries.
+      description: >-
+        Search for standard and
+        [custom](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/)
+        entries in the [stop
+        words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/),
+        [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/),
+        or [segmentation
+        (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/)
+        dictionaries.
+      summary: Search dictionary entries.
       parameters:
         - $ref: '#/components/parameters/DictionaryName'
       requestBody:
@@ -4031,7 +4663,8 @@ paths:
           application/json:
             schema:
               title: searchDictionaryEntriesParams
-              description: The `searchDictionaryEntries` parameters.
+              description: |
+                `searchDictionaryEntries` parameters.
               type: object
               required:
                 - query
@@ -4062,9 +4695,9 @@ paths:
         - search
       operationId: getDictionarySettings
       description: >-
-        Retrieve dictionaries settings. The API stores languages whose standard
-        entries are disabled. Fetch settings does not return false values.
-      summary: Retrieve dictionaries settings.
+        Get the languages for which [stop words are turned
+        off](#tag/Dictionaries/operation/setDictionarySettings).
+      summary: Get stop word settings.
       responses:
         '200':
           description: OK
@@ -4091,8 +4724,8 @@ paths:
       tags:
         - search
       operationId: setDictionarySettings
-      description: Set dictionaries settings.
-      summary: Set dictionaries settings.
+      description: Set stop word settings for a specific language.
+      summary: Set stop word settings.
       requestBody:
         required: true
         content:
@@ -4102,8 +4735,8 @@ paths:
               type: object
               additionalProperties: false
               description: >-
-                Disable the builtin Algolia entries for a type of dictionary per
-                language.
+                Enable or turn off the built-in Algolia stop words for a
+                specific language.
               required:
                 - disableStandardEntries
               properties:
@@ -4125,7 +4758,15 @@ paths:
       tags:
         - search
       operationId: getDictionaryLanguages
-      description: List dictionaries supported per language.
+      description: >-
+        Lists Algolia's [supported
+        languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/)
+        and any customizations applied to each language's [stop
+        word](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/),
+        [plural](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/),
+        and [segmentation
+        (compound)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/)
+        features.
       summary: List available languages.
       responses:
         '200':
@@ -4150,17 +4791,12 @@ paths:
       tags:
         - search
       operationId: assignUserId
-      summary: Assign or Move userID.
+      summary: Assign or move a user ID.
       description: >
-        Assign or Move a userID to a cluster.
+        Assign or move a user ID to a cluster.
 
-        The time it takes to migrate (move) a user is proportional to the amount
-        of data linked to the userID.
-
-        Upon success, the response is 200 OK.
-
-        A successful response indicates that the operation has been taken into
-        account, and the userID is directly usable.
+        The time it takes to move a user is proportional to the amount of data
+        linked to the user ID.
       parameters:
         - $ref: '#/components/parameters/UserIDInHeader'
       requestBody:
@@ -4194,14 +4830,10 @@ paths:
       operationId: listUserIds
       summary: List userIDs.
       description: >
-        List the userIDs assigned to a multi-clusters appID.
+        List the userIDs assigned to a multi-cluster application.
 
-        The data returned will usually be a few seconds behind real time,
-        because userID usage may take up to a few seconds to propagate to the
-        different clusters.
-
-        Upon success, the response is 200 OK and contains the following userIDs
-        data.
+        Since it can take up to a few seconds to get the data from the different
+        clusters, the response isn't real-time.
       parameters:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/HitsPerPage'
@@ -4213,11 +4845,11 @@ paths:
               schema:
                 title: listUserIdsResponse
                 type: object
-                description: UserIDs data.
+                description: User ID data.
                 properties:
                   userIDs:
                     type: array
-                    description: List of userIDs.
+                    description: User IDs.
                     items:
                       $ref: '#/components/schemas/userId'
                 required:
@@ -4236,13 +4868,9 @@ paths:
         - search
       operationId: batchAssignUserIds
       summary: Batch assign userIDs.
-      description: >
-        Assign multiple userIDs to a cluster.
-
-        Upon success, the response is 200 OK.
-
-        A successful response indicates that the operation has been taken into
-        account, and the userIDs are directly usable.
+      description: |
+        Assign multiple user IDs to a cluster.
+        **You can't _move_ users with this operation.**.
       parameters:
         - $ref: '#/components/parameters/UserIDInHeader'
       requestBody:
@@ -4259,9 +4887,11 @@ paths:
                   $ref: '#/components/schemas/clusterName'
                 users:
                   type: array
-                  description: >-
-                    userIDs to assign. Note you cannot move users with this
-                    method.
+                  description: User IDs to assign.
+                  example:
+                    - einstein
+                    - bohr
+                    - feynman
                   items:
                     type: string
               required:
@@ -4285,14 +4915,11 @@ paths:
       operationId: getTopUserIds
       summary: Get top userID.
       description: >
-        Get the top 10 userIDs with the highest number of records per cluster.
+        Get the IDs of the 10 users with the highest number of records per
+        cluster.
 
-        The data returned will usually be a few seconds behind real time,
-        because userID usage may take up to a few seconds to propagate to the
-        different clusters.
-
-        Upon success, the response is 200 OK and contains the following array of
-        userIDs and clusters.
+        Since it can take up to a few seconds to get the data from the different
+        clusters, the response isn't real-time.
       responses:
         '200':
           description: OK
@@ -4301,11 +4928,14 @@ paths:
               schema:
                 title: getTopUserIdsResponse
                 type: object
-                description: Array of userIDs and clusters.
+                description: User IDs and clusters.
                 properties:
                   topUsers:
                     type: array
-                    description: Mapping of cluster names to top users.
+                    description: >-
+                      Key-value pairs with cluster names as keys and lists of
+                      users with the highest number of records per cluster as
+                      values.
                     items:
                       type: object
                       additionalProperties:
@@ -4331,12 +4961,8 @@ paths:
       description: >
         Returns the userID data stored in the mapping.
 
-        The data returned will usually be a few seconds behind real time,
-        because userID usage may take up to a few seconds to propagate to the
-        different clusters.
-
-        Upon success, the response is 200 OK and contains the following userID
-        data.
+        Since it can take up to a few seconds to get the data from the different
+        clusters, the response isn't real-time.
       parameters:
         - $ref: '#/components/parameters/UserIDInPath'
       responses:
@@ -4359,11 +4985,7 @@ paths:
         - search
       operationId: removeUserId
       summary: Remove userID.
-      description: >
-        Remove a userID and its associated data from the multi-clusters.
-
-        Upon success, the response is 200 OK and a task is created to remove the
-        userID data and mapping.
+      description: Remove a userID and its associated data from the multi-clusters.
       parameters:
         - $ref: '#/components/parameters/UserIDInPath'
       responses:
@@ -4394,12 +5016,7 @@ paths:
         - search
       operationId: listClusters
       summary: List clusters.
-      description: >
-        List the clusters available in a multi-clusters setup for a single
-        appID.
-
-        Upon success, the response is 200 OK and contains the following
-        clusters.
+      description: List the available clusters in a multi-cluster setup.
       responses:
         '200':
           description: OK
@@ -4408,11 +5025,14 @@ paths:
               schema:
                 title: listClustersResponse
                 type: object
-                description: Array of clusters.
+                description: Clusters.
                 properties:
                   topUsers:
                     type: array
-                    description: Mapping of cluster names to top users.
+                    description: >-
+                      Key-value pairs with cluster names as keys and lists of
+                      users with the highest number of records per cluster as
+                      values.
                     items:
                       $ref: '#/components/schemas/clusterName'
                 required:
@@ -4432,23 +5052,16 @@ paths:
       operationId: searchUserIds
       x-use-read-transporter: true
       x-cacheable: true
-      summary: Search userID.
+      summary: Search for a user ID.
       description: >
-        Search for userIDs.
+        Since it can take up to a few seconds to get the data from the different
+        clusters, the response isn't real-time.
 
-        The data returned will usually be a few seconds behind real time,
-        because userID usage may take up to a few seconds propagate to the
-        different clusters.
-
-        To keep updates moving quickly, the index of userIDs isn't built
-        synchronously with the mapping. Instead, the index is built once every
-        12h, at the same time as the update of userID usage. For example, when
-        you perform a modification like adding or moving a userID, the search
-        will report an outdated value until the next rebuild of the mapping,
-        which takes place every 12h.
-
-        Upon success, the response is 200 OK and contains the following userIDs
-        data.
+        To ensure rapid updates, the user IDs index isn't built at the same time
+        as the mapping. Instead, it's built every 12 hours, at the same time as
+        the update of user ID usage. For example, if you add or move a user ID,
+        the search will show an old value until the next time the mapping is
+        rebuilt (every 12 hours). 
       requestBody:
         required: true
         content:
@@ -4462,8 +5075,9 @@ paths:
                 query:
                   type: string
                   description: >-
-                    Query to search. The search is a prefix search with
-                    typoTolerance. Use empty query to retrieve all users.
+                    Query to search. The search is a prefix search with [typo
+                    tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/)
+                    enabled. An empty query will retrieve all users.
                 clusterName:
                   $ref: '#/components/schemas/clusterName'
                 page:
@@ -4484,7 +5098,7 @@ paths:
                 properties:
                   hits:
                     type: array
-                    description: List of user object matching the query.
+                    description: User objects that match the query.
                     items:
                       title: userHit
                       type: object
@@ -4545,22 +5159,17 @@ paths:
       tags:
         - search
       operationId: hasPendingMappings
-      summary: Get migration status.
+      summary: Get migration and user mapping status.
       description: >
-        Get the status of your clusters' migrations or user creations.
-
-        Creating a large batch of users or migrating your multi-cluster may take
-        quite some time. This method lets you retrieve the status of the
-        migration, so you can know when it's done.
-
-        Upon success, the response is 200 OK.
-
-        A successful response indicates that the operation has been taken into
-        account, and the userIDs are directly usable.
+        To determine when the time-consuming process of creating a large batch
+        of users or migrating users from one cluster to another is complete,
+        this operation retrieves the status of the process.
       parameters:
         - in: query
           name: getClusters
-          description: If the clusters pending mapping state should be on the response.
+          description: >-
+            Indicates whether to include the cluster's pending mapping state in
+            the response.
           schema:
             type: boolean
       responses:
@@ -4574,12 +5183,14 @@ paths:
                 additionalProperties: false
                 properties:
                   pending:
-                    description: If there is any clusters with pending mapping state.
+                    description: >-
+                      Indicates whether there are clusters undergoing migration,
+                      creation, or deletion.
                     type: boolean
                   clusters:
-                    description: >-
-                      Describe cluster pending (migrating, creating, deleting)
-                      mapping state.
+                    description: >
+                      Cluster pending mapping state: migrating, creating,
+                      deleting.
                     type: object
                     additionalProperties:
                       type: array
@@ -4600,8 +5211,8 @@ paths:
       tags:
         - search
       operationId: getSources
-      description: List all allowed sources.
-      summary: List all allowed sources.
+      description: Get all allowed sources (IP addresses).
+      summary: Get all allowed IP addresses.
       responses:
         '200':
           description: OK
@@ -4622,10 +5233,10 @@ paths:
         - search
       operationId: replaceSources
       description: Replace all allowed sources.
-      summary: Replace all allowed sources.
+      summary: Replace all sources.
       requestBody:
         required: true
-        description: The sources to allow.
+        description: Allowed sources.
         content:
           application/json:
             schema:
@@ -4657,11 +5268,11 @@ paths:
       tags:
         - search
       operationId: appendSource
-      description: Add a single source to the list of allowed sources.
-      summary: Add a single source.
+      description: Add a source to the list of allowed sources.
+      summary: Add a source.
       requestBody:
         required: true
-        description: The source to add.
+        description: Source to add.
         content:
           application/json:
             schema:
@@ -4682,13 +5293,13 @@ paths:
       tags:
         - search
       operationId: deleteSource
-      description: Remove a single source from the list of allowed sources.
-      summary: Remove a single source.
+      description: Remove a source from the list of allowed sources.
+      summary: Remove a source.
       parameters:
         - name: source
           in: path
           required: true
-          description: The IP range of the source.
+          description: IP address range of the source.
           schema:
             type: string
             example: 10.0.0.1/32
@@ -4719,22 +5330,33 @@ paths:
       tags:
         - search
       operationId: getLogs
-      description: Return the latest log entries.
+      description: >
+        The request must be authenticated by an API key with the [`logs`
+        ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).
+
+        Logs are held for the last seven days. There's also a logging limit of
+        1,000 API calls per server.
+
+        This request counts towards your [operations
+        quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-)
+        but doesn't appear in the logs itself.
+
+        > **Note**: To fetch the logs for a Distributed Search Network (DSN)
+        cluster, target the [DSN's
+        endpoint](https://www.algolia.com/doc/guides/scaling/distributed-search-network-dsn/#accessing-dsn-servers).
       summary: Return the latest log entries.
       parameters:
         - name: offset
           in: query
           description: >-
-            First entry to retrieve (zero-based). Log entries are sorted by
-            decreasing date, therefore 0 designates the most recent log entry.
+            First log entry to retrieve. Sorted by decreasing date with 0 being
+            the most recent.
           schema:
             type: integer
             default: 0
         - name: length
           in: query
-          description: >-
-            Maximum number of entries to retrieve. The maximum allowed value is
-            1000.
+          description: Maximum number of entries to retrieve.
           schema:
             type: integer
             default: 10
@@ -4743,7 +5365,8 @@ paths:
           in: query
           description: >-
             Index for which log entries should be retrieved. When omitted, log
-            entries are retrieved across all indices.
+            entries are retrieved for all indices.
+          example: products
           schema:
             type: string
             nullable: true
@@ -4774,53 +5397,99 @@ paths:
                       properties:
                         timestamp:
                           type: string
-                          description: Timestamp in ISO-8601 format.
+                          description: >-
+                            Timestamp in [ISO
+                            8601](https://wikipedia.org/wiki/ISO_8601) format.
+                          example: '2023-03-08T12:34:56Z'
                         method:
                           type: string
                           description: HTTP method of the performed request.
+                          example: GET
                         answer_code:
                           type: string
                           description: HTTP response code.
+                          example: '200'
                         query_body:
                           type: string
-                          description: Request body. Truncated after 1000 characters.
+                          description: Request body. Truncated after 1,000 characters.
+                          example: >-
+                            \n{\n \"requests\": [\n  {\n   \"indexName\":
+                            \"best_buy\",\n   \"params\":
+                            \"query=&hitsPerPage=10&page=0&attributesToRetrieve=*&highlightPreTag=%3Cais-highlight-0000000000%3E&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&getRankingInfo=1&facets=%5B%22brand%22%2C%22categories%22%2C%22free_shipping%22%2C%22type%22%5D&tagFilters=\"\n 
+                            }\n ]\n}\n
                         answer:
                           type: string
-                          description: Answer body. Truncated after 1000 characters.
+                          description: Answer body. Truncated after 1,000 characters.
+                          example: >
+                            'n{\n \"results\": [\n  {\n   \"hits\": [\n   
+                            {\n     \"name\": \"Amazon - Fire TV Stick\",\n    
+                            \"description\": \"Amazon Fire TV Stick connects to
+                            your TV's HDMI port. Just grab and go to enjoy
+                            Netflix, Prime Instant Video, Hulu Plus,
+                            YouTube.com, music, and much more.\",\n    
+                            \"brand\": \"Amazon\",\n     \"categories\":
+                            [\n      \"TV & Home Theater\",\n      \"Streaming
+                            Media Players\"\n     ],\n    
+                            \"hierarchicalCategories\": {\n      \"lvl0\": \"TV
+                            & Home Theater\",\n      \"lvl1\": \"TV & Home
+                            Theater > Streaming Media Players\"\n     },\n    
+                            \"type\": \"Streaming media plyr\",\n     \"price\":
+                            39.99,\n     \"price_range\": \"1 - 50\",\n    
+                            \"image\":
+                            \"https:\/\/cdn-demo.algolia.com\/bestbuy\/9999119_sb.jpg\",\n    
+                            \"url\":
+                            \"http:\/\/www.bestbuy.com\/site\/amazon-fire-tv-stick\/9999119.p?id=1219460752591&skuId=9999119&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W\",\n    
+                            \"free_shipping\": false,\n     \"popularity\":
+                            9843,\n     \"rating\": 4,\n     \"objectID\":
+                            \"9999119\"\n'
                         url:
                           type: string
                           description: Request URL.
+                          example: /1/indexes
                         ip:
                           type: string
-                          description: IP of the client which performed the request.
+                          description: IP address of the client that performed the request.
+                          example: 127.0.0.1
                         query_headers:
                           type: string
-                          description: Request Headers (API Key is obfuscated).
+                          description: Request headers (API key is obfuscated).
+                          example: >-
+                            User-Agent: curl/7.24.0 (x86_64-apple-darwin12.0)
+                            libcurl/7.24.0 OpenSSL/0.9.8x zlib/1.2.5\nHost:
+                            localhost.algolia.com:8080\nAccept:
+                            */*\nContent-Type: application/json;
+                            charset=utf-8\nX-Algolia-API-Key:
+                            20f***************************\nX-Algolia-Application-Id:
+                            MyApplicationID\n
                         sha1:
                           type: string
                           description: SHA1 signature of the log entry.
+                          example: 26c53bd7e38ca71f4741b71994cd94a600b7ac68
                         nb_api_calls:
                           type: string
                           description: Number of API calls.
+                          example: '1'
                         processing_time_ms:
                           type: string
                           description: >-
-                            Processing time for the query. It doesn't include
+                            Processing time for the query. Doesn't include
                             network time.
+                          example: '2'
                         index:
                           type: string
                           description: Index targeted by the query.
+                          example: best_buy
                         query_params:
                           type: string
                           description: Query parameters sent with the request.
+                          example: query=georgia&attributesToRetrieve=name,city,country
                         query_nb_hits:
                           type: string
                           description: Number of hits returned for the query.
+                          example: '1'
                         inner_queries:
                           type: array
-                          description: >-
-                            Array of all performed queries for the given
-                            request.
+                          description: Performed queries for the given request.
                           items:
                             type: object
                             title: logQuery
@@ -4828,12 +5497,15 @@ paths:
                               index_name:
                                 type: string
                                 description: Index targeted by the query.
+                                example: best_buy
                               user_token:
                                 type: string
                                 description: User identifier.
+                                example: 93.189.166.128
                               query_id:
                                 type: string
-                                description: QueryID for the given query.
+                                description: Unique query identifier.
+                                example: '313453231'
                       required:
                         - timestamp
                         - method
@@ -4859,18 +5531,20 @@ paths:
       tags:
         - search
       operationId: getTask
-      description: Check the current status of a given task.
-      summary: Check the status of a task.
+      description: >-
+        Some operations, such as copying an index, will respond with a `taskID`
+        value. Use this value here to check the status of that task.
+      summary: Check a task's status.
       parameters:
         - $ref: '#/components/parameters/IndexName'
         - name: taskID
           in: path
-          description: Unique identifier of an task. Numeric value (up to 64bits).
+          description: Unique task identifier.
           required: true
           schema:
             type: integer
             format: int64
-            example: 13235
+            example: 1506303845001
       responses:
         '200':
           description: OK
@@ -4898,8 +5572,32 @@ paths:
       tags:
         - search
       operationId: operationIndex
-      summary: Copy/move index.
-      description: Performs a copy or a move operation on a index.
+      summary: Copy, move, or rename an index.
+      description: >-
+        This `operation`, _copy_ or _move_, will copy or move a source index's
+        (`IndexName`) records, settings, synonyms, and rules to a `destination`
+        index.
+
+        If the destination index exists, it will be replaced, except for
+        index-specific API keys and analytics data.
+
+        If the destination index doesn't exist, it will be created.
+
+
+        The choice between moving or copying an index depends on your needs.
+        Choose:
+
+
+        - **Move** to rename an index.
+
+        - **Copy** to create a new index with the same records and configuration
+        as an existing one.
+
+
+        > **Note**: When considering copying or moving, be aware of the [rate
+        limitations](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits)
+        on these processes and the [impact on your analytics
+        data](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/concepts/indices-analytics/).
       parameters:
         - $ref: '#/components/parameters/IndexName'
       requestBody:
@@ -4920,8 +5618,14 @@ paths:
                   items:
                     $ref: '#/components/schemas/scopeType'
                   description: >-
-                    Scope of the data to copy. When absent, a full copy is
-                    performed. When present, only the selected scopes are
+                    **This only applies to the _copy_ operation.**
+
+
+                    If you omit `scope`, the copy command copies all records,
+                    settings, synonyms, and rules.
+
+
+                    If you specify `scope`, only the specified scopes are
                     copied.
               required:
                 - operation
@@ -4942,10 +5646,11 @@ paths:
       tags:
         - search
       operationId: listIndices
-      summary: List existing indexes.
-      description: List existing indexes from an application.
+      summary: List indices.
+      description: List indices in an Algolia application.
       parameters:
         - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/HitsPerPage'
       responses:
         '200':
           description: OK

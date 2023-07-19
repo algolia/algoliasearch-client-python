@@ -7,7 +7,11 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Controls how the exact ranking criterion is computed when the query contains only one word. */
+/**
+ * Determines how the [Exact ranking
+ * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes)
+ * is computed when the query contains only one word.
+ */
 public enum ExactOnSingleWordQuery {
   ATTRIBUTE("attribute"),
 

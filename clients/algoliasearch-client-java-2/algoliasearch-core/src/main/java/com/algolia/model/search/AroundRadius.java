@@ -14,7 +14,11 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
-/** Define the maximum radius for a geo search (in meters). */
+/**
+ * [Maximum
+ * radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius)
+ * for a geographical search (in meters).
+ */
 @JsonDeserialize(using = AroundRadius.AroundRadiusDeserializer.class)
 @JsonSerialize(using = AroundRadius.AroundRadiusSerializer.class)
 public abstract class AroundRadius implements CompoundType {

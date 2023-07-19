@@ -23,7 +23,7 @@ public class GetUsersCountResponse {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */
@@ -43,7 +43,7 @@ public class GetUsersCountResponse {
   }
 
   /**
-   * A list of users count with their date.
+   * User count.
    *
    * @return dates
    */

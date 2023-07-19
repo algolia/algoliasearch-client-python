@@ -27,7 +27,7 @@ public class AbTestsVariantSearchParams {
   }
 
   /**
-   * The index performing the A/B test.
+   * A/B test index.
    *
    * @return index
    */
@@ -42,7 +42,7 @@ public class AbTestsVariantSearchParams {
   }
 
   /**
-   * The traffic percentage for the A/B test.
+   * A/B test traffic percentage.
    *
    * @return trafficPercentage
    */
@@ -57,7 +57,7 @@ public class AbTestsVariantSearchParams {
   }
 
   /**
-   * The A/B test description.
+   * A/B test description.
    *
    * @return description
    */

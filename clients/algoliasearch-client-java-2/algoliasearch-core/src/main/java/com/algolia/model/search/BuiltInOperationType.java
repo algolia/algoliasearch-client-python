@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** The operation to apply on the attribute. */
+/** Operation to apply to the attribute. */
 public enum BuiltInOperationType {
   INCREMENT("Increment"),
 

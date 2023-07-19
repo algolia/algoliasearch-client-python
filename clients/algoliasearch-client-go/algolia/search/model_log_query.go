@@ -12,7 +12,7 @@ type LogQuery struct {
 	IndexName *string `json:"index_name,omitempty"`
 	// User identifier.
 	UserToken *string `json:"user_token,omitempty"`
-	// QueryID for the given query.
+	// Unique query identifier.
 	QueryId *string `json:"query_id,omitempty"`
 }
 

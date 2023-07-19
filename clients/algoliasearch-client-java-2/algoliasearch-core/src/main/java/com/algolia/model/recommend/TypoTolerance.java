@@ -14,7 +14,11 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
-/** Controls whether typo tolerance is enabled and how it is applied. */
+/**
+ * Controls whether [typo
+ * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/)
+ * is enabled and how it is applied.
+ */
 @JsonDeserialize(using = TypoTolerance.TypoToleranceDeserializer.class)
 @JsonSerialize(using = TypoTolerance.TypoToleranceSerializer.class)
 public abstract class TypoTolerance implements CompoundType {

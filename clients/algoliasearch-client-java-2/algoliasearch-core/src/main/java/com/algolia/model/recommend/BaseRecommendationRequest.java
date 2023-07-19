@@ -36,7 +36,7 @@ public class BaseRecommendationRequest {
   }
 
   /**
-   * Unique identifier of the object.
+   * Unique object identifier.
    *
    * @return objectID
    */

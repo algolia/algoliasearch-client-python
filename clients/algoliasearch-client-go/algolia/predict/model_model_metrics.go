@@ -13,7 +13,7 @@ type ModelMetrics struct {
 	Mrr       *float64 `json:"mrr,omitempty"`
 	Coverage  *float64 `json:"coverage,omitempty"`
 	F1Score   *float64 `json:"f1_score,omitempty"`
-	// Date of last update (ISO-8601 format).
+	// Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
 	UpdatedAt *string `json:"updatedAt,omitempty"`
 }
 

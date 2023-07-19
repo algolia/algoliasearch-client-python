@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** UserIDs data. */
+/** User ID data. */
 public class ListUserIdsResponse {
 
   @JsonProperty("userIDs")
@@ -25,7 +25,7 @@ public class ListUserIdsResponse {
   }
 
   /**
-   * List of userIDs.
+   * User IDs.
    *
    * @return userIDs
    */

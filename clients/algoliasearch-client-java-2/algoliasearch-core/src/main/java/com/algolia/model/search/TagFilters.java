@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.util.List;
 
-/** Filter hits by tags. */
+/** [Filter hits by tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/). */
 @JsonDeserialize(using = TagFilters.TagFiltersDeserializer.class)
 @JsonSerialize(using = TagFilters.TagFiltersSerializer.class)
 public abstract class TagFilters implements CompoundType {

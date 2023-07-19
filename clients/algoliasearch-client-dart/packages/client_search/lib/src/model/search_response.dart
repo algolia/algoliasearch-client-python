@@ -42,35 +42,36 @@ final class SearchResponse {
     required this.hits,
   });
 
-  /// If a search encounters an index that is being A/B tested, abTestID reports the ongoing A/B test ID.
+  /// A/B test ID. This is only included in the response for indices that are part of an A/B test.
   @JsonKey(name: r'abTestID')
   final int? abTestID;
 
-  /// If a search encounters an index that is being A/B tested, abTestVariantID reports the variant ID of the index used (starting at 1).
+  /// Variant ID. This is only included in the response for indices that are part of an A/B test.
+  // minimum: 1
   @JsonKey(name: r'abTestVariantID')
   final int? abTestVariantID;
 
-  /// The computed geo location.
+  /// Computed geographical location.
   @JsonKey(name: r'aroundLatLng')
   final String? aroundLatLng;
 
-  /// The automatically computed radius. For legacy reasons, this parameter is a string and not an integer.
+  /// Automatically-computed radius.
   @JsonKey(name: r'automaticRadius')
   final String? automaticRadius;
 
-  /// Whether the facet count is exhaustive or approximate.
+  /// Indicates whether the facet count is exhaustive (exact) or approximate.
   @JsonKey(name: r'exhaustiveFacetsCount')
   final bool? exhaustiveFacetsCount;
 
-  /// Indicate if the nbHits count was exhaustive or approximate.
+  /// Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
   @JsonKey(name: r'exhaustiveNbHits')
   final bool exhaustiveNbHits;
 
-  /// Indicate if the typo-tolerance search was exhaustive or approximate (only included when typo-tolerance is enabled).
+  /// Indicates whether the search for typos was exhaustive (exact) or approximate.
   @JsonKey(name: r'exhaustiveTypo')
   final bool? exhaustiveTypo;
 
-  /// A mapping of each facet name to the corresponding facet counts.
+  /// Mapping of each facet name to the corresponding facet counts.
   @JsonKey(name: r'facets')
   final Map<String, Map<String, int>>? facets;
 
@@ -78,7 +79,9 @@ final class SearchResponse {
   @JsonKey(name: r'facets_stats')
   final Map<String, FacetsStats>? facetsStats;
 
-  /// Set the number of hits per page.
+  /// Number of hits per page.
+  // minimum: 1
+  // maximum: 1000
   @JsonKey(name: r'hitsPerPage')
   final int hitsPerPage;
 
@@ -86,38 +89,38 @@ final class SearchResponse {
   @JsonKey(name: r'index')
   final String? index;
 
-  /// Index name used for the query. In the case of an A/B test, the targeted index isn't always the index used by the query.
+  /// Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query.
   @JsonKey(name: r'indexUsed')
   final String? indexUsed;
 
-  /// Used to return warnings about the query.
+  /// Warnings about the query.
   @JsonKey(name: r'message')
   final String? message;
 
-  /// Number of hits that the search query matched.
+  /// Number of hits the search query matched.
   @JsonKey(name: r'nbHits')
   final int nbHits;
 
-  /// Number of pages available for the current query.
+  /// Number of pages of results for the current query.
   @JsonKey(name: r'nbPages')
   final int nbPages;
 
-  /// The number of hits selected and sorted by the relevant sort algorithm.
+  /// Number of hits selected and sorted by the relevant sort algorithm.
   @JsonKey(name: r'nbSortedHits')
   final int? nbSortedHits;
 
-  /// Specify the page to retrieve.
+  /// Page to retrieve (the first page is `0`, not `1`).
   @JsonKey(name: r'page')
   final int page;
 
-  /// A url-encoded string of all search parameters.
+  /// URL-encoded string of all search parameters.
   @JsonKey(name: r'params')
   final String params;
 
   @JsonKey(name: r'redirect')
   final BaseSearchResponseRedirect? redirect;
 
-  /// The query string that will be searched, after normalization.
+  /// Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
   @JsonKey(name: r'parsedQuery')
   final String? parsedQuery;
 
@@ -125,15 +128,15 @@ final class SearchResponse {
   @JsonKey(name: r'processingTimeMS')
   final int processingTimeMS;
 
-  /// The text to search in the index.
+  /// Text to search for in an index.
   @JsonKey(name: r'query')
   final String query;
 
-  /// A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set.
+  /// Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
   @JsonKey(name: r'queryAfterRemoval')
   final String? queryAfterRemoval;
 
-  /// Actual host name of the server that processed the request.
+  /// Host name of the server that processed the request.
   @JsonKey(name: r'serverUsed')
   final String? serverUsed;
 

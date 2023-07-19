@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** The state of the dictionary entry. */
+/** Indicates whether a dictionary entry is active (`enabled`) or inactive (`disabled`). */
 public enum DictionaryEntryState {
   ENABLED("enabled"),
 

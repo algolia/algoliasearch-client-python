@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// CreatedAtResponse The response with a createdAt timestamp.
+// CreatedAtResponse Response and creation timestamp.
 type CreatedAtResponse struct {
-	// Date of creation (ISO-8601 format).
+	// Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
 	CreatedAt string `json:"createdAt" validate:"required"`
 }
 

@@ -49,26 +49,26 @@ class AbtestingClientRequestsTests {
       addABTestsRequest0.setEndAt(endAt1);
       String name1 = "myABTest";
       addABTestsRequest0.setName(name1);
-      List<AddABTestsVariant> variant1 = new ArrayList<>();
+      List<AddABTestsVariant> variants1 = new ArrayList<>();
       {
-        AbTestsVariant variant_02 = new AbTestsVariant();
+        AbTestsVariant variants_02 = new AbTestsVariant();
         {
           String index3 = "AB_TEST_1";
-          variant_02.setIndex(index3);
+          variants_02.setIndex(index3);
           int trafficPercentage3 = 30;
-          variant_02.setTrafficPercentage(trafficPercentage3);
+          variants_02.setTrafficPercentage(trafficPercentage3);
         }
-        variant1.add(AddABTestsVariant.of(variant_02));
-        AbTestsVariant variant_12 = new AbTestsVariant();
+        variants1.add(AddABTestsVariant.of(variants_02));
+        AbTestsVariant variants_12 = new AbTestsVariant();
         {
           String index3 = "AB_TEST_2";
-          variant_12.setIndex(index3);
+          variants_12.setIndex(index3);
           int trafficPercentage3 = 50;
-          variant_12.setTrafficPercentage(trafficPercentage3);
+          variants_12.setTrafficPercentage(trafficPercentage3);
         }
-        variant1.add(AddABTestsVariant.of(variant_12));
+        variants1.add(AddABTestsVariant.of(variants_12));
       }
-      addABTestsRequest0.setVariant(variant1);
+      addABTestsRequest0.setVariants(variants1);
     }
 
     assertDoesNotThrow(() -> {
@@ -80,7 +80,7 @@ class AbtestingClientRequestsTests {
     assertEquals(req.method, "POST");
     assertDoesNotThrow(() -> {
       JSONAssert.assertEquals(
-        "{\"endAt\":\"2022-12-31T00:00:00.000Z\",\"name\":\"myABTest\",\"variant\":[{\"index\":\"AB_TEST_1\",\"trafficPercentage\":30},{\"index\":\"AB_TEST_2\",\"trafficPercentage\":50}]}",
+        "{\"endAt\":\"2022-12-31T00:00:00.000Z\",\"name\":\"myABTest\",\"variants\":[{\"index\":\"AB_TEST_1\",\"trafficPercentage\":30},{\"index\":\"AB_TEST_2\",\"trafficPercentage\":50}]}",
         req.body,
         JSONCompareMode.STRICT
       );

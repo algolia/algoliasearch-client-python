@@ -5,145 +5,145 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The Algolia index settings.
+ * Algolia index settings.
  *
- * @param replicas Creates replicas, exact copies of an index.
- * @param paginationLimitedTo Set the maximum number of hits accessible via pagination.
- * @param unretrievableAttributes List of attributes that can't be retrieved at query time.
- * @param disableTypoToleranceOnWords A list of words for which you want to turn off typo tolerance.
- * @param attributesToTransliterate Specify on which attributes in your index Algolia should apply Japanese transliteration to make words indexed in Katakana or Kanji searchable in Hiragana.
- * @param camelCaseAttributes List of attributes on which to do a decomposition of camel case words.
- * @param decompoundedAttributes Specify on which attributes in your index Algolia should apply word segmentation, also known as decompounding.
- * @param indexLanguages Sets the languages at the index level for language-specific processing such as tokenization and normalization.
- * @param disablePrefixOnAttributes List of attributes on which you want to disable prefix matching.
- * @param allowCompressionOfIntegerArray Enables compression of large integer arrays.
- * @param numericAttributesForFiltering List of numeric attributes that can be used as numerical filters.
- * @param separatorsToIndex Control which separators are indexed.
- * @param searchableAttributes The complete list of attributes used for searching.
+ * @param replicas Creates [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/), which are copies of a primary index with the same records but different settings.
+ * @param paginationLimitedTo Maximum number of hits accessible through pagination.
+ * @param unretrievableAttributes Attributes that can't be retrieved at query time.
+ * @param disableTypoToleranceOnWords Words for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
+ * @param attributesToTransliterate Attributes in your index to which [Japanese transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead) applies. This will ensure that words indexed in Katakana or Kanji can also be searched in Hiragana.
+ * @param camelCaseAttributes Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words.
+ * @param decompoundedAttributes Attributes in your index to which [word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) (decompounding) applies.
+ * @param indexLanguages Set the languages of your index, for language-specific processing steps such as [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/) and [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
+ * @param disablePrefixOnAttributes Attributes for which you want to turn off [prefix matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search).
+ * @param allowCompressionOfIntegerArray Incidates whether the engine compresses arrays with exclusively non-negative integers. When enabled, the compressed arrays may be reordered.
+ * @param numericAttributesForFiltering Numeric attributes that can be used as [numerical filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters).
+ * @param separatorsToIndex Controls which separators are added to an Algolia index as part of [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean). Separators are all non-letter characters except spaces and currency characters, such as $€£¥.
+ * @param searchableAttributes [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
  * @param userData Lets you store custom data in your indices.
- * @param customNormalization Overrides Algolia's default normalization.
- * @param attributesForFaceting The complete list of attributes that will be used for faceting.
- * @param attributesToRetrieve This parameter controls which attributes to retrieve and which not to retrieve.
- * @param restrictSearchableAttributes Restricts a given query to look in only a subset of your searchable attributes.
- * @param ranking Controls how Algolia should sort your results.
- * @param customRanking Specifies the custom ranking criterion.
- * @param relevancyStrictness Controls the relevancy threshold below which less relevant results aren't included in the results.
- * @param attributesToHighlight List of attributes to highlight.
- * @param attributesToSnippet List of attributes to snippet, with an optional maximum number of words to snippet.
- * @param highlightPreTag The HTML string to insert before the highlighted parts in all highlight and snippet results.
- * @param highlightPostTag The HTML string to insert after the highlighted parts in all highlight and snippet results.
+ * @param customNormalization A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
+ * @param attributesForFaceting Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
+ * @param attributesToRetrieve Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
+ * @param restrictSearchableAttributes Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
+ * @param ranking Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
+ * @param customRanking Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
+ * @param relevancyStrictness Relevancy threshold below which less relevant results aren't included in the results.
+ * @param attributesToHighlight Attributes to highlight. Strings that match the search query in the attributes are highlighted by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).
+ * @param attributesToSnippet Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words. If not specified, the attribute is shortened to the 10 words around the matching string but you can specify the number. For example: `body:20`.
+ * @param highlightPreTag HTML string to insert before the highlighted parts in all highlight and snippet results.
+ * @param highlightPostTag HTML string to insert after the highlighted parts in all highlight and snippet results.
  * @param snippetEllipsisText String used as an ellipsis indicator when a snippet is truncated.
  * @param restrictHighlightAndSnippetArrays Restrict highlighting and snippeting to items that matched the query.
- * @param hitsPerPage Set the number of hits per page.
- * @param minWordSizefor1Typo Minimum number of characters a word in the query string must contain to accept matches with 1 typo.
- * @param minWordSizefor2Typos Minimum number of characters a word in the query string must contain to accept matches with 2 typos.
+ * @param hitsPerPage Number of hits per page.
+ * @param minWordSizefor1Typo Minimum number of characters a word in the query string must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
+ * @param minWordSizefor2Typos Minimum number of characters a word in the query string must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
  * @param typoTolerance
  * @param allowTyposOnNumericTokens Whether to allow typos on numbers (\"numeric tokens\") in the query string.
- * @param disableTypoToleranceOnAttributes List of attributes on which you want to disable typo tolerance.
+ * @param disableTypoToleranceOnAttributes Attributes for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
  * @param ignorePlurals
  * @param removeStopWords
- * @param keepDiacriticsOnCharacters List of characters that the engine shouldn't automatically normalize.
- * @param queryLanguages Sets the languages to be used by language-specific settings and functionalities such as ignorePlurals, removeStopWords, and CJK word-detection.
- * @param decompoundQuery Splits compound words into their composing atoms in the query.
- * @param enableRules Whether Rules should be globally enabled.
- * @param enablePersonalization Enable the Personalization feature.
+ * @param keepDiacriticsOnCharacters Characters that the engine shouldn't automatically [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
+ * @param queryLanguages Sets your user's search language. This adjusts language-specific settings and features such as `ignorePlurals`, `removeStopWords`, and [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk) word detection.
+ * @param decompoundQuery [Splits compound words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words) into their component word parts in the query.
+ * @param enableRules Incidates whether [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
+ * @param enablePersonalization Incidates whether [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/) is enabled.
  * @param queryType
  * @param removeWordsIfNoResults
  * @param mode
  * @param semanticSearch
- * @param advancedSyntax Enables the advanced query syntax.
- * @param optionalWords A list of words that should be considered as optional when found in the query.
- * @param disableExactOnAttributes List of attributes on which you want to disable the exact ranking criterion.
+ * @param advancedSyntax Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
+ * @param optionalWords Words which should be considered [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words) when found in a query.
+ * @param disableExactOnAttributes Attributes for which you want to [turn off the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
  * @param exactOnSingleWordQuery
- * @param alternativesAsExact List of alternatives that should be considered an exact match by the exact ranking criterion.
- * @param advancedSyntaxFeatures Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is enabled.
- * @param explain Enriches the API’s response with meta-information as to how the query was processed.
+ * @param alternativesAsExact Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
+ * @param advancedSyntaxFeatures Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
+ * @param explain Enriches the API's response with information about how the query was processed.
  * @param distinct
- * @param attributeForDistinct Name of the de-duplication attribute to be used with the distinct feature.
+ * @param attributeForDistinct Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
  * @param synonyms Whether to take into account an index's synonyms for a particular search.
  * @param replaceSynonymsInHighlight Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
- * @param minProximity Precision of the proximity ranking criterion.
- * @param responseFields Choose which fields to return in the API response. This parameters applies to search and browse queries.
- * @param maxFacetHits Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
- * @param attributeCriteriaComputedByMinProximity When attribute is ranked above proximity in your ranking formula, proximity is used to select which searchable attribute is matched in the attribute ranking stage.
+ * @param minProximity Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
+ * @param responseFields Attributes to include in the API response for search and browse queries.
+ * @param maxFacetHits Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+ * @param attributeCriteriaComputedByMinProximity When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
  * @param renderingContent
  */
 @Serializable
 public data class IndexSettings(
 
-  /** Creates replicas, exact copies of an index. */
+  /** Creates [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/), which are copies of a primary index with the same records but different settings. */
   @SerialName(value = "replicas") val replicas: List<String>? = null,
 
-  /** Set the maximum number of hits accessible via pagination. */
+  /** Maximum number of hits accessible through pagination. */
   @SerialName(value = "paginationLimitedTo") val paginationLimitedTo: Int? = null,
 
-  /** List of attributes that can't be retrieved at query time. */
+  /** Attributes that can't be retrieved at query time. */
   @SerialName(value = "unretrievableAttributes") val unretrievableAttributes: List<String>? = null,
 
-  /** A list of words for which you want to turn off typo tolerance. */
+  /** Words for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/). */
   @SerialName(value = "disableTypoToleranceOnWords") val disableTypoToleranceOnWords: List<String>? = null,
 
-  /** Specify on which attributes in your index Algolia should apply Japanese transliteration to make words indexed in Katakana or Kanji searchable in Hiragana. */
+  /** Attributes in your index to which [Japanese transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead) applies. This will ensure that words indexed in Katakana or Kanji can also be searched in Hiragana. */
   @SerialName(value = "attributesToTransliterate") val attributesToTransliterate: List<String>? = null,
 
-  /** List of attributes on which to do a decomposition of camel case words. */
+  /** Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words. */
   @SerialName(value = "camelCaseAttributes") val camelCaseAttributes: List<String>? = null,
 
-  /** Specify on which attributes in your index Algolia should apply word segmentation, also known as decompounding. */
+  /** Attributes in your index to which [word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) (decompounding) applies. */
   @SerialName(value = "decompoundedAttributes") val decompoundedAttributes: JsonObject? = null,
 
-  /** Sets the languages at the index level for language-specific processing such as tokenization and normalization. */
+  /** Set the languages of your index, for language-specific processing steps such as [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/) and [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/). */
   @SerialName(value = "indexLanguages") val indexLanguages: List<String>? = null,
 
-  /** List of attributes on which you want to disable prefix matching. */
+  /** Attributes for which you want to turn off [prefix matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search). */
   @SerialName(value = "disablePrefixOnAttributes") val disablePrefixOnAttributes: List<String>? = null,
 
-  /** Enables compression of large integer arrays. */
+  /** Incidates whether the engine compresses arrays with exclusively non-negative integers. When enabled, the compressed arrays may be reordered.  */
   @SerialName(value = "allowCompressionOfIntegerArray") val allowCompressionOfIntegerArray: Boolean? = null,
 
-  /** List of numeric attributes that can be used as numerical filters. */
+  /** Numeric attributes that can be used as [numerical filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters). */
   @SerialName(value = "numericAttributesForFiltering") val numericAttributesForFiltering: List<String>? = null,
 
-  /** Control which separators are indexed. */
+  /** Controls which separators are added to an Algolia index as part of [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean). Separators are all non-letter characters except spaces and currency characters, such as $€£¥. */
   @SerialName(value = "separatorsToIndex") val separatorsToIndex: String? = null,
 
-  /** The complete list of attributes used for searching. */
+  /** [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).  */
   @SerialName(value = "searchableAttributes") val searchableAttributes: List<String>? = null,
 
   /** Lets you store custom data in your indices. */
   @SerialName(value = "userData") val userData: JsonObject? = null,
 
-  /** Overrides Algolia's default normalization. */
+  /** A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/). */
   @SerialName(value = "customNormalization") val customNormalization: Map<kotlin.String, Map<kotlin.String, String>>? = null,
 
-  /** The complete list of attributes that will be used for faceting. */
+  /** Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.  */
   @SerialName(value = "attributesForFaceting") val attributesForFaceting: List<String>? = null,
 
-  /** This parameter controls which attributes to retrieve and which not to retrieve. */
+  /** Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes. */
   @SerialName(value = "attributesToRetrieve") val attributesToRetrieve: List<String>? = null,
 
-  /** Restricts a given query to look in only a subset of your searchable attributes. */
+  /** Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/). */
   @SerialName(value = "restrictSearchableAttributes") val restrictSearchableAttributes: List<String>? = null,
 
-  /** Controls how Algolia should sort your results. */
+  /** Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/). */
   @SerialName(value = "ranking") val ranking: List<String>? = null,
 
-  /** Specifies the custom ranking criterion. */
+  /** Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.  */
   @SerialName(value = "customRanking") val customRanking: List<String>? = null,
 
-  /** Controls the relevancy threshold below which less relevant results aren't included in the results. */
+  /** Relevancy threshold below which less relevant results aren't included in the results. */
   @SerialName(value = "relevancyStrictness") val relevancyStrictness: Int? = null,
 
-  /** List of attributes to highlight. */
+  /** Attributes to highlight. Strings that match the search query in the attributes are highlighted by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`). */
   @SerialName(value = "attributesToHighlight") val attributesToHighlight: List<String>? = null,
 
-  /** List of attributes to snippet, with an optional maximum number of words to snippet. */
+  /** Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words. If not specified, the attribute is shortened to the 10 words around the matching string but you can specify the number. For example: `body:20`.  */
   @SerialName(value = "attributesToSnippet") val attributesToSnippet: List<String>? = null,
 
-  /** The HTML string to insert before the highlighted parts in all highlight and snippet results. */
+  /** HTML string to insert before the highlighted parts in all highlight and snippet results. */
   @SerialName(value = "highlightPreTag") val highlightPreTag: String? = null,
 
-  /** The HTML string to insert after the highlighted parts in all highlight and snippet results. */
+  /** HTML string to insert after the highlighted parts in all highlight and snippet results. */
   @SerialName(value = "highlightPostTag") val highlightPostTag: String? = null,
 
   /** String used as an ellipsis indicator when a snippet is truncated. */
@@ -152,13 +152,13 @@ public data class IndexSettings(
   /** Restrict highlighting and snippeting to items that matched the query. */
   @SerialName(value = "restrictHighlightAndSnippetArrays") val restrictHighlightAndSnippetArrays: Boolean? = null,
 
-  /** Set the number of hits per page. */
+  /** Number of hits per page. */
   @SerialName(value = "hitsPerPage") val hitsPerPage: Int? = null,
 
-  /** Minimum number of characters a word in the query string must contain to accept matches with 1 typo. */
+  /** Minimum number of characters a word in the query string must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos). */
   @SerialName(value = "minWordSizefor1Typo") val minWordSizefor1Typo: Int? = null,
 
-  /** Minimum number of characters a word in the query string must contain to accept matches with 2 typos. */
+  /** Minimum number of characters a word in the query string must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos). */
   @SerialName(value = "minWordSizefor2Typos") val minWordSizefor2Typos: Int? = null,
 
   @SerialName(value = "typoTolerance") val typoTolerance: TypoTolerance? = null,
@@ -166,26 +166,26 @@ public data class IndexSettings(
   /** Whether to allow typos on numbers (\"numeric tokens\") in the query string. */
   @SerialName(value = "allowTyposOnNumericTokens") val allowTyposOnNumericTokens: Boolean? = null,
 
-  /** List of attributes on which you want to disable typo tolerance. */
+  /** Attributes for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/). */
   @SerialName(value = "disableTypoToleranceOnAttributes") val disableTypoToleranceOnAttributes: List<String>? = null,
 
   @SerialName(value = "ignorePlurals") val ignorePlurals: IgnorePlurals? = null,
 
   @SerialName(value = "removeStopWords") val removeStopWords: RemoveStopWords? = null,
 
-  /** List of characters that the engine shouldn't automatically normalize. */
+  /** Characters that the engine shouldn't automatically [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/). */
   @SerialName(value = "keepDiacriticsOnCharacters") val keepDiacriticsOnCharacters: String? = null,
 
-  /** Sets the languages to be used by language-specific settings and functionalities such as ignorePlurals, removeStopWords, and CJK word-detection. */
+  /** Sets your user's search language. This adjusts language-specific settings and features such as `ignorePlurals`, `removeStopWords`, and [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk) word detection. */
   @SerialName(value = "queryLanguages") val queryLanguages: List<String>? = null,
 
-  /** Splits compound words into their composing atoms in the query. */
+  /** [Splits compound words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words) into their component word parts in the query.  */
   @SerialName(value = "decompoundQuery") val decompoundQuery: Boolean? = null,
 
-  /** Whether Rules should be globally enabled. */
+  /** Incidates whether [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled. */
   @SerialName(value = "enableRules") val enableRules: Boolean? = null,
 
-  /** Enable the Personalization feature. */
+  /** Incidates whether [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/) is enabled. */
   @SerialName(value = "enablePersonalization") val enablePersonalization: Boolean? = null,
 
   @SerialName(value = "queryType") val queryType: QueryType? = null,
@@ -196,29 +196,29 @@ public data class IndexSettings(
 
   @SerialName(value = "semanticSearch") val semanticSearch: IndexSettingsAsSearchParamsSemanticSearch? = null,
 
-  /** Enables the advanced query syntax. */
+  /** Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax). */
   @SerialName(value = "advancedSyntax") val advancedSyntax: Boolean? = null,
 
-  /** A list of words that should be considered as optional when found in the query. */
+  /** Words which should be considered [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words) when found in a query. */
   @SerialName(value = "optionalWords") val optionalWords: List<String>? = null,
 
-  /** List of attributes on which you want to disable the exact ranking criterion. */
+  /** Attributes for which you want to [turn off the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes). */
   @SerialName(value = "disableExactOnAttributes") val disableExactOnAttributes: List<String>? = null,
 
   @SerialName(value = "exactOnSingleWordQuery") val exactOnSingleWordQuery: ExactOnSingleWordQuery? = null,
 
-  /** List of alternatives that should be considered an exact match by the exact ranking criterion. */
+  /** Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes). */
   @SerialName(value = "alternativesAsExact") val alternativesAsExact: List<AlternativesAsExact>? = null,
 
-  /** Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is enabled. */
+  /** Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled. */
   @SerialName(value = "advancedSyntaxFeatures") val advancedSyntaxFeatures: List<AdvancedSyntaxFeatures>? = null,
 
-  /** Enriches the API’s response with meta-information as to how the query was processed. */
+  /** Enriches the API's response with information about how the query was processed. */
   @SerialName(value = "explain") val explain: List<String>? = null,
 
   @SerialName(value = "distinct") val distinct: Distinct? = null,
 
-  /** Name of the de-duplication attribute to be used with the distinct feature. */
+  /** Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature). */
   @SerialName(value = "attributeForDistinct") val attributeForDistinct: String? = null,
 
   /** Whether to take into account an index's synonyms for a particular search. */
@@ -227,16 +227,16 @@ public data class IndexSettings(
   /** Whether to highlight and snippet the original word that matches the synonym or the synonym itself. */
   @SerialName(value = "replaceSynonymsInHighlight") val replaceSynonymsInHighlight: Boolean? = null,
 
-  /** Precision of the proximity ranking criterion. */
+  /** Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity). */
   @SerialName(value = "minProximity") val minProximity: Int? = null,
 
-  /** Choose which fields to return in the API response. This parameters applies to search and browse queries. */
+  /** Attributes to include in the API response for search and browse queries. */
   @SerialName(value = "responseFields") val responseFields: List<String>? = null,
 
-  /** Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100. */
+  /** Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). */
   @SerialName(value = "maxFacetHits") val maxFacetHits: Int? = null,
 
-  /** When attribute is ranked above proximity in your ranking formula, proximity is used to select which searchable attribute is matched in the attribute ranking stage. */
+  /** When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage. */
   @SerialName(value = "attributeCriteriaComputedByMinProximity") val attributeCriteriaComputedByMinProximity: Boolean? = null,
 
   @SerialName(value = "renderingContent") val renderingContent: RenderingContent? = null,

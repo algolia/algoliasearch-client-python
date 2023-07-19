@@ -21,7 +21,7 @@ public class SuccessResponse {
   }
 
   /**
-   * The status code.
+   * Status code.
    *
    * @return status
    */
@@ -36,7 +36,7 @@ public class SuccessResponse {
   }
 
   /**
-   * Message of the response.
+   * Response message.
    *
    * @return message
    */

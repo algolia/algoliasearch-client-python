@@ -7,7 +7,10 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Gets or Sets searchStrategy */
+/**
+ * - `none`: executes all queries. - `stopIfEnoughMatches`: executes queries one by one, stopping
+ * further query execution as soon as a query matches at least the `hitsPerPage` number of results.
+ */
 public enum SearchStrategy {
   NONE("none"),
 

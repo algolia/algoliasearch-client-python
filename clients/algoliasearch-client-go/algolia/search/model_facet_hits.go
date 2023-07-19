@@ -8,11 +8,11 @@ import (
 
 // FacetHits struct for FacetHits
 type FacetHits struct {
-	// Raw value of the facet.
+	// Facet value.
 	Value string `json:"value" validate:"required"`
-	// Markup text with occurrences highlighted.
+	// Markup text with `facetQuery` matches highlighted.
 	Highlighted string `json:"highlighted" validate:"required"`
-	// How many objects contain this facet value. This takes into account the extra search parameters specified in the query. Like for a regular search query, the counts may not be exhaustive.
+	// Number of records containing this facet value. This takes into account the extra search parameters specified in the query. Like for a regular search query, the [counts may not be exhaustive](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).
 	Count int32 `json:"count" validate:"required"`
 }
 

@@ -5,36 +5,36 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Parameters for the search.
+ * Rules search parameters.
  *
- * @param query Full text query.
+ * @param query Rule object query.
  * @param anchoring
- * @param context Restricts matches to contextual rules with a specific context (exact match).
- * @param page Requested page (zero-based).
- * @param hitsPerPage Maximum number of hits in a page. Minimum is 1, maximum is 1000.
- * @param enabled When specified, restricts matches to rules with a specific enabled status. When absent (default), all rules are retrieved, regardless of their enabled status.
- * @param requestOptions A mapping of requestOptions to send along with the request.
+ * @param context Restricts responses to the specified [contextual rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules).
+ * @param page Requested page (the first page is page 0).
+ * @param hitsPerPage Maximum number of hits per page.
+ * @param enabled Restricts responses to enabled rules. When not specified (default), _all_ rules are retrieved.
+ * @param requestOptions Request options to send with the API call.
  */
 @Serializable
 public data class SearchRulesParams(
 
-  /** Full text query. */
+  /** Rule object query. */
   @SerialName(value = "query") val query: String? = null,
 
   @SerialName(value = "anchoring") val anchoring: Anchoring? = null,
 
-  /** Restricts matches to contextual rules with a specific context (exact match). */
+  /** Restricts responses to the specified [contextual rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules). */
   @SerialName(value = "context") val context: String? = null,
 
-  /** Requested page (zero-based). */
+  /** Requested page (the first page is page 0). */
   @SerialName(value = "page") val page: Int? = null,
 
-  /** Maximum number of hits in a page. Minimum is 1, maximum is 1000. */
+  /** Maximum number of hits per page. */
   @SerialName(value = "hitsPerPage") val hitsPerPage: Int? = null,
 
-  /** When specified, restricts matches to rules with a specific enabled status. When absent (default), all rules are retrieved, regardless of their enabled status. */
+  /** Restricts responses to enabled rules. When not specified (default), _all_ rules are retrieved. */
   @SerialName(value = "enabled") val enabled: Boolean? = null,
 
-  /** A mapping of requestOptions to send along with the request. */
+  /** Request options to send with the API call. */
   @SerialName(value = "requestOptions") val requestOptions: List<JsonObject>? = null,
 )

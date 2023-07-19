@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * GetTopFilterForAttributeResponse
  *
- * @param values A list of filters for the given attributes.
+ * @param values Filter values for an attribute.
  */
 @Serializable
 public data class GetTopFilterForAttributeResponse(
 
-  /** A list of filters for the given attributes. */
+  /** Filter values for an attribute. */
   @SerialName(value = "values") val values: List<GetTopFilterForAttribute>,
 )

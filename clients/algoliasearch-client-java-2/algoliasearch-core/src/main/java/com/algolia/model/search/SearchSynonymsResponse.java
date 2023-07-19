@@ -43,7 +43,7 @@ public class SearchSynonymsResponse {
   }
 
   /**
-   * Array of synonym objects.
+   * Synonym objects.
    *
    * @return hits
    */
@@ -58,7 +58,7 @@ public class SearchSynonymsResponse {
   }
 
   /**
-   * Number of hits that the search query matched.
+   * Number of hits the search query matched.
    *
    * @return nbHits
    */

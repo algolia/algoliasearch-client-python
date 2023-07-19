@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** The recommendation model to use. */
+/** Recommendation model. */
 public enum RecommendationModels {
   RELATED_PRODUCTS("related-products"),
 

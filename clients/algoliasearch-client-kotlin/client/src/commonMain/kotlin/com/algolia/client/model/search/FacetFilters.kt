@@ -10,7 +10,7 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
 /**
- * Filter hits by facet value.
+ * [Filter hits by facet value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
  */
 @Serializable(FacetFiltersSerializer::class)
 public sealed interface FacetFilters {

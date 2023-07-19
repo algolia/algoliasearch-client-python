@@ -89,8 +89,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -104,8 +104,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -125,6 +125,182 @@ func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ..
 			queryParams.Set(k, parameterToString(v))
 		}
 	}
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Set(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodDelete, postBody, headers, queryParams)
+	if err != nil {
+		return returnValue, err
+	}
+
+	res, err := c.callAPI(req, call.Write)
+	if err != nil {
+		return returnValue, err
+	}
+	if res == nil {
+		return returnValue, reportError("res is nil")
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
+	if err != nil {
+		return returnValue, err
+	}
+
+	if res.StatusCode >= 300 {
+		newErr := &APIError{
+			Message: string(resBody),
+			Status:  res.StatusCode,
+		}
+		if res.StatusCode == 400 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 402 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 403 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 404 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+		}
+		return returnValue, newErr
+	}
+
+	err = c.decode(&returnValue, resBody, res.Header.Get("Content-Type"))
+	if err != nil {
+		return returnValue, reportError("cannot decode result: %w", err)
+	}
+
+	return returnValue, nil
+}
+
+func (r *ApiDeleteRecommendRuleRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok {
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["model"]; ok {
+		err = json.Unmarshal(v, &r.model)
+		if err != nil {
+			err = json.Unmarshal(b, &r.model)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["objectID"]; ok {
+		err = json.Unmarshal(v, &r.objectID)
+		if err != nil {
+			err = json.Unmarshal(b, &r.objectID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ApiDeleteRecommendRuleRequest represents the request with all the parameters for the API call.
+type ApiDeleteRecommendRuleRequest struct {
+	indexName string
+	model     RecommendModels
+	objectID  string
+}
+
+// NewApiDeleteRecommendRuleRequest creates an instance of the ApiDeleteRecommendRuleRequest to be used for the API call.
+func (c *APIClient) NewApiDeleteRecommendRuleRequest(indexName string, model RecommendModels, objectID string) ApiDeleteRecommendRuleRequest {
+	return ApiDeleteRecommendRuleRequest{
+		indexName: indexName,
+		model:     model,
+		objectID:  objectID,
+	}
+}
+
+/*
+DeleteRecommendRule Delete a Recommend rule. Wraps DeleteRecommendRuleWithContext using context.Background.
+
+Delete a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+Request can be constructed by NewApiDeleteRecommendRuleRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param objectID string - Unique record (object) identifier.
+	@return DeletedAtResponse
+*/
+func (c *APIClient) DeleteRecommendRule(r ApiDeleteRecommendRuleRequest, opts ...Option) (*DeletedAtResponse, error) {
+	return c.DeleteRecommendRuleWithContext(context.Background(), r, opts...)
+}
+
+/*
+DeleteRecommendRule Delete a Recommend rule.
+
+Delete a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+Request can be constructed by NewApiDeleteRecommendRuleRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param objectID string - Unique record (object) identifier.
+	@return DeletedAtResponse
+*/
+func (c *APIClient) DeleteRecommendRuleWithContext(ctx context.Context, r ApiDeleteRecommendRuleRequest, opts ...Option) (*DeletedAtResponse, error) {
+	var (
+		postBody    any
+		returnValue *DeletedAtResponse
+	)
+
+	requestPath := "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}"
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"model"+"}", url.PathEscape(parameterToString(r.model)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
+
+	headers := make(map[string]string)
+	queryParams := url.Values{}
 
 	// optional params if any
 	for _, opt := range opts {
@@ -261,8 +437,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -276,8 +452,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -297,6 +473,358 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 			queryParams.Set(k, parameterToString(v))
 		}
 	}
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Set(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
+	if err != nil {
+		return returnValue, err
+	}
+
+	res, err := c.callAPI(req, call.Write)
+	if err != nil {
+		return returnValue, err
+	}
+	if res == nil {
+		return returnValue, reportError("res is nil")
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
+	if err != nil {
+		return returnValue, err
+	}
+
+	if res.StatusCode >= 300 {
+		newErr := &APIError{
+			Message: string(resBody),
+			Status:  res.StatusCode,
+		}
+		if res.StatusCode == 400 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 402 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 403 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 404 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+		}
+		return returnValue, newErr
+	}
+
+	err = c.decode(&returnValue, resBody, res.Header.Get("Content-Type"))
+	if err != nil {
+		return returnValue, reportError("cannot decode result: %w", err)
+	}
+
+	return returnValue, nil
+}
+
+func (r *ApiGetRecommendRuleRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok {
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["model"]; ok {
+		err = json.Unmarshal(v, &r.model)
+		if err != nil {
+			err = json.Unmarshal(b, &r.model)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["objectID"]; ok {
+		err = json.Unmarshal(v, &r.objectID)
+		if err != nil {
+			err = json.Unmarshal(b, &r.objectID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ApiGetRecommendRuleRequest represents the request with all the parameters for the API call.
+type ApiGetRecommendRuleRequest struct {
+	indexName string
+	model     RecommendModels
+	objectID  string
+}
+
+// NewApiGetRecommendRuleRequest creates an instance of the ApiGetRecommendRuleRequest to be used for the API call.
+func (c *APIClient) NewApiGetRecommendRuleRequest(indexName string, model RecommendModels, objectID string) ApiGetRecommendRuleRequest {
+	return ApiGetRecommendRuleRequest{
+		indexName: indexName,
+		model:     model,
+		objectID:  objectID,
+	}
+}
+
+/*
+GetRecommendRule Get a Recommend rule. Wraps GetRecommendRuleWithContext using context.Background.
+
+Return a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+Request can be constructed by NewApiGetRecommendRuleRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param objectID string - Unique record (object) identifier.
+	@return RuleResponse
+*/
+func (c *APIClient) GetRecommendRule(r ApiGetRecommendRuleRequest, opts ...Option) (*RuleResponse, error) {
+	return c.GetRecommendRuleWithContext(context.Background(), r, opts...)
+}
+
+/*
+GetRecommendRule Get a Recommend rule.
+
+Return a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+Request can be constructed by NewApiGetRecommendRuleRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param objectID string - Unique record (object) identifier.
+	@return RuleResponse
+*/
+func (c *APIClient) GetRecommendRuleWithContext(ctx context.Context, r ApiGetRecommendRuleRequest, opts ...Option) (*RuleResponse, error) {
+	var (
+		postBody    any
+		returnValue *RuleResponse
+	)
+
+	requestPath := "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}"
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"model"+"}", url.PathEscape(parameterToString(r.model)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"objectID"+"}", url.PathEscape(parameterToString(r.objectID)), -1)
+
+	headers := make(map[string]string)
+	queryParams := url.Values{}
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Set(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
+	if err != nil {
+		return returnValue, err
+	}
+
+	res, err := c.callAPI(req, call.Write)
+	if err != nil {
+		return returnValue, err
+	}
+	if res == nil {
+		return returnValue, reportError("res is nil")
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
+	if err != nil {
+		return returnValue, err
+	}
+
+	if res.StatusCode >= 300 {
+		newErr := &APIError{
+			Message: string(resBody),
+			Status:  res.StatusCode,
+		}
+		if res.StatusCode == 400 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 402 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 403 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 404 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+		}
+		return returnValue, newErr
+	}
+
+	err = c.decode(&returnValue, resBody, res.Header.Get("Content-Type"))
+	if err != nil {
+		return returnValue, reportError("cannot decode result: %w", err)
+	}
+
+	return returnValue, nil
+}
+
+func (r *ApiGetRecommendStatusRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok {
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["model"]; ok {
+		err = json.Unmarshal(v, &r.model)
+		if err != nil {
+			err = json.Unmarshal(b, &r.model)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["taskID"]; ok {
+		err = json.Unmarshal(v, &r.taskID)
+		if err != nil {
+			err = json.Unmarshal(b, &r.taskID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ApiGetRecommendStatusRequest represents the request with all the parameters for the API call.
+type ApiGetRecommendStatusRequest struct {
+	indexName string
+	model     RecommendModels
+	taskID    int64
+}
+
+// NewApiGetRecommendStatusRequest creates an instance of the ApiGetRecommendStatusRequest to be used for the API call.
+func (c *APIClient) NewApiGetRecommendStatusRequest(indexName string, model RecommendModels, taskID int64) ApiGetRecommendStatusRequest {
+	return ApiGetRecommendStatusRequest{
+		indexName: indexName,
+		model:     model,
+		taskID:    taskID,
+	}
+}
+
+/*
+GetRecommendStatus Get a Recommend task's status. Wraps GetRecommendStatusWithContext using context.Background.
+
+Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+
+Request can be constructed by NewApiGetRecommendStatusRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param taskID int64 - Unique identifier of a task. Numeric value (up to 64bits).
+	@return GetRecommendTaskResponse
+*/
+func (c *APIClient) GetRecommendStatus(r ApiGetRecommendStatusRequest, opts ...Option) (*GetRecommendTaskResponse, error) {
+	return c.GetRecommendStatusWithContext(context.Background(), r, opts...)
+}
+
+/*
+GetRecommendStatus Get a Recommend task's status.
+
+Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+
+Request can be constructed by NewApiGetRecommendStatusRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param taskID int64 - Unique identifier of a task. Numeric value (up to 64bits).
+	@return GetRecommendTaskResponse
+*/
+func (c *APIClient) GetRecommendStatusWithContext(ctx context.Context, r ApiGetRecommendStatusRequest, opts ...Option) (*GetRecommendTaskResponse, error) {
+	var (
+		postBody    any
+		returnValue *GetRecommendTaskResponse
+	)
+
+	requestPath := "/1/indexes/{indexName}/{model}/task/{taskID}"
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"model"+"}", url.PathEscape(parameterToString(r.model)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"taskID"+"}", url.PathEscape(parameterToString(r.taskID)), -1)
+
+	headers := make(map[string]string)
+	queryParams := url.Values{}
 
 	// optional params if any
 	for _, opt := range opts {
@@ -416,9 +944,12 @@ func (c *APIClient) NewApiGetRecommendationsRequest(getRecommendationsParams *Ge
 }
 
 /*
-GetRecommendations Get results. Wraps GetRecommendationsWithContext using context.Background.
+GetRecommendations Get recommendations and trending items. Wraps GetRecommendationsWithContext using context.Background.
 
-Returns recommendations or trending results, for a specific model and `objectID`.
+Returns results from either recommendation or trending models:
+
+  - **Recommendations** are provided by the [Related Products](https://www.algolia.com/doc/guides/algolia-recommend/overview/#related-products-and-related-content) and [Frequently Bought Together](https://www.algolia.com/doc/guides/algolia-recommend/overview/#frequently-bought-together) models
+  - **Trending** models are [Trending Items and Trending Facet Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
 
 Request can be constructed by NewApiGetRecommendationsRequest with parameters below.
 
@@ -430,9 +961,12 @@ func (c *APIClient) GetRecommendations(r ApiGetRecommendationsRequest, opts ...O
 }
 
 /*
-GetRecommendations Get results.
+GetRecommendations Get recommendations and trending items.
 
-Returns recommendations or trending results, for a specific model and `objectID`.
+Returns results from either recommendation or trending models:
+
+  - **Recommendations** are provided by the [Related Products](https://www.algolia.com/doc/guides/algolia-recommend/overview/#related-products-and-related-content) and [Frequently Bought Together](https://www.algolia.com/doc/guides/algolia-recommend/overview/#frequently-bought-together) models
+  - **Trending** models are [Trending Items and Trending Facet Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
 
 Request can be constructed by NewApiGetRecommendationsRequest with parameters below.
 
@@ -606,9 +1140,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -622,9 +1156,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -802,9 +1336,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
@@ -818,9 +1352,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
@@ -863,6 +1397,192 @@ func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ..
 	}
 
 	res, err := c.callAPI(req, call.Write)
+	if err != nil {
+		return returnValue, err
+	}
+	if res == nil {
+		return returnValue, reportError("res is nil")
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
+	if err != nil {
+		return returnValue, err
+	}
+
+	if res.StatusCode >= 300 {
+		newErr := &APIError{
+			Message: string(resBody),
+			Status:  res.StatusCode,
+		}
+		if res.StatusCode == 400 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 402 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 403 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+			return returnValue, newErr
+		}
+		if res.StatusCode == 404 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+		}
+		return returnValue, newErr
+	}
+
+	err = c.decode(&returnValue, resBody, res.Header.Get("Content-Type"))
+	if err != nil {
+		return returnValue, reportError("cannot decode result: %w", err)
+	}
+
+	return returnValue, nil
+}
+
+func (r *ApiSearchRecommendRulesRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["indexName"]; ok {
+		err = json.Unmarshal(v, &r.indexName)
+		if err != nil {
+			err = json.Unmarshal(b, &r.indexName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["model"]; ok {
+		err = json.Unmarshal(v, &r.model)
+		if err != nil {
+			err = json.Unmarshal(b, &r.model)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["searchRecommendRulesParams"]; ok {
+		err = json.Unmarshal(v, &r.searchRecommendRulesParams)
+		if err != nil {
+			err = json.Unmarshal(b, &r.searchRecommendRulesParams)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ApiSearchRecommendRulesRequest represents the request with all the parameters for the API call.
+type ApiSearchRecommendRulesRequest struct {
+	indexName                  string
+	model                      RecommendModels
+	searchRecommendRulesParams *SearchRecommendRulesParams
+}
+
+// NewApiSearchRecommendRulesRequest creates an instance of the ApiSearchRecommendRulesRequest to be used for the API call.
+func (c *APIClient) NewApiSearchRecommendRulesRequest(indexName string, model RecommendModels) ApiSearchRecommendRulesRequest {
+	return ApiSearchRecommendRulesRequest{
+		indexName: indexName,
+		model:     model,
+	}
+}
+
+// WithSearchRecommendRulesParams adds the searchRecommendRulesParams to the ApiSearchRecommendRulesRequest and returns the request for chaining.
+func (r ApiSearchRecommendRulesRequest) WithSearchRecommendRulesParams(searchRecommendRulesParams *SearchRecommendRulesParams) ApiSearchRecommendRulesRequest {
+	r.searchRecommendRulesParams = searchRecommendRulesParams
+	return r
+}
+
+/*
+SearchRecommendRules List Recommend rules. Wraps SearchRecommendRulesWithContext using context.Background.
+
+List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+Request can be constructed by NewApiSearchRecommendRulesRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param searchRecommendRulesParams SearchRecommendRulesParams
+	@return SearchRecommendRulesResponse
+*/
+func (c *APIClient) SearchRecommendRules(r ApiSearchRecommendRulesRequest, opts ...Option) (*SearchRecommendRulesResponse, error) {
+	return c.SearchRecommendRulesWithContext(context.Background(), r, opts...)
+}
+
+/*
+SearchRecommendRules List Recommend rules.
+
+List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+Request can be constructed by NewApiSearchRecommendRulesRequest with parameters below.
+
+	@param indexName string - Index on which to perform the request.
+	@param model RecommendModels - [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
+	@param searchRecommendRulesParams SearchRecommendRulesParams
+	@return SearchRecommendRulesResponse
+*/
+func (c *APIClient) SearchRecommendRulesWithContext(ctx context.Context, r ApiSearchRecommendRulesRequest, opts ...Option) (*SearchRecommendRulesResponse, error) {
+	var (
+		postBody    any
+		returnValue *SearchRecommendRulesResponse
+	)
+
+	requestPath := "/1/indexes/{indexName}/{model}/recommend/rules/search"
+	requestPath = strings.Replace(requestPath, "{"+"indexName"+"}", url.PathEscape(parameterToString(r.indexName)), -1)
+	requestPath = strings.Replace(requestPath, "{"+"model"+"}", url.PathEscape(parameterToString(r.model)), -1)
+
+	headers := make(map[string]string)
+	queryParams := url.Values{}
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Set(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	// body params
+	if isNilorEmpty(r.searchRecommendRulesParams) {
+		postBody = "{}"
+	} else {
+		postBody = r.searchRecommendRulesParams
+	}
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
+	if err != nil {
+		return returnValue, err
+	}
+
+	res, err := c.callAPI(req, call.Read)
 	if err != nil {
 		return returnValue, err
 	}

@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// GetRecommendationsParams The `getRecommendations` parameters.
+// GetRecommendationsParams Recommend parameters.
 type GetRecommendationsParams struct {
-	// The `getRecommendations` requests.
+	// Request parameters depend on the model (recommendations or trending).
 	Requests []RecommendationsRequest `json:"requests" validate:"required"`
 }
 

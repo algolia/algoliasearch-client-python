@@ -8,7 +8,7 @@ import (
 
 // GetSearchesNoClicksResponse struct for GetSearchesNoClicksResponse
 type GetSearchesNoClicksResponse struct {
-	// A list of searches with no clicks and their count.
+	// Searches with no clicks.
 	Searches []SearchNoClickEvent `json:"searches" validate:"required"`
 }
 

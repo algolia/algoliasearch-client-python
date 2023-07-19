@@ -2,13 +2,13 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// The state of the dictionary entry.
+/// Indicates whether a dictionary entry is active (`enabled`) or inactive (`disabled`).
 @JsonEnum(valueField: 'raw')
 enum DictionaryEntryState {
-  /// The state of the dictionary entry.
+  /// Indicates whether a dictionary entry is active (`enabled`) or inactive (`disabled`).
   enabled(r'enabled'),
 
-  /// The state of the dictionary entry.
+  /// Indicates whether a dictionary entry is active (`enabled`) or inactive (`disabled`).
   disabled(r'disabled');
 
   const DictionaryEntryState(this.raw);

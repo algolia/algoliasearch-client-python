@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// TypoTolerance - Controls whether typo tolerance is enabled and how it is applied.
+// TypoTolerance - Controls whether [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) is enabled and how it is applied.
 type TypoTolerance struct {
 	TypoToleranceEnum *TypoToleranceEnum
 	Bool              *bool

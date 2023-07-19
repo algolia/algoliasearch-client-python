@@ -32,7 +32,7 @@ public sealed interface SnippetResult {
     /**
      * Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
      *
-     * @param `value` Markup text with occurrences highlighted.
+     * @param `value` Markup text with `facetQuery` matches highlighted.
      * @param matchLevel
      */
     public fun SnippetResultOption(

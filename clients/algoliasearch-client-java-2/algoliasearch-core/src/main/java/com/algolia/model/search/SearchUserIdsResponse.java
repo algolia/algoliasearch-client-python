@@ -37,7 +37,7 @@ public class SearchUserIdsResponse {
   }
 
   /**
-   * List of user object matching the query.
+   * User objects that match the query.
    *
    * @return hits
    */
@@ -52,7 +52,7 @@ public class SearchUserIdsResponse {
   }
 
   /**
-   * Number of hits that the search query matched.
+   * Number of hits the search query matched.
    *
    * @return nbHits
    */
@@ -67,7 +67,7 @@ public class SearchUserIdsResponse {
   }
 
   /**
-   * Specify the page to retrieve.
+   * Page to retrieve (the first page is `0`, not `1`).
    *
    * @return page
    */
@@ -82,7 +82,7 @@ public class SearchUserIdsResponse {
   }
 
   /**
-   * Maximum number of hits in a page. Minimum is 1, maximum is 1000.
+   * Maximum number of hits per page. minimum: 1 maximum: 1000
    *
    * @return hitsPerPage
    */
@@ -97,7 +97,7 @@ public class SearchUserIdsResponse {
   }
 
   /**
-   * Date of last update (ISO-8601 format).
+   * Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return updatedAt
    */

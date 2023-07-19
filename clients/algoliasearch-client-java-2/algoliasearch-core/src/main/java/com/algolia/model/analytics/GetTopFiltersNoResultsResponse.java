@@ -25,7 +25,7 @@ public class GetTopFiltersNoResultsResponse {
   }
 
   /**
-   * A list of filters without results.
+   * Filters with no results.
    *
    * @return values
    */

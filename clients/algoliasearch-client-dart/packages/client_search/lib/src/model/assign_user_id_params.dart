@@ -12,7 +12,7 @@ final class AssignUserIdParams {
     required this.cluster,
   });
 
-  /// Name of the cluster.
+  /// Cluster name.
   @JsonKey(name: r'cluster')
   final String cluster;
 

@@ -12,7 +12,7 @@ final class GetObjectsResponse {
     required this.results,
   });
 
-  /// List of results fetched.
+  /// Retrieved results.
   @JsonKey(name: r'results')
   final List<Object> results;
 

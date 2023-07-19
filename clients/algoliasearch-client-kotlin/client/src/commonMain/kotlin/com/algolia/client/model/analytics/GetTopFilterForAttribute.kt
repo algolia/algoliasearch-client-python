@@ -7,23 +7,23 @@ import kotlinx.serialization.json.*
 /**
  * GetTopFilterForAttribute
  *
- * @param attribute The attribute.
- * @param `operator` The operator.
- * @param `value` The value of the attribute.
- * @param count The number of occurrences.
+ * @param attribute Attribute name.
+ * @param `operator` Operator.
+ * @param `value` Attribute value.
+ * @param count Number of occurrences.
  */
 @Serializable
 public data class GetTopFilterForAttribute(
 
-  /** The attribute. */
+  /** Attribute name. */
   @SerialName(value = "attribute") val attribute: String,
 
-  /** The operator. */
+  /** Operator. */
   @SerialName(value = "operator") val `operator`: String,
 
-  /** The value of the attribute. */
+  /** Attribute value. */
   @SerialName(value = "value") val `value`: String,
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "count") val count: Int,
 )

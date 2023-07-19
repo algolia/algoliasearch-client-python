@@ -2,28 +2,28 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// The operation to apply on the attribute.
+/// Operation to apply to the attribute.
 @JsonEnum(valueField: 'raw')
 enum BuiltInOperationType {
-  /// The operation to apply on the attribute.
+  /// Operation to apply to the attribute.
   increment(r'Increment'),
 
-  /// The operation to apply on the attribute.
+  /// Operation to apply to the attribute.
   decrement(r'Decrement'),
 
-  /// The operation to apply on the attribute.
+  /// Operation to apply to the attribute.
   add(r'Add'),
 
-  /// The operation to apply on the attribute.
+  /// Operation to apply to the attribute.
   remove(r'Remove'),
 
-  /// The operation to apply on the attribute.
+  /// Operation to apply to the attribute.
   addUnique(r'AddUnique'),
 
-  /// The operation to apply on the attribute.
+  /// Operation to apply to the attribute.
   incrementFrom(r'IncrementFrom'),
 
-  /// The operation to apply on the attribute.
+  /// Operation to apply to the attribute.
   incrementSet(r'IncrementSet');
 
   const BuiltInOperationType(this.raw);

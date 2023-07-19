@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** A userID. */
+/** Unique user ID. */
 public class UserId {
 
   @JsonProperty("userID")
@@ -42,7 +42,7 @@ public class UserId {
   }
 
   /**
-   * Cluster on which the user is assigned.
+   * Cluster to which the user is assigned.
    *
    * @return clusterName
    */

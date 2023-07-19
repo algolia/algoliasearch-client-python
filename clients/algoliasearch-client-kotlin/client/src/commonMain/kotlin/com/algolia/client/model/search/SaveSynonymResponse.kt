@@ -7,19 +7,19 @@ import kotlinx.serialization.json.*
 /**
  * SaveSynonymResponse
  *
- * @param taskID taskID of the task to wait for.
- * @param updatedAt Date of last update (ISO-8601 format).
- * @param id objectID of the inserted object.
+ * @param taskID Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.
+ * @param updatedAt Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
+ * @param id Unique identifier of a synonym object.
  */
 @Serializable
 public data class SaveSynonymResponse(
 
-  /** taskID of the task to wait for. */
+  /** Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.  */
   @SerialName(value = "taskID") val taskID: Long,
 
-  /** Date of last update (ISO-8601 format). */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String,
 
-  /** objectID of the inserted object. */
+  /** Unique identifier of a synonym object. */
   @SerialName(value = "id") val id: String,
 )

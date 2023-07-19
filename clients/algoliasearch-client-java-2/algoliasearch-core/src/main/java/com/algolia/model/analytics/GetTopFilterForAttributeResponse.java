@@ -25,7 +25,7 @@ public class GetTopFilterForAttributeResponse {
   }
 
   /**
-   * A list of filters for the given attributes.
+   * Filter values for an attribute.
    *
    * @return values
    */

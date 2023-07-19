@@ -25,7 +25,7 @@ public class GetClickPositionsResponse {
   }
 
   /**
-   * A list of the click positions with their click count.
+   * Click positions.
    *
    * @return positions
    */

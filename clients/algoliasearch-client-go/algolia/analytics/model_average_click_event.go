@@ -8,11 +8,11 @@ import (
 
 // AverageClickEvent struct for AverageClickEvent
 type AverageClickEvent struct {
-	// The average of all the click count event.
+	// Average count of all click events.
 	Average float64 `json:"average" validate:"required"`
-	// The number of click event.
+	// Number of click events.
 	ClickCount int32 `json:"clickCount" validate:"required"`
-	// Date of the event.
+	// Date of the event in the format YYYY-MM-DD.
 	Date string `json:"date" validate:"required"`
 }
 

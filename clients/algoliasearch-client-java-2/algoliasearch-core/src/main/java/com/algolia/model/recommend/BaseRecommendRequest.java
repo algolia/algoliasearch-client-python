@@ -30,7 +30,7 @@ public class BaseRecommendRequest {
   }
 
   /**
-   * The Algolia index name.
+   * Algolia index name.
    *
    * @return indexName
    */
@@ -45,7 +45,9 @@ public class BaseRecommendRequest {
   }
 
   /**
-   * The threshold to use when filtering recommendations by their score. minimum: 0 maximum: 100
+   * Recommendations with a confidence score lower than `threshold` won't appear in results. >
+   * **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to
+   * 100, the more relevant the recommendations are. minimum: 0 maximum: 100
    *
    * @return threshold
    */
@@ -60,8 +62,7 @@ public class BaseRecommendRequest {
   }
 
   /**
-   * The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the
-   * objectID may be returned.
+   * Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
    *
    * @return maxRecommendations
    */

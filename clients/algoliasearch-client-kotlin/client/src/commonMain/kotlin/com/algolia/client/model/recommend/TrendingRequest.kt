@@ -8,11 +8,11 @@ import kotlinx.serialization.json.*
  * TrendingRequest
  *
  * @param model
- * @param indexName The Algolia index name.
- * @param threshold The threshold to use when filtering recommendations by their score.
- * @param facetName The facet name to use for trending models.
- * @param facetValue The facet value to use for trending models.
- * @param maxRecommendations The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the objectID may be returned.
+ * @param indexName Algolia index name.
+ * @param threshold Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
+ * @param facetName Facet name for trending models.
+ * @param facetValue Facet value for trending models.
+ * @param maxRecommendations Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
  * @param queryParameters
  * @param fallbackParameters
  */
@@ -21,19 +21,19 @@ public data class TrendingRequest(
 
   @SerialName(value = "model") val model: TrendingModels,
 
-  /** The Algolia index name. */
+  /** Algolia index name. */
   @SerialName(value = "indexName") val indexName: String,
 
-  /** The threshold to use when filtering recommendations by their score. */
+  /** Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.  */
   @SerialName(value = "threshold") val threshold: Int,
 
-  /** The facet name to use for trending models. */
+  /** Facet name for trending models. */
   @SerialName(value = "facetName") val facetName: String? = null,
 
-  /** The facet value to use for trending models. */
+  /** Facet value for trending models. */
   @SerialName(value = "facetValue") val facetValue: String? = null,
 
-  /** The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the objectID may be returned. */
+  /** Maximum number of recommendations to retrieve. If 0, all recommendations will be returned. */
   @SerialName(value = "maxRecommendations") val maxRecommendations: Int? = null,
 
   @SerialName(value = "queryParameters") val queryParameters: SearchParamsObject? = null,

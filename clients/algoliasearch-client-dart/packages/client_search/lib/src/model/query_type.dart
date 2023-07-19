@@ -2,16 +2,16 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// Controls if and how query words are interpreted as prefixes.
+/// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
 @JsonEnum(valueField: 'raw')
 enum QueryType {
-  /// Controls if and how query words are interpreted as prefixes.
+  /// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
   prefixLast(r'prefixLast'),
 
-  /// Controls if and how query words are interpreted as prefixes.
+  /// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
   prefixAll(r'prefixAll'),
 
-  /// Controls if and how query words are interpreted as prefixes.
+  /// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
   prefixNone(r'prefixNone');
 
   const QueryType(this.raw);

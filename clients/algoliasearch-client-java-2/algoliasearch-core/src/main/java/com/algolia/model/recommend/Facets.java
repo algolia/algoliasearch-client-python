@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** The ordering of facets (widgets). */
+/** Ordering of facets (widgets). */
 public class Facets {
 
   @JsonProperty("order")

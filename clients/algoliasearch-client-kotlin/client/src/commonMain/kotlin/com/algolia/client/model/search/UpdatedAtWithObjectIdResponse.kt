@@ -5,21 +5,21 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The response with a taskID, an objectID and an updatedAt timestamp.
+ * Response, taskID, unique object identifier, and an update timestamp.
  *
- * @param taskID taskID of the task to wait for.
- * @param updatedAt Date of last update (ISO-8601 format).
- * @param objectID Unique identifier of the object.
+ * @param taskID Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.
+ * @param updatedAt Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
+ * @param objectID Unique object identifier.
  */
 @Serializable
 public data class UpdatedAtWithObjectIdResponse(
 
-  /** taskID of the task to wait for. */
+  /** Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.  */
   @SerialName(value = "taskID") val taskID: Long? = null,
 
-  /** Date of last update (ISO-8601 format). */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String? = null,
 
-  /** Unique identifier of the object. */
+  /** Unique object identifier. */
   @SerialName(value = "objectID") val objectID: String? = null,
 )

@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * List of rights for the API key. The following rights can be used:  addObject: allows to add/update an object in the index (copy/move index are also allowed with this right). analytics: allows to retrieve the analytics through the Analytics API. browse: allows to retrieve all index content via the browse API. deleteIndex: allows to delete or clear index content. deleteObject: allows to delete objects from the index. editSettings: allows to change index settings. listIndexes: allows to list all accessible indices. logs: allows to get the logs. recommendation: Allows usage of the Personalization dashboard and the Recommendation API. search: allows to search the index. seeUnretrievableAttributes: disable unretrievableAttributes feature for all operations returning records. settings: allows to get index settings.
+ * API key permissions:  `addObject`: required to add or update records, copy or move an index. `analytics`: required to access the Analytics API. `browse`: required to view records `deleteIndex`: required to delete indices. `deleteObject`: required to delete records. `editSettings`: required to change index settings. `listIndexes`: required to list indices. `logs`: required to access logs of search and indexing operations. `recommendation`: required to access the Personalization and Recommend APIs. `search`: required to search records `seeUnretrievableAttributes`: required to retrieve [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) for all operations that return records. `settings`: required to examine index settings.
  */
 @Serializable
 public enum class Acl(public val value: kotlin.String) {

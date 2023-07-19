@@ -10,7 +10,7 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
 /**
- * Controls whether typo tolerance is enabled and how it is applied.
+ * Controls whether [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) is enabled and how it is applied.
  */
 @Serializable(TypoToleranceSerializer::class)
 public sealed interface TypoTolerance {

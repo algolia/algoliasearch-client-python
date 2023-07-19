@@ -2,10 +2,10 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// Perform a search query with `default`, will search for facet values if `facet` is given.
+/// - `default`: perform a search query - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
 @JsonEnum(valueField: 'raw')
 enum SearchTypeDefault {
-  /// Perform a search query with `default`, will search for facet values if `facet` is given.
+  /// - `default`: perform a search query - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
   default_(r'default');
 
   const SearchTypeDefault(this.raw);

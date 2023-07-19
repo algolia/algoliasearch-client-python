@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The `batch` parameters.
+ * Batch parameters.
  *
  * @param requests
  */

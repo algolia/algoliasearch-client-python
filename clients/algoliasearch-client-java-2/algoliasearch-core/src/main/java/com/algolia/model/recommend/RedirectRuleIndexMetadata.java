@@ -75,7 +75,7 @@ public class RedirectRuleIndexMetadata {
   }
 
   /**
-   * Status for the redirect rule.
+   * Redirect rule status.
    *
    * @return succeed
    */

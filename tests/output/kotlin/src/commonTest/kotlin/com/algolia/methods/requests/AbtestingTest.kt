@@ -29,7 +29,7 @@ class AbtestingTest {
           addABTestsRequest = AddABTestsRequest(
             endAt = "2022-12-31T00:00:00.000Z",
             name = "myABTest",
-            variant = listOf(
+            variants = listOf(
               AbTestsVariant(
                 index = "AB_TEST_1",
                 trafficPercentage = 30,
@@ -45,7 +45,7 @@ class AbtestingTest {
       intercept = {
         assertEquals("/2/abtests".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"endAt":"2022-12-31T00:00:00.000Z","name":"myABTest","variant":[{"index":"AB_TEST_1","trafficPercentage":30},{"index":"AB_TEST_2","trafficPercentage":50}]}""", it.body)
+        assertJsonBody("""{"endAt":"2022-12-31T00:00:00.000Z","name":"myABTest","variants":[{"index":"AB_TEST_1","trafficPercentage":30},{"index":"AB_TEST_2","trafficPercentage":50}]}""", it.body)
       },
     )
   }

@@ -13,7 +13,7 @@ final class ListApiKeysResponse {
     required this.keys,
   });
 
-  /// List of api keys.
+  /// API keys.
   @JsonKey(name: r'keys')
   final List<GetApiKeyResponse> keys;
 

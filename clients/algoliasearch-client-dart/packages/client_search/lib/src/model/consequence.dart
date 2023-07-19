@@ -21,15 +21,15 @@ final class Consequence {
   @JsonKey(name: r'params')
   final ConsequenceParams? params;
 
-  /// Objects to promote as hits.
+  /// Records to promote.
   @JsonKey(name: r'promote')
   final Iterable<dynamic>? promote;
 
-  /// Only use in combination with the promote consequence. When true, promoted results will be restricted to match the filters of the current search. When false, the promoted results will show up regardless of the filters.
+  /// Only use in combination with the `promote` consequence. When `true`, promoted results will be restricted to match the filters of the current search. When `false`, the promoted results will show up regardless of the filters.
   @JsonKey(name: r'filterPromotes')
   final bool? filterPromotes;
 
-  /// Objects to hide from hits. Each object must contain an objectID field. By default, you can hide up to 50 items per rule.
+  /// Records to hide. By default, you can hide up to 50 records per rule.
   @JsonKey(name: r'hide')
   final List<ConsequenceHide>? hide;
 

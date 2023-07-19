@@ -8,7 +8,7 @@ import (
 
 // GetTopFiltersNoResultsResponse struct for GetTopFiltersNoResultsResponse
 type GetTopFiltersNoResultsResponse struct {
-	// A list of filters without results.
+	// Filters with no results.
 	Values []GetTopFiltersNoResultsValues `json:"values" validate:"required"`
 }
 

@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * ListApiKeysResponse
  *
- * @param keys List of api keys.
+ * @param keys API keys.
  */
 @Serializable
 public data class ListApiKeysResponse(
 
-  /** List of api keys. */
+  /** API keys. */
   @SerialName(value = "keys") val keys: List<GetApiKeyResponse>,
 )

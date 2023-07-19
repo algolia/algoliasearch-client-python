@@ -15,19 +15,19 @@ final class FacetsStats {
     this.sum,
   });
 
-  /// The minimum value in the result set.
+  /// Minimum value in the results.
   @JsonKey(name: r'min')
   final double? min;
 
-  /// The maximum value in the result set.
+  /// Maximum value in the results.
   @JsonKey(name: r'max')
   final double? max;
 
-  /// The average facet value in the result set.
+  /// Average facet value in the results.
   @JsonKey(name: r'avg')
   final double? avg;
 
-  /// The sum of all values in the result set.
+  /// Sum of all values in the results.
   @JsonKey(name: r'sum')
   final double? sum;
 

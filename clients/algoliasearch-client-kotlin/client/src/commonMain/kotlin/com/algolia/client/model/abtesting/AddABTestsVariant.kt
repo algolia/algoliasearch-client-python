@@ -20,9 +20,9 @@ public sealed interface AddABTestsVariant {
     /**
      * AbTestsVariant
      *
-     * @param index The index performing the A/B test.
-     * @param trafficPercentage The traffic percentage for the A/B test.
-     * @param description The A/B test description.
+     * @param index A/B test index.
+     * @param trafficPercentage A/B test traffic percentage.
+     * @param description A/B test description.
      */
     public fun AbTestsVariant(
       index: String,
@@ -37,10 +37,10 @@ public sealed interface AddABTestsVariant {
     /**
      * AbTestsVariantSearchParams
      *
-     * @param index The index performing the A/B test.
-     * @param trafficPercentage The traffic percentage for the A/B test.
+     * @param index A/B test index.
+     * @param trafficPercentage A/B test traffic percentage.
      * @param customSearchParameters
-     * @param description The A/B test description.
+     * @param description A/B test description.
      */
     public fun AbTestsVariantSearchParams(
       index: String,

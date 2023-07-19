@@ -8,7 +8,7 @@ import (
 
 // Hit A single hit.
 type Hit struct {
-	// Unique identifier of the object.
+	// Unique object identifier.
 	ObjectID string `json:"objectID" validate:"required"`
 	// Show highlighted section and words matched on a query.
 	HighlightResult *map[string]HighlightResult `json:"_highlightResult,omitempty"`

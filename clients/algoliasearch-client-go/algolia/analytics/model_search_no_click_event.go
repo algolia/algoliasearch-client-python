@@ -8,11 +8,11 @@ import (
 
 // SearchNoClickEvent struct for SearchNoClickEvent
 type SearchNoClickEvent struct {
-	// The search query.
+	// User query.
 	Search string `json:"search" validate:"required"`
-	// The number of occurrences.
+	// Number of occurrences.
 	Count int32 `json:"count" validate:"required"`
-	// The number of occurrences.
+	// Number of occurrences.
 	WithFilterCount int32 `json:"withFilterCount" validate:"required"`
 }
 

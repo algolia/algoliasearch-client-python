@@ -137,9 +137,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -152,9 +151,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -165,8 +163,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -179,8 +176,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -191,9 +187,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -226,9 +221,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -239,8 +233,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -253,8 +246,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -267,7 +259,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * updates to the underlying query suggestion index. Note that when doing this, the underlying
    * index does not change - existing suggestions remain untouched.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return SuccessResponse
@@ -282,7 +274,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * updates to the underlying query suggestion index. Note that when doing this, the underlying
    * index does not change - existing suggestions remain untouched.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return SuccessResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -295,7 +287,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * configuration, you stop all updates to the underlying query suggestion index. Note that when
    * doing this, the underlying index does not change - existing suggestions remain untouched.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<SuccessResponse> The awaitable future
@@ -324,7 +316,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * configuration, you stop all updates to the underlying query suggestion index. Note that when
    * doing this, the underlying index does not change - existing suggestions remain untouched.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return CompletableFuture<SuccessResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -335,9 +327,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -350,9 +341,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -363,8 +353,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -377,8 +366,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -389,9 +377,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -424,9 +411,8 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -437,8 +423,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -451,8 +436,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -520,7 +504,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * Get the configuration of a single Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return QuerySuggestionsIndex
@@ -533,7 +517,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * Get the configuration of a single Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return QuerySuggestionsIndex
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -544,7 +528,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) Get the configuration of a single Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<QuerySuggestionsIndex> The awaitable future
@@ -571,7 +555,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) Get the configuration of a single Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return CompletableFuture<QuerySuggestionsIndex> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -583,7 +567,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * Get the status of a Query Suggestion's index. The status includes whether the Query Suggestions
    * index is currently in the process of being built, and the last build time.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Status
@@ -597,7 +581,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * Get the status of a Query Suggestion's index. The status includes whether the Query Suggestions
    * index is currently in the process of being built, and the last build time.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return Status
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -610,7 +594,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * the Query Suggestions index is currently in the process of being built, and the last build
    * time.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Status> The awaitable future
@@ -638,7 +622,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * the Query Suggestions index is currently in the process of being built, and the last build
    * time.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return CompletableFuture<Status> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -649,7 +633,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * Get the log file of the last build of a single Query Suggestion index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return List<LogFile>
@@ -662,7 +646,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * Get the log file of the last build of a single Query Suggestion index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return List<LogFile>
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -673,7 +657,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) Get the log file of the last build of a single Query Suggestion index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<List<LogFile>> The awaitable future
@@ -699,7 +683,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) Get the log file of the last build of a single Query Suggestion index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @return CompletableFuture<List<LogFile>> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -710,10 +694,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -727,10 +710,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -741,8 +723,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -755,8 +736,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -767,10 +747,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -803,10 +782,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -817,8 +795,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -831,8 +808,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -843,10 +819,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -860,10 +835,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -874,8 +848,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return Object
@@ -888,8 +861,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -900,10 +872,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -936,10 +907,9 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
-   * @param parameters Query parameters to be applied to the current query. (optional)
-   * @param body The parameters to send with the custom request. (optional)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
+   * @param parameters Query parameters to apply to the current query. (optional)
+   * @param body Parameters to send with the custom request. (optional)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -950,8 +920,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @return CompletableFuture<Object> The awaitable future
@@ -964,8 +933,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be
-   *     specified. (required)
+   * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
@@ -976,7 +944,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * Update the configuration of a Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param querySuggestionsIndexParam (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
@@ -994,7 +962,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * Update the configuration of a Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param querySuggestionsIndexParam (required)
    * @return SuccessResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
@@ -1007,7 +975,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) Update the configuration of a Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param querySuggestionsIndexParam (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
@@ -1042,7 +1010,7 @@ public class QuerySuggestionsClient extends ApiClient {
   /**
    * (asynchronously) Update the configuration of a Query Suggestions index.
    *
-   * @param indexName The index in which to perform the request. (required)
+   * @param indexName Index on which to perform the request. (required)
    * @param querySuggestionsIndexParam (required)
    * @return CompletableFuture<SuccessResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call

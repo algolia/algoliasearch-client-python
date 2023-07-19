@@ -8,20 +8,20 @@ import (
 
 // SynonymHit Synonym object.
 type SynonymHit struct {
-	// Unique identifier of the synonym object to be created or updated.
+	// Unique identifier of a synonym object.
 	ObjectID string      `json:"objectID" validate:"required"`
 	Type     SynonymType `json:"type" validate:"required"`
-	// Words or phrases to be considered equivalent.
+	// Words or phrases considered equivalent.
 	Synonyms []string `json:"synonyms,omitempty"`
-	// Word or phrase to appear in query strings (for onewaysynonym).
+	// Word or phrase to appear in query strings (for [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)).
 	Input *string `json:"input,omitempty"`
-	// Word or phrase to appear in query strings (for altcorrection1 and altcorrection2).
+	// Word or phrase to appear in query strings (for [`altcorrection1` and `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)).
 	Word *string `json:"word,omitempty"`
 	// Words to be matched in records.
 	Corrections []string `json:"corrections,omitempty"`
-	// Token to be put inside records.
+	// [Placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/) to be put inside records.
 	Placeholder *string `json:"placeholder,omitempty"`
-	// List of query words that will match the token.
+	// Query words that will match the [placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/).
 	Replacements []string `json:"replacements,omitempty"`
 }
 

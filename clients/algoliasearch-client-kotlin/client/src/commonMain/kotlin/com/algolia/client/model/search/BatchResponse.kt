@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * BatchResponse
  *
- * @param taskID taskID of the task to wait for.
- * @param objectIDs List of objectID.
+ * @param taskID Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.
+ * @param objectIDs Unique object (record) identifiers.
  */
 @Serializable
 public data class BatchResponse(
 
-  /** taskID of the task to wait for. */
+  /** Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.  */
   @SerialName(value = "taskID") val taskID: Long,
 
-  /** List of objectID. */
+  /** Unique object (record) identifiers. */
   @SerialName(value = "objectIDs") val objectIDs: List<String>,
 )

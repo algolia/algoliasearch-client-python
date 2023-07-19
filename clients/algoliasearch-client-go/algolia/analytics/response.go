@@ -1,7 +1,7 @@
 /*
 Analytics API
 
-API powering the Analytics feature of Algolia.
+The Analytics API lets you review your search, and click and conversion analytics. > **Note**: The API key in the `X-Algolia-API-Key` header requires the [`analytics` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).
 
 API version: 1.0.0
 */

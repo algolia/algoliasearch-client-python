@@ -15,7 +15,10 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.util.List;
 
-/** Filter on numeric attributes. */
+/**
+ * [Filter on numeric
+ * attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
+ */
 @JsonDeserialize(using = NumericFilters.NumericFiltersDeserializer.class)
 @JsonSerialize(using = NumericFilters.NumericFiltersSerializer.class)
 public abstract class NumericFilters implements CompoundType {

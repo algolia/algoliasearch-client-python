@@ -19,7 +19,7 @@ final class Hit extends DelegatingMap<String, dynamic> {
     Map<String, dynamic> additionalProperties = const {},
   }) : super(additionalProperties);
 
-  /// Unique identifier of the object.
+  /// Unique object identifier.
   @JsonKey(name: r'objectID')
   final String objectID;
 

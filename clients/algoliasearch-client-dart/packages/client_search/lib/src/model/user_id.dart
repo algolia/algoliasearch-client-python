@@ -19,7 +19,7 @@ final class UserId {
   @JsonKey(name: r'userID')
   final String userID;
 
-  /// Cluster on which the user is assigned.
+  /// Cluster to which the user is assigned.
   @JsonKey(name: r'clusterName')
   final String clusterName;
 

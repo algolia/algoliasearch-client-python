@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** Array of userIDs and clusters. */
+/** User IDs and clusters. */
 public class GetTopUserIdsResponse {
 
   @JsonProperty("topUsers")
@@ -26,7 +26,8 @@ public class GetTopUserIdsResponse {
   }
 
   /**
-   * Mapping of cluster names to top users.
+   * Key-value pairs with cluster names as keys and lists of users with the highest number of
+   * records per cluster as values.
    *
    * @return topUsers
    */

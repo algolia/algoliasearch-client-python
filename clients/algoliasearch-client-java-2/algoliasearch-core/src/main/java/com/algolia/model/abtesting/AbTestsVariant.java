@@ -24,7 +24,7 @@ public class AbTestsVariant {
   }
 
   /**
-   * The index performing the A/B test.
+   * A/B test index.
    *
    * @return index
    */
@@ -39,7 +39,7 @@ public class AbTestsVariant {
   }
 
   /**
-   * The traffic percentage for the A/B test.
+   * A/B test traffic percentage.
    *
    * @return trafficPercentage
    */
@@ -54,7 +54,7 @@ public class AbTestsVariant {
   }
 
   /**
-   * The A/B test description.
+   * A/B test description.
    *
    * @return description
    */

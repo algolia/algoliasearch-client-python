@@ -5,13 +5,13 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Unique identifier of the object to hide.
+ * Unique identifier of the record to hide.
  *
- * @param objectID Unique identifier of the object.
+ * @param objectID Unique object identifier.
  */
 @Serializable
 public data class ConsequenceHide(
 
-  /** Unique identifier of the object. */
+  /** Unique object identifier. */
   @SerialName(value = "objectID") val objectID: String,
 )

@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// ListClustersResponse Array of clusters.
+// ListClustersResponse Clusters.
 type ListClustersResponse struct {
-	// Mapping of cluster names to top users.
+	// Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values.
 	TopUsers []string `json:"topUsers" validate:"required"`
 }
 

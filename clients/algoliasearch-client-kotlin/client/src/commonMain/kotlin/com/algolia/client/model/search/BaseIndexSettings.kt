@@ -7,67 +7,67 @@ import kotlinx.serialization.json.*
 /**
  * BaseIndexSettings
  *
- * @param replicas Creates replicas, exact copies of an index.
- * @param paginationLimitedTo Set the maximum number of hits accessible via pagination.
- * @param unretrievableAttributes List of attributes that can't be retrieved at query time.
- * @param disableTypoToleranceOnWords A list of words for which you want to turn off typo tolerance.
- * @param attributesToTransliterate Specify on which attributes in your index Algolia should apply Japanese transliteration to make words indexed in Katakana or Kanji searchable in Hiragana.
- * @param camelCaseAttributes List of attributes on which to do a decomposition of camel case words.
- * @param decompoundedAttributes Specify on which attributes in your index Algolia should apply word segmentation, also known as decompounding.
- * @param indexLanguages Sets the languages at the index level for language-specific processing such as tokenization and normalization.
- * @param disablePrefixOnAttributes List of attributes on which you want to disable prefix matching.
- * @param allowCompressionOfIntegerArray Enables compression of large integer arrays.
- * @param numericAttributesForFiltering List of numeric attributes that can be used as numerical filters.
- * @param separatorsToIndex Control which separators are indexed.
- * @param searchableAttributes The complete list of attributes used for searching.
+ * @param replicas Creates [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/), which are copies of a primary index with the same records but different settings.
+ * @param paginationLimitedTo Maximum number of hits accessible through pagination.
+ * @param unretrievableAttributes Attributes that can't be retrieved at query time.
+ * @param disableTypoToleranceOnWords Words for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
+ * @param attributesToTransliterate Attributes in your index to which [Japanese transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead) applies. This will ensure that words indexed in Katakana or Kanji can also be searched in Hiragana.
+ * @param camelCaseAttributes Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words.
+ * @param decompoundedAttributes Attributes in your index to which [word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) (decompounding) applies.
+ * @param indexLanguages Set the languages of your index, for language-specific processing steps such as [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/) and [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
+ * @param disablePrefixOnAttributes Attributes for which you want to turn off [prefix matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search).
+ * @param allowCompressionOfIntegerArray Incidates whether the engine compresses arrays with exclusively non-negative integers. When enabled, the compressed arrays may be reordered.
+ * @param numericAttributesForFiltering Numeric attributes that can be used as [numerical filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters).
+ * @param separatorsToIndex Controls which separators are added to an Algolia index as part of [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean). Separators are all non-letter characters except spaces and currency characters, such as $€£¥.
+ * @param searchableAttributes [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
  * @param userData Lets you store custom data in your indices.
- * @param customNormalization Overrides Algolia's default normalization.
+ * @param customNormalization A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
  */
 @Serializable
 public data class BaseIndexSettings(
 
-  /** Creates replicas, exact copies of an index. */
+  /** Creates [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/), which are copies of a primary index with the same records but different settings. */
   @SerialName(value = "replicas") val replicas: List<String>? = null,
 
-  /** Set the maximum number of hits accessible via pagination. */
+  /** Maximum number of hits accessible through pagination. */
   @SerialName(value = "paginationLimitedTo") val paginationLimitedTo: Int? = null,
 
-  /** List of attributes that can't be retrieved at query time. */
+  /** Attributes that can't be retrieved at query time. */
   @SerialName(value = "unretrievableAttributes") val unretrievableAttributes: List<String>? = null,
 
-  /** A list of words for which you want to turn off typo tolerance. */
+  /** Words for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/). */
   @SerialName(value = "disableTypoToleranceOnWords") val disableTypoToleranceOnWords: List<String>? = null,
 
-  /** Specify on which attributes in your index Algolia should apply Japanese transliteration to make words indexed in Katakana or Kanji searchable in Hiragana. */
+  /** Attributes in your index to which [Japanese transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead) applies. This will ensure that words indexed in Katakana or Kanji can also be searched in Hiragana. */
   @SerialName(value = "attributesToTransliterate") val attributesToTransliterate: List<String>? = null,
 
-  /** List of attributes on which to do a decomposition of camel case words. */
+  /** Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words. */
   @SerialName(value = "camelCaseAttributes") val camelCaseAttributes: List<String>? = null,
 
-  /** Specify on which attributes in your index Algolia should apply word segmentation, also known as decompounding. */
+  /** Attributes in your index to which [word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) (decompounding) applies. */
   @SerialName(value = "decompoundedAttributes") val decompoundedAttributes: JsonObject? = null,
 
-  /** Sets the languages at the index level for language-specific processing such as tokenization and normalization. */
+  /** Set the languages of your index, for language-specific processing steps such as [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/) and [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/). */
   @SerialName(value = "indexLanguages") val indexLanguages: List<String>? = null,
 
-  /** List of attributes on which you want to disable prefix matching. */
+  /** Attributes for which you want to turn off [prefix matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search). */
   @SerialName(value = "disablePrefixOnAttributes") val disablePrefixOnAttributes: List<String>? = null,
 
-  /** Enables compression of large integer arrays. */
+  /** Incidates whether the engine compresses arrays with exclusively non-negative integers. When enabled, the compressed arrays may be reordered.  */
   @SerialName(value = "allowCompressionOfIntegerArray") val allowCompressionOfIntegerArray: Boolean? = null,
 
-  /** List of numeric attributes that can be used as numerical filters. */
+  /** Numeric attributes that can be used as [numerical filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters). */
   @SerialName(value = "numericAttributesForFiltering") val numericAttributesForFiltering: List<String>? = null,
 
-  /** Control which separators are indexed. */
+  /** Controls which separators are added to an Algolia index as part of [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean). Separators are all non-letter characters except spaces and currency characters, such as $€£¥. */
   @SerialName(value = "separatorsToIndex") val separatorsToIndex: String? = null,
 
-  /** The complete list of attributes used for searching. */
+  /** [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).  */
   @SerialName(value = "searchableAttributes") val searchableAttributes: List<String>? = null,
 
   /** Lets you store custom data in your indices. */
   @SerialName(value = "userData") val userData: JsonObject? = null,
 
-  /** Overrides Algolia's default normalization. */
+  /** A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/). */
   @SerialName(value = "customNormalization") val customNormalization: Map<kotlin.String, Map<kotlin.String, String>>? = null,
 )

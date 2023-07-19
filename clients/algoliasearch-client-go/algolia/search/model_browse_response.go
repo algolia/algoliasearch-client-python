@@ -8,58 +8,58 @@ import (
 
 // BrowseResponse struct for BrowseResponse
 type BrowseResponse struct {
-	// If a search encounters an index that is being A/B tested, abTestID reports the ongoing A/B test ID.
+	// A/B test ID. This is only included in the response for indices that are part of an A/B test.
 	AbTestID *int32 `json:"abTestID,omitempty"`
-	// If a search encounters an index that is being A/B tested, abTestVariantID reports the variant ID of the index used (starting at 1).
+	// Variant ID. This is only included in the response for indices that are part of an A/B test.
 	AbTestVariantID *int32 `json:"abTestVariantID,omitempty"`
-	// The computed geo location.
+	// Computed geographical location.
 	AroundLatLng *string `json:"aroundLatLng,omitempty"`
-	// The automatically computed radius. For legacy reasons, this parameter is a string and not an integer.
+	// Automatically-computed radius.
 	AutomaticRadius *string `json:"automaticRadius,omitempty"`
-	// Whether the facet count is exhaustive or approximate.
+	// Indicates whether the facet count is exhaustive (exact) or approximate.
 	ExhaustiveFacetsCount *bool `json:"exhaustiveFacetsCount,omitempty"`
-	// Indicate if the nbHits count was exhaustive or approximate.
+	// Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
 	ExhaustiveNbHits bool `json:"exhaustiveNbHits" validate:"required"`
-	// Indicate if the typo-tolerance search was exhaustive or approximate (only included when typo-tolerance is enabled).
+	// Indicates whether the search for typos was exhaustive (exact) or approximate.
 	ExhaustiveTypo *bool `json:"exhaustiveTypo,omitempty"`
-	// A mapping of each facet name to the corresponding facet counts.
+	// Mapping of each facet name to the corresponding facet counts.
 	Facets *map[string]map[string]int32 `json:"facets,omitempty"`
 	// Statistics for numerical facets.
 	FacetsStats *map[string]FacetsStats `json:"facets_stats,omitempty"`
-	// Set the number of hits per page.
+	// Number of hits per page.
 	HitsPerPage int32 `json:"hitsPerPage" validate:"required"`
 	// Index name used for the query.
 	Index *string `json:"index,omitempty"`
-	// Index name used for the query. In the case of an A/B test, the targeted index isn't always the index used by the query.
+	// Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query.
 	IndexUsed *string `json:"indexUsed,omitempty"`
-	// Used to return warnings about the query.
+	// Warnings about the query.
 	Message *string `json:"message,omitempty"`
-	// Number of hits that the search query matched.
+	// Number of hits the search query matched.
 	NbHits int32 `json:"nbHits" validate:"required"`
-	// Number of pages available for the current query.
+	// Number of pages of results for the current query.
 	NbPages int32 `json:"nbPages" validate:"required"`
-	// The number of hits selected and sorted by the relevant sort algorithm.
+	// Number of hits selected and sorted by the relevant sort algorithm.
 	NbSortedHits *int32 `json:"nbSortedHits,omitempty"`
-	// Specify the page to retrieve.
+	// Page to retrieve (the first page is `0`, not `1`).
 	Page int32 `json:"page" validate:"required"`
-	// A url-encoded string of all search parameters.
+	// URL-encoded string of all search parameters.
 	Params   string                      `json:"params" validate:"required"`
 	Redirect *BaseSearchResponseRedirect `json:"redirect,omitempty"`
-	// The query string that will be searched, after normalization.
+	// Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
 	ParsedQuery *string `json:"parsedQuery,omitempty"`
 	// Time the server took to process the request, in milliseconds.
 	ProcessingTimeMS int32 `json:"processingTimeMS" validate:"required"`
-	// The text to search in the index.
+	// Text to search for in an index.
 	Query string `json:"query" validate:"required"`
-	// A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set.
+	// Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
 	QueryAfterRemoval *string `json:"queryAfterRemoval,omitempty"`
-	// Actual host name of the server that processed the request.
+	// Host name of the server that processed the request.
 	ServerUsed *string `json:"serverUsed,omitempty"`
 	// Lets you store custom data in your indices.
 	UserData         map[string]interface{} `json:"userData,omitempty"`
 	RenderingContent *RenderingContent      `json:"renderingContent,omitempty"`
 	Hits             []Hit                  `json:"hits" validate:"required"`
-	// Cursor indicating the location to resume browsing from. Must match the value returned by the previous call.
+	// Cursor indicating the location to resume browsing from. Must match the value returned by the previous call. Pass this value to the subsequent browse call to get the next page of results. When the end of the index has been reached, `cursor` is absent from the response.
 	Cursor *string `json:"cursor,omitempty"`
 }
 

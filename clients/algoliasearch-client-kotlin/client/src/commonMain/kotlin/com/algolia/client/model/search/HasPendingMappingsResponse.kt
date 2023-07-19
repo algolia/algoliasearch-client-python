@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * HasPendingMappingsResponse
  *
- * @param pending If there is any clusters with pending mapping state.
- * @param clusters Describe cluster pending (migrating, creating, deleting) mapping state.
+ * @param pending Indicates whether there are clusters undergoing migration, creation, or deletion.
+ * @param clusters Cluster pending mapping state: migrating, creating, deleting.
  */
 @Serializable
 public data class HasPendingMappingsResponse(
 
-  /** If there is any clusters with pending mapping state. */
+  /** Indicates whether there are clusters undergoing migration, creation, or deletion. */
   @SerialName(value = "pending") val pending: Boolean,
 
-  /** Describe cluster pending (migrating, creating, deleting) mapping state. */
+  /** Cluster pending mapping state: migrating, creating, deleting.  */
   @SerialName(value = "clusters") val clusters: Map<kotlin.String, List<String>>? = null,
 )

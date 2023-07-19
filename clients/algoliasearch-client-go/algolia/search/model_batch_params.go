@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// BatchParams The `multipleBatch` parameters.
+// BatchParams Batch parameters.
 type BatchParams struct {
 	Requests []MultipleBatchRequest `json:"requests" validate:"required"`
 }

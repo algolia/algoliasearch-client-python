@@ -12,7 +12,7 @@ final class RemoveUserIdResponse {
     required this.deletedAt,
   });
 
-  /// Date of deletion (ISO-8601 format).
+  /// Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
   @JsonKey(name: r'deletedAt')
   final String deletedAt;
 

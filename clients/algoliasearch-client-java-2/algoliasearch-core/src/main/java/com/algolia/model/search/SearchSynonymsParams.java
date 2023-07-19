@@ -18,7 +18,7 @@ public class SearchSynonymsParams {
   }
 
   /**
-   * The text to search in the index.
+   * Text to search for in an index.
    *
    * @return query
    */

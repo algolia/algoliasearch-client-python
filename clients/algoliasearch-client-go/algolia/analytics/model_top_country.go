@@ -8,9 +8,9 @@ import (
 
 // TopCountry struct for TopCountry
 type TopCountry struct {
-	// The country.
+	// Country.
 	Country string `json:"country" validate:"required"`
-	// The number of occurrences.
+	// Number of occurrences.
 	Count int32 `json:"count" validate:"required"`
 }
 

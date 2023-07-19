@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * BaseGetApiKeyResponse
  *
- * @param createdAt Time of the event expressed in milliseconds since the Unix epoch.
- * @param `value` The API key.
+ * @param createdAt Timestamp of creation in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time).
+ * @param `value` API key.
  */
 @Serializable
 public data class BaseGetApiKeyResponse(
 
-  /** Time of the event expressed in milliseconds since the Unix epoch. */
+  /** Timestamp of creation in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). */
   @SerialName(value = "createdAt") val createdAt: Long,
 
-  /** The API key. */
+  /** API key. */
   @SerialName(value = "value") val `value`: String? = null,
 )

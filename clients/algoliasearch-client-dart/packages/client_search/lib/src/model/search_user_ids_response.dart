@@ -17,23 +17,25 @@ final class SearchUserIdsResponse {
     required this.updatedAt,
   });
 
-  /// List of user object matching the query.
+  /// User objects that match the query.
   @JsonKey(name: r'hits')
   final List<UserHit> hits;
 
-  /// Number of hits that the search query matched.
+  /// Number of hits the search query matched.
   @JsonKey(name: r'nbHits')
   final int nbHits;
 
-  /// Specify the page to retrieve.
+  /// Page to retrieve (the first page is `0`, not `1`).
   @JsonKey(name: r'page')
   final int page;
 
-  /// Maximum number of hits in a page. Minimum is 1, maximum is 1000.
+  /// Maximum number of hits per page.
+  // minimum: 1
+  // maximum: 1000
   @JsonKey(name: r'hitsPerPage')
   final int hitsPerPage;
 
-  /// Date of last update (ISO-8601 format).
+  /// Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
   @JsonKey(name: r'updatedAt')
   final String updatedAt;
 

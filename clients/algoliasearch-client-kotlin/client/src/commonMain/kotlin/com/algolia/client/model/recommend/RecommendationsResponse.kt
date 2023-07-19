@@ -7,82 +7,82 @@ import kotlinx.serialization.json.*
 /**
  * RecommendationsResponse
  *
- * @param exhaustiveNbHits Indicate if the nbHits count was exhaustive or approximate.
- * @param hitsPerPage Set the number of hits per page.
- * @param nbHits Number of hits that the search query matched.
- * @param nbPages Number of pages available for the current query.
- * @param page Specify the page to retrieve.
- * @param params A url-encoded string of all search parameters.
+ * @param exhaustiveNbHits Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
+ * @param hitsPerPage Number of hits per page.
+ * @param nbHits Number of hits the search query matched.
+ * @param nbPages Number of pages of results for the current query.
+ * @param page Page to retrieve (the first page is `0`, not `1`).
+ * @param params URL-encoded string of all search parameters.
  * @param processingTimeMS Time the server took to process the request, in milliseconds.
- * @param query The text to search in the index.
+ * @param query Text to search for in an index.
  * @param hits
- * @param abTestID If a search encounters an index that is being A/B tested, abTestID reports the ongoing A/B test ID.
- * @param abTestVariantID If a search encounters an index that is being A/B tested, abTestVariantID reports the variant ID of the index used (starting at 1).
- * @param aroundLatLng The computed geo location.
- * @param automaticRadius The automatically computed radius. For legacy reasons, this parameter is a string and not an integer.
- * @param exhaustiveFacetsCount Whether the facet count is exhaustive or approximate.
- * @param exhaustiveTypo Indicate if the typo-tolerance search was exhaustive or approximate (only included when typo-tolerance is enabled).
- * @param facets A mapping of each facet name to the corresponding facet counts.
+ * @param abTestID A/B test ID. This is only included in the response for indices that are part of an A/B test.
+ * @param abTestVariantID Variant ID. This is only included in the response for indices that are part of an A/B test.
+ * @param aroundLatLng Computed geographical location.
+ * @param automaticRadius Automatically-computed radius.
+ * @param exhaustiveFacetsCount Indicates whether the facet count is exhaustive (exact) or approximate.
+ * @param exhaustiveTypo Indicates whether the search for typos was exhaustive (exact) or approximate.
+ * @param facets Mapping of each facet name to the corresponding facet counts.
  * @param facetsStats Statistics for numerical facets.
  * @param index Index name used for the query.
- * @param indexUsed Index name used for the query. In the case of an A/B test, the targeted index isn't always the index used by the query.
- * @param message Used to return warnings about the query.
- * @param nbSortedHits The number of hits selected and sorted by the relevant sort algorithm.
+ * @param indexUsed Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query.
+ * @param message Warnings about the query.
+ * @param nbSortedHits Number of hits selected and sorted by the relevant sort algorithm.
  * @param redirect
- * @param parsedQuery The query string that will be searched, after normalization.
- * @param queryAfterRemoval A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set.
- * @param serverUsed Actual host name of the server that processed the request.
+ * @param parsedQuery Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
+ * @param queryAfterRemoval Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
+ * @param serverUsed Host name of the server that processed the request.
  * @param userData Lets you store custom data in your indices.
  * @param renderingContent
  */
 @Serializable
 public data class RecommendationsResponse(
 
-  /** Indicate if the nbHits count was exhaustive or approximate. */
+  /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
   @SerialName(value = "exhaustiveNbHits") val exhaustiveNbHits: Boolean,
 
-  /** Set the number of hits per page. */
+  /** Number of hits per page. */
   @SerialName(value = "hitsPerPage") val hitsPerPage: Int,
 
-  /** Number of hits that the search query matched. */
+  /** Number of hits the search query matched. */
   @SerialName(value = "nbHits") val nbHits: Int,
 
-  /** Number of pages available for the current query. */
+  /** Number of pages of results for the current query. */
   @SerialName(value = "nbPages") val nbPages: Int,
 
-  /** Specify the page to retrieve. */
+  /** Page to retrieve (the first page is `0`, not `1`). */
   @SerialName(value = "page") val page: Int,
 
-  /** A url-encoded string of all search parameters. */
+  /** URL-encoded string of all search parameters. */
   @SerialName(value = "params") val params: String,
 
   /** Time the server took to process the request, in milliseconds. */
   @SerialName(value = "processingTimeMS") val processingTimeMS: Int,
 
-  /** The text to search in the index. */
+  /** Text to search for in an index. */
   @SerialName(value = "query") val query: String,
 
   @SerialName(value = "hits") val hits: List<RecommendHit>,
 
-  /** If a search encounters an index that is being A/B tested, abTestID reports the ongoing A/B test ID. */
+  /** A/B test ID. This is only included in the response for indices that are part of an A/B test. */
   @SerialName(value = "abTestID") val abTestID: Int? = null,
 
-  /** If a search encounters an index that is being A/B tested, abTestVariantID reports the variant ID of the index used (starting at 1). */
+  /** Variant ID. This is only included in the response for indices that are part of an A/B test. */
   @SerialName(value = "abTestVariantID") val abTestVariantID: Int? = null,
 
-  /** The computed geo location. */
+  /** Computed geographical location. */
   @SerialName(value = "aroundLatLng") val aroundLatLng: String? = null,
 
-  /** The automatically computed radius. For legacy reasons, this parameter is a string and not an integer. */
+  /** Automatically-computed radius. */
   @SerialName(value = "automaticRadius") val automaticRadius: String? = null,
 
-  /** Whether the facet count is exhaustive or approximate. */
+  /** Indicates whether the facet count is exhaustive (exact) or approximate. */
   @SerialName(value = "exhaustiveFacetsCount") val exhaustiveFacetsCount: Boolean? = null,
 
-  /** Indicate if the typo-tolerance search was exhaustive or approximate (only included when typo-tolerance is enabled). */
+  /** Indicates whether the search for typos was exhaustive (exact) or approximate. */
   @SerialName(value = "exhaustiveTypo") val exhaustiveTypo: Boolean? = null,
 
-  /** A mapping of each facet name to the corresponding facet counts. */
+  /** Mapping of each facet name to the corresponding facet counts. */
   @SerialName(value = "facets") val facets: Map<kotlin.String, Map<kotlin.String, Int>>? = null,
 
   /** Statistics for numerical facets. */
@@ -91,24 +91,24 @@ public data class RecommendationsResponse(
   /** Index name used for the query. */
   @SerialName(value = "index") val index: String? = null,
 
-  /** Index name used for the query. In the case of an A/B test, the targeted index isn't always the index used by the query. */
+  /** Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query. */
   @SerialName(value = "indexUsed") val indexUsed: String? = null,
 
-  /** Used to return warnings about the query. */
+  /** Warnings about the query. */
   @SerialName(value = "message") val message: String? = null,
 
-  /** The number of hits selected and sorted by the relevant sort algorithm. */
+  /** Number of hits selected and sorted by the relevant sort algorithm. */
   @SerialName(value = "nbSortedHits") val nbSortedHits: Int? = null,
 
   @SerialName(value = "redirect") val redirect: BaseSearchResponseRedirect? = null,
 
-  /** The query string that will be searched, after normalization. */
+  /** Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched. */
   @SerialName(value = "parsedQuery") val parsedQuery: String? = null,
 
-  /** A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set. */
+  /** Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set. */
   @SerialName(value = "queryAfterRemoval") val queryAfterRemoval: String? = null,
 
-  /** Actual host name of the server that processed the request. */
+  /** Host name of the server that processed the request. */
   @SerialName(value = "serverUsed") val serverUsed: String? = null,
 
   /** Lets you store custom data in your indices. */

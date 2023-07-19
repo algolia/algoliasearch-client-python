@@ -12,7 +12,7 @@ final class SearchParamsString {
     this.params,
   });
 
-  /// Search parameters as URL-encoded query string.
+  /// Search parameters as a URL-encoded query string.
   @JsonKey(name: r'params')
   final String? params;
 

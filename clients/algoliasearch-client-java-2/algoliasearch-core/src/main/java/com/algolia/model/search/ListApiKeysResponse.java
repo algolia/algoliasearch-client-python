@@ -25,7 +25,7 @@ public class ListApiKeysResponse {
   }
 
   /**
-   * List of api keys.
+   * API keys.
    *
    * @return keys
    */

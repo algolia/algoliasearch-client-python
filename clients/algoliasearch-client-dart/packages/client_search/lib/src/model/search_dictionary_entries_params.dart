@@ -15,19 +15,21 @@ final class SearchDictionaryEntriesParams {
     this.language,
   });
 
-  /// The text to search in the index.
+  /// Text to search for in an index.
   @JsonKey(name: r'query')
   final String query;
 
-  /// Specify the page to retrieve.
+  /// Page to retrieve (the first page is `0`, not `1`).
   @JsonKey(name: r'page')
   final int? page;
 
-  /// Set the number of hits per page.
+  /// Number of hits per page.
+  // minimum: 1
+  // maximum: 1000
   @JsonKey(name: r'hitsPerPage')
   final int? hitsPerPage;
 
-  /// Language ISO code supported by the dictionary (e.g., \"en\" for English).
+  /// [Supported language ISO code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
   @JsonKey(name: r'language')
   final String? language;
 

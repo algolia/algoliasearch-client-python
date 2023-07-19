@@ -10,7 +10,7 @@ import (
 type UserHit struct {
 	// userID of the user.
 	UserID string `json:"userID" validate:"required"`
-	// Name of the cluster.
+	// Cluster name.
 	ClusterName string `json:"clusterName" validate:"required"`
 	// Number of records in the cluster.
 	NbRecords int32 `json:"nbRecords" validate:"required"`

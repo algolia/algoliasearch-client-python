@@ -21,7 +21,7 @@ public class SearchForHitsOptions {
   }
 
   /**
-   * The Algolia index name.
+   * Algolia index name.
    *
    * @return indexName
    */

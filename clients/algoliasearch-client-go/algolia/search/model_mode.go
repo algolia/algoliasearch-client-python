@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// Mode The search mode that the index will use to query for results.
+// Mode Search mode the index will use to query for results.
 type Mode string
 
 // List of mode

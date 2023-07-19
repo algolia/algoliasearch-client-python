@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Consequence of the Rule. */
+/**
+ * [Consequences](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#consequences)
+ * of a rule.
+ */
 public class Consequence {
 
   @JsonProperty("params")
@@ -55,7 +58,7 @@ public class Consequence {
   }
 
   /**
-   * Objects to promote as hits.
+   * Records to promote.
    *
    * @return promote
    */
@@ -70,8 +73,8 @@ public class Consequence {
   }
 
   /**
-   * Only use in combination with the promote consequence. When true, promoted results will be
-   * restricted to match the filters of the current search. When false, the promoted results will
+   * Only use in combination with the `promote` consequence. When `true`, promoted results will be
+   * restricted to match the filters of the current search. When `false`, the promoted results will
    * show up regardless of the filters.
    *
    * @return filterPromotes
@@ -95,8 +98,7 @@ public class Consequence {
   }
 
   /**
-   * Objects to hide from hits. Each object must contain an objectID field. By default, you can hide
-   * up to 50 items per rule.
+   * Records to hide. By default, you can hide up to 50 records per rule.
    *
    * @return hide
    */

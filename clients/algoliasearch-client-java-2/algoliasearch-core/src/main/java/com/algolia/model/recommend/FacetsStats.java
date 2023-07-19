@@ -27,7 +27,7 @@ public class FacetsStats {
   }
 
   /**
-   * The minimum value in the result set.
+   * Minimum value in the results.
    *
    * @return min
    */
@@ -42,7 +42,7 @@ public class FacetsStats {
   }
 
   /**
-   * The maximum value in the result set.
+   * Maximum value in the results.
    *
    * @return max
    */
@@ -57,7 +57,7 @@ public class FacetsStats {
   }
 
   /**
-   * The average facet value in the result set.
+   * Average facet value in the results.
    *
    * @return avg
    */
@@ -72,7 +72,7 @@ public class FacetsStats {
   }
 
   /**
-   * The sum of all values in the result set.
+   * Sum of all values in the results.
    *
    * @return sum
    */

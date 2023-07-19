@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// TaskStatus the model 'TaskStatus'
+// TaskStatus _published_ if the task has been processed, _notPublished_ otherwise.
 type TaskStatus string
 
 // List of taskStatus

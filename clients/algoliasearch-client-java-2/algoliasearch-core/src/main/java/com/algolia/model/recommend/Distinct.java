@@ -14,7 +14,10 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
-/** Enables de-duplication or grouping of results. */
+/**
+ * Enables [deduplication or grouping of results (Algolia's _distinct_
+ * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
+ */
 @JsonDeserialize(using = Distinct.DistinctDeserializer.class)
 @JsonSerialize(using = Distinct.DistinctSerializer.class)
 public abstract class Distinct implements CompoundType {

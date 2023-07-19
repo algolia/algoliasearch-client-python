@@ -25,7 +25,7 @@ public class GetTopFilterAttributesResponse {
   }
 
   /**
-   * A list of attributes with their count.
+   * Filterable attributes.
    *
    * @return attributes
    */

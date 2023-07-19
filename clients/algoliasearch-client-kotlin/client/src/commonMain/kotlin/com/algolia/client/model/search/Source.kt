@@ -5,17 +5,17 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The source.
+ * Source.
  *
- * @param source The IP range of the source.
- * @param description The description of the source.
+ * @param source IP address range of the source.
+ * @param description Source description.
  */
 @Serializable
 public data class Source(
 
-  /** The IP range of the source. */
+  /** IP address range of the source. */
   @SerialName(value = "source") val source: String,
 
-  /** The description of the source. */
+  /** Source description. */
   @SerialName(value = "description") val description: String? = null,
 )

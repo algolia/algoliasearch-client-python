@@ -12,7 +12,7 @@ final class IndexSettingsAsSearchParamsSemanticSearch {
     this.eventSources,
   });
 
-  /// When null, the current index / replica group will be used as the event source.
+  /// Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.
   @JsonKey(name: r'eventSources')
   final List<String>? eventSources;
 

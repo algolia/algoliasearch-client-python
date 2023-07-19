@@ -45,7 +45,7 @@ public class Hit {
   }
 
   /**
-   * Unique identifier of the object.
+   * Unique object identifier.
    *
    * @return objectID
    */

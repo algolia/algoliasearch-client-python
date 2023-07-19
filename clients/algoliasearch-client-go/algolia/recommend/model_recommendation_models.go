@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// RecommendationModels The recommendation model to use.
+// RecommendationModels Recommendation model.
 type RecommendationModels string
 
 // List of recommendationModels

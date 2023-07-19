@@ -6,13 +6,13 @@ import (
 	"fmt"
 )
 
-// GetObjectsRequest getObjects operation on an index.
+// GetObjectsRequest Record retrieval operation.
 type GetObjectsRequest struct {
-	// List of attributes to retrieve. By default, all retrievable attributes are returned.
+	// Attributes to retrieve. If not specified, all retrievable attributes are returned.
 	AttributesToRetrieve []string `json:"attributesToRetrieve,omitempty"`
-	// ID of the object within that index.
+	// Record's objectID.
 	ObjectID string `json:"objectID" validate:"required"`
-	// name of the index containing the object.
+	// Name of the index containing the required records.
 	IndexName string `json:"indexName" validate:"required"`
 }
 

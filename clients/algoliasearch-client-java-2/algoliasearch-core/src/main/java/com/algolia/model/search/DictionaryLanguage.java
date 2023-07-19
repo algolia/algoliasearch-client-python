@@ -9,23 +9,23 @@ import java.util.Objects;
 /** Custom entries for a dictionary. */
 public class DictionaryLanguage {
 
-  @JsonProperty("nbCustomEntires")
-  private Integer nbCustomEntires;
+  @JsonProperty("nbCustomEntries")
+  private Integer nbCustomEntries;
 
-  public DictionaryLanguage setNbCustomEntires(Integer nbCustomEntires) {
-    this.nbCustomEntires = nbCustomEntires;
+  public DictionaryLanguage setNbCustomEntries(Integer nbCustomEntries) {
+    this.nbCustomEntries = nbCustomEntries;
     return this;
   }
 
   /**
-   * When nbCustomEntries is set to 0, the user didn't customize the dictionary. The dictionary is
-   * still supported with standard, Algolia-provided entries.
+   * If `0`, the dictionary hasn't been customized and only contains standard entries provided by
+   * Algolia. If `null`, that feature isn't available or isn't supported for that language.
    *
-   * @return nbCustomEntires
+   * @return nbCustomEntries
    */
   @javax.annotation.Nullable
-  public Integer getNbCustomEntires() {
-    return nbCustomEntires;
+  public Integer getNbCustomEntries() {
+    return nbCustomEntries;
   }
 
   @Override
@@ -37,19 +37,19 @@ public class DictionaryLanguage {
       return false;
     }
     DictionaryLanguage dictionaryLanguage = (DictionaryLanguage) o;
-    return Objects.equals(this.nbCustomEntires, dictionaryLanguage.nbCustomEntires);
+    return Objects.equals(this.nbCustomEntries, dictionaryLanguage.nbCustomEntries);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nbCustomEntires);
+    return Objects.hash(nbCustomEntries);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DictionaryLanguage {\n");
-    sb.append("    nbCustomEntires: ").append(toIndentedString(nbCustomEntires)).append("\n");
+    sb.append("    nbCustomEntries: ").append(toIndentedString(nbCustomEntries)).append("\n");
     sb.append("}");
     return sb.toString();
   }

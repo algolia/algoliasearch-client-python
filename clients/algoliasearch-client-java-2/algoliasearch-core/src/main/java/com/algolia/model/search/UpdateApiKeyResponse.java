@@ -21,7 +21,7 @@ public class UpdateApiKeyResponse {
   }
 
   /**
-   * The API key.
+   * API key.
    *
    * @return key
    */
@@ -36,7 +36,7 @@ public class UpdateApiKeyResponse {
   }
 
   /**
-   * Date of last update (ISO-8601 format).
+   * Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return updatedAt
    */

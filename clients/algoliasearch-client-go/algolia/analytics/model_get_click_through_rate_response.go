@@ -8,13 +8,13 @@ import (
 
 // GetClickThroughRateResponse struct for GetClickThroughRateResponse
 type GetClickThroughRateResponse struct {
-	// The click-through rate.
+	// [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
 	Rate float64 `json:"rate" validate:"required"`
-	// The number of click event.
+	// Number of click events.
 	ClickCount int32 `json:"clickCount" validate:"required"`
-	// The number of tracked search click.
+	// Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
 	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
-	// A list of click-through rate events with their date.
+	// Click-through rate events.
 	Dates []ClickThroughRateEvent `json:"dates" validate:"required"`
 }
 

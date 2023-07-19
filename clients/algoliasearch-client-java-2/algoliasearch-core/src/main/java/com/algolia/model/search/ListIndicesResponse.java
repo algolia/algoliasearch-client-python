@@ -28,7 +28,7 @@ public class ListIndicesResponse {
   }
 
   /**
-   * List of the fetched indices.
+   * All indices in your Algolia application.
    *
    * @return items
    */

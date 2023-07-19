@@ -22,7 +22,7 @@ public sealed interface HighlightResult {
     /**
      * Show highlighted section and words matched on a query.
      *
-     * @param `value` Markup text with occurrences highlighted.
+     * @param `value` Markup text with `facetQuery` matches highlighted.
      * @param matchLevel
      * @param matchedWords List of words from the query that matched the object.
      * @param fullyHighlighted Whether the entire attribute value is highlighted.

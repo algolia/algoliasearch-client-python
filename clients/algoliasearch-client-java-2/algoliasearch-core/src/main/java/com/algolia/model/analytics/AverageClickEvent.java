@@ -24,7 +24,7 @@ public class AverageClickEvent {
   }
 
   /**
-   * The average of all the click count event.
+   * Average count of all click events.
    *
    * @return average
    */
@@ -39,7 +39,7 @@ public class AverageClickEvent {
   }
 
   /**
-   * The number of click event.
+   * Number of click events.
    *
    * @return clickCount
    */
@@ -54,7 +54,7 @@ public class AverageClickEvent {
   }
 
   /**
-   * Date of the event.
+   * Date of the event in the format YYYY-MM-DD.
    *
    * @return date
    */

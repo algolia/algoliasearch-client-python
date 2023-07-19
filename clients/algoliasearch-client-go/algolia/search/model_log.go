@@ -8,27 +8,27 @@ import (
 
 // Log struct for Log
 type Log struct {
-	// Timestamp in ISO-8601 format.
+	// Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
 	Timestamp string `json:"timestamp" validate:"required"`
 	// HTTP method of the performed request.
 	Method string `json:"method" validate:"required"`
 	// HTTP response code.
 	AnswerCode string `json:"answer_code" validate:"required"`
-	// Request body. Truncated after 1000 characters.
+	// Request body. Truncated after 1,000 characters.
 	QueryBody string `json:"query_body" validate:"required"`
-	// Answer body. Truncated after 1000 characters.
+	// Answer body. Truncated after 1,000 characters.
 	Answer string `json:"answer" validate:"required"`
 	// Request URL.
 	Url string `json:"url" validate:"required"`
-	// IP of the client which performed the request.
+	// IP address of the client that performed the request.
 	Ip string `json:"ip" validate:"required"`
-	// Request Headers (API Key is obfuscated).
+	// Request headers (API key is obfuscated).
 	QueryHeaders string `json:"query_headers" validate:"required"`
 	// SHA1 signature of the log entry.
 	Sha1 string `json:"sha1" validate:"required"`
 	// Number of API calls.
 	NbApiCalls string `json:"nb_api_calls" validate:"required"`
-	// Processing time for the query. It doesn't include network time.
+	// Processing time for the query. Doesn't include network time.
 	ProcessingTimeMs string `json:"processing_time_ms" validate:"required"`
 	// Index targeted by the query.
 	Index *string `json:"index,omitempty"`
@@ -36,7 +36,7 @@ type Log struct {
 	QueryParams *string `json:"query_params,omitempty"`
 	// Number of hits returned for the query.
 	QueryNbHits *string `json:"query_nb_hits,omitempty"`
-	// Array of all performed queries for the given request.
+	// Performed queries for the given request.
 	InnerQueries []LogQuery `json:"inner_queries,omitempty"`
 }
 

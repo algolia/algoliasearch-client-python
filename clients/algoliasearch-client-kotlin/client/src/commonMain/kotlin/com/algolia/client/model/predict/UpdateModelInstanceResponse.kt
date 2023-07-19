@@ -8,7 +8,7 @@ import kotlinx.serialization.json.*
  * UpdateModelInstanceResponse
  *
  * @param modelID The ID of the model.
- * @param updatedAt Date of last update (ISO-8601 format).
+ * @param updatedAt Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
  */
 @Serializable
 public data class UpdateModelInstanceResponse(
@@ -16,6 +16,6 @@ public data class UpdateModelInstanceResponse(
   /** The ID of the model. */
   @SerialName(value = "modelID") val modelID: String,
 
-  /** Date of last update (ISO-8601 format). */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String,
 )

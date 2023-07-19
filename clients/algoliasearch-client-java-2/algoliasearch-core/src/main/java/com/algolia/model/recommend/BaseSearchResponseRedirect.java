@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** This parameter is for internal use only. */
+/**
+ * [Redirect results to a
+ * URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
+ */
 public class BaseSearchResponseRedirect {
 
   @JsonProperty("index")

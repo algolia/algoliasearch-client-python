@@ -103,8 +103,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * If a search encounters an index that is being A/B tested, abTestID reports the ongoing A/B test
-   * ID.
+   * A/B test ID. This is only included in the response for indices that are part of an A/B test.
    *
    * @return abTestID
    */
@@ -119,8 +118,8 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * If a search encounters an index that is being A/B tested, abTestVariantID reports the variant
-   * ID of the index used (starting at 1).
+   * Variant ID. This is only included in the response for indices that are part of an A/B test.
+   * minimum: 1
    *
    * @return abTestVariantID
    */
@@ -135,7 +134,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * The computed geo location.
+   * Computed geographical location.
    *
    * @return aroundLatLng
    */
@@ -150,8 +149,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * The automatically computed radius. For legacy reasons, this parameter is a string and not an
-   * integer.
+   * Automatically-computed radius.
    *
    * @return automaticRadius
    */
@@ -166,7 +164,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Whether the facet count is exhaustive or approximate.
+   * Indicates whether the facet count is exhaustive (exact) or approximate.
    *
    * @return exhaustiveFacetsCount
    */
@@ -181,7 +179,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Indicate if the nbHits count was exhaustive or approximate.
+   * Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
    *
    * @return exhaustiveNbHits
    */
@@ -196,8 +194,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Indicate if the typo-tolerance search was exhaustive or approximate (only included when
-   * typo-tolerance is enabled).
+   * Indicates whether the search for typos was exhaustive (exact) or approximate.
    *
    * @return exhaustiveTypo
    */
@@ -220,7 +217,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * A mapping of each facet name to the corresponding facet counts.
+   * Mapping of each facet name to the corresponding facet counts.
    *
    * @return facets
    */
@@ -258,7 +255,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Set the number of hits per page.
+   * Number of hits per page. minimum: 1 maximum: 1000
    *
    * @return hitsPerPage
    */
@@ -288,8 +285,8 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Index name used for the query. In the case of an A/B test, the targeted index isn't always the
-   * index used by the query.
+   * Index name used for the query. During A/B testing, the targeted index isn't always the index
+   * used by the query.
    *
    * @return indexUsed
    */
@@ -304,7 +301,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Used to return warnings about the query.
+   * Warnings about the query.
    *
    * @return message
    */
@@ -319,7 +316,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Number of hits that the search query matched.
+   * Number of hits the search query matched.
    *
    * @return nbHits
    */
@@ -334,7 +331,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Number of pages available for the current query.
+   * Number of pages of results for the current query.
    *
    * @return nbPages
    */
@@ -349,7 +346,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * The number of hits selected and sorted by the relevant sort algorithm.
+   * Number of hits selected and sorted by the relevant sort algorithm.
    *
    * @return nbSortedHits
    */
@@ -364,7 +361,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Specify the page to retrieve.
+   * Page to retrieve (the first page is `0`, not `1`).
    *
    * @return page
    */
@@ -379,7 +376,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * A url-encoded string of all search parameters.
+   * URL-encoded string of all search parameters.
    *
    * @return params
    */
@@ -409,7 +406,8 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * The query string that will be searched, after normalization.
+   * Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean)
+   * query string that will be searched.
    *
    * @return parsedQuery
    */
@@ -439,7 +437,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * The text to search in the index.
+   * Text to search for in an index.
    *
    * @return query
    */
@@ -454,8 +452,8 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * A markup text indicating which parts of the original query have been removed in order to
-   * retrieve a non-empty result set.
+   * Markup text indicating which parts of the original query have been removed to retrieve a
+   * non-empty result set.
    *
    * @return queryAfterRemoval
    */
@@ -470,7 +468,7 @@ public class BrowseResponse<T> {
   }
 
   /**
-   * Actual host name of the server that processed the request.
+   * Host name of the server that processed the request.
    *
    * @return serverUsed
    */
@@ -536,7 +534,8 @@ public class BrowseResponse<T> {
 
   /**
    * Cursor indicating the location to resume browsing from. Must match the value returned by the
-   * previous call.
+   * previous call. Pass this value to the subsequent browse call to get the next page of results.
+   * When the end of the index has been reached, `cursor` is absent from the response.
    *
    * @return cursor
    */

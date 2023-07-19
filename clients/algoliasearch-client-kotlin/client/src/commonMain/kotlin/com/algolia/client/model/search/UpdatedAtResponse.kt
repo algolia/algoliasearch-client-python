@@ -5,17 +5,17 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The response with a taskID and an updatedAt timestamp.
+ * Response, taskID, and update timestamp.
  *
- * @param taskID taskID of the task to wait for.
- * @param updatedAt Date of last update (ISO-8601 format).
+ * @param taskID Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.
+ * @param updatedAt Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
  */
 @Serializable
 public data class UpdatedAtResponse(
 
-  /** taskID of the task to wait for. */
+  /** Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.  */
   @SerialName(value = "taskID") val taskID: Long,
 
-  /** Date of last update (ISO-8601 format). */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String,
 )

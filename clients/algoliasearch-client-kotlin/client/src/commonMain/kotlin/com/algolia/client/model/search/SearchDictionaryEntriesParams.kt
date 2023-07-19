@@ -5,25 +5,25 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The `searchDictionaryEntries` parameters.
+ * `searchDictionaryEntries` parameters.
  *
- * @param query The text to search in the index.
- * @param page Specify the page to retrieve.
- * @param hitsPerPage Set the number of hits per page.
- * @param language Language ISO code supported by the dictionary (e.g., \"en\" for English).
+ * @param query Text to search for in an index.
+ * @param page Page to retrieve (the first page is `0`, not `1`).
+ * @param hitsPerPage Number of hits per page.
+ * @param language [Supported language ISO code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
  */
 @Serializable
 public data class SearchDictionaryEntriesParams(
 
-  /** The text to search in the index. */
+  /** Text to search for in an index. */
   @SerialName(value = "query") val query: String,
 
-  /** Specify the page to retrieve. */
+  /** Page to retrieve (the first page is `0`, not `1`). */
   @SerialName(value = "page") val page: Int? = null,
 
-  /** Set the number of hits per page. */
+  /** Number of hits per page. */
   @SerialName(value = "hitsPerPage") val hitsPerPage: Int? = null,
 
-  /** Language ISO code supported by the dictionary (e.g., \"en\" for English). */
+  /** [Supported language ISO code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).  */
   @SerialName(value = "language") val language: String? = null,
 )

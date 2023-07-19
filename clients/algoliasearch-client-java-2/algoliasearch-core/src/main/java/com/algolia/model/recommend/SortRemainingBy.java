@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * How to display the remaining items. - `count`: facet count (descending). - `alpha`: alphabetical
+ * How to display the remaining items: - `count`: facet count (descending). - `alpha`: alphabetical
  * (ascending). - `hidden`: show only pinned values.
  */
 public enum SortRemainingBy {

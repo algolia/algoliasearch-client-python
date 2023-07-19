@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** The `getObjects` parameters. */
+/** Request parameters. */
 public class GetObjectsParams {
 
   @JsonProperty("requests")

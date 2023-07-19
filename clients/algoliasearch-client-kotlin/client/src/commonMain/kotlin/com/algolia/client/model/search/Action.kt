@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * type of operation.
+ * Type of batch operation.
  */
 @Serializable
 public enum class Action(public val value: kotlin.String) {

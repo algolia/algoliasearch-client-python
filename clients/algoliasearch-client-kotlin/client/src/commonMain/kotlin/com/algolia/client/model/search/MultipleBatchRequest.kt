@@ -8,7 +8,7 @@ import kotlinx.serialization.json.*
  * MultipleBatchRequest
  *
  * @param action
- * @param body arguments to the operation (depends on the type of the operation).
+ * @param body Operation arguments (varies with specified `action`).
  * @param indexName Index to target for this operation.
  */
 @Serializable
@@ -16,7 +16,7 @@ public data class MultipleBatchRequest(
 
   @SerialName(value = "action") val action: Action,
 
-  /** arguments to the operation (depends on the type of the operation). */
+  /** Operation arguments (varies with specified `action`). */
   @SerialName(value = "body") val body: JsonObject,
 
   /** Index to target for this operation. */

@@ -21,7 +21,7 @@ public class TopCountry {
   }
 
   /**
-   * The country.
+   * Country.
    *
    * @return country
    */
@@ -36,7 +36,7 @@ public class TopCountry {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */

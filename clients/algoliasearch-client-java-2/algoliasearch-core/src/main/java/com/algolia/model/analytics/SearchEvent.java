@@ -21,7 +21,7 @@ public class SearchEvent {
   }
 
   /**
-   * Date of the event.
+   * Date of the event in the format YYYY-MM-DD.
    *
    * @return date
    */
@@ -36,7 +36,7 @@ public class SearchEvent {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */

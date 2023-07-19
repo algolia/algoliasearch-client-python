@@ -7,7 +7,10 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Gets or Sets orderBy */
+/**
+ * Method for ordering results. `clickThroughRate`, `conversionRate` and `averageClickPosition` are
+ * only available if the `clickAnalytics` parameter is `true`.
+ */
 public enum OrderBy {
   SEARCH_COUNT("searchCount"),
 

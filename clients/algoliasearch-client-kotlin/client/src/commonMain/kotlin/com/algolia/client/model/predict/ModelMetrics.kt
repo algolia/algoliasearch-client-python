@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
  * @param mrr
  * @param coverage
  * @param f1Score
- * @param updatedAt Date of last update (ISO-8601 format).
+ * @param updatedAt Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
  */
 @Serializable
 public data class ModelMetrics(
@@ -27,6 +27,6 @@ public data class ModelMetrics(
 
   @SerialName(value = "f1_score") val f1Score: Double? = null,
 
-  /** Date of last update (ISO-8601 format). */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String? = null,
 )

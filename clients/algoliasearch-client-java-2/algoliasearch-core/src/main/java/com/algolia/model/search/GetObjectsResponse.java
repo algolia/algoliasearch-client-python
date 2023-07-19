@@ -25,7 +25,7 @@ public class GetObjectsResponse<T> {
   }
 
   /**
-   * List of results fetched.
+   * Retrieved results.
    *
    * @return results
    */

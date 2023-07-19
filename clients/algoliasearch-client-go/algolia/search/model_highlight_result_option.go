@@ -8,7 +8,7 @@ import (
 
 // HighlightResultOption Show highlighted section and words matched on a query.
 type HighlightResultOption struct {
-	// Markup text with occurrences highlighted.
+	// Markup text with `facetQuery` matches highlighted.
 	Value      string     `json:"value" validate:"required"`
 	MatchLevel MatchLevel `json:"matchLevel" validate:"required"`
 	// List of words from the query that matched the object.

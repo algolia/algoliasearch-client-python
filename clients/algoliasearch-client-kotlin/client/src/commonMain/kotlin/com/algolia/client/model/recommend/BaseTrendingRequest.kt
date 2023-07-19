@@ -8,17 +8,17 @@ import kotlinx.serialization.json.*
  * BaseTrendingRequest
  *
  * @param model
- * @param facetName The facet name to use for trending models.
- * @param facetValue The facet value to use for trending models.
+ * @param facetName Facet name for trending models.
+ * @param facetValue Facet value for trending models.
  */
 @Serializable
 public data class BaseTrendingRequest(
 
   @SerialName(value = "model") val model: TrendingModels,
 
-  /** The facet name to use for trending models. */
+  /** Facet name for trending models. */
   @SerialName(value = "facetName") val facetName: String? = null,
 
-  /** The facet value to use for trending models. */
+  /** Facet value for trending models. */
   @SerialName(value = "facetValue") val facetValue: String? = null,
 )

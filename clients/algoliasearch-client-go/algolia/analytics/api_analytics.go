@@ -89,8 +89,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -104,8 +104,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -261,8 +261,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -276,8 +276,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -461,14 +461,15 @@ func (r ApiGetAverageClickPositionRequest) WithTags(tags string) ApiGetAverageCl
 /*
 GetAverageClickPosition Get average click position. Wraps GetAverageClickPositionWithContext using context.Background.
 
-Returns the average click position. The endpoint returns a value for the complete given time range, as well as a value per day.
+Return the average click position for the complete time range and for individual days.
+> **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
 Request can be constructed by NewApiGetAverageClickPositionRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetAverageClickPositionResponse
 */
 func (c *APIClient) GetAverageClickPosition(r ApiGetAverageClickPositionRequest, opts ...Option) (*GetAverageClickPositionResponse, error) {
@@ -478,14 +479,15 @@ func (c *APIClient) GetAverageClickPosition(r ApiGetAverageClickPositionRequest,
 /*
 GetAverageClickPosition Get average click position.
 
-Returns the average click position. The endpoint returns a value for the complete given time range, as well as a value per day.
+Return the average click position for the complete time range and for individual days.
+> **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
 Request can be constructed by NewApiGetAverageClickPositionRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetAverageClickPositionResponse
 */
 func (c *APIClient) GetAverageClickPositionWithContext(ctx context.Context, r ApiGetAverageClickPositionRequest, opts ...Option) (*GetAverageClickPositionResponse, error) {
@@ -674,19 +676,18 @@ func (r ApiGetClickPositionsRequest) WithTags(tags string) ApiGetClickPositionsR
 }
 
 /*
-GetClickPositions Get clicks per positions. Wraps GetClickPositionsWithContext using context.Background.
+GetClickPositions Get click positions. Wraps GetClickPositionsWithContext using context.Background.
 
-Returns the distribution of clicks per range of positions.
+Show the number of clicks events and their associated position in the search results.
 
-If the groups all have a count of 0, it means Algolia didn’t receive any click events for the queries with the clickAnalytics search parameter set to true.
-The count is 0 until Algolia receives at least one click event.
+> **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
 Request can be constructed by NewApiGetClickPositionsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetClickPositionsResponse
 */
 func (c *APIClient) GetClickPositions(r ApiGetClickPositionsRequest, opts ...Option) (*GetClickPositionsResponse, error) {
@@ -694,19 +695,18 @@ func (c *APIClient) GetClickPositions(r ApiGetClickPositionsRequest, opts ...Opt
 }
 
 /*
-GetClickPositions Get clicks per positions.
+GetClickPositions Get click positions.
 
-Returns the distribution of clicks per range of positions.
+Show the number of clicks events and their associated position in the search results.
 
-If the groups all have a count of 0, it means Algolia didn’t receive any click events for the queries with the clickAnalytics search parameter set to true.
-The count is 0 until Algolia receives at least one click event.
+> **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
 Request can be constructed by NewApiGetClickPositionsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetClickPositionsResponse
 */
 func (c *APIClient) GetClickPositionsWithContext(ctx context.Context, r ApiGetClickPositionsRequest, opts ...Option) (*GetClickPositionsResponse, error) {
@@ -897,14 +897,14 @@ func (r ApiGetClickThroughRateRequest) WithTags(tags string) ApiGetClickThroughR
 /*
 GetClickThroughRate Get click-through rate (CTR). Wraps GetClickThroughRateWithContext using context.Background.
 
-Returns a click-through rate (CTR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of clicks and searches used to compute the rates.
+Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
 
 Request can be constructed by NewApiGetClickThroughRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetClickThroughRateResponse
 */
 func (c *APIClient) GetClickThroughRate(r ApiGetClickThroughRateRequest, opts ...Option) (*GetClickThroughRateResponse, error) {
@@ -914,14 +914,14 @@ func (c *APIClient) GetClickThroughRate(r ApiGetClickThroughRateRequest, opts ..
 /*
 GetClickThroughRate Get click-through rate (CTR).
 
-Returns a click-through rate (CTR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of clicks and searches used to compute the rates.
+Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
 
 Request can be constructed by NewApiGetClickThroughRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetClickThroughRateResponse
 */
 func (c *APIClient) GetClickThroughRateWithContext(ctx context.Context, r ApiGetClickThroughRateRequest, opts ...Option) (*GetClickThroughRateResponse, error) {
@@ -1112,14 +1112,14 @@ func (r ApiGetConversationRateRequest) WithTags(tags string) ApiGetConversationR
 /*
 GetConversationRate Get conversion rate (CR). Wraps GetConversationRateWithContext using context.Background.
 
-Returns a conversion rate (CR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of conversion and searches used to compute the rates.
+Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
 
 Request can be constructed by NewApiGetConversationRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetConversationRateResponse
 */
 func (c *APIClient) GetConversationRate(r ApiGetConversationRateRequest, opts ...Option) (*GetConversationRateResponse, error) {
@@ -1129,14 +1129,14 @@ func (c *APIClient) GetConversationRate(r ApiGetConversationRateRequest, opts ..
 /*
 GetConversationRate Get conversion rate (CR).
 
-Returns a conversion rate (CR). The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of conversion and searches used to compute the rates.
+Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
 
 Request can be constructed by NewApiGetConversationRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetConversationRateResponse
 */
 func (c *APIClient) GetConversationRateWithContext(ctx context.Context, r ApiGetConversationRateRequest, opts ...Option) (*GetConversationRateResponse, error) {
@@ -1327,14 +1327,14 @@ func (r ApiGetNoClickRateRequest) WithTags(tags string) ApiGetNoClickRateRequest
 /*
 GetNoClickRate Get no click rate. Wraps GetNoClickRateWithContext using context.Background.
 
-Returns the rate at which searches didn't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
 
 Request can be constructed by NewApiGetNoClickRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetNoClickRateResponse
 */
 func (c *APIClient) GetNoClickRate(r ApiGetNoClickRateRequest, opts ...Option) (*GetNoClickRateResponse, error) {
@@ -1344,14 +1344,14 @@ func (c *APIClient) GetNoClickRate(r ApiGetNoClickRateRequest, opts ...Option) (
 /*
 GetNoClickRate Get no click rate.
 
-Returns the rate at which searches didn't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
 
 Request can be constructed by NewApiGetNoClickRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetNoClickRateResponse
 */
 func (c *APIClient) GetNoClickRateWithContext(ctx context.Context, r ApiGetNoClickRateRequest, opts ...Option) (*GetNoClickRateResponse, error) {
@@ -1542,14 +1542,14 @@ func (r ApiGetNoResultsRateRequest) WithTags(tags string) ApiGetNoResultsRateReq
 /*
 GetNoResultsRate Get no results rate. Wraps GetNoResultsRateWithContext using context.Background.
 
-Returns the rate at which searches didn't return any results. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without results used to compute the rates.
+Returns the rate at which searches didn't return any results.
 
 Request can be constructed by NewApiGetNoResultsRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetNoResultsRateResponse
 */
 func (c *APIClient) GetNoResultsRate(r ApiGetNoResultsRateRequest, opts ...Option) (*GetNoResultsRateResponse, error) {
@@ -1559,14 +1559,14 @@ func (c *APIClient) GetNoResultsRate(r ApiGetNoResultsRateRequest, opts ...Optio
 /*
 GetNoResultsRate Get no results rate.
 
-Returns the rate at which searches didn't return any results. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without results used to compute the rates.
+Returns the rate at which searches didn't return any results.
 
 Request can be constructed by NewApiGetNoResultsRateRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetNoResultsRateResponse
 */
 func (c *APIClient) GetNoResultsRateWithContext(ctx context.Context, r ApiGetNoResultsRateRequest, opts ...Option) (*GetNoResultsRateResponse, error) {
@@ -1755,16 +1755,16 @@ func (r ApiGetSearchesCountRequest) WithTags(tags string) ApiGetSearchesCountReq
 }
 
 /*
-GetSearchesCount Get searches count. Wraps GetSearchesCountWithContext using context.Background.
+GetSearchesCount Get number of searches. Wraps GetSearchesCountWithContext using context.Background.
 
-Returns the number of searches across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+Returns the number of searches within a time range.
 
 Request can be constructed by NewApiGetSearchesCountRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetSearchesCountResponse
 */
 func (c *APIClient) GetSearchesCount(r ApiGetSearchesCountRequest, opts ...Option) (*GetSearchesCountResponse, error) {
@@ -1772,16 +1772,16 @@ func (c *APIClient) GetSearchesCount(r ApiGetSearchesCountRequest, opts ...Optio
 }
 
 /*
-GetSearchesCount Get searches count.
+GetSearchesCount Get number of searches.
 
-Returns the number of searches across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+Returns the number of searches within a time range.
 
 Request can be constructed by NewApiGetSearchesCountRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetSearchesCountResponse
 */
 func (c *APIClient) GetSearchesCountWithContext(ctx context.Context, r ApiGetSearchesCountRequest, opts ...Option) (*GetSearchesCountResponse, error) {
@@ -2004,16 +2004,16 @@ func (r ApiGetSearchesNoClicksRequest) WithTags(tags string) ApiGetSearchesNoCli
 /*
 GetSearchesNoClicks Get top searches with no clicks. Wraps GetSearchesNoClicksWithContext using context.Background.
 
-Returns top searches that didn't lead to any clicks. Limited to the 1000 most frequent ones. For each search, also returns the average number of found hits.
+Return the most popular of the last 1,000 searches that didn't lead to any clicks.
 
 Request can be constructed by NewApiGetSearchesNoClicksRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetSearchesNoClicksResponse
 */
 func (c *APIClient) GetSearchesNoClicks(r ApiGetSearchesNoClicksRequest, opts ...Option) (*GetSearchesNoClicksResponse, error) {
@@ -2023,16 +2023,16 @@ func (c *APIClient) GetSearchesNoClicks(r ApiGetSearchesNoClicksRequest, opts ..
 /*
 GetSearchesNoClicks Get top searches with no clicks.
 
-Returns top searches that didn't lead to any clicks. Limited to the 1000 most frequent ones. For each search, also returns the average number of found hits.
+Return the most popular of the last 1,000 searches that didn't lead to any clicks.
 
 Request can be constructed by NewApiGetSearchesNoClicksRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetSearchesNoClicksResponse
 */
 func (c *APIClient) GetSearchesNoClicksWithContext(ctx context.Context, r ApiGetSearchesNoClicksRequest, opts ...Option) (*GetSearchesNoClicksResponse, error) {
@@ -2261,16 +2261,16 @@ func (r ApiGetSearchesNoResultsRequest) WithTags(tags string) ApiGetSearchesNoRe
 /*
 GetSearchesNoResults Get top searches with no results. Wraps GetSearchesNoResultsWithContext using context.Background.
 
-Returns top searches that didn't return any results. Limited to the 1000 most frequent ones.
+Returns the most popular of the latest 1,000 searches that didn't return any results.
 
 Request can be constructed by NewApiGetSearchesNoResultsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetSearchesNoResultsResponse
 */
 func (c *APIClient) GetSearchesNoResults(r ApiGetSearchesNoResultsRequest, opts ...Option) (*GetSearchesNoResultsResponse, error) {
@@ -2280,16 +2280,16 @@ func (c *APIClient) GetSearchesNoResults(r ApiGetSearchesNoResultsRequest, opts 
 /*
 GetSearchesNoResults Get top searches with no results.
 
-Returns top searches that didn't return any results. Limited to the 1000 most frequent ones.
+Returns the most popular of the latest 1,000 searches that didn't return any results.
 
 Request can be constructed by NewApiGetSearchesNoResultsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetSearchesNoResultsResponse
 */
 func (c *APIClient) GetSearchesNoResultsWithContext(ctx context.Context, r ApiGetSearchesNoResultsRequest, opts ...Option) (*GetSearchesNoResultsResponse, error) {
@@ -2438,11 +2438,12 @@ func (c *APIClient) NewApiGetStatusRequest(index string) ApiGetStatusRequest {
 /*
 GetStatus Get Analytics API status. Wraps GetStatusWithContext using context.Background.
 
-Returns the latest update time of the analytics API for a given index. If the index has been recently created and/or no search has been performed yet the updated time will be null.
+Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`.
+> **Note**: The Analytics API is updated every 5&nbsp;minutes.
 
 Request can be constructed by NewApiGetStatusRequest with parameters below.
 
-	@param index string - The index name to target.
+	@param index string - Index name to target.
 	@return GetStatusResponse
 */
 func (c *APIClient) GetStatus(r ApiGetStatusRequest, opts ...Option) (*GetStatusResponse, error) {
@@ -2452,11 +2453,12 @@ func (c *APIClient) GetStatus(r ApiGetStatusRequest, opts ...Option) (*GetStatus
 /*
 GetStatus Get Analytics API status.
 
-Returns the latest update time of the analytics API for a given index. If the index has been recently created and/or no search has been performed yet the updated time will be null.
+Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`.
+> **Note**: The Analytics API is updated every 5&nbsp;minutes.
 
 Request can be constructed by NewApiGetStatusRequest with parameters below.
 
-	@param index string - The index name to target.
+	@param index string - Index name to target.
 	@return GetStatusResponse
 */
 func (c *APIClient) GetStatusWithContext(ctx context.Context, r ApiGetStatusRequest, opts ...Option) (*GetStatusResponse, error) {
@@ -2670,16 +2672,16 @@ func (r ApiGetTopCountriesRequest) WithTags(tags string) ApiGetTopCountriesReque
 /*
 GetTopCountries Get top countries. Wraps GetTopCountriesWithContext using context.Background.
 
-Returns top countries. Limited to the 1000 most frequent ones.
+Returns top countries. Limited to the 1,000 most frequent ones.
 
 Request can be constructed by NewApiGetTopCountriesRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopCountriesResponse
 */
 func (c *APIClient) GetTopCountries(r ApiGetTopCountriesRequest, opts ...Option) (*GetTopCountriesResponse, error) {
@@ -2689,16 +2691,16 @@ func (c *APIClient) GetTopCountries(r ApiGetTopCountriesRequest, opts ...Option)
 /*
 GetTopCountries Get top countries.
 
-Returns top countries. Limited to the 1000 most frequent ones.
+Returns top countries. Limited to the 1,000 most frequent ones.
 
 Request can be constructed by NewApiGetTopCountriesRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopCountriesResponse
 */
 func (c *APIClient) GetTopCountriesWithContext(ctx context.Context, r ApiGetTopCountriesRequest, opts ...Option) (*GetTopCountriesResponse, error) {
@@ -2941,19 +2943,19 @@ func (r ApiGetTopFilterAttributesRequest) WithTags(tags string) ApiGetTopFilterA
 }
 
 /*
-GetTopFilterAttributes Get top filter attributes. Wraps GetTopFilterAttributesWithContext using context.Background.
+GetTopFilterAttributes Get top filterable attributes. Wraps GetTopFilterAttributesWithContext using context.Background.
 
-Returns top filter attributes. Limited to the 1000 most used filters.
+Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
 
 Request can be constructed by NewApiGetTopFilterAttributesRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopFilterAttributesResponse
 */
 func (c *APIClient) GetTopFilterAttributes(r ApiGetTopFilterAttributesRequest, opts ...Option) (*GetTopFilterAttributesResponse, error) {
@@ -2961,19 +2963,19 @@ func (c *APIClient) GetTopFilterAttributes(r ApiGetTopFilterAttributesRequest, o
 }
 
 /*
-GetTopFilterAttributes Get top filter attributes.
+GetTopFilterAttributes Get top filterable attributes.
 
-Returns top filter attributes. Limited to the 1000 most used filters.
+Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
 
 Request can be constructed by NewApiGetTopFilterAttributesRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopFilterAttributesResponse
 */
 func (c *APIClient) GetTopFilterAttributesWithContext(ctx context.Context, r ApiGetTopFilterAttributesRequest, opts ...Option) (*GetTopFilterAttributesResponse, error) {
@@ -3230,20 +3232,20 @@ func (r ApiGetTopFilterForAttributeRequest) WithTags(tags string) ApiGetTopFilte
 }
 
 /*
-GetTopFilterForAttribute Get top filters for the an attribute. Wraps GetTopFilterForAttributeWithContext using context.Background.
+GetTopFilterForAttribute Get top filter values for an attribute. Wraps GetTopFilterForAttributeWithContext using context.Background.
 
-Returns top filters for the given attribute. Limited to the 1000 most used filters.
+Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
 
 Request can be constructed by NewApiGetTopFilterForAttributeRequest with parameters below.
 
-	@param attribute string - The exact name of the attribute.
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param attribute string - Attribute name.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopFilterForAttributeResponse
 */
 func (c *APIClient) GetTopFilterForAttribute(r ApiGetTopFilterForAttributeRequest, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
@@ -3251,20 +3253,20 @@ func (c *APIClient) GetTopFilterForAttribute(r ApiGetTopFilterForAttributeReques
 }
 
 /*
-GetTopFilterForAttribute Get top filters for the an attribute.
+GetTopFilterForAttribute Get top filter values for an attribute.
 
-Returns top filters for the given attribute. Limited to the 1000 most used filters.
+Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
 
 Request can be constructed by NewApiGetTopFilterForAttributeRequest with parameters below.
 
-	@param attribute string - The exact name of the attribute.
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param attribute string - Attribute name.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopFilterForAttributeResponse
 */
 func (c *APIClient) GetTopFilterForAttributeWithContext(ctx context.Context, r ApiGetTopFilterForAttributeRequest, opts ...Option) (*GetTopFilterForAttributeResponse, error) {
@@ -3513,17 +3515,17 @@ func (r ApiGetTopFiltersNoResultsRequest) WithTags(tags string) ApiGetTopFilters
 /*
 GetTopFiltersNoResults Get top filters for a no result search. Wraps GetTopFiltersNoResultsWithContext using context.Background.
 
-Returns top filters with no results. Limited to the 1000 most used filters.
+Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
 
 Request can be constructed by NewApiGetTopFiltersNoResultsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopFiltersNoResultsResponse
 */
 func (c *APIClient) GetTopFiltersNoResults(r ApiGetTopFiltersNoResultsRequest, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
@@ -3533,17 +3535,17 @@ func (c *APIClient) GetTopFiltersNoResults(r ApiGetTopFiltersNoResultsRequest, o
 /*
 GetTopFiltersNoResults Get top filters for a no result search.
 
-Returns top filters with no results. Limited to the 1000 most used filters.
+Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
 
 Request can be constructed by NewApiGetTopFiltersNoResultsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopFiltersNoResultsResponse
 */
 func (c *APIClient) GetTopFiltersNoResultsWithContext(ctx context.Context, r ApiGetTopFiltersNoResultsRequest, opts ...Option) (*GetTopFiltersNoResultsResponse, error) {
@@ -3807,18 +3809,18 @@ func (r ApiGetTopHitsRequest) WithTags(tags string) ApiGetTopHitsRequest {
 /*
 GetTopHits Get top hits. Wraps GetTopHitsWithContext using context.Background.
 
-Returns top hits. Limited to the 1000 most frequent ones.
+Return the most popular clicked results in the last 1,000 searches.
 
 Request can be constructed by NewApiGetTopHitsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param clickAnalytics bool - Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopHitsResponse
 */
 func (c *APIClient) GetTopHits(r ApiGetTopHitsRequest, opts ...Option) (*GetTopHitsResponse, error) {
@@ -3828,18 +3830,18 @@ func (c *APIClient) GetTopHits(r ApiGetTopHitsRequest, opts ...Option) (*GetTopH
 /*
 GetTopHits Get top hits.
 
-Returns top hits. Limited to the 1000 most frequent ones.
+Return the most popular clicked results in the last 1,000 searches.
 
 Request can be constructed by NewApiGetTopHitsRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param search string - The query term to search for. Must match the exact user input.
-	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param index string - Index name to target.
+	@param search string - User query.
+	@param clickAnalytics bool - Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopHitsResponse
 */
 func (c *APIClient) GetTopHitsWithContext(ctx context.Context, r ApiGetTopHitsRequest, opts ...Option) (*GetTopHitsResponse, error) {
@@ -4122,19 +4124,19 @@ func (r ApiGetTopSearchesRequest) WithTags(tags string) ApiGetTopSearchesRequest
 /*
 GetTopSearches Get top searches. Wraps GetTopSearchesWithContext using context.Background.
 
-Returns top searches. Limited to the 1000 most frequent ones. For each search, also returns the average number of hits returned.
+Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
 
 Request can be constructed by NewApiGetTopSearchesRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param index string - Index name to target.
+	@param clickAnalytics bool - Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
 	@param orderBy OrderBy - Reorder the results.
-	@param direction Direction - The sorting of the result.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param direction Direction - Sorting direction of the results: ascending or descending.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopSearchesResponse
 */
 func (c *APIClient) GetTopSearches(r ApiGetTopSearchesRequest, opts ...Option) (*GetTopSearchesResponse, error) {
@@ -4144,19 +4146,19 @@ func (c *APIClient) GetTopSearches(r ApiGetTopSearchesRequest, opts ...Option) (
 /*
 GetTopSearches Get top searches.
 
-Returns top searches. Limited to the 1000 most frequent ones. For each search, also returns the average number of hits returned.
+Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
 
 Request can be constructed by NewApiGetTopSearchesRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param clickAnalytics bool - Whether to include the click-through and conversion rates for a search.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
+	@param index string - Index name to target.
+	@param clickAnalytics bool - Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
 	@param orderBy OrderBy - Reorder the results.
-	@param direction Direction - The sorting of the result.
-	@param limit int32 - Number of records to return. Limit is the size of the page.
+	@param direction Direction - Sorting direction of the results: ascending or descending.
+	@param limit int32 - Number of records to return (page size).
 	@param offset int32 - Position of the starting record. Used for paging. 0 is the first record.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetTopSearchesResponse
 */
 func (c *APIClient) GetTopSearchesWithContext(ctx context.Context, r ApiGetTopSearchesRequest, opts ...Option) (*GetTopSearchesResponse, error) {
@@ -4360,16 +4362,16 @@ func (r ApiGetUsersCountRequest) WithTags(tags string) ApiGetUsersCountRequest {
 }
 
 /*
-GetUsersCount Get users count. Wraps GetUsersCountWithContext using context.Background.
+GetUsersCount Get user count. Wraps GetUsersCountWithContext using context.Background.
 
-Returns the distinct count of users across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+Return the count of unique users.
 
 Request can be constructed by NewApiGetUsersCountRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetUsersCountResponse
 */
 func (c *APIClient) GetUsersCount(r ApiGetUsersCountRequest, opts ...Option) (*GetUsersCountResponse, error) {
@@ -4377,16 +4379,16 @@ func (c *APIClient) GetUsersCount(r ApiGetUsersCountRequest, opts ...Option) (*G
 }
 
 /*
-GetUsersCount Get users count.
+GetUsersCount Get user count.
 
-Returns the distinct count of users across the given time range. The endpoint returns a value for the complete given time range, as well as a value per day.
+Return the count of unique users.
 
 Request can be constructed by NewApiGetUsersCountRequest with parameters below.
 
-	@param index string - The index name to target.
-	@param startDate string - The lower bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param endDate string - The upper bound timestamp (a date, a string like \"2006-01-02\") of the period to analyze.
-	@param tags string - Filter metrics on the provided tags. Each tag must correspond to an analyticsTags set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it should be URL encoded.
+	@param index string - Index name to target.
+	@param startDate string - Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param endDate string - End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+	@param tags string - Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
 	@return GetUsersCountResponse
 */
 func (c *APIClient) GetUsersCountWithContext(ctx context.Context, r ApiGetUsersCountRequest, opts ...Option) (*GetUsersCountResponse, error) {
@@ -4565,9 +4567,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -4581,9 +4583,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -4761,9 +4763,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
@@ -4777,9 +4779,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {

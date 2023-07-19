@@ -8,10 +8,10 @@ import kotlinx.serialization.json.*
  * RecommendationRequest
  *
  * @param model
- * @param objectID Unique identifier of the object.
- * @param indexName The Algolia index name.
- * @param threshold The threshold to use when filtering recommendations by their score.
- * @param maxRecommendations The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the objectID may be returned.
+ * @param objectID Unique object identifier.
+ * @param indexName Algolia index name.
+ * @param threshold Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
+ * @param maxRecommendations Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
  * @param queryParameters
  * @param fallbackParameters
  */
@@ -20,16 +20,16 @@ public data class RecommendationRequest(
 
   @SerialName(value = "model") val model: RecommendationModels,
 
-  /** Unique identifier of the object. */
+  /** Unique object identifier. */
   @SerialName(value = "objectID") val objectID: String,
 
-  /** The Algolia index name. */
+  /** Algolia index name. */
   @SerialName(value = "indexName") val indexName: String,
 
-  /** The threshold to use when filtering recommendations by their score. */
+  /** Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.  */
   @SerialName(value = "threshold") val threshold: Int,
 
-  /** The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the objectID may be returned. */
+  /** Maximum number of recommendations to retrieve. If 0, all recommendations will be returned. */
   @SerialName(value = "maxRecommendations") val maxRecommendations: Int? = null,
 
   @SerialName(value = "queryParameters") val queryParameters: SearchParamsObject? = null,

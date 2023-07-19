@@ -7,23 +7,23 @@ import kotlinx.serialization.json.*
 /**
  * NoResultsRateEvent
  *
- * @param date Date of the event.
- * @param noResultCount The number of occurrences.
- * @param count The number of occurrences.
- * @param rate The click-through rate.
+ * @param date Date of the event in the format YYYY-MM-DD.
+ * @param noResultCount Number of occurences.
+ * @param count Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
+ * @param rate [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
  */
 @Serializable
 public data class NoResultsRateEvent(
 
-  /** Date of the event. */
+  /** Date of the event in the format YYYY-MM-DD. */
   @SerialName(value = "date") val date: String,
 
-  /** The number of occurrences. */
+  /** Number of occurences. */
   @SerialName(value = "noResultCount") val noResultCount: Int,
 
-  /** The number of occurrences. */
+  /** Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`). */
   @SerialName(value = "count") val count: Int,
 
-  /** The click-through rate. */
+  /** [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).  */
   @SerialName(value = "rate") val rate: Double,
 )

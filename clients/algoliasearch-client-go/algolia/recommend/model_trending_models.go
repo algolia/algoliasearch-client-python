@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// TrendingModels The trending model to use.
+// TrendingModels Trending model.
 type TrendingModels string
 
 // List of trendingModels

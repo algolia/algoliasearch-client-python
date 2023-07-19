@@ -21,7 +21,7 @@ public class GetTopFilterAttribute {
   }
 
   /**
-   * The attribute.
+   * Attribute name.
    *
    * @return attribute
    */
@@ -36,7 +36,7 @@ public class GetTopFilterAttribute {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */

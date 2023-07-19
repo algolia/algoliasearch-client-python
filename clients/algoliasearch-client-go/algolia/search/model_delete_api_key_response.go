@@ -8,7 +8,7 @@ import (
 
 // DeleteApiKeyResponse struct for DeleteApiKeyResponse
 type DeleteApiKeyResponse struct {
-	// Date of deletion (ISO-8601 format).
+	// Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
 	DeletedAt string `json:"deletedAt" validate:"required"`
 }
 

@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * TopHit
  *
- * @param hit The hit.
- * @param count The number of occurrences.
+ * @param hit Hit.
+ * @param count Number of occurrences.
  */
 @Serializable
 public data class TopHit(
 
-  /** The hit. */
+  /** Hit. */
   @SerialName(value = "hit") val hit: String,
 
-  /** The number of occurrences. */
+  /** Number of occurrences. */
   @SerialName(value = "count") val count: Int,
 )

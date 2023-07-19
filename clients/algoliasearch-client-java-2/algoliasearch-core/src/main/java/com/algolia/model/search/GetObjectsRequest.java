@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** getObjects operation on an index. */
+/** Record retrieval operation. */
 public class GetObjectsRequest {
 
   @JsonProperty("attributesToRetrieve")
@@ -34,7 +34,7 @@ public class GetObjectsRequest {
   }
 
   /**
-   * List of attributes to retrieve. By default, all retrievable attributes are returned.
+   * Attributes to retrieve. If not specified, all retrievable attributes are returned.
    *
    * @return attributesToRetrieve
    */
@@ -49,7 +49,7 @@ public class GetObjectsRequest {
   }
 
   /**
-   * ID of the object within that index.
+   * Record's objectID.
    *
    * @return objectID
    */
@@ -64,7 +64,7 @@ public class GetObjectsRequest {
   }
 
   /**
-   * name of the index containing the object.
+   * Name of the index containing the required records.
    *
    * @return indexName
    */

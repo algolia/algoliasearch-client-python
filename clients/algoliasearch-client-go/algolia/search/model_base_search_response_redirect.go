@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// BaseSearchResponseRedirect This parameter is for internal use only.
+// BaseSearchResponseRedirect [Redirect results to a URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
 type BaseSearchResponseRedirect struct {
 	Index []RedirectRuleIndexMetadata `json:"index,omitempty"`
 }

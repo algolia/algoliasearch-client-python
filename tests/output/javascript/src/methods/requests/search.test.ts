@@ -816,12 +816,13 @@ describe('listIndices', () => {
   test('listIndices with parameters', async () => {
     const req = (await client.listIndices({
       page: 8,
+      hitsPerPage: 3,
     })) as unknown as EchoResponse;
 
     expect(req.path).toEqual('/1/indexes');
     expect(req.method).toEqual('GET');
     expect(req.data).toEqual(undefined);
-    expect(req.searchParams).toStrictEqual({ page: '8' });
+    expect(req.searchParams).toStrictEqual({ page: '8', hitsPerPage: '3' });
   });
 });
 

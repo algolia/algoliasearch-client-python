@@ -30,7 +30,7 @@ public class SearchForFacetsOptions {
   }
 
   /**
-   * The `facet` name.
+   * Facet name.
    *
    * @return facet
    */
@@ -45,7 +45,7 @@ public class SearchForFacetsOptions {
   }
 
   /**
-   * The Algolia index name.
+   * Algolia index name.
    *
    * @return indexName
    */
@@ -75,8 +75,9 @@ public class SearchForFacetsOptions {
   }
 
   /**
-   * Maximum number of facet hits to return during a search for facet values. For performance
-   * reasons, the maximum allowed number of returned values is 100. maximum: 100
+   * Maximum number of facet hits to return when [searching for facet
+   * values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+   * maximum: 100
    *
    * @return maxFacetHits
    */

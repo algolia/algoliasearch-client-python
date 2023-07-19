@@ -7,23 +7,23 @@ import kotlinx.serialization.json.*
 /**
  * OK
  *
- * @param query Query to search. The search is a prefix search with typoTolerance. Use empty query to retrieve all users.
- * @param clusterName Name of the cluster.
- * @param page Specify the page to retrieve.
- * @param hitsPerPage Set the number of hits per page.
+ * @param query Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users.
+ * @param clusterName Cluster name.
+ * @param page Page to retrieve (the first page is `0`, not `1`).
+ * @param hitsPerPage Number of hits per page.
  */
 @Serializable
 public data class SearchUserIdsParams(
 
-  /** Query to search. The search is a prefix search with typoTolerance. Use empty query to retrieve all users. */
+  /** Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users. */
   @SerialName(value = "query") val query: String,
 
-  /** Name of the cluster. */
+  /** Cluster name. */
   @SerialName(value = "clusterName") val clusterName: String? = null,
 
-  /** Specify the page to retrieve. */
+  /** Page to retrieve (the first page is `0`, not `1`). */
   @SerialName(value = "page") val page: Int? = null,
 
-  /** Set the number of hits per page. */
+  /** Number of hits per page. */
   @SerialName(value = "hitsPerPage") val hitsPerPage: Int? = null,
 )

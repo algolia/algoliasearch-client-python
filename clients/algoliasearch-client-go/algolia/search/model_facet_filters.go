@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// FacetFilters - Filter hits by facet value.
+// FacetFilters - [Filter hits by facet value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
 type FacetFilters struct {
 	ArrayOfMixedSearchFilters *[]MixedSearchFilters
 	String                    *string

@@ -24,7 +24,7 @@ public class ABTestResponse {
   }
 
   /**
-   * The index performing the A/B test.
+   * A/B test index.
    *
    * @return index
    */
@@ -39,7 +39,7 @@ public class ABTestResponse {
   }
 
   /**
-   * The A/B test ID.
+   * Unique A/B test ID.
    *
    * @return abTestID
    */
@@ -54,7 +54,9 @@ public class ABTestResponse {
   }
 
   /**
-   * taskID of the task to wait for.
+   * Unique identifier of a task. A successful API response means that a task was added to a queue.
+   * It might not run immediately. You can check the task's progress with the `task` operation and
+   * this `taskID`.
    *
    * @return taskID
    */

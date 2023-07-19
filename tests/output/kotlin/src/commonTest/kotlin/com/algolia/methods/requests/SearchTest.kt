@@ -1107,12 +1107,13 @@ class SearchTest {
       call = {
         listIndices(
           page = 8,
+          hitsPerPage = 3,
         )
       },
       intercept = {
         assertEquals("/1/indexes".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("GET"), it.method)
-        assertContainsAll("""{"page":"8"}""", it.url.parameters)
+        assertContainsAll("""{"page":"8","hitsPerPage":"3"}""", it.url.parameters)
         assertNoBody(it.body)
       },
     )

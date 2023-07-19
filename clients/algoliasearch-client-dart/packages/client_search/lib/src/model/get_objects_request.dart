@@ -14,15 +14,15 @@ final class GetObjectsRequest {
     required this.indexName,
   });
 
-  /// List of attributes to retrieve. By default, all retrievable attributes are returned.
+  /// Attributes to retrieve. If not specified, all retrievable attributes are returned.
   @JsonKey(name: r'attributesToRetrieve')
   final List<String>? attributesToRetrieve;
 
-  /// ID of the object within that index.
+  /// Record's objectID.
   @JsonKey(name: r'objectID')
   final String objectID;
 
-  /// name of the index containing the object.
+  /// Name of the index containing the required records.
   @JsonKey(name: r'indexName')
   final String indexName;
 

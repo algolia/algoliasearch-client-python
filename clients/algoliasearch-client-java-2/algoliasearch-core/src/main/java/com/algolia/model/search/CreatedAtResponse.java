@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** The response with a createdAt timestamp. */
+/** Response and creation timestamp. */
 public class CreatedAtResponse {
 
   @JsonProperty("createdAt")
@@ -18,7 +18,7 @@ public class CreatedAtResponse {
   }
 
   /**
-   * Date of creation (ISO-8601 format).
+   * Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return createdAt
    */

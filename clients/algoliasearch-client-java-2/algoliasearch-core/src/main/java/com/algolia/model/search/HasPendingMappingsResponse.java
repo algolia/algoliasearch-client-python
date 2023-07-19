@@ -24,7 +24,7 @@ public class HasPendingMappingsResponse {
   }
 
   /**
-   * If there is any clusters with pending mapping state.
+   * Indicates whether there are clusters undergoing migration, creation, or deletion.
    *
    * @return pending
    */
@@ -47,7 +47,7 @@ public class HasPendingMappingsResponse {
   }
 
   /**
-   * Describe cluster pending (migrating, creating, deleting) mapping state.
+   * Cluster pending mapping state: migrating, creating, deleting.
    *
    * @return clusters
    */

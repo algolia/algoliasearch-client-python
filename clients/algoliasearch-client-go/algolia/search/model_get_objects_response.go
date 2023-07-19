@@ -8,7 +8,7 @@ import (
 
 // GetObjectsResponse struct for GetObjectsResponse
 type GetObjectsResponse struct {
-	// List of results fetched.
+	// Retrieved results.
 	Results []map[string]interface{} `json:"results" validate:"required"`
 }
 

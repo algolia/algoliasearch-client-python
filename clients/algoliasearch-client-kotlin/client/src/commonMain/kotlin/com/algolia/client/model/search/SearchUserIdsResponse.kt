@@ -7,27 +7,27 @@ import kotlinx.serialization.json.*
 /**
  * userIDs data.
  *
- * @param hits List of user object matching the query.
- * @param nbHits Number of hits that the search query matched.
- * @param page Specify the page to retrieve.
- * @param hitsPerPage Maximum number of hits in a page. Minimum is 1, maximum is 1000.
- * @param updatedAt Date of last update (ISO-8601 format).
+ * @param hits User objects that match the query.
+ * @param nbHits Number of hits the search query matched.
+ * @param page Page to retrieve (the first page is `0`, not `1`).
+ * @param hitsPerPage Maximum number of hits per page.
+ * @param updatedAt Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
  */
 @Serializable
 public data class SearchUserIdsResponse(
 
-  /** List of user object matching the query. */
+  /** User objects that match the query. */
   @SerialName(value = "hits") val hits: List<UserHit>,
 
-  /** Number of hits that the search query matched. */
+  /** Number of hits the search query matched. */
   @SerialName(value = "nbHits") val nbHits: Int,
 
-  /** Specify the page to retrieve. */
+  /** Page to retrieve (the first page is `0`, not `1`). */
   @SerialName(value = "page") val page: Int,
 
-  /** Maximum number of hits in a page. Minimum is 1, maximum is 1000. */
+  /** Maximum number of hits per page. */
   @SerialName(value = "hitsPerPage") val hitsPerPage: Int,
 
-  /** Date of last update (ISO-8601 format). */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String,
 )

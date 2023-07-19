@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** Single objectID to promote as hits. */
+/** Record to promote. */
 public class PromoteObjectID {
 
   @JsonProperty("objectID")
@@ -21,7 +21,7 @@ public class PromoteObjectID {
   }
 
   /**
-   * Unique identifier of the object to promote.
+   * Unique identifier of the record to promote.
    *
    * @return objectID
    */
@@ -36,9 +36,9 @@ public class PromoteObjectID {
   }
 
   /**
-   * The position to promote the objects to (zero-based). If you pass objectIDs, the objects are
-   * placed at this position as a group. For example, if you pass four objectIDs to position 0, the
-   * objects take the first four positions.
+   * The position to promote the records to. If you pass objectIDs, the records are placed at this
+   * position as a group. For example, if you pronmote four objectIDs to position 0, the records
+   * take the first four positions.
    *
    * @return position
    */

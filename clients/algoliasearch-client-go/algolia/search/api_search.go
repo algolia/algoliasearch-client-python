@@ -72,9 +72,11 @@ func (c *APIClient) NewApiAddApiKeyRequest(apiKey *ApiKey) ApiAddApiKeyRequest {
 }
 
 /*
-AddApiKey Create an API key. Wraps AddApiKeyWithContext using context.Background.
+AddApiKey Add API key. Wraps AddApiKeyWithContext using context.Background.
 
-Add a new API Key with specific permissions/restrictions.
+Add a new API key with specific permissions and restrictions.
+The request must be authenticated with the admin API key.
+The response returns an API key string.
 
 Request can be constructed by NewApiAddApiKeyRequest with parameters below.
 
@@ -86,9 +88,11 @@ func (c *APIClient) AddApiKey(r ApiAddApiKeyRequest, opts ...Option) (*AddApiKey
 }
 
 /*
-AddApiKey Create an API key.
+AddApiKey Add API key.
 
-Add a new API Key with specific permissions/restrictions.
+Add a new API key with specific permissions and restrictions.
+The request must be authenticated with the admin API key.
+The response returns an API key string.
 
 Request can be constructed by NewApiAddApiKeyRequest with parameters below.
 
@@ -251,17 +255,19 @@ func (c *APIClient) NewApiAddOrUpdateObjectRequest(indexName string, objectID st
 }
 
 /*
-AddOrUpdateObject Add or replace an object. Wraps AddOrUpdateObjectWithContext using context.Background.
+AddOrUpdateObject Add or update a record (using objectID). Wraps AddOrUpdateObjectWithContext using context.Background.
 
-Add or replace an object with a given object ID.
-If the object does not exist, it will be created.
-If it already exists, it will be replaced.
+If you use an existing `objectID`, the existing record will be replaced with the new one.
+
+To update only some attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead.
+
+To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
 
 Request can be constructed by NewApiAddOrUpdateObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param body map[string]interface{} - The Algolia object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
+	@param body map[string]interface{} - Algolia record.
 	@return UpdatedAtWithObjectIdResponse
 */
 func (c *APIClient) AddOrUpdateObject(r ApiAddOrUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
@@ -269,17 +275,19 @@ func (c *APIClient) AddOrUpdateObject(r ApiAddOrUpdateObjectRequest, opts ...Opt
 }
 
 /*
-AddOrUpdateObject Add or replace an object.
+AddOrUpdateObject Add or update a record (using objectID).
 
-Add or replace an object with a given object ID.
-If the object does not exist, it will be created.
-If it already exists, it will be replaced.
+If you use an existing `objectID`, the existing record will be replaced with the new one.
+
+To update only some attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead.
+
+To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
 
 Request can be constructed by NewApiAddOrUpdateObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param body map[string]interface{} - The Algolia object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
+	@param body map[string]interface{} - Algolia record.
 	@return UpdatedAtWithObjectIdResponse
 */
 func (c *APIClient) AddOrUpdateObjectWithContext(ctx context.Context, r ApiAddOrUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
@@ -415,13 +423,13 @@ func (c *APIClient) NewApiAppendSourceRequest(source *Source) ApiAppendSourceReq
 }
 
 /*
-AppendSource Add a single source. Wraps AppendSourceWithContext using context.Background.
+AppendSource Add a source. Wraps AppendSourceWithContext using context.Background.
 
-Add a single source to the list of allowed sources.
+Add a source to the list of allowed sources.
 
 Request can be constructed by NewApiAppendSourceRequest with parameters below.
 
-	@param source Source - The source to add.
+	@param source Source - Source to add.
 	@return CreatedAtResponse
 */
 func (c *APIClient) AppendSource(r ApiAppendSourceRequest, opts ...Option) (*CreatedAtResponse, error) {
@@ -429,13 +437,13 @@ func (c *APIClient) AppendSource(r ApiAppendSourceRequest, opts ...Option) (*Cre
 }
 
 /*
-AppendSource Add a single source.
+AppendSource Add a source.
 
-Add a single source to the list of allowed sources.
+Add a source to the list of allowed sources.
 
 Request can be constructed by NewApiAppendSourceRequest with parameters below.
 
-	@param source Source - The source to add.
+	@param source Source - Source to add.
 	@return CreatedAtResponse
 */
 func (c *APIClient) AppendSourceWithContext(ctx context.Context, r ApiAppendSourceRequest, opts ...Option) (*CreatedAtResponse, error) {
@@ -583,12 +591,10 @@ func (c *APIClient) NewApiAssignUserIdRequest(xAlgoliaUserID string, assignUserI
 }
 
 /*
-AssignUserId Assign or Move userID. Wraps AssignUserIdWithContext using context.Background.
+AssignUserId Assign or move a user ID. Wraps AssignUserIdWithContext using context.Background.
 
-Assign or Move a userID to a cluster.
-The time it takes to migrate (move) a user is proportional to the amount of data linked to the userID.
-Upon success, the response is 200 OK.
-A successful response indicates that the operation has been taken into account, and the userID is directly usable.
+Assign or move a user ID to a cluster.
+The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
 Request can be constructed by NewApiAssignUserIdRequest with parameters below.
 
@@ -601,12 +607,10 @@ func (c *APIClient) AssignUserId(r ApiAssignUserIdRequest, opts ...Option) (*Cre
 }
 
 /*
-AssignUserId Assign or Move userID.
+AssignUserId Assign or move a user ID.
 
-Assign or Move a userID to a cluster.
-The time it takes to migrate (move) a user is proportional to the amount of data linked to the userID.
-Upon success, the response is 200 OK.
-A successful response indicates that the operation has been taken into account, and the userID is directly usable.
+Assign or move a user ID to a cluster.
+The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
 Request can be constructed by NewApiAssignUserIdRequest with parameters below.
 
@@ -764,13 +768,14 @@ func (c *APIClient) NewApiBatchRequest(indexName string, batchWriteParams *Batch
 }
 
 /*
-Batch Batch operations to one index. Wraps BatchWithContext using context.Background.
+Batch Batch write operations on one index. Wraps BatchWithContext using context.Background.
 
-Perform multiple write operations targeting one index, in a single API call.
+To reduce the time spent on network round trips, you can perform several write actions in a single API call. Actions are applied in the order they are specified.
+The supported `action`s are equivalent to the individual operations of the same name.
 
 Request can be constructed by NewApiBatchRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param batchWriteParams BatchWriteParams
 	@return BatchResponse
 */
@@ -779,13 +784,14 @@ func (c *APIClient) Batch(r ApiBatchRequest, opts ...Option) (*BatchResponse, er
 }
 
 /*
-Batch Batch operations to one index.
+Batch Batch write operations on one index.
 
-Perform multiple write operations targeting one index, in a single API call.
+To reduce the time spent on network round trips, you can perform several write actions in a single API call. Actions are applied in the order they are specified.
+The supported `action`s are equivalent to the individual operations of the same name.
 
 Request can be constructed by NewApiBatchRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param batchWriteParams BatchWriteParams
 	@return BatchResponse
 */
@@ -937,9 +943,8 @@ func (c *APIClient) NewApiBatchAssignUserIdsRequest(xAlgoliaUserID string, batch
 /*
 BatchAssignUserIds Batch assign userIDs. Wraps BatchAssignUserIdsWithContext using context.Background.
 
-Assign multiple userIDs to a cluster.
-Upon success, the response is 200 OK.
-A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+Assign multiple user IDs to a cluster.
+**You can't _move_ users with this operation.**.
 
 Request can be constructed by NewApiBatchAssignUserIdsRequest with parameters below.
 
@@ -954,9 +959,8 @@ func (c *APIClient) BatchAssignUserIds(r ApiBatchAssignUserIdsRequest, opts ...O
 /*
 BatchAssignUserIds Batch assign userIDs.
 
-Assign multiple userIDs to a cluster.
-Upon success, the response is 200 OK.
-A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+Assign multiple user IDs to a cluster.
+**You can't _move_ users with this operation.**.
 
 Request can be constructed by NewApiBatchAssignUserIdsRequest with parameters below.
 
@@ -1116,11 +1120,11 @@ func (c *APIClient) NewApiBatchDictionaryEntriesRequest(dictionaryName Dictionar
 /*
 BatchDictionaryEntries Batch dictionary entries. Wraps BatchDictionaryEntriesWithContext using context.Background.
 
-Send a batch of dictionary entries.
+Add or remove a batch of dictionary entries.
 
 Request can be constructed by NewApiBatchDictionaryEntriesRequest with parameters below.
 
-	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param dictionaryName DictionaryType - Dictionary to search in.
 	@param batchDictionaryEntriesParams BatchDictionaryEntriesParams
 	@return UpdatedAtResponse
 */
@@ -1131,11 +1135,11 @@ func (c *APIClient) BatchDictionaryEntries(r ApiBatchDictionaryEntriesRequest, o
 /*
 BatchDictionaryEntries Batch dictionary entries.
 
-Send a batch of dictionary entries.
+Add or remove a batch of dictionary entries.
 
 Request can be constructed by NewApiBatchDictionaryEntriesRequest with parameters below.
 
-	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param dictionaryName DictionaryType - Dictionary to search in.
 	@param batchDictionaryEntriesParams BatchDictionaryEntriesParams
 	@return UpdatedAtResponse
 */
@@ -1285,15 +1289,15 @@ func (r ApiBrowseRequest) WithBrowseParams(browseParams *BrowseParams) ApiBrowse
 }
 
 /*
-Browse Retrieve all index content. Wraps BrowseWithContext using context.Background.
+Browse Get all records from an index. Wraps BrowseWithContext using context.Background.
 
-This method allows you to retrieve all index content. It can retrieve up to 1,000 records per call and supports full text search and filters.
-For performance reasons, some features are not supported, including `distinct`, sorting by `typos`, `words` or `geo distance`.
-When there is more content to be browsed, the response contains a cursor field. This cursor has to be passed to the subsequent call to browse in order to get the next page of results. When the end of the index has been reached, the cursor field is absent from the response.
+Retrieve up to 1,000 records per call.
+Supports full-text search and filters. For better performance, it doesn't support:
+- The `distinct` query parameter - Sorting by typos, proximity, words, or geographical distance.
 
 Request can be constructed by NewApiBrowseRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param browseParams BrowseParams
 	@return BrowseResponse
 */
@@ -1302,15 +1306,15 @@ func (c *APIClient) Browse(r ApiBrowseRequest, opts ...Option) (*BrowseResponse,
 }
 
 /*
-Browse Retrieve all index content.
+Browse Get all records from an index.
 
-This method allows you to retrieve all index content. It can retrieve up to 1,000 records per call and supports full text search and filters.
-For performance reasons, some features are not supported, including `distinct`, sorting by `typos`, `words` or `geo distance`.
-When there is more content to be browsed, the response contains a cursor field. This cursor has to be passed to the subsequent call to browse in order to get the next page of results. When the end of the index has been reached, the cursor field is absent from the response.
+Retrieve up to 1,000 records per call.
+Supports full-text search and filters. For better performance, it doesn't support:
+- The `distinct` query parameter - Sorting by typos, proximity, words, or geographical distance.
 
 Request can be constructed by NewApiBrowseRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param browseParams BrowseParams
 	@return BrowseResponse
 */
@@ -1461,14 +1465,14 @@ func (r ApiClearAllSynonymsRequest) WithForwardToReplicas(forwardToReplicas bool
 }
 
 /*
-ClearAllSynonyms Clear all synonyms. Wraps ClearAllSynonymsWithContext using context.Background.
+ClearAllSynonyms Delete all synonyms. Wraps ClearAllSynonymsWithContext using context.Background.
 
-Remove all synonyms from an index.
+Delete all synonyms in the index.
 
 Request can be constructed by NewApiClearAllSynonymsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) ClearAllSynonyms(r ApiClearAllSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -1476,14 +1480,14 @@ func (c *APIClient) ClearAllSynonyms(r ApiClearAllSynonymsRequest, opts ...Optio
 }
 
 /*
-ClearAllSynonyms Clear all synonyms.
+ClearAllSynonyms Delete all synonyms.
 
-Remove all synonyms from an index.
+Delete all synonyms in the index.
 
 Request can be constructed by NewApiClearAllSynonymsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) ClearAllSynonymsWithContext(ctx context.Context, r ApiClearAllSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -1615,13 +1619,13 @@ func (c *APIClient) NewApiClearObjectsRequest(indexName string) ApiClearObjectsR
 }
 
 /*
-ClearObjects Clear all objects from an index. Wraps ClearObjectsWithContext using context.Background.
+ClearObjects Delete all records from an index. Wraps ClearObjectsWithContext using context.Background.
 
-Delete an index's content, but leave settings and index-specific API keys untouched.
+Delete the records but leave settings and index-specific API keys untouched.
 
 Request can be constructed by NewApiClearObjectsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) ClearObjects(r ApiClearObjectsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -1629,13 +1633,13 @@ func (c *APIClient) ClearObjects(r ApiClearObjectsRequest, opts ...Option) (*Upd
 }
 
 /*
-ClearObjects Clear all objects from an index.
+ClearObjects Delete all records from an index.
 
-Delete an index's content, but leave settings and index-specific API keys untouched.
+Delete the records but leave settings and index-specific API keys untouched.
 
 Request can be constructed by NewApiClearObjectsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) ClearObjectsWithContext(ctx context.Context, r ApiClearObjectsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -1779,14 +1783,14 @@ func (r ApiClearRulesRequest) WithForwardToReplicas(forwardToReplicas bool) ApiC
 }
 
 /*
-ClearRules Clear Rules. Wraps ClearRulesWithContext using context.Background.
+ClearRules Delete all rules. Wraps ClearRulesWithContext using context.Background.
 
-Delete all Rules in the index.
+Delete all rules in the index.
 
 Request can be constructed by NewApiClearRulesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) ClearRules(r ApiClearRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -1794,14 +1798,14 @@ func (c *APIClient) ClearRules(r ApiClearRulesRequest, opts ...Option) (*Updated
 }
 
 /*
-ClearRules Clear Rules.
+ClearRules Delete all rules.
 
-Delete all Rules in the index.
+Delete all rules in the index.
 
 Request can be constructed by NewApiClearRulesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) ClearRulesWithContext(ctx context.Context, r ApiClearRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -1955,8 +1959,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -1970,8 +1974,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -2105,13 +2109,14 @@ func (c *APIClient) NewApiDeleteApiKeyRequest(key string) ApiDeleteApiKeyRequest
 }
 
 /*
-DeleteApiKey Delete an API key. Wraps DeleteApiKeyWithContext using context.Background.
+DeleteApiKey Delete API key. Wraps DeleteApiKeyWithContext using context.Background.
 
-Delete an existing API Key.
+Delete an existing API key.
+The request must be authenticated with the admin API key.
 
 Request can be constructed by NewApiDeleteApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@return DeleteApiKeyResponse
 */
 func (c *APIClient) DeleteApiKey(r ApiDeleteApiKeyRequest, opts ...Option) (*DeleteApiKeyResponse, error) {
@@ -2119,13 +2124,14 @@ func (c *APIClient) DeleteApiKey(r ApiDeleteApiKeyRequest, opts ...Option) (*Del
 }
 
 /*
-DeleteApiKey Delete an API key.
+DeleteApiKey Delete API key.
 
-Delete an existing API Key.
+Delete an existing API key.
+The request must be authenticated with the admin API key.
 
 Request can be constructed by NewApiDeleteApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@return DeleteApiKeyResponse
 */
 func (c *APIClient) DeleteApiKeyWithContext(ctx context.Context, r ApiDeleteApiKeyRequest, opts ...Option) (*DeleteApiKeyResponse, error) {
@@ -2269,15 +2275,14 @@ func (c *APIClient) NewApiDeleteByRequest(indexName string, deleteByParams *Dele
 }
 
 /*
-DeleteBy Delete all records matching the query. Wraps DeleteByWithContext using context.Background.
+DeleteBy Delete all records matching a query. Wraps DeleteByWithContext using context.Background.
 
-Remove all objects matching a filter (including geo filters).
-This method enables you to delete one or more objects based on filters (numeric, facet, tag or geo queries).
-It doesn't accept empty filters or a query.
+This operation doesn't support all the query options, only its filters (numeric, facet, or tag) and geo queries.
+It doesn't accept empty filters or queries.
 
 Request can be constructed by NewApiDeleteByRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param deleteByParams DeleteByParams
 	@return DeletedAtResponse
 */
@@ -2286,15 +2291,14 @@ func (c *APIClient) DeleteBy(r ApiDeleteByRequest, opts ...Option) (*DeletedAtRe
 }
 
 /*
-DeleteBy Delete all records matching the query.
+DeleteBy Delete all records matching a query.
 
-Remove all objects matching a filter (including geo filters).
-This method enables you to delete one or more objects based on filters (numeric, facet, tag or geo queries).
-It doesn't accept empty filters or a query.
+This operation doesn't support all the query options, only its filters (numeric, facet, or tag) and geo queries.
+It doesn't accept empty filters or queries.
 
 Request can be constructed by NewApiDeleteByRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param deleteByParams DeleteByParams
 	@return DeletedAtResponse
 */
@@ -2434,7 +2438,7 @@ Delete an existing index.
 
 Request can be constructed by NewApiDeleteIndexRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return DeletedAtResponse
 */
 func (c *APIClient) DeleteIndex(r ApiDeleteIndexRequest, opts ...Option) (*DeletedAtResponse, error) {
@@ -2448,7 +2452,7 @@ Delete an existing index.
 
 Request can be constructed by NewApiDeleteIndexRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return DeletedAtResponse
 */
 func (c *APIClient) DeleteIndexWithContext(ctx context.Context, r ApiDeleteIndexRequest, opts ...Option) (*DeletedAtResponse, error) {
@@ -2587,14 +2591,14 @@ func (c *APIClient) NewApiDeleteObjectRequest(indexName string, objectID string)
 }
 
 /*
-DeleteObject Delete an object. Wraps DeleteObjectWithContext using context.Background.
+DeleteObject Delete a record. Wraps DeleteObjectWithContext using context.Background.
 
-Delete an existing object.
+To delete a set of records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy) instead.
 
 Request can be constructed by NewApiDeleteObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
 	@return DeletedAtResponse
 */
 func (c *APIClient) DeleteObject(r ApiDeleteObjectRequest, opts ...Option) (*DeletedAtResponse, error) {
@@ -2602,14 +2606,14 @@ func (c *APIClient) DeleteObject(r ApiDeleteObjectRequest, opts ...Option) (*Del
 }
 
 /*
-DeleteObject Delete an object.
+DeleteObject Delete a record.
 
-Delete an existing object.
+To delete a set of records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy) instead.
 
 Request can be constructed by NewApiDeleteObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
 	@return DeletedAtResponse
 */
 func (c *APIClient) DeleteObjectWithContext(ctx context.Context, r ApiDeleteObjectRequest, opts ...Option) (*DeletedAtResponse, error) {
@@ -2767,13 +2771,13 @@ func (r ApiDeleteRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiD
 /*
 DeleteRule Delete a rule. Wraps DeleteRuleWithContext using context.Background.
 
-Delete the Rule with the specified objectID.
+Delete a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
 Request can be constructed by NewApiDeleteRuleRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a rule object.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) DeleteRule(r ApiDeleteRuleRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -2783,13 +2787,13 @@ func (c *APIClient) DeleteRule(r ApiDeleteRuleRequest, opts ...Option) (*Updated
 /*
 DeleteRule Delete a rule.
 
-Delete the Rule with the specified objectID.
+Delete a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
 Request can be constructed by NewApiDeleteRuleRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a rule object.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) DeleteRuleWithContext(ctx context.Context, r ApiDeleteRuleRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -2922,13 +2926,13 @@ func (c *APIClient) NewApiDeleteSourceRequest(source string) ApiDeleteSourceRequ
 }
 
 /*
-DeleteSource Remove a single source. Wraps DeleteSourceWithContext using context.Background.
+DeleteSource Remove a source. Wraps DeleteSourceWithContext using context.Background.
 
-Remove a single source from the list of allowed sources.
+Remove a source from the list of allowed sources.
 
 Request can be constructed by NewApiDeleteSourceRequest with parameters below.
 
-	@param source string - The IP range of the source.
+	@param source string - IP address range of the source.
 	@return DeleteSourceResponse
 */
 func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*DeleteSourceResponse, error) {
@@ -2936,13 +2940,13 @@ func (c *APIClient) DeleteSource(r ApiDeleteSourceRequest, opts ...Option) (*Del
 }
 
 /*
-DeleteSource Remove a single source.
+DeleteSource Remove a source.
 
-Remove a single source from the list of allowed sources.
+Remove a source from the list of allowed sources.
 
 Request can be constructed by NewApiDeleteSourceRequest with parameters below.
 
-	@param source string - The IP range of the source.
+	@param source string - IP address range of the source.
 	@return DeleteSourceResponse
 */
 func (c *APIClient) DeleteSourceWithContext(ctx context.Context, r ApiDeleteSourceRequest, opts ...Option) (*DeleteSourceResponse, error) {
@@ -3097,15 +3101,15 @@ func (r ApiDeleteSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) A
 }
 
 /*
-DeleteSynonym Delete synonym. Wraps DeleteSynonymWithContext using context.Background.
+DeleteSynonym Delete a synonym. Wraps DeleteSynonymWithContext using context.Background.
 
-Delete a single synonyms set, identified by the given objectID.
+Delete a synonym by its `objectID`. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
 Request can be constructed by NewApiDeleteSynonymRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a synonym object.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return DeletedAtResponse
 */
 func (c *APIClient) DeleteSynonym(r ApiDeleteSynonymRequest, opts ...Option) (*DeletedAtResponse, error) {
@@ -3113,15 +3117,15 @@ func (c *APIClient) DeleteSynonym(r ApiDeleteSynonymRequest, opts ...Option) (*D
 }
 
 /*
-DeleteSynonym Delete synonym.
+DeleteSynonym Delete a synonym.
 
-Delete a single synonyms set, identified by the given objectID.
+Delete a synonym by its `objectID`. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
 Request can be constructed by NewApiDeleteSynonymRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a synonym object.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return DeletedAtResponse
 */
 func (c *APIClient) DeleteSynonymWithContext(ctx context.Context, r ApiDeleteSynonymRequest, opts ...Option) (*DeletedAtResponse, error) {
@@ -3276,8 +3280,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -3291,8 +3295,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -3426,13 +3430,14 @@ func (c *APIClient) NewApiGetApiKeyRequest(key string) ApiGetApiKeyRequest {
 }
 
 /*
-GetApiKey Get an API key. Wraps GetApiKeyWithContext using context.Background.
+GetApiKey Get API key permissions. Wraps GetApiKeyWithContext using context.Background.
 
-Get the permissions of an API key.
+Get the permissions and restrictions of a specific API key.
+When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
 
 Request can be constructed by NewApiGetApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@return GetApiKeyResponse
 */
 func (c *APIClient) GetApiKey(r ApiGetApiKeyRequest, opts ...Option) (*GetApiKeyResponse, error) {
@@ -3440,13 +3445,14 @@ func (c *APIClient) GetApiKey(r ApiGetApiKeyRequest, opts ...Option) (*GetApiKey
 }
 
 /*
-GetApiKey Get an API key.
+GetApiKey Get API key permissions.
 
-Get the permissions of an API key.
+Get the permissions and restrictions of a specific API key.
+When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
 
 Request can be constructed by NewApiGetApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@return GetApiKeyResponse
 */
 func (c *APIClient) GetApiKeyWithContext(ctx context.Context, r ApiGetApiKeyRequest, opts ...Option) (*GetApiKeyResponse, error) {
@@ -3545,7 +3551,7 @@ func (c *APIClient) GetApiKeyWithContext(ctx context.Context, r ApiGetApiKeyRequ
 /*
 GetDictionaryLanguages List available languages. Wraps GetDictionaryLanguagesWithContext using context.Background.
 
-List dictionaries supported per language.
+Lists Algolia's [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and any customizations applied to each language's [stop word](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plural](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), and [segmentation (compound)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) features.
 
 Request can be constructed by NewApiGetDictionaryLanguagesRequest with parameters below.
 
@@ -3558,7 +3564,7 @@ func (c *APIClient) GetDictionaryLanguages(opts ...Option) (*map[string]Language
 /*
 GetDictionaryLanguages List available languages.
 
-List dictionaries supported per language.
+Lists Algolia's [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and any customizations applied to each language's [stop word](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plural](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), and [segmentation (compound)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) features.
 
 Request can be constructed by NewApiGetDictionaryLanguagesRequest with parameters below.
 
@@ -3657,9 +3663,9 @@ func (c *APIClient) GetDictionaryLanguagesWithContext(ctx context.Context, opts 
 }
 
 /*
-GetDictionarySettings Retrieve dictionaries settings. Wraps GetDictionarySettingsWithContext using context.Background.
+GetDictionarySettings Get stop word settings. Wraps GetDictionarySettingsWithContext using context.Background.
 
-Retrieve dictionaries settings. The API stores languages whose standard entries are disabled. Fetch settings does not return false values.
+Get the languages for which [stop words are turned off](#tag/Dictionaries/operation/setDictionarySettings).
 
 Request can be constructed by NewApiGetDictionarySettingsRequest with parameters below.
 
@@ -3670,9 +3676,9 @@ func (c *APIClient) GetDictionarySettings(opts ...Option) (*GetDictionarySetting
 }
 
 /*
-GetDictionarySettings Retrieve dictionaries settings.
+GetDictionarySettings Get stop word settings.
 
-Retrieve dictionaries settings. The API stores languages whose standard entries are disabled. Fetch settings does not return false values.
+Get the languages for which [stop words are turned off](#tag/Dictionaries/operation/setDictionarySettings).
 
 Request can be constructed by NewApiGetDictionarySettingsRequest with parameters below.
 
@@ -3856,13 +3862,16 @@ func (r ApiGetLogsRequest) WithType_(type_ *LogType) ApiGetLogsRequest {
 /*
 GetLogs Return the latest log entries. Wraps GetLogsWithContext using context.Background.
 
-Return the latest log entries.
+The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).
+Logs are held for the last seven days. There's also a logging limit of 1,000 API calls per server.
+This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself.
+> **Note**: To fetch the logs for a Distributed Search Network (DSN) cluster, target the [DSN's endpoint](https://www.algolia.com/doc/guides/scaling/distributed-search-network-dsn/#accessing-dsn-servers).
 
 Request can be constructed by NewApiGetLogsRequest with parameters below.
 
-	@param offset int32 - First entry to retrieve (zero-based). Log entries are sorted by decreasing date, therefore 0 designates the most recent log entry.
-	@param length int32 - Maximum number of entries to retrieve. The maximum allowed value is 1000.
-	@param indexName string - Index for which log entries should be retrieved. When omitted, log entries are retrieved across all indices.
+	@param offset int32 - First log entry to retrieve. Sorted by decreasing date with 0 being the most recent.
+	@param length int32 - Maximum number of entries to retrieve.
+	@param indexName string - Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices.
 	@param type_ LogType - Type of log entries to retrieve. When omitted, all log entries are retrieved.
 	@return GetLogsResponse
 */
@@ -3873,13 +3882,16 @@ func (c *APIClient) GetLogs(r ApiGetLogsRequest, opts ...Option) (*GetLogsRespon
 /*
 GetLogs Return the latest log entries.
 
-Return the latest log entries.
+The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).
+Logs are held for the last seven days. There's also a logging limit of 1,000 API calls per server.
+This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself.
+> **Note**: To fetch the logs for a Distributed Search Network (DSN) cluster, target the [DSN's endpoint](https://www.algolia.com/doc/guides/scaling/distributed-search-network-dsn/#accessing-dsn-servers).
 
 Request can be constructed by NewApiGetLogsRequest with parameters below.
 
-	@param offset int32 - First entry to retrieve (zero-based). Log entries are sorted by decreasing date, therefore 0 designates the most recent log entry.
-	@param length int32 - Maximum number of entries to retrieve. The maximum allowed value is 1000.
-	@param indexName string - Index for which log entries should be retrieved. When omitted, log entries are retrieved across all indices.
+	@param offset int32 - First log entry to retrieve. Sorted by decreasing date with 0 being the most recent.
+	@param length int32 - Maximum number of entries to retrieve.
+	@param indexName string - Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices.
 	@param type_ LogType - Type of log entries to retrieve. When omitted, all log entries are retrieved.
 	@return GetLogsResponse
 */
@@ -4047,15 +4059,15 @@ func (r ApiGetObjectRequest) WithAttributesToRetrieve(attributesToRetrieve []str
 }
 
 /*
-GetObject Retrieve an object. Wraps GetObjectWithContext using context.Background.
+GetObject Get a record. Wraps GetObjectWithContext using context.Background.
 
-Retrieve one object from the index.
+To get more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
 
 Request can be constructed by NewApiGetObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param attributesToRetrieve []string - List of attributes to retrieve. If not specified, all retrievable attributes are returned.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
+	@param attributesToRetrieve []string - Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key.
 	@return map[string]string
 */
 func (c *APIClient) GetObject(r ApiGetObjectRequest, opts ...Option) (map[string]string, error) {
@@ -4063,15 +4075,15 @@ func (c *APIClient) GetObject(r ApiGetObjectRequest, opts ...Option) (map[string
 }
 
 /*
-GetObject Retrieve an object.
+GetObject Get a record.
 
-Retrieve one object from the index.
+To get more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
 
 Request can be constructed by NewApiGetObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param attributesToRetrieve []string - List of attributes to retrieve. If not specified, all retrievable attributes are returned.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
+	@param attributesToRetrieve []string - Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key.
 	@return map[string]string
 */
 func (c *APIClient) GetObjectWithContext(ctx context.Context, r ApiGetObjectRequest, opts ...Option) (map[string]string, error) {
@@ -4209,13 +4221,13 @@ func (c *APIClient) NewApiGetObjectsRequest(getObjectsParams *GetObjectsParams) 
 }
 
 /*
-GetObjects Retrieve one or more objects. Wraps GetObjectsWithContext using context.Background.
+GetObjects Get multiple records. Wraps GetObjectsWithContext using context.Background.
 
-Retrieve one or more objects, potentially from different indices, in a single API call.
+Retrieve one or more records, potentially from different indices, in a single API operation. Results will be received in the same order as the requests.
 
 Request can be constructed by NewApiGetObjectsRequest with parameters below.
 
-	@param getObjectsParams GetObjectsParams - The Algolia object.
+	@param getObjectsParams GetObjectsParams - Request object.
 	@return GetObjectsResponse
 */
 func (c *APIClient) GetObjects(r ApiGetObjectsRequest, opts ...Option) (*GetObjectsResponse, error) {
@@ -4223,13 +4235,13 @@ func (c *APIClient) GetObjects(r ApiGetObjectsRequest, opts ...Option) (*GetObje
 }
 
 /*
-GetObjects Retrieve one or more objects.
+GetObjects Get multiple records.
 
-Retrieve one or more objects, potentially from different indices, in a single API call.
+Retrieve one or more records, potentially from different indices, in a single API operation. Results will be received in the same order as the requests.
 
 Request can be constructed by NewApiGetObjectsRequest with parameters below.
 
-	@param getObjectsParams GetObjectsParams - The Algolia object.
+	@param getObjectsParams GetObjectsParams - Request object.
 	@return GetObjectsResponse
 */
 func (c *APIClient) GetObjectsWithContext(ctx context.Context, r ApiGetObjectsRequest, opts ...Option) (*GetObjectsResponse, error) {
@@ -4374,12 +4386,12 @@ func (c *APIClient) NewApiGetRuleRequest(indexName string, objectID string) ApiG
 /*
 GetRule Get a rule. Wraps GetRuleWithContext using context.Background.
 
-Retrieve the Rule with the specified objectID.
+Get a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
 Request can be constructed by NewApiGetRuleRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a rule object.
 	@return Rule
 */
 func (c *APIClient) GetRule(r ApiGetRuleRequest, opts ...Option) (*Rule, error) {
@@ -4389,12 +4401,12 @@ func (c *APIClient) GetRule(r ApiGetRuleRequest, opts ...Option) (*Rule, error) 
 /*
 GetRule Get a rule.
 
-Retrieve the Rule with the specified objectID.
+Get a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
 Request can be constructed by NewApiGetRuleRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a rule object.
 	@return Rule
 */
 func (c *APIClient) GetRuleWithContext(ctx context.Context, r ApiGetRuleRequest, opts ...Option) (*Rule, error) {
@@ -4523,13 +4535,13 @@ func (c *APIClient) NewApiGetSettingsRequest(indexName string) ApiGetSettingsReq
 }
 
 /*
-GetSettings Retrieve settings of an index. Wraps GetSettingsWithContext using context.Background.
+GetSettings Get index settings. Wraps GetSettingsWithContext using context.Background.
 
-Retrieve settings of an index.
+Return an object containing an index's [configuration settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
 
 Request can be constructed by NewApiGetSettingsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return IndexSettings
 */
 func (c *APIClient) GetSettings(r ApiGetSettingsRequest, opts ...Option) (*IndexSettings, error) {
@@ -4537,13 +4549,13 @@ func (c *APIClient) GetSettings(r ApiGetSettingsRequest, opts ...Option) (*Index
 }
 
 /*
-GetSettings Retrieve settings of an index.
+GetSettings Get index settings.
 
-Retrieve settings of an index.
+Return an object containing an index's [configuration settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
 
 Request can be constructed by NewApiGetSettingsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return IndexSettings
 */
 func (c *APIClient) GetSettingsWithContext(ctx context.Context, r ApiGetSettingsRequest, opts ...Option) (*IndexSettings, error) {
@@ -4640,9 +4652,9 @@ func (c *APIClient) GetSettingsWithContext(ctx context.Context, r ApiGetSettings
 }
 
 /*
-GetSources List all allowed sources. Wraps GetSourcesWithContext using context.Background.
+GetSources Get all allowed IP addresses. Wraps GetSourcesWithContext using context.Background.
 
-List all allowed sources.
+Get all allowed sources (IP addresses).
 
 Request can be constructed by NewApiGetSourcesRequest with parameters below.
 
@@ -4653,9 +4665,9 @@ func (c *APIClient) GetSources(opts ...Option) ([]Source, error) {
 }
 
 /*
-GetSources List all allowed sources.
+GetSources Get all allowed IP addresses.
 
-List all allowed sources.
+Get all allowed sources (IP addresses).
 
 Request can be constructed by NewApiGetSourcesRequest with parameters below.
 
@@ -4796,14 +4808,14 @@ func (c *APIClient) NewApiGetSynonymRequest(indexName string, objectID string) A
 }
 
 /*
-GetSynonym Get synonym. Wraps GetSynonymWithContext using context.Background.
+GetSynonym Get a synonym object. Wraps GetSynonymWithContext using context.Background.
 
-Fetch a synonym object identified by its objectID.
+Get a syonym by its `objectID`. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
 Request can be constructed by NewApiGetSynonymRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a synonym object.
 	@return SynonymHit
 */
 func (c *APIClient) GetSynonym(r ApiGetSynonymRequest, opts ...Option) (*SynonymHit, error) {
@@ -4811,14 +4823,14 @@ func (c *APIClient) GetSynonym(r ApiGetSynonymRequest, opts ...Option) (*Synonym
 }
 
 /*
-GetSynonym Get synonym.
+GetSynonym Get a synonym object.
 
-Fetch a synonym object identified by its objectID.
+Get a syonym by its `objectID`. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
 Request can be constructed by NewApiGetSynonymRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a synonym object.
 	@return SynonymHit
 */
 func (c *APIClient) GetSynonymWithContext(ctx context.Context, r ApiGetSynonymRequest, opts ...Option) (*SynonymHit, error) {
@@ -4958,14 +4970,14 @@ func (c *APIClient) NewApiGetTaskRequest(indexName string, taskID int64) ApiGetT
 }
 
 /*
-GetTask Check the status of a task. Wraps GetTaskWithContext using context.Background.
+GetTask Check a task's status. Wraps GetTaskWithContext using context.Background.
 
-Check the current status of a given task.
+Some operations, such as copying an index, will respond with a `taskID` value. Use this value here to check the status of that task.
 
 Request can be constructed by NewApiGetTaskRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param taskID int64 - Unique identifier of an task. Numeric value (up to 64bits).
+	@param indexName string - Index on which to perform the request.
+	@param taskID int64 - Unique task identifier.
 	@return GetTaskResponse
 */
 func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*GetTaskResponse, error) {
@@ -4973,14 +4985,14 @@ func (c *APIClient) GetTask(r ApiGetTaskRequest, opts ...Option) (*GetTaskRespon
 }
 
 /*
-GetTask Check the status of a task.
+GetTask Check a task's status.
 
-Check the current status of a given task.
+Some operations, such as copying an index, will respond with a `taskID` value. Use this value here to check the status of that task.
 
 Request can be constructed by NewApiGetTaskRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param taskID int64 - Unique identifier of an task. Numeric value (up to 64bits).
+	@param indexName string - Index on which to perform the request.
+	@param taskID int64 - Unique task identifier.
 	@return GetTaskResponse
 */
 func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest, opts ...Option) (*GetTaskResponse, error) {
@@ -5080,9 +5092,8 @@ func (c *APIClient) GetTaskWithContext(ctx context.Context, r ApiGetTaskRequest,
 /*
 GetTopUserIds Get top userID. Wraps GetTopUserIdsWithContext using context.Background.
 
-Get the top 10 userIDs with the highest number of records per cluster.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
-Upon success, the response is 200 OK and contains the following array of userIDs and clusters.
+Get the IDs of the 10 users with the highest number of records per cluster.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
 
 Request can be constructed by NewApiGetTopUserIdsRequest with parameters below.
 
@@ -5095,9 +5106,8 @@ func (c *APIClient) GetTopUserIds(opts ...Option) (*GetTopUserIdsResponse, error
 /*
 GetTopUserIds Get top userID.
 
-Get the top 10 userIDs with the highest number of records per cluster.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
-Upon success, the response is 200 OK and contains the following array of userIDs and clusters.
+Get the IDs of the 10 users with the highest number of records per cluster.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
 
 Request can be constructed by NewApiGetTopUserIdsRequest with parameters below.
 
@@ -5230,8 +5240,7 @@ func (c *APIClient) NewApiGetUserIdRequest(userID string) ApiGetUserIdRequest {
 GetUserId Get userID. Wraps GetUserIdWithContext using context.Background.
 
 Returns the userID data stored in the mapping.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
-Upon success, the response is 200 OK and contains the following userID data.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
 
 Request can be constructed by NewApiGetUserIdRequest with parameters below.
 
@@ -5246,8 +5255,7 @@ func (c *APIClient) GetUserId(r ApiGetUserIdRequest, opts ...Option) (*UserId, e
 GetUserId Get userID.
 
 Returns the userID data stored in the mapping.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
-Upon success, the response is 200 OK and contains the following userID data.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
 
 Request can be constructed by NewApiGetUserIdRequest with parameters below.
 
@@ -5383,16 +5391,13 @@ func (r ApiHasPendingMappingsRequest) WithGetClusters(getClusters bool) ApiHasPe
 }
 
 /*
-HasPendingMappings Get migration status. Wraps HasPendingMappingsWithContext using context.Background.
+HasPendingMappings Get migration and user mapping status. Wraps HasPendingMappingsWithContext using context.Background.
 
-Get the status of your clusters' migrations or user creations.
-Creating a large batch of users or migrating your multi-cluster may take quite some time. This method lets you retrieve the status of the migration, so you can know when it's done.
-Upon success, the response is 200 OK.
-A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
 
 Request can be constructed by NewApiHasPendingMappingsRequest with parameters below.
 
-	@param getClusters bool - If the clusters pending mapping state should be on the response.
+	@param getClusters bool - Indicates whether to include the cluster's pending mapping state in the response.
 	@return HasPendingMappingsResponse
 */
 func (c *APIClient) HasPendingMappings(r ApiHasPendingMappingsRequest, opts ...Option) (*HasPendingMappingsResponse, error) {
@@ -5400,16 +5405,13 @@ func (c *APIClient) HasPendingMappings(r ApiHasPendingMappingsRequest, opts ...O
 }
 
 /*
-HasPendingMappings Get migration status.
+HasPendingMappings Get migration and user mapping status.
 
-Get the status of your clusters' migrations or user creations.
-Creating a large batch of users or migrating your multi-cluster may take quite some time. This method lets you retrieve the status of the migration, so you can know when it's done.
-Upon success, the response is 200 OK.
-A successful response indicates that the operation has been taken into account, and the userIDs are directly usable.
+To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
 
 Request can be constructed by NewApiHasPendingMappingsRequest with parameters below.
 
-	@param getClusters bool - If the clusters pending mapping state should be on the response.
+	@param getClusters bool - Indicates whether to include the cluster's pending mapping state in the response.
 	@return HasPendingMappingsResponse
 */
 func (c *APIClient) HasPendingMappingsWithContext(ctx context.Context, r ApiHasPendingMappingsRequest, opts ...Option) (*HasPendingMappingsResponse, error) {
@@ -5509,9 +5511,9 @@ func (c *APIClient) HasPendingMappingsWithContext(ctx context.Context, r ApiHasP
 }
 
 /*
-ListApiKeys List API Keys. Wraps ListApiKeysWithContext using context.Background.
+ListApiKeys List API keys. Wraps ListApiKeysWithContext using context.Background.
 
-List API keys, along with their associated rights.
+List all API keys associated with your Algolia application, including their permissions and restrictions.
 
 Request can be constructed by NewApiListApiKeysRequest with parameters below.
 
@@ -5522,9 +5524,9 @@ func (c *APIClient) ListApiKeys(opts ...Option) (*ListApiKeysResponse, error) {
 }
 
 /*
-ListApiKeys List API Keys.
+ListApiKeys List API keys.
 
-List API keys, along with their associated rights.
+List all API keys associated with your Algolia application, including their permissions and restrictions.
 
 Request can be constructed by NewApiListApiKeysRequest with parameters below.
 
@@ -5625,8 +5627,7 @@ func (c *APIClient) ListApiKeysWithContext(ctx context.Context, opts ...Option) 
 /*
 ListClusters List clusters. Wraps ListClustersWithContext using context.Background.
 
-List the clusters available in a multi-clusters setup for a single appID.
-Upon success, the response is 200 OK and contains the following clusters.
+List the available clusters in a multi-cluster setup.
 
 Request can be constructed by NewApiListClustersRequest with parameters below.
 
@@ -5639,8 +5640,7 @@ func (c *APIClient) ListClusters(opts ...Option) (*ListClustersResponse, error) 
 /*
 ListClusters List clusters.
 
-List the clusters available in a multi-clusters setup for a single appID.
-Upon success, the response is 200 OK and contains the following clusters.
+List the available clusters in a multi-cluster setup.
 
 Request can be constructed by NewApiListClustersRequest with parameters below.
 
@@ -5753,13 +5753,23 @@ func (r *ApiListIndicesRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
+	if v, ok := req["hitsPerPage"]; ok {
+		err = json.Unmarshal(v, &r.hitsPerPage)
+		if err != nil {
+			err = json.Unmarshal(b, &r.hitsPerPage)
+			if err != nil {
+				return err
+			}
+		}
+	}
 
 	return nil
 }
 
 // ApiListIndicesRequest represents the request with all the parameters for the API call.
 type ApiListIndicesRequest struct {
-	page int32
+	page        int32
+	hitsPerPage int32
 }
 
 // NewApiListIndicesRequest creates an instance of the ApiListIndicesRequest to be used for the API call.
@@ -5773,14 +5783,21 @@ func (r ApiListIndicesRequest) WithPage(page int32) ApiListIndicesRequest {
 	return r
 }
 
-/*
-ListIndices List existing indexes. Wraps ListIndicesWithContext using context.Background.
+// WithHitsPerPage adds the hitsPerPage to the ApiListIndicesRequest and returns the request for chaining.
+func (r ApiListIndicesRequest) WithHitsPerPage(hitsPerPage int32) ApiListIndicesRequest {
+	r.hitsPerPage = hitsPerPage
+	return r
+}
 
-List existing indexes from an application.
+/*
+ListIndices List indices. Wraps ListIndicesWithContext using context.Background.
+
+List indices in an Algolia application.
 
 Request can be constructed by NewApiListIndicesRequest with parameters below.
 
-	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@param page int32 - Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+	@param hitsPerPage int32 - Maximum number of hits per page.
 	@return ListIndicesResponse
 */
 func (c *APIClient) ListIndices(r ApiListIndicesRequest, opts ...Option) (*ListIndicesResponse, error) {
@@ -5788,13 +5805,14 @@ func (c *APIClient) ListIndices(r ApiListIndicesRequest, opts ...Option) (*ListI
 }
 
 /*
-ListIndices List existing indexes.
+ListIndices List indices.
 
-List existing indexes from an application.
+List indices in an Algolia application.
 
 Request can be constructed by NewApiListIndicesRequest with parameters below.
 
-	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
+	@param page int32 - Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+	@param hitsPerPage int32 - Maximum number of hits per page.
 	@return ListIndicesResponse
 */
 func (c *APIClient) ListIndicesWithContext(ctx context.Context, r ApiListIndicesRequest, opts ...Option) (*ListIndicesResponse, error) {
@@ -5810,6 +5828,9 @@ func (c *APIClient) ListIndicesWithContext(ctx context.Context, r ApiListIndices
 
 	if !isNilorEmpty(r.page) {
 		queryParams.Set("page", parameterToString(r.page))
+	}
+	if !isNilorEmpty(r.hitsPerPage) {
+		queryParams.Set("hitsPerPage", parameterToString(r.hitsPerPage))
 	}
 
 	// optional params if any
@@ -5947,14 +5968,13 @@ func (r ApiListUserIdsRequest) WithHitsPerPage(hitsPerPage int32) ApiListUserIds
 /*
 ListUserIds List userIDs. Wraps ListUserIdsWithContext using context.Background.
 
-List the userIDs assigned to a multi-clusters appID.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
-Upon success, the response is 200 OK and contains the following userIDs data.
+List the userIDs assigned to a multi-cluster application.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
 
 Request can be constructed by NewApiListUserIdsRequest with parameters below.
 
-	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
-	@param hitsPerPage int32 - Maximum number of objects to retrieve.
+	@param page int32 - Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+	@param hitsPerPage int32 - Maximum number of hits per page.
 	@return ListUserIdsResponse
 */
 func (c *APIClient) ListUserIds(r ApiListUserIdsRequest, opts ...Option) (*ListUserIdsResponse, error) {
@@ -5964,14 +5984,13 @@ func (c *APIClient) ListUserIds(r ApiListUserIdsRequest, opts ...Option) (*ListU
 /*
 ListUserIds List userIDs.
 
-List the userIDs assigned to a multi-clusters appID.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds to propagate to the different clusters.
-Upon success, the response is 200 OK and contains the following userIDs data.
+List the userIDs assigned to a multi-cluster application.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
 
 Request can be constructed by NewApiListUserIdsRequest with parameters below.
 
-	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
-	@param hitsPerPage int32 - Maximum number of objects to retrieve.
+	@param page int32 - Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+	@param hitsPerPage int32 - Maximum number of hits per page.
 	@return ListUserIdsResponse
 */
 func (c *APIClient) ListUserIdsWithContext(ctx context.Context, r ApiListUserIdsRequest, opts ...Option) (*ListUserIdsResponse, error) {
@@ -6110,9 +6129,10 @@ func (c *APIClient) NewApiMultipleBatchRequest(batchParams *BatchParams) ApiMult
 }
 
 /*
-MultipleBatch Batch operations to many indices. Wraps MultipleBatchWithContext using context.Background.
+MultipleBatch Batch write operations on multiple indices. Wraps MultipleBatchWithContext using context.Background.
 
-Perform multiple write operations, potentially targeting multiple indices, in a single API call.
+To reduce the time spent on network round trips, you can perform several write actions in a single request. It's a multi-index version of the [`batch` operation](#tag/Records/operation/batch). Actions are applied in the order they are specified.
+The supported actions are equivalent to the individual operations of the same name.
 
 Request can be constructed by NewApiMultipleBatchRequest with parameters below.
 
@@ -6124,9 +6144,10 @@ func (c *APIClient) MultipleBatch(r ApiMultipleBatchRequest, opts ...Option) (*M
 }
 
 /*
-MultipleBatch Batch operations to many indices.
+MultipleBatch Batch write operations on multiple indices.
 
-Perform multiple write operations, potentially targeting multiple indices, in a single API call.
+To reduce the time spent on network round trips, you can perform several write actions in a single request. It's a multi-index version of the [`batch` operation](#tag/Records/operation/batch). Actions are applied in the order they are specified.
+The supported actions are equivalent to the individual operations of the same name.
 
 Request can be constructed by NewApiMultipleBatchRequest with parameters below.
 
@@ -6278,13 +6299,22 @@ func (c *APIClient) NewApiOperationIndexRequest(indexName string, operationIndex
 }
 
 /*
-OperationIndex Copy/move index. Wraps OperationIndexWithContext using context.Background.
+OperationIndex Copy, move, or rename an index. Wraps OperationIndexWithContext using context.Background.
 
-Performs a copy or a move operation on a index.
+This `operation`, _copy_ or _move_, will copy or move a source index's (`IndexName`) records, settings, synonyms, and rules to a `destination` index.
+If the destination index exists, it will be replaced, except for index-specific API keys and analytics data.
+If the destination index doesn't exist, it will be created.
+
+The choice between moving or copying an index depends on your needs. Choose:
+
+- **Move** to rename an index.
+- **Copy** to create a new index with the same records and configuration as an existing one.
+
+> **Note**: When considering copying or moving, be aware of the [rate limitations](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits) on these processes and the [impact on your analytics data](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/concepts/indices-analytics/).
 
 Request can be constructed by NewApiOperationIndexRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param operationIndexParams OperationIndexParams
 	@return UpdatedAtResponse
 */
@@ -6293,13 +6323,22 @@ func (c *APIClient) OperationIndex(r ApiOperationIndexRequest, opts ...Option) (
 }
 
 /*
-OperationIndex Copy/move index.
+OperationIndex Copy, move, or rename an index.
 
-Performs a copy or a move operation on a index.
+This `operation`, _copy_ or _move_, will copy or move a source index's (`IndexName`) records, settings, synonyms, and rules to a `destination` index.
+If the destination index exists, it will be replaced, except for index-specific API keys and analytics data.
+If the destination index doesn't exist, it will be created.
+
+The choice between moving or copying an index depends on your needs. Choose:
+
+- **Move** to rename an index.
+- **Copy** to create a new index with the same records and configuration as an existing one.
+
+> **Note**: When considering copying or moving, be aware of the [rate limitations](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits) on these processes and the [impact on your analytics data](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/concepts/indices-analytics/).
 
 Request can be constructed by NewApiOperationIndexRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param operationIndexParams OperationIndexParams
 	@return UpdatedAtResponse
 */
@@ -6476,19 +6515,17 @@ func (r ApiPartialUpdateObjectRequest) WithCreateIfNotExists(createIfNotExists b
 }
 
 /*
-PartialUpdateObject Partially update an object. Wraps PartialUpdateObjectWithContext using context.Background.
+PartialUpdateObject Update record attributes. Wraps PartialUpdateObjectWithContext using context.Background.
 
-Update one or more attributes of an existing object.
-This method lets you update only a part of an existing object, either by adding new attributes or updating existing ones.
-You can partially update several objects in a single method call.
-If the index targeted by this operation doesn't exist yet, it's automatically created.
+Add new attributes or update current ones in an existing record.
+You can use any first-level attribute but not nested attributes. If you specify a [nested attribute](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/creating-and-using-nested-attributes/), the engine treats it as a replacement for its first-level ancestor.
 
 Request can be constructed by NewApiPartialUpdateObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param attributesToUpdate map[string]AttributeToUpdate - Map of attribute(s) to update.
-	@param createIfNotExists bool - Creates the record if it does not exist yet.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
+	@param attributesToUpdate map[string]AttributeToUpdate - Object with attributes to update.
+	@param createIfNotExists bool - Indicates whether to create a new record if it doesn't exist yet.
 	@return UpdatedAtWithObjectIdResponse
 */
 func (c *APIClient) PartialUpdateObject(r ApiPartialUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
@@ -6496,19 +6533,17 @@ func (c *APIClient) PartialUpdateObject(r ApiPartialUpdateObjectRequest, opts ..
 }
 
 /*
-PartialUpdateObject Partially update an object.
+PartialUpdateObject Update record attributes.
 
-Update one or more attributes of an existing object.
-This method lets you update only a part of an existing object, either by adding new attributes or updating existing ones.
-You can partially update several objects in a single method call.
-If the index targeted by this operation doesn't exist yet, it's automatically created.
+Add new attributes or update current ones in an existing record.
+You can use any first-level attribute but not nested attributes. If you specify a [nested attribute](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/creating-and-using-nested-attributes/), the engine treats it as a replacement for its first-level ancestor.
 
 Request can be constructed by NewApiPartialUpdateObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
-	@param attributesToUpdate map[string]AttributeToUpdate - Map of attribute(s) to update.
-	@param createIfNotExists bool - Creates the record if it does not exist yet.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique record (object) identifier.
+	@param attributesToUpdate map[string]AttributeToUpdate - Object with attributes to update.
+	@param createIfNotExists bool - Indicates whether to create a new record if it doesn't exist yet.
 	@return UpdatedAtWithObjectIdResponse
 */
 func (c *APIClient) PartialUpdateObjectWithContext(ctx context.Context, r ApiPartialUpdateObjectRequest, opts ...Option) (*UpdatedAtWithObjectIdResponse, error) {
@@ -6684,9 +6719,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -6700,9 +6735,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -6880,9 +6915,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
@@ -6896,9 +6931,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
@@ -7041,7 +7076,6 @@ func (c *APIClient) NewApiRemoveUserIdRequest(userID string) ApiRemoveUserIdRequ
 RemoveUserId Remove userID. Wraps RemoveUserIdWithContext using context.Background.
 
 Remove a userID and its associated data from the multi-clusters.
-Upon success, the response is 200 OK and a task is created to remove the userID data and mapping.
 
 Request can be constructed by NewApiRemoveUserIdRequest with parameters below.
 
@@ -7056,7 +7090,6 @@ func (c *APIClient) RemoveUserId(r ApiRemoveUserIdRequest, opts ...Option) (*Rem
 RemoveUserId Remove userID.
 
 Remove a userID and its associated data from the multi-clusters.
-Upon success, the response is 200 OK and a task is created to remove the userID data and mapping.
 
 Request can be constructed by NewApiRemoveUserIdRequest with parameters below.
 
@@ -7193,13 +7226,13 @@ func (c *APIClient) NewApiReplaceSourcesRequest(source []Source) ApiReplaceSourc
 }
 
 /*
-ReplaceSources Replace all allowed sources. Wraps ReplaceSourcesWithContext using context.Background.
+ReplaceSources Replace all sources. Wraps ReplaceSourcesWithContext using context.Background.
 
 Replace all allowed sources.
 
 Request can be constructed by NewApiReplaceSourcesRequest with parameters below.
 
-	@param source []Source - The sources to allow.
+	@param source []Source - Allowed sources.
 	@return ReplaceSourceResponse
 */
 func (c *APIClient) ReplaceSources(r ApiReplaceSourcesRequest, opts ...Option) (*ReplaceSourceResponse, error) {
@@ -7207,13 +7240,13 @@ func (c *APIClient) ReplaceSources(r ApiReplaceSourcesRequest, opts ...Option) (
 }
 
 /*
-ReplaceSources Replace all allowed sources.
+ReplaceSources Replace all sources.
 
 Replace all allowed sources.
 
 Request can be constructed by NewApiReplaceSourcesRequest with parameters below.
 
-	@param source []Source - The sources to allow.
+	@param source []Source - Allowed sources.
 	@return ReplaceSourceResponse
 */
 func (c *APIClient) ReplaceSourcesWithContext(ctx context.Context, r ApiReplaceSourcesRequest, opts ...Option) (*ReplaceSourceResponse, error) {
@@ -7345,13 +7378,14 @@ func (c *APIClient) NewApiRestoreApiKeyRequest(key string) ApiRestoreApiKeyReque
 }
 
 /*
-RestoreApiKey Restore an API key. Wraps RestoreApiKeyWithContext using context.Background.
+RestoreApiKey Restore API key. Wraps RestoreApiKeyWithContext using context.Background.
 
-Restore a deleted API key, along with its associated rights.
+Restore a deleted API key, along with its associated permissions.
+The request must be authenticated with the admin API key.
 
 Request can be constructed by NewApiRestoreApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@return AddApiKeyResponse
 */
 func (c *APIClient) RestoreApiKey(r ApiRestoreApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
@@ -7359,13 +7393,14 @@ func (c *APIClient) RestoreApiKey(r ApiRestoreApiKeyRequest, opts ...Option) (*A
 }
 
 /*
-RestoreApiKey Restore an API key.
+RestoreApiKey Restore API key.
 
-Restore a deleted API key, along with its associated rights.
+Restore a deleted API key, along with its associated permissions.
+The request must be authenticated with the admin API key.
 
 Request can be constructed by NewApiRestoreApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@return AddApiKeyResponse
 */
 func (c *APIClient) RestoreApiKeyWithContext(ctx context.Context, r ApiRestoreApiKeyRequest, opts ...Option) (*AddApiKeyResponse, error) {
@@ -7509,13 +7544,16 @@ func (c *APIClient) NewApiSaveObjectRequest(indexName string, body map[string]in
 }
 
 /*
-SaveObject Add an object to the index. Wraps SaveObjectWithContext using context.Background.
+SaveObject Add or update a record. Wraps SaveObjectWithContext using context.Background.
 
-Add an object to the index, automatically assigning it an object ID.
+Add a record (object) to an index or replace it.
+If the record doesn't contain an `objectID`, Algolia automatically adds it.
+If you use an existing `objectID`, the existing record is replaced with the new one.
+To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
 
 Request can be constructed by NewApiSaveObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param body map[string]interface{} - The Algolia record.
 	@return SaveObjectResponse
 */
@@ -7524,13 +7562,16 @@ func (c *APIClient) SaveObject(r ApiSaveObjectRequest, opts ...Option) (*SaveObj
 }
 
 /*
-SaveObject Add an object to the index.
+SaveObject Add or update a record.
 
-Add an object to the index, automatically assigning it an object ID.
+Add a record (object) to an index or replace it.
+If the record doesn't contain an `objectID`, Algolia automatically adds it.
+If you use an existing `objectID`, the existing record is replaced with the new one.
+To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
 
 Request can be constructed by NewApiSaveObjectRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param body map[string]interface{} - The Algolia record.
 	@return SaveObjectResponse
 */
@@ -7704,16 +7745,16 @@ func (r ApiSaveRuleRequest) WithForwardToReplicas(forwardToReplicas bool) ApiSav
 }
 
 /*
-SaveRule Save/Update a rule. Wraps SaveRuleWithContext using context.Background.
+SaveRule Create or update a rule. Wraps SaveRuleWithContext using context.Background.
 
-Create or update the Rule with the specified objectID.
+To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
 
 Request can be constructed by NewApiSaveRuleRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a rule object.
 	@param rule Rule
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedRuleResponse
 */
 func (c *APIClient) SaveRule(r ApiSaveRuleRequest, opts ...Option) (*UpdatedRuleResponse, error) {
@@ -7721,16 +7762,16 @@ func (c *APIClient) SaveRule(r ApiSaveRuleRequest, opts ...Option) (*UpdatedRule
 }
 
 /*
-SaveRule Save/Update a rule.
+SaveRule Create or update a rule.
 
-Create or update the Rule with the specified objectID.
+To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
 
 Request can be constructed by NewApiSaveRuleRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a rule object.
 	@param rule Rule
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedRuleResponse
 */
 func (c *APIClient) SaveRuleWithContext(ctx context.Context, r ApiSaveRuleRequest, opts ...Option) (*UpdatedRuleResponse, error) {
@@ -7918,14 +7959,14 @@ func (r ApiSaveRulesRequest) WithClearExistingRules(clearExistingRules bool) Api
 /*
 SaveRules Save a batch of rules. Wraps SaveRulesWithContext using context.Background.
 
-Create/update multiple rules objects at once.
+Create or update multiple rules.
 
 Request can be constructed by NewApiSaveRulesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param rules []Rule
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
-	@param clearExistingRules bool - When true, existing Rules are cleared before adding this batch. When false, existing Rules are kept.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
+	@param clearExistingRules bool - Indicates whether existing rules should be deleted before adding this batch.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) SaveRules(r ApiSaveRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -7935,14 +7976,14 @@ func (c *APIClient) SaveRules(r ApiSaveRulesRequest, opts ...Option) (*UpdatedAt
 /*
 SaveRules Save a batch of rules.
 
-Create/update multiple rules objects at once.
+Create or update multiple rules.
 
 Request can be constructed by NewApiSaveRulesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param rules []Rule
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
-	@param clearExistingRules bool - When true, existing Rules are cleared before adding this batch. When false, existing Rules are kept.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
+	@param clearExistingRules bool - Indicates whether existing rules should be deleted before adding this batch.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) SaveRulesWithContext(ctx context.Context, r ApiSaveRulesRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -8125,16 +8166,19 @@ func (r ApiSaveSynonymRequest) WithForwardToReplicas(forwardToReplicas bool) Api
 }
 
 /*
-SaveSynonym Save synonym. Wraps SaveSynonymWithContext using context.Background.
+SaveSynonym Save a synonym. Wraps SaveSynonymWithContext using context.Background.
 
-Create a new synonym object or update the existing synonym object with the given object ID.
+Add a [synonym](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms) to an index or replace it.
+If the synonym `objectID` doesn't exist, Algolia adds a new one.
+If you use an existing synonym `objectID`, the existing synonym is replaced with the new one.
+To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
 
 Request can be constructed by NewApiSaveSynonymRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a synonym object.
 	@param synonymHit SynonymHit
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return SaveSynonymResponse
 */
 func (c *APIClient) SaveSynonym(r ApiSaveSynonymRequest, opts ...Option) (*SaveSynonymResponse, error) {
@@ -8142,16 +8186,19 @@ func (c *APIClient) SaveSynonym(r ApiSaveSynonymRequest, opts ...Option) (*SaveS
 }
 
 /*
-SaveSynonym Save synonym.
+SaveSynonym Save a synonym.
 
-Create a new synonym object or update the existing synonym object with the given object ID.
+Add a [synonym](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms) to an index or replace it.
+If the synonym `objectID` doesn't exist, Algolia adds a new one.
+If you use an existing synonym `objectID`, the existing synonym is replaced with the new one.
+To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
 
 Request can be constructed by NewApiSaveSynonymRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param objectID string - Unique identifier of an object.
+	@param indexName string - Index on which to perform the request.
+	@param objectID string - Unique identifier of a synonym object.
 	@param synonymHit SynonymHit
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return SaveSynonymResponse
 */
 func (c *APIClient) SaveSynonymWithContext(ctx context.Context, r ApiSaveSynonymRequest, opts ...Option) (*SaveSynonymResponse, error) {
@@ -8339,14 +8386,14 @@ func (r ApiSaveSynonymsRequest) WithReplaceExistingSynonyms(replaceExistingSynon
 /*
 SaveSynonyms Save a batch of synonyms. Wraps SaveSynonymsWithContext using context.Background.
 
-Create/update multiple synonym objects at once, potentially replacing the entire list of synonyms if replaceExistingSynonyms is true.
+Create or update multiple synonyms.
 
 Request can be constructed by NewApiSaveSynonymsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param synonymHit []SynonymHit
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
-	@param replaceExistingSynonyms bool - Replace all synonyms of the index with the ones sent with this request.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
+	@param replaceExistingSynonyms bool - Indicates whether to replace all synonyms in the index with the ones sent with this request.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) SaveSynonyms(r ApiSaveSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -8356,14 +8403,14 @@ func (c *APIClient) SaveSynonyms(r ApiSaveSynonymsRequest, opts ...Option) (*Upd
 /*
 SaveSynonyms Save a batch of synonyms.
 
-Create/update multiple synonym objects at once, potentially replacing the entire list of synonyms if replaceExistingSynonyms is true.
+Create or update multiple synonyms.
 
 Request can be constructed by NewApiSaveSynonymsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param synonymHit []SynonymHit
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
-	@param replaceExistingSynonyms bool - Replace all synonyms of the index with the ones sent with this request.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
+	@param replaceExistingSynonyms bool - Indicates whether to replace all synonyms in the index with the ones sent with this request.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) SaveSynonymsWithContext(ctx context.Context, r ApiSaveSynonymsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -8510,11 +8557,11 @@ func (c *APIClient) NewApiSearchRequest(searchMethodParams *SearchMethodParams) 
 /*
 Search Search multiple indices. Wraps SearchWithContext using context.Background.
 
-Perform a search operation targeting one or many indices.
+Send multiple search queries to one or more indices.
 
 Request can be constructed by NewApiSearchRequest with parameters below.
 
-	@param searchMethodParams SearchMethodParams - The `search` requests and strategy.
+	@param searchMethodParams SearchMethodParams - Query requests and strategies. Results will be received in the same order as the queries.
 	@return SearchResponses
 */
 func (c *APIClient) Search(r ApiSearchRequest, opts ...Option) (*SearchResponses, error) {
@@ -8524,11 +8571,11 @@ func (c *APIClient) Search(r ApiSearchRequest, opts ...Option) (*SearchResponses
 /*
 Search Search multiple indices.
 
-Perform a search operation targeting one or many indices.
+Send multiple search queries to one or more indices.
 
 Request can be constructed by NewApiSearchRequest with parameters below.
 
-	@param searchMethodParams SearchMethodParams - The `search` requests and strategy.
+	@param searchMethodParams SearchMethodParams - Query requests and strategies. Results will be received in the same order as the queries.
 	@return SearchResponses
 */
 func (c *APIClient) SearchWithContext(ctx context.Context, r ApiSearchRequest, opts ...Option) (*SearchResponses, error) {
@@ -8676,13 +8723,13 @@ func (c *APIClient) NewApiSearchDictionaryEntriesRequest(dictionaryName Dictiona
 }
 
 /*
-SearchDictionaryEntries Search a dictionary entries. Wraps SearchDictionaryEntriesWithContext using context.Background.
+SearchDictionaryEntries Search dictionary entries. Wraps SearchDictionaryEntriesWithContext using context.Background.
 
-Search the dictionary entries.
+Search for standard and [custom](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/) entries in the [stop words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), or [segmentation (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) dictionaries.
 
 Request can be constructed by NewApiSearchDictionaryEntriesRequest with parameters below.
 
-	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param dictionaryName DictionaryType - Dictionary to search in.
 	@param searchDictionaryEntriesParams SearchDictionaryEntriesParams
 	@return UpdatedAtResponse
 */
@@ -8691,13 +8738,13 @@ func (c *APIClient) SearchDictionaryEntries(r ApiSearchDictionaryEntriesRequest,
 }
 
 /*
-SearchDictionaryEntries Search a dictionary entries.
+SearchDictionaryEntries Search dictionary entries.
 
-Search the dictionary entries.
+Search for standard and [custom](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/) entries in the [stop words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), or [segmentation (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) dictionaries.
 
 Request can be constructed by NewApiSearchDictionaryEntriesRequest with parameters below.
 
-	@param dictionaryName DictionaryType - The dictionary to search in.
+	@param dictionaryName DictionaryType - Dictionary to search in.
 	@param searchDictionaryEntriesParams SearchDictionaryEntriesParams
 	@return UpdatedAtResponse
 */
@@ -8858,14 +8905,15 @@ func (r ApiSearchForFacetValuesRequest) WithSearchForFacetValuesRequest(searchFo
 }
 
 /*
-SearchForFacetValues Search for values of a given facet. Wraps SearchForFacetValuesWithContext using context.Background.
+SearchForFacetValues Search for facet values. Wraps SearchForFacetValuesWithContext using context.Background.
 
-Search for values of a given facet, optionally restricting the returned values to those contained in objects matching other search criteria.
+[Search for a facet's values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values), optionally restricting the returned values to those contained in records matching other search criteria.
+> **Note**: Pagination isn't supported (`page` and `hitsPerPage` are ignored). By default, the engine returns a maximum of 10 values but you can adjust this with `maxFacetHits`.
 
 Request can be constructed by NewApiSearchForFacetValuesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param facetName string - The facet name.
+	@param indexName string - Index on which to perform the request.
+	@param facetName string - Facet name.
 	@param searchForFacetValuesRequest SearchForFacetValuesRequest
 	@return SearchForFacetValuesResponse
 */
@@ -8874,14 +8922,15 @@ func (c *APIClient) SearchForFacetValues(r ApiSearchForFacetValuesRequest, opts 
 }
 
 /*
-SearchForFacetValues Search for values of a given facet.
+SearchForFacetValues Search for facet values.
 
-Search for values of a given facet, optionally restricting the returned values to those contained in objects matching other search criteria.
+[Search for a facet's values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values), optionally restricting the returned values to those contained in records matching other search criteria.
+> **Note**: Pagination isn't supported (`page` and `hitsPerPage` are ignored). By default, the engine returns a maximum of 10 values but you can adjust this with `maxFacetHits`.
 
 Request can be constructed by NewApiSearchForFacetValuesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param facetName string - The facet name.
+	@param indexName string - Index on which to perform the request.
+	@param facetName string - Facet name.
 	@param searchForFacetValuesRequest SearchForFacetValuesRequest
 	@return SearchForFacetValuesResponse
 */
@@ -9035,11 +9084,11 @@ func (r ApiSearchRulesRequest) WithSearchRulesParams(searchRulesParams *SearchRu
 /*
 SearchRules Search for rules. Wraps SearchRulesWithContext using context.Background.
 
-Search for rules matching various criteria.
+Search for rules in your index. You can control the search with parameters. To list all rules, send an empty request body.
 
 Request can be constructed by NewApiSearchRulesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param searchRulesParams SearchRulesParams
 	@return SearchRulesResponse
 */
@@ -9050,11 +9099,11 @@ func (c *APIClient) SearchRules(r ApiSearchRulesRequest, opts ...Option) (*Searc
 /*
 SearchRules Search for rules.
 
-Search for rules matching various criteria.
+Search for rules in your index. You can control the search with parameters. To list all rules, send an empty request body.
 
 Request can be constructed by NewApiSearchRulesRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param searchRulesParams SearchRulesParams
 	@return SearchRulesResponse
 */
@@ -9205,13 +9254,13 @@ func (r ApiSearchSingleIndexRequest) WithSearchParams(searchParams *SearchParams
 }
 
 /*
-SearchSingleIndex Search in a single index. Wraps SearchSingleIndexWithContext using context.Background.
+SearchSingleIndex Search an index. Wraps SearchSingleIndexWithContext using context.Background.
 
-Perform a search operation targeting one specific index.
+Return records that match the query.
 
 Request can be constructed by NewApiSearchSingleIndexRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param searchParams SearchParams
 	@return SearchResponse
 */
@@ -9220,13 +9269,13 @@ func (c *APIClient) SearchSingleIndex(r ApiSearchSingleIndexRequest, opts ...Opt
 }
 
 /*
-SearchSingleIndex Search in a single index.
+SearchSingleIndex Search an index.
 
-Perform a search operation targeting one specific index.
+Return records that match the query.
 
 Request can be constructed by NewApiSearchSingleIndexRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param searchParams SearchParams
 	@return SearchResponse
 */
@@ -9425,17 +9474,17 @@ func (r ApiSearchSynonymsRequest) WithSearchSynonymsParams(searchSynonymsParams 
 }
 
 /*
-SearchSynonyms Search synonyms. Wraps SearchSynonymsWithContext using context.Background.
+SearchSynonyms Search for synonyms. Wraps SearchSynonymsWithContext using context.Background.
 
-Search or browse all synonyms, optionally filtering them by type.
+Search for synonyms in your index. You can control and filter the search with parameters. To get all synonyms, send an empty request body.
 
 Request can be constructed by NewApiSearchSynonymsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param type_ SynonymType - Only search for specific types of synonyms.
-	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
-	@param hitsPerPage int32 - Maximum number of objects to retrieve.
-	@param searchSynonymsParams SearchSynonymsParams - The body of the the `searchSynonyms` method.
+	@param indexName string - Index on which to perform the request.
+	@param type_ SynonymType - Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
+	@param page int32 - Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination.
+	@param hitsPerPage int32 - Maximum number of hits per page.
+	@param searchSynonymsParams SearchSynonymsParams - Body of the `searchSynonyms` operation.
 	@return SearchSynonymsResponse
 */
 func (c *APIClient) SearchSynonyms(r ApiSearchSynonymsRequest, opts ...Option) (*SearchSynonymsResponse, error) {
@@ -9443,17 +9492,17 @@ func (c *APIClient) SearchSynonyms(r ApiSearchSynonymsRequest, opts ...Option) (
 }
 
 /*
-SearchSynonyms Search synonyms.
+SearchSynonyms Search for synonyms.
 
-Search or browse all synonyms, optionally filtering them by type.
+Search for synonyms in your index. You can control and filter the search with parameters. To get all synonyms, send an empty request body.
 
 Request can be constructed by NewApiSearchSynonymsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
-	@param type_ SynonymType - Only search for specific types of synonyms.
-	@param page int32 - Requested page (zero-based). When specified, will retrieve a specific page; the page size is implicitly set to 100. When null, will retrieve all indices (no pagination).
-	@param hitsPerPage int32 - Maximum number of objects to retrieve.
-	@param searchSynonymsParams SearchSynonymsParams - The body of the the `searchSynonyms` method.
+	@param indexName string - Index on which to perform the request.
+	@param type_ SynonymType - Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
+	@param page int32 - Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination.
+	@param hitsPerPage int32 - Maximum number of hits per page.
+	@param searchSynonymsParams SearchSynonymsParams - Body of the `searchSynonyms` operation.
 	@return SearchSynonymsResponse
 */
 func (c *APIClient) SearchSynonymsWithContext(ctx context.Context, r ApiSearchSynonymsRequest, opts ...Option) (*SearchSynonymsResponse, error) {
@@ -9602,12 +9651,10 @@ func (c *APIClient) NewApiSearchUserIdsRequest(searchUserIdsParams *SearchUserId
 }
 
 /*
-SearchUserIds Search userID. Wraps SearchUserIdsWithContext using context.Background.
+SearchUserIds Search for a user ID. Wraps SearchUserIdsWithContext using context.Background.
 
-Search for userIDs.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds propagate to the different clusters.
-To keep updates moving quickly, the index of userIDs isn't built synchronously with the mapping. Instead, the index is built once every 12h, at the same time as the update of userID usage. For example, when you perform a modification like adding or moving a userID, the search will report an outdated value until the next rebuild of the mapping, which takes place every 12h.
-Upon success, the response is 200 OK and contains the following userIDs data.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
 Request can be constructed by NewApiSearchUserIdsRequest with parameters below.
 
@@ -9619,12 +9666,10 @@ func (c *APIClient) SearchUserIds(r ApiSearchUserIdsRequest, opts ...Option) (*S
 }
 
 /*
-SearchUserIds Search userID.
+SearchUserIds Search for a user ID.
 
-Search for userIDs.
-The data returned will usually be a few seconds behind real time, because userID usage may take up to a few seconds propagate to the different clusters.
-To keep updates moving quickly, the index of userIDs isn't built synchronously with the mapping. Instead, the index is built once every 12h, at the same time as the update of userID usage. For example, when you perform a modification like adding or moving a userID, the search will report an outdated value until the next rebuild of the mapping, which takes place every 12h.
-Upon success, the response is 200 OK and contains the following userIDs data.
+Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
 Request can be constructed by NewApiSearchUserIdsRequest with parameters below.
 
@@ -9765,9 +9810,9 @@ func (c *APIClient) NewApiSetDictionarySettingsRequest(dictionarySettingsParams 
 }
 
 /*
-SetDictionarySettings Set dictionaries settings. Wraps SetDictionarySettingsWithContext using context.Background.
+SetDictionarySettings Set stop word settings. Wraps SetDictionarySettingsWithContext using context.Background.
 
-Set dictionaries settings.
+Set stop word settings for a specific language.
 
 Request can be constructed by NewApiSetDictionarySettingsRequest with parameters below.
 
@@ -9779,9 +9824,9 @@ func (c *APIClient) SetDictionarySettings(r ApiSetDictionarySettingsRequest, opt
 }
 
 /*
-SetDictionarySettings Set dictionaries settings.
+SetDictionarySettings Set stop word settings.
 
-Set dictionaries settings.
+Set stop word settings for a specific language.
 
 Request can be constructed by NewApiSetDictionarySettingsRequest with parameters below.
 
@@ -9949,15 +9994,15 @@ func (r ApiSetSettingsRequest) WithForwardToReplicas(forwardToReplicas bool) Api
 }
 
 /*
-SetSettings Update settings of an index. Wraps SetSettingsWithContext using context.Background.
+SetSettings Update index settings. Wraps SetSettingsWithContext using context.Background.
 
-Update settings of an index. Only specified settings are overridden; unspecified settings are left unchanged. Specifying null for a setting resets it to its default value.
+Update the specified [index settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/). Specifying null for a setting resets it to its default value.
 
 Request can be constructed by NewApiSetSettingsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param indexSettings IndexSettings
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) SetSettings(r ApiSetSettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -9965,15 +10010,15 @@ func (c *APIClient) SetSettings(r ApiSetSettingsRequest, opts ...Option) (*Updat
 }
 
 /*
-SetSettings Update settings of an index.
+SetSettings Update index settings.
 
-Update settings of an index. Only specified settings are overridden; unspecified settings are left unchanged. Specifying null for a setting resets it to its default value.
+Update the specified [index settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/). Specifying null for a setting resets it to its default value.
 
 Request can be constructed by NewApiSetSettingsRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param indexSettings IndexSettings
-	@param forwardToReplicas bool - When true, changes are also propagated to replicas of the given indexName.
+	@param forwardToReplicas bool - Indicates whether changed index settings are forwarded to the replica indices.
 	@return UpdatedAtResponse
 */
 func (c *APIClient) SetSettingsWithContext(ctx context.Context, r ApiSetSettingsRequest, opts ...Option) (*UpdatedAtResponse, error) {
@@ -10128,11 +10173,13 @@ func (c *APIClient) NewApiUpdateApiKeyRequest(key string, apiKey *ApiKey) ApiUpd
 /*
 UpdateApiKey Update an API key. Wraps UpdateApiKeyWithContext using context.Background.
 
-Replace every permission of an existing API key.
+Replace the permissions of an existing API key.
+Any unspecified parameter resets that permission to its default value.
+The request must be authenticated with the admin API key.
 
 Request can be constructed by NewApiUpdateApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@param apiKey ApiKey
 	@return UpdateApiKeyResponse
 */
@@ -10143,11 +10190,13 @@ func (c *APIClient) UpdateApiKey(r ApiUpdateApiKeyRequest, opts ...Option) (*Upd
 /*
 UpdateApiKey Update an API key.
 
-Replace every permission of an existing API key.
+Replace the permissions of an existing API key.
+Any unspecified parameter resets that permission to its default value.
+The request must be authenticated with the admin API key.
 
 Request can be constructed by NewApiUpdateApiKeyRequest with parameters below.
 
-	@param key string - API Key string.
+	@param key string - API key.
 	@param apiKey ApiKey
 	@return UpdateApiKeyResponse
 */

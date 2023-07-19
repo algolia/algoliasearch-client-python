@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// OperationType Type of operation to perform (move or copy).
+// OperationType Operation to perform (_move_ or _copy_).
 type OperationType string
 
 // List of operationType

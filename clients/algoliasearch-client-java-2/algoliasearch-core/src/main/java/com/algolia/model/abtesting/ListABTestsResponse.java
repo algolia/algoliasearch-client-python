@@ -31,7 +31,7 @@ public class ListABTestsResponse {
   }
 
   /**
-   * List of A/B tests.
+   * A/B tests.
    *
    * @return abtests
    */
@@ -46,7 +46,7 @@ public class ListABTestsResponse {
   }
 
   /**
-   * Number of A/B tests found for the app.
+   * Number of A/B tests implemented.
    *
    * @return count
    */
@@ -61,7 +61,7 @@ public class ListABTestsResponse {
   }
 
   /**
-   * Number of A/B tests retrievable.
+   * Number of retrievable A/B tests.
    *
    * @return total
    */

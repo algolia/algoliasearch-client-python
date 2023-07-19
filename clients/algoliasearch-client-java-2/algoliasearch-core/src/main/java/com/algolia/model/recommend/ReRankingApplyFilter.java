@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * When Dynamic Re-Ranking is enabled, only records that match these filters will be impacted by
- * Dynamic Re-Ranking.
+ * When [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) is enabled,
+ * only records that match these filters will be affected by Dynamic Re-Ranking.
  */
 @JsonDeserialize(using = ReRankingApplyFilter.ReRankingApplyFilterDeserializer.class)
 @JsonSerialize(using = ReRankingApplyFilter.ReRankingApplyFilterSerializer.class)

@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// Languages A dictionary language.
+// Languages Dictionary language.
 type Languages struct {
 	Plurals   NullableDictionaryLanguage `json:"plurals" validate:"required"`
 	Stopwords NullableDictionaryLanguage `json:"stopwords" validate:"required"`

@@ -9,20 +9,20 @@ part 'dictionary_language.g.dart';
 final class DictionaryLanguage {
   /// Returns a new [DictionaryLanguage] instance.
   const DictionaryLanguage({
-    this.nbCustomEntires,
+    this.nbCustomEntries,
   });
 
-  /// When nbCustomEntries is set to 0, the user didn't customize the dictionary. The dictionary is still supported with standard, Algolia-provided entries.
-  @JsonKey(name: r'nbCustomEntires')
-  final int? nbCustomEntires;
+  /// If `0`, the dictionary hasn't been customized and only contains standard entries provided by Algolia. If `null`, that feature isn't available or isn't supported for that language.
+  @JsonKey(name: r'nbCustomEntries')
+  final int? nbCustomEntries;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DictionaryLanguage && other.nbCustomEntires == nbCustomEntires;
+      other is DictionaryLanguage && other.nbCustomEntries == nbCustomEntries;
 
   @override
-  int get hashCode => nbCustomEntires.hashCode;
+  int get hashCode => nbCustomEntries.hashCode;
 
   factory DictionaryLanguage.fromJson(Map<String, dynamic> json) =>
       _$DictionaryLanguageFromJson(json);

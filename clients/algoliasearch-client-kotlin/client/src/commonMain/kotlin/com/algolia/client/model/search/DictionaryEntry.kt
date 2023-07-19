@@ -8,31 +8,31 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
 /**
- * A dictionary entry.
+ * Dictionary entry.
  *
- * @param objectID Unique identifier of the object.
- * @param language Language ISO code supported by the dictionary (e.g., \"en\" for English).
- * @param word The word of the dictionary entry.
- * @param words The words of the dictionary entry.
- * @param decomposition A decomposition of the word of the dictionary entry.
+ * @param objectID Unique identifier for a dictionary object.
+ * @param language [Supported language ISO code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
+ * @param word Dictionary entry word. Usage depends on the type of dictionary entry. **`stopwordEntry`** The stop word you want to add or update. If the entry already exists in Algolia's standard dictionary, you can override its behavior by adding it to the custom dictionary and setting its `state` to `disabled`. **`compoundEntry`** When `decomposition` is empty: adds `word` as a compound atom. For example, atom “kino” decomposes the query “kopfkino” into \"kopf\" and \"kino\". When `decomposition` isn't empty: creates a decomposition exception. For example, when decomposition is set to the [\"hund\", \"hutte\"] exception, \"hundehutte\" decomposes into “hund” and “hutte”, discarding the linking \"e\".
+ * @param words Compound dictionary [word declensions](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/). If the entry already exists in Algolia's standard dictionary, you can override its behavior by adding it to the custom dictionary and setting its `state` to `disabled`.
+ * @param decomposition For compound entries, governs the behavior of the `word` parameter.
  * @param state
  */
 @Serializable(DictionaryEntrySerializer::class)
 public data class DictionaryEntry(
 
-  /** Unique identifier of the object. */
+  /** Unique identifier for a dictionary object. */
   val objectID: String,
 
-  /** Language ISO code supported by the dictionary (e.g., \"en\" for English). */
+  /** [Supported language ISO code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).  */
   val language: String,
 
-  /** The word of the dictionary entry. */
+  /** Dictionary entry word. Usage depends on the type of dictionary entry. **`stopwordEntry`** The stop word you want to add or update. If the entry already exists in Algolia's standard dictionary, you can override its behavior by adding it to the custom dictionary and setting its `state` to `disabled`. **`compoundEntry`** When `decomposition` is empty: adds `word` as a compound atom. For example, atom “kino” decomposes the query “kopfkino” into \"kopf\" and \"kino\". When `decomposition` isn't empty: creates a decomposition exception. For example, when decomposition is set to the [\"hund\", \"hutte\"] exception, \"hundehutte\" decomposes into “hund” and “hutte”, discarding the linking \"e\".  */
   val word: String? = null,
 
-  /** The words of the dictionary entry. */
+  /** Compound dictionary [word declensions](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/). If the entry already exists in Algolia's standard dictionary, you can override its behavior by adding it to the custom dictionary and setting its `state` to `disabled`.  */
   val words: List<String>? = null,
 
-  /** A decomposition of the word of the dictionary entry. */
+  /** For compound entries, governs the behavior of the `word` parameter. */
   val decomposition: List<String>? = null,
 
   val state: DictionaryEntryState? = null,

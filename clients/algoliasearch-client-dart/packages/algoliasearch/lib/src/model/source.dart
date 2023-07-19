@@ -13,11 +13,11 @@ final class Source {
     this.description,
   });
 
-  /// The IP range of the source.
+  /// IP address range of the source.
   @JsonKey(name: r'source')
   final String source;
 
-  /// The description of the source.
+  /// Source description.
   @JsonKey(name: r'description')
   final String? description;
 

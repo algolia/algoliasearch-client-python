@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// Distinct - Enables de-duplication or grouping of results.
+// Distinct - Enables [deduplication or grouping of results (Algolia's _distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
 type Distinct struct {
 	Bool  *bool
 	Int32 *int32

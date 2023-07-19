@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** Unique identifier of the object to hide. */
+/** Unique identifier of the record to hide. */
 public class ConsequenceHide {
 
   @JsonProperty("objectID")
@@ -18,7 +18,7 @@ public class ConsequenceHide {
   }
 
   /**
-   * Unique identifier of the object.
+   * Unique object identifier.
    *
    * @return objectID
    */

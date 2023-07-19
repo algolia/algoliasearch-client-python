@@ -7,23 +7,23 @@ import kotlinx.serialization.json.*
 /**
  * FacetsStats
  *
- * @param min The minimum value in the result set.
- * @param max The maximum value in the result set.
- * @param avg The average facet value in the result set.
- * @param sum The sum of all values in the result set.
+ * @param min Minimum value in the results.
+ * @param max Maximum value in the results.
+ * @param avg Average facet value in the results.
+ * @param sum Sum of all values in the results.
  */
 @Serializable
 public data class FacetsStats(
 
-  /** The minimum value in the result set. */
+  /** Minimum value in the results. */
   @SerialName(value = "min") val min: Double? = null,
 
-  /** The maximum value in the result set. */
+  /** Maximum value in the results. */
   @SerialName(value = "max") val max: Double? = null,
 
-  /** The average facet value in the result set. */
+  /** Average facet value in the results. */
   @SerialName(value = "avg") val avg: Double? = null,
 
-  /** The sum of all values in the result set. */
+  /** Sum of all values in the results. */
   @SerialName(value = "sum") val sum: Double? = null,
 )

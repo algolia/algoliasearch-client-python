@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * SuccessResponse
  *
- * @param status The status code.
- * @param message Message of the response.
+ * @param status Status code.
+ * @param message Response message.
  */
 @Serializable
 public data class SuccessResponse(
 
-  /** The status code. */
+  /** Status code. */
   @SerialName(value = "status") val status: Int,
 
-  /** Message of the response. */
+  /** Response message. */
   @SerialName(value = "message") val message: String,
 )

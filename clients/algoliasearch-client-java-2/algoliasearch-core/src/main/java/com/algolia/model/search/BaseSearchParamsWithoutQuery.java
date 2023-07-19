@@ -116,8 +116,7 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Overrides the query parameter and performs a more generic search that can be used to find
-   * \"similar\" results.
+   * Overrides the query parameter and performs a more generic search.
    *
    * @return similarQuery
    */
@@ -132,7 +131,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Filter the query with numeric, facet and/or tag filters.
+   * [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the
+   * query with numeric, facet, or tag filters.
    *
    * @return filters
    */
@@ -207,7 +207,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Determines how to calculate the total score for filtering.
+   * Determines how to calculate [filter
+   * scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores).
+   * If `false`, maximum score is kept. If `true`, score is summed.
    *
    * @return sumOrFiltersScores
    */
@@ -230,7 +232,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Retrieve facets and their facet values.
+   * Returns
+   * [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts),
+   * their facet values, and the number of matching facet values.
    *
    * @return facets
    */
@@ -245,7 +249,7 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Maximum number of facet values to return for each facet during a regular search.
+   * Maximum number of facet values to return for each facet.
    *
    * @return maxValuesPerFacet
    */
@@ -260,7 +264,11 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Force faceting to be applied after de-duplication (via the Distinct setting).
+   * Forces faceting to be applied after
+   * [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/)
+   * (with the distinct feature). Alternatively, the `afterDistinct`
+   * [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
+   * of `attributesForFaceting` allows for more granular control.
    *
    * @return facetingAfterDistinct
    */
@@ -290,7 +298,7 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Specify the page to retrieve.
+   * Page to retrieve (the first page is `0`, not `1`).
    *
    * @return page
    */
@@ -305,7 +313,11 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Specify the offset of the first hit to return.
+   * Specifies the offset of the first hit to return. > **Note**: Using `page` and `hitsPerPage` is
+   * the recommended method for [paging
+   * results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/).
+   * However, you can use `offset` and `length` to implement [an alternative approach to
+   * paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
    *
    * @return offset
    */
@@ -320,7 +332,12 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Set the number of hits to retrieve (used only with offset). minimum: 1 maximum: 1000
+   * Sets the number of hits to retrieve (for use with `offset`). > **Note**: Using `page` and
+   * `hitsPerPage` is the recommended method for [paging
+   * results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/).
+   * However, you can use `offset` and `length` to implement [an alternative approach to
+   * paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
+   * minimum: 1 maximum: 1000
    *
    * @return length
    */
@@ -335,7 +352,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Search for entries around a central geolocation, enabling a geo search within a circular area.
+   * Search for entries [around a central
+   * location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point),
+   * enabling a geographical search within a circular area.
    *
    * @return aroundLatLng
    */
@@ -350,8 +369,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Search for entries around a given location automatically computed from the requester's IP
-   * address.
+   * Search for entries around a location. The location is automatically computed from the
+   * requester's IP address.
    *
    * @return aroundLatLngViaIP
    */
@@ -381,7 +400,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Precision of geo search (in meters), to add grouping by geo location to the ranking formula.
+   * Precision of a geographical search (in meters), to [group results that are more or less the
+   * same distance from a central
+   * point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
    *
    * @return aroundPrecision
    */
@@ -396,7 +417,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Minimum radius (in meters) used for a geo search when aroundRadius is not set. minimum: 1
+   * Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
+   * minimum: 1
    *
    * @return minimumAroundRadius
    */
@@ -419,7 +441,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Search inside a rectangular area (in geo coordinates).
+   * Search inside a [rectangular
+   * area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
+   * (in geographical coordinates).
    *
    * @return insideBoundingBox
    */
@@ -442,7 +466,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Search inside a polygon (in geo coordinates).
+   * Search inside a
+   * [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
+   * (in geographical coordinates).
    *
    * @return insidePolygon
    */
@@ -465,11 +491,10 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * This parameter changes the default values of certain parameters and settings that work best for
-   * a natural language query, such as ignorePlurals, removeStopWords, removeWordsIfNoResults,
-   * analyticsTags and ruleContexts. These parameters and settings work well together when the query
-   * is formatted in natural language instead of keywords, for example when your user performs a
-   * voice search.
+   * Changes the default values of parameters that work best for a natural language query, such as
+   * `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and
+   * `ruleContexts`. These parameters work well together when the query consists of fuller natural
+   * language strings instead of keywords, for example when processing voice search queries.
    *
    * @return naturalLanguages
    */
@@ -492,7 +517,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Enables contextual rules.
+   * Assigns [rule
+   * contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context)
+   * to search queries.
    *
    * @return ruleContexts
    */
@@ -507,7 +534,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Define the impact of the Personalization feature.
+   * Defines how much [Personalization affects
+   * results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
    *
    * @return personalizationImpact
    */
@@ -522,7 +550,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Associates a certain user token with the current search.
+   * Associates a [user
+   * token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current
+   * search.
    *
    * @return userToken
    */
@@ -537,7 +567,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Retrieve detailed ranking information.
+   * Incidates whether the search response includes [detailed ranking
+   * information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
    *
    * @return getRankingInfo
    */
@@ -552,7 +583,9 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Enable the Click Analytics feature.
+   * Indicates whether a query ID parameter is included in the search response. This is required for
+   * [tracking click and conversion
+   * events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
    *
    * @return clickAnalytics
    */
@@ -567,7 +600,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Whether the current query will be taken into account in the Analytics.
+   * Indicates whether this query will be included in
+   * [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
    *
    * @return analytics
    */
@@ -590,7 +624,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * List of tags to apply to the query for analytics purposes.
+   * Tags to apply to the query for [segmenting analytics
+   * data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
    *
    * @return analyticsTags
    */
@@ -620,7 +655,7 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Whether this search should participate in running AB tests.
+   * Incidates whether this search will be considered in A/B testing.
    *
    * @return enableABTest
    */
@@ -635,7 +670,8 @@ public class BaseSearchParamsWithoutQuery {
   }
 
   /**
-   * Whether this search should use AI Re-Ranking.
+   * Indicates whether this search will use [Dynamic
+   * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
    *
    * @return enableReRanking
    */

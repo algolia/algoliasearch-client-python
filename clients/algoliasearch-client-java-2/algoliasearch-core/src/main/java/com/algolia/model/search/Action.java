@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** type of operation. */
+/** Type of batch operation. */
 public enum Action {
   ADD_OBJECT("addObject"),
 

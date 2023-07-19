@@ -29,8 +29,8 @@ public class AbtestingClient(
   }
 
   /**
-   * Create a test.
-   * Creates a new A/B test with provided configuration. You can set an A/B test on two different indices with different settings, or on the same index with different search parameters by providing a customSearchParameters setting on one of the variants.
+   * Create an A/B test.
+   * Creates an A/B test.
    * @param addABTestsRequest
    * @param requestOptions additional request configuration.
    */
@@ -49,8 +49,8 @@ public class AbtestingClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun del(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -69,9 +69,9 @@ public class AbtestingClient(
   }
 
   /**
-   * Delete a test.
-   * Delete a test.
-   * @param id The A/B test ID.
+   * Delete an A/B test.
+   * Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+   * @param id Unique A/B test ID.
    * @param requestOptions additional request configuration.
    */
   public suspend fun deleteABTest(id: Int, requestOptions: RequestOptions? = null): ABTestResponse {
@@ -88,8 +88,8 @@ public class AbtestingClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
    * @param requestOptions additional request configuration.
    */
   public suspend fun get(path: String, parameters: Map<kotlin.String, Any>? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -108,9 +108,9 @@ public class AbtestingClient(
   }
 
   /**
-   * Get a test.
-   * Returns metadata and metrics for an A/B test.
-   * @param id The A/B test ID.
+   * Get A/B test details.
+   * Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+   * @param id Unique A/B test ID.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getABTest(id: Int, requestOptions: RequestOptions? = null): ABTest {
@@ -125,12 +125,12 @@ public class AbtestingClient(
   }
 
   /**
-   * List all tests.
-   * Fetch all existing A/B tests for App that are available for the current API Key. When no data has been processed, the metrics will be returned as null.
+   * List all A/B tests.
+   * List all A/B tests.
    * @param offset Position of the starting record. Used for paging. 0 is the first record. (default to 0)
-   * @param limit Number of records to return. Limit is the size of the page. (default to 10)
-   * @param indexPrefix Filters the returned ab tests by any indices starting with the provided prefix that are assigned to either variant of an ab test.
-   * @param indexSuffix Filters the returned ab tests by any indices ending with the provided suffix that are assigned to either variant of an ab test.
+   * @param limit Number of records to return (page size). (default to 10)
+   * @param indexPrefix Only return A/B tests for indices starting with this prefix.
+   * @param indexSuffix Only return A/B tests for indices ending with this suffix.
    * @param requestOptions additional request configuration.
    */
   public suspend fun listABTests(offset: Int? = null, limit: Int? = null, indexPrefix: String? = null, indexSuffix: String? = null, requestOptions: RequestOptions? = null): ListABTestsResponse {
@@ -153,9 +153,9 @@ public class AbtestingClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun post(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -177,9 +177,9 @@ public class AbtestingClient(
   /**
    * Send requests to the Algolia REST API.
    * This method allow you to send requests to the Algolia REST API.
-   * @param path The path of the API endpoint to target, anything after the /1 needs to be specified.
-   * @param parameters Query parameters to be applied to the current query.
-   * @param body The parameters to send with the custom request.
+   * @param path Path of the endpoint, anything after \"/1\" must be specified.
+   * @param parameters Query parameters to apply to the current query.
+   * @param body Parameters to send with the custom request.
    * @param requestOptions additional request configuration.
    */
   public suspend fun put(path: String, parameters: Map<kotlin.String, Any>? = null, body: JsonObject? = null, requestOptions: RequestOptions? = null): JsonObject {
@@ -199,9 +199,9 @@ public class AbtestingClient(
   }
 
   /**
-   * Stop a test.
-   * Marks the A/B test as stopped. At this point, the test is over and cannot be restarted. As a result, your application is back to normal: index A will perform as usual, receiving 100% of all search requests. Associated metadata and metrics are still stored.
-   * @param id The A/B test ID.
+   * Stop an A/B test.
+   * If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+   * @param id Unique A/B test ID.
    * @param requestOptions additional request configuration.
    */
   public suspend fun stopABTest(id: Int, requestOptions: RequestOptions? = null): ABTestResponse {

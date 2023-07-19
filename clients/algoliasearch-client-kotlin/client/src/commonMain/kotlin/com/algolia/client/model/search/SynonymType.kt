@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * Type of the synonym object.
+ * Synonym type.
  */
 @Serializable
 public enum class SynonymType(public val value: kotlin.String) {

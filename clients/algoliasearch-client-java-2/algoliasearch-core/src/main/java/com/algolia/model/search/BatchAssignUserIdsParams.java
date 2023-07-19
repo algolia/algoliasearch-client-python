@@ -23,7 +23,7 @@ public class BatchAssignUserIdsParams {
   }
 
   /**
-   * Name of the cluster.
+   * Cluster name.
    *
    * @return cluster
    */
@@ -43,7 +43,7 @@ public class BatchAssignUserIdsParams {
   }
 
   /**
-   * userIDs to assign. Note you cannot move users with this method.
+   * User IDs to assign.
    *
    * @return users
    */

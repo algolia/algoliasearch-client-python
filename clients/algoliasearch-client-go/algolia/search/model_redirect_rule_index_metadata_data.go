@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// RedirectRuleIndexMetadataData Data for the redirect rule.
+// RedirectRuleIndexMetadataData Redirect rule data.
 type RedirectRuleIndexMetadataData struct {
 	RuleObjectID string `json:"ruleObjectID" validate:"required"`
 }

@@ -2,28 +2,28 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// type of operation.
+/// Type of batch operation.
 @JsonEnum(valueField: 'raw')
 enum Action {
-  /// type of operation.
+  /// Type of batch operation.
   addObject(r'addObject'),
 
-  /// type of operation.
+  /// Type of batch operation.
   updateObject(r'updateObject'),
 
-  /// type of operation.
+  /// Type of batch operation.
   partialUpdateObject(r'partialUpdateObject'),
 
-  /// type of operation.
+  /// Type of batch operation.
   partialUpdateObjectNoCreate(r'partialUpdateObjectNoCreate'),
 
-  /// type of operation.
+  /// Type of batch operation.
   deleteObject(r'deleteObject'),
 
-  /// type of operation.
+  /// Type of batch operation.
   delete(r'delete'),
 
-  /// type of operation.
+  /// Type of batch operation.
   clear(r'clear');
 
   const Action(this.raw);

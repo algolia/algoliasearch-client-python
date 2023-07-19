@@ -8,13 +8,13 @@ import (
 
 // FacetsStats struct for FacetsStats
 type FacetsStats struct {
-	// The minimum value in the result set.
+	// Minimum value in the results.
 	Min *float64 `json:"min,omitempty"`
-	// The maximum value in the result set.
+	// Maximum value in the results.
 	Max *float64 `json:"max,omitempty"`
-	// The average facet value in the result set.
+	// Average facet value in the results.
 	Avg *float64 `json:"avg,omitempty"`
-	// The sum of all values in the result set.
+	// Sum of all values in the results.
 	Sum *float64 `json:"sum,omitempty"`
 }
 

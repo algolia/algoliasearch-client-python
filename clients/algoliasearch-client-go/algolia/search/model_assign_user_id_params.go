@@ -8,7 +8,7 @@ import (
 
 // AssignUserIdParams Assign userID parameters.
 type AssignUserIdParams struct {
-	// Name of the cluster.
+	// Cluster name.
 	Cluster string `json:"cluster" validate:"required"`
 }
 

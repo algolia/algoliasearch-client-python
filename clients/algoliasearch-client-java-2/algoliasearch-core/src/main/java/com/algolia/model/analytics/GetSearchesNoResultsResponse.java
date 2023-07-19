@@ -25,7 +25,7 @@ public class GetSearchesNoResultsResponse {
   }
 
   /**
-   * A list of searches with no results and their count.
+   * Searches with no results.
    *
    * @return searches
    */

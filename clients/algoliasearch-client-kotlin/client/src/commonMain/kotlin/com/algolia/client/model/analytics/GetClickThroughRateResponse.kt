@@ -7,23 +7,23 @@ import kotlinx.serialization.json.*
 /**
  * GetClickThroughRateResponse
  *
- * @param rate The click-through rate.
- * @param clickCount The number of click event.
- * @param trackedSearchCount The number of tracked search click.
- * @param dates A list of click-through rate events with their date.
+ * @param rate [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+ * @param clickCount Number of click events.
+ * @param trackedSearchCount Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
+ * @param dates Click-through rate events.
  */
 @Serializable
 public data class GetClickThroughRateResponse(
 
-  /** The click-through rate. */
+  /** [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).  */
   @SerialName(value = "rate") val rate: Double,
 
-  /** The number of click event. */
+  /** Number of click events. */
   @SerialName(value = "clickCount") val clickCount: Int,
 
-  /** The number of tracked search click. */
+  /** Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`. */
   @SerialName(value = "trackedSearchCount") val trackedSearchCount: Int,
 
-  /** A list of click-through rate events with their date. */
+  /** Click-through rate events. */
   @SerialName(value = "dates") val dates: List<ClickThroughRateEvent>,
 )

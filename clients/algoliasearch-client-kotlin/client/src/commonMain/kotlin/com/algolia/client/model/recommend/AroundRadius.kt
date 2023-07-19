@@ -10,7 +10,7 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
 /**
- * Define the maximum radius for a geo search (in meters).
+ * [Maximum radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius) for a geographical search (in meters).
  */
 @Serializable(AroundRadiusSerializer::class)
 public sealed interface AroundRadius {

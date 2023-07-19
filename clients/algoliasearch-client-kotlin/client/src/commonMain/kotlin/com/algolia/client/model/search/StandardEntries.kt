@@ -5,21 +5,21 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Map of language ISO code supported by the dictionary (e.g., \"en\" for English) to a boolean value.
+ * Key-value pairs of [supported language ISO codes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and boolean values.
  *
- * @param plurals Language ISO code.
- * @param stopwords Language ISO code.
- * @param compounds Language ISO code.
+ * @param plurals Key-value pair of a language ISO code and a boolean value.
+ * @param stopwords Key-value pair of a language ISO code and a boolean value.
+ * @param compounds Key-value pair of a language ISO code and a boolean value.
  */
 @Serializable
 public data class StandardEntries(
 
-  /** Language ISO code. */
+  /** Key-value pair of a language ISO code and a boolean value. */
   @SerialName(value = "plurals") val plurals: Map<kotlin.String, Boolean>? = null,
 
-  /** Language ISO code. */
+  /** Key-value pair of a language ISO code and a boolean value. */
   @SerialName(value = "stopwords") val stopwords: Map<kotlin.String, Boolean>? = null,
 
-  /** Language ISO code. */
+  /** Key-value pair of a language ISO code and a boolean value. */
   @SerialName(value = "compounds") val compounds: Map<kotlin.String, Boolean>? = null,
 )

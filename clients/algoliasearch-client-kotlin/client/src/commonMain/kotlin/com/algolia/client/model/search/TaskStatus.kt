@@ -3,6 +3,9 @@ package com.algolia.client.model.search
 
 import kotlinx.serialization.*
 
+/**
+ * _published_ if the task has been processed, _notPublished_ otherwise.
+ */
 @Serializable
 public enum class TaskStatus(public val value: kotlin.String) {
 

@@ -9,8 +9,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Map of language ISO code supported by the dictionary (e.g., \"en\" for English) to a boolean
- * value.
+ * Key-value pairs of [supported language ISO
+ * codes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/)
+ * and boolean values.
  */
 public class StandardEntries {
 
@@ -37,7 +38,7 @@ public class StandardEntries {
   }
 
   /**
-   * Language ISO code.
+   * Key-value pair of a language ISO code and a boolean value.
    *
    * @return plurals
    */
@@ -60,7 +61,7 @@ public class StandardEntries {
   }
 
   /**
-   * Language ISO code.
+   * Key-value pair of a language ISO code and a boolean value.
    *
    * @return stopwords
    */
@@ -83,7 +84,7 @@ public class StandardEntries {
   }
 
   /**
-   * Language ISO code.
+   * Key-value pair of a language ISO code and a boolean value.
    *
    * @return compounds
    */

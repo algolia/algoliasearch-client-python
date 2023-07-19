@@ -48,7 +48,7 @@ public class UserHit {
   }
 
   /**
-   * Name of the cluster.
+   * Cluster name.
    *
    * @return clusterName
    */

@@ -8,9 +8,9 @@ import (
 
 // BaseGetApiKeyResponse struct for BaseGetApiKeyResponse
 type BaseGetApiKeyResponse struct {
-	// The API key.
+	// API key.
 	Value *string `json:"value,omitempty"`
-	// Time of the event expressed in milliseconds since the Unix epoch.
+	// Timestamp of creation in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time).
 	CreatedAt int64 `json:"createdAt" validate:"required"`
 }
 

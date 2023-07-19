@@ -29,7 +29,9 @@ public class GetClickThroughRateResponse {
   }
 
   /**
-   * The click-through rate.
+   * [Click-through rate
+   * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+   * minimum: 0 maximum: 1
    *
    * @return rate
    */
@@ -44,7 +46,7 @@ public class GetClickThroughRateResponse {
   }
 
   /**
-   * The number of click event.
+   * Number of click events.
    *
    * @return clickCount
    */
@@ -59,7 +61,8 @@ public class GetClickThroughRateResponse {
   }
 
   /**
-   * The number of tracked search click.
+   * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
+   * parameter is `true`.
    *
    * @return trackedSearchCount
    */
@@ -79,7 +82,7 @@ public class GetClickThroughRateResponse {
   }
 
   /**
-   * A list of click-through rate events with their date.
+   * Click-through rate events.
    *
    * @return dates
    */

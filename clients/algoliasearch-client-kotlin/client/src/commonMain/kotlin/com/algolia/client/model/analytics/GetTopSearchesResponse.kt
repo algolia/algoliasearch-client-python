@@ -20,7 +20,7 @@ public sealed interface GetTopSearchesResponse {
     /**
      * TopSearchesResponse
      *
-     * @param searches A list of top searches with their count.
+     * @param searches Top searches with their hits count.
      */
     public fun TopSearchesResponse(
       searches: List<TopSearch>,
@@ -31,7 +31,7 @@ public sealed interface GetTopSearchesResponse {
     /**
      * TopSearchesResponseWithAnalytics
      *
-     * @param searches A list of top searches with their count and analytics.
+     * @param searches Top searches with their hits count and analytics.
      */
     public fun TopSearchesResponseWithAnalytics(
       searches: List<TopSearchWithAnalytics>,

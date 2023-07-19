@@ -54,7 +54,7 @@ public class TrendingRequest {
   }
 
   /**
-   * The facet name to use for trending models.
+   * Facet name for trending models.
    *
    * @return facetName
    */
@@ -69,7 +69,7 @@ public class TrendingRequest {
   }
 
   /**
-   * The facet value to use for trending models.
+   * Facet value for trending models.
    *
    * @return facetValue
    */
@@ -84,7 +84,7 @@ public class TrendingRequest {
   }
 
   /**
-   * The Algolia index name.
+   * Algolia index name.
    *
    * @return indexName
    */
@@ -99,7 +99,9 @@ public class TrendingRequest {
   }
 
   /**
-   * The threshold to use when filtering recommendations by their score. minimum: 0 maximum: 100
+   * Recommendations with a confidence score lower than `threshold` won't appear in results. >
+   * **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to
+   * 100, the more relevant the recommendations are. minimum: 0 maximum: 100
    *
    * @return threshold
    */
@@ -114,8 +116,7 @@ public class TrendingRequest {
   }
 
   /**
-   * The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the
-   * objectID may be returned.
+   * Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
    *
    * @return maxRecommendations
    */

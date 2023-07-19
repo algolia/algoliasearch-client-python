@@ -4,7 +4,7 @@ package com.algolia.client.model.search
 import kotlinx.serialization.*
 
 /**
- * Whether the pattern parameter must match the beginning or the end of the query string, or both, or none.
+ * Whether the pattern parameter matches the beginning (`startsWith`) or end (`endsWith`) of the query string, is an exact match (`is`), or a partial match (`contains`).
  */
 @Serializable
 public enum class Anchoring(public val value: kotlin.String) {

@@ -2,13 +2,13 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// The search mode that the index will use to query for results.
+/// Search mode the index will use to query for results.
 @JsonEnum(valueField: 'raw')
 enum Mode {
-  /// The search mode that the index will use to query for results.
+  /// Search mode the index will use to query for results.
   neuralSearch(r'neuralSearch'),
 
-  /// The search mode that the index will use to query for results.
+  /// Search mode the index will use to query for results.
   keywordSearch(r'keywordSearch');
 
   const Mode(this.raw);

@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Data for the redirect rule.
+ * Redirect rule data.
  *
  * @param ruleObjectID
  */

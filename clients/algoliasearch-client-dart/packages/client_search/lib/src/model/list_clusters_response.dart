@@ -12,7 +12,7 @@ final class ListClustersResponse {
     required this.topUsers,
   });
 
-  /// Mapping of cluster names to top users.
+  /// Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values.
   @JsonKey(name: r'topUsers')
   final List<String> topUsers;
 

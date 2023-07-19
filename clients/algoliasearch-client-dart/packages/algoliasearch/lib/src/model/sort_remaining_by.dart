@@ -2,16 +2,16 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+/// How to display the remaining items:    - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
 @JsonEnum(valueField: 'raw')
 enum SortRemainingBy {
-  /// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+  /// How to display the remaining items:    - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
   count(r'count'),
 
-  /// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+  /// How to display the remaining items:    - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
   alpha(r'alpha'),
 
-  /// How to display the remaining items.   - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+  /// How to display the remaining items:    - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
   hidden(r'hidden');
 
   const SortRemainingBy(this.raw);

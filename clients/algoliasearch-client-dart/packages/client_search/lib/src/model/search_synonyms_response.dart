@@ -16,11 +16,11 @@ final class SearchSynonymsResponse extends DelegatingMap<String, dynamic> {
     Map<String, dynamic> additionalProperties = const {},
   }) : super(additionalProperties);
 
-  /// Array of synonym objects.
+  /// Synonym objects.
   @JsonKey(name: r'hits')
   final List<SynonymHit> hits;
 
-  /// Number of hits that the search query matched.
+  /// Number of hits the search query matched.
   @JsonKey(name: r'nbHits')
   final int nbHits;
 

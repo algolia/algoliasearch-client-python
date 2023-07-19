@@ -17,11 +17,11 @@ final class SearchForFacetsOptions {
     required this.type,
   });
 
-  /// The `facet` name.
+  /// Facet name.
   @JsonKey(name: r'facet')
   final String facet;
 
-  /// The Algolia index name.
+  /// Algolia index name.
   @JsonKey(name: r'indexName')
   final String indexName;
 
@@ -29,7 +29,7 @@ final class SearchForFacetsOptions {
   @JsonKey(name: r'facetQuery')
   final String? facetQuery;
 
-  /// Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
+  /// Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
   // maximum: 100
   @JsonKey(name: r'maxFacetHits')
   final int? maxFacetHits;

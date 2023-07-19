@@ -7,13 +7,13 @@ import kotlinx.serialization.json.*
 /**
  * ListIndicesResponse
  *
- * @param items List of the fetched indices.
+ * @param items All indices in your Algolia application.
  * @param nbPages Number of pages.
  */
 @Serializable
 public data class ListIndicesResponse(
 
-  /** List of the fetched indices. */
+  /** All indices in your Algolia application. */
   @SerialName(value = "items") val items: List<FetchedIndex>,
 
   /** Number of pages. */

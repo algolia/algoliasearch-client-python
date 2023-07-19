@@ -255,8 +255,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Del(r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -270,8 +270,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiDelRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) DelWithContext(ctx context.Context, r ApiDelRequest, opts ...Option) (map[string]interface{}, error) {
@@ -413,7 +413,7 @@ Note that when doing this, the underlying index does not change - existing sugge
 
 Request can be constructed by NewApiDeleteConfigRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return SuccessResponse
 */
 func (c *APIClient) DeleteConfig(r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
@@ -429,7 +429,7 @@ Note that when doing this, the underlying index does not change - existing sugge
 
 Request can be constructed by NewApiDeleteConfigRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return SuccessResponse
 */
 func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
@@ -570,8 +570,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) Get(r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -585,8 +585,8 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiGetRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
 	@return map[string]interface{}
 */
 func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ...Option) (map[string]interface{}, error) {
@@ -842,7 +842,7 @@ Get the configuration of a single Query Suggestions index.
 
 Request can be constructed by NewApiGetConfigRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return QuerySuggestionsIndex
 */
 func (c *APIClient) GetConfig(r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
@@ -856,7 +856,7 @@ Get the configuration of a single Query Suggestions index.
 
 Request can be constructed by NewApiGetConfigRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return QuerySuggestionsIndex
 */
 func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
@@ -1000,7 +1000,7 @@ The status includes whether the Query Suggestions index is currently in the proc
 
 Request can be constructed by NewApiGetConfigStatusRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return Status
 */
 func (c *APIClient) GetConfigStatus(r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
@@ -1015,7 +1015,7 @@ The status includes whether the Query Suggestions index is currently in the proc
 
 Request can be constructed by NewApiGetConfigStatusRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return Status
 */
 func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
@@ -1140,7 +1140,7 @@ Get the log file of the last build of a single Query Suggestion index.
 
 Request can be constructed by NewApiGetLogFileRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return []LogFile
 */
 func (c *APIClient) GetLogFile(r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
@@ -1154,7 +1154,7 @@ Get the log file of the last build of a single Query Suggestion index.
 
 Request can be constructed by NewApiGetLogFileRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@return []LogFile
 */
 func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
@@ -1320,9 +1320,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Post(r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -1336,9 +1336,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPostRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PostWithContext(ctx context.Context, r ApiPostRequest, opts ...Option) (map[string]interface{}, error) {
@@ -1516,9 +1516,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) Put(r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
@@ -1532,9 +1532,9 @@ This method allow you to send requests to the Algolia REST API.
 
 Request can be constructed by NewApiPutRequest with parameters below.
 
-	@param path string - The path of the API endpoint to target, anything after the /1 needs to be specified.
-	@param parameters map[string]interface{} - Query parameters to be applied to the current query.
-	@param body map[string]interface{} - The parameters to send with the custom request.
+	@param path string - Path of the endpoint, anything after \"/1\" must be specified.
+	@param parameters map[string]interface{} - Query parameters to apply to the current query.
+	@param body map[string]interface{} - Parameters to send with the custom request.
 	@return map[string]interface{}
 */
 func (c *APIClient) PutWithContext(ctx context.Context, r ApiPutRequest, opts ...Option) (map[string]interface{}, error) {
@@ -1696,7 +1696,7 @@ Update the configuration of a Query Suggestions index.
 
 Request can be constructed by NewApiUpdateConfigRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param querySuggestionsIndexParam QuerySuggestionsIndexParam
 	@return SuccessResponse
 */
@@ -1711,7 +1711,7 @@ Update the configuration of a Query Suggestions index.
 
 Request can be constructed by NewApiUpdateConfigRequest with parameters below.
 
-	@param indexName string - The index in which to perform the request.
+	@param indexName string - Index on which to perform the request.
 	@param querySuggestionsIndexParam QuerySuggestionsIndexParam
 	@return SuccessResponse
 */

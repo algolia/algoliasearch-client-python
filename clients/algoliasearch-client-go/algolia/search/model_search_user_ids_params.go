@@ -8,13 +8,13 @@ import (
 
 // SearchUserIdsParams OK
 type SearchUserIdsParams struct {
-	// Query to search. The search is a prefix search with typoTolerance. Use empty query to retrieve all users.
+	// Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users.
 	Query string `json:"query" validate:"required"`
-	// Name of the cluster.
+	// Cluster name.
 	ClusterName *string `json:"clusterName,omitempty"`
-	// Specify the page to retrieve.
+	// Page to retrieve (the first page is `0`, not `1`).
 	Page *int32 `json:"page,omitempty"`
-	// Set the number of hits per page.
+	// Number of hits per page.
 	HitsPerPage *int32 `json:"hitsPerPage,omitempty"`
 }
 

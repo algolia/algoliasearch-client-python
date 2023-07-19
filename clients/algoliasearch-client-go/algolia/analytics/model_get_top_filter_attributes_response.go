@@ -8,7 +8,7 @@ import (
 
 // GetTopFilterAttributesResponse struct for GetTopFilterAttributesResponse
 type GetTopFilterAttributesResponse struct {
-	// A list of attributes with their count.
+	// Filterable attributes.
 	Attributes []GetTopFilterAttribute `json:"attributes" validate:"required"`
 }
 

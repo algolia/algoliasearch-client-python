@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** A dictionary language. */
+/** Dictionary language. */
 public class Languages {
 
   @JsonProperty("plurals")

@@ -10,7 +10,7 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
 /**
- * Filter on numeric attributes.
+ * [Filter on numeric attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
  */
 @Serializable(NumericFiltersSerializer::class)
 public sealed interface NumericFilters {

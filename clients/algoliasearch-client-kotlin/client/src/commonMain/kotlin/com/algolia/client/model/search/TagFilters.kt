@@ -10,7 +10,7 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
 /**
- * Filter hits by tags.
+ * [Filter hits by tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/).
  */
 @Serializable(TagFiltersSerializer::class)
 public sealed interface TagFilters {

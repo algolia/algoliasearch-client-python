@@ -5,17 +5,17 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Single objectID to promote as hits.
+ * Record to promote.
  *
- * @param objectID Unique identifier of the object to promote.
- * @param position The position to promote the objects to (zero-based). If you pass objectIDs, the objects are placed at this position as a group. For example, if you pass four objectIDs to position 0, the objects take the first four positions.
+ * @param objectID Unique identifier of the record to promote.
+ * @param position The position to promote the records to. If you pass objectIDs, the records are placed at this position as a group. For example, if you pronmote four objectIDs to position 0, the records take the first four positions.
  */
 @Serializable
 public data class PromoteObjectID(
 
-  /** Unique identifier of the object to promote. */
+  /** Unique identifier of the record to promote. */
   @SerialName(value = "objectID") val objectID: String,
 
-  /** The position to promote the objects to (zero-based). If you pass objectIDs, the objects are placed at this position as a group. For example, if you pass four objectIDs to position 0, the objects take the first four positions. */
+  /** The position to promote the records to. If you pass objectIDs, the records are placed at this position as a group. For example, if you pronmote four objectIDs to position 0, the records take the first four positions. */
   @SerialName(value = "position") val position: Int,
 ) : Promote

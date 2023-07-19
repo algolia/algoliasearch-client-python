@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// BuiltInOperationType The operation to apply on the attribute.
+// BuiltInOperationType Operation to apply to the attribute.
 type BuiltInOperationType string
 
 // List of builtInOperationType

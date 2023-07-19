@@ -260,8 +260,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Overrides the query parameter and performs a more generic search that can be used to find
-   * \"similar\" results.
+   * Overrides the query parameter and performs a more generic search.
    *
    * @return similarQuery
    */
@@ -276,7 +275,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Filter the query with numeric, facet and/or tag filters.
+   * [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the
+   * query with numeric, facet, or tag filters.
    *
    * @return filters
    */
@@ -351,7 +351,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Determines how to calculate the total score for filtering.
+   * Determines how to calculate [filter
+   * scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores).
+   * If `false`, maximum score is kept. If `true`, score is summed.
    *
    * @return sumOrFiltersScores
    */
@@ -374,7 +376,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Retrieve facets and their facet values.
+   * Returns
+   * [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts),
+   * their facet values, and the number of matching facet values.
    *
    * @return facets
    */
@@ -389,7 +393,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Maximum number of facet values to return for each facet during a regular search.
+   * Maximum number of facet values to return for each facet.
    *
    * @return maxValuesPerFacet
    */
@@ -404,7 +408,11 @@ public class ConsequenceParams {
   }
 
   /**
-   * Force faceting to be applied after de-duplication (via the Distinct setting).
+   * Forces faceting to be applied after
+   * [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/)
+   * (with the distinct feature). Alternatively, the `afterDistinct`
+   * [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
+   * of `attributesForFaceting` allows for more granular control.
    *
    * @return facetingAfterDistinct
    */
@@ -434,7 +442,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Specify the page to retrieve.
+   * Page to retrieve (the first page is `0`, not `1`).
    *
    * @return page
    */
@@ -449,7 +457,11 @@ public class ConsequenceParams {
   }
 
   /**
-   * Specify the offset of the first hit to return.
+   * Specifies the offset of the first hit to return. > **Note**: Using `page` and `hitsPerPage` is
+   * the recommended method for [paging
+   * results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/).
+   * However, you can use `offset` and `length` to implement [an alternative approach to
+   * paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
    *
    * @return offset
    */
@@ -464,7 +476,12 @@ public class ConsequenceParams {
   }
 
   /**
-   * Set the number of hits to retrieve (used only with offset). minimum: 1 maximum: 1000
+   * Sets the number of hits to retrieve (for use with `offset`). > **Note**: Using `page` and
+   * `hitsPerPage` is the recommended method for [paging
+   * results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/).
+   * However, you can use `offset` and `length` to implement [an alternative approach to
+   * paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
+   * minimum: 1 maximum: 1000
    *
    * @return length
    */
@@ -479,7 +496,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Search for entries around a central geolocation, enabling a geo search within a circular area.
+   * Search for entries [around a central
+   * location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point),
+   * enabling a geographical search within a circular area.
    *
    * @return aroundLatLng
    */
@@ -494,8 +513,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Search for entries around a given location automatically computed from the requester's IP
-   * address.
+   * Search for entries around a location. The location is automatically computed from the
+   * requester's IP address.
    *
    * @return aroundLatLngViaIP
    */
@@ -525,7 +544,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Precision of geo search (in meters), to add grouping by geo location to the ranking formula.
+   * Precision of a geographical search (in meters), to [group results that are more or less the
+   * same distance from a central
+   * point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
    *
    * @return aroundPrecision
    */
@@ -540,7 +561,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Minimum radius (in meters) used for a geo search when aroundRadius is not set. minimum: 1
+   * Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
+   * minimum: 1
    *
    * @return minimumAroundRadius
    */
@@ -563,7 +585,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Search inside a rectangular area (in geo coordinates).
+   * Search inside a [rectangular
+   * area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
+   * (in geographical coordinates).
    *
    * @return insideBoundingBox
    */
@@ -586,7 +610,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Search inside a polygon (in geo coordinates).
+   * Search inside a
+   * [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
+   * (in geographical coordinates).
    *
    * @return insidePolygon
    */
@@ -609,11 +635,10 @@ public class ConsequenceParams {
   }
 
   /**
-   * This parameter changes the default values of certain parameters and settings that work best for
-   * a natural language query, such as ignorePlurals, removeStopWords, removeWordsIfNoResults,
-   * analyticsTags and ruleContexts. These parameters and settings work well together when the query
-   * is formatted in natural language instead of keywords, for example when your user performs a
-   * voice search.
+   * Changes the default values of parameters that work best for a natural language query, such as
+   * `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and
+   * `ruleContexts`. These parameters work well together when the query consists of fuller natural
+   * language strings instead of keywords, for example when processing voice search queries.
    *
    * @return naturalLanguages
    */
@@ -636,7 +661,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Enables contextual rules.
+   * Assigns [rule
+   * contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context)
+   * to search queries.
    *
    * @return ruleContexts
    */
@@ -651,7 +678,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Define the impact of the Personalization feature.
+   * Defines how much [Personalization affects
+   * results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
    *
    * @return personalizationImpact
    */
@@ -666,7 +694,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Associates a certain user token with the current search.
+   * Associates a [user
+   * token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current
+   * search.
    *
    * @return userToken
    */
@@ -681,7 +711,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Retrieve detailed ranking information.
+   * Incidates whether the search response includes [detailed ranking
+   * information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
    *
    * @return getRankingInfo
    */
@@ -696,7 +727,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Enable the Click Analytics feature.
+   * Indicates whether a query ID parameter is included in the search response. This is required for
+   * [tracking click and conversion
+   * events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
    *
    * @return clickAnalytics
    */
@@ -711,7 +744,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Whether the current query will be taken into account in the Analytics.
+   * Indicates whether this query will be included in
+   * [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
    *
    * @return analytics
    */
@@ -734,7 +768,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * List of tags to apply to the query for analytics purposes.
+   * Tags to apply to the query for [segmenting analytics
+   * data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
    *
    * @return analyticsTags
    */
@@ -764,7 +799,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Whether this search should participate in running AB tests.
+   * Incidates whether this search will be considered in A/B testing.
    *
    * @return enableABTest
    */
@@ -779,7 +814,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Whether this search should use AI Re-Ranking.
+   * Indicates whether this search will use [Dynamic
+   * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
    *
    * @return enableReRanking
    */
@@ -817,7 +853,11 @@ public class ConsequenceParams {
   }
 
   /**
-   * The complete list of attributes that will be used for faceting.
+   * Attributes used for
+   * [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and
+   * the
+   * [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
+   * that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
    *
    * @return attributesForFaceting
    */
@@ -840,7 +880,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * This parameter controls which attributes to retrieve and which not to retrieve.
+   * Attributes to include in the API response. To reduce the size of your response, you can
+   * retrieve only some of the attributes. By default, the response includes all attributes.
    *
    * @return attributesToRetrieve
    */
@@ -863,7 +904,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Restricts a given query to look in only a subset of your searchable attributes.
+   * Restricts a query to only look at a subset of your [searchable
+   * attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
    *
    * @return restrictSearchableAttributes
    */
@@ -886,7 +928,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Controls how Algolia should sort your results.
+   * Determines the order in which Algolia [returns your
+   * results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
    *
    * @return ranking
    */
@@ -909,7 +952,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Specifies the custom ranking criterion.
+   * Specifies the [Custom ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use
+   * the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
    *
    * @return customRanking
    */
@@ -924,8 +969,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Controls the relevancy threshold below which less relevant results aren't included in the
-   * results.
+   * Relevancy threshold below which less relevant results aren't included in the results.
    *
    * @return relevancyStrictness
    */
@@ -948,7 +992,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * List of attributes to highlight.
+   * Attributes to highlight. Strings that match the search query in the attributes are highlighted
+   * by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).
    *
    * @return attributesToHighlight
    */
@@ -971,7 +1016,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * List of attributes to snippet, with an optional maximum number of words to snippet.
+   * Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words.
+   * If not specified, the attribute is shortened to the 10 words around the matching string but you
+   * can specify the number. For example: `body:20`.
    *
    * @return attributesToSnippet
    */
@@ -986,7 +1033,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * The HTML string to insert before the highlighted parts in all highlight and snippet results.
+   * HTML string to insert before the highlighted parts in all highlight and snippet results.
    *
    * @return highlightPreTag
    */
@@ -1001,7 +1048,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * The HTML string to insert after the highlighted parts in all highlight and snippet results.
+   * HTML string to insert after the highlighted parts in all highlight and snippet results.
    *
    * @return highlightPostTag
    */
@@ -1046,7 +1093,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Set the number of hits per page.
+   * Number of hits per page. minimum: 1 maximum: 1000
    *
    * @return hitsPerPage
    */
@@ -1061,8 +1108,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Minimum number of characters a word in the query string must contain to accept matches with 1
-   * typo.
+   * Minimum number of characters a word in the query string must contain to accept matches with
+   * [one
+   * typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
    *
    * @return minWordSizefor1Typo
    */
@@ -1077,8 +1125,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Minimum number of characters a word in the query string must contain to accept matches with 2
-   * typos.
+   * Minimum number of characters a word in the query string must contain to accept matches with
+   * [two
+   * typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
    *
    * @return minWordSizefor2Typos
    */
@@ -1131,7 +1180,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * List of attributes on which you want to disable typo tolerance.
+   * Attributes for which you want to turn off [typo
+   * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
    *
    * @return disableTypoToleranceOnAttributes
    */
@@ -1176,7 +1226,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * List of characters that the engine shouldn't automatically normalize.
+   * Characters that the engine shouldn't automatically
+   * [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
    *
    * @return keepDiacriticsOnCharacters
    */
@@ -1199,8 +1250,10 @@ public class ConsequenceParams {
   }
 
   /**
-   * Sets the languages to be used by language-specific settings and functionalities such as
-   * ignorePlurals, removeStopWords, and CJK word-detection.
+   * Sets your user's search language. This adjusts language-specific settings and features such as
+   * `ignorePlurals`, `removeStopWords`, and
+   * [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk)
+   * word detection.
    *
    * @return queryLanguages
    */
@@ -1215,7 +1268,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Splits compound words into their composing atoms in the query.
+   * [Splits compound
+   * words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words)
+   * into their component word parts in the query.
    *
    * @return decompoundQuery
    */
@@ -1230,7 +1285,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Whether Rules should be globally enabled.
+   * Incidates whether
+   * [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
    *
    * @return enableRules
    */
@@ -1245,7 +1301,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Enable the Personalization feature.
+   * Incidates whether
+   * [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/)
+   * is enabled.
    *
    * @return enablePersonalization
    */
@@ -1320,7 +1378,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Enables the advanced query syntax.
+   * Enables the [advanced query
+   * syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
    *
    * @return advancedSyntax
    */
@@ -1343,7 +1402,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * A list of words that should be considered as optional when found in the query.
+   * Words which should be considered
+   * [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words)
+   * when found in a query.
    *
    * @return optionalWords
    */
@@ -1366,7 +1427,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * List of attributes on which you want to disable the exact ranking criterion.
+   * Attributes for which you want to [turn off the exact ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
    *
    * @return disableExactOnAttributes
    */
@@ -1404,7 +1466,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * List of alternatives that should be considered an exact match by the exact ranking criterion.
+   * Alternatives that should be considered an exact match by [the exact ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
    *
    * @return alternativesAsExact
    */
@@ -1427,7 +1490,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Allows you to specify which advanced syntax features are active when ‘advancedSyntax' is
+   * Allows you to specify which advanced syntax features are active when `advancedSyntax` is
    * enabled.
    *
    * @return advancedSyntaxFeatures
@@ -1451,7 +1514,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Enriches the API’s response with meta-information as to how the query was processed.
+   * Enriches the API's response with information about how the query was processed.
    *
    * @return explain
    */
@@ -1481,7 +1544,8 @@ public class ConsequenceParams {
   }
 
   /**
-   * Name of the de-duplication attribute to be used with the distinct feature.
+   * Name of the deduplication attribute to be used with Algolia's [_distinct_
+   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
    *
    * @return attributeForDistinct
    */
@@ -1527,7 +1591,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Precision of the proximity ranking criterion. minimum: 1 maximum: 7
+   * Precision of the [proximity ranking
+   * criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
+   * minimum: 1 maximum: 7
    *
    * @return minProximity
    */
@@ -1550,8 +1616,7 @@ public class ConsequenceParams {
   }
 
   /**
-   * Choose which fields to return in the API response. This parameters applies to search and browse
-   * queries.
+   * Attributes to include in the API response for search and browse queries.
    *
    * @return responseFields
    */
@@ -1566,8 +1631,9 @@ public class ConsequenceParams {
   }
 
   /**
-   * Maximum number of facet hits to return during a search for facet values. For performance
-   * reasons, the maximum allowed number of returned values is 100. maximum: 100
+   * Maximum number of facet hits to return when [searching for facet
+   * values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+   * maximum: 100
    *
    * @return maxFacetHits
    */
@@ -1582,8 +1648,10 @@ public class ConsequenceParams {
   }
 
   /**
-   * When attribute is ranked above proximity in your ranking formula, proximity is used to select
-   * which searchable attribute is matched in the attribute ranking stage.
+   * When the [Attribute criterion is ranked above
+   * Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations)
+   * in your ranking formula, Proximity is used to select which searchable attribute is matched in
+   * the Attribute ranking stage.
    *
    * @return attributeCriteriaComputedByMinProximity
    */

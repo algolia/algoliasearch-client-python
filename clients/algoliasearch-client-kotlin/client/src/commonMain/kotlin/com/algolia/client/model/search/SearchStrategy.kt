@@ -3,6 +3,9 @@ package com.algolia.client.model.search
 
 import kotlinx.serialization.*
 
+/**
+ * - `none`: executes all queries. - `stopIfEnoughMatches`: executes queries one by one, stopping further query execution as soon as a query matches at least the `hitsPerPage` number of results.
+ */
 @Serializable
 public enum class SearchStrategy(public val value: kotlin.String) {
 

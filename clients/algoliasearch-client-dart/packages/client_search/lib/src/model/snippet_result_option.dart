@@ -14,7 +14,7 @@ final class SnippetResultOption {
     required this.matchLevel,
   });
 
-  /// Markup text with occurrences highlighted.
+  /// Markup text with `facetQuery` matches highlighted.
   @JsonKey(name: r'value')
   final String value;
 

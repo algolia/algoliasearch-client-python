@@ -7,19 +7,19 @@ import kotlinx.serialization.json.*
 /**
  * SearchForFacetsOptions
  *
- * @param facet The `facet` name.
- * @param indexName The Algolia index name.
+ * @param facet Facet name.
+ * @param indexName Algolia index name.
  * @param type
  * @param facetQuery Text to search inside the facet's values.
- * @param maxFacetHits Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100.
+ * @param maxFacetHits Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
  */
 @Serializable
 public data class SearchForFacetsOptions(
 
-  /** The `facet` name. */
+  /** Facet name. */
   @SerialName(value = "facet") val facet: String,
 
-  /** The Algolia index name. */
+  /** Algolia index name. */
   @SerialName(value = "indexName") val indexName: String,
 
   @SerialName(value = "type") val type: SearchTypeFacet,
@@ -27,6 +27,6 @@ public data class SearchForFacetsOptions(
   /** Text to search inside the facet's values. */
   @SerialName(value = "facetQuery") val facetQuery: String? = null,
 
-  /** Maximum number of facet hits to return during a search for facet values. For performance reasons, the maximum allowed number of returned values is 100. */
+  /** Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). */
   @SerialName(value = "maxFacetHits") val maxFacetHits: Int? = null,
 )

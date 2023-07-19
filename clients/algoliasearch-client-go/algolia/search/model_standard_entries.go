@@ -6,13 +6,13 @@ import (
 	"fmt"
 )
 
-// StandardEntries Map of language ISO code supported by the dictionary (e.g., \"en\" for English) to a boolean value.
+// StandardEntries Key-value pairs of [supported language ISO codes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and boolean values.
 type StandardEntries struct {
-	// Language ISO code.
+	// Key-value pair of a language ISO code and a boolean value.
 	Plurals map[string]bool `json:"plurals,omitempty"`
-	// Language ISO code.
+	// Key-value pair of a language ISO code and a boolean value.
 	Stopwords map[string]bool `json:"stopwords,omitempty"`
-	// Language ISO code.
+	// Key-value pair of a language ISO code and a boolean value.
 	Compounds map[string]bool `json:"compounds,omitempty"`
 }
 

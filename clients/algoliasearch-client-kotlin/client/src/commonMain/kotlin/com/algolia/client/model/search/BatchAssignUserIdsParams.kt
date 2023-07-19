@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * Assign userID parameters.
  *
- * @param cluster Name of the cluster.
- * @param users userIDs to assign. Note you cannot move users with this method.
+ * @param cluster Cluster name.
+ * @param users User IDs to assign.
  */
 @Serializable
 public data class BatchAssignUserIdsParams(
 
-  /** Name of the cluster. */
+  /** Cluster name. */
   @SerialName(value = "cluster") val cluster: String,
 
-  /** userIDs to assign. Note you cannot move users with this method. */
+  /** User IDs to assign. */
   @SerialName(value = "users") val users: List<String>,
 )

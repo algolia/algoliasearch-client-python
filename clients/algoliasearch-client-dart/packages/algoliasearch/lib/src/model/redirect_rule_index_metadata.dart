@@ -29,7 +29,7 @@ final class RedirectRuleIndexMetadata {
   @JsonKey(name: r'reason')
   final String reason;
 
-  /// Status for the redirect rule.
+  /// Redirect rule status.
   @JsonKey(name: r'succeed')
   final bool succeed;
 

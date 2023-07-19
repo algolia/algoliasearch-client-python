@@ -17,9 +17,7 @@ components:
     PathInPath:
       name: path
       in: path
-      description: >-
-        The path of the API endpoint to target, anything after the /1 needs to
-        be specified.
+      description: Path of the endpoint, anything after "/1" must be specified.
       required: true
       schema:
         type: string
@@ -27,14 +25,14 @@ components:
     Parameters:
       name: parameters
       in: query
-      description: Query parameters to be applied to the current query.
+      description: Query parameters to apply to the current query.
       schema:
         type: object
         additionalProperties: true
     IndexName:
       name: indexName
       in: path
-      description: The index in which to perform the request.
+      description: Index on which to perform the request.
       required: true
       schema:
         type: string
@@ -269,7 +267,7 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorBase'
     StatusUnprocessableEntity:
-      description: Status unprocessable entity.
+      description: Unprocessable Entity.
       content:
         application/json:
           schema:
@@ -295,11 +293,11 @@ components:
               status:
                 type: integer
                 example: 200
-                description: The status code.
+                description: Status code.
               message:
                 type: string
                 example: Success
-                description: Message of the response.
+                description: Response message.
 servers:
   - url: https://query-suggestions.{region}.algolia.com
     variables:
@@ -354,7 +352,7 @@ paths:
     post:
       operationId: post
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:
@@ -384,7 +382,7 @@ paths:
     put:
       operationId: put
       requestBody:
-        description: The parameters to send with the custom request.
+        description: Parameters to send with the custom request.
         content:
           application/json:
             schema:

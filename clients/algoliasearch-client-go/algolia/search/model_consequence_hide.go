@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// ConsequenceHide Unique identifier of the object to hide.
+// ConsequenceHide Unique identifier of the record to hide.
 type ConsequenceHide struct {
-	// Unique identifier of the object.
+	// Unique object identifier.
 	ObjectID string `json:"objectID" validate:"required"`
 }
 

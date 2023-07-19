@@ -13,11 +13,11 @@ final class BatchAssignUserIdsParams {
     required this.users,
   });
 
-  /// Name of the cluster.
+  /// Cluster name.
   @JsonKey(name: r'cluster')
   final String cluster;
 
-  /// userIDs to assign. Note you cannot move users with this method.
+  /// User IDs to assign.
   @JsonKey(name: r'users')
   final List<String> users;
 

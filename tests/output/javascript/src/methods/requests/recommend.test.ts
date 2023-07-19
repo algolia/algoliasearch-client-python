@@ -32,6 +32,23 @@ describe('del', () => {
   });
 });
 
+describe('deleteRecommendRule', () => {
+  test('deleteRecommendRule', async () => {
+    const req = (await client.deleteRecommendRule({
+      indexName: 'indexName',
+      model: 'related-products',
+      objectID: 'objectID',
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual(
+      '/1/indexes/indexName/related-products/recommend/rules/objectID'
+    );
+    expect(req.method).toEqual('DELETE');
+    expect(req.data).toEqual(undefined);
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
+});
+
 describe('get', () => {
   test('allow get method for a custom path with minimal parameters', async () => {
     const req = (await client.get({
@@ -54,6 +71,40 @@ describe('get', () => {
     expect(req.method).toEqual('GET');
     expect(req.data).toEqual(undefined);
     expect(req.searchParams).toStrictEqual({ query: 'parameters' });
+  });
+});
+
+describe('getRecommendRule', () => {
+  test('getRecommendRule', async () => {
+    const req = (await client.getRecommendRule({
+      indexName: 'indexName',
+      model: 'related-products',
+      objectID: 'objectID',
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual(
+      '/1/indexes/indexName/related-products/recommend/rules/objectID'
+    );
+    expect(req.method).toEqual('GET');
+    expect(req.data).toEqual(undefined);
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
+});
+
+describe('getRecommendStatus', () => {
+  test('getRecommendStatus', async () => {
+    const req = (await client.getRecommendStatus({
+      indexName: 'indexName',
+      model: 'related-products',
+      taskID: 12345,
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual(
+      '/1/indexes/indexName/related-products/task/12345'
+    );
+    expect(req.method).toEqual('GET');
+    expect(req.data).toEqual(undefined);
+    expect(req.searchParams).toStrictEqual(undefined);
   });
 });
 
@@ -541,5 +592,21 @@ describe('put', () => {
     expect(req.method).toEqual('PUT');
     expect(req.data).toEqual({ body: 'parameters' });
     expect(req.searchParams).toStrictEqual({ query: 'parameters' });
+  });
+});
+
+describe('searchRecommendRules', () => {
+  test('searchRecommendRules', async () => {
+    const req = (await client.searchRecommendRules({
+      indexName: 'indexName',
+      model: 'related-products',
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual(
+      '/1/indexes/indexName/related-products/recommend/rules/search'
+    );
+    expect(req.method).toEqual('POST');
+    expect(req.data).toEqual({});
+    expect(req.searchParams).toStrictEqual(undefined);
   });
 });

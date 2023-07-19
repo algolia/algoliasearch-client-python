@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * GetTopFiltersNoResultsResponse
  *
- * @param values A list of filters without results.
+ * @param values Filters with no results.
  */
 @Serializable
 public data class GetTopFiltersNoResultsResponse(
 
-  /** A list of filters without results. */
+  /** Filters with no results. */
   @SerialName(value = "values") val values: List<GetTopFiltersNoResultsValues>,
 )

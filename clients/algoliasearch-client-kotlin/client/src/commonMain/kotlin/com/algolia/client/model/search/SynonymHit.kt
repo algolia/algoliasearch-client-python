@@ -7,38 +7,38 @@ import kotlinx.serialization.json.*
 /**
  * Synonym object.
  *
- * @param objectID Unique identifier of the synonym object to be created or updated.
+ * @param objectID Unique identifier of a synonym object.
  * @param type
- * @param synonyms Words or phrases to be considered equivalent.
- * @param input Word or phrase to appear in query strings (for onewaysynonym).
- * @param word Word or phrase to appear in query strings (for altcorrection1 and altcorrection2).
+ * @param synonyms Words or phrases considered equivalent.
+ * @param input Word or phrase to appear in query strings (for [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)).
+ * @param word Word or phrase to appear in query strings (for [`altcorrection1` and `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)).
  * @param corrections Words to be matched in records.
- * @param placeholder Token to be put inside records.
- * @param replacements List of query words that will match the token.
+ * @param placeholder [Placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/) to be put inside records.
+ * @param replacements Query words that will match the [placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/).
  */
 @Serializable
 public data class SynonymHit(
 
-  /** Unique identifier of the synonym object to be created or updated. */
+  /** Unique identifier of a synonym object. */
   @SerialName(value = "objectID") val objectID: String,
 
   @SerialName(value = "type") val type: SynonymType,
 
-  /** Words or phrases to be considered equivalent. */
+  /** Words or phrases considered equivalent. */
   @SerialName(value = "synonyms") val synonyms: List<String>? = null,
 
-  /** Word or phrase to appear in query strings (for onewaysynonym). */
+  /** Word or phrase to appear in query strings (for [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)). */
   @SerialName(value = "input") val input: String? = null,
 
-  /** Word or phrase to appear in query strings (for altcorrection1 and altcorrection2). */
+  /** Word or phrase to appear in query strings (for [`altcorrection1` and `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)). */
   @SerialName(value = "word") val word: String? = null,
 
   /** Words to be matched in records. */
   @SerialName(value = "corrections") val corrections: List<String>? = null,
 
-  /** Token to be put inside records. */
+  /** [Placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/) to be put inside records.  */
   @SerialName(value = "placeholder") val placeholder: String? = null,
 
-  /** List of query words that will match the token. */
+  /** Query words that will match the [placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/). */
   @SerialName(value = "replacements") val replacements: List<String>? = null,
 )

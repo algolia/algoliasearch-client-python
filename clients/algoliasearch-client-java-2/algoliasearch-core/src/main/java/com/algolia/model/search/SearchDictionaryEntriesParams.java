@@ -6,7 +6,7 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import java.util.Objects;
 
-/** The `searchDictionaryEntries` parameters. */
+/** `searchDictionaryEntries` parameters. */
 public class SearchDictionaryEntriesParams {
 
   @JsonProperty("query")
@@ -27,7 +27,7 @@ public class SearchDictionaryEntriesParams {
   }
 
   /**
-   * The text to search in the index.
+   * Text to search for in an index.
    *
    * @return query
    */
@@ -42,7 +42,7 @@ public class SearchDictionaryEntriesParams {
   }
 
   /**
-   * Specify the page to retrieve.
+   * Page to retrieve (the first page is `0`, not `1`).
    *
    * @return page
    */
@@ -57,7 +57,7 @@ public class SearchDictionaryEntriesParams {
   }
 
   /**
-   * Set the number of hits per page.
+   * Number of hits per page. minimum: 1 maximum: 1000
    *
    * @return hitsPerPage
    */
@@ -72,7 +72,8 @@ public class SearchDictionaryEntriesParams {
   }
 
   /**
-   * Language ISO code supported by the dictionary (e.g., \"en\" for English).
+   * [Supported language ISO
+   * code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
    *
    * @return language
    */

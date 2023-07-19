@@ -7,15 +7,15 @@ import kotlinx.serialization.json.*
 /**
  * MultipleBatchResponse
  *
- * @param taskID List of tasksIDs per index.
- * @param objectIDs List of objectID.
+ * @param taskID TaskIDs per index.
+ * @param objectIDs Unique object (record) identifiers.
  */
 @Serializable
 public data class MultipleBatchResponse(
 
-  /** List of tasksIDs per index. */
+  /** TaskIDs per index. */
   @SerialName(value = "taskID") val taskID: Map<kotlin.String, Long>,
 
-  /** List of objectID. */
+  /** Unique object (record) identifiers. */
   @SerialName(value = "objectIDs") val objectIDs: List<String>,
 )

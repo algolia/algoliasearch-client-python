@@ -5,13 +5,13 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * UserIDs data.
+ * User ID data.
  *
- * @param userIDs List of userIDs.
+ * @param userIDs User IDs.
  */
 @Serializable
 public data class ListUserIdsResponse(
 
-  /** List of userIDs. */
+  /** User IDs. */
   @SerialName(value = "userIDs") val userIDs: List<UserId>,
 )

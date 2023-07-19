@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** Defining how facets should be ordered. */
+/** Defines the ordering of facets (widgets). */
 public class FacetOrdering {
 
   @JsonProperty("facets")
@@ -46,7 +46,7 @@ public class FacetOrdering {
   }
 
   /**
-   * The ordering of facet values, within an individual list.
+   * Ordering of facet values within an individual facet.
    *
    * @return values
    */

@@ -9,13 +9,13 @@ import (
 // RecommendationRequest struct for RecommendationRequest
 type RecommendationRequest struct {
 	Model RecommendationModels `json:"model" validate:"required"`
-	// Unique identifier of the object.
+	// Unique object identifier.
 	ObjectID string `json:"objectID" validate:"required"`
-	// The Algolia index name.
+	// Algolia index name.
 	IndexName string `json:"indexName" validate:"required"`
-	// The threshold to use when filtering recommendations by their score.
+	// Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
 	Threshold int32 `json:"threshold" validate:"required"`
-	// The max number of recommendations to retrieve. If it's set to 0, all the recommendations of the objectID may be returned.
+	// Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
 	MaxRecommendations *int32              `json:"maxRecommendations,omitempty"`
 	QueryParameters    *SearchParamsObject `json:"queryParameters,omitempty"`
 	FallbackParameters *SearchParamsObject `json:"fallbackParameters,omitempty"`

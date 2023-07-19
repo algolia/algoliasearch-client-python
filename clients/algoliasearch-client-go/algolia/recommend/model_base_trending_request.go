@@ -9,9 +9,9 @@ import (
 // BaseTrendingRequest struct for BaseTrendingRequest
 type BaseTrendingRequest struct {
 	Model TrendingModels `json:"model" validate:"required"`
-	// The facet name to use for trending models.
+	// Facet name for trending models.
 	FacetName *string `json:"facetName,omitempty"`
-	// The facet value to use for trending models.
+	// Facet value for trending models.
 	FacetValue *string `json:"facetValue,omitempty"`
 }
 

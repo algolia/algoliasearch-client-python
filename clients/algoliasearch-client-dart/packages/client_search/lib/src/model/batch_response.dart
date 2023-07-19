@@ -13,11 +13,11 @@ final class BatchResponse {
     required this.objectIDs,
   });
 
-  /// taskID of the task to wait for.
+  /// Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.
   @JsonKey(name: r'taskID')
   final int taskID;
 
-  /// List of objectID.
+  /// Unique object (record) identifiers.
   @JsonKey(name: r'objectIDs')
   final List<String> objectIDs;
 

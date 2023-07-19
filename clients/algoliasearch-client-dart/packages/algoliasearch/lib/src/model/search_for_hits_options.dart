@@ -14,7 +14,7 @@ final class SearchForHitsOptions {
     this.type,
   });
 
-  /// The Algolia index name.
+  /// Algolia index name.
   @JsonKey(name: r'indexName')
   final String indexName;
 

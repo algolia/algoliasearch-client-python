@@ -7,11 +7,11 @@ import kotlinx.serialization.json.*
 /**
  * TopHitsResponseWithAnalytics
  *
- * @param hits A list of top hits with their count and analytics.
+ * @param hits Top hits.
  */
 @Serializable
 public data class TopHitsResponseWithAnalytics(
 
-  /** A list of top hits with their count and analytics. */
+  /** Top hits. */
   @SerialName(value = "hits") val hits: List<TopHitWithAnalytics>,
 ) : GetTopHitsResponse

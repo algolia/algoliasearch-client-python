@@ -27,7 +27,7 @@ final class Log {
     this.innerQueries,
   });
 
-  /// Timestamp in ISO-8601 format.
+  /// Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
   @JsonKey(name: r'timestamp')
   final String timestamp;
 
@@ -39,11 +39,11 @@ final class Log {
   @JsonKey(name: r'answer_code')
   final String answerCode;
 
-  /// Request body. Truncated after 1000 characters.
+  /// Request body. Truncated after 1,000 characters.
   @JsonKey(name: r'query_body')
   final String queryBody;
 
-  /// Answer body. Truncated after 1000 characters.
+  /// Answer body. Truncated after 1,000 characters.
   @JsonKey(name: r'answer')
   final String answer;
 
@@ -51,11 +51,11 @@ final class Log {
   @JsonKey(name: r'url')
   final String url;
 
-  /// IP of the client which performed the request.
+  /// IP address of the client that performed the request.
   @JsonKey(name: r'ip')
   final String ip;
 
-  /// Request Headers (API Key is obfuscated).
+  /// Request headers (API key is obfuscated).
   @JsonKey(name: r'query_headers')
   final String queryHeaders;
 
@@ -67,7 +67,7 @@ final class Log {
   @JsonKey(name: r'nb_api_calls')
   final String nbApiCalls;
 
-  /// Processing time for the query. It doesn't include network time.
+  /// Processing time for the query. Doesn't include network time.
   @JsonKey(name: r'processing_time_ms')
   final String processingTimeMs;
 
@@ -83,7 +83,7 @@ final class Log {
   @JsonKey(name: r'query_nb_hits')
   final String? queryNbHits;
 
-  /// Array of all performed queries for the given request.
+  /// Performed queries for the given request.
   @JsonKey(name: r'inner_queries')
   final List<LogQuery>? innerQueries;
 

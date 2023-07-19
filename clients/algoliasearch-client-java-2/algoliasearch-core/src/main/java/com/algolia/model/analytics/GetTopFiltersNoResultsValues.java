@@ -23,7 +23,7 @@ public class GetTopFiltersNoResultsValues {
   }
 
   /**
-   * The number of occurrences.
+   * Number of occurrences.
    *
    * @return count
    */
@@ -43,7 +43,7 @@ public class GetTopFiltersNoResultsValues {
   }
 
   /**
-   * A list of filters without results.
+   * Filters with no results.
    *
    * @return values
    */

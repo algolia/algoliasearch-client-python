@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** A Recommend hit. */
+/** Recommend hit. */
 public class RecommendHit {
 
   @JsonProperty("objectID")
@@ -48,7 +48,7 @@ public class RecommendHit {
   }
 
   /**
-   * Unique identifier of the object.
+   * Unique object identifier.
    *
    * @return objectID
    */
@@ -140,7 +140,7 @@ public class RecommendHit {
   }
 
   /**
-   * The recommendation score. minimum: 0 maximum: 100
+   * Recommendation score. minimum: 0 maximum: 100
    *
    * @return score
    */

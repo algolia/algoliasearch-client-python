@@ -4,7 +4,7 @@ package com.algolia.client.model.recommend
 import kotlinx.serialization.*
 
 /**
- * The trending model to use.
+ * Trending model.
  */
 @Serializable
 public enum class TrendingModels(public val value: kotlin.String) {

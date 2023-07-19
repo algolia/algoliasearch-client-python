@@ -30,7 +30,7 @@ public class MultipleBatchResponse {
   }
 
   /**
-   * List of tasksIDs per index.
+   * TaskIDs per index.
    *
    * @return taskID
    */
@@ -50,7 +50,7 @@ public class MultipleBatchResponse {
   }
 
   /**
-   * List of objectID.
+   * Unique object (record) identifiers.
    *
    * @return objectIDs
    */

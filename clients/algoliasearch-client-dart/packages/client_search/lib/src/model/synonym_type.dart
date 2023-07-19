@@ -2,22 +2,22 @@
 // ignore_for_file: unused_element
 import 'package:json_annotation/json_annotation.dart';
 
-/// Type of the synonym object.
+/// Synonym type.
 @JsonEnum(valueField: 'raw')
 enum SynonymType {
-  /// Type of the synonym object.
+  /// Synonym type.
   synonym(r'synonym'),
 
-  /// Type of the synonym object.
+  /// Synonym type.
   onewaysynonym(r'onewaysynonym'),
 
-  /// Type of the synonym object.
+  /// Synonym type.
   altcorrection1(r'altcorrection1'),
 
-  /// Type of the synonym object.
+  /// Synonym type.
   altcorrection2(r'altcorrection2'),
 
-  /// Type of the synonym object.
+  /// Synonym type.
   placeholder(r'placeholder');
 
   const SynonymType(this.raw);

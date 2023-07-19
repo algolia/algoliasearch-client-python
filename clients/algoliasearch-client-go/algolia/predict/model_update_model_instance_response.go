@@ -10,7 +10,7 @@ import (
 type UpdateModelInstanceResponse struct {
 	// The ID of the model.
 	ModelID string `json:"modelID" validate:"required"`
-	// Date of last update (ISO-8601 format).
+	// Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
 	UpdatedAt string `json:"updatedAt" validate:"required"`
 }
 

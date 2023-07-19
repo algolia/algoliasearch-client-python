@@ -14,8 +14,8 @@ public class AddABTestsRequest {
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("variant")
-  private List<AddABTestsVariant> variant = new ArrayList<>();
+  @JsonProperty("variants")
+  private List<AddABTestsVariant> variants = new ArrayList<>();
 
   @JsonProperty("endAt")
   private String endAt;
@@ -35,24 +35,24 @@ public class AddABTestsRequest {
     return name;
   }
 
-  public AddABTestsRequest setVariant(List<AddABTestsVariant> variant) {
-    this.variant = variant;
+  public AddABTestsRequest setVariants(List<AddABTestsVariant> variants) {
+    this.variants = variants;
     return this;
   }
 
-  public AddABTestsRequest addVariant(AddABTestsVariant variantItem) {
-    this.variant.add(variantItem);
+  public AddABTestsRequest addVariants(AddABTestsVariant variantsItem) {
+    this.variants.add(variantsItem);
     return this;
   }
 
   /**
-   * List of 2 variants for the A/B test.
+   * A/B test variants.
    *
-   * @return variant
+   * @return variants
    */
   @javax.annotation.Nonnull
-  public List<AddABTestsVariant> getVariant() {
-    return variant;
+  public List<AddABTestsVariant> getVariants() {
+    return variants;
   }
 
   public AddABTestsRequest setEndAt(String endAt) {
@@ -61,7 +61,7 @@ public class AddABTestsRequest {
   }
 
   /**
-   * End date for the A/B test expressed as YYYY-MM-DDThh:mm:ssZ.
+   * End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
    *
    * @return endAt
    */
@@ -81,14 +81,14 @@ public class AddABTestsRequest {
     AddABTestsRequest addABTestsRequest = (AddABTestsRequest) o;
     return (
       Objects.equals(this.name, addABTestsRequest.name) &&
-      Objects.equals(this.variant, addABTestsRequest.variant) &&
+      Objects.equals(this.variants, addABTestsRequest.variants) &&
       Objects.equals(this.endAt, addABTestsRequest.endAt)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, variant, endAt);
+    return Objects.hash(name, variants, endAt);
   }
 
   @Override
@@ -96,7 +96,7 @@ public class AddABTestsRequest {
     StringBuilder sb = new StringBuilder();
     sb.append("class AddABTestsRequest {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    variant: ").append(toIndentedString(variant)).append("\n");
+    sb.append("    variants: ").append(toIndentedString(variants)).append("\n");
     sb.append("    endAt: ").append(toIndentedString(endAt)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -10,7 +10,7 @@ import kotlinx.serialization.json.*
  * @param source Source index for the redirect rule.
  * @param dest Destination index for the redirect rule.
  * @param reason Reason for the redirect rule.
- * @param succeed Status for the redirect rule.
+ * @param succeed Redirect rule status.
  * @param `data`
  */
 @Serializable
@@ -25,7 +25,7 @@ public data class RedirectRuleIndexMetadata(
   /** Reason for the redirect rule. */
   @SerialName(value = "reason") val reason: String,
 
-  /** Status for the redirect rule. */
+  /** Redirect rule status. */
   @SerialName(value = "succeed") val succeed: Boolean,
 
   @SerialName(value = "data") val `data`: RedirectRuleIndexMetadataData,

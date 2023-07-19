@@ -9,16 +9,16 @@ import (
 // DeleteByParams struct for DeleteByParams
 type DeleteByParams struct {
 	FacetFilters *FacetFilters `json:"facetFilters,omitempty"`
-	// Filter the query with numeric, facet and/or tag filters.
+	// [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the query with numeric, facet, or tag filters.
 	Filters        *string         `json:"filters,omitempty"`
 	NumericFilters *NumericFilters `json:"numericFilters,omitempty"`
 	TagFilters     *TagFilters     `json:"tagFilters,omitempty"`
-	// Search for entries around a central geolocation, enabling a geo search within a circular area.
+	// Search for entries [around a central location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point), enabling a geographical search within a circular area.
 	AroundLatLng *string       `json:"aroundLatLng,omitempty"`
 	AroundRadius *AroundRadius `json:"aroundRadius,omitempty"`
-	// Search inside a rectangular area (in geo coordinates).
+	// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
 	InsideBoundingBox []float64 `json:"insideBoundingBox,omitempty"`
-	// Search inside a polygon (in geo coordinates).
+	// Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
 	InsidePolygon []float64 `json:"insidePolygon,omitempty"`
 }
 

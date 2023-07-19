@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The settings relevant for configuration of the semantic search engine. These settings are only
- * used when the mode is set to 'neuralSearch'.
+ * Settings for the semantic search part of NeuralSearch. Only used when `mode` is _neuralSearch_.
  */
 public class IndexSettingsAsSearchParamsSemanticSearch {
 
@@ -31,7 +30,8 @@ public class IndexSettingsAsSearchParamsSemanticSearch {
   }
 
   /**
-   * When null, the current index / replica group will be used as the event source.
+   * Indices from which to collect click and conversion events. If null, the current index and
+   * replica group will be used as the event source.
    *
    * @return eventSources
    */

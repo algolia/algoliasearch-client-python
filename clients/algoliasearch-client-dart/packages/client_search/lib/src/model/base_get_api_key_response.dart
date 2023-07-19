@@ -13,11 +13,11 @@ final class BaseGetApiKeyResponse {
     required this.createdAt,
   });
 
-  /// The API key.
+  /// API key.
   @JsonKey(name: r'value')
   final String? value;
 
-  /// Time of the event expressed in milliseconds since the Unix epoch.
+  /// Timestamp of creation in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time).
   @JsonKey(name: r'createdAt')
   final int createdAt;
 

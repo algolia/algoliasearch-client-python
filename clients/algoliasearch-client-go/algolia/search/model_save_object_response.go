@@ -8,10 +8,11 @@ import (
 
 // SaveObjectResponse struct for SaveObjectResponse
 type SaveObjectResponse struct {
+	// Date of creation (ISO-8601 format).
 	CreatedAt string `json:"createdAt" validate:"required"`
-	// taskID of the task to wait for.
+	// Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`.
 	TaskID int64 `json:"taskID" validate:"required"`
-	// Unique identifier of the object.
+	// Unique object identifier.
 	ObjectID *string `json:"objectID,omitempty"`
 }
 

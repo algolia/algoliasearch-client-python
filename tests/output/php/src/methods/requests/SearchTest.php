@@ -1354,6 +1354,7 @@ class SearchTest extends TestCase implements HttpClientInterface
         $client = $this->getClient();
         $client->listIndices(
             8,
+            3,
         );
 
         $this->assertRequests([
@@ -1361,7 +1362,7 @@ class SearchTest extends TestCase implements HttpClientInterface
                 "path" => "/1/indexes",
                 "method" => "GET",
                 "body" => null,
-                "queryParameters" => json_decode("{\"page\":\"8\"}", true),
+                "queryParameters" => json_decode("{\"page\":\"8\",\"hitsPerPage\":\"3\"}", true),
             ],
         ]);
     }

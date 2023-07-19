@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** The `multipleBatch` parameters. */
+/** Batch parameters. */
 public class BatchParams {
 
   @JsonProperty("requests")

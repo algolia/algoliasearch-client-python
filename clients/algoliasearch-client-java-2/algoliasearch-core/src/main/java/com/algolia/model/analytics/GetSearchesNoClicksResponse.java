@@ -25,7 +25,7 @@ public class GetSearchesNoClicksResponse {
   }
 
   /**
-   * A list of searches with no clicks and their count.
+   * Searches with no clicks.
    *
    * @return searches
    */
