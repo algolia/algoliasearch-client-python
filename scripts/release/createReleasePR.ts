@@ -450,7 +450,7 @@ async function createReleasePR(): Promise<void> {
     await run(`git push -d origin ${headBranch}`);
   }
 
-  await run(`git checkout -b ${headBranch}`);
+  await run(`git checkout -B ${headBranch}`);
 
   setVerbose(true);
   console.log(`Pushing updated changes to: ${headBranch}`);
