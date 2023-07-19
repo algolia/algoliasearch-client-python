@@ -41,16 +41,16 @@ func (r *ApiCreateConfigRequest) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if v, ok := req["querySuggestionsIndexWithIndexParam"]; ok {
-		err = json.Unmarshal(v, &r.querySuggestionsIndexWithIndexParam)
+	if v, ok := req["querySuggestionsConfigurationWithIndex"]; ok {
+		err = json.Unmarshal(v, &r.querySuggestionsConfigurationWithIndex)
 		if err != nil {
-			err = json.Unmarshal(b, &r.querySuggestionsIndexWithIndexParam)
+			err = json.Unmarshal(b, &r.querySuggestionsConfigurationWithIndex)
 			if err != nil {
 				return err
 			}
 		}
 	} else {
-		err = json.Unmarshal(b, &r.querySuggestionsIndexWithIndexParam)
+		err = json.Unmarshal(b, &r.querySuggestionsConfigurationWithIndex)
 		if err != nil {
 			return err
 		}
@@ -61,52 +61,56 @@ func (r *ApiCreateConfigRequest) UnmarshalJSON(b []byte) error {
 
 // ApiCreateConfigRequest represents the request with all the parameters for the API call.
 type ApiCreateConfigRequest struct {
-	querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam
+	querySuggestionsConfigurationWithIndex *QuerySuggestionsConfigurationWithIndex
 }
 
 // NewApiCreateConfigRequest creates an instance of the ApiCreateConfigRequest to be used for the API call.
-func (c *APIClient) NewApiCreateConfigRequest(querySuggestionsIndexWithIndexParam *QuerySuggestionsIndexWithIndexParam) ApiCreateConfigRequest {
+func (c *APIClient) NewApiCreateConfigRequest(querySuggestionsConfigurationWithIndex *QuerySuggestionsConfigurationWithIndex) ApiCreateConfigRequest {
 	return ApiCreateConfigRequest{
-		querySuggestionsIndexWithIndexParam: querySuggestionsIndexWithIndexParam,
+		querySuggestionsConfigurationWithIndex: querySuggestionsConfigurationWithIndex,
 	}
 }
 
 /*
 CreateConfig Create a configuration. Wraps CreateConfigWithContext using context.Background.
 
-Create a configuration of a Query Suggestions index. There's a limit of 100 configurations per application.
+Create a new Query Suggestions configuration.
+
+You can have up to 100 configurations per Algolia application.
 
 Request can be constructed by NewApiCreateConfigRequest with parameters below.
 
-	@param querySuggestionsIndexWithIndexParam QuerySuggestionsIndexWithIndexParam
-	@return SuccessResponse
+	@param querySuggestionsConfigurationWithIndex QuerySuggestionsConfigurationWithIndex
+	@return BaseResponse
 */
-func (c *APIClient) CreateConfig(r ApiCreateConfigRequest, opts ...Option) (*SuccessResponse, error) {
+func (c *APIClient) CreateConfig(r ApiCreateConfigRequest, opts ...Option) (*BaseResponse, error) {
 	return c.CreateConfigWithContext(context.Background(), r, opts...)
 }
 
 /*
 CreateConfig Create a configuration.
 
-Create a configuration of a Query Suggestions index. There's a limit of 100 configurations per application.
+Create a new Query Suggestions configuration.
+
+You can have up to 100 configurations per Algolia application.
 
 Request can be constructed by NewApiCreateConfigRequest with parameters below.
 
-	@param querySuggestionsIndexWithIndexParam QuerySuggestionsIndexWithIndexParam
-	@return SuccessResponse
+	@param querySuggestionsConfigurationWithIndex QuerySuggestionsConfigurationWithIndex
+	@return BaseResponse
 */
-func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConfigRequest, opts ...Option) (*SuccessResponse, error) {
+func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConfigRequest, opts ...Option) (*BaseResponse, error) {
 	var (
 		postBody    any
-		returnValue *SuccessResponse
+		returnValue *BaseResponse
 	)
 
 	requestPath := "/1/configs"
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if r.querySuggestionsIndexWithIndexParam == nil {
-		return returnValue, reportError("querySuggestionsIndexWithIndexParam is required and must be specified")
+	if r.querySuggestionsConfigurationWithIndex == nil {
+		return returnValue, reportError("querySuggestionsConfigurationWithIndex is required and must be specified")
 	}
 
 	// optional params if any
@@ -120,7 +124,7 @@ func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConf
 	}
 
 	// body params
-	postBody = r.querySuggestionsIndexWithIndexParam
+	postBody = r.querySuggestionsConfigurationWithIndex
 	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -147,7 +151,7 @@ func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConf
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 400 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -156,16 +160,7 @@ func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConf
 			return returnValue, newErr
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 403 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -174,7 +169,7 @@ func (c *APIClient) CreateConfigWithContext(ctx context.Context, r ApiCreateConf
 			return returnValue, newErr
 		}
 		if res.StatusCode == 422 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -407,35 +402,37 @@ func (c *APIClient) NewApiDeleteConfigRequest(indexName string) ApiDeleteConfigR
 /*
 DeleteConfig Delete a configuration. Wraps DeleteConfigWithContext using context.Background.
 
-Delete a configuration of a Query Suggestion's index.
-By deleting a configuration, you stop all updates to the underlying query suggestion index.
-Note that when doing this, the underlying index does not change - existing suggestions remain untouched.
+Delete a Query Suggestions configuration.
+
+Deleting only removes the configuration and stops updates to the Query Suggestions index.
+The Query Suggestions index itself is not deleted.
 
 Request can be constructed by NewApiDeleteConfigRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return SuccessResponse
+	@param indexName string - Query Suggestions index name.
+	@return BaseResponse
 */
-func (c *APIClient) DeleteConfig(r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
+func (c *APIClient) DeleteConfig(r ApiDeleteConfigRequest, opts ...Option) (*BaseResponse, error) {
 	return c.DeleteConfigWithContext(context.Background(), r, opts...)
 }
 
 /*
 DeleteConfig Delete a configuration.
 
-Delete a configuration of a Query Suggestion's index.
-By deleting a configuration, you stop all updates to the underlying query suggestion index.
-Note that when doing this, the underlying index does not change - existing suggestions remain untouched.
+Delete a Query Suggestions configuration.
+
+Deleting only removes the configuration and stops updates to the Query Suggestions index.
+The Query Suggestions index itself is not deleted.
 
 Request can be constructed by NewApiDeleteConfigRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return SuccessResponse
+	@param indexName string - Query Suggestions index name.
+	@return BaseResponse
 */
-func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConfigRequest, opts ...Option) (*SuccessResponse, error) {
+func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConfigRequest, opts ...Option) (*BaseResponse, error) {
 	var (
 		postBody    any
-		returnValue *SuccessResponse
+		returnValue *BaseResponse
 	)
 
 	requestPath := "/1/configs/{indexName}"
@@ -480,16 +477,7 @@ func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConf
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 403 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -498,7 +486,7 @@ func (c *APIClient) DeleteConfigWithContext(ctx context.Context, r ApiDeleteConf
 			return returnValue, newErr
 		}
 		if res.StatusCode == 500 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -691,31 +679,29 @@ func (c *APIClient) GetWithContext(ctx context.Context, r ApiGetRequest, opts ..
 /*
 GetAllConfigs List configurations. Wraps GetAllConfigsWithContext using context.Background.
 
-Get all the configurations of Query Suggestions.
-For each index, you get a block of JSON with a list of its configuration settings.
+List all Query Suggestions configurations of your Algolia application.
 
 Request can be constructed by NewApiGetAllConfigsRequest with parameters below.
 
-	@return []QuerySuggestionsIndex
+	@return []QuerySuggestionsConfigurationResponse
 */
-func (c *APIClient) GetAllConfigs(opts ...Option) ([]QuerySuggestionsIndex, error) {
+func (c *APIClient) GetAllConfigs(opts ...Option) ([]QuerySuggestionsConfigurationResponse, error) {
 	return c.GetAllConfigsWithContext(context.Background(), opts...)
 }
 
 /*
 GetAllConfigs List configurations.
 
-Get all the configurations of Query Suggestions.
-For each index, you get a block of JSON with a list of its configuration settings.
+List all Query Suggestions configurations of your Algolia application.
 
 Request can be constructed by NewApiGetAllConfigsRequest with parameters below.
 
-	@return []QuerySuggestionsIndex
+	@return []QuerySuggestionsConfigurationResponse
 */
-func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, opts ...Option) ([]QuerySuggestionsIndex, error) {
+func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, opts ...Option) ([]QuerySuggestionsConfigurationResponse, error) {
 	var (
 		postBody    any
-		returnValue []QuerySuggestionsIndex
+		returnValue []QuerySuggestionsConfigurationResponse
 	)
 
 	requestPath := "/1/configs"
@@ -759,34 +745,7 @@ func (c *APIClient) GetAllConfigsWithContext(ctx context.Context, opts ...Option
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 403 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 422 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 500 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -836,33 +795,33 @@ func (c *APIClient) NewApiGetConfigRequest(indexName string) ApiGetConfigRequest
 }
 
 /*
-GetConfig Get a single configuration. Wraps GetConfigWithContext using context.Background.
+GetConfig Get a configuration. Wraps GetConfigWithContext using context.Background.
 
-Get the configuration of a single Query Suggestions index.
+Get a single Query Suggestions configuration.
 
 Request can be constructed by NewApiGetConfigRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return QuerySuggestionsIndex
+	@param indexName string - Query Suggestions index name.
+	@return QuerySuggestionsConfigurationResponse
 */
-func (c *APIClient) GetConfig(r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
+func (c *APIClient) GetConfig(r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsConfigurationResponse, error) {
 	return c.GetConfigWithContext(context.Background(), r, opts...)
 }
 
 /*
-GetConfig Get a single configuration.
+GetConfig Get a configuration.
 
-Get the configuration of a single Query Suggestions index.
+Get a single Query Suggestions configuration.
 
 Request can be constructed by NewApiGetConfigRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return QuerySuggestionsIndex
+	@param indexName string - Query Suggestions index name.
+	@return QuerySuggestionsConfigurationResponse
 */
-func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsIndex, error) {
+func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequest, opts ...Option) (*QuerySuggestionsConfigurationResponse, error) {
 	var (
 		postBody    any
-		returnValue *QuerySuggestionsIndex
+		returnValue *QuerySuggestionsConfigurationResponse
 	)
 
 	requestPath := "/1/configs/{indexName}"
@@ -907,7 +866,7 @@ func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequ
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 400 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -916,16 +875,7 @@ func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequ
 			return returnValue, newErr
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 403 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -934,16 +884,7 @@ func (c *APIClient) GetConfigWithContext(ctx context.Context, r ApiGetConfigRequ
 			return returnValue, newErr
 		}
 		if res.StatusCode == 404 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 500 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -995,33 +936,31 @@ func (c *APIClient) NewApiGetConfigStatusRequest(indexName string) ApiGetConfigS
 /*
 GetConfigStatus Get configuration status. Wraps GetConfigStatusWithContext using context.Background.
 
-Get the status of a Query Suggestion's index.
-The status includes whether the Query Suggestions index is currently in the process of being built, and the last build time.
+Report the status of a Query Suggestions index.
 
 Request can be constructed by NewApiGetConfigStatusRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return Status
+	@param indexName string - Query Suggestions index name.
+	@return GetConfigStatus200Response
 */
-func (c *APIClient) GetConfigStatus(r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
+func (c *APIClient) GetConfigStatus(r ApiGetConfigStatusRequest, opts ...Option) (*GetConfigStatus200Response, error) {
 	return c.GetConfigStatusWithContext(context.Background(), r, opts...)
 }
 
 /*
 GetConfigStatus Get configuration status.
 
-Get the status of a Query Suggestion's index.
-The status includes whether the Query Suggestions index is currently in the process of being built, and the last build time.
+Report the status of a Query Suggestions index.
 
 Request can be constructed by NewApiGetConfigStatusRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return Status
+	@param indexName string - Query Suggestions index name.
+	@return GetConfigStatus200Response
 */
-func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConfigStatusRequest, opts ...Option) (*Status, error) {
+func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConfigStatusRequest, opts ...Option) (*GetConfigStatus200Response, error) {
 	var (
 		postBody    any
-		returnValue *Status
+		returnValue *GetConfigStatus200Response
 	)
 
 	requestPath := "/1/configs/{indexName}/status"
@@ -1066,7 +1005,7 @@ func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConf
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -1074,17 +1013,8 @@ func (c *APIClient) GetConfigStatusWithContext(ctx context.Context, r ApiGetConf
 			}
 			return returnValue, newErr
 		}
-		if res.StatusCode == 403 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 500 {
-			var v ErrorBase
+		if res.StatusCode == 404 {
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -1134,33 +1064,33 @@ func (c *APIClient) NewApiGetLogFileRequest(indexName string) ApiGetLogFileReque
 }
 
 /*
-GetLogFile Get a log file. Wraps GetLogFileWithContext using context.Background.
+GetLogFile Get logs. Wraps GetLogFileWithContext using context.Background.
 
-Get the log file of the last build of a single Query Suggestion index.
+Get the logs for a single Query Suggestions index.
 
 Request can be constructed by NewApiGetLogFileRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return []LogFile
+	@param indexName string - Query Suggestions index name.
+	@return GetLogFile200Response
 */
-func (c *APIClient) GetLogFile(r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
+func (c *APIClient) GetLogFile(r ApiGetLogFileRequest, opts ...Option) (*GetLogFile200Response, error) {
 	return c.GetLogFileWithContext(context.Background(), r, opts...)
 }
 
 /*
-GetLogFile Get a log file.
+GetLogFile Get logs.
 
-Get the log file of the last build of a single Query Suggestion index.
+Get the logs for a single Query Suggestions index.
 
 Request can be constructed by NewApiGetLogFileRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@return []LogFile
+	@param indexName string - Query Suggestions index name.
+	@return GetLogFile200Response
 */
-func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRequest, opts ...Option) ([]LogFile, error) {
+func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRequest, opts ...Option) (*GetLogFile200Response, error) {
 	var (
 		postBody    any
-		returnValue []LogFile
+		returnValue *GetLogFile200Response
 	)
 
 	requestPath := "/1/logs/{indexName}"
@@ -1205,16 +1135,7 @@ func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRe
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 403 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -1223,16 +1144,7 @@ func (c *APIClient) GetLogFileWithContext(ctx context.Context, r ApiGetLogFileRe
 			return returnValue, newErr
 		}
 		if res.StatusCode == 404 {
-			var v ErrorBase
-			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.Message = err.Error()
-				return returnValue, newErr
-			}
-			return returnValue, newErr
-		}
-		if res.StatusCode == 500 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -1657,16 +1569,16 @@ func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-	if v, ok := req["querySuggestionsIndexParam"]; ok {
-		err = json.Unmarshal(v, &r.querySuggestionsIndexParam)
+	if v, ok := req["querySuggestionsConfiguration"]; ok {
+		err = json.Unmarshal(v, &r.querySuggestionsConfiguration)
 		if err != nil {
-			err = json.Unmarshal(b, &r.querySuggestionsIndexParam)
+			err = json.Unmarshal(b, &r.querySuggestionsConfiguration)
 			if err != nil {
 				return err
 			}
 		}
 	} else {
-		err = json.Unmarshal(b, &r.querySuggestionsIndexParam)
+		err = json.Unmarshal(b, &r.querySuggestionsConfiguration)
 		if err != nil {
 			return err
 		}
@@ -1677,48 +1589,48 @@ func (r *ApiUpdateConfigRequest) UnmarshalJSON(b []byte) error {
 
 // ApiUpdateConfigRequest represents the request with all the parameters for the API call.
 type ApiUpdateConfigRequest struct {
-	indexName                  string
-	querySuggestionsIndexParam *QuerySuggestionsIndexParam
+	indexName                     string
+	querySuggestionsConfiguration *QuerySuggestionsConfiguration
 }
 
 // NewApiUpdateConfigRequest creates an instance of the ApiUpdateConfigRequest to be used for the API call.
-func (c *APIClient) NewApiUpdateConfigRequest(indexName string, querySuggestionsIndexParam *QuerySuggestionsIndexParam) ApiUpdateConfigRequest {
+func (c *APIClient) NewApiUpdateConfigRequest(indexName string, querySuggestionsConfiguration *QuerySuggestionsConfiguration) ApiUpdateConfigRequest {
 	return ApiUpdateConfigRequest{
-		indexName:                  indexName,
-		querySuggestionsIndexParam: querySuggestionsIndexParam,
+		indexName:                     indexName,
+		querySuggestionsConfiguration: querySuggestionsConfiguration,
 	}
 }
 
 /*
 UpdateConfig Update a configuration. Wraps UpdateConfigWithContext using context.Background.
 
-Update the configuration of a Query Suggestions index.
+Update a QuerySuggestions configuration.
 
 Request can be constructed by NewApiUpdateConfigRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@param querySuggestionsIndexParam QuerySuggestionsIndexParam
-	@return SuccessResponse
+	@param indexName string - Query Suggestions index name.
+	@param querySuggestionsConfiguration QuerySuggestionsConfiguration
+	@return BaseResponse
 */
-func (c *APIClient) UpdateConfig(r ApiUpdateConfigRequest, opts ...Option) (*SuccessResponse, error) {
+func (c *APIClient) UpdateConfig(r ApiUpdateConfigRequest, opts ...Option) (*BaseResponse, error) {
 	return c.UpdateConfigWithContext(context.Background(), r, opts...)
 }
 
 /*
 UpdateConfig Update a configuration.
 
-Update the configuration of a Query Suggestions index.
+Update a QuerySuggestions configuration.
 
 Request can be constructed by NewApiUpdateConfigRequest with parameters below.
 
-	@param indexName string - Index on which to perform the request.
-	@param querySuggestionsIndexParam QuerySuggestionsIndexParam
-	@return SuccessResponse
+	@param indexName string - Query Suggestions index name.
+	@param querySuggestionsConfiguration QuerySuggestionsConfiguration
+	@return BaseResponse
 */
-func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConfigRequest, opts ...Option) (*SuccessResponse, error) {
+func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConfigRequest, opts ...Option) (*BaseResponse, error) {
 	var (
 		postBody    any
-		returnValue *SuccessResponse
+		returnValue *BaseResponse
 	)
 
 	requestPath := "/1/configs/{indexName}"
@@ -1726,8 +1638,8 @@ func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConf
 
 	headers := make(map[string]string)
 	queryParams := url.Values{}
-	if r.querySuggestionsIndexParam == nil {
-		return returnValue, reportError("querySuggestionsIndexParam is required and must be specified")
+	if r.querySuggestionsConfiguration == nil {
+		return returnValue, reportError("querySuggestionsConfiguration is required and must be specified")
 	}
 
 	// optional params if any
@@ -1741,7 +1653,7 @@ func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConf
 	}
 
 	// body params
-	postBody = r.querySuggestionsIndexParam
+	postBody = r.querySuggestionsConfiguration
 	req, err := c.prepareRequest(ctx, requestPath, http.MethodPut, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err
@@ -1768,7 +1680,7 @@ func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConf
 			Status:  res.StatusCode,
 		}
 		if res.StatusCode == 401 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()
@@ -1777,7 +1689,7 @@ func (c *APIClient) UpdateConfigWithContext(ctx context.Context, r ApiUpdateConf
 			return returnValue, newErr
 		}
 		if res.StatusCode == 500 {
-			var v ErrorBase
+			var v BaseResponse
 			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.Message = err.Error()

@@ -1,7 +1,7 @@
 /*
 Query Suggestions API
 
-API powering the Query Suggestions feature of Algolia.
+The Query Suggestions API lets you manage Algolia's Query Suggestions configurations. Query Suggestions add new indices with popular search queries, external suggestions, or facet values to your Algolia application. In your user interface, you can query the Query Suggestions indices like regular indices and add [suggested searches](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/query-suggestions/js/) to guide users and speed up their search.
 
 API version: 1.0.0
 */

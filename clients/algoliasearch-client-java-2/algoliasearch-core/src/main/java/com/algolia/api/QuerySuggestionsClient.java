@@ -62,54 +62,54 @@ public class QuerySuggestionsClient extends ApiClient {
   }
 
   /**
-   * Create a configuration of a Query Suggestions index. There's a limit of 100 configurations per
+   * Create a new Query Suggestions configuration. You can have up to 100 configurations per Algolia
    * application.
    *
-   * @param querySuggestionsIndexWithIndexParam (required)
+   * @param querySuggestionsConfigurationWithIndex (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return SuccessResponse
+   * @return BaseResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SuccessResponse createConfig(
-    QuerySuggestionsIndexWithIndexParam querySuggestionsIndexWithIndexParam,
+  public BaseResponse createConfig(
+    QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    return LaunderThrowable.await(createConfigAsync(querySuggestionsIndexWithIndexParam, requestOptions));
+    return LaunderThrowable.await(createConfigAsync(querySuggestionsConfigurationWithIndex, requestOptions));
   }
 
   /**
-   * Create a configuration of a Query Suggestions index. There's a limit of 100 configurations per
+   * Create a new Query Suggestions configuration. You can have up to 100 configurations per Algolia
    * application.
    *
-   * @param querySuggestionsIndexWithIndexParam (required)
-   * @return SuccessResponse
+   * @param querySuggestionsConfigurationWithIndex (required)
+   * @return BaseResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SuccessResponse createConfig(QuerySuggestionsIndexWithIndexParam querySuggestionsIndexWithIndexParam)
+  public BaseResponse createConfig(QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex)
     throws AlgoliaRuntimeException {
-    return this.createConfig(querySuggestionsIndexWithIndexParam, null);
+    return this.createConfig(querySuggestionsConfigurationWithIndex, null);
   }
 
   /**
-   * (asynchronously) Create a configuration of a Query Suggestions index. There&#39;s a limit of
-   * 100 configurations per application.
+   * (asynchronously) Create a new Query Suggestions configuration. You can have up to 100
+   * configurations per Algolia application.
    *
-   * @param querySuggestionsIndexWithIndexParam (required)
+   * @param querySuggestionsConfigurationWithIndex (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<SuccessResponse> The awaitable future
+   * @return CompletableFuture<BaseResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SuccessResponse> createConfigAsync(
-    QuerySuggestionsIndexWithIndexParam querySuggestionsIndexWithIndexParam,
+  public CompletableFuture<BaseResponse> createConfigAsync(
+    QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (querySuggestionsIndexWithIndexParam == null) {
-      throw new AlgoliaRuntimeException("Parameter `querySuggestionsIndexWithIndexParam` is required when calling" + " `createConfig`.");
+    if (querySuggestionsConfigurationWithIndex == null) {
+      throw new AlgoliaRuntimeException("Parameter `querySuggestionsConfigurationWithIndex` is required when calling" + " `createConfig`.");
     }
 
-    Object bodyObj = querySuggestionsIndexWithIndexParam;
+    Object bodyObj = querySuggestionsConfigurationWithIndex;
 
     // create path and map variables
     String requestPath = "/1/configs";
@@ -118,20 +118,20 @@ public class QuerySuggestionsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<SuccessResponse>() {});
+    return this.executeAsync(call, new TypeReference<BaseResponse>() {});
   }
 
   /**
-   * (asynchronously) Create a configuration of a Query Suggestions index. There&#39;s a limit of
-   * 100 configurations per application.
+   * (asynchronously) Create a new Query Suggestions configuration. You can have up to 100
+   * configurations per Algolia application.
    *
-   * @param querySuggestionsIndexWithIndexParam (required)
-   * @return CompletableFuture<SuccessResponse> The awaitable future
+   * @param querySuggestionsConfigurationWithIndex (required)
+   * @return CompletableFuture<BaseResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SuccessResponse> createConfigAsync(QuerySuggestionsIndexWithIndexParam querySuggestionsIndexWithIndexParam)
+  public CompletableFuture<BaseResponse> createConfigAsync(QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex)
     throws AlgoliaRuntimeException {
-    return this.createConfigAsync(querySuggestionsIndexWithIndexParam, null);
+    return this.createConfigAsync(querySuggestionsConfigurationWithIndex, null);
   }
 
   /**
@@ -255,46 +255,43 @@ public class QuerySuggestionsClient extends ApiClient {
   }
 
   /**
-   * Delete a configuration of a Query Suggestion's index. By deleting a configuration, you stop all
-   * updates to the underlying query suggestion index. Note that when doing this, the underlying
-   * index does not change - existing suggestions remain untouched.
+   * Delete a Query Suggestions configuration. Deleting only removes the configuration and stops
+   * updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return SuccessResponse
+   * @return BaseResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SuccessResponse deleteConfig(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public BaseResponse deleteConfig(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteConfigAsync(indexName, requestOptions));
   }
 
   /**
-   * Delete a configuration of a Query Suggestion's index. By deleting a configuration, you stop all
-   * updates to the underlying query suggestion index. Note that when doing this, the underlying
-   * index does not change - existing suggestions remain untouched.
+   * Delete a Query Suggestions configuration. Deleting only removes the configuration and stops
+   * updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return SuccessResponse
+   * @param indexName Query Suggestions index name. (required)
+   * @return BaseResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SuccessResponse deleteConfig(String indexName) throws AlgoliaRuntimeException {
+  public BaseResponse deleteConfig(String indexName) throws AlgoliaRuntimeException {
     return this.deleteConfig(indexName, null);
   }
 
   /**
-   * (asynchronously) Delete a configuration of a Query Suggestion&#39;s index. By deleting a
-   * configuration, you stop all updates to the underlying query suggestion index. Note that when
-   * doing this, the underlying index does not change - existing suggestions remain untouched.
+   * (asynchronously) Delete a Query Suggestions configuration. Deleting only removes the
+   * configuration and stops updates to the Query Suggestions index. The Query Suggestions index
+   * itself is not deleted.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<SuccessResponse> The awaitable future
+   * @return CompletableFuture<BaseResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SuccessResponse> deleteConfigAsync(String indexName, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<BaseResponse> deleteConfigAsync(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     if (indexName == null) {
       throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `deleteConfig`.");
     }
@@ -308,19 +305,19 @@ public class QuerySuggestionsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "DELETE", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<SuccessResponse>() {});
+    return this.executeAsync(call, new TypeReference<BaseResponse>() {});
   }
 
   /**
-   * (asynchronously) Delete a configuration of a Query Suggestion&#39;s index. By deleting a
-   * configuration, you stop all updates to the underlying query suggestion index. Note that when
-   * doing this, the underlying index does not change - existing suggestions remain untouched.
+   * (asynchronously) Delete a Query Suggestions configuration. Deleting only removes the
+   * configuration and stops updates to the Query Suggestions index. The Query Suggestions index
+   * itself is not deleted.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return CompletableFuture<SuccessResponse> The awaitable future
+   * @param indexName Query Suggestions index name. (required)
+   * @return CompletableFuture<BaseResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SuccessResponse> deleteConfigAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<BaseResponse> deleteConfigAsync(String indexName) throws AlgoliaRuntimeException {
     return this.deleteConfigAsync(indexName, null);
   }
 
@@ -445,39 +442,37 @@ public class QuerySuggestionsClient extends ApiClient {
   }
 
   /**
-   * Get all the configurations of Query Suggestions. For each index, you get a block of JSON with a
-   * list of its configuration settings.
+   * List all Query Suggestions configurations of your Algolia application.
    *
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return List<QuerySuggestionsIndex>
+   * @return List<QuerySuggestionsConfigurationResponse>
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public List<QuerySuggestionsIndex> getAllConfigs(RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public List<QuerySuggestionsConfigurationResponse> getAllConfigs(RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getAllConfigsAsync(requestOptions));
   }
 
   /**
-   * Get all the configurations of Query Suggestions. For each index, you get a block of JSON with a
-   * list of its configuration settings.
+   * List all Query Suggestions configurations of your Algolia application.
    *
-   * @return List<QuerySuggestionsIndex>
+   * @return List<QuerySuggestionsConfigurationResponse>
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public List<QuerySuggestionsIndex> getAllConfigs() throws AlgoliaRuntimeException {
+  public List<QuerySuggestionsConfigurationResponse> getAllConfigs() throws AlgoliaRuntimeException {
     return this.getAllConfigs(null);
   }
 
   /**
-   * (asynchronously) Get all the configurations of Query Suggestions. For each index, you get a
-   * block of JSON with a list of its configuration settings.
+   * (asynchronously) List all Query Suggestions configurations of your Algolia application.
    *
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<List<QuerySuggestionsIndex>> The awaitable future
+   * @return CompletableFuture<List<QuerySuggestionsConfigurationResponse>> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<List<QuerySuggestionsIndex>> getAllConfigsAsync(RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<List<QuerySuggestionsConfigurationResponse>> getAllConfigsAsync(RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     Object bodyObj = null;
 
     // create path and map variables
@@ -487,54 +482,53 @@ public class QuerySuggestionsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<List<QuerySuggestionsIndex>>() {});
+    return this.executeAsync(call, new TypeReference<List<QuerySuggestionsConfigurationResponse>>() {});
   }
 
   /**
-   * (asynchronously) Get all the configurations of Query Suggestions. For each index, you get a
-   * block of JSON with a list of its configuration settings.
+   * (asynchronously) List all Query Suggestions configurations of your Algolia application.
    *
-   * @return CompletableFuture<List<QuerySuggestionsIndex>> The awaitable future
+   * @return CompletableFuture<List<QuerySuggestionsConfigurationResponse>> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<List<QuerySuggestionsIndex>> getAllConfigsAsync() throws AlgoliaRuntimeException {
+  public CompletableFuture<List<QuerySuggestionsConfigurationResponse>> getAllConfigsAsync() throws AlgoliaRuntimeException {
     return this.getAllConfigsAsync(null);
   }
 
   /**
-   * Get the configuration of a single Query Suggestions index.
+   * Get a single Query Suggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return QuerySuggestionsIndex
+   * @return QuerySuggestionsConfigurationResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public QuerySuggestionsIndex getConfig(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public QuerySuggestionsConfigurationResponse getConfig(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getConfigAsync(indexName, requestOptions));
   }
 
   /**
-   * Get the configuration of a single Query Suggestions index.
+   * Get a single Query Suggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return QuerySuggestionsIndex
+   * @param indexName Query Suggestions index name. (required)
+   * @return QuerySuggestionsConfigurationResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public QuerySuggestionsIndex getConfig(String indexName) throws AlgoliaRuntimeException {
+  public QuerySuggestionsConfigurationResponse getConfig(String indexName) throws AlgoliaRuntimeException {
     return this.getConfig(indexName, null);
   }
 
   /**
-   * (asynchronously) Get the configuration of a single Query Suggestions index.
+   * (asynchronously) Get a single Query Suggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<QuerySuggestionsIndex> The awaitable future
+   * @return CompletableFuture<QuerySuggestionsConfigurationResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<QuerySuggestionsIndex> getConfigAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<QuerySuggestionsConfigurationResponse> getConfigAsync(String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     if (indexName == null) {
       throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getConfig`.");
@@ -549,58 +543,55 @@ public class QuerySuggestionsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<QuerySuggestionsIndex>() {});
+    return this.executeAsync(call, new TypeReference<QuerySuggestionsConfigurationResponse>() {});
   }
 
   /**
-   * (asynchronously) Get the configuration of a single Query Suggestions index.
+   * (asynchronously) Get a single Query Suggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return CompletableFuture<QuerySuggestionsIndex> The awaitable future
+   * @param indexName Query Suggestions index name. (required)
+   * @return CompletableFuture<QuerySuggestionsConfigurationResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<QuerySuggestionsIndex> getConfigAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<QuerySuggestionsConfigurationResponse> getConfigAsync(String indexName) throws AlgoliaRuntimeException {
     return this.getConfigAsync(indexName, null);
   }
 
   /**
-   * Get the status of a Query Suggestion's index. The status includes whether the Query Suggestions
-   * index is currently in the process of being built, and the last build time.
+   * Report the status of a Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Status
+   * @return GetConfigStatus200Response
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Status getConfigStatus(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public GetConfigStatus200Response getConfigStatus(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getConfigStatusAsync(indexName, requestOptions));
   }
 
   /**
-   * Get the status of a Query Suggestion's index. The status includes whether the Query Suggestions
-   * index is currently in the process of being built, and the last build time.
+   * Report the status of a Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return Status
+   * @param indexName Query Suggestions index name. (required)
+   * @return GetConfigStatus200Response
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Status getConfigStatus(String indexName) throws AlgoliaRuntimeException {
+  public GetConfigStatus200Response getConfigStatus(String indexName) throws AlgoliaRuntimeException {
     return this.getConfigStatus(indexName, null);
   }
 
   /**
-   * (asynchronously) Get the status of a Query Suggestion&#39;s index. The status includes whether
-   * the Query Suggestions index is currently in the process of being built, and the last build
-   * time.
+   * (asynchronously) Report the status of a Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Status> The awaitable future
+   * @return CompletableFuture<GetConfigStatus200Response> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Status> getConfigStatusAsync(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetConfigStatus200Response> getConfigStatusAsync(String indexName, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     if (indexName == null) {
       throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getConfigStatus`.");
     }
@@ -614,56 +605,55 @@ public class QuerySuggestionsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Status>() {});
+    return this.executeAsync(call, new TypeReference<GetConfigStatus200Response>() {});
   }
 
   /**
-   * (asynchronously) Get the status of a Query Suggestion&#39;s index. The status includes whether
-   * the Query Suggestions index is currently in the process of being built, and the last build
-   * time.
+   * (asynchronously) Report the status of a Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return CompletableFuture<Status> The awaitable future
+   * @param indexName Query Suggestions index name. (required)
+   * @return CompletableFuture<GetConfigStatus200Response> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Status> getConfigStatusAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetConfigStatus200Response> getConfigStatusAsync(String indexName) throws AlgoliaRuntimeException {
     return this.getConfigStatusAsync(indexName, null);
   }
 
   /**
-   * Get the log file of the last build of a single Query Suggestion index.
+   * Get the logs for a single Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return List<LogFile>
+   * @return GetLogFile200Response
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public List<LogFile> getLogFile(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public GetLogFile200Response getLogFile(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getLogFileAsync(indexName, requestOptions));
   }
 
   /**
-   * Get the log file of the last build of a single Query Suggestion index.
+   * Get the logs for a single Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return List<LogFile>
+   * @param indexName Query Suggestions index name. (required)
+   * @return GetLogFile200Response
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public List<LogFile> getLogFile(String indexName) throws AlgoliaRuntimeException {
+  public GetLogFile200Response getLogFile(String indexName) throws AlgoliaRuntimeException {
     return this.getLogFile(indexName, null);
   }
 
   /**
-   * (asynchronously) Get the log file of the last build of a single Query Suggestion index.
+   * (asynchronously) Get the logs for a single Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
+   * @param indexName Query Suggestions index name. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<List<LogFile>> The awaitable future
+   * @return CompletableFuture<GetLogFile200Response> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<List<LogFile>> getLogFileAsync(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetLogFile200Response> getLogFileAsync(String indexName, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     if (indexName == null) {
       throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getLogFile`.");
     }
@@ -677,17 +667,17 @@ public class QuerySuggestionsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<List<LogFile>>() {});
+    return this.executeAsync(call, new TypeReference<GetLogFile200Response>() {});
   }
 
   /**
-   * (asynchronously) Get the log file of the last build of a single Query Suggestion index.
+   * (asynchronously) Get the logs for a single Query Suggestions index.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @return CompletableFuture<List<LogFile>> The awaitable future
+   * @param indexName Query Suggestions index name. (required)
+   * @return CompletableFuture<GetLogFile200Response> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<List<LogFile>> getLogFileAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetLogFile200Response> getLogFileAsync(String indexName) throws AlgoliaRuntimeException {
     return this.getLogFileAsync(indexName, null);
   }
 
@@ -942,60 +932,60 @@ public class QuerySuggestionsClient extends ApiClient {
   }
 
   /**
-   * Update the configuration of a Query Suggestions index.
+   * Update a QuerySuggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @param querySuggestionsIndexParam (required)
+   * @param indexName Query Suggestions index name. (required)
+   * @param querySuggestionsConfiguration (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return SuccessResponse
+   * @return BaseResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SuccessResponse updateConfig(
+  public BaseResponse updateConfig(
     String indexName,
-    QuerySuggestionsIndexParam querySuggestionsIndexParam,
+    QuerySuggestionsConfiguration querySuggestionsConfiguration,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    return LaunderThrowable.await(updateConfigAsync(indexName, querySuggestionsIndexParam, requestOptions));
+    return LaunderThrowable.await(updateConfigAsync(indexName, querySuggestionsConfiguration, requestOptions));
   }
 
   /**
-   * Update the configuration of a Query Suggestions index.
+   * Update a QuerySuggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @param querySuggestionsIndexParam (required)
-   * @return SuccessResponse
+   * @param indexName Query Suggestions index name. (required)
+   * @param querySuggestionsConfiguration (required)
+   * @return BaseResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SuccessResponse updateConfig(String indexName, QuerySuggestionsIndexParam querySuggestionsIndexParam)
+  public BaseResponse updateConfig(String indexName, QuerySuggestionsConfiguration querySuggestionsConfiguration)
     throws AlgoliaRuntimeException {
-    return this.updateConfig(indexName, querySuggestionsIndexParam, null);
+    return this.updateConfig(indexName, querySuggestionsConfiguration, null);
   }
 
   /**
-   * (asynchronously) Update the configuration of a Query Suggestions index.
+   * (asynchronously) Update a QuerySuggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @param querySuggestionsIndexParam (required)
+   * @param indexName Query Suggestions index name. (required)
+   * @param querySuggestionsConfiguration (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<SuccessResponse> The awaitable future
+   * @return CompletableFuture<BaseResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SuccessResponse> updateConfigAsync(
+  public CompletableFuture<BaseResponse> updateConfigAsync(
     String indexName,
-    QuerySuggestionsIndexParam querySuggestionsIndexParam,
+    QuerySuggestionsConfiguration querySuggestionsConfiguration,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     if (indexName == null) {
       throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `updateConfig`.");
     }
 
-    if (querySuggestionsIndexParam == null) {
-      throw new AlgoliaRuntimeException("Parameter `querySuggestionsIndexParam` is required when calling `updateConfig`.");
+    if (querySuggestionsConfiguration == null) {
+      throw new AlgoliaRuntimeException("Parameter `querySuggestionsConfiguration` is required when calling `updateConfig`.");
     }
 
-    Object bodyObj = querySuggestionsIndexParam;
+    Object bodyObj = querySuggestionsConfiguration;
 
     // create path and map variables
     String requestPath = "/1/configs/{indexName}".replaceAll("\\{indexName\\}", this.escapeString(indexName.toString()));
@@ -1004,19 +994,19 @@ public class QuerySuggestionsClient extends ApiClient {
     Map<String, String> headers = new HashMap<String, String>();
 
     Call call = this.buildCall(requestPath, "PUT", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<SuccessResponse>() {});
+    return this.executeAsync(call, new TypeReference<BaseResponse>() {});
   }
 
   /**
-   * (asynchronously) Update the configuration of a Query Suggestions index.
+   * (asynchronously) Update a QuerySuggestions configuration.
    *
-   * @param indexName Index on which to perform the request. (required)
-   * @param querySuggestionsIndexParam (required)
-   * @return CompletableFuture<SuccessResponse> The awaitable future
+   * @param indexName Query Suggestions index name. (required)
+   * @param querySuggestionsConfiguration (required)
+   * @return CompletableFuture<BaseResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SuccessResponse> updateConfigAsync(String indexName, QuerySuggestionsIndexParam querySuggestionsIndexParam)
+  public CompletableFuture<BaseResponse> updateConfigAsync(String indexName, QuerySuggestionsConfiguration querySuggestionsConfiguration)
     throws AlgoliaRuntimeException {
-    return this.updateConfigAsync(indexName, querySuggestionsIndexParam, null);
+    return this.updateConfigAsync(indexName, querySuggestionsConfiguration, null);
   }
 }

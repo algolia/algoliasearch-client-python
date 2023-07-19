@@ -98,7 +98,7 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
   "testIndex",
 "facets" =>
   [
-  ["attributes" =>
+  ["attribute" =>
   "test",
 ],
 ],
@@ -131,7 +131,7 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
             [
                 "path" => "/1/configs",
                 "method" => "POST",
-                "body" => json_decode("{\"indexName\":\"theIndexName\",\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attributes\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}"),
+                "body" => json_decode("{\"indexName\":\"theIndexName\",\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attribute\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}"),
             ],
         ]);
     }
@@ -762,7 +762,7 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
   "testIndex",
 "facets" =>
   [
-  ["attributes" =>
+  ["attribute" =>
   "test",
 ],
 ],
@@ -795,7 +795,7 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
             [
                 "path" => "/1/configs/theIndexName",
                 "method" => "PUT",
-                "body" => json_decode("{\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attributes\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}"),
+                "body" => json_decode("{\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attribute\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}"),
             ],
         ]);
     }

@@ -26,23 +26,20 @@ class QuerySuggestionsTest {
     client.runTest(
       call = {
         createConfig(
-          querySuggestionsIndexWithIndexParam = QuerySuggestionsIndexWithIndexParam(
+          querySuggestionsConfigurationWithIndex = QuerySuggestionsConfigurationWithIndex(
             indexName = "theIndexName",
             sourceIndices = listOf(
               SourceIndex(
                 indexName = "testIndex",
                 facets = listOf(
-                  buildJsonObject {
-                    put(
-                      "attributes",
-                      JsonPrimitive("test"),
-                    )
-                  },
+                  Facet(
+                    attribute = "test",
+                  ),
                 ),
                 generate = listOf(listOf("facetA", "facetB"), listOf("facetC")),
               ),
             ),
-            languages = listOf("french"),
+            languages = Languages.ListOfString(listOf("french")),
             exclude = listOf("test"),
           ),
         )
@@ -50,7 +47,7 @@ class QuerySuggestionsTest {
       intercept = {
         assertEquals("/1/configs".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"indexName":"theIndexName","sourceIndices":[{"indexName":"testIndex","facets":[{"attributes":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}""", it.body)
+        assertJsonBody("""{"indexName":"theIndexName","sourceIndices":[{"indexName":"testIndex","facets":[{"attribute":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}""", it.body)
       },
     )
   }
@@ -570,22 +567,19 @@ class QuerySuggestionsTest {
       call = {
         updateConfig(
           indexName = "theIndexName",
-          querySuggestionsIndexParam = QuerySuggestionsIndexParam(
+          querySuggestionsConfiguration = QuerySuggestionsConfiguration(
             sourceIndices = listOf(
               SourceIndex(
                 indexName = "testIndex",
                 facets = listOf(
-                  buildJsonObject {
-                    put(
-                      "attributes",
-                      JsonPrimitive("test"),
-                    )
-                  },
+                  Facet(
+                    attribute = "test",
+                  ),
                 ),
                 generate = listOf(listOf("facetA", "facetB"), listOf("facetC")),
               ),
             ),
-            languages = listOf("french"),
+            languages = Languages.ListOfString(listOf("french")),
             exclude = listOf("test"),
           ),
         )
@@ -593,7 +587,7 @@ class QuerySuggestionsTest {
       intercept = {
         assertEquals("/1/configs/theIndexName".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("PUT"), it.method)
-        assertJsonBody("""{"sourceIndices":[{"indexName":"testIndex","facets":[{"attributes":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}""", it.body)
+        assertJsonBody("""{"sourceIndices":[{"indexName":"testIndex","facets":[{"attribute":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}""", it.body)
       },
     )
   }

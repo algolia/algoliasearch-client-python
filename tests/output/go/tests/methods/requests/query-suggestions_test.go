@@ -37,7 +37,7 @@ func TestSuggestions_CreateConfig(t *testing.T) {
 		{
 			name: "createConfig",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"indexName":"theIndexName","sourceIndices":[{"indexName":"testIndex","facets":[{"attributes":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}`
+				parametersStr := `{"indexName":"theIndexName","sourceIndices":[{"indexName":"testIndex","facets":[{"attribute":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}`
 				req := suggestions.ApiCreateConfigRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.CreateConfig(req)
@@ -49,7 +49,7 @@ func TestSuggestions_CreateConfig(t *testing.T) {
 				require.Equal(t, "POST", echo.method)
 
 				ja := jsonassert.New(t)
-				ja.Assertf(*echo.body, `{"indexName":"theIndexName","sourceIndices":[{"indexName":"testIndex","facets":[{"attributes":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}`)
+				ja.Assertf(*echo.body, `{"indexName":"theIndexName","sourceIndices":[{"indexName":"testIndex","facets":[{"attribute":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}`)
 			},
 		},
 	}
@@ -728,7 +728,7 @@ func TestSuggestions_UpdateConfig(t *testing.T) {
 		{
 			name: "updateConfig",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"indexName":"theIndexName","querySuggestionsIndexParam":{"sourceIndices":[{"indexName":"testIndex","facets":[{"attributes":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}}`
+				parametersStr := `{"indexName":"theIndexName","querySuggestionsConfiguration":{"sourceIndices":[{"indexName":"testIndex","facets":[{"attribute":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}}`
 				req := suggestions.ApiUpdateConfigRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.UpdateConfig(req)
@@ -740,7 +740,7 @@ func TestSuggestions_UpdateConfig(t *testing.T) {
 				require.Equal(t, "PUT", echo.method)
 
 				ja := jsonassert.New(t)
-				ja.Assertf(*echo.body, `{"sourceIndices":[{"indexName":"testIndex","facets":[{"attributes":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}`)
+				ja.Assertf(*echo.body, `{"sourceIndices":[{"indexName":"testIndex","facets":[{"attribute":"test"}],"generate":[["facetA","facetB"],["facetC"]]}],"languages":["french"],"exclude":["test"]}`)
 			},
 		},
 	}

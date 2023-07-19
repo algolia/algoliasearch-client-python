@@ -6,20 +6,20 @@ import (
 	"fmt"
 )
 
-// LogLevel type of the record, can be one of three values (INFO, SKIP or ERROR).
+// LogLevel The type of log entry.   - `SKIP`. A query is skipped because it doesn't match the conditions for successful inclusion. For example, when a query doesn't generate enough search results. - `INFO`. An informative log entry. - `ERROR`. The Query Suggestions process encountered an error.
 type LogLevel string
 
-// List of logLevel
+// List of LogLevel
 const (
-	LOGLEVEL_INFO  LogLevel = "INFO"
 	LOGLEVEL_SKIP  LogLevel = "SKIP"
+	LOGLEVEL_INFO  LogLevel = "INFO"
 	LOGLEVEL_ERROR LogLevel = "ERROR"
 )
 
 // All allowed values of LogLevel enum
 var AllowedLogLevelEnumValues = []LogLevel{
-	"INFO",
 	"SKIP",
+	"INFO",
 	"ERROR",
 }
 
@@ -61,7 +61,7 @@ func (v LogLevel) IsValid() bool {
 	return false
 }
 
-// Ptr returns reference to logLevel value
+// Ptr returns reference to LogLevel value
 func (v LogLevel) Ptr() *LogLevel {
 	return &v
 }

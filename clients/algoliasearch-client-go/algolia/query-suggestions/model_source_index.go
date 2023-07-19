@@ -6,25 +6,32 @@ import (
 	"fmt"
 )
 
-// SourceIndex struct for SourceIndex
+// SourceIndex Configuration of an Algolia index for Query Suggestions.
 type SourceIndex struct {
-	// Source index name.
+	// Name of the Algolia index to use as source for query suggestions.
 	IndexName string `json:"indexName" validate:"required"`
-	// List of analytics tags to filter the popular searches per tag.
+	// If true, Query Suggestions uses all replicas of the primary index to find popular searches. If false, only the primary index is used.
+	Replicas *bool `json:"replicas,omitempty"`
+	// [Analytics tags](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) for filtering the popular searches.
 	AnalyticsTags []string `json:"analyticsTags,omitempty"`
-	// List of facets to define as categories for the query suggestions.
-	Facets []map[string]interface{} `json:"facets,omitempty"`
-	// Minimum number of hits (e.g., matching records in the source index) to generate a suggestions.
+	// Facets to use as top categories with your suggestions.  If provided, Query Suggestions adds the top facet values to each suggestion.
+	Facets []Facet `json:"facets,omitempty"`
+	// Minimum number of hits required to be included as a suggestion.  A search query must at least generate `minHits` hits to be included in the Query Suggestions index.
 	MinHits *int32 `json:"minHits,omitempty"`
-	// Minimum number of required letters for a suggestion to remain.
-	MinLetters *int32 `json:"minLetters,omitempty"`
-	// List of facet attributes used to generate Query Suggestions. The resulting suggestions are every combination of the facets in the nested list (e.g., (facetA and facetB) and facetC).
-	Generate [][]string `json:"generate,omitempty"`
-	// List of external indices to use to generate custom Query Suggestions.
-	External []SourceIndexExternal `json:"external,omitempty"`
+	// Minimum letters required to be included as a suggestion.  A search query must be at least `minLetters` long to be included in the Query Suggestions index.
+	MinLetters *int32      `json:"minLetters,omitempty"`
+	Generate   []*[]string `json:"generate,omitempty"`
+	// Algolia indices with popular searches to use as query suggestions.  Records of these indices must have these attributes:    - `query`: search query which will be added as a suggestion   - `count`: measure of popularity of that search query  For example, you can export popular searches from an external analytics tool, such as Google Analytics or Adobe Analytics, and feed this data into an external Algolia index. You can use this external index to generate query suggestions until your Algolia analytics has collected enough data.
+	External []string `json:"external,omitempty"`
 }
 
 type SourceIndexOption func(f *SourceIndex)
+
+func WithSourceIndexReplicas(val bool) SourceIndexOption {
+	return func(f *SourceIndex) {
+		f.Replicas = &val
+	}
+}
 
 func WithSourceIndexAnalyticsTags(val []string) SourceIndexOption {
 	return func(f *SourceIndex) {
@@ -32,7 +39,7 @@ func WithSourceIndexAnalyticsTags(val []string) SourceIndexOption {
 	}
 }
 
-func WithSourceIndexFacets(val []map[string]interface{}) SourceIndexOption {
+func WithSourceIndexFacets(val []Facet) SourceIndexOption {
 	return func(f *SourceIndex) {
 		f.Facets = val
 	}
@@ -50,13 +57,13 @@ func WithSourceIndexMinLetters(val int32) SourceIndexOption {
 	}
 }
 
-func WithSourceIndexGenerate(val [][]string) SourceIndexOption {
+func WithSourceIndexGenerate(val []*[]string) SourceIndexOption {
 	return func(f *SourceIndex) {
 		f.Generate = val
 	}
 }
 
-func WithSourceIndexExternal(val []SourceIndexExternal) SourceIndexOption {
+func WithSourceIndexExternal(val []string) SourceIndexOption {
 	return func(f *SourceIndex) {
 		f.External = val
 	}
@@ -80,6 +87,12 @@ func NewSourceIndex(indexName string, opts ...SourceIndexOption) *SourceIndex {
 // but it doesn't guarantee that properties required by API are set
 func NewSourceIndexWithDefaults() *SourceIndex {
 	this := &SourceIndex{}
+	var replicas bool = false
+	this.Replicas = &replicas
+	var minHits int32 = 5
+	this.MinHits = &minHits
+	var minLetters int32 = 4
+	this.MinLetters = &minLetters
 	return this
 }
 
@@ -107,9 +120,41 @@ func (o *SourceIndex) SetIndexName(v string) {
 	o.IndexName = v
 }
 
-// GetAnalyticsTags returns the AnalyticsTags field value if set, zero value otherwise.
+// GetReplicas returns the Replicas field value if set, zero value otherwise.
+func (o *SourceIndex) GetReplicas() bool {
+	if o == nil || o.Replicas == nil {
+		var ret bool
+		return ret
+	}
+	return *o.Replicas
+}
+
+// GetReplicasOk returns a tuple with the Replicas field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceIndex) GetReplicasOk() (*bool, bool) {
+	if o == nil || o.Replicas == nil {
+		return nil, false
+	}
+	return o.Replicas, true
+}
+
+// HasReplicas returns a boolean if a field has been set.
+func (o *SourceIndex) HasReplicas() bool {
+	if o != nil && o.Replicas != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetReplicas gets a reference to the given bool and assigns it to the Replicas field.
+func (o *SourceIndex) SetReplicas(v bool) {
+	o.Replicas = &v
+}
+
+// GetAnalyticsTags returns the AnalyticsTags field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *SourceIndex) GetAnalyticsTags() []string {
-	if o == nil || o.AnalyticsTags == nil {
+	if o == nil {
 		var ret []string
 		return ret
 	}
@@ -118,6 +163,7 @@ func (o *SourceIndex) GetAnalyticsTags() []string {
 
 // GetAnalyticsTagsOk returns a tuple with the AnalyticsTags field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *SourceIndex) GetAnalyticsTagsOk() ([]string, bool) {
 	if o == nil || o.AnalyticsTags == nil {
 		return nil, false
@@ -139,10 +185,10 @@ func (o *SourceIndex) SetAnalyticsTags(v []string) {
 	o.AnalyticsTags = v
 }
 
-// GetFacets returns the Facets field value if set, zero value otherwise.
-func (o *SourceIndex) GetFacets() []map[string]interface{} {
-	if o == nil || o.Facets == nil {
-		var ret []map[string]interface{}
+// GetFacets returns the Facets field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *SourceIndex) GetFacets() []Facet {
+	if o == nil {
+		var ret []Facet
 		return ret
 	}
 	return o.Facets
@@ -150,7 +196,8 @@ func (o *SourceIndex) GetFacets() []map[string]interface{} {
 
 // GetFacetsOk returns a tuple with the Facets field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *SourceIndex) GetFacetsOk() ([]map[string]interface{}, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *SourceIndex) GetFacetsOk() ([]Facet, bool) {
 	if o == nil || o.Facets == nil {
 		return nil, false
 	}
@@ -166,8 +213,8 @@ func (o *SourceIndex) HasFacets() bool {
 	return false
 }
 
-// SetFacets gets a reference to the given []map[string]interface{} and assigns it to the Facets field.
-func (o *SourceIndex) SetFacets(v []map[string]interface{}) {
+// SetFacets gets a reference to the given []Facet and assigns it to the Facets field.
+func (o *SourceIndex) SetFacets(v []Facet) {
 	o.Facets = v
 }
 
@@ -236,9 +283,9 @@ func (o *SourceIndex) SetMinLetters(v int32) {
 }
 
 // GetGenerate returns the Generate field value if set, zero value otherwise.
-func (o *SourceIndex) GetGenerate() [][]string {
+func (o *SourceIndex) GetGenerate() []*[]string {
 	if o == nil || o.Generate == nil {
-		var ret [][]string
+		var ret []*[]string
 		return ret
 	}
 	return o.Generate
@@ -246,7 +293,7 @@ func (o *SourceIndex) GetGenerate() [][]string {
 
 // GetGenerateOk returns a tuple with the Generate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *SourceIndex) GetGenerateOk() ([][]string, bool) {
+func (o *SourceIndex) GetGenerateOk() ([]*[]string, bool) {
 	if o == nil || o.Generate == nil {
 		return nil, false
 	}
@@ -262,15 +309,15 @@ func (o *SourceIndex) HasGenerate() bool {
 	return false
 }
 
-// SetGenerate gets a reference to the given [][]string and assigns it to the Generate field.
-func (o *SourceIndex) SetGenerate(v [][]string) {
+// SetGenerate gets a reference to the given []*[]string and assigns it to the Generate field.
+func (o *SourceIndex) SetGenerate(v []*[]string) {
 	o.Generate = v
 }
 
-// GetExternal returns the External field value if set, zero value otherwise.
-func (o *SourceIndex) GetExternal() []SourceIndexExternal {
-	if o == nil || o.External == nil {
-		var ret []SourceIndexExternal
+// GetExternal returns the External field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *SourceIndex) GetExternal() []string {
+	if o == nil {
+		var ret []string
 		return ret
 	}
 	return o.External
@@ -278,7 +325,8 @@ func (o *SourceIndex) GetExternal() []SourceIndexExternal {
 
 // GetExternalOk returns a tuple with the External field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *SourceIndex) GetExternalOk() ([]SourceIndexExternal, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *SourceIndex) GetExternalOk() ([]string, bool) {
 	if o == nil || o.External == nil {
 		return nil, false
 	}
@@ -294,8 +342,8 @@ func (o *SourceIndex) HasExternal() bool {
 	return false
 }
 
-// SetExternal gets a reference to the given []SourceIndexExternal and assigns it to the External field.
-func (o *SourceIndex) SetExternal(v []SourceIndexExternal) {
+// SetExternal gets a reference to the given []string and assigns it to the External field.
+func (o *SourceIndex) SetExternal(v []string) {
 	o.External = v
 }
 
@@ -303,6 +351,9 @@ func (o SourceIndex) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
 		toSerialize["indexName"] = o.IndexName
+	}
+	if o.Replicas != nil {
+		toSerialize["replicas"] = o.Replicas
 	}
 	if o.AnalyticsTags != nil {
 		toSerialize["analyticsTags"] = o.AnalyticsTags
@@ -328,6 +379,7 @@ func (o SourceIndex) MarshalJSON() ([]byte, error) {
 func (o SourceIndex) String() string {
 	out := ""
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
+	out += fmt.Sprintf("  replicas=%v\n", o.Replicas)
 	out += fmt.Sprintf("  analyticsTags=%v\n", o.AnalyticsTags)
 	out += fmt.Sprintf("  facets=%v\n", o.Facets)
 	out += fmt.Sprintf("  minHits=%v\n", o.MinHits)

@@ -30,15 +30,15 @@ public class QuerySuggestionsClient(
 
   /**
    * Create a configuration.
-   * Create a configuration of a Query Suggestions index. There's a limit of 100 configurations per application.
-   * @param querySuggestionsIndexWithIndexParam
+   * Create a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
+   * @param querySuggestionsConfigurationWithIndex
    * @param requestOptions additional request configuration.
    */
-  public suspend fun createConfig(querySuggestionsIndexWithIndexParam: QuerySuggestionsIndexWithIndexParam, requestOptions: RequestOptions? = null): SuccessResponse {
+  public suspend fun createConfig(querySuggestionsConfigurationWithIndex: QuerySuggestionsConfigurationWithIndex, requestOptions: RequestOptions? = null): BaseResponse {
     val requestConfig = RequestConfig(
       method = RequestMethod.POST,
       path = listOf("1", "configs"),
-      body = querySuggestionsIndexWithIndexParam,
+      body = querySuggestionsConfigurationWithIndex,
     )
     return requester.execute(
       requestConfig = requestConfig,
@@ -70,11 +70,11 @@ public class QuerySuggestionsClient(
 
   /**
    * Delete a configuration.
-   * Delete a configuration of a Query Suggestion's index. By deleting a configuration, you stop all updates to the underlying query suggestion index. Note that when doing this, the underlying index does not change - existing suggestions remain untouched.
-   * @param indexName Index on which to perform the request.
+   * Delete a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
+   * @param indexName Query Suggestions index name.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun deleteConfig(indexName: String, requestOptions: RequestOptions? = null): SuccessResponse {
+  public suspend fun deleteConfig(indexName: String, requestOptions: RequestOptions? = null): BaseResponse {
     require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `deleteConfig`." }
     val requestConfig = RequestConfig(
       method = RequestMethod.DELETE,
@@ -110,10 +110,10 @@ public class QuerySuggestionsClient(
 
   /**
    * List configurations.
-   * Get all the configurations of Query Suggestions. For each index, you get a block of JSON with a list of its configuration settings.
+   * List all Query Suggestions configurations of your Algolia application.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun getAllConfigs(requestOptions: RequestOptions? = null): List<QuerySuggestionsIndex> {
+  public suspend fun getAllConfigs(requestOptions: RequestOptions? = null): List<QuerySuggestionsConfigurationResponse> {
     val requestConfig = RequestConfig(
       method = RequestMethod.GET,
       path = listOf("1", "configs"),
@@ -125,12 +125,12 @@ public class QuerySuggestionsClient(
   }
 
   /**
-   * Get a single configuration.
-   * Get the configuration of a single Query Suggestions index.
-   * @param indexName Index on which to perform the request.
+   * Get a configuration.
+   * Get a single Query Suggestions configuration.
+   * @param indexName Query Suggestions index name.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun getConfig(indexName: String, requestOptions: RequestOptions? = null): QuerySuggestionsIndex {
+  public suspend fun getConfig(indexName: String, requestOptions: RequestOptions? = null): QuerySuggestionsConfigurationResponse {
     require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `getConfig`." }
     val requestConfig = RequestConfig(
       method = RequestMethod.GET,
@@ -144,11 +144,11 @@ public class QuerySuggestionsClient(
 
   /**
    * Get configuration status.
-   * Get the status of a Query Suggestion's index. The status includes whether the Query Suggestions index is currently in the process of being built, and the last build time.
-   * @param indexName Index on which to perform the request.
+   * Report the status of a Query Suggestions index.
+   * @param indexName Query Suggestions index name.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun getConfigStatus(indexName: String, requestOptions: RequestOptions? = null): Status {
+  public suspend fun getConfigStatus(indexName: String, requestOptions: RequestOptions? = null): GetConfigStatus200Response {
     require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `getConfigStatus`." }
     val requestConfig = RequestConfig(
       method = RequestMethod.GET,
@@ -161,12 +161,12 @@ public class QuerySuggestionsClient(
   }
 
   /**
-   * Get a log file.
-   * Get the log file of the last build of a single Query Suggestion index.
-   * @param indexName Index on which to perform the request.
+   * Get logs.
+   * Get the logs for a single Query Suggestions index.
+   * @param indexName Query Suggestions index name.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun getLogFile(indexName: String, requestOptions: RequestOptions? = null): List<LogFile> {
+  public suspend fun getLogFile(indexName: String, requestOptions: RequestOptions? = null): GetLogFile200Response {
     require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `getLogFile`." }
     val requestConfig = RequestConfig(
       method = RequestMethod.GET,
@@ -228,17 +228,17 @@ public class QuerySuggestionsClient(
 
   /**
    * Update a configuration.
-   * Update the configuration of a Query Suggestions index.
-   * @param indexName Index on which to perform the request.
-   * @param querySuggestionsIndexParam
+   * Update a QuerySuggestions configuration.
+   * @param indexName Query Suggestions index name.
+   * @param querySuggestionsConfiguration
    * @param requestOptions additional request configuration.
    */
-  public suspend fun updateConfig(indexName: String, querySuggestionsIndexParam: QuerySuggestionsIndexParam, requestOptions: RequestOptions? = null): SuccessResponse {
+  public suspend fun updateConfig(indexName: String, querySuggestionsConfiguration: QuerySuggestionsConfiguration, requestOptions: RequestOptions? = null): BaseResponse {
     require(indexName.isNotBlank()) { "Parameter `indexName` is required when calling `updateConfig`." }
     val requestConfig = RequestConfig(
       method = RequestMethod.PUT,
       path = listOf("1", "configs", "$indexName"),
-      body = querySuggestionsIndexParam,
+      body = querySuggestionsConfiguration,
     )
     return requester.execute(
       requestConfig = requestConfig,

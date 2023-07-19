@@ -43,22 +43,22 @@ class QuerySuggestionsClientRequestsTests {
   @Test
   @DisplayName("createConfig")
   void createConfigTest0() {
-    QuerySuggestionsIndexWithIndexParam querySuggestionsIndexWithIndexParam0 = new QuerySuggestionsIndexWithIndexParam();
+    QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex0 = new QuerySuggestionsConfigurationWithIndex();
     {
       String indexName1 = "theIndexName";
-      querySuggestionsIndexWithIndexParam0.setIndexName(indexName1);
+      querySuggestionsConfigurationWithIndex0.setIndexName(indexName1);
       List<SourceIndex> sourceIndices1 = new ArrayList<>();
       {
         SourceIndex sourceIndices_02 = new SourceIndex();
         {
           String indexName3 = "testIndex";
           sourceIndices_02.setIndexName(indexName3);
-          List<Object> facets3 = new ArrayList<>();
+          List<Facet> facets3 = new ArrayList<>();
           {
-            Map<String, String> facets_04 = new HashMap<>();
+            Facet facets_04 = new Facet();
             {
-              String attributes5 = "test";
-              facets_04.put("attributes", attributes5);
+              String attribute5 = "test";
+              facets_04.setAttribute(attribute5);
             }
             facets3.add(facets_04);
           }
@@ -84,23 +84,23 @@ class QuerySuggestionsClientRequestsTests {
         }
         sourceIndices1.add(sourceIndices_02);
       }
-      querySuggestionsIndexWithIndexParam0.setSourceIndices(sourceIndices1);
+      querySuggestionsConfigurationWithIndex0.setSourceIndices(sourceIndices1);
       List<String> languages1 = new ArrayList<>();
       {
         String languages_02 = "french";
         languages1.add(languages_02);
       }
-      querySuggestionsIndexWithIndexParam0.setLanguages(languages1);
+      querySuggestionsConfigurationWithIndex0.setLanguages(Languages.of(languages1));
       List<String> exclude1 = new ArrayList<>();
       {
         String exclude_02 = "test";
         exclude1.add(exclude_02);
       }
-      querySuggestionsIndexWithIndexParam0.setExclude(exclude1);
+      querySuggestionsConfigurationWithIndex0.setExclude(exclude1);
     }
 
     assertDoesNotThrow(() -> {
-      client.createConfig(querySuggestionsIndexWithIndexParam0);
+      client.createConfig(querySuggestionsConfigurationWithIndex0);
     });
     EchoResponse req = echo.getLastResponse();
 
@@ -108,7 +108,7 @@ class QuerySuggestionsClientRequestsTests {
     assertEquals(req.method, "POST");
     assertDoesNotThrow(() -> {
       JSONAssert.assertEquals(
-        "{\"indexName\":\"theIndexName\",\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attributes\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}",
+        "{\"indexName\":\"theIndexName\",\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attribute\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}",
         req.body,
         JSONCompareMode.STRICT
       );
@@ -825,7 +825,7 @@ class QuerySuggestionsClientRequestsTests {
   @DisplayName("updateConfig")
   void updateConfigTest0() {
     String indexName0 = "theIndexName";
-    QuerySuggestionsIndexParam querySuggestionsIndexParam0 = new QuerySuggestionsIndexParam();
+    QuerySuggestionsConfiguration querySuggestionsConfiguration0 = new QuerySuggestionsConfiguration();
     {
       List<SourceIndex> sourceIndices1 = new ArrayList<>();
       {
@@ -833,12 +833,12 @@ class QuerySuggestionsClientRequestsTests {
         {
           String indexName3 = "testIndex";
           sourceIndices_02.setIndexName(indexName3);
-          List<Object> facets3 = new ArrayList<>();
+          List<Facet> facets3 = new ArrayList<>();
           {
-            Map<String, String> facets_04 = new HashMap<>();
+            Facet facets_04 = new Facet();
             {
-              String attributes5 = "test";
-              facets_04.put("attributes", attributes5);
+              String attribute5 = "test";
+              facets_04.setAttribute(attribute5);
             }
             facets3.add(facets_04);
           }
@@ -864,23 +864,23 @@ class QuerySuggestionsClientRequestsTests {
         }
         sourceIndices1.add(sourceIndices_02);
       }
-      querySuggestionsIndexParam0.setSourceIndices(sourceIndices1);
+      querySuggestionsConfiguration0.setSourceIndices(sourceIndices1);
       List<String> languages1 = new ArrayList<>();
       {
         String languages_02 = "french";
         languages1.add(languages_02);
       }
-      querySuggestionsIndexParam0.setLanguages(languages1);
+      querySuggestionsConfiguration0.setLanguages(Languages.of(languages1));
       List<String> exclude1 = new ArrayList<>();
       {
         String exclude_02 = "test";
         exclude1.add(exclude_02);
       }
-      querySuggestionsIndexParam0.setExclude(exclude1);
+      querySuggestionsConfiguration0.setExclude(exclude1);
     }
 
     assertDoesNotThrow(() -> {
-      client.updateConfig(indexName0, querySuggestionsIndexParam0);
+      client.updateConfig(indexName0, querySuggestionsConfiguration0);
     });
     EchoResponse req = echo.getLastResponse();
 
@@ -888,7 +888,7 @@ class QuerySuggestionsClientRequestsTests {
     assertEquals(req.method, "PUT");
     assertDoesNotThrow(() -> {
       JSONAssert.assertEquals(
-        "{\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attributes\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}",
+        "{\"sourceIndices\":[{\"indexName\":\"testIndex\",\"facets\":[{\"attribute\":\"test\"}],\"generate\":[[\"facetA\",\"facetB\"],[\"facetC\"]]}],\"languages\":[\"french\"],\"exclude\":[\"test\"]}",
         req.body,
         JSONCompareMode.STRICT
       );

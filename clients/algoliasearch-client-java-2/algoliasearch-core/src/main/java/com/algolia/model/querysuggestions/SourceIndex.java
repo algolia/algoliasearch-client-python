@@ -8,17 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** SourceIndex */
+/** Configuration of an Algolia index for Query Suggestions. */
 public class SourceIndex {
 
   @JsonProperty("indexName")
   private String indexName;
 
+  @JsonProperty("replicas")
+  private Boolean replicas;
+
   @JsonProperty("analyticsTags")
   private List<String> analyticsTags;
 
   @JsonProperty("facets")
-  private List<Object> facets;
+  private List<Facet> facets;
 
   @JsonProperty("minHits")
   private Integer minHits;
@@ -30,7 +33,7 @@ public class SourceIndex {
   private List<List<String>> generate;
 
   @JsonProperty("external")
-  private List<SourceIndexExternal> external;
+  private List<String> external;
 
   public SourceIndex setIndexName(String indexName) {
     this.indexName = indexName;
@@ -38,13 +41,29 @@ public class SourceIndex {
   }
 
   /**
-   * Source index name.
+   * Name of the Algolia index to use as source for query suggestions.
    *
    * @return indexName
    */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;
+  }
+
+  public SourceIndex setReplicas(Boolean replicas) {
+    this.replicas = replicas;
+    return this;
+  }
+
+  /**
+   * If true, Query Suggestions uses all replicas of the primary index to find popular searches. If
+   * false, only the primary index is used.
+   *
+   * @return replicas
+   */
+  @javax.annotation.Nullable
+  public Boolean getReplicas() {
+    return replicas;
   }
 
   public SourceIndex setAnalyticsTags(List<String> analyticsTags) {
@@ -61,7 +80,8 @@ public class SourceIndex {
   }
 
   /**
-   * List of analytics tags to filter the popular searches per tag.
+   * [Analytics tags](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) for
+   * filtering the popular searches.
    *
    * @return analyticsTags
    */
@@ -70,12 +90,12 @@ public class SourceIndex {
     return analyticsTags;
   }
 
-  public SourceIndex setFacets(List<Object> facets) {
+  public SourceIndex setFacets(List<Facet> facets) {
     this.facets = facets;
     return this;
   }
 
-  public SourceIndex addFacets(Object facetsItem) {
+  public SourceIndex addFacets(Facet facetsItem) {
     if (this.facets == null) {
       this.facets = new ArrayList<>();
     }
@@ -84,12 +104,13 @@ public class SourceIndex {
   }
 
   /**
-   * List of facets to define as categories for the query suggestions.
+   * Facets to use as top categories with your suggestions. If provided, Query Suggestions adds the
+   * top facet values to each suggestion.
    *
    * @return facets
    */
   @javax.annotation.Nullable
-  public List<Object> getFacets() {
+  public List<Facet> getFacets() {
     return facets;
   }
 
@@ -99,7 +120,8 @@ public class SourceIndex {
   }
 
   /**
-   * Minimum number of hits (e.g., matching records in the source index) to generate a suggestions.
+   * Minimum number of hits required to be included as a suggestion. A search query must at least
+   * generate `minHits` hits to be included in the Query Suggestions index. minimum: 0
    *
    * @return minHits
    */
@@ -114,7 +136,8 @@ public class SourceIndex {
   }
 
   /**
-   * Minimum number of required letters for a suggestion to remain.
+   * Minimum letters required to be included as a suggestion. A search query must be at least
+   * `minLetters` long to be included in the Query Suggestions index. minimum: 0
    *
    * @return minLetters
    */
@@ -137,8 +160,7 @@ public class SourceIndex {
   }
 
   /**
-   * List of facet attributes used to generate Query Suggestions. The resulting suggestions are
-   * every combination of the facets in the nested list (e.g., (facetA and facetB) and facetC).
+   * Get generate
    *
    * @return generate
    */
@@ -147,12 +169,12 @@ public class SourceIndex {
     return generate;
   }
 
-  public SourceIndex setExternal(List<SourceIndexExternal> external) {
+  public SourceIndex setExternal(List<String> external) {
     this.external = external;
     return this;
   }
 
-  public SourceIndex addExternal(SourceIndexExternal externalItem) {
+  public SourceIndex addExternal(String externalItem) {
     if (this.external == null) {
       this.external = new ArrayList<>();
     }
@@ -161,12 +183,17 @@ public class SourceIndex {
   }
 
   /**
-   * List of external indices to use to generate custom Query Suggestions.
+   * Algolia indices with popular searches to use as query suggestions. Records of these indices
+   * must have these attributes: - `query`: search query which will be added as a suggestion -
+   * `count`: measure of popularity of that search query For example, you can export popular
+   * searches from an external analytics tool, such as Google Analytics or Adobe Analytics, and feed
+   * this data into an external Algolia index. You can use this external index to generate query
+   * suggestions until your Algolia analytics has collected enough data.
    *
    * @return external
    */
   @javax.annotation.Nullable
-  public List<SourceIndexExternal> getExternal() {
+  public List<String> getExternal() {
     return external;
   }
 
@@ -181,6 +208,7 @@ public class SourceIndex {
     SourceIndex sourceIndex = (SourceIndex) o;
     return (
       Objects.equals(this.indexName, sourceIndex.indexName) &&
+      Objects.equals(this.replicas, sourceIndex.replicas) &&
       Objects.equals(this.analyticsTags, sourceIndex.analyticsTags) &&
       Objects.equals(this.facets, sourceIndex.facets) &&
       Objects.equals(this.minHits, sourceIndex.minHits) &&
@@ -192,7 +220,7 @@ public class SourceIndex {
 
   @Override
   public int hashCode() {
-    return Objects.hash(indexName, analyticsTags, facets, minHits, minLetters, generate, external);
+    return Objects.hash(indexName, replicas, analyticsTags, facets, minHits, minLetters, generate, external);
   }
 
   @Override
@@ -200,6 +228,7 @@ public class SourceIndex {
     StringBuilder sb = new StringBuilder();
     sb.append("class SourceIndex {\n");
     sb.append("    indexName: ").append(toIndentedString(indexName)).append("\n");
+    sb.append("    replicas: ").append(toIndentedString(replicas)).append("\n");
     sb.append("    analyticsTags: ").append(toIndentedString(analyticsTags)).append("\n");
     sb.append("    facets: ").append(toIndentedString(facets)).append("\n");
     sb.append("    minHits: ").append(toIndentedString(minHits)).append("\n");

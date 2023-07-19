@@ -16,7 +16,7 @@ describe('createConfig', () => {
       sourceIndices: [
         {
           indexName: 'testIndex',
-          facets: [{ attributes: 'test' }],
+          facets: [{ attribute: 'test' }],
           generate: [['facetA', 'facetB'], ['facetC']],
         },
       ],
@@ -31,7 +31,7 @@ describe('createConfig', () => {
       sourceIndices: [
         {
           indexName: 'testIndex',
-          facets: [{ attributes: 'test' }],
+          facets: [{ attribute: 'test' }],
           generate: [['facetA', 'facetB'], ['facetC']],
         },
       ],
@@ -415,11 +415,11 @@ describe('updateConfig', () => {
   test('updateConfig', async () => {
     const req = (await client.updateConfig({
       indexName: 'theIndexName',
-      querySuggestionsIndexParam: {
+      querySuggestionsConfiguration: {
         sourceIndices: [
           {
             indexName: 'testIndex',
-            facets: [{ attributes: 'test' }],
+            facets: [{ attribute: 'test' }],
             generate: [['facetA', 'facetB'], ['facetC']],
           },
         ],
@@ -434,7 +434,7 @@ describe('updateConfig', () => {
       sourceIndices: [
         {
           indexName: 'testIndex',
-          facets: [{ attributes: 'test' }],
+          facets: [{ attribute: 'test' }],
           generate: [['facetA', 'facetB'], ['facetC']],
         },
       ],
