@@ -58,6 +58,9 @@ final _regMap = RegExp(r'^Map<String,(.*)>$');
               value.values.map((dynamic v) => deserialize<BaseType, BaseType>(v, targetType, growable: growable)),
             ) as ReturnType;
           }
+          if (targetType == 'Object') {
+            return value;
+          }
           break;
     } 
     throw Exception('Cannot deserialize');

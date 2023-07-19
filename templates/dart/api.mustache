@@ -100,8 +100,13 @@ final class {{classname}} implements ApiClient {
     {{/isFreeFormObject}}
     {{/requiredParams}}
     final request = ApiRequest(
-        method: RequestMethod.{{#lambda.snakecase}}{{httpMethod}}{{/lambda.snakecase}}, 
+        method: RequestMethod.{{#lambda.snakecase}}{{httpMethod}}{{/lambda.snakecase}},
+        {{^vendorExtensions.x-is-custom-request}}
         path: r'{{{path}}}'{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', Uri.encodeComponent({{{paramName}}}.toString())){{/pathParams}},
+        {{/vendorExtensions.x-is-custom-request}}
+        {{#vendorExtensions.x-is-custom-request}}
+        path: r'{{{path}}}'{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', {{{paramName}}}){{/pathParams}},
+        {{/vendorExtensions.x-is-custom-request}}
         {{#vendorExtensions.x-use-read-transporter}}
         isRead : {{{vendorExtensions.x-use-read-transporter}}},
         {{/vendorExtensions.x-use-read-transporter}}

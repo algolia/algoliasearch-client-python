@@ -81,6 +81,7 @@ class DioRequester implements Requester {
       options: Options(
         method: request.method,
         headers: request.headers,
+        contentType: request.body != null ? Headers.jsonContentType: null,
         sendTimeout: request.timeout,
         receiveTimeout: request.timeout,
       ),
