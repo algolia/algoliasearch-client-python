@@ -1,44 +1,38 @@
 get:
   tags:
-    - advanced
+    - logs
   operationId: getLogFile
-  summary: Get a log file.
-  description: Get the log file of the last build of a single Query Suggestion index.
+  summary: Get logs.
+  description: Get the logs for a single Query Suggestions index.
   parameters:
-    - $ref: '../../common/parameters.yml#/IndexName'
+    - $ref: '../common/parameters.yml#/IndexName'
   responses:
     '200':
       description: OK
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: object
-              title: LogFile
-              additionalProperties: false
-              required:
-                - timestamp
-                - level
-                - message
-                - contextLevel
-              properties:
-                timestamp:
-                  type: string
-                  description: date and time of creation of the record.
-                level:
-                  $ref: '../common/enums.yml#/logLevel'
-                message:
-                  type: string
-                  description: detailed description of what happened.
-                contextLevel:
-                  type: integer
-                  description: indicates the hierarchy of the records. For example, a record with contextLevel=1 belongs to a preceding record with contextLevel=0.
+            type: object
+            additionalProperties: false
+            properties:
+              timestamp:
+                type: string
+                description: Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+                example: 2023-07-05T08:03:33.898076171Z
+              level:
+                $ref: '../common/enums.yml#/LogLevel'
+              message:
+                type: string
+                description: Details about this log entry.
+                example: 'skipping query "Brooke Adams": not enough search results, got 1, expected 5'
+              contextLevel:
+                type: integer
+                description: |
+                  Level indicating the position of a suggestion in a hierarchy of records. 
+
+                  For example, a `contextLevel` of 1 indicates that this suggestion belongs to a previous suggestion with `contextLevel` 0.
+                example: 1
     '401':
-      $ref: '../../common/responses/Unauthorized.yml'
-    '403':
-      $ref: '../../common/responses/MethodNotAllowed.yml'
+      $ref: '../common/responses/Unauthorized.yml'
     '404':
-      $ref: '../../common/responses/IndexNotFound.yml'
-    '500':
-      $ref: '../../common/responses/InternalError.yml'
+      $ref: '../common/responses/NotFound.yml'

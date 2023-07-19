@@ -1,0 +1,25 @@
+description: Unauthorized
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/BaseResponse.yml'
+    examples:
+      Unauthorized:
+        summary: Wrong region.
+        description: |
+          Make sure to make your request to the server corresponding to your region.  
+
+          You can check the region for your application in the [Algolia dashboard](https://dashboard.algolia.com/account/infrastructure/analytics).
+        value:
+          'status': 401
+          'message': 'The log processing region does not match'
+          
+      InvalidCredentials:
+        summary: Invalid credentials.
+        description: Your application ID or API key is wrong.
+        value: {'status': 401, 'message': 'Invalid credentials'}
+      WrongAPIKey:
+        summary: Admin API key required.
+        description: Your API key is not the Admin API key for your application.
+        value:
+          {'status': 401, 'message': 'The admin API key is required'}

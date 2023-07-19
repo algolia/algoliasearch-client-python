@@ -7,7 +7,7 @@
           "indexName": "testIndex",
           "facets": [
             {
-              "attributes": "test"
+              "attribute": "test"
             }
           ],
           "generate": [
@@ -38,7 +38,7 @@
             "indexName": "testIndex",
             "facets": [
               {
-                "attributes": "test"
+                "attribute": "test"
               }
             ],
             "generate": [

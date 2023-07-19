@@ -1,0 +1,11 @@
+title: facet
+description: Facet to use as category.
+type: object
+additionalProperties: false
+properties:
+  attribute:
+    type: string
+    description: Facet name.
+  amount:
+    type: integer
+    description: Number of suggestions.

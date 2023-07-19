@@ -1,0 +1,14 @@
+type: object
+description: Query Suggestions configuration.
+required:
+  - indexName
+  - sourceIndices
+allOf:
+  - type: object
+    additionalProperties: false
+    required:
+      - indexName
+    properties:
+      indexName:
+        $ref: './QuerySuggestionsIndexName.yml'
+  - $ref: './QuerySuggestionsConfiguration.yml'

@@ -1,7 +1,10 @@
 openapi: 3.0.2
 info:
   title: Query Suggestions API
-  description: API powering the Query Suggestions feature of Algolia.
+  description: |
+    The Query Suggestions API lets you manage Algolia's Query Suggestions configurations.
+    Query Suggestions add new indices with popular search queries, external suggestions, or facet values to your Algolia application.
+    In your user interface, you can query the Query Suggestions indices like regular indices and add [suggested searches](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/query-suggestions/js/) to guide users and speed up their search.
   version: 1.0.0
 components:
   securitySchemes:
@@ -11,6 +14,9 @@ components:
       $ref: '../common/securitySchemes.yml#/apiKey'
 servers:
   - url: https://query-suggestions.{region}.algolia.com
+    description: |
+      You can check the region for your application in the [Algolia dashboard](https://dashboard.algolia.com/account/infrastructure/analytics).
+      If you connect to the wrong region, the API returns an error with the status `401` and the message: "The log processing region does not match".
     variables:
       region:
         enum:
@@ -21,19 +27,19 @@ security:
   - appId: []
     apiKey: []
 tags:
-  - name: advanced
-    x-displayName: Advanced
-    description: Advanced operations.
   - name: configurations
     x-displayName: Configurations
     description: Manage Query Suggestions configurations.
-x-tagGroups:
-  - name: General
+  - name: logs
+    x-displayName: Logs
+    description: Get logs for a Query Suggestions index.
+x-tagGroups: 
+  - name: Configurations
     tags:
       - configurations
-  - name: Others
+  - name: Logs
     tags:
-      - advanced
+      - logs
 paths:
   # ######################
   # ### Custom request ###
