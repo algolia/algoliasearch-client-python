@@ -20,6 +20,7 @@ export const patterns = [
   '!clients/algoliasearch-client-javascript/.yarn/**',
   '!clients/algoliasearch-client-javascript/scripts/**',
   '!clients/algoliasearch-client-javascript/tests/**',
+  '!clients/algoliasearch-client-javascript/packages/**/package.json',
   '!clients/algoliasearch-client-javascript/packages/requester-*/**',
   '!clients/algoliasearch-client-javascript/packages/client-common/**',
   '!clients/algoliasearch-client-javascript/packages/algoliasearch/__tests__/**',
