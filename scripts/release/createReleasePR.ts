@@ -32,7 +32,7 @@ import type {
   Scope,
   Changelog,
 } from './types.js';
-import { updateAPIVersions, updateDartPackages } from './updateAPIVersions.js';
+import { updateAPIVersions } from './updateAPIVersions.js';
 
 dotenv.config({ path: ROOT_ENV_PATH });
 
@@ -442,7 +442,6 @@ async function createReleasePR(): Promise<void> {
 
   console.log('Updating config files...');
   await updateAPIVersions(versions, changelog);
-  await updateDartPackages();
 
   const headBranch = `chore/prepare-release-${TODAY}`;
   console.log(`Switching to branch: ${headBranch}`);

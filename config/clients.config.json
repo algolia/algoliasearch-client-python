@@ -15,7 +15,7 @@
     "folder": "clients/algoliasearch-client-javascript",
     "npmNamespace": "@algolia",
     "gitRepoId": "algoliasearch-client-javascript",
-    "utilsPackageVersion": "5.0.0-alpha.73",
+    "packageVersion": "5.0.0-alpha.73",
     "modelFolder": "model",
     "apiFolder": "src",
     "customGenerator": "algolia-javascript",

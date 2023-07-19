@@ -1,5 +1,4 @@
 import clientsConfig from '../config/clients.config.json' assert { type: 'json' };
-import openapiConfig from '../config/openapitools.json' assert { type: 'json' };
 
 import type { Language, LanguageConfig } from './types.js';
 
@@ -48,11 +47,6 @@ export function getCustomGenerator(language: Language): string {
  * Returns the version of the package from clients.config.json, except for JavaScript where it returns the version of javascript-search.
  */
 export function getPackageVersionDefault(language: Language): string {
-  if (language === 'javascript') {
-    return openapiConfig['generator-cli'].generators['javascript-search']
-      .additionalProperties.packageVersion;
-  }
-
   return getClientsConfigField(language, 'packageVersion');
 }
 

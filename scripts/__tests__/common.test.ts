@@ -59,15 +59,9 @@ describe('config', () => {
   describe('getClientsConfigField', () => {
     it('throws if the field is not found', () => {
       expect(() => {
-        getClientsConfigField('javascript', 'packageVersion');
+        getClientsConfigField('javascript', 'foofoo');
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Unable to find 'packageVersion' for 'javascript'"`
-      );
-
-      expect(() => {
-        getClientsConfigField('java', 'utilsPackageVersion');
-      }).toThrowErrorMatchingInlineSnapshot(
-        `"Unable to find 'utilsPackageVersion' for 'java'"`
+        `"Unable to find 'foofoo' for 'javascript'"`
       );
     });
 

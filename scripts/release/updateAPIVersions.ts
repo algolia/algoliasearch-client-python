@@ -2,7 +2,6 @@ import fsp from 'fs/promises';
 
 import dotenv from 'dotenv';
 import yaml from 'js-yaml';
-import semver from 'semver';
 
 import clientsConfig from '../../config/clients.config.json' assert { type: 'json' };
 import openapiConfig from '../../config/openapitools.json' assert { type: 'json' };
@@ -16,11 +15,7 @@ import {
   CI,
   setVerbose,
 } from '../common.js';
-import {
-  getClientsConfigField,
-  getGitHubUrl,
-  getLanguageFolder,
-} from '../config.js';
+import { getGitHubUrl, getLanguageFolder } from '../config.js';
 import type { Language } from '../types.js';
 
 import { RELEASED_TAG, writeJsonFile } from './common.js';
@@ -28,82 +23,17 @@ import type { Changelog, Versions, VersionsToRelease } from './types.js';
 
 dotenv.config({ path: ROOT_ENV_PATH });
 
-/**
- * Bump each client version of the JavaScript client in workspace places and config files.
- *
- * We don't use the pre-computed `next` version for JavaScript, because the packages have independent versioning.
- */
-async function updateVersionForJavascript(
-  jsVersion: NonNullable<VersionsToRelease['javascript']>
-): Promise<void> {
-  // Sets the new version of the utils package
-  const utilsPackageVersion = getClientsConfigField(
-    'javascript',
-    'utilsPackageVersion'
-  );
-  const nextUtilsPackageVersion = semver.inc(
-    utilsPackageVersion,
-    jsVersion.releaseType
-  );
-
-  if (!nextUtilsPackageVersion) {
-    throw new Error(
-      `Failed to bump version ${utilsPackageVersion} by ${jsVersion.releaseType}.`
-    );
-  }
-
-  clientsConfig.javascript.utilsPackageVersion = nextUtilsPackageVersion;
-
-  // Sets the new version of the JavaScript client
-  Object.values(GENERATORS)
-    .filter((gen) => gen.language === 'javascript')
-    .forEach((gen) => {
-      const { additionalProperties } = gen;
-      const newVersion = semver.inc(
-        additionalProperties.packageVersion,
-        jsVersion.releaseType
-      );
-      const packageName = `${clientsConfig.javascript.npmNamespace}/${additionalProperties.packageName}`;
-
-      if (!newVersion) {
-        throw new Error(
-          `Failed to bump '${packageName}' by '${jsVersion.releaseType}'.`
-        );
-      }
-
-      additionalProperties.packageVersion = newVersion;
-      // We don't want this field to be in the final file, it only exists in the scripts.
-      additionalProperties.packageName = undefined;
-    });
-
-  // update `openapitools.json` config file
-  await writeJsonFile(
-    toAbsolutePath('config/openapitools.json'),
-    openapiConfig
-  );
-
-  // update `clients.config.json` file for the utils version
-  await writeJsonFile(
-    toAbsolutePath('config/clients.config.json'),
-    clientsConfig
-  );
-}
-
 async function updateConfigFiles(
   versionsToRelease: VersionsToRelease
 ): Promise<void> {
-  if (versionsToRelease.javascript) {
-    await updateVersionForJavascript(versionsToRelease.javascript);
-  }
-
   // update the other versions in clients.config.json
-  LANGUAGES.forEach((lang) => {
-    if (lang === 'javascript' || !versionsToRelease[lang]) {
-      return;
+  for (const lang of LANGUAGES) {
+    if (!versionsToRelease[lang]) {
+      continue;
     }
 
     clientsConfig[lang].packageVersion = versionsToRelease[lang]!.next;
-  });
+  }
 
   await writeJsonFile(
     toAbsolutePath('config/clients.config.json'),
@@ -181,31 +111,17 @@ export async function updateAPIVersions(
   for (const [lang, { current, releaseType, next }] of Object.entries(
     versionsToRelease
   )) {
-    /*
-      About bumping versions of JS clients:
-      
-      There are generated clients in JS repo, and non-generated clients like `client-common`, `requester-*`
-      Now that the versions of generated clients are updated in `openapitools.json`,
-      the generation output will have correct new versions.
-      
-      However, we need to manually update versions of the non-generated (a.k.a. manually written) clients.
-      In order to do that, we run `yarn release:bump <releaseType>` in this monorepo first.
-      It will update the versions of the non-generated clients which exists in this monorepo.
-      After that, we generate clients with new versions. And then, we copy all of them over to JS repository.
-      */
+    if (lang === 'dart') {
+      await updateDartPackages();
+
+      continue;
+    }
+
     if (lang === 'javascript') {
       const cwd = getLanguageFolder(lang);
 
-      // install yarn in case some package were updated
-      setVerbose(true);
-      await run('yarn install', { cwd });
       setVerbose(CI);
-      await run(`yarn release:bump ${releaseType}`, { cwd });
-    }
-
-    if (lang === 'dart') {
-      // skip dart.
-      continue;
+      await run(`yarn install && yarn release:bump ${releaseType}`, { cwd });
     }
 
     await updateChangelog(lang as Language, changelog[lang], current, next);
@@ -216,12 +132,12 @@ export async function updateAPIVersions(
  * Updates packages versions and generates the changelog.
  * Documentation: {@link https://melos.invertase.dev/commands/version | melos version}.
  */
-export async function updateDartPackages(): Promise<void> {
+async function updateDartPackages(): Promise<void> {
   const cwd = getLanguageFolder('dart');
 
   // Generate dart packages versions and changelogs
   await run(
-    `(cd ${cwd} && melos version --no-git-tag-version --yes --diff ${RELEASED_TAG})`
+    `(cd ${cwd} && dart pub get && melos version --no-git-tag-version --yes --diff ${RELEASED_TAG})`
   );
 
   // Update packages configs based on generated versions

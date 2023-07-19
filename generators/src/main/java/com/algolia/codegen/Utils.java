@@ -130,13 +130,30 @@ public class Utils {
     }
   }
 
+  /**
+   * Get the current version of the given client from the
+   * `clients/algoliasearch-client-javascript/packages/${client}/package.json` file, defaults to
+   * 0.0.1 if not found
+   */
+  public static String getPackageJsonVersion(String client) throws ConfigException {
+    try {
+      JsonNode packageJson = Utils.readJsonFile("clients/algoliasearch-client-javascript/packages/" + client + "/package.json");
+      String value = packageJson.get("version").asText();
+
+      if (value.isEmpty()) {
+        return "0.0.1";
+      }
+
+      return value;
+    } catch (ConfigException e) {
+      return "0.0.1";
+    }
+  }
+
   /** Get the `field` value in the `config/clients.config.json` file for the given language */
   public static String getClientConfigField(String language, String... fields) throws ConfigException {
     if (fields.length == 0) {
       throw new ConfigException("getClientConfigField requires at least one field");
-    }
-    if (language.equals("javascript") && fields[0].equals("packageVersion")) {
-      throw new ConfigException("Cannot read 'packageVersion' with language=\"javascript\", " + "read configs/openapitools.json instead");
     }
     if (cacheConfig == null) {
       cacheConfig = readJsonFile("config/clients.config.json");
