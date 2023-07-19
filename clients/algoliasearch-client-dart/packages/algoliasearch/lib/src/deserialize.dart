@@ -312,6 +312,9 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
               growable: growable)),
         ) as ReturnType;
       }
+      if (targetType == 'Object') {
+        return value;
+      }
       break;
   }
   throw Exception('Cannot deserialize');

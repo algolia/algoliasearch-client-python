@@ -65,8 +65,7 @@ final class InsightsClient implements ApiClient {
     );
     final request = ApiRequest(
       method: RequestMethod.delete,
-      path: r'/1{path}'
-          .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
+      path: r'/1{path}'.replaceAll('{' r'path' '}', path),
       queryParams: {
         ...?parameters,
       },
@@ -100,8 +99,7 @@ final class InsightsClient implements ApiClient {
     );
     final request = ApiRequest(
       method: RequestMethod.get,
-      path: r'/1{path}'
-          .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
+      path: r'/1{path}'.replaceAll('{' r'path' '}', path),
       queryParams: {
         ...?parameters,
       },
@@ -137,8 +135,7 @@ final class InsightsClient implements ApiClient {
     );
     final request = ApiRequest(
       method: RequestMethod.post,
-      path: r'/1{path}'
-          .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
+      path: r'/1{path}'.replaceAll('{' r'path' '}', path),
       queryParams: {
         ...?parameters,
       },
@@ -201,8 +198,7 @@ final class InsightsClient implements ApiClient {
     );
     final request = ApiRequest(
       method: RequestMethod.put,
-      path: r'/1{path}'
-          .replaceAll('{' r'path' '}', Uri.encodeComponent(path.toString())),
+      path: r'/1{path}'.replaceAll('{' r'path' '}', path),
       queryParams: {
         ...?parameters,
       },
