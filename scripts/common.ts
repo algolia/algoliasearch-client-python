@@ -2,7 +2,7 @@ import fsp from 'fs/promises';
 import path from 'path';
 
 import { Octokit } from '@octokit/rest';
-import { execaCommand } from 'execa';
+import { execaCommand, execa } from 'execa';
 import type { ExecaError } from 'execa';
 import { hashElement } from 'folder-hash';
 import { remove } from 'fs-extra';
@@ -154,7 +154,7 @@ export async function gitCommit({
     ? `${message}\n\n\n${coAuthors.join('\n')}`
     : message;
 
-  await execaCommand(`git commit -m "${messageWithCoAuthors}"`, { cwd });
+  await execa('git', ['commit', '-m', messageWithCoAuthors], { cwd });
 }
 
 export async function checkForCache({
