@@ -44,6 +44,7 @@ public class AlgoliaJavaGenerator extends JavaClientCodegen {
     supportingFiles.removeIf(file ->
       file.getTemplateFile().equals("build.gradle.mustache") ||
       file.getTemplateFile().equals("settings.gradle.mustache") ||
+      file.getTemplateFile().equals("gradlew.mustache") ||
       file.getTemplateFile().equals("gitignore.mustache") ||
       file.getTemplateFile().equals("ApiClient.mustache") ||
       file.getTemplateFile().equals("ApiCallback.mustache") ||
