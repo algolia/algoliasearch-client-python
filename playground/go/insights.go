@@ -9,15 +9,15 @@ import (
 func testInsights(appID, apiKey string) int {
 	insightsClient := insights.NewClient(appID, apiKey, insights.US)
 
-	events := insights.NewInsightEvents([]insights.InsightEvent{
-		*insights.NewInsightEvent("click",
-			"myEvent",
+	events := insights.NewInsightsEvents([]insights.EventsItems{
+		insights.ClickedObjectIDsAsEventsItems(insights.NewClickedObjectIDs("myEvent",
+			insights.CLICKEVENT_CLICK,
 			"test_index",
+			[]string{"myObjectID"},
 			"myToken",
-			insights.WithInsightEventPositions([]int32{1, 2, 3}),
-			insights.WithInsightEventQueryID("myQueryID")),
+			insights.WithClickedObjectIDsTimestamp(1234567890))),
 	})
-	pushEventsResponse, err := insightsClient.PushEvents(
+	eventsResponse, err := insightsClient.PushEvents(
 		insightsClient.NewApiPushEventsRequest(events),
 	)
 	if err != nil {
@@ -25,7 +25,7 @@ func testInsights(appID, apiKey string) int {
 		return 1
 	}
 
-	printResponse(pushEventsResponse)
+	printResponse(eventsResponse)
 
 	return 0
 }

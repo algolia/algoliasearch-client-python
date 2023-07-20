@@ -20,7 +20,7 @@ suspend fun main() {
     val request = AddABTestsRequest(
         name = "testing",
         endAt = "2023-04-08T05:10:00Z",
-        variant = listOf(
+        variants = listOf(
             AbTestsVariant(index = dotenv["ANALYTICS_INDEX"], trafficPercentage = 30),
             AbTestsVariant(index = dotenv["ANALYTICS_INDEX_B"], trafficPercentage = 70),
         )

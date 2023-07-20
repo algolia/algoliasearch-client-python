@@ -7,8 +7,8 @@ void main() async {
     apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   );
 
-  // Creating an InsightEvents object with a list of InsightEvent objects.
-  // Each InsightEvent represents an event such as a user viewing a specific item.
+  // Creating an InsightsEvents object with a list of EventsItems objects.
+  // Each EventsItems represents an event such as a user viewing a specific item.
   final events = InsightsEvents(
     events: [
       ViewedObjectIDs(

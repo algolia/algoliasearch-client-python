@@ -2,9 +2,9 @@ package com.algolia.playground
 
 import com.algolia.client.api.InsightsClient
 import com.algolia.client.configuration.ClientOptions
-import com.algolia.client.model.insights.EventType
-import com.algolia.client.model.insights.InsightEvent
-import com.algolia.client.model.insights.InsightEvents
+import com.algolia.client.model.insights.ClickEvent
+import com.algolia.client.model.insights.EventsItems
+import com.algolia.client.model.insights.InsightsEvents
 import io.github.cdimascio.dotenv.Dotenv
 import io.ktor.client.plugins.logging.*
 import kotlin.system.exitProcess
@@ -19,10 +19,10 @@ suspend fun main() {
     )
     val indexName = dotenv["SEARCH_INDEX"]
 
-    val events = InsightEvents(
+    val events = InsightsEvents(
         events = listOf(
-            InsightEvent(
-                eventType = EventType.Click,
+            EventsItems.ClickedObjectIDs(
+                eventType = ClickEvent.Click,
                 eventName = "click",
                 index = indexName,
                 userToken = "playground_user",

@@ -13,16 +13,16 @@ public class Insights {
     InsightsClient client = new InsightsClient(dotenv.get("ALGOLIA_APPLICATION_ID"), dotenv.get("ALGOLIA_SEARCH_KEY"));
 
     String indexName = dotenv.get("SEARCH_INDEX");
-    InsightEvents params = new InsightEvents();
-    InsightEvent event = new InsightEvent();
-    event.setEventType(EventType.CLICK);
-    event.setUserToken("user");
-    event.setIndex("test_what");
-    event.setEventName("test");
+    InsightsEvents params = new InsightsEvents();
+    EventsItems event = EventsItems.of(new ClickedObjectIDs()
+      .setEventType(ClickEvent.CLICK)
+      .setUserToken("user")
+      .setIndex("test_what")
+      .setEventName("test"));
     params.addEvents(event);
 
     try {
-      PushEventsResponse result = client.pushEvents(params);
+      EventsResponse result = client.pushEvents(params);
       System.out.println(result);
     } catch (AlgoliaApiException e) {
       // the API failed

@@ -341,7 +341,7 @@ const recordsFromDataSource = [
 ];
 
 // Here we construct the request to be sent to Algolia with the `batch` method
-const requests: BatchOperation[] = recordsFromDataSource.map((record) => {
+const requests: BatchRequest[] = recordsFromDataSource.map((record) => {
   return {
     // `batch` allows you to do many Algolia operations, but here we want to index our record.
     action: 'addObject',
@@ -404,10 +404,10 @@ List<Actor> records = Arrays.asList(
 );
 
 // Here we construct the request to be sent to Algolia with the `batch` method
-List<BatchOperation> requests = new ArrayList<>();
+List<BatchRequest> requests = new ArrayList<>();
 
 for (Actor record : records) {
-  requests.add(new BatchOperation()
+  requests.add(new BatchRequest()
     .setAction(Action.ADD_OBJECT)
     // Accepts any serializable class.
     .setBody(record)

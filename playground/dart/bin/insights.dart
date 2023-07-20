@@ -11,11 +11,11 @@ void main() async {
     options: ClientOptions(logger: print),
   );
 
-  // Creating an InsightEvents object with a list of InsightEvent objects.
-  // Each InsightEvent represents an event such as a user viewing a specific item.
-  final events = InsightEvents(
+  // Creating an InsightsEvents object with a list of EventsItems objects.
+  // Each EventsItems represents an event such as a user viewing a specific item.
+  final events = InsightsEvents(
     events: [
-      InsightEvent(
+      ViewEvent(
         eventType: EventType.view,
         eventName: 'View event',
         index: 'instant_search',
@@ -25,7 +25,7 @@ void main() async {
       )
     ],
   );
-  await insights.pushEvents(insightEvents: events);
+  await insights.pushEvents(insightsEvents: events);
 
   // Close the client and dispose of all underlying resources.
   insights.dispose();

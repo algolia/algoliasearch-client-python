@@ -1,4 +1,5 @@
 plugins {
+    application
     kotlin("jvm") version "1.9.0"
     kotlin("plugin.serialization") version "1.9.0"
 }
@@ -23,4 +24,8 @@ tasks.test {
 
 kotlin {
     jvmToolchain(11)
+}
+
+application {
+    mainClass.set(project.property("mainClass") as String?)
 }

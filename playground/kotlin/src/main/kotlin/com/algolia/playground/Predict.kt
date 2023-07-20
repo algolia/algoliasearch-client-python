@@ -17,8 +17,6 @@ suspend fun main() {
         options = ClientOptions(logLevel = LogLevel.BODY),
     )
 
-    val userId = dotenv["ALGOLIA_PREDICT_USER_ID"] ?: "user1"
-
     val updateSegment = client.updateSegment(
         segmentID = "segment1",
         updateSegmentParams = SegmentConditionsParam(
@@ -30,7 +28,7 @@ suspend fun main() {
                         filters = listOf(
                             SegmentAffinityFilter(
                                 operator = SegmentFilterOperatorNumerical.values().first { it.value == "GT" },
-                                value = SegmentAffinityFilterValue.Double(200.0),
+                                value = SegmentAffinityFilterValue.Number(200.0),
                             ),
                         ),
                     ),

@@ -42,10 +42,10 @@ public class Search {
     try {
       List<Actor> records = Arrays.asList(new Actor("Tom Cruise"), new Actor("Scarlett Johansson"));
 
-      List<BatchOperation> batch = new ArrayList<>();
+      List<BatchRequest> batch = new ArrayList<>();
 
       for (Actor record : records) {
-        batch.add(new BatchOperation().setAction(Action.ADD_OBJECT).setBody(record));
+        batch.add(new BatchRequest().setAction(Action.ADD_OBJECT).setBody(record));
       }
 
       BatchResponse response = client.batch(indexName, new BatchWriteParams().setRequests(batch));

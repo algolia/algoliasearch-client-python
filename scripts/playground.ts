@@ -20,6 +20,14 @@ export async function playground({
         )} run`
       );
       break;
+    case 'kotlin':
+      await run(
+        `./gradle/gradlew -p playground/kotlin -PmainClass=com.algolia.playground.${createClientName(
+          client,
+          'kotlin'
+        )}Kt run`
+      );
+      break;
     case 'php':
       await run(
         `cd clients/algoliasearch-client-php/ && \

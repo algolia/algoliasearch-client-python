@@ -187,7 +187,7 @@ program
       interactive,
     });
 
-    setVerbose(false);
+    setVerbose(true);
 
     await playground({
       language,
