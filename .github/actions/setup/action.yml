@@ -127,6 +127,7 @@ runs:
       if: ${{ inputs.language == 'go' }}
       uses: actions/setup-go@v4
       with:
+        cache-dependency-path: clients/algoliasearch-client-go/go.sum
         go-version: ${{ steps.go-version.outputs.GO_VERSION }}
 
     # Dart deps
