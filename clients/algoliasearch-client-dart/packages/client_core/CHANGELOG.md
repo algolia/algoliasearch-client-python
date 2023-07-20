@@ -1,3 +1,7 @@
+## 0.1.1+3
+
+ - **FIX**(dart): custom calls path and deserialization (#1780).
+
 ## 0.1.1+2
 
  - **DOCS**(dart): update changelog formatting (#1684).

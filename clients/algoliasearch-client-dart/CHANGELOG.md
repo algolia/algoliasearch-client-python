@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-07-19
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`algolia_client_core` - `v0.1.1+3`](#algolia_client_core---v0113)
+ - [`algolia_client_search` - `v0.1.1+3`](#algolia_client_search---v0113)
+ - [`algolia_client_insights` - `v0.1.1+4`](#algolia_client_insights---v0114)
+ - [`algoliasearch` - `v0.1.1+4`](#algoliasearch---v0114)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `algolia_client_search` - `v0.1.1+3`
+ - `algolia_client_insights` - `v0.1.1+4`
+ - `algoliasearch` - `v0.1.1+4`
+
+---
+
+#### `algolia_client_core` - `v0.1.1+3`
+
+ - **FIX**(dart): custom calls path and deserialization (#1780).
+
+
 ## 2023-07-04
 
 ### Changes
