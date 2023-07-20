@@ -41,51 +41,25 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ALGOLIA_BOT_TOKEN }}
       
     outputs:
-      PUBLISH_CORE: ${{ steps.version.outputs.core }}
-      PUBLISH_SEARCH: ${{ steps.version.outputs.search }}
-      PUBLISH_INSIGHTS: ${{ steps.version.outputs.insights }}
-      PUBLISH_ALGOLIASEARCH: ${{ steps.version.outputs.algoliasearch }}
+      PUBLISH: ${{ steps.version.outputs.publish }}
 
-  publish_algoliasearch:
+  publish:
     needs: version
-    name: Publish AlgoliaSearch
-    if: ${{ needs.version.outputs.PUBLISH_ALGOLIASEARCH == 'true' }}
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    name: Publish
+    runs-on: ubuntu-20.04
+    if: ${{ needs.version.outputs.PUBLISH == 'true' }}
     permissions:
       id-token: write
-    with:
-      environment: 'pub.dev'
-      working-directory: packages/algoliasearch
+    environment: pub.dev
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
 
-  publish_core:
-    needs: version
-    name: Publish Client Core
-    if: ${{ needs.version.outputs.PUBLISH_CORE == 'true' }}
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    permissions:
-      id-token: write
-    with:
-      environment: 'pub.dev'
-      working-directory: packages/client-core
-
-  publish_search:
-    needs: version
-    name: Publish Search Client
-    if: ${{ needs.version.outputs.PUBLISH_SEARCH == 'true' }}
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    permissions:
-      id-token: write
-    with:
-      environment: 'pub.dev'
-      working-directory: packages/client-search
-
-  publish_insights:
-    needs: version
-    name: Publish Insights Client
-    if: ${{ needs.version.outputs.PUBLISH_INSIGHTS == 'true' }}
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    permissions:
-      id-token: write
-    with:
-      environment: 'pub.dev'
-      working-directory: packages/client-insights
+      - name: Install Tools
+        run: dart pub global activate melos
+      - name: Bootstrap Workspace
+        run: melos bootstrap
+      - name: Install dependencies
+        run: melos get
+      - name: Publish packages
+        run: melos publish --no-dry-run --yes
