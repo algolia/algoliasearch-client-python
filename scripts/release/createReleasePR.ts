@@ -404,9 +404,7 @@ async function createReleasePR(): Promise<void> {
   const versionChanges = getVersionChangesText(versions);
 
   console.log('Creating changelogs for all languages...');
-  const changelog: Changelog = LANGUAGES.filter(
-    (lang) => lang !== 'dart'
-  ).reduce((newChangelog, lang) => {
+  const changelog: Changelog = LANGUAGES.reduce((newChangelog, lang) => {
     if (versions[lang].noCommit) {
       return newChangelog;
     }

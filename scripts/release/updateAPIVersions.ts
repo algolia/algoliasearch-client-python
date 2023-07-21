@@ -2,6 +2,7 @@ import fsp from 'fs/promises';
 
 import dotenv from 'dotenv';
 import yaml from 'js-yaml';
+import type { ReleaseType } from 'semver';
 
 import clientsConfig from '../../config/clients.config.json' assert { type: 'json' };
 import openapiConfig from '../../config/openapitools.json' assert { type: 'json' };
@@ -45,12 +46,10 @@ async function updateChangelog(
   lang: Language,
   changelog: string,
   current: string,
-  next: string
+  next: string,
+  changelogPath: string
 ): Promise<void> {
   let content = '';
-  const changelogPath = toAbsolutePath(
-    `${getLanguageFolder(lang)}/CHANGELOG.md`
-  );
   const changelogHeader = `## [${next}](${getGitHubUrl(
     lang
   )}/compare/${current}...${next})`;
@@ -112,19 +111,25 @@ export async function updateAPIVersions(
     versionsToRelease
   )) {
     if (lang === 'dart') {
-      await updateDartPackages();
+      await updateDartPackages(changelog[lang]!, releaseType);
 
       continue;
     }
 
     if (lang === 'javascript') {
-      const cwd = getLanguageFolder(lang);
-
       setVerbose(CI);
-      await run(`yarn install && yarn release:bump ${releaseType}`, { cwd });
+      await run(`yarn install && yarn release:bump ${releaseType}`, {
+        cwd: getLanguageFolder(lang),
+      });
     }
 
-    await updateChangelog(lang as Language, changelog[lang], current, next);
+    await updateChangelog(
+      lang as Language,
+      changelog[lang],
+      current,
+      next,
+      toAbsolutePath(`${getLanguageFolder(lang as Language)}/CHANGELOG.md`)
+    );
   }
 }
 
@@ -132,31 +137,47 @@ export async function updateAPIVersions(
  * Updates packages versions and generates the changelog.
  * Documentation: {@link https://melos.invertase.dev/commands/version | melos version}.
  */
-async function updateDartPackages(): Promise<void> {
-  const cwd = getLanguageFolder('dart');
-
-  // Generate dart packages versions and changelogs
-  await run(
-    `(cd ${cwd} && dart pub get && melos version --no-git-tag-version --yes --diff ${RELEASED_TAG})`
-  );
+async function updateDartPackages(
+  changelog: string,
+  releaseType: ReleaseType
+): Promise<void> {
+  await run('dart pub get', { cwd: getLanguageFolder('dart') });
 
   // Update packages configs based on generated versions
   for (const gen of Object.values(GENERATORS)) {
-    if (gen.language === 'dart') {
-      const { additionalProperties } = gen;
-      const newVersion = await getPubspecVersion(
-        `../${gen.output}/pubspec.yaml`
-      );
-      if (!newVersion) {
-        throw new Error(`Failed to bump '${gen.packageName}'.`);
-      }
-      additionalProperties.packageVersion = newVersion;
-      additionalProperties.packageName = undefined;
-
-      if (gen.client === 'algoliasearch') {
-        clientsConfig.dart.packageVersion = newVersion;
-      }
+    if (gen.language !== 'dart') {
+      continue;
     }
+
+    const currentVersion = gen.additionalProperties.packageVersion;
+    const packageName = await getPubspecField(gen.output, 'name');
+    if (!packageName) {
+      throw new Error(`Unable to find packageName for '${gen.packageName}'.`);
+    }
+
+    await run(
+      `melos version --manual-version=${packageName}:${releaseType} --no-changelog --no-git-tag-version --yes --diff ${RELEASED_TAG}`,
+      { cwd: gen.output }
+    );
+
+    const newVersion = await getPubspecField(gen.output, 'version');
+    if (!newVersion) {
+      throw new Error(`Failed to bump '${gen.packageName}'.`);
+    }
+    gen.additionalProperties.packageVersion = newVersion;
+    gen.additionalProperties.packageName = undefined;
+
+    if (gen.client === 'algoliasearch') {
+      clientsConfig.dart.packageVersion = newVersion;
+    }
+
+    await updateChangelog(
+      'dart',
+      changelog,
+      currentVersion,
+      newVersion,
+      toAbsolutePath(`${gen.output}/CHANGELOG.md`)
+    );
   }
 
   // update `openapitools.json` config file
@@ -175,13 +196,18 @@ async function updateDartPackages(): Promise<void> {
 /**
  * Get 'version' from pubspec.yaml file.
  */
-async function getPubspecVersion(
-  filePath: string
+async function getPubspecField(
+  filePath: string,
+  field: string
 ): Promise<string | undefined> {
   try {
-    const fileContent = await fsp.readFile(filePath, 'utf8');
-    const data = yaml.load(fileContent) as { version?: string };
-    return data.version;
+    const fileContent = await fsp.readFile(
+      toAbsolutePath(`${filePath}/pubspec.yaml`),
+      'utf8'
+    );
+    const pubspec = yaml.load(fileContent) as Record<string, any>;
+
+    return pubspec[field];
   } catch (error) {
     throw new Error(`Error reading the file: ${error}`);
   }
