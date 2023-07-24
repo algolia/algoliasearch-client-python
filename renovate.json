@@ -139,7 +139,7 @@
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "dart-lang/sdk",
       "versioningTemplate": "semver",
-      "extractVersionTemplate": "^(?<version>((?!-(alpha|dev)).)*$)"
+      "extractVersionTemplate": "^((?!-(alpha|dev)).)*$"
     },
     {
       "description": "Update .go-version",
