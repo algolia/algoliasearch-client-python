@@ -136,8 +136,10 @@
       "matchStrings": [
         "(?<currentValue>.*)"
       ],
-      "datasourceTemplate": "dart-version",
-      "depNameTemplate": "dart"
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "dart-lang/sdk",
+      "versioningTemplate": "semver",
+      "extractVersionTemplate": "^(?<version>((?!-(alpha|dev)).)*$)"
     },
     {
       "description": "Update .go-version",
