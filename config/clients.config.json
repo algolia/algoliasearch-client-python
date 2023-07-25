@@ -15,7 +15,7 @@
     "folder": "clients/algoliasearch-client-javascript",
     "npmNamespace": "@algolia",
     "gitRepoId": "algoliasearch-client-javascript",
-    "packageVersion": "5.0.0-alpha.74",
+    "packageVersion": "5.0.0-alpha.75",
     "modelFolder": "model",
     "apiFolder": "src",
     "customGenerator": "algolia-javascript",
@@ -63,7 +63,7 @@
   "dart": {
     "folder": "clients/algoliasearch-client-dart",
     "gitRepoId": "algoliasearch-client-dart",
-    "packageVersion": "0.1.1+4",
+    "packageVersion": "0.1.2",
     "modelFolder": "lib/src/model",
     "apiFolder": "lib/src/api",
     "customGenerator": "algolia-dart",
