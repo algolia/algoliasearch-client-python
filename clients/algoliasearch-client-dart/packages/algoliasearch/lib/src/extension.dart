@@ -10,16 +10,17 @@ extension SearchClientExt on SearchClient {
       searchMethodParams: SearchMethodParams(requests: [request]),
       requestOptions: requestOptions,
     );
-    return response.results.first;
+    return SearchResponse.fromJson(response.results.first);
   }
 
   /// Perform a search operation targeting one index.
-  Future<SearchResponses> searchMultiIndex({
+  Future<Iterable<SearchResponse>> searchMultiIndex({
     required List<SearchForHits> queries,
     SearchStrategy? strategy,
     RequestOptions? requestOptions,
   }) {
     final request = SearchMethodParams(requests: queries, strategy: strategy);
-    return search(searchMethodParams: request, requestOptions: requestOptions);
+    return search(searchMethodParams: request, requestOptions: requestOptions)
+        .then((res) => res.results.map((e) => SearchResponse.fromJson(e)));
   }
 }

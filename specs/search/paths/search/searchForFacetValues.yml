@@ -37,32 +37,7 @@ post:
       content:
         application/json:
           schema:
-            title: searchForFacetValuesResponse
-            type: object
-            additionalProperties: false
-            required:
-              - facetHits
-            properties:
-              facetHits:
-                type: array
-                items:
-                  type: object
-                  title: facetHits
-                  additionalProperties: false
-                  required:
-                    - value
-                    - highlighted
-                    - count
-                  properties:
-                    value:
-                      description: Facet value.
-                      example: 'Mobile phone'
-                      type: string
-                    highlighted:
-                      $ref: '../../common/schemas/Hit.yml#/highlightedValue'
-                    count:
-                      description: Number of records containing this facet value. This takes into account the extra search parameters specified in the query. Like for a regular search query, the [counts may not be exhaustive](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).
-                      type: integer
+            $ref: '../../common/schemas/SearchForFacetValuesResponse.yml#/searchForFacetValuesResponse'
     '400':
       $ref: '../../../common/responses/BadRequest.yml'
     '402':

@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.KotlinClientCodegen;
@@ -218,6 +219,14 @@ public class AlgoliaKotlinGenerator extends KotlinClientCodegen {
           HashMap<String, String> parentInfo = new HashMap<>();
           parentInfo.put("parent_classname", model.classname);
           compoundParent(compoundModel).add(parentInfo);
+          List<String> values = (List<String>) compoundModel.vendorExtensions.get("x-discriminator-fields");
+          if (values != null) {
+            List<Map<String, String>> newValues = values
+              .stream()
+              .map(value -> Collections.singletonMap("field", value))
+              .collect(Collectors.toList());
+            oneOfModel.put("discriminators", newValues);
+          }
         }
         oneOfList.add(oneOfModel);
       }

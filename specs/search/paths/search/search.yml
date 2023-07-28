@@ -38,7 +38,7 @@ post:
               results:
                 type: array
                 items:
-                  $ref: '../../common/schemas/SearchResponse.yml#/searchResponse'
+                  $ref: '../../common/schemas/SearchResult.yml#/searchResult'
             required:
               - results
     '400':

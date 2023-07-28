@@ -59,7 +59,7 @@ internal class {{classname}}Serializer : KSerializer<{{classname}}> {
         {{#vendorExtensions.x-one-of-list}}
 
         // deserialize {{{type}}}
-        if (tree is {{#isObject}}JsonObject{{/isObject}}{{#isList}}JsonArray{{/isList}}{{^isObject}}{{^isList}}JsonPrimitive{{/isList}}{{/isObject}}) {
+        if (tree is {{#isObject}}JsonObject{{/isObject}}{{#isList}}JsonArray{{/isList}}{{^isObject}}{{^isList}}JsonPrimitive{{/isList}}{{/isObject}}{{#discriminators}} && tree.containsKey("{{field}}"){{/discriminators}}) {
             try {    
                 return codec.json.decodeFromJsonElement<{{>oneof_compound}}>(tree)
             } catch (e: Exception) {

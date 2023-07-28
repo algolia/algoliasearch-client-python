@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * {{{description}}}{{^description}}{{classname}}{{/description}}{{#isDeprecated}}
@@ -18,7 +20,10 @@ import java.util.List;
 @JsonDeserialize(using = {{classname}}.{{classname}}Deserializer.class)
 @JsonSerialize(using = {{classname}}.{{classname}}Serializer.class)
 {{>additionalModelTypeAnnotations}}
-public abstract class {{classname}} implements CompoundType {
+public abstract class {{classname}}{{#vendorExtensions.x-propagated-generic}}<T>{{/vendorExtensions.x-propagated-generic}} implements CompoundType {
+
+    private static final Logger LOGGER = Logger.getLogger({{classname}}.class.getName());
+
     {{#vendorExtensions.x-one-of-list}}
     public static {{classname}} of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}({{{type}}} inside) {
         return new {{classname}}{{name}}(inside);
@@ -51,46 +56,22 @@ public abstract class {{classname}} implements CompoundType {
         }
 
          @Override
-        public {{classname}} deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        public {{classname}} deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
             JsonNode tree = jp.readValueAsTree();
-            {{{classname}}} deserialized = null;
-           
-            int match = 0;
-            JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-            String currentType = "";
             {{#vendorExtensions.x-one-of-list}}
-            // deserialize {{{type}}}
-            try {
-                boolean attemptParsing = true;
-                currentType = "{{{type}}}";
-                if (((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-                    ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-                    (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-                    (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-                    (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-                    {{#isNullable}}
-                        | (token == JsonToken.VALUE_NULL)
-                    {{/isNullable}}) {
-                    deserialized = {{{classname}}}.of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}(({{{type}}}) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<{{{type}}}>() {}));
-                    match++;
-                } else if (token == JsonToken.START_OBJECT) {
-                  try {
-                    deserialized = {{{classname}}}.of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}(({{{type}}}) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<{{{type}}}>() {}));
-                    match++;
-                  } catch(IOException e) {
-                    // do nothing
-                  }
-                }
-            } catch (Exception e) {
-                // deserialization failed, continue
-                System.err.println("Failed to deserialize oneOf {{{type}}} (error: " + e.getMessage() + ") (type: " + currentType + ")");
-            }
 
-            {{/vendorExtensions.x-one-of-list}}
-            if (match == 1) {
-                return deserialized;
+            // deserialize {{{type}}}
+            if (tree.{{#isObject}}isObject(){{/isObject}}{{#isList}}isArray(){{/isList}}{{^isObject}}{{^isList}}isValueNode(){{/isList}}{{/isObject}}{{#discriminators}} && tree.has("{{field}}"){{/discriminators}}) {
+                try(JsonParser parser = tree.traverse(jp.getCodec())) {   
+                    {{{type}}} value = parser.readValueAs(new TypeReference<{{{type}}}>() {});
+                    return {{{classname}}}.of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}(value);
+                } catch (Exception e) {
+                    // deserialization failed, continue
+                    LOGGER.finest("Failed to deserialize oneOf {{{type}}} (error: " + e.getMessage() + ") (type: {{{type}}})");
+                }    
             }
-            throw new IOException(String.format("Failed deserialization for {{classname}}: %d classes match result, expected 1", match));
+            {{/vendorExtensions.x-one-of-list}}
+            throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
         }
 
         /**

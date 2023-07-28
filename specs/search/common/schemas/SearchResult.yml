@@ -1,0 +1,4 @@
+searchResult:
+  oneOf:
+    - $ref: 'SearchResponse.yml#/searchResponse'
+    - $ref: 'SearchForFacetValuesResponse.yml#/searchForFacetValuesResponse'

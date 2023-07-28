@@ -354,4 +354,58 @@ public Iterable<Rule> browseRules(String indexName, SearchRulesParams params) {
 public Iterable<Rule> browseRules(String indexName) {
   return browseRules(indexName, null, null);
 }
+
+/**
+  * (asynchronously) Send multiple search queries to one or more indices.
+  *
+  * @param searchMethodParams Query requests and strategies. Results will be received in the same
+  *     order as the queries. (required)
+  * @return CompletableFuture<SearchResponses<Object>> The awaitable future
+  * @throws AlgoliaRuntimeException If it fails to process the API call
+  */
+public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
+        throws AlgoliaRuntimeException {
+  return this.searchAsync(searchMethodParams, Object.class, requestOptions);
+}
+
+/**
+  * (asynchronously) Send multiple search queries to one or more indices.
+  *
+  * @param searchMethodParams Query requests and strategies. Results will be received in the same
+  *     order as the queries. (required)
+  * @return CompletableFuture<SearchResponses<Object>> The awaitable future
+  * @throws AlgoliaRuntimeException If it fails to process the API call
+  */
+public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams)
+        throws AlgoliaRuntimeException {
+  return this.searchAsync(searchMethodParams, Object.class, null);
+}
+
+/**
+  * Send multiple search queries to one or more indices.
+  *
+  * @param searchMethodParams Query requests and strategies. Results will be received in the same
+  *     order as the queries. (required)
+  * @param requestOptions The requestOptions to send along with the query, they will be merged with
+  *     the transporter requestOptions.
+  * @return SearchResponses<Object>
+  * @throws AlgoliaRuntimeException If it fails to process the API call
+  */
+public SearchResponses<Object> search(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
+        throws AlgoliaRuntimeException {
+  return this.search(searchMethodParams, Object.class, requestOptions);
+}
+
+/**
+  * Send multiple search queries to one or more indices.
+  *
+  * @param searchMethodParams Query requests and strategies. Results will be received in the same
+  *     order as the queries. (required)
+  * @return SearchResponses<Object>
+  * @throws AlgoliaRuntimeException If it fails to process the API call
+  */
+public SearchResponses<Object> search(SearchMethodParams searchMethodParams)
+        throws AlgoliaRuntimeException {
+  return this.search(searchMethodParams, Object.class, null);
+}
 {{/isSearchClient}}

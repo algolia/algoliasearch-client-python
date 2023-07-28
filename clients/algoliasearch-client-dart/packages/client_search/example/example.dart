@@ -13,9 +13,9 @@ void main() async {
     hitsPerPage: 5,
   );
   // Execute the search request.
-  final responseHits = await client.searchIndex(
+  final responseHits = await client.searchSingleIndex(
     indexName: 'instant_search',
-    request: queryHits,
+    searchParams: queryHits,
   );
   // Print the search hits.
   printHits(responseHits);

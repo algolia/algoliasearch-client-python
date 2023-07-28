@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.JavaClientCodegen;
 import org.openapitools.codegen.model.ModelMap;
@@ -89,14 +90,26 @@ public class AlgoliaJavaGenerator extends JavaClientCodegen {
       CodegenModel model = modelContainer.getModels().get(0).getModel();
 
       if (!model.oneOf.isEmpty()) {
-        List<HashMap<String, String>> oneOfList = new ArrayList();
+        List<HashMap<String, Object>> oneOfList = new ArrayList();
 
         for (String oneOf : model.oneOf) {
-          HashMap<String, String> oneOfModel = new HashMap();
-
+          HashMap<String, Object> oneOfModel = new HashMap();
           oneOfModel.put("type", oneOf);
           oneOfModel.put("name", oneOf.replace("<", "Of").replace(">", ""));
-
+          oneOfModel.put("isList", oneOf.contains("List"));
+          ModelsMap modelsMap = models.get(oneOf);
+          if (modelsMap != null) {
+            oneOfModel.put("isObject", true);
+            CodegenModel compoundModel = modelsMap.getModels().get(0).getModel();
+            List<String> values = (List<String>) compoundModel.vendorExtensions.get("x-discriminator-fields");
+            if (values != null) {
+              List<Map<String, String>> newValues = values
+                .stream()
+                .map(value -> Collections.singletonMap("field", value))
+                .collect(Collectors.toList());
+              oneOfModel.put("discriminators", newValues);
+            }
+          }
           oneOfList.add(oneOfModel);
         }
 
