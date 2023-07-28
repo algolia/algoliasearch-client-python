@@ -3,6 +3,7 @@
 
 package com.algolia.model.recommend;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -13,11 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /** RecommendationsRequest */
 @JsonDeserialize(using = RecommendationsRequest.RecommendationsRequestDeserializer.class)
 @JsonSerialize(using = RecommendationsRequest.RecommendationsRequestSerializer.class)
 public abstract class RecommendationsRequest implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(RecommendationsRequest.class.getName());
 
   public static RecommendationsRequest of(RecommendationRequest inside) {
     return new RecommendationsRequestRecommendationRequest(inside);
@@ -55,81 +59,31 @@ public abstract class RecommendationsRequest implements CompoundType {
     }
 
     @Override
-    public RecommendationsRequest deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public RecommendationsRequest deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      RecommendationsRequest deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize RecommendationRequest
-      try {
-        boolean attemptParsing = true;
-        currentType = "RecommendationRequest";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            RecommendationsRequest.of(
-              (RecommendationRequest) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<RecommendationRequest>() {})
-            );
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              RecommendationsRequest.of(
-                (RecommendationRequest) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<RecommendationRequest>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          RecommendationRequest value = parser.readValueAs(new TypeReference<RecommendationRequest>() {});
+          return RecommendationsRequest.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf RecommendationRequest (error: " + e.getMessage() + ") (type: RecommendationRequest)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf RecommendationRequest (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize TrendingRequest
-      try {
-        boolean attemptParsing = true;
-        currentType = "TrendingRequest";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            RecommendationsRequest.of((TrendingRequest) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<TrendingRequest>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              RecommendationsRequest.of(
-                (TrendingRequest) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<TrendingRequest>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          TrendingRequest value = parser.readValueAs(new TypeReference<TrendingRequest>() {});
+          return RecommendationsRequest.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf TrendingRequest (error: " + e.getMessage() + ") (type: TrendingRequest)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf TrendingRequest (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(
-        String.format("Failed deserialization for RecommendationsRequest: %d classes match result, expected" + " 1", match)
-      );
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */

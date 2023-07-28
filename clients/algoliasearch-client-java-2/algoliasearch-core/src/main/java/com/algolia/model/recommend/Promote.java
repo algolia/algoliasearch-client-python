@@ -3,6 +3,7 @@
 
 package com.algolia.model.recommend;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -13,11 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /** Promote */
 @JsonDeserialize(using = Promote.PromoteDeserializer.class)
 @JsonSerialize(using = Promote.PromoteSerializer.class)
 public abstract class Promote implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(Promote.class.getName());
 
   public static Promote of(PromoteObjectID inside) {
     return new PromotePromoteObjectID(inside);
@@ -54,70 +58,31 @@ public abstract class Promote implements CompoundType {
     }
 
     @Override
-    public Promote deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Promote deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      Promote deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize PromoteObjectID
-      try {
-        boolean attemptParsing = true;
-        currentType = "PromoteObjectID";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = Promote.of((PromoteObjectID) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<PromoteObjectID>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized = Promote.of((PromoteObjectID) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<PromoteObjectID>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          PromoteObjectID value = parser.readValueAs(new TypeReference<PromoteObjectID>() {});
+          return Promote.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf PromoteObjectID (error: " + e.getMessage() + ") (type: PromoteObjectID)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf PromoteObjectID (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize PromoteObjectIDs
-      try {
-        boolean attemptParsing = true;
-        currentType = "PromoteObjectIDs";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = Promote.of((PromoteObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<PromoteObjectIDs>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              Promote.of((PromoteObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<PromoteObjectIDs>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          PromoteObjectIDs value = parser.readValueAs(new TypeReference<PromoteObjectIDs>() {});
+          return Promote.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf PromoteObjectIDs (error: " + e.getMessage() + ") (type: PromoteObjectIDs)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf PromoteObjectIDs (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(String.format("Failed deserialization for Promote: %d classes match result, expected 1", match));
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */

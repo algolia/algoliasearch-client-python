@@ -3,6 +3,7 @@
 
 package com.algolia.model.search;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -14,11 +15,14 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /** HighlightResult */
 @JsonDeserialize(using = HighlightResult.HighlightResultDeserializer.class)
 @JsonSerialize(using = HighlightResult.HighlightResultSerializer.class)
 public abstract class HighlightResult implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(HighlightResult.class.getName());
 
   public static HighlightResult of(HighlightResultOption inside) {
     return new HighlightResultHighlightResultOption(inside);
@@ -56,83 +60,33 @@ public abstract class HighlightResult implements CompoundType {
     }
 
     @Override
-    public HighlightResult deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public HighlightResult deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      HighlightResult deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize HighlightResultOption
-      try {
-        boolean attemptParsing = true;
-        currentType = "HighlightResultOption";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            HighlightResult.of(
-              (HighlightResultOption) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<HighlightResultOption>() {})
-            );
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              HighlightResult.of(
-                (HighlightResultOption) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<HighlightResultOption>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          HighlightResultOption value = parser.readValueAs(new TypeReference<HighlightResultOption>() {});
+          return HighlightResult.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf HighlightResultOption (error: " + e.getMessage() + ") (type: HighlightResultOption)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf HighlightResultOption (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize List<HighlightResultOption>
-      try {
-        boolean attemptParsing = true;
-        currentType = "List<HighlightResultOption>";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            HighlightResult.of(
-              (List<HighlightResultOption>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<HighlightResultOption>>() {})
-            );
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              HighlightResult.of(
-                (List<HighlightResultOption>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<HighlightResultOption>>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isArray()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          List<HighlightResultOption> value = parser.readValueAs(new TypeReference<List<HighlightResultOption>>() {});
+          return HighlightResult.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest(
+            "Failed to deserialize oneOf List<HighlightResultOption> (error: " + e.getMessage() + ") (type: List<HighlightResultOption>)"
+          );
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println(
-          "Failed to deserialize oneOf List<HighlightResultOption> (error: " + e.getMessage() + ") (type: " + currentType + ")"
-        );
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(String.format("Failed deserialization for HighlightResult: %d classes match result, expected 1", match));
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */

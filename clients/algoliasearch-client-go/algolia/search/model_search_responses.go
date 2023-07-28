@@ -8,14 +8,14 @@ import (
 
 // SearchResponses struct for SearchResponses
 type SearchResponses struct {
-	Results []SearchResponse `json:"results" validate:"required"`
+	Results []SearchResult `json:"results" validate:"required"`
 }
 
 // NewSearchResponses instantiates a new SearchResponses object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSearchResponses(results []SearchResponse) *SearchResponses {
+func NewSearchResponses(results []SearchResult) *SearchResponses {
 	this := &SearchResponses{}
 	this.Results = results
 	return this
@@ -30,9 +30,9 @@ func NewSearchResponsesWithDefaults() *SearchResponses {
 }
 
 // GetResults returns the Results field value
-func (o *SearchResponses) GetResults() []SearchResponse {
+func (o *SearchResponses) GetResults() []SearchResult {
 	if o == nil {
-		var ret []SearchResponse
+		var ret []SearchResult
 		return ret
 	}
 
@@ -41,7 +41,7 @@ func (o *SearchResponses) GetResults() []SearchResponse {
 
 // GetResultsOk returns a tuple with the Results field value
 // and a boolean to check if the value has been set.
-func (o *SearchResponses) GetResultsOk() ([]SearchResponse, bool) {
+func (o *SearchResponses) GetResultsOk() ([]SearchResult, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -49,7 +49,7 @@ func (o *SearchResponses) GetResultsOk() ([]SearchResponse, bool) {
 }
 
 // SetResults sets field value
-func (o *SearchResponses) SetResults(v []SearchResponse) {
+func (o *SearchResponses) SetResults(v []SearchResult) {
 	o.Results = v
 }
 

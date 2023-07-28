@@ -12,14 +12,14 @@ import java.util.Objects;
 public class SearchResponses<T> {
 
   @JsonProperty("results")
-  private List<SearchResponse<T>> results = new ArrayList<>();
+  private List<SearchResult<T>> results = new ArrayList<>();
 
-  public SearchResponses setResults(List<SearchResponse<T>> results) {
+  public SearchResponses setResults(List<SearchResult<T>> results) {
     this.results = results;
     return this;
   }
 
-  public SearchResponses addResults(SearchResponse<T> resultsItem) {
+  public SearchResponses addResults(SearchResult<T> resultsItem) {
     this.results.add(resultsItem);
     return this;
   }
@@ -30,7 +30,7 @@ public class SearchResponses<T> {
    * @return results
    */
   @javax.annotation.Nonnull
-  public List<SearchResponse<T>> getResults() {
+  public List<SearchResult<T>> getResults() {
     return results;
   }
 

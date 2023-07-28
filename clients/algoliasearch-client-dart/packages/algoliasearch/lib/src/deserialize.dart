@@ -21,6 +21,7 @@ import 'package:algoliasearch/src/model/dictionary_entry.dart';
 import 'package:algoliasearch/src/model/dictionary_language.dart';
 import 'package:algoliasearch/src/model/edit.dart';
 import 'package:algoliasearch/src/model/error_base.dart';
+import 'package:algoliasearch/src/model/facet_hits.dart';
 import 'package:algoliasearch/src/model/facet_ordering.dart';
 import 'package:algoliasearch/src/model/facets.dart';
 import 'package:algoliasearch/src/model/facets_stats.dart';
@@ -43,6 +44,7 @@ import 'package:algoliasearch/src/model/redirect_rule_index_metadata.dart';
 import 'package:algoliasearch/src/model/redirect_rule_index_metadata_data.dart';
 import 'package:algoliasearch/src/model/rendering_content.dart';
 import 'package:algoliasearch/src/model/rule.dart';
+import 'package:algoliasearch/src/model/search_for_facet_values_response.dart';
 import 'package:algoliasearch/src/model/search_for_facets.dart';
 import 'package:algoliasearch/src/model/search_for_facets_options.dart';
 import 'package:algoliasearch/src/model/search_for_hits.dart';
@@ -158,6 +160,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'ErrorBase':
       return ErrorBase.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'ExactOnSingleWordQuery':
+    case 'FacetHits':
+      return FacetHits.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'FacetOrdering':
       return FacetOrdering.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -223,6 +227,9 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'Rule':
       return Rule.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'ScopeType':
+    case 'SearchForFacetValuesResponse':
+      return SearchForFacetValuesResponse.fromJson(
+          value as Map<String, dynamic>) as ReturnType;
     case 'SearchForFacets':
       return SearchForFacets.fromJson(value as Map<String, dynamic>)
           as ReturnType;

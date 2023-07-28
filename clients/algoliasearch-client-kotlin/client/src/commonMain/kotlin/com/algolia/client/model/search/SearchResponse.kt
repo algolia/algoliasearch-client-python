@@ -62,7 +62,7 @@ public data class SearchResponse(
   /** Text to search for in an index. */
   @SerialName(value = "query") val query: String,
 
-  @SerialName(value = "hits") val hits: List<JsonObject>,
+  @SerialName(value = "hits") val hits: List<Hit>,
 
   /** A/B test ID. This is only included in the response for indices that are part of an A/B test. */
   @SerialName(value = "abTestID") val abTestID: Int? = null,
@@ -115,4 +115,4 @@ public data class SearchResponse(
   @SerialName(value = "userData") val userData: JsonObject? = null,
 
   @SerialName(value = "renderingContent") val renderingContent: RenderingContent? = null,
-)
+) : SearchResult

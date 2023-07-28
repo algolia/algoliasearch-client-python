@@ -3,6 +3,7 @@
 
 package com.algolia.model.search;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Controls whether [typo
@@ -22,6 +24,8 @@ import java.io.IOException;
 @JsonDeserialize(using = TypoTolerance.TypoToleranceDeserializer.class)
 @JsonSerialize(using = TypoTolerance.TypoToleranceSerializer.class)
 public abstract class TypoTolerance implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(TypoTolerance.class.getName());
 
   public static TypoTolerance of(Boolean inside) {
     return new TypoToleranceBoolean(inside);
@@ -59,71 +63,31 @@ public abstract class TypoTolerance implements CompoundType {
     }
 
     @Override
-    public TypoTolerance deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public TypoTolerance deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      TypoTolerance deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize Boolean
-      try {
-        boolean attemptParsing = true;
-        currentType = "Boolean";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = TypoTolerance.of((Boolean) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<Boolean>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized = TypoTolerance.of((Boolean) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<Boolean>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isValueNode()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          Boolean value = parser.readValueAs(new TypeReference<Boolean>() {});
+          return TypoTolerance.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf Boolean (error: " + e.getMessage() + ") (type: Boolean)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf Boolean (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize TypoToleranceEnum
-      try {
-        boolean attemptParsing = true;
-        currentType = "TypoToleranceEnum";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            TypoTolerance.of((TypoToleranceEnum) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<TypoToleranceEnum>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              TypoTolerance.of((TypoToleranceEnum) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<TypoToleranceEnum>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          TypoToleranceEnum value = parser.readValueAs(new TypeReference<TypoToleranceEnum>() {});
+          return TypoTolerance.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf TypoToleranceEnum (error: " + e.getMessage() + ") (type: TypoToleranceEnum)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf TypoToleranceEnum (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(String.format("Failed deserialization for TypoTolerance: %d classes match result, expected 1", match));
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */

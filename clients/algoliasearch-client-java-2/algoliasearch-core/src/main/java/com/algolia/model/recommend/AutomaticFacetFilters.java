@@ -3,6 +3,7 @@
 
 package com.algolia.model.recommend;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Names of facets to which automatic filtering must be applied; they must match the facet name of a
@@ -22,6 +24,8 @@ import java.util.List;
 @JsonDeserialize(using = AutomaticFacetFilters.AutomaticFacetFiltersDeserializer.class)
 @JsonSerialize(using = AutomaticFacetFilters.AutomaticFacetFiltersSerializer.class)
 public abstract class AutomaticFacetFilters implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(AutomaticFacetFilters.class.getName());
 
   public static AutomaticFacetFilters ofListOfAutomaticFacetFilter(List<AutomaticFacetFilter> inside) {
     return new AutomaticFacetFiltersListOfAutomaticFacetFilter(inside);
@@ -59,85 +63,33 @@ public abstract class AutomaticFacetFilters implements CompoundType {
     }
 
     @Override
-    public AutomaticFacetFilters deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public AutomaticFacetFilters deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      AutomaticFacetFilters deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize List<AutomaticFacetFilter>
-      try {
-        boolean attemptParsing = true;
-        currentType = "List<AutomaticFacetFilter>";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            AutomaticFacetFilters.ofListOfAutomaticFacetFilter(
-              (List<AutomaticFacetFilter>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<AutomaticFacetFilter>>() {})
-            );
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              AutomaticFacetFilters.ofListOfAutomaticFacetFilter(
-                (List<AutomaticFacetFilter>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<AutomaticFacetFilter>>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isArray()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          List<AutomaticFacetFilter> value = parser.readValueAs(new TypeReference<List<AutomaticFacetFilter>>() {});
+          return AutomaticFacetFilters.ofListOfAutomaticFacetFilter(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest(
+            "Failed to deserialize oneOf List<AutomaticFacetFilter> (error: " + e.getMessage() + ") (type: List<AutomaticFacetFilter>)"
+          );
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println(
-          "Failed to deserialize oneOf List<AutomaticFacetFilter> (error: " + e.getMessage() + ") (type: " + currentType + ")"
-        );
       }
 
       // deserialize List<String>
-      try {
-        boolean attemptParsing = true;
-        currentType = "List<String>";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            AutomaticFacetFilters.ofListOfString(
-              (List<String>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<String>>() {})
-            );
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              AutomaticFacetFilters.ofListOfString(
-                (List<String>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<String>>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isArray()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          List<String> value = parser.readValueAs(new TypeReference<List<String>>() {});
+          return AutomaticFacetFilters.ofListOfString(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf List<String> (error: " + e.getMessage() + ") (type: List<String>)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf List<String> (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(
-        String.format("Failed deserialization for AutomaticFacetFilters: %d classes match result, expected" + " 1", match)
-      );
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */

@@ -12,5 +12,5 @@ import kotlinx.serialization.json.*
 @Serializable
 public data class SearchHits(
 
-  @SerialName(value = "hits") val hits: List<JsonObject>,
+  @SerialName(value = "hits") val hits: List<Hit>,
 )

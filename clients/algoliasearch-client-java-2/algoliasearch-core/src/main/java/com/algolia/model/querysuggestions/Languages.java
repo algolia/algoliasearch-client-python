@@ -3,6 +3,7 @@
 
 package com.algolia.model.querysuggestions;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Set the language for deduplicating singular and plural suggestions. If specified, only the more
@@ -22,6 +24,8 @@ import java.util.List;
 @JsonDeserialize(using = Languages.LanguagesDeserializer.class)
 @JsonSerialize(using = Languages.LanguagesSerializer.class)
 public abstract class Languages implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(Languages.class.getName());
 
   public static Languages of(Boolean inside) {
     return new LanguagesBoolean(inside);
@@ -58,69 +62,31 @@ public abstract class Languages implements CompoundType {
     }
 
     @Override
-    public Languages deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Languages deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      Languages deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize Boolean
-      try {
-        boolean attemptParsing = true;
-        currentType = "Boolean";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = Languages.of((Boolean) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<Boolean>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized = Languages.of((Boolean) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<Boolean>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isValueNode()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          Boolean value = parser.readValueAs(new TypeReference<Boolean>() {});
+          return Languages.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf Boolean (error: " + e.getMessage() + ") (type: Boolean)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf Boolean (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize List<String>
-      try {
-        boolean attemptParsing = true;
-        currentType = "List<String>";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = Languages.of((List<String>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<String>>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized = Languages.of((List<String>) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<List<String>>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isArray()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          List<String> value = parser.readValueAs(new TypeReference<List<String>>() {});
+          return Languages.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf List<String> (error: " + e.getMessage() + ") (type: List<String>)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf List<String> (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(String.format("Failed deserialization for Languages: %d classes match result, expected 1", match));
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */

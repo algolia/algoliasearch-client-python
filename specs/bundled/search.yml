@@ -1688,6 +1688,42 @@ components:
         - `none`: executes all queries. - `stopIfEnoughMatches`: executes
         queries one by one, stopping further query execution as soon as a query
         matches at least the `hitsPerPage` number of results. 
+    searchForFacetValuesResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - facetHits
+      x-discriminator-fields:
+        - facetHits
+      properties:
+        facetHits:
+          type: array
+          items:
+            type: object
+            title: facetHits
+            additionalProperties: false
+            required:
+              - value
+              - highlighted
+              - count
+            properties:
+              value:
+                description: Facet value.
+                example: Mobile phone
+                type: string
+              highlighted:
+                $ref: '#/components/schemas/highlightedValue'
+              count:
+                description: >-
+                  Number of records containing this facet value. This takes into
+                  account the extra search parameters specified in the query.
+                  Like for a regular search query, the [counts may not be
+                  exhaustive](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).
+                type: integer
+    searchResult:
+      oneOf:
+        - $ref: '#/components/schemas/searchResponse'
+        - $ref: '#/components/schemas/searchForFacetValuesResponse'
     cursor:
       type: object
       additionalProperties: false
@@ -3273,7 +3309,7 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/searchResponse'
+                      $ref: '#/components/schemas/searchResult'
                 required:
                   - results
         '400':
@@ -3329,37 +3365,7 @@ paths:
           content:
             application/json:
               schema:
-                title: searchForFacetValuesResponse
-                type: object
-                additionalProperties: false
-                required:
-                  - facetHits
-                properties:
-                  facetHits:
-                    type: array
-                    items:
-                      type: object
-                      title: facetHits
-                      additionalProperties: false
-                      required:
-                        - value
-                        - highlighted
-                        - count
-                      properties:
-                        value:
-                          description: Facet value.
-                          example: Mobile phone
-                          type: string
-                        highlighted:
-                          $ref: '#/components/schemas/highlightedValue'
-                        count:
-                          description: >-
-                            Number of records containing this facet value. This
-                            takes into account the extra search parameters
-                            specified in the query. Like for a regular search
-                            query, the [counts may not be
-                            exhaustive](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).
-                          type: integer
+                $ref: '#/components/schemas/searchForFacetValuesResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '402':

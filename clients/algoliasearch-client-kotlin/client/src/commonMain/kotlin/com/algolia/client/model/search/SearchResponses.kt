@@ -12,5 +12,5 @@ import kotlinx.serialization.json.*
 @Serializable
 public data class SearchResponses(
 
-  @SerialName(value = "results") val results: List<SearchResponse>,
+  @SerialName(value = "results") val results: List<SearchResult>,
 )

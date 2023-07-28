@@ -12,12 +12,7 @@ SearchResponses _$SearchResponsesFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = SearchResponses(
-          results: $checkedConvert(
-              'results',
-              (v) => (v as List<dynamic>)
-                  .map(
-                      (e) => SearchResponse.fromJson(e as Map<String, dynamic>))
-                  .toList()),
+          results: $checkedConvert('results', (v) => v as List<dynamic>),
         );
         return val;
       },
@@ -25,5 +20,5 @@ SearchResponses _$SearchResponsesFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SearchResponsesToJson(SearchResponses instance) =>
     <String, dynamic>{
-      'results': instance.results.map((e) => e.toJson()).toList(),
+      'results': instance.results.toList(),
     };

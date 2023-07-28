@@ -13,4 +13,4 @@ import kotlinx.serialization.json.*
 public data class SearchForFacetValuesResponse(
 
   @SerialName(value = "facetHits") val facetHits: List<FacetHits>,
-)
+) : SearchResult

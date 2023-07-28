@@ -3,6 +3,7 @@
 
 package com.algolia.model.insights;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -13,11 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /** EventsItems */
 @JsonDeserialize(using = EventsItems.EventsItemsDeserializer.class)
 @JsonSerialize(using = EventsItems.EventsItemsSerializer.class)
 public abstract class EventsItems implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(EventsItems.class.getName());
 
   public static EventsItems of(ClickedFilters inside) {
     return new EventsItemsClickedFilters(inside);
@@ -78,254 +82,103 @@ public abstract class EventsItems implements CompoundType {
     }
 
     @Override
-    public EventsItems deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public EventsItems deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      EventsItems deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize ClickedFilters
-      try {
-        boolean attemptParsing = true;
-        currentType = "ClickedFilters";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = EventsItems.of((ClickedFilters) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ClickedFilters>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              EventsItems.of((ClickedFilters) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ClickedFilters>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ClickedFilters value = parser.readValueAs(new TypeReference<ClickedFilters>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf ClickedFilters (error: " + e.getMessage() + ") (type: ClickedFilters)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf ClickedFilters (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize ClickedObjectIDs
-      try {
-        boolean attemptParsing = true;
-        currentType = "ClickedObjectIDs";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            EventsItems.of((ClickedObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ClickedObjectIDs>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              EventsItems.of((ClickedObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ClickedObjectIDs>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ClickedObjectIDs value = parser.readValueAs(new TypeReference<ClickedObjectIDs>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf ClickedObjectIDs (error: " + e.getMessage() + ") (type: ClickedObjectIDs)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf ClickedObjectIDs (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize ClickedObjectIDsAfterSearch
-      try {
-        boolean attemptParsing = true;
-        currentType = "ClickedObjectIDsAfterSearch";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            EventsItems.of(
-              (ClickedObjectIDsAfterSearch) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ClickedObjectIDsAfterSearch>() {})
-            );
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              EventsItems.of(
-                (ClickedObjectIDsAfterSearch) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ClickedObjectIDsAfterSearch>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ClickedObjectIDsAfterSearch value = parser.readValueAs(new TypeReference<ClickedObjectIDsAfterSearch>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest(
+            "Failed to deserialize oneOf ClickedObjectIDsAfterSearch (error: " + e.getMessage() + ") (type: ClickedObjectIDsAfterSearch)"
+          );
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println(
-          "Failed to deserialize oneOf ClickedObjectIDsAfterSearch (error: " + e.getMessage() + ") (type: " + currentType + ")"
-        );
       }
 
       // deserialize ConvertedFilters
-      try {
-        boolean attemptParsing = true;
-        currentType = "ConvertedFilters";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            EventsItems.of((ConvertedFilters) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ConvertedFilters>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              EventsItems.of((ConvertedFilters) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ConvertedFilters>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ConvertedFilters value = parser.readValueAs(new TypeReference<ConvertedFilters>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf ConvertedFilters (error: " + e.getMessage() + ") (type: ConvertedFilters)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf ConvertedFilters (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize ConvertedObjectIDs
-      try {
-        boolean attemptParsing = true;
-        currentType = "ConvertedObjectIDs";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            EventsItems.of((ConvertedObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ConvertedObjectIDs>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              EventsItems.of((ConvertedObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ConvertedObjectIDs>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ConvertedObjectIDs value = parser.readValueAs(new TypeReference<ConvertedObjectIDs>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf ConvertedObjectIDs (error: " + e.getMessage() + ") (type: ConvertedObjectIDs)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf ConvertedObjectIDs (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize ConvertedObjectIDsAfterSearch
-      try {
-        boolean attemptParsing = true;
-        currentType = "ConvertedObjectIDsAfterSearch";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            EventsItems.of(
-              (ConvertedObjectIDsAfterSearch) tree
-                .traverse(jp.getCodec())
-                .readValueAs(new TypeReference<ConvertedObjectIDsAfterSearch>() {})
-            );
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              EventsItems.of(
-                (ConvertedObjectIDsAfterSearch) tree
-                  .traverse(jp.getCodec())
-                  .readValueAs(new TypeReference<ConvertedObjectIDsAfterSearch>() {})
-              );
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ConvertedObjectIDsAfterSearch value = parser.readValueAs(new TypeReference<ConvertedObjectIDsAfterSearch>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest(
+            "Failed to deserialize oneOf ConvertedObjectIDsAfterSearch (error: " +
+            e.getMessage() +
+            ") (type: ConvertedObjectIDsAfterSearch)"
+          );
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println(
-          "Failed to deserialize oneOf ConvertedObjectIDsAfterSearch (error: " + e.getMessage() + ") (type: " + currentType + ")"
-        );
       }
 
       // deserialize ViewedFilters
-      try {
-        boolean attemptParsing = true;
-        currentType = "ViewedFilters";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = EventsItems.of((ViewedFilters) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ViewedFilters>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized = EventsItems.of((ViewedFilters) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ViewedFilters>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ViewedFilters value = parser.readValueAs(new TypeReference<ViewedFilters>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf ViewedFilters (error: " + e.getMessage() + ") (type: ViewedFilters)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf ViewedFilters (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize ViewedObjectIDs
-      try {
-        boolean attemptParsing = true;
-        currentType = "ViewedObjectIDs";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            EventsItems.of((ViewedObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ViewedObjectIDs>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              EventsItems.of((ViewedObjectIDs) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<ViewedObjectIDs>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          ViewedObjectIDs value = parser.readValueAs(new TypeReference<ViewedObjectIDs>() {});
+          return EventsItems.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf ViewedObjectIDs (error: " + e.getMessage() + ") (type: ViewedObjectIDs)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf ViewedObjectIDs (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(String.format("Failed deserialization for EventsItems: %d classes match result, expected 1", match));
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */

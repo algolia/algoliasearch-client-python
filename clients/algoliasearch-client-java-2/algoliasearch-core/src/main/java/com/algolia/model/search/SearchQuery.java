@@ -3,6 +3,7 @@
 
 package com.algolia.model.search;
 
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
@@ -13,11 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /** SearchQuery */
 @JsonDeserialize(using = SearchQuery.SearchQueryDeserializer.class)
 @JsonSerialize(using = SearchQuery.SearchQuerySerializer.class)
 public abstract class SearchQuery implements CompoundType {
+
+  private static final Logger LOGGER = Logger.getLogger(SearchQuery.class.getName());
 
   public static SearchQuery of(SearchForFacets inside) {
     return new SearchQuerySearchForFacets(inside);
@@ -54,71 +58,31 @@ public abstract class SearchQuery implements CompoundType {
     }
 
     @Override
-    public SearchQuery deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public SearchQuery deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
-      SearchQuery deserialized = null;
 
-      int match = 0;
-      JsonToken token = tree.traverse(jp.getCodec()).nextToken();
-      String currentType = "";
       // deserialize SearchForFacets
-      try {
-        boolean attemptParsing = true;
-        currentType = "SearchForFacets";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized =
-            SearchQuery.of((SearchForFacets) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<SearchForFacets>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized =
-              SearchQuery.of((SearchForFacets) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<SearchForFacets>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          SearchForFacets value = parser.readValueAs(new TypeReference<SearchForFacets>() {});
+          return SearchQuery.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf SearchForFacets (error: " + e.getMessage() + ") (type: SearchForFacets)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf SearchForFacets (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
 
       // deserialize SearchForHits
-      try {
-        boolean attemptParsing = true;
-        currentType = "SearchForHits";
-        if (
-          ((currentType.equals("Integer") || currentType.equals("Long")) && token == JsonToken.VALUE_NUMBER_INT) |
-          ((currentType.equals("Float") || currentType.equals("Double")) && token == JsonToken.VALUE_NUMBER_FLOAT) |
-          (currentType.equals("Boolean") && (token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE)) |
-          (currentType.equals("String") && token == JsonToken.VALUE_STRING) |
-          (currentType.startsWith("List<") && token == JsonToken.START_ARRAY)
-        ) {
-          deserialized = SearchQuery.of((SearchForHits) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<SearchForHits>() {}));
-          match++;
-        } else if (token == JsonToken.START_OBJECT) {
-          try {
-            deserialized = SearchQuery.of((SearchForHits) tree.traverse(jp.getCodec()).readValueAs(new TypeReference<SearchForHits>() {}));
-            match++;
-          } catch (IOException e) {
-            // do nothing
-          }
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          SearchForHits value = parser.readValueAs(new TypeReference<SearchForHits>() {});
+          return SearchQuery.of(value);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf SearchForHits (error: " + e.getMessage() + ") (type: SearchForHits)");
         }
-      } catch (Exception e) {
-        // deserialization failed, continue
-        System.err.println("Failed to deserialize oneOf SearchForHits (error: " + e.getMessage() + ") (type: " + currentType + ")");
       }
-
-      if (match == 1) {
-        return deserialized;
-      }
-      throw new IOException(String.format("Failed deserialization for SearchQuery: %d classes match result, expected 1", match));
+      throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
     }
 
     /** Handle deserialization of the 'null' value. */
