@@ -6,13 +6,13 @@ import (
 	"fmt"
 )
 
-// AuthenticationUpdate Payload to partialy update an Authentication.
+// AuthenticationUpdate Payload to partially update an Authentication.
 type AuthenticationUpdate struct {
 	Type *AuthenticationType `json:"type,omitempty"`
 	// An human readable name describing the object.
-	Name     *string    `json:"name,omitempty"`
-	Platform *Platform  `json:"platform,omitempty"`
-	Input    *AuthInput `json:"input,omitempty"`
+	Name     *string           `json:"name,omitempty"`
+	Platform *Platform         `json:"platform,omitempty"`
+	Input    *AuthInputPartial `json:"input,omitempty"`
 }
 
 type AuthenticationUpdateOption func(f *AuthenticationUpdate)
@@ -35,7 +35,7 @@ func WithAuthenticationUpdatePlatform(val Platform) AuthenticationUpdateOption {
 	}
 }
 
-func WithAuthenticationUpdateInput(val AuthInput) AuthenticationUpdateOption {
+func WithAuthenticationUpdateInput(val AuthInputPartial) AuthenticationUpdateOption {
 	return func(f *AuthenticationUpdate) {
 		f.Input = &val
 	}
@@ -158,9 +158,9 @@ func (o *AuthenticationUpdate) SetPlatform(v Platform) {
 }
 
 // GetInput returns the Input field value if set, zero value otherwise.
-func (o *AuthenticationUpdate) GetInput() AuthInput {
+func (o *AuthenticationUpdate) GetInput() AuthInputPartial {
 	if o == nil || o.Input == nil {
-		var ret AuthInput
+		var ret AuthInputPartial
 		return ret
 	}
 	return *o.Input
@@ -168,7 +168,7 @@ func (o *AuthenticationUpdate) GetInput() AuthInput {
 
 // GetInputOk returns a tuple with the Input field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AuthenticationUpdate) GetInputOk() (*AuthInput, bool) {
+func (o *AuthenticationUpdate) GetInputOk() (*AuthInputPartial, bool) {
 	if o == nil || o.Input == nil {
 		return nil, false
 	}
@@ -184,8 +184,8 @@ func (o *AuthenticationUpdate) HasInput() bool {
 	return false
 }
 
-// SetInput gets a reference to the given AuthInput and assigns it to the Input field.
-func (o *AuthenticationUpdate) SetInput(v AuthInput) {
+// SetInput gets a reference to the given AuthInputPartial and assigns it to the Input field.
+func (o *AuthenticationUpdate) SetInput(v AuthInputPartial) {
 	o.Input = &v
 }
 
