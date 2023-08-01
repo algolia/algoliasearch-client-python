@@ -1,3 +1,8 @@
+## [0.1.2+2](https://github.com/algolia/algoliasearch-client-dart/compare/0.1.2...0.1.2+2)
+
+- [58ea5dbf](https://github.com/algolia/api-clients-automation/commit/58ea5dbf) fix(specs): allow partial input update for authentications ([#1856](https://github.com/algolia/api-clients-automation/pull/1856)) by [@Fluf22](https://github.com/Fluf22/)
+- [2ac508ff](https://github.com/algolia/api-clients-automation/commit/2ac508ff) fix(specs): search w/ hits & facets responses ([#1774](https://github.com/algolia/api-clients-automation/pull/1774)) by [@aallam](https://github.com/aallam/)
+
 ## [0.1.2](https://github.com/algolia/algoliasearch-client-dart/compare/0.1.1+3...0.1.2)
 
 - [81ae3c73c](https://github.com/algolia/api-clients-automation/commit/81ae3c73c) feat(dart): rely on common changelog ([#1788](https://github.com/algolia/api-clients-automation/pull/1788)) by [@shortcuts](https://github.com/shortcuts/)

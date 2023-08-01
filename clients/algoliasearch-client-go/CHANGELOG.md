@@ -1,3 +1,8 @@
+## [4.0.0-alpha.22](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.21...4.0.0-alpha.22)
+
+- [58ea5dbf](https://github.com/algolia/api-clients-automation/commit/58ea5dbf) fix(specs): allow partial input update for authentications ([#1856](https://github.com/algolia/api-clients-automation/pull/1856)) by [@Fluf22](https://github.com/Fluf22/)
+- [2ac508ff](https://github.com/algolia/api-clients-automation/commit/2ac508ff) fix(specs): search w/ hits & facets responses ([#1774](https://github.com/algolia/api-clients-automation/pull/1774)) by [@aallam](https://github.com/aallam/)
+
 ## [4.0.0-alpha.21](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.20...4.0.0-alpha.21)
 
 - [333368a3b](https://github.com/algolia/api-clients-automation/commit/333368a3b) feat(specs): query suggestions ([#1740](https://github.com/algolia/api-clients-automation/pull/1740)) by [@kai687](https://github.com/kai687/)
