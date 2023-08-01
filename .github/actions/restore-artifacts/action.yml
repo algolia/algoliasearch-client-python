@@ -78,7 +78,7 @@ runs:
       if: ${{ inputs.java == 'true' && inputs.type == 'all' }}
       shell: bash
       run: |
-        rm -rf clients/algoliasearch-client-java-2
+        rm -rf clients/algoliasearch-client-java
         unzip -q -o clients-java.zip && rm clients-java.zip
     # Go
     - name: Download clients-go artifact

@@ -8,12 +8,12 @@ describe('micromatch', () => {
       micromatch
         .match(
           [
-            'clients/algoliasearch-client-java-2/build.gradle',
-            'clients/algoliasearch-client-java-2/.gitignore',
-            'clients/algoliasearch-client-java-2/gradle.properties',
-            'clients/algoliasearch-client-java-2/algoliasearch-core/src/main/java/com/algolia/api/SearchClient.java',
-            'clients/algoliasearch-client-java-2/algoliasearch-core/src/main/java/com/algolia/model/search/Test.java',
-            'clients/algoliasearch-client-java-2/algoliasearch-core/src/main/java/com/algolia/utils/AlgoliaAgent.java',
+            'clients/algoliasearch-client-java/build.gradle',
+            'clients/algoliasearch-client-java/.gitignore',
+            'clients/algoliasearch-client-java/gradle.properties',
+            'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/api/SearchClient.java',
+            'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/model/search/Test.java',
+            'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/utils/AlgoliaAgent.java',
 
             'clients/algoliasearch-client-javascript/.prettierrc',
             'clients/algoliasearch-client-javascript/lerna.json',
@@ -39,9 +39,9 @@ describe('micromatch', () => {
         .sort()
     ).toEqual(
       [
-        'clients/algoliasearch-client-java-2/gradle.properties',
-        'clients/algoliasearch-client-java-2/algoliasearch-core/src/main/java/com/algolia/api/SearchClient.java',
-        'clients/algoliasearch-client-java-2/algoliasearch-core/src/main/java/com/algolia/model/search/Test.java',
+        'clients/algoliasearch-client-java/gradle.properties',
+        'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/api/SearchClient.java',
+        'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/model/search/Test.java',
 
         'clients/algoliasearch-client-javascript/packages/client-search/ignore.txt',
 

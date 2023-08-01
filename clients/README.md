@@ -8,7 +8,7 @@ This folder hosts the generated clients.
 
 ### Java
 
-- [algoliasearch-client-java-2](./algoliasearch-client-java-2/): The Algolia search client.
+- [algoliasearch-client-java](./algoliasearch-client-java/): The Algolia search client.
 
 ### JavaScript
 

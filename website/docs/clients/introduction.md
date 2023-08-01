@@ -12,7 +12,7 @@ Generated code in production can be find on repository of the clients.
 
 - [Javascript](https://github.com/algolia/algoliasearch-client-javascript/tree/next/)
 - [PHP](https://github.com/algolia/algoliasearch-client-php/tree/next/)
-- [Java](https://github.com/algolia/algoliasearch-client-java-2/tree/next/)
+- [Java](https://github.com/algolia/algoliasearch-client-java/tree/next/)
 
 ## Usage
 

@@ -39,28 +39,28 @@
         "output": "#{cwd}/clients/algoliasearch-client-javascript/packages/monitoring"
       },
       "java-search": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "java-recommend": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "java-personalization": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "java-analytics": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "java-insights": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "java-abtesting": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "java-query-suggestions": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "java-monitoring": {
-        "output": "#{cwd}/clients/algoliasearch-client-java-2"
+        "output": "#{cwd}/clients/algoliasearch-client-java"
       },
       "php-search": {
         "output": "#{cwd}/clients/algoliasearch-client-php"
