@@ -14,10 +14,16 @@ final class UserHighlightResult {
   });
 
   /// Show highlighted section and words matched on a query.
+  /// One of types:
+  /// - [List<HighlightResultOption>]
+  /// - [HighlightResultOption]
   @JsonKey(name: r'userID')
   final Map<String, dynamic> userID;
 
   /// Show highlighted section and words matched on a query.
+  /// One of types:
+  /// - [List<HighlightResultOption>]
+  /// - [HighlightResultOption]
   @JsonKey(name: r'clusterName')
   final Map<String, dynamic> clusterName;
 

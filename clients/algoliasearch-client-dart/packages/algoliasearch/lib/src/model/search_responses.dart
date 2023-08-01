@@ -12,6 +12,9 @@ final class SearchResponses {
     required this.results,
   });
 
+  /// One of types:
+  /// - [SearchForFacetValuesResponse]
+  /// - [SearchResponse]
   @JsonKey(name: r'results')
   final Iterable<dynamic> results;
 

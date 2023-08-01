@@ -129,9 +129,9 @@ final class SearchClient implements ApiClient {
   /// If you use an existing `objectID`, the existing record will be replaced with the new one.  To update only some attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead.  To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique record (object) identifier.
-  /// * [body] - Algolia record.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique record (object) identifier.
+  /// * [body] Algolia record.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtWithObjectIdResponse> addOrUpdateObject({
     required String indexName,
@@ -184,7 +184,7 @@ final class SearchClient implements ApiClient {
   /// Add a source to the list of allowed sources.
   ///
   /// Parameters:
-  /// * [source] - Source to add.
+  /// * [source] Source to add.
   /// * [requestOptions] additional request configuration.
   Future<CreatedAtResponse> appendSource({
     required Source source,
@@ -210,7 +210,7 @@ final class SearchClient implements ApiClient {
   /// Assign or move a user ID to a cluster. The time it takes to move a user is proportional to the amount of data linked to the user ID.
   ///
   /// Parameters:
-  /// * [xAlgoliaUserID] - userID to assign.
+  /// * [xAlgoliaUserID] userID to assign.
   /// * [assignUserIdParams]
   /// * [requestOptions] additional request configuration.
   Future<CreatedAtResponse> assignUserId({
@@ -245,7 +245,7 @@ final class SearchClient implements ApiClient {
   /// To reduce the time spent on network round trips, you can perform several write actions in a single API call. Actions are applied in the order they are specified. The supported `action`s are equivalent to the individual operations of the same name.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [batchWriteParams]
   /// * [requestOptions] additional request configuration.
   Future<BatchResponse> batch({
@@ -278,7 +278,7 @@ final class SearchClient implements ApiClient {
   /// Assign multiple user IDs to a cluster. **You can't _move_ users with this operation.**.
   ///
   /// Parameters:
-  /// * [xAlgoliaUserID] - userID to assign.
+  /// * [xAlgoliaUserID] userID to assign.
   /// * [batchAssignUserIdsParams]
   /// * [requestOptions] additional request configuration.
   Future<CreatedAtResponse> batchAssignUserIds({
@@ -313,7 +313,7 @@ final class SearchClient implements ApiClient {
   /// Add or remove a batch of dictionary entries.
   ///
   /// Parameters:
-  /// * [dictionaryName] - Dictionary to search in.
+  /// * [dictionaryName] Dictionary to search in.
   /// * [batchDictionaryEntriesParams]
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> batchDictionaryEntries({
@@ -343,8 +343,8 @@ final class SearchClient implements ApiClient {
   /// Retrieve up to 1,000 records per call. Supports full-text search and filters. For better performance, it doesn't support: - The `distinct` query parameter - Sorting by typos, proximity, words, or geographical distance.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [browseParams]
+  /// * [indexName] Index on which to perform the request.
+  /// * [browseParams]  - one of types: [SearchParamsString], [BrowseParamsObject],
   /// * [requestOptions] additional request configuration.
   Future<BrowseResponse> browse({
     required String indexName,
@@ -376,8 +376,8 @@ final class SearchClient implements ApiClient {
   /// Delete all synonyms in the index.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [indexName] Index on which to perform the request.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> clearAllSynonyms({
     required String indexName,
@@ -411,7 +411,7 @@ final class SearchClient implements ApiClient {
   /// Delete the records but leave settings and index-specific API keys untouched.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> clearObjects({
     required String indexName,
@@ -441,8 +441,8 @@ final class SearchClient implements ApiClient {
   /// Delete all rules in the index.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [indexName] Index on which to perform the request.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> clearRules({
     required String indexName,
@@ -476,8 +476,8 @@ final class SearchClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
-  /// * [parameters] - Query parameters to apply to the current query.
+  /// * [path] Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] Query parameters to apply to the current query.
   /// * [requestOptions] additional request configuration.
   Future<Object> del({
     required String path,
@@ -510,7 +510,7 @@ final class SearchClient implements ApiClient {
   /// Delete an existing API key. The request must be authenticated with the admin API key.
   ///
   /// Parameters:
-  /// * [key] - API key.
+  /// * [key] API key.
   /// * [requestOptions] additional request configuration.
   Future<DeleteApiKeyResponse> deleteApiKey({
     required String key,
@@ -540,7 +540,7 @@ final class SearchClient implements ApiClient {
   /// This operation doesn't support all the query options, only its filters (numeric, facet, or tag) and geo queries. It doesn't accept empty filters or queries.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [deleteByParams]
   /// * [requestOptions] additional request configuration.
   Future<DeletedAtResponse> deleteBy({
@@ -573,7 +573,7 @@ final class SearchClient implements ApiClient {
   /// Delete an existing index.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [requestOptions] additional request configuration.
   Future<DeletedAtResponse> deleteIndex({
     required String indexName,
@@ -603,8 +603,8 @@ final class SearchClient implements ApiClient {
   /// To delete a set of records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy) instead.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique record (object) identifier.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique record (object) identifier.
   /// * [requestOptions] additional request configuration.
   Future<DeletedAtResponse> deleteObject({
     required String indexName,
@@ -642,9 +642,9 @@ final class SearchClient implements ApiClient {
   /// Delete a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique identifier of a rule object.
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique identifier of a rule object.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> deleteRule({
     required String indexName,
@@ -686,7 +686,7 @@ final class SearchClient implements ApiClient {
   /// Remove a source from the list of allowed sources.
   ///
   /// Parameters:
-  /// * [source] - IP address range of the source.
+  /// * [source] IP address range of the source.
   /// * [requestOptions] additional request configuration.
   Future<DeleteSourceResponse> deleteSource({
     required String source,
@@ -716,9 +716,9 @@ final class SearchClient implements ApiClient {
   /// Delete a synonym by its `objectID`. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique identifier of a synonym object.
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique identifier of a synonym object.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
   /// * [requestOptions] additional request configuration.
   Future<DeletedAtResponse> deleteSynonym({
     required String indexName,
@@ -760,8 +760,8 @@ final class SearchClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
-  /// * [parameters] - Query parameters to apply to the current query.
+  /// * [path] Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] Query parameters to apply to the current query.
   /// * [requestOptions] additional request configuration.
   Future<Object> get({
     required String path,
@@ -794,7 +794,7 @@ final class SearchClient implements ApiClient {
   /// Get the permissions and restrictions of a specific API key. When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
   ///
   /// Parameters:
-  /// * [key] - API key.
+  /// * [key] API key.
   /// * [requestOptions] additional request configuration.
   Future<GetApiKeyResponse> getApiKey({
     required String key,
@@ -871,14 +871,14 @@ final class SearchClient implements ApiClient {
   /// The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl). Logs are held for the last seven days. There's also a logging limit of 1,000 API calls per server. This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself. > **Note**: To fetch the logs for a Distributed Search Network (DSN) cluster, target the [DSN's endpoint](https://www.algolia.com/doc/guides/scaling/distributed-search-network-dsn/#accessing-dsn-servers).
   ///
   /// Parameters:
-  /// * [offset] - First log entry to retrieve. Sorted by decreasing date with 0 being the most recent.
-  /// * [length] - Maximum number of entries to retrieve.
-  /// * [indexName] - Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices.
-  /// * [type] - Type of log entries to retrieve. When omitted, all log entries are retrieved.
+  /// * [offset] First log entry to retrieve. Sorted by decreasing date with 0 being the most recent.
+  /// * [length] Maximum number of entries to retrieve.
+  /// * [indexName] Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices.
+  /// * [type] Type of log entries to retrieve. When omitted, all log entries are retrieved.
   /// * [requestOptions] additional request configuration.
   Future<GetLogsResponse> getLogs({
-    int? offset = 0,
-    int? length = 10,
+    int? offset,
+    int? length,
     String? indexName,
     LogType? type,
     RequestOptions? requestOptions,
@@ -908,9 +908,9 @@ final class SearchClient implements ApiClient {
   /// To get more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique record (object) identifier.
-  /// * [attributesToRetrieve] - Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique record (object) identifier.
+  /// * [attributesToRetrieve] Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key.
   /// * [requestOptions] additional request configuration.
   Future<Map<String, String>> getObject({
     required String indexName,
@@ -953,7 +953,7 @@ final class SearchClient implements ApiClient {
   /// Retrieve one or more records, potentially from different indices, in a single API operation. Results will be received in the same order as the requests.
   ///
   /// Parameters:
-  /// * [getObjectsParams] - Request object.
+  /// * [getObjectsParams] Request object.
   /// * [requestOptions] additional request configuration.
   Future<GetObjectsResponse> getObjects({
     required GetObjectsParams getObjectsParams,
@@ -980,8 +980,8 @@ final class SearchClient implements ApiClient {
   /// Get a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique identifier of a rule object.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique identifier of a rule object.
   /// * [requestOptions] additional request configuration.
   Future<Rule> getRule({
     required String indexName,
@@ -1019,7 +1019,7 @@ final class SearchClient implements ApiClient {
   /// Return an object containing an index's [configuration settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [requestOptions] additional request configuration.
   Future<IndexSettings> getSettings({
     required String indexName,
@@ -1072,8 +1072,8 @@ final class SearchClient implements ApiClient {
   /// Get a syonym by its `objectID`. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique identifier of a synonym object.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique identifier of a synonym object.
   /// * [requestOptions] additional request configuration.
   Future<SynonymHit> getSynonym({
     required String indexName,
@@ -1111,8 +1111,8 @@ final class SearchClient implements ApiClient {
   /// Some operations, such as copying an index, will respond with a `taskID` value. Use this value here to check the status of that task.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [taskID] - Unique task identifier.
+  /// * [indexName] Index on which to perform the request.
+  /// * [taskID] Unique task identifier.
   /// * [requestOptions] additional request configuration.
   Future<GetTaskResponse> getTask({
     required String indexName,
@@ -1169,7 +1169,7 @@ final class SearchClient implements ApiClient {
   /// Returns the userID data stored in the mapping. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
   ///
   /// Parameters:
-  /// * [userID] - userID to assign.
+  /// * [userID] userID to assign.
   /// * [requestOptions] additional request configuration.
   Future<UserId> getUserId({
     required String userID,
@@ -1199,7 +1199,7 @@ final class SearchClient implements ApiClient {
   /// To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
   ///
   /// Parameters:
-  /// * [getClusters] - Indicates whether to include the cluster's pending mapping state in the response.
+  /// * [getClusters] Indicates whether to include the cluster's pending mapping state in the response.
   /// * [requestOptions] additional request configuration.
   Future<HasPendingMappingsResponse> hasPendingMappings({
     bool? getClusters,
@@ -1273,12 +1273,12 @@ final class SearchClient implements ApiClient {
   /// List indices in an Algolia application.
   ///
   /// Parameters:
-  /// * [page] - Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
-  /// * [hitsPerPage] - Maximum number of hits per page.
+  /// * [page] Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+  /// * [hitsPerPage] Maximum number of hits per page.
   /// * [requestOptions] additional request configuration.
   Future<ListIndicesResponse> listIndices({
     int? page,
-    int? hitsPerPage = 100,
+    int? hitsPerPage,
     RequestOptions? requestOptions,
   }) async {
     final request = ApiRequest(
@@ -1304,12 +1304,12 @@ final class SearchClient implements ApiClient {
   /// List the userIDs assigned to a multi-cluster application. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
   ///
   /// Parameters:
-  /// * [page] - Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
-  /// * [hitsPerPage] - Maximum number of hits per page.
+  /// * [page] Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+  /// * [hitsPerPage] Maximum number of hits per page.
   /// * [requestOptions] additional request configuration.
   Future<ListUserIdsResponse> listUserIds({
     int? page,
-    int? hitsPerPage = 100,
+    int? hitsPerPage,
     RequestOptions? requestOptions,
   }) async {
     final request = ApiRequest(
@@ -1361,7 +1361,7 @@ final class SearchClient implements ApiClient {
   /// This `operation`, _copy_ or _move_, will copy or move a source index's (`IndexName`) records, settings, synonyms, and rules to a `destination` index. If the destination index exists, it will be replaced, except for index-specific API keys and analytics data. If the destination index doesn't exist, it will be created.  The choice between moving or copying an index depends on your needs. Choose:  - **Move** to rename an index. - **Copy** to create a new index with the same records and configuration as an existing one.  > **Note**: When considering copying or moving, be aware of the [rate limitations](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits) on these processes and the [impact on your analytics data](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/concepts/indices-analytics/).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [operationIndexParams]
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> operationIndex({
@@ -1394,16 +1394,16 @@ final class SearchClient implements ApiClient {
   /// Add new attributes or update current ones in an existing record. You can use any first-level attribute but not nested attributes. If you specify a [nested attribute](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/creating-and-using-nested-attributes/), the engine treats it as a replacement for its first-level ancestor.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique record (object) identifier.
-  /// * [attributesToUpdate] - Object with attributes to update.
-  /// * [createIfNotExists] - Indicates whether to create a new record if it doesn't exist yet.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique record (object) identifier.
+  /// * [attributesToUpdate] Object with attributes to update. - one of types: [BuiltInOperation], [String],
+  /// * [createIfNotExists] Indicates whether to create a new record if it doesn't exist yet.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtWithObjectIdResponse> partialUpdateObject({
     required String indexName,
     required String objectID,
     required Map<String, dynamic> attributesToUpdate,
-    bool? createIfNotExists = true,
+    bool? createIfNotExists,
     RequestOptions? requestOptions,
   }) async {
     assert(
@@ -1442,9 +1442,9 @@ final class SearchClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
-  /// * [parameters] - Query parameters to apply to the current query.
-  /// * [body] - Parameters to send with the custom request.
+  /// * [path] Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] Query parameters to apply to the current query.
+  /// * [body] Parameters to send with the custom request.
   /// * [requestOptions] additional request configuration.
   Future<Object> post({
     required String path,
@@ -1479,9 +1479,9 @@ final class SearchClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
-  /// * [parameters] - Query parameters to apply to the current query.
-  /// * [body] - Parameters to send with the custom request.
+  /// * [path] Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] Query parameters to apply to the current query.
+  /// * [body] Parameters to send with the custom request.
   /// * [requestOptions] additional request configuration.
   Future<Object> put({
     required String path,
@@ -1516,7 +1516,7 @@ final class SearchClient implements ApiClient {
   /// Remove a userID and its associated data from the multi-clusters.
   ///
   /// Parameters:
-  /// * [userID] - userID to assign.
+  /// * [userID] userID to assign.
   /// * [requestOptions] additional request configuration.
   Future<RemoveUserIdResponse> removeUserId({
     required String userID,
@@ -1546,7 +1546,7 @@ final class SearchClient implements ApiClient {
   /// Replace all allowed sources.
   ///
   /// Parameters:
-  /// * [source] - Allowed sources.
+  /// * [source] Allowed sources.
   /// * [requestOptions] additional request configuration.
   Future<ReplaceSourceResponse> replaceSources({
     required List<Source> source,
@@ -1572,7 +1572,7 @@ final class SearchClient implements ApiClient {
   /// Restore a deleted API key, along with its associated permissions. The request must be authenticated with the admin API key.
   ///
   /// Parameters:
-  /// * [key] - API key.
+  /// * [key] API key.
   /// * [requestOptions] additional request configuration.
   Future<AddApiKeyResponse> restoreApiKey({
     required String key,
@@ -1602,8 +1602,8 @@ final class SearchClient implements ApiClient {
   /// Add a record (object) to an index or replace it. If the record doesn't contain an `objectID`, Algolia automatically adds it. If you use an existing `objectID`, the existing record is replaced with the new one. To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [body] - The Algolia record.
+  /// * [indexName] Index on which to perform the request.
+  /// * [body] The Algolia record.
   /// * [requestOptions] additional request configuration.
   Future<SaveObjectResponse> saveObject({
     required String indexName,
@@ -1647,10 +1647,10 @@ final class SearchClient implements ApiClient {
   /// To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique identifier of a rule object.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique identifier of a rule object.
   /// * [rule]
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedRuleResponse> saveRule({
     required String indexName,
@@ -1694,10 +1694,10 @@ final class SearchClient implements ApiClient {
   /// Create or update multiple rules.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [rules]
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
-  /// * [clearExistingRules] - Indicates whether existing rules should be deleted before adding this batch.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [clearExistingRules] Indicates whether existing rules should be deleted before adding this batch.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> saveRules({
     required String indexName,
@@ -1736,10 +1736,10 @@ final class SearchClient implements ApiClient {
   /// Add a [synonym](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms) to an index or replace it. If the synonym `objectID` doesn't exist, Algolia adds a new one. If you use an existing synonym `objectID`, the existing synonym is replaced with the new one. To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [objectID] - Unique identifier of a synonym object.
+  /// * [indexName] Index on which to perform the request.
+  /// * [objectID] Unique identifier of a synonym object.
   /// * [synonymHit]
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
   /// * [requestOptions] additional request configuration.
   Future<SaveSynonymResponse> saveSynonym({
     required String indexName,
@@ -1783,10 +1783,10 @@ final class SearchClient implements ApiClient {
   /// Create or update multiple synonyms.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [synonymHit]
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
-  /// * [replaceExistingSynonyms] - Indicates whether to replace all synonyms in the index with the ones sent with this request.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [replaceExistingSynonyms] Indicates whether to replace all synonyms in the index with the ones sent with this request.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> saveSynonyms({
     required String indexName,
@@ -1825,7 +1825,7 @@ final class SearchClient implements ApiClient {
   /// Send multiple search queries to one or more indices.
   ///
   /// Parameters:
-  /// * [searchMethodParams] - Query requests and strategies. Results will be received in the same order as the queries.
+  /// * [searchMethodParams] Query requests and strategies. Results will be received in the same order as the queries.
   /// * [requestOptions] additional request configuration.
   Future<SearchResponses> search({
     required SearchMethodParams searchMethodParams,
@@ -1852,7 +1852,7 @@ final class SearchClient implements ApiClient {
   /// Search for standard and [custom](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/) entries in the [stop words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), or [segmentation (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) dictionaries.
   ///
   /// Parameters:
-  /// * [dictionaryName] - Dictionary to search in.
+  /// * [dictionaryName] Dictionary to search in.
   /// * [searchDictionaryEntriesParams]
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> searchDictionaryEntries({
@@ -1883,8 +1883,8 @@ final class SearchClient implements ApiClient {
   /// [Search for a facet's values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values), optionally restricting the returned values to those contained in records matching other search criteria. > **Note**: Pagination isn't supported (`page` and `hitsPerPage` are ignored). By default, the engine returns a maximum of 10 values but you can adjust this with `maxFacetHits`.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [facetName] - Facet name.
+  /// * [indexName] Index on which to perform the request.
+  /// * [facetName] Facet name.
   /// * [searchForFacetValuesRequest]
   /// * [requestOptions] additional request configuration.
   Future<SearchForFacetValuesResponse> searchForFacetValues({
@@ -1927,7 +1927,7 @@ final class SearchClient implements ApiClient {
   /// Search for rules in your index. You can control the search with parameters. To list all rules, send an empty request body.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [searchRulesParams]
   /// * [requestOptions] additional request configuration.
   Future<SearchRulesResponse> searchRules({
@@ -1961,8 +1961,8 @@ final class SearchClient implements ApiClient {
   /// Return records that match the query.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [searchParams]
+  /// * [indexName] Index on which to perform the request.
+  /// * [searchParams]  - one of types: [SearchParamsString], [SearchParamsObject],
   /// * [requestOptions] additional request configuration.
   Future<SearchResponse> searchSingleIndex({
     required String indexName,
@@ -1995,17 +1995,17 @@ final class SearchClient implements ApiClient {
   /// Search for synonyms in your index. You can control and filter the search with parameters. To get all synonyms, send an empty request body.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
-  /// * [type] - Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
-  /// * [page] - Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination.
-  /// * [hitsPerPage] - Maximum number of hits per page.
-  /// * [searchSynonymsParams] - Body of the `searchSynonyms` operation.
+  /// * [indexName] Index on which to perform the request.
+  /// * [type] Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
+  /// * [page] Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination.
+  /// * [hitsPerPage] Maximum number of hits per page.
+  /// * [searchSynonymsParams] Body of the `searchSynonyms` operation.
   /// * [requestOptions] additional request configuration.
   Future<SearchSynonymsResponse> searchSynonyms({
     required String indexName,
     SynonymType? type,
-    int? page = 0,
-    int? hitsPerPage = 100,
+    int? page,
+    int? hitsPerPage,
     SearchSynonymsParams? searchSynonymsParams,
     RequestOptions? requestOptions,
   }) async {
@@ -2093,9 +2093,9 @@ final class SearchClient implements ApiClient {
   /// Update the specified [index settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/). Specifying null for a setting resets it to its default value.
   ///
   /// Parameters:
-  /// * [indexName] - Index on which to perform the request.
+  /// * [indexName] Index on which to perform the request.
   /// * [indexSettings]
-  /// * [forwardToReplicas] - Indicates whether changed index settings are forwarded to the replica indices.
+  /// * [forwardToReplicas] Indicates whether changed index settings are forwarded to the replica indices.
   /// * [requestOptions] additional request configuration.
   Future<UpdatedAtResponse> setSettings({
     required String indexName,
@@ -2131,7 +2131,7 @@ final class SearchClient implements ApiClient {
   /// Replace the permissions of an existing API key. Any unspecified parameter resets that permission to its default value. The request must be authenticated with the admin API key.
   ///
   /// Parameters:
-  /// * [key] - API key.
+  /// * [key] API key.
   /// * [apiKey]
   /// * [requestOptions] additional request configuration.
   Future<UpdateApiKeyResponse> updateApiKey({

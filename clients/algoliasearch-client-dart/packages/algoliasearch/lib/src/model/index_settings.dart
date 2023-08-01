@@ -201,6 +201,9 @@ final class IndexSettings {
   @JsonKey(name: r'minWordSizefor2Typos')
   final int? minWordSizefor2Typos;
 
+  /// One of types:
+  /// - [TypoToleranceEnum]
+  /// - [bool]
   @JsonKey(name: r'typoTolerance')
   final dynamic typoTolerance;
 
@@ -212,9 +215,15 @@ final class IndexSettings {
   @JsonKey(name: r'disableTypoToleranceOnAttributes')
   final List<String>? disableTypoToleranceOnAttributes;
 
+  /// One of types:
+  /// - [bool]
+  /// - [List<String>]
   @JsonKey(name: r'ignorePlurals')
   final dynamic ignorePlurals;
 
+  /// One of types:
+  /// - [bool]
+  /// - [List<String>]
   @JsonKey(name: r'removeStopWords')
   final dynamic removeStopWords;
 
@@ -277,6 +286,9 @@ final class IndexSettings {
   @JsonKey(name: r'explain')
   final List<String>? explain;
 
+  /// One of types:
+  /// - [bool]
+  /// - [int]
   @JsonKey(name: r'distinct')
   final dynamic distinct;
 

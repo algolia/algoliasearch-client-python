@@ -48,9 +48,9 @@ final class SearchClient implements ApiClient {
   /// This method allow you to send requests to the Algolia REST API.
   ///
   /// Parameters:
-  /// * [path] - Path of the endpoint, anything after \"/1\" must be specified.
-  /// * [parameters] - Query parameters to apply to the current query.
-  /// * [body] - Parameters to send with the custom request.
+  /// * [path] Path of the endpoint, anything after \"/1\" must be specified.
+  /// * [parameters] Query parameters to apply to the current query.
+  /// * [body] Parameters to send with the custom request.
   /// * [requestOptions] additional request configuration.
   Future<Object> post({
     required String path,
@@ -85,7 +85,7 @@ final class SearchClient implements ApiClient {
   /// Send multiple search queries to one or more indices.
   ///
   /// Parameters:
-  /// * [searchMethodParams] - Query requests and strategies. Results will be received in the same order as the queries.
+  /// * [searchMethodParams] Query requests and strategies. Results will be received in the same order as the queries.
   /// * [requestOptions] additional request configuration.
   Future<SearchResponses> search({
     required SearchMethodParams searchMethodParams,

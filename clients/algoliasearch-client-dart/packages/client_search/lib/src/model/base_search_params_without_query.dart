@@ -52,15 +52,31 @@ final class BaseSearchParamsWithoutQuery {
   @JsonKey(name: r'filters')
   final String? filters;
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'facetFilters')
   final dynamic facetFilters;
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'optionalFilters')
   final dynamic optionalFilters;
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'numericFilters')
   final dynamic numericFilters;
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'tagFilters')
   final dynamic tagFilters;
 
@@ -106,6 +122,9 @@ final class BaseSearchParamsWithoutQuery {
   @JsonKey(name: r'aroundLatLngViaIP')
   final bool? aroundLatLngViaIP;
 
+  /// One of types:
+  /// - [AroundRadiusAll]
+  /// - [int]
   @JsonKey(name: r'aroundRadius')
   final dynamic aroundRadius;
 
@@ -170,6 +189,10 @@ final class BaseSearchParamsWithoutQuery {
   @JsonKey(name: r'enableReRanking')
   final bool? enableReRanking;
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'reRankingApplyFilter')
   final dynamic reRankingApplyFilter;
 

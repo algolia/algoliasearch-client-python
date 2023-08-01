@@ -19,6 +19,10 @@ final class DeleteByParams {
     this.insidePolygon,
   });
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'facetFilters')
   final dynamic facetFilters;
 
@@ -26,9 +30,17 @@ final class DeleteByParams {
   @JsonKey(name: r'filters')
   final String? filters;
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'numericFilters')
   final dynamic numericFilters;
 
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
   @JsonKey(name: r'tagFilters')
   final dynamic tagFilters;
 
@@ -36,6 +48,9 @@ final class DeleteByParams {
   @JsonKey(name: r'aroundLatLng')
   final String? aroundLatLng;
 
+  /// One of types:
+  /// - [AroundRadiusAll]
+  /// - [int]
   @JsonKey(name: r'aroundRadius')
   final dynamic aroundRadius;
 

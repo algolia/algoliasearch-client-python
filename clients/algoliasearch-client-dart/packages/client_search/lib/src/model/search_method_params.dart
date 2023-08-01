@@ -14,6 +14,9 @@ final class SearchMethodParams {
     this.strategy,
   });
 
+  /// One of types:
+  /// - [SearchForHits]
+  /// - [SearchForFacets]
   @JsonKey(name: r'requests')
   final Iterable<dynamic> requests;
 

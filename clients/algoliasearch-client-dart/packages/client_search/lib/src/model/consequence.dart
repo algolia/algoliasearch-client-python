@@ -22,6 +22,9 @@ final class Consequence {
   final ConsequenceParams? params;
 
   /// Records to promote.
+  /// One of types:
+  /// - [PromoteObjectIDs]
+  /// - [PromoteObjectID]
   @JsonKey(name: r'promote')
   final Iterable<dynamic>? promote;
 

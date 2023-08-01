@@ -16,12 +16,21 @@ final class Params {
     this.renderingContent,
   });
 
+  /// One of types:
+  /// - [ConsequenceQueryObject]
+  /// - [String]
   @JsonKey(name: r'query')
   final dynamic query;
 
+  /// One of types:
+  /// - [List<AutomaticFacetFilter>]
+  /// - [List<String>]
   @JsonKey(name: r'automaticFacetFilters')
   final dynamic automaticFacetFilters;
 
+  /// One of types:
+  /// - [List<AutomaticFacetFilter>]
+  /// - [List<String>]
   @JsonKey(name: r'automaticOptionalFacetFilters')
   final dynamic automaticOptionalFacetFilters;
 

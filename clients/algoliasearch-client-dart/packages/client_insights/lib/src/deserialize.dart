@@ -1,12 +1,15 @@
+import 'package:algolia_client_insights/src/model/click_event.dart';
 import 'package:algolia_client_insights/src/model/clicked_filters.dart';
 import 'package:algolia_client_insights/src/model/clicked_object_ids.dart';
 import 'package:algolia_client_insights/src/model/clicked_object_ids_after_search.dart';
+import 'package:algolia_client_insights/src/model/conversion_event.dart';
 import 'package:algolia_client_insights/src/model/converted_filters.dart';
 import 'package:algolia_client_insights/src/model/converted_object_ids.dart';
 import 'package:algolia_client_insights/src/model/converted_object_ids_after_search.dart';
 import 'package:algolia_client_insights/src/model/error_base.dart';
 import 'package:algolia_client_insights/src/model/events_response.dart';
 import 'package:algolia_client_insights/src/model/insights_events.dart';
+import 'package:algolia_client_insights/src/model/view_event.dart';
 import 'package:algolia_client_insights/src/model/viewed_filters.dart';
 import 'package:algolia_client_insights/src/model/viewed_object_ids.dart';
 
@@ -30,6 +33,7 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'double':
       return (value is double ? value : double.parse('$value')) as ReturnType;
     case 'ClickEvent':
+      return ClickEvent.fromJson(value) as ReturnType;
     case 'ClickedFilters':
       return ClickedFilters.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -40,6 +44,7 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return ClickedObjectIDsAfterSearch.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'ConversionEvent':
+      return ConversionEvent.fromJson(value) as ReturnType;
     case 'ConvertedFilters':
       return ConvertedFilters.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -58,6 +63,7 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return InsightsEvents.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'ViewEvent':
+      return ViewEvent.fromJson(value) as ReturnType;
     case 'ViewedFilters':
       return ViewedFilters.fromJson(value as Map<String, dynamic>)
           as ReturnType;

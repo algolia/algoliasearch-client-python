@@ -31,6 +31,13 @@ enum Action {
 
   dynamic toJson() => raw;
 
+  static Action fromJson(dynamic json) {
+    for (final value in values) {
+      if (value.raw == json) return value;
+    }
+    throw ArgumentError.value(json, "raw", "No enum value with that value");
+  }
+
   @override
   String toString() => raw.toString();
 }
