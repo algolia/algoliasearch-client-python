@@ -61,7 +61,7 @@ final class RetryStrategy {
         host.failed();
         errors.add(e);
       } on AlgoliaApiException catch (e) {
-        if (e.statusCode / 100 == 4) rethrow;
+        if (e.statusCode ~/ 100 == 4) rethrow;
         host.failed();
         errors.add(e);
       }
