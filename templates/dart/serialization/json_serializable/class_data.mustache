@@ -26,6 +26,12 @@ final class {{{classname}}}{
   {{#description}}
       /// {{{description}}}
   {{/description}}
+  {{#vendorExtensions}}
+  {{#x-is-oneof}}
+     /// One of types: {{#x-oneof-types}}
+     /// - [{{{.}}}]{{/x-oneof-types}}
+  {{/x-is-oneof}}
+  {{/vendorExtensions}}
   {{^isEnum}}
       {{#minimum}}
           // minimum: {{{minimum}}}
@@ -56,14 +62,16 @@ final class {{{classname}}}{
   @override
   bool operator ==(Object other) => identical(this, other) || other is {{{classname}}} &&
   {{#vars}}
-     other.{{{name}}} == {{{name}}}{{^-last}} &&{{/-last}}{{#-last}};{{/-last}}
+     {{^deprecated}}other.{{{name}}} == {{{name}}}{{^-last}} &&{{/-last}}{{/deprecated}}
   {{/vars}}
+    ;
 
   @override
   int get hashCode =>
   {{#vars}}
-    {{#isNullable}}({{{name}}} == null ? 0 : {{{name}}}.hashCode){{/isNullable}}{{^isNullable}}{{{name}}}.hashCode{{/isNullable}}{{^-last}} +{{/-last}}{{#-last}};{{/-last}}
+    {{^deprecated}}{{#isNullable}}({{{name}}} == null ? 0 : {{{name}}}.hashCode){{/isNullable}}{{^isNullable}}{{{name}}}.hashCode{{/isNullable}}{{^-last}} +{{/-last}}{{/deprecated}}
   {{/vars}}
+    ;
 
   factory {{{classname}}}.fromJson(Map<String, dynamic> json) => _${{{classname}}}FromJson(json);
 

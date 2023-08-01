@@ -9,7 +9,6 @@ void main() {
   {{#tests}}
   test('{{{testName}}}', () { 
     {{#autoCreateClient}}
-     /* {{{.}}} */
     final client =  {{client}}(
       appId: 'appId', 
       apiKey: 'apiKey',

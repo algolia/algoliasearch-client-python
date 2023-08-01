@@ -1,13 +1,17 @@
 package com.algolia.codegen;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.DartDioClientCodegen;
 import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationsMap;
+import org.openapitools.codegen.utils.CamelizeOption;
 import org.openapitools.codegen.utils.StringUtils;
 
 public class AlgoliaDartGenerator extends DartDioClientCodegen {
@@ -43,12 +47,13 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
         " tolerance & user insights, and more, in Dart/Flutter apps."
       );
     } else {
-      libName = "algolia_client_" + client;
-      packageFolder = "client_" + client;
+      String packageName = client.replace("-", "_");
+      libName = "algolia_client_" + packageName;
+      packageFolder = "client_" + packageName;
       setApiNameSuffix(Utils.API_SUFFIX);
       setPubDescription(
         "A sub-package of the AlgoliaSearch library, offering " +
-        client +
+        client.replace("-", " ") +
         "-specific functionalities for enhanced search and discovery in Dart/Flutter" +
         " apps."
       );
@@ -62,7 +67,7 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
 
     super.processOpts();
 
-    Arrays.asList("source", "get", "hide").forEach(reservedWords::remove); // reserved words from dart-keywords.txt
+    Arrays.asList("source", "get", "hide", "operator").forEach(reservedWords::remove); // reserved words from dart-keywords.txt
 
     if (isAlgoliasearchClient) {
       supportingFiles.removeIf(file -> file.getTemplateFile().contains("lib"));
@@ -84,7 +89,6 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("auth"));
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("api_client"));
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("gitignore"));
-    supportingFiles.removeIf(file -> file.getTemplateFile().contains("build"));
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("analysis_options"));
     supportingFiles.removeIf(file -> file.getTemplateFile().contains("README"));
 
@@ -94,8 +98,6 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
     // Search config
     additionalProperties.put("isSearchClient", client.equals("search"));
     additionalProperties.put("packageVersion", Utils.getClientConfigField("dart", "packageVersion"));
-
-    // typeMapping.put("object", "Map<String, dynamic>"); // from kotlinx.serialization
 
     // Generate server info
     Utils.generateServer(client, additionalProperties);
@@ -109,6 +111,7 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
   @Override
   public Map<String, ModelsMap> postProcessAllModels(Map<String, ModelsMap> objs) {
     Map<String, ModelsMap> modelsMap = super.postProcessAllModels(objs);
+    FieldUtils.normalizeVarNames(modelsMap);
     return support.clearOneOfFromModels(libName, modelsMap);
   }
 
@@ -134,20 +137,22 @@ public class AlgoliaDartGenerator extends DartDioClientCodegen {
 class SchemaSupport {
 
   private static final String GENERIC_TYPE = "dynamic";
+  private static final String X_ONEOF_TYPES = "x-oneof-types";
+  private static final String X_IS_ONEOF = "x-is-oneof";
 
-  private final Map<String, String> oneOfs = new HashMap<>(); // Maintain a list of deleted class names
+  private final Map<String, OneOfMetadata> oneOfs = new HashMap<>(); // Maintain a list of deleted class names
 
   public Set<String> classnames() {
     return oneOfs.keySet();
   }
 
   public Collection<String> imports() {
-    return oneOfs.values();
+    return oneOfs.values().stream().map(e -> e.imprt).collect(Collectors.toSet());
   }
 
   Map<String, ModelsMap> clearOneOfFromModels(String libName, Map<String, ModelsMap> modelsMap) {
     removeModels(libName, modelsMap);
-    updateFieldTypes(modelsMap);
+    updateField(modelsMap);
     removeImports(modelsMap);
     return modelsMap;
   }
@@ -161,8 +166,21 @@ class SchemaSupport {
       CodegenModel model = modelMap.getModel();
       if (!model.oneOf.isEmpty()) {
         String classname = modelMap.getModel().classname;
-        oneOfs.put(classname, asImport(libName, classname));
+        oneOfs.put(classname, new OneOfMetadata(asImport(libName, classname), model.oneOf));
         iterator.remove();
+        continue;
+      }
+      if (model.allOf.size() == 1) { // Changed from 'oneOf' to 'allOf'
+        String classname = modelMap.getModel().classname;
+        oneOfs.put(classname, new OneOfMetadata(asImport(libName, classname), model.oneOf));
+        iterator.remove();
+      }
+
+      if (model.allOf.size() == 1) {
+        model.vendorExtensions.put("x-is-type-alias", true);
+        ModelsMap map = modelsMap.get(model.allOf.iterator().next());
+        String aliasType = map != null ? map.getModels().get(0).getModel().classname : GENERIC_TYPE;
+        model.vendorExtensions.put("x-type-alias", aliasType);
       }
     }
   }
@@ -171,21 +189,67 @@ class SchemaSupport {
     return "package:" + libName + "/src/model/" + StringUtils.underscore(classname) + ".dart";
   }
 
-  private void updateFieldTypes(Map<String, ModelsMap> modelsMap) {
+  private void updateField(Map<String, ModelsMap> modelsMap) {
     for (ModelsMap modelContainer : modelsMap.values()) {
       List<ModelMap> models = modelContainer.getModels();
       if (models == null || models.isEmpty()) continue;
       ModelMap modelMap = models.get(0);
       CodegenModel model = modelMap.getModel();
       for (CodegenProperty property : model.vars) {
-        if (oneOfs.containsKey(property.dataType)) {
-          property.setDatatypeWithEnum(GENERIC_TYPE);
-        } else if (property.isMap && oneOfs.containsKey(property.complexType)) {
-          property.setDatatypeWithEnum("Map<String, " + GENERIC_TYPE + ">");
-        } else if (property.isContainer && oneOfs.containsKey(property.complexType)) {
-          property.setDatatypeWithEnum("Iterable<" + GENERIC_TYPE + ">");
-        }
+        updatePropertyDataType(property);
       }
+    }
+  }
+
+  private void updatePropertyDataType(CodegenProperty property) {
+    if (
+      oneOfs.containsKey(property.dataType) ||
+      (property.isMap && oneOfs.containsKey(property.complexType)) ||
+      (property.isContainer && oneOfs.containsKey(property.complexType))
+    ) {
+      String dataType;
+      if (oneOfs.containsKey(property.dataType)) {
+        dataType = GENERIC_TYPE;
+      } else if (property.isMap) {
+        dataType = "Map<String, " + GENERIC_TYPE + ">";
+      } else {
+        dataType = "Iterable<" + GENERIC_TYPE + ">";
+      }
+
+      property.setDatatypeWithEnum(dataType);
+      Set<String> types = oneOfs.containsKey(property.dataType)
+        ? oneOfs.get(property.dataType).types
+        : oneOfs.get(property.complexType).types;
+      Set<String> newTypes = getOneOfTypes(types);
+      property.vendorExtensions.put(X_ONEOF_TYPES, newTypes);
+      property.vendorExtensions.put(X_IS_ONEOF, true);
+    }
+  }
+
+  public Set<String> getOneOfTypes(Set<String> types) {
+    Set<String> newTypes = new HashSet<>();
+    for (String type : types) {
+      newTypes.addAll(getOneOfType(type));
+    }
+    return newTypes;
+  }
+
+  private Set<String> getOneOfType(String type) {
+    if (oneOfs.containsKey(type)) {
+      return oneOfs.get(type).types;
+    } else if (type.startsWith("List<")) { // only lists are supported for now.
+      String innerType = type.substring(5, type.length() - 1);
+      return getOneOfTypesList(innerType);
+    } else {
+      return Collections.singleton(type);
+    }
+  }
+
+  private Set<String> getOneOfTypesList(String type) {
+    if (oneOfs.containsKey(type)) {
+      return oneOfs.get(type).types.stream().map(e -> "List<" + e + ">").collect(Collectors.toSet());
+    } else {
+      return Collections.singleton("List<" + type + ">");
     }
   }
 
@@ -194,28 +258,51 @@ class SchemaSupport {
       ModelsMap modelContainer = entry.getValue();
       ModelMap modelMap = modelContainer.getModels().get(0);
       CodegenModel model = modelMap.getModel();
-      model.imports.removeIf(oneOfs::containsValue);
+      for (Map.Entry<String, OneOfMetadata> oneof : oneOfs.entrySet()) {
+        String imprt = oneof.getValue().imprt;
+        model.imports.remove(imprt);
+      }
     }
   }
 
   CodegenOperation clearOneOfFromOperation(CodegenOperation operation) {
     for (CodegenParameter parameter : operation.allParams) {
-      boolean isCleared = false;
-      if (oneOfs.containsKey(parameter.dataType)) {
-        parameter.dataType = GENERIC_TYPE;
-        isCleared = true;
-      } else if (parameter.isMap && oneOfs.containsKey(parameter.baseType)) {
-        parameter.dataType = "Map<String, " + GENERIC_TYPE + ">";
-        isCleared = true;
-      } else if (parameter.isContainer && oneOfs.containsKey(parameter.baseType)) {
-        parameter.dataType = "Iterable<" + GENERIC_TYPE + ">";
-        isCleared = true;
-      }
-      if (isCleared) {
-        parameter.isModel = false;
-      }
+      clearOneOfFromParam(parameter);
+    }
+
+    for (CodegenParameter parameter : operation.requiredParams) {
+      clearOneOfFromParam(parameter);
+    }
+
+    for (CodegenParameter parameter : operation.optionalParams) {
+      clearOneOfFromParam(parameter);
+    }
+
+    if (oneOfs.containsKey(operation.returnType)) {
+      operation.returnType = GENERIC_TYPE;
+      operation.returnBaseType = GENERIC_TYPE;
+      operation.vendorExtensions.put(X_ONEOF_TYPES, getOneOfType(operation.returnType));
+      operation.vendorExtensions.put(X_IS_ONEOF, true);
     }
     return operation;
+  }
+
+  private void clearOneOfFromParam(CodegenParameter parameter) {
+    String keyType = parameter.isMap || parameter.isContainer ? parameter.baseType : parameter.dataType;
+    if (oneOfs.containsKey(keyType)) {
+      Set<String> types = oneOfs.get(keyType).types;
+      if (parameter.isMap) {
+        parameter.dataType = "Map<String, " + GENERIC_TYPE + ">";
+      } else if (parameter.isContainer) {
+        parameter.dataType = "Iterable<" + GENERIC_TYPE + ">";
+      } else {
+        parameter.dataType = GENERIC_TYPE;
+      }
+      parameter.isModel = false;
+      Set<String> newTypes = getOneOfTypes(types);
+      parameter.vendorExtensions.put(X_ONEOF_TYPES, newTypes);
+      parameter.vendorExtensions.put(X_IS_ONEOF, true);
+    }
   }
 
   OperationsMap clearOneOfFromApiImports(OperationsMap operationsMap) {
@@ -223,5 +310,62 @@ class SchemaSupport {
     List<String> imports = (List<String>) operationsMap.get("imports");
     imports.removeAll(imports());
     return operationsMap;
+  }
+}
+
+class FieldUtils {
+
+  private FieldUtils() {
+    // empty.
+  }
+
+  static Map<String, ModelsMap> normalizeVarNames(Map<String, ModelsMap> modelsMap) {
+    for (ModelsMap modelContainer : modelsMap.values()) {
+      List<ModelMap> models = modelContainer.getModels();
+      if (models == null || models.isEmpty()) continue;
+      ModelMap modelMap = models.get(0);
+      CodegenModel model = modelMap.getModel();
+      if (model.isEnum) {
+        normalizeEnumVars(model);
+      } else {
+        normalizeModelVars(model);
+      }
+    }
+    return modelsMap;
+  }
+
+  private static void normalizeModelVars(CodegenModel model) {
+    for (CodegenProperty property : model.vars) {
+      if (isAllUpperCase(property.name)) {
+        property.name = lowerCase(property.name);
+      }
+    }
+  }
+
+  private static void normalizeEnumVars(CodegenModel model) {
+    List<Map<String, Object>> enumVars = (List<Map<String, Object>>) model.allowableValues.get("enumVars");
+    for (Map<String, Object> enumVar : enumVars) {
+      String name = (String) enumVar.get("name");
+      enumVar.put("name", lowerCamelCase(name));
+    }
+  }
+
+  private static String lowerCamelCase(String varName) {
+    if (isAllUpperCase(varName)) {
+      return lowerCase(varName);
+    } else {
+      return StringUtils.camelize(varName, CamelizeOption.LOWERCASE_FIRST_CHAR);
+    }
+  }
+}
+
+class OneOfMetadata {
+
+  final String imprt;
+  final Set<String> types;
+
+  public OneOfMetadata(String imprt, Set<String> types) {
+    this.imprt = imprt;
+    this.types = types;
   }
 }

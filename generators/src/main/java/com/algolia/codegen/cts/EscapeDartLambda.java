@@ -56,7 +56,6 @@ public class EscapeDartLambda implements Mustache.Lambda {
     "null",
     "of",
     "on",
-    "operator",
     "out",
     "part",
     "patch",

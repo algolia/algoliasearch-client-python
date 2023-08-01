@@ -1,10 +1,9 @@
 {{#models}}
-  {{#model}}
-  {{^isEnum}}
+{{#model}}
 import 'package:{{pubName}}/{{sourceFolder}}/{{modelPackage}}/{{classFilename}}.dart';
-{{/isEnum}}
 {{/model}}
 {{/models}}
+import 'package:json_annotation/json_annotation.dart';
 
 final _regList = RegExp(r'^List<(.*)>$');
 final _regSet = RegExp(r'^Set<(.*)>$');
@@ -28,8 +27,7 @@ final _regMap = RegExp(r'^Map<String,(.*)>$');
           {{#model}}
         case '{{{classname}}}':
             {{#isEnum}}
-          {{#native_serialization}}return {{{classname}}}TypeTransformer().decode(value);{{/native_serialization}}
-          {{#json_serializable}} return _$enumDecode(_${{{classname}}}EnumMap, value);{{/json_serializable}}
+          return {{{classname}}}.fromJson(value) as ReturnType;
             {{/isEnum}}
             {{^isEnum}}
           return {{{classname}}}.fromJson(value as Map<String, dynamic>) as ReturnType;

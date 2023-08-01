@@ -5,6 +5,6 @@
         {{#imports}}
 import '{{.}}';
         {{/imports}}
-{{#isEnum}}{{>enum}}{{/isEnum}}{{^isEnum}}{{>class}}{{/isEnum}}
+{{#vendorExtensions.x-is-type-alias}}{{> typealias}}{{/vendorExtensions.x-is-type-alias}}{{^vendorExtensions.x-is-type-alias}}{{#isEnum}}{{>enum}}{{/isEnum}}{{^isEnum}}{{>class}}{{/isEnum}}{{/vendorExtensions.x-is-type-alias}}
     {{/model}}
 {{/models}}

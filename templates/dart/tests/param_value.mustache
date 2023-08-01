@@ -2,7 +2,7 @@
 {{#isString}}"{{{value}}}"{{/isString}}
 {{#isNumber}}{{{value}}}{{/isNumber}}
 {{#isBoolean}}{{{value}}}{{/isBoolean}}
-{{#isEnum}}{{{objectName}}}.{{#lambda.escapeReserved}}{{#lambda.camelcase}}{{&value}}{{/lambda.camelcase}}{{/lambda.escapeReserved}}{{/isEnum}}
+{{#isEnum}}{{{objectName}}}.fromJson("{{value}}"){{/isEnum}}
 {{#isArray}}[{{#value}}{{> param_value}},{{/value}}]{{/isArray}}
 {{#isFreeFormObject}}{{> param_map}}{{/isFreeFormObject}}
 {{#isObject}}{{> param_object}}{{/isObject}}

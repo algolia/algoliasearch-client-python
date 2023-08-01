@@ -5,6 +5,7 @@ import com.algolia.codegen.exceptions.GeneratorException;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
 import org.openapitools.codegen.SupportingFile;
 
 public class DartCTSManager implements CTSManager {
@@ -27,9 +28,9 @@ public class DartCTSManager implements CTSManager {
       bundle.put("import", "package:algoliasearch/algoliasearch_lite.dart");
       bundle.put("client", "SearchClient");
     } else {
-      String packageName = "algolia_client_" + StringUtils.lowerCase(clientName);
+      String packageName = "algolia_client_" + StringUtils.lowerCase(clientName).replace("-", "_");
       bundle.put("import", "package:" + packageName + "/" + packageName + ".dart");
-      bundle.put("client", StringUtils.capitalize(clientName) + "Client");
+      bundle.put("client", WordUtils.capitalizeFully(clientName, '-').replace("-", "") + "Client");
     }
   }
 }

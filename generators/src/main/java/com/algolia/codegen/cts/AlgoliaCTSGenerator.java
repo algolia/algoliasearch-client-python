@@ -87,6 +87,7 @@ public class AlgoliaCTSGenerator extends DefaultCodegen {
     lambdas.put("replaceBacktick", new ReplaceBacktickLambda());
     lambdas.put("escapeReserved", new EscapeDartLambda());
     lambdas.put("escapeDollarSign", new EscapeDollarSignLambda());
+    lambdas.put("lowerCamelCase", new LowerCamelCaseLambda());
     return lambdas;
   }
 

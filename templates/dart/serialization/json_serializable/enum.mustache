@@ -11,7 +11,7 @@ enum {{{classname}}} {
   {{#description}}
   /// {{{.}}}
   {{/description}}
-  {{{name}}}({{#isString}}r{{/isString}}{{{value}}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
+  {{#lambda.camelcase}}{{&name}}}{{/lambda.camelcase}}({{#isString}}r{{/isString}}{{{value}}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
 {{/enumVars}}
 {{/allowableValues}}
 
@@ -19,6 +19,13 @@ enum {{{classname}}} {
   final dynamic raw;
 
   dynamic toJson() => raw;
+
+  static {{{classname}}} fromJson(dynamic json) {
+    for (final value in values) {
+      if (value.raw == json) return value;
+    }
+    throw ArgumentError.value(json, "raw", "No enum value with that value");
+  }
 
   @override
   String toString() => raw.toString();

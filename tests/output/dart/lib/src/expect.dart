@@ -44,7 +44,7 @@ Map<String, dynamic> _normalizeKeys(Map<String, dynamic>? map) {
 /// Verifies that the [actual] URI string, once fully decoded, matches the
 /// [expected] string.
 void expectPath(String actual, String expected) {
-  expect(Uri.decodeFull(actual), expected);
+  expect(Uri.decodeFull(actual), Uri.decodeFull(expected));
 }
 
 /// Checks if the [actual] map of query parameters matches the [expected]
