@@ -25,7 +25,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	//debug.Enable()
+	// debug.Enable()
 
 	switch client {
 	case "ingestion":
@@ -38,8 +38,6 @@ func main() {
 		returnCode = testInsights(appID, apiKey)
 	case "personalization":
 		returnCode = testPersonalization(appID, apiKey)
-	case "predict":
-		returnCode = testPredict(appID, apiKey)
 	case "query-suggestions":
 		returnCode = testQuerySuggestions(appID, apiKey)
 	case "recommend":

@@ -9,7 +9,7 @@ type:
     type: array
     items:
       $ref: './schemas/destination.yml#/DestinationType'
-    example: search,predict
+    example: search
 
 authenticationID:
   name: authenticationID

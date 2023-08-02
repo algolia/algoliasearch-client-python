@@ -19,8 +19,6 @@ apis:
     root: specs/recommend/spec.yml
   search:
     root: specs/search/spec.yml
-  predict:
-    root: specs/predict/spec.yml
 
 extends:
   - recommended

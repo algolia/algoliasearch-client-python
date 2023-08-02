@@ -14,7 +14,6 @@
     "@algolia/client-search": "link:../../../clients/algoliasearch-client-javascript/packages/client-search",
     "@algolia/ingestion": "link:../../../clients/algoliasearch-client-javascript/packages/ingestion",
     "@algolia/monitoring": "link:../../../clients/algoliasearch-client-javascript/packages/monitoring",
-    "@algolia/predict": "link:../../../clients/algoliasearch-client-javascript/packages/predict",
     "@algolia/recommend": "link:../../../clients/algoliasearch-client-javascript/packages/recommend",
     "@algolia/requester-node-http": "link:../../../clients/algoliasearch-client-javascript/packages/requester-node-http",
     "algoliasearch": "link:../../../clients/algoliasearch-client-javascript/packages/algoliasearch"

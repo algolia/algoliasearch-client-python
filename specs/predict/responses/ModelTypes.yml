@@ -1,3 +1,0 @@
-compatibleSources:
-  type: string
-  enum: [bigquery]

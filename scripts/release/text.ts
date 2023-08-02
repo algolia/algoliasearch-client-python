@@ -20,7 +20,7 @@ export default {
     * @algolia/client-search@5.0.0 -> 5.0.1
     * @algolia/client-abtesting@5.0.0 -> 5.0.1
     * ...
-    * @algolia/predict@0.0.1 -> 0.0.2
+    * @algolia/ingestion@0.0.1 -> 0.0.2
     * ...
     * @algolia/requester-browser-xhr@0.0.5 -> 0.0.6.
   </details>

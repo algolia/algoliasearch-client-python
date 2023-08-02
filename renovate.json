@@ -176,7 +176,6 @@
     "**/client-search/**",
     "**/client_search/**",
     "**/ingestion/**",
-    "**/predict/**",
     "**/recommend/**",
     "clients/algoliasearch-client-php/composer.json",
     "tests/output/dart/**",

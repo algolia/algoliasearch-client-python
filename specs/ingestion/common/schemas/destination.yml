@@ -103,7 +103,7 @@ DestinationSearch:
 DestinationType:
   type: string
   description: Type of the Destination, defines in which Algolia product the data will be stored.
-  enum: ['search', 'insights', 'flow', 'predict']
+  enum: ['search', 'insights', 'flow']
 
 DestinationIndexPrefix:
   type: object

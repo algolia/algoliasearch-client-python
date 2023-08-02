@@ -6,7 +6,6 @@
   "sandboxes": [
     "algolia-algoliasearch-for-javascript-jc82hd",
     "algolia-client-search-for-javascript-10pix9",
-    "algolia-client-predict-for-javascript-4e31t3",
     "algolia-recommend-for-javascript-j04foe",
     "algolia-client-abtesting-for-javascript-8wthkc",
     "algolia-client-query-suggestions-for-javascrip-h8rwl4",

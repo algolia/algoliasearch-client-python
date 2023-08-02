@@ -99,7 +99,7 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/DestinationType'
-        example: search,predict
+        example: search
     authenticationID:
       name: authenticationID
       in: query

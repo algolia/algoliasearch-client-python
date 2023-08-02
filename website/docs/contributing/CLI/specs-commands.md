@@ -41,7 +41,7 @@ yarn docker build specs recommend
 ### Build many spec
 
 ```bash
-yarn docker build specs recommend search predict
+yarn docker build specs recommend search ingestion
 ```
 
 ## Lint

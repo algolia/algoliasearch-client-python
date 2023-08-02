@@ -124,12 +124,6 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@algolia/predict@link:../../../clients/algoliasearch-client-javascript/packages/predict::locator=javascript-playground%40workspace%3Aplayground%2Fjavascript%2Fnode":
-  version: 0.0.0-use.local
-  resolution: "@algolia/predict@link:../../../clients/algoliasearch-client-javascript/packages/predict::locator=javascript-playground%40workspace%3Aplayground%2Fjavascript%2Fnode"
-  languageName: node
-  linkType: soft
-
 "@algolia/recommend@link:../../../clients/algoliasearch-client-javascript/packages/recommend::locator=javascript-playground%40workspace%3Aplayground%2Fjavascript%2Fnode":
   version: 0.0.0-use.local
   resolution: "@algolia/recommend@link:../../../clients/algoliasearch-client-javascript/packages/recommend::locator=javascript-playground%40workspace%3Aplayground%2Fjavascript%2Fnode"
@@ -6556,7 +6550,6 @@ __metadata:
     "@algolia/client-query-suggestions": "link:../../../clients/algoliasearch-client-javascript/packages/client-query-suggestions"
     "@algolia/client-search": "link:../../../clients/algoliasearch-client-javascript/packages/client-search"
     "@algolia/ingestion": "link:../../../clients/algoliasearch-client-javascript/packages/ingestion"
-    "@algolia/predict": "link:../../../clients/algoliasearch-client-javascript/packages/predict"
     "@algolia/recommend": "link:../../../clients/algoliasearch-client-javascript/packages/recommend"
     "@algolia/requester-node-http": "link:../../../clients/algoliasearch-client-javascript/packages/requester-node-http"
     algoliasearch: "link:../../../clients/algoliasearch-client-javascript/packages/algoliasearch"
