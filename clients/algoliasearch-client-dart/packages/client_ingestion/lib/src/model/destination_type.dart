@@ -12,10 +12,7 @@ enum DestinationType {
   insights(r'insights'),
 
   /// Type of the Destination, defines in which Algolia product the data will be stored.
-  flow(r'flow'),
-
-  /// Type of the Destination, defines in which Algolia product the data will be stored.
-  predict(r'predict');
+  flow(r'flow');
 
   const DestinationType(this.raw);
   final dynamic raw;

@@ -4,7 +4,6 @@ import com.algolia.client.api.MonitoringClient
 import com.algolia.client.configuration.*
 import com.algolia.client.model.monitoring.*
 import com.algolia.client.transport.*
-import com.algolia.extension.*
 import com.algolia.utils.*
 import io.ktor.http.*
 import kotlinx.coroutines.test.*

@@ -14,7 +14,6 @@ const (
 	DESTINATIONTYPE_SEARCH   DestinationType = "search"
 	DESTINATIONTYPE_INSIGHTS DestinationType = "insights"
 	DESTINATIONTYPE_FLOW     DestinationType = "flow"
-	DESTINATIONTYPE_PREDICT  DestinationType = "predict"
 )
 
 // All allowed values of DestinationType enum
@@ -22,7 +21,6 @@ var AllowedDestinationTypeEnumValues = []DestinationType{
 	"search",
 	"insights",
 	"flow",
-	"predict",
 }
 
 func (v *DestinationType) UnmarshalJSON(src []byte) error {

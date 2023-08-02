@@ -16,10 +16,7 @@ public enum class DestinationType(public val value: kotlin.String) {
   Insights("insights"),
 
   @SerialName(value = "flow")
-  Flow("flow"),
-
-  @SerialName(value = "predict")
-  Predict("predict");
+  Flow("flow");
 
   override fun toString(): kotlin.String = value
 }

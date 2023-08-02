@@ -49,5 +49,4 @@ const _$DestinationTypeEnumMap = {
   DestinationType.search: 'search',
   DestinationType.insights: 'insights',
   DestinationType.flow: 'flow',
-  DestinationType.predict: 'predict',
 };

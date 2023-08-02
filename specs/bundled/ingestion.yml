@@ -643,7 +643,6 @@ components:
         - search
         - insights
         - flow
-        - predict
     destinationSortKeys:
       type: string
       description: Used to sort the Destination list endpoint.
