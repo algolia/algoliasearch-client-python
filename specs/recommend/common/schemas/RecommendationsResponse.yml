@@ -11,6 +11,12 @@ recommendHits:
       type: array
       items:
         $ref: '#/recommendHit'
+    query:
+      $ref: '../../../common/schemas/SearchParams.yml#/query'    
+    params:
+      type: string
+      description: URL-encoded string of all search parameters.
+      example: query=a&hitsPerPage=20     
   required:
     - hits
 

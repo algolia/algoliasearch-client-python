@@ -11,8 +11,16 @@ searchHits:
       type: array
       items:
         $ref: 'Hit.yml#/hit'
+    query:
+      $ref: '../../../common/schemas/SearchParams.yml#/query'    
+    params:
+      type: string
+      description: URL-encoded string of all search parameters.
+      example: query=a&hitsPerPage=20  
   required:
     - hits
+    - query
+    - params
 
 baseSearchResponse:
   type: object
@@ -24,8 +32,6 @@ baseSearchResponse:
     - hitsPerPage
     - processingTimeMS
     - exhaustiveNbHits
-    - query
-    - params
   properties:
     abTestID:
       type: integer
@@ -110,10 +116,6 @@ baseSearchResponse:
       example: 20
     page:
       $ref: '../../../common/schemas/SearchParams.yml#/page'
-    params:
-      type: string
-      description: URL-encoded string of all search parameters.
-      example: query=a&hitsPerPage=20
     redirect:
       type: object
       description: >
@@ -131,8 +133,6 @@ baseSearchResponse:
       type: integer
       description: Time the server took to process the request, in milliseconds.
       example: 20
-    query:
-      $ref: '../../../common/schemas/SearchParams.yml#/query'
     queryAfterRemoval:
       type: string
       description: Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
