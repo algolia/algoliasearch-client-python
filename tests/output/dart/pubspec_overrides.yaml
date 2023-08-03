@@ -7,18 +7,5 @@ dependency_overrides:
     path: ../../../clients/algoliasearch-client-dart/packages/client_search
   algolia_client_insights:
     path: ../../../clients/algoliasearch-client-dart/packages/client_insights
-  algolia_client_abtesting:
-    path: ../../../clients/algoliasearch-client-dart/packages/client_abtesting
-  algolia_client_analytics:
-    path: ../../../clients/algoliasearch-client-dart/packages/client_analytics
-  algolia_client_ingestion:
-    path: ../../../clients/algoliasearch-client-dart/packages/client_ingestion
-  algolia_client_monitoring:
-    path: ../../../clients/algoliasearch-client-dart/packages/client_monitoring
-  algolia_client_personalization:
-    path: ../../../clients/algoliasearch-client-dart/packages/client_personalization
-  algolia_client_query_suggestions:
-    path: ../../../clients/algoliasearch-client-dart/packages/client_query_suggestions
   algolia_client_recommend:
     path: ../../../clients/algoliasearch-client-dart/packages/client_recommend
-
