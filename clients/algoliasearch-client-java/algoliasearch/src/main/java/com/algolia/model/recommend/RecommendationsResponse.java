@@ -64,9 +64,6 @@ public class RecommendationsResponse {
   @JsonProperty("page")
   private Integer page;
 
-  @JsonProperty("params")
-  private String params;
-
   @JsonProperty("redirect")
   private BaseSearchResponseRedirect redirect;
 
@@ -75,9 +72,6 @@ public class RecommendationsResponse {
 
   @JsonProperty("processingTimeMS")
   private Integer processingTimeMS;
-
-  @JsonProperty("query")
-  private String query;
 
   @JsonProperty("queryAfterRemoval")
   private String queryAfterRemoval;
@@ -93,6 +87,12 @@ public class RecommendationsResponse {
 
   @JsonProperty("hits")
   private List<RecommendHit> hits = new ArrayList<>();
+
+  @JsonProperty("query")
+  private String query;
+
+  @JsonProperty("params")
+  private String params;
 
   public RecommendationsResponse setAbTestID(Integer abTestID) {
     this.abTestID = abTestID;
@@ -367,21 +367,6 @@ public class RecommendationsResponse {
     return page;
   }
 
-  public RecommendationsResponse setParams(String params) {
-    this.params = params;
-    return this;
-  }
-
-  /**
-   * URL-encoded string of all search parameters.
-   *
-   * @return params
-   */
-  @javax.annotation.Nonnull
-  public String getParams() {
-    return params;
-  }
-
   public RecommendationsResponse setRedirect(BaseSearchResponseRedirect redirect) {
     this.redirect = redirect;
     return this;
@@ -426,21 +411,6 @@ public class RecommendationsResponse {
   @javax.annotation.Nonnull
   public Integer getProcessingTimeMS() {
     return processingTimeMS;
-  }
-
-  public RecommendationsResponse setQuery(String query) {
-    this.query = query;
-    return this;
-  }
-
-  /**
-   * Text to search for in an index.
-   *
-   * @return query
-   */
-  @javax.annotation.Nonnull
-  public String getQuery() {
-    return query;
   }
 
   public RecommendationsResponse setQueryAfterRemoval(String queryAfterRemoval) {
@@ -524,6 +494,36 @@ public class RecommendationsResponse {
     return hits;
   }
 
+  public RecommendationsResponse setQuery(String query) {
+    this.query = query;
+    return this;
+  }
+
+  /**
+   * Text to search for in an index.
+   *
+   * @return query
+   */
+  @javax.annotation.Nullable
+  public String getQuery() {
+    return query;
+  }
+
+  public RecommendationsResponse setParams(String params) {
+    this.params = params;
+    return this;
+  }
+
+  /**
+   * URL-encoded string of all search parameters.
+   *
+   * @return params
+   */
+  @javax.annotation.Nullable
+  public String getParams() {
+    return params;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -551,16 +551,16 @@ public class RecommendationsResponse {
       Objects.equals(this.nbPages, recommendationsResponse.nbPages) &&
       Objects.equals(this.nbSortedHits, recommendationsResponse.nbSortedHits) &&
       Objects.equals(this.page, recommendationsResponse.page) &&
-      Objects.equals(this.params, recommendationsResponse.params) &&
       Objects.equals(this.redirect, recommendationsResponse.redirect) &&
       Objects.equals(this.parsedQuery, recommendationsResponse.parsedQuery) &&
       Objects.equals(this.processingTimeMS, recommendationsResponse.processingTimeMS) &&
-      Objects.equals(this.query, recommendationsResponse.query) &&
       Objects.equals(this.queryAfterRemoval, recommendationsResponse.queryAfterRemoval) &&
       Objects.equals(this.serverUsed, recommendationsResponse.serverUsed) &&
       Objects.equals(this.userData, recommendationsResponse.userData) &&
       Objects.equals(this.renderingContent, recommendationsResponse.renderingContent) &&
-      Objects.equals(this.hits, recommendationsResponse.hits)
+      Objects.equals(this.hits, recommendationsResponse.hits) &&
+      Objects.equals(this.query, recommendationsResponse.query) &&
+      Objects.equals(this.params, recommendationsResponse.params)
     );
   }
 
@@ -584,16 +584,16 @@ public class RecommendationsResponse {
       nbPages,
       nbSortedHits,
       page,
-      params,
       redirect,
       parsedQuery,
       processingTimeMS,
-      query,
       queryAfterRemoval,
       serverUsed,
       userData,
       renderingContent,
-      hits
+      hits,
+      query,
+      params
     );
   }
 
@@ -618,16 +618,16 @@ public class RecommendationsResponse {
     sb.append("    nbPages: ").append(toIndentedString(nbPages)).append("\n");
     sb.append("    nbSortedHits: ").append(toIndentedString(nbSortedHits)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
     sb.append("    parsedQuery: ").append(toIndentedString(parsedQuery)).append("\n");
     sb.append("    processingTimeMS: ").append(toIndentedString(processingTimeMS)).append("\n");
-    sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    queryAfterRemoval: ").append(toIndentedString(queryAfterRemoval)).append("\n");
     sb.append("    serverUsed: ").append(toIndentedString(serverUsed)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");
     sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
+    sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("}");
     return sb.toString();
   }

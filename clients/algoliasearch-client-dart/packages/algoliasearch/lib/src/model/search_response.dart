@@ -30,16 +30,16 @@ final class SearchResponse {
     required this.nbPages,
     this.nbSortedHits,
     required this.page,
-    required this.params,
     this.redirect,
     this.parsedQuery,
     required this.processingTimeMS,
-    required this.query,
     this.queryAfterRemoval,
     this.serverUsed,
     this.userData,
     this.renderingContent,
     required this.hits,
+    required this.query,
+    required this.params,
   });
 
   /// A/B test ID. This is only included in the response for indices that are part of an A/B test.
@@ -113,10 +113,6 @@ final class SearchResponse {
   @JsonKey(name: r'page')
   final int page;
 
-  /// URL-encoded string of all search parameters.
-  @JsonKey(name: r'params')
-  final String params;
-
   @JsonKey(name: r'redirect')
   final BaseSearchResponseRedirect? redirect;
 
@@ -127,10 +123,6 @@ final class SearchResponse {
   /// Time the server took to process the request, in milliseconds.
   @JsonKey(name: r'processingTimeMS')
   final int processingTimeMS;
-
-  /// Text to search for in an index.
-  @JsonKey(name: r'query')
-  final String query;
 
   /// Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
   @JsonKey(name: r'queryAfterRemoval')
@@ -149,6 +141,14 @@ final class SearchResponse {
 
   @JsonKey(name: r'hits')
   final List<Hit> hits;
+
+  /// Text to search for in an index.
+  @JsonKey(name: r'query')
+  final String query;
+
+  /// URL-encoded string of all search parameters.
+  @JsonKey(name: r'params')
+  final String params;
 
   @override
   bool operator ==(Object other) =>
@@ -171,16 +171,16 @@ final class SearchResponse {
           other.nbPages == nbPages &&
           other.nbSortedHits == nbSortedHits &&
           other.page == page &&
-          other.params == params &&
           other.redirect == redirect &&
           other.parsedQuery == parsedQuery &&
           other.processingTimeMS == processingTimeMS &&
-          other.query == query &&
           other.queryAfterRemoval == queryAfterRemoval &&
           other.serverUsed == serverUsed &&
           other.userData == userData &&
           other.renderingContent == renderingContent &&
-          other.hits == hits;
+          other.hits == hits &&
+          other.query == query &&
+          other.params == params;
 
   @override
   int get hashCode =>
@@ -201,16 +201,16 @@ final class SearchResponse {
       nbPages.hashCode +
       nbSortedHits.hashCode +
       page.hashCode +
-      params.hashCode +
       redirect.hashCode +
       parsedQuery.hashCode +
       processingTimeMS.hashCode +
-      query.hashCode +
       queryAfterRemoval.hashCode +
       serverUsed.hashCode +
       userData.hashCode +
       renderingContent.hashCode +
-      hits.hashCode;
+      hits.hashCode +
+      query.hashCode +
+      params.hashCode;
 
   factory SearchResponse.fromJson(Map<String, dynamic> json) =>
       _$SearchResponseFromJson(json);

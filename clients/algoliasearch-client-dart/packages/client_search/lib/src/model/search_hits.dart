@@ -11,17 +11,31 @@ final class SearchHits {
   /// Returns a new [SearchHits] instance.
   const SearchHits({
     required this.hits,
+    required this.query,
+    required this.params,
   });
 
   @JsonKey(name: r'hits')
   final List<Hit> hits;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is SearchHits && other.hits == hits;
+  /// Text to search for in an index.
+  @JsonKey(name: r'query')
+  final String query;
+
+  /// URL-encoded string of all search parameters.
+  @JsonKey(name: r'params')
+  final String params;
 
   @override
-  int get hashCode => hits.hashCode;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SearchHits &&
+          other.hits == hits &&
+          other.query == query &&
+          other.params == params;
+
+  @override
+  int get hashCode => hits.hashCode + query.hashCode + params.hashCode;
 
   factory SearchHits.fromJson(Map<String, dynamic> json) =>
       _$SearchHitsFromJson(json);

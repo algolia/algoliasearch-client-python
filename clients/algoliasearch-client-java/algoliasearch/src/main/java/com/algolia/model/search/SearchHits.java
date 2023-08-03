@@ -14,6 +14,12 @@ public class SearchHits<T> {
   @JsonProperty("hits")
   private List<T> hits = new ArrayList<>();
 
+  @JsonProperty("query")
+  private String query;
+
+  @JsonProperty("params")
+  private String params;
+
   public SearchHits setHits(List<T> hits) {
     this.hits = hits;
     return this;
@@ -34,6 +40,36 @@ public class SearchHits<T> {
     return hits;
   }
 
+  public SearchHits setQuery(String query) {
+    this.query = query;
+    return this;
+  }
+
+  /**
+   * Text to search for in an index.
+   *
+   * @return query
+   */
+  @javax.annotation.Nonnull
+  public String getQuery() {
+    return query;
+  }
+
+  public SearchHits setParams(String params) {
+    this.params = params;
+    return this;
+  }
+
+  /**
+   * URL-encoded string of all search parameters.
+   *
+   * @return params
+   */
+  @javax.annotation.Nonnull
+  public String getParams() {
+    return params;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -43,12 +79,16 @@ public class SearchHits<T> {
       return false;
     }
     SearchHits searchHits = (SearchHits) o;
-    return Objects.equals(this.hits, searchHits.hits);
+    return (
+      Objects.equals(this.hits, searchHits.hits) &&
+      Objects.equals(this.query, searchHits.query) &&
+      Objects.equals(this.params, searchHits.params)
+    );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hits);
+    return Objects.hash(hits, query, params);
   }
 
   @Override
@@ -56,6 +96,8 @@ public class SearchHits<T> {
     StringBuilder sb = new StringBuilder();
     sb.append("class SearchHits {\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
+    sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("}");
     return sb.toString();
   }

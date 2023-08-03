@@ -14,6 +14,12 @@ public class RecommendHits {
   @JsonProperty("hits")
   private List<RecommendHit> hits = new ArrayList<>();
 
+  @JsonProperty("query")
+  private String query;
+
+  @JsonProperty("params")
+  private String params;
+
   public RecommendHits setHits(List<RecommendHit> hits) {
     this.hits = hits;
     return this;
@@ -34,6 +40,36 @@ public class RecommendHits {
     return hits;
   }
 
+  public RecommendHits setQuery(String query) {
+    this.query = query;
+    return this;
+  }
+
+  /**
+   * Text to search for in an index.
+   *
+   * @return query
+   */
+  @javax.annotation.Nullable
+  public String getQuery() {
+    return query;
+  }
+
+  public RecommendHits setParams(String params) {
+    this.params = params;
+    return this;
+  }
+
+  /**
+   * URL-encoded string of all search parameters.
+   *
+   * @return params
+   */
+  @javax.annotation.Nullable
+  public String getParams() {
+    return params;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -43,12 +79,16 @@ public class RecommendHits {
       return false;
     }
     RecommendHits recommendHits = (RecommendHits) o;
-    return Objects.equals(this.hits, recommendHits.hits);
+    return (
+      Objects.equals(this.hits, recommendHits.hits) &&
+      Objects.equals(this.query, recommendHits.query) &&
+      Objects.equals(this.params, recommendHits.params)
+    );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hits);
+    return Objects.hash(hits, query, params);
   }
 
   @Override
@@ -56,6 +96,8 @@ public class RecommendHits {
     StringBuilder sb = new StringBuilder();
     sb.append("class RecommendHits {\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
+    sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("}");
     return sb.toString();
   }

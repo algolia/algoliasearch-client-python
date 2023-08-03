@@ -41,16 +41,12 @@ type BaseSearchResponse struct {
 	// Number of hits selected and sorted by the relevant sort algorithm.
 	NbSortedHits *int32 `json:"nbSortedHits,omitempty"`
 	// Page to retrieve (the first page is `0`, not `1`).
-	Page int32 `json:"page" validate:"required"`
-	// URL-encoded string of all search parameters.
-	Params   string                      `json:"params" validate:"required"`
+	Page     int32                       `json:"page" validate:"required"`
 	Redirect *BaseSearchResponseRedirect `json:"redirect,omitempty"`
 	// Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
 	ParsedQuery *string `json:"parsedQuery,omitempty"`
 	// Time the server took to process the request, in milliseconds.
 	ProcessingTimeMS int32 `json:"processingTimeMS" validate:"required"`
-	// Text to search for in an index.
-	Query string `json:"query" validate:"required"`
 	// Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
 	QueryAfterRemoval *string `json:"queryAfterRemoval,omitempty"`
 	// Host name of the server that processed the request.
@@ -174,16 +170,14 @@ func WithBaseSearchResponseRenderingContent(val RenderingContent) BaseSearchResp
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewBaseSearchResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, params string, processingTimeMS int32, query string, opts ...BaseSearchResponseOption) *BaseSearchResponse {
+func NewBaseSearchResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, processingTimeMS int32, opts ...BaseSearchResponseOption) *BaseSearchResponse {
 	this := &BaseSearchResponse{}
 	this.ExhaustiveNbHits = exhaustiveNbHits
 	this.HitsPerPage = hitsPerPage
 	this.NbHits = nbHits
 	this.NbPages = nbPages
 	this.Page = page
-	this.Params = params
 	this.ProcessingTimeMS = processingTimeMS
-	this.Query = query
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -199,8 +193,6 @@ func NewBaseSearchResponseWithDefaults() *BaseSearchResponse {
 	this.HitsPerPage = hitsPerPage
 	var page int32 = 0
 	this.Page = page
-	var query string = ""
-	this.Query = query
 	return this
 }
 
@@ -708,30 +700,6 @@ func (o *BaseSearchResponse) SetPage(v int32) {
 	o.Page = v
 }
 
-// GetParams returns the Params field value
-func (o *BaseSearchResponse) GetParams() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Params
-}
-
-// GetParamsOk returns a tuple with the Params field value
-// and a boolean to check if the value has been set.
-func (o *BaseSearchResponse) GetParamsOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Params, true
-}
-
-// SetParams sets field value
-func (o *BaseSearchResponse) SetParams(v string) {
-	o.Params = v
-}
-
 // GetRedirect returns the Redirect field value if set, zero value otherwise.
 func (o *BaseSearchResponse) GetRedirect() BaseSearchResponseRedirect {
 	if o == nil || o.Redirect == nil {
@@ -818,30 +786,6 @@ func (o *BaseSearchResponse) GetProcessingTimeMSOk() (*int32, bool) {
 // SetProcessingTimeMS sets field value
 func (o *BaseSearchResponse) SetProcessingTimeMS(v int32) {
 	o.ProcessingTimeMS = v
-}
-
-// GetQuery returns the Query field value
-func (o *BaseSearchResponse) GetQuery() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Query
-}
-
-// GetQueryOk returns a tuple with the Query field value
-// and a boolean to check if the value has been set.
-func (o *BaseSearchResponse) GetQueryOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Query, true
-}
-
-// SetQuery sets field value
-func (o *BaseSearchResponse) SetQuery(v string) {
-	o.Query = v
 }
 
 // GetQueryAfterRemoval returns the QueryAfterRemoval field value if set, zero value otherwise.
@@ -1025,9 +969,6 @@ func (o BaseSearchResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["page"] = o.Page
 	}
-	if true {
-		toSerialize["params"] = o.Params
-	}
 	if o.Redirect != nil {
 		toSerialize["redirect"] = o.Redirect
 	}
@@ -1036,9 +977,6 @@ func (o BaseSearchResponse) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["processingTimeMS"] = o.ProcessingTimeMS
-	}
-	if true {
-		toSerialize["query"] = o.Query
 	}
 	if o.QueryAfterRemoval != nil {
 		toSerialize["queryAfterRemoval"] = o.QueryAfterRemoval
@@ -1074,11 +1012,9 @@ func (o BaseSearchResponse) String() string {
 	out += fmt.Sprintf("  nbPages=%v\n", o.NbPages)
 	out += fmt.Sprintf("  nbSortedHits=%v\n", o.NbSortedHits)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
-	out += fmt.Sprintf("  params=%v\n", o.Params)
 	out += fmt.Sprintf("  redirect=%v\n", o.Redirect)
 	out += fmt.Sprintf("  parsedQuery=%v\n", o.ParsedQuery)
 	out += fmt.Sprintf("  processingTimeMS=%v\n", o.ProcessingTimeMS)
-	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  queryAfterRemoval=%v\n", o.QueryAfterRemoval)
 	out += fmt.Sprintf("  serverUsed=%v\n", o.ServerUsed)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)

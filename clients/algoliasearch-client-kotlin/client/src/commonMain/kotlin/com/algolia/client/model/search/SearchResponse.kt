@@ -12,10 +12,10 @@ import kotlinx.serialization.json.*
  * @param nbHits Number of hits the search query matched.
  * @param nbPages Number of pages of results for the current query.
  * @param page Page to retrieve (the first page is `0`, not `1`).
- * @param params URL-encoded string of all search parameters.
  * @param processingTimeMS Time the server took to process the request, in milliseconds.
- * @param query Text to search for in an index.
  * @param hits
+ * @param query Text to search for in an index.
+ * @param params URL-encoded string of all search parameters.
  * @param abTestID A/B test ID. This is only included in the response for indices that are part of an A/B test.
  * @param abTestVariantID Variant ID. This is only included in the response for indices that are part of an A/B test.
  * @param aroundLatLng Computed geographical location.
@@ -53,16 +53,16 @@ public data class SearchResponse(
   /** Page to retrieve (the first page is `0`, not `1`). */
   @SerialName(value = "page") val page: Int,
 
-  /** URL-encoded string of all search parameters. */
-  @SerialName(value = "params") val params: String,
-
   /** Time the server took to process the request, in milliseconds. */
   @SerialName(value = "processingTimeMS") val processingTimeMS: Int,
+
+  @SerialName(value = "hits") val hits: List<Hit>,
 
   /** Text to search for in an index. */
   @SerialName(value = "query") val query: String,
 
-  @SerialName(value = "hits") val hits: List<Hit>,
+  /** URL-encoded string of all search parameters. */
+  @SerialName(value = "params") val params: String,
 
   /** A/B test ID. This is only included in the response for indices that are part of an A/B test. */
   @SerialName(value = "abTestID") val abTestID: Int? = null,

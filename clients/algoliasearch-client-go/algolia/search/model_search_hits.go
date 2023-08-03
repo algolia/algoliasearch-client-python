@@ -9,15 +9,21 @@ import (
 // SearchHits struct for SearchHits
 type SearchHits struct {
 	Hits []Hit `json:"hits" validate:"required"`
+	// Text to search for in an index.
+	Query string `json:"query" validate:"required"`
+	// URL-encoded string of all search parameters.
+	Params string `json:"params" validate:"required"`
 }
 
 // NewSearchHits instantiates a new SearchHits object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSearchHits(hits []Hit) *SearchHits {
+func NewSearchHits(hits []Hit, query string, params string) *SearchHits {
 	this := &SearchHits{}
 	this.Hits = hits
+	this.Query = query
+	this.Params = params
 	return this
 }
 
@@ -26,6 +32,8 @@ func NewSearchHits(hits []Hit) *SearchHits {
 // but it doesn't guarantee that properties required by API are set
 func NewSearchHitsWithDefaults() *SearchHits {
 	this := &SearchHits{}
+	var query string = ""
+	this.Query = query
 	return this
 }
 
@@ -53,10 +61,64 @@ func (o *SearchHits) SetHits(v []Hit) {
 	o.Hits = v
 }
 
+// GetQuery returns the Query field value
+func (o *SearchHits) GetQuery() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Query
+}
+
+// GetQueryOk returns a tuple with the Query field value
+// and a boolean to check if the value has been set.
+func (o *SearchHits) GetQueryOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Query, true
+}
+
+// SetQuery sets field value
+func (o *SearchHits) SetQuery(v string) {
+	o.Query = v
+}
+
+// GetParams returns the Params field value
+func (o *SearchHits) GetParams() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Params
+}
+
+// GetParamsOk returns a tuple with the Params field value
+// and a boolean to check if the value has been set.
+func (o *SearchHits) GetParamsOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Params, true
+}
+
+// SetParams sets field value
+func (o *SearchHits) SetParams(v string) {
+	o.Params = v
+}
+
 func (o SearchHits) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
 		toSerialize["hits"] = o.Hits
+	}
+	if true {
+		toSerialize["query"] = o.Query
+	}
+	if true {
+		toSerialize["params"] = o.Params
 	}
 	return json.Marshal(toSerialize)
 }
@@ -64,6 +126,8 @@ func (o SearchHits) MarshalJSON() ([]byte, error) {
 func (o SearchHits) String() string {
 	out := ""
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
+	out += fmt.Sprintf("  query=%v\n", o.Query)
+	out += fmt.Sprintf("  params=%v\n", o.Params)
 	return fmt.Sprintf("SearchHits {\n%s}", out)
 }
 

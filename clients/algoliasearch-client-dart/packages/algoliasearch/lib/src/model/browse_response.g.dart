@@ -41,7 +41,6 @@ BrowseResponse _$BrowseResponseFromJson(Map<String, dynamic> json) =>
           nbPages: $checkedConvert('nbPages', (v) => v as int),
           nbSortedHits: $checkedConvert('nbSortedHits', (v) => v as int?),
           page: $checkedConvert('page', (v) => v as int),
-          params: $checkedConvert('params', (v) => v as String),
           redirect: $checkedConvert(
               'redirect',
               (v) => v == null
@@ -51,7 +50,6 @@ BrowseResponse _$BrowseResponseFromJson(Map<String, dynamic> json) =>
           parsedQuery: $checkedConvert('parsedQuery', (v) => v as String?),
           processingTimeMS:
               $checkedConvert('processingTimeMS', (v) => v as int),
-          query: $checkedConvert('query', (v) => v as String),
           queryAfterRemoval:
               $checkedConvert('queryAfterRemoval', (v) => v as String?),
           serverUsed: $checkedConvert('serverUsed', (v) => v as String?),
@@ -66,6 +64,8 @@ BrowseResponse _$BrowseResponseFromJson(Map<String, dynamic> json) =>
               (v) => (v as List<dynamic>)
                   .map((e) => Hit.fromJson(e as Map<String, dynamic>))
                   .toList()),
+          query: $checkedConvert('query', (v) => v as String),
+          params: $checkedConvert('params', (v) => v as String),
           cursor: $checkedConvert('cursor', (v) => v as String?),
         );
         return val;
@@ -100,16 +100,16 @@ Map<String, dynamic> _$BrowseResponseToJson(BrowseResponse instance) {
   val['nbPages'] = instance.nbPages;
   writeNotNull('nbSortedHits', instance.nbSortedHits);
   val['page'] = instance.page;
-  val['params'] = instance.params;
   writeNotNull('redirect', instance.redirect?.toJson());
   writeNotNull('parsedQuery', instance.parsedQuery);
   val['processingTimeMS'] = instance.processingTimeMS;
-  val['query'] = instance.query;
   writeNotNull('queryAfterRemoval', instance.queryAfterRemoval);
   writeNotNull('serverUsed', instance.serverUsed);
   writeNotNull('userData', instance.userData);
   writeNotNull('renderingContent', instance.renderingContent?.toJson());
   val['hits'] = instance.hits.map((e) => e.toJson()).toList();
+  val['query'] = instance.query;
+  val['params'] = instance.params;
   writeNotNull('cursor', instance.cursor);
   return val;
 }

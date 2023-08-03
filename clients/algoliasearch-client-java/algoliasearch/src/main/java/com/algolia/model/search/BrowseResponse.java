@@ -64,9 +64,6 @@ public class BrowseResponse<T> {
   @JsonProperty("page")
   private Integer page;
 
-  @JsonProperty("params")
-  private String params;
-
   @JsonProperty("redirect")
   private BaseSearchResponseRedirect redirect;
 
@@ -75,9 +72,6 @@ public class BrowseResponse<T> {
 
   @JsonProperty("processingTimeMS")
   private Integer processingTimeMS;
-
-  @JsonProperty("query")
-  private String query;
 
   @JsonProperty("queryAfterRemoval")
   private String queryAfterRemoval;
@@ -93,6 +87,12 @@ public class BrowseResponse<T> {
 
   @JsonProperty("hits")
   private List<T> hits = new ArrayList<>();
+
+  @JsonProperty("query")
+  private String query;
+
+  @JsonProperty("params")
+  private String params;
 
   @JsonProperty("cursor")
   private String cursor;
@@ -370,21 +370,6 @@ public class BrowseResponse<T> {
     return page;
   }
 
-  public BrowseResponse setParams(String params) {
-    this.params = params;
-    return this;
-  }
-
-  /**
-   * URL-encoded string of all search parameters.
-   *
-   * @return params
-   */
-  @javax.annotation.Nonnull
-  public String getParams() {
-    return params;
-  }
-
   public BrowseResponse setRedirect(BaseSearchResponseRedirect redirect) {
     this.redirect = redirect;
     return this;
@@ -429,21 +414,6 @@ public class BrowseResponse<T> {
   @javax.annotation.Nonnull
   public Integer getProcessingTimeMS() {
     return processingTimeMS;
-  }
-
-  public BrowseResponse setQuery(String query) {
-    this.query = query;
-    return this;
-  }
-
-  /**
-   * Text to search for in an index.
-   *
-   * @return query
-   */
-  @javax.annotation.Nonnull
-  public String getQuery() {
-    return query;
   }
 
   public BrowseResponse setQueryAfterRemoval(String queryAfterRemoval) {
@@ -527,6 +497,36 @@ public class BrowseResponse<T> {
     return hits;
   }
 
+  public BrowseResponse setQuery(String query) {
+    this.query = query;
+    return this;
+  }
+
+  /**
+   * Text to search for in an index.
+   *
+   * @return query
+   */
+  @javax.annotation.Nonnull
+  public String getQuery() {
+    return query;
+  }
+
+  public BrowseResponse setParams(String params) {
+    this.params = params;
+    return this;
+  }
+
+  /**
+   * URL-encoded string of all search parameters.
+   *
+   * @return params
+   */
+  @javax.annotation.Nonnull
+  public String getParams() {
+    return params;
+  }
+
   public BrowseResponse setCursor(String cursor) {
     this.cursor = cursor;
     return this;
@@ -571,16 +571,16 @@ public class BrowseResponse<T> {
       Objects.equals(this.nbPages, browseResponse.nbPages) &&
       Objects.equals(this.nbSortedHits, browseResponse.nbSortedHits) &&
       Objects.equals(this.page, browseResponse.page) &&
-      Objects.equals(this.params, browseResponse.params) &&
       Objects.equals(this.redirect, browseResponse.redirect) &&
       Objects.equals(this.parsedQuery, browseResponse.parsedQuery) &&
       Objects.equals(this.processingTimeMS, browseResponse.processingTimeMS) &&
-      Objects.equals(this.query, browseResponse.query) &&
       Objects.equals(this.queryAfterRemoval, browseResponse.queryAfterRemoval) &&
       Objects.equals(this.serverUsed, browseResponse.serverUsed) &&
       Objects.equals(this.userData, browseResponse.userData) &&
       Objects.equals(this.renderingContent, browseResponse.renderingContent) &&
       Objects.equals(this.hits, browseResponse.hits) &&
+      Objects.equals(this.query, browseResponse.query) &&
+      Objects.equals(this.params, browseResponse.params) &&
       Objects.equals(this.cursor, browseResponse.cursor)
     );
   }
@@ -605,16 +605,16 @@ public class BrowseResponse<T> {
       nbPages,
       nbSortedHits,
       page,
-      params,
       redirect,
       parsedQuery,
       processingTimeMS,
-      query,
       queryAfterRemoval,
       serverUsed,
       userData,
       renderingContent,
       hits,
+      query,
+      params,
       cursor
     );
   }
@@ -640,16 +640,16 @@ public class BrowseResponse<T> {
     sb.append("    nbPages: ").append(toIndentedString(nbPages)).append("\n");
     sb.append("    nbSortedHits: ").append(toIndentedString(nbSortedHits)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
     sb.append("    parsedQuery: ").append(toIndentedString(parsedQuery)).append("\n");
     sb.append("    processingTimeMS: ").append(toIndentedString(processingTimeMS)).append("\n");
-    sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    queryAfterRemoval: ").append(toIndentedString(queryAfterRemoval)).append("\n");
     sb.append("    serverUsed: ").append(toIndentedString(serverUsed)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");
     sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
+    sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("    cursor: ").append(toIndentedString(cursor)).append("\n");
     sb.append("}");
     return sb.toString();

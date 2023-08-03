@@ -12,9 +12,7 @@ import kotlinx.serialization.json.*
  * @param nbHits Number of hits the search query matched.
  * @param nbPages Number of pages of results for the current query.
  * @param page Page to retrieve (the first page is `0`, not `1`).
- * @param params URL-encoded string of all search parameters.
  * @param processingTimeMS Time the server took to process the request, in milliseconds.
- * @param query Text to search for in an index.
  * @param hits
  * @param abTestID A/B test ID. This is only included in the response for indices that are part of an A/B test.
  * @param abTestVariantID Variant ID. This is only included in the response for indices that are part of an A/B test.
@@ -34,6 +32,8 @@ import kotlinx.serialization.json.*
  * @param serverUsed Host name of the server that processed the request.
  * @param userData Lets you store custom data in your indices.
  * @param renderingContent
+ * @param query Text to search for in an index.
+ * @param params URL-encoded string of all search parameters.
  */
 @Serializable
 public data class RecommendationsResponse(
@@ -53,14 +53,8 @@ public data class RecommendationsResponse(
   /** Page to retrieve (the first page is `0`, not `1`). */
   @SerialName(value = "page") val page: Int,
 
-  /** URL-encoded string of all search parameters. */
-  @SerialName(value = "params") val params: String,
-
   /** Time the server took to process the request, in milliseconds. */
   @SerialName(value = "processingTimeMS") val processingTimeMS: Int,
-
-  /** Text to search for in an index. */
-  @SerialName(value = "query") val query: String,
 
   @SerialName(value = "hits") val hits: List<RecommendHit>,
 
@@ -115,4 +109,10 @@ public data class RecommendationsResponse(
   @SerialName(value = "userData") val userData: JsonObject? = null,
 
   @SerialName(value = "renderingContent") val renderingContent: RenderingContent? = null,
+
+  /** Text to search for in an index. */
+  @SerialName(value = "query") val query: String? = null,
+
+  /** URL-encoded string of all search parameters. */
+  @SerialName(value = "params") val params: String? = null,
 )

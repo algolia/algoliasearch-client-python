@@ -11,17 +11,31 @@ final class RecommendHits {
   /// Returns a new [RecommendHits] instance.
   const RecommendHits({
     required this.hits,
+    this.query,
+    this.params,
   });
 
   @JsonKey(name: r'hits')
   final List<RecommendHit> hits;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is RecommendHits && other.hits == hits;
+  /// Text to search for in an index.
+  @JsonKey(name: r'query')
+  final String? query;
+
+  /// URL-encoded string of all search parameters.
+  @JsonKey(name: r'params')
+  final String? params;
 
   @override
-  int get hashCode => hits.hashCode;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RecommendHits &&
+          other.hits == hits &&
+          other.query == query &&
+          other.params == params;
+
+  @override
+  int get hashCode => hits.hashCode + query.hashCode + params.hashCode;
 
   factory RecommendHits.fromJson(Map<String, dynamic> json) =>
       _$RecommendHitsFromJson(json);

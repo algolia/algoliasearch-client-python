@@ -1245,8 +1245,6 @@ components:
         - hitsPerPage
         - processingTimeMS
         - exhaustiveNbHits
-        - query
-        - params
       properties:
         abTestID:
           type: integer
@@ -1343,10 +1341,6 @@ components:
           example: 20
         page:
           $ref: '#/components/schemas/page'
-        params:
-          type: string
-          description: URL-encoded string of all search parameters.
-          example: query=a&hitsPerPage=20
         redirect:
           type: object
           description: >
@@ -1367,8 +1361,6 @@ components:
           type: integer
           description: Time the server took to process the request, in milliseconds.
           example: 20
-        query:
-          $ref: '#/components/schemas/query'
         queryAfterRemoval:
           type: string
           description: >-
@@ -1573,6 +1565,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/recommendHit'
+        query:
+          $ref: '#/components/schemas/query'
+        params:
+          type: string
+          description: URL-encoded string of all search parameters.
+          example: query=a&hitsPerPage=20
       required:
         - hits
     recommendationsResponse:

@@ -62,9 +62,6 @@ public class BaseSearchResponse {
   @JsonProperty("page")
   private Integer page;
 
-  @JsonProperty("params")
-  private String params;
-
   @JsonProperty("redirect")
   private BaseSearchResponseRedirect redirect;
 
@@ -73,9 +70,6 @@ public class BaseSearchResponse {
 
   @JsonProperty("processingTimeMS")
   private Integer processingTimeMS;
-
-  @JsonProperty("query")
-  private String query;
 
   @JsonProperty("queryAfterRemoval")
   private String queryAfterRemoval;
@@ -362,21 +356,6 @@ public class BaseSearchResponse {
     return page;
   }
 
-  public BaseSearchResponse setParams(String params) {
-    this.params = params;
-    return this;
-  }
-
-  /**
-   * URL-encoded string of all search parameters.
-   *
-   * @return params
-   */
-  @javax.annotation.Nonnull
-  public String getParams() {
-    return params;
-  }
-
   public BaseSearchResponse setRedirect(BaseSearchResponseRedirect redirect) {
     this.redirect = redirect;
     return this;
@@ -421,21 +400,6 @@ public class BaseSearchResponse {
   @javax.annotation.Nonnull
   public Integer getProcessingTimeMS() {
     return processingTimeMS;
-  }
-
-  public BaseSearchResponse setQuery(String query) {
-    this.query = query;
-    return this;
-  }
-
-  /**
-   * Text to search for in an index.
-   *
-   * @return query
-   */
-  @javax.annotation.Nonnull
-  public String getQuery() {
-    return query;
   }
 
   public BaseSearchResponse setQueryAfterRemoval(String queryAfterRemoval) {
@@ -526,11 +490,9 @@ public class BaseSearchResponse {
       Objects.equals(this.nbPages, baseSearchResponse.nbPages) &&
       Objects.equals(this.nbSortedHits, baseSearchResponse.nbSortedHits) &&
       Objects.equals(this.page, baseSearchResponse.page) &&
-      Objects.equals(this.params, baseSearchResponse.params) &&
       Objects.equals(this.redirect, baseSearchResponse.redirect) &&
       Objects.equals(this.parsedQuery, baseSearchResponse.parsedQuery) &&
       Objects.equals(this.processingTimeMS, baseSearchResponse.processingTimeMS) &&
-      Objects.equals(this.query, baseSearchResponse.query) &&
       Objects.equals(this.queryAfterRemoval, baseSearchResponse.queryAfterRemoval) &&
       Objects.equals(this.serverUsed, baseSearchResponse.serverUsed) &&
       Objects.equals(this.userData, baseSearchResponse.userData) &&
@@ -558,11 +520,9 @@ public class BaseSearchResponse {
       nbPages,
       nbSortedHits,
       page,
-      params,
       redirect,
       parsedQuery,
       processingTimeMS,
-      query,
       queryAfterRemoval,
       serverUsed,
       userData,
@@ -591,11 +551,9 @@ public class BaseSearchResponse {
     sb.append("    nbPages: ").append(toIndentedString(nbPages)).append("\n");
     sb.append("    nbSortedHits: ").append(toIndentedString(nbSortedHits)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
     sb.append("    parsedQuery: ").append(toIndentedString(parsedQuery)).append("\n");
     sb.append("    processingTimeMS: ").append(toIndentedString(processingTimeMS)).append("\n");
-    sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    queryAfterRemoval: ").append(toIndentedString(queryAfterRemoval)).append("\n");
     sb.append("    serverUsed: ").append(toIndentedString(serverUsed)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");

@@ -41,16 +41,12 @@ type RecommendationsResponse struct {
 	// Number of hits selected and sorted by the relevant sort algorithm.
 	NbSortedHits *int32 `json:"nbSortedHits,omitempty"`
 	// Page to retrieve (the first page is `0`, not `1`).
-	Page int32 `json:"page" validate:"required"`
-	// URL-encoded string of all search parameters.
-	Params   string                      `json:"params" validate:"required"`
+	Page     int32                       `json:"page" validate:"required"`
 	Redirect *BaseSearchResponseRedirect `json:"redirect,omitempty"`
 	// Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
 	ParsedQuery *string `json:"parsedQuery,omitempty"`
 	// Time the server took to process the request, in milliseconds.
 	ProcessingTimeMS int32 `json:"processingTimeMS" validate:"required"`
-	// Text to search for in an index.
-	Query string `json:"query" validate:"required"`
 	// Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
 	QueryAfterRemoval *string `json:"queryAfterRemoval,omitempty"`
 	// Host name of the server that processed the request.
@@ -59,6 +55,10 @@ type RecommendationsResponse struct {
 	UserData         map[string]interface{} `json:"userData,omitempty"`
 	RenderingContent *RenderingContent      `json:"renderingContent,omitempty"`
 	Hits             []RecommendHit         `json:"hits" validate:"required"`
+	// Text to search for in an index.
+	Query *string `json:"query,omitempty"`
+	// URL-encoded string of all search parameters.
+	Params *string `json:"params,omitempty"`
 }
 
 type RecommendationsResponseOption func(f *RecommendationsResponse)
@@ -171,20 +171,30 @@ func WithRecommendationsResponseRenderingContent(val RenderingContent) Recommend
 	}
 }
 
+func WithRecommendationsResponseQuery(val string) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.Query = &val
+	}
+}
+
+func WithRecommendationsResponseParams(val string) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.Params = &val
+	}
+}
+
 // NewRecommendationsResponse instantiates a new RecommendationsResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRecommendationsResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, params string, processingTimeMS int32, query string, hits []RecommendHit, opts ...RecommendationsResponseOption) *RecommendationsResponse {
+func NewRecommendationsResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, processingTimeMS int32, hits []RecommendHit, opts ...RecommendationsResponseOption) *RecommendationsResponse {
 	this := &RecommendationsResponse{}
 	this.ExhaustiveNbHits = exhaustiveNbHits
 	this.HitsPerPage = hitsPerPage
 	this.NbHits = nbHits
 	this.NbPages = nbPages
 	this.Page = page
-	this.Params = params
 	this.ProcessingTimeMS = processingTimeMS
-	this.Query = query
 	this.Hits = hits
 	for _, opt := range opts {
 		opt(this)
@@ -202,7 +212,7 @@ func NewRecommendationsResponseWithDefaults() *RecommendationsResponse {
 	var page int32 = 0
 	this.Page = page
 	var query string = ""
-	this.Query = query
+	this.Query = &query
 	return this
 }
 
@@ -710,30 +720,6 @@ func (o *RecommendationsResponse) SetPage(v int32) {
 	o.Page = v
 }
 
-// GetParams returns the Params field value
-func (o *RecommendationsResponse) GetParams() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Params
-}
-
-// GetParamsOk returns a tuple with the Params field value
-// and a boolean to check if the value has been set.
-func (o *RecommendationsResponse) GetParamsOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Params, true
-}
-
-// SetParams sets field value
-func (o *RecommendationsResponse) SetParams(v string) {
-	o.Params = v
-}
-
 // GetRedirect returns the Redirect field value if set, zero value otherwise.
 func (o *RecommendationsResponse) GetRedirect() BaseSearchResponseRedirect {
 	if o == nil || o.Redirect == nil {
@@ -820,30 +806,6 @@ func (o *RecommendationsResponse) GetProcessingTimeMSOk() (*int32, bool) {
 // SetProcessingTimeMS sets field value
 func (o *RecommendationsResponse) SetProcessingTimeMS(v int32) {
 	o.ProcessingTimeMS = v
-}
-
-// GetQuery returns the Query field value
-func (o *RecommendationsResponse) GetQuery() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Query
-}
-
-// GetQueryOk returns a tuple with the Query field value
-// and a boolean to check if the value has been set.
-func (o *RecommendationsResponse) GetQueryOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Query, true
-}
-
-// SetQuery sets field value
-func (o *RecommendationsResponse) SetQuery(v string) {
-	o.Query = v
 }
 
 // GetQueryAfterRemoval returns the QueryAfterRemoval field value if set, zero value otherwise.
@@ -998,6 +960,70 @@ func (o *RecommendationsResponse) SetHits(v []RecommendHit) {
 	o.Hits = v
 }
 
+// GetQuery returns the Query field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetQuery() string {
+	if o == nil || o.Query == nil {
+		var ret string
+		return ret
+	}
+	return *o.Query
+}
+
+// GetQueryOk returns a tuple with the Query field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetQueryOk() (*string, bool) {
+	if o == nil || o.Query == nil {
+		return nil, false
+	}
+	return o.Query, true
+}
+
+// HasQuery returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasQuery() bool {
+	if o != nil && o.Query != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetQuery gets a reference to the given string and assigns it to the Query field.
+func (o *RecommendationsResponse) SetQuery(v string) {
+	o.Query = &v
+}
+
+// GetParams returns the Params field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetParams() string {
+	if o == nil || o.Params == nil {
+		var ret string
+		return ret
+	}
+	return *o.Params
+}
+
+// GetParamsOk returns a tuple with the Params field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetParamsOk() (*string, bool) {
+	if o == nil || o.Params == nil {
+		return nil, false
+	}
+	return o.Params, true
+}
+
+// HasParams returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasParams() bool {
+	if o != nil && o.Params != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetParams gets a reference to the given string and assigns it to the Params field.
+func (o *RecommendationsResponse) SetParams(v string) {
+	o.Params = &v
+}
+
 func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.AbTestID != nil {
@@ -1051,9 +1077,6 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["page"] = o.Page
 	}
-	if true {
-		toSerialize["params"] = o.Params
-	}
 	if o.Redirect != nil {
 		toSerialize["redirect"] = o.Redirect
 	}
@@ -1062,9 +1085,6 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["processingTimeMS"] = o.ProcessingTimeMS
-	}
-	if true {
-		toSerialize["query"] = o.Query
 	}
 	if o.QueryAfterRemoval != nil {
 		toSerialize["queryAfterRemoval"] = o.QueryAfterRemoval
@@ -1080,6 +1100,12 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["hits"] = o.Hits
+	}
+	if o.Query != nil {
+		toSerialize["query"] = o.Query
+	}
+	if o.Params != nil {
+		toSerialize["params"] = o.Params
 	}
 	return json.Marshal(toSerialize)
 }
@@ -1103,16 +1129,16 @@ func (o RecommendationsResponse) String() string {
 	out += fmt.Sprintf("  nbPages=%v\n", o.NbPages)
 	out += fmt.Sprintf("  nbSortedHits=%v\n", o.NbSortedHits)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
-	out += fmt.Sprintf("  params=%v\n", o.Params)
 	out += fmt.Sprintf("  redirect=%v\n", o.Redirect)
 	out += fmt.Sprintf("  parsedQuery=%v\n", o.ParsedQuery)
 	out += fmt.Sprintf("  processingTimeMS=%v\n", o.ProcessingTimeMS)
-	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  queryAfterRemoval=%v\n", o.QueryAfterRemoval)
 	out += fmt.Sprintf("  serverUsed=%v\n", o.ServerUsed)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
+	out += fmt.Sprintf("  query=%v\n", o.Query)
+	out += fmt.Sprintf("  params=%v\n", o.Params)
 	return fmt.Sprintf("RecommendationsResponse {\n%s}", out)
 }
 

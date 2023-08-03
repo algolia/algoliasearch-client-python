@@ -8,9 +8,17 @@ import kotlinx.serialization.json.*
  * RecommendHits
  *
  * @param hits
+ * @param query Text to search for in an index.
+ * @param params URL-encoded string of all search parameters.
  */
 @Serializable
 public data class RecommendHits(
 
   @SerialName(value = "hits") val hits: List<RecommendHit>,
+
+  /** Text to search for in an index. */
+  @SerialName(value = "query") val query: String? = null,
+
+  /** URL-encoded string of all search parameters. */
+  @SerialName(value = "params") val params: String? = null,
 )

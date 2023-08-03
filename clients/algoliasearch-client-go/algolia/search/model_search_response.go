@@ -41,16 +41,12 @@ type SearchResponse struct {
 	// Number of hits selected and sorted by the relevant sort algorithm.
 	NbSortedHits *int32 `json:"nbSortedHits,omitempty"`
 	// Page to retrieve (the first page is `0`, not `1`).
-	Page int32 `json:"page" validate:"required"`
-	// URL-encoded string of all search parameters.
-	Params   string                      `json:"params" validate:"required"`
+	Page     int32                       `json:"page" validate:"required"`
 	Redirect *BaseSearchResponseRedirect `json:"redirect,omitempty"`
 	// Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
 	ParsedQuery *string `json:"parsedQuery,omitempty"`
 	// Time the server took to process the request, in milliseconds.
 	ProcessingTimeMS int32 `json:"processingTimeMS" validate:"required"`
-	// Text to search for in an index.
-	Query string `json:"query" validate:"required"`
 	// Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
 	QueryAfterRemoval *string `json:"queryAfterRemoval,omitempty"`
 	// Host name of the server that processed the request.
@@ -59,6 +55,10 @@ type SearchResponse struct {
 	UserData         map[string]interface{} `json:"userData,omitempty"`
 	RenderingContent *RenderingContent      `json:"renderingContent,omitempty"`
 	Hits             []Hit                  `json:"hits" validate:"required"`
+	// Text to search for in an index.
+	Query string `json:"query" validate:"required"`
+	// URL-encoded string of all search parameters.
+	Params string `json:"params" validate:"required"`
 }
 
 type SearchResponseOption func(f *SearchResponse)
@@ -175,17 +175,17 @@ func WithSearchResponseRenderingContent(val RenderingContent) SearchResponseOpti
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSearchResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, params string, processingTimeMS int32, query string, hits []Hit, opts ...SearchResponseOption) *SearchResponse {
+func NewSearchResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, processingTimeMS int32, hits []Hit, query string, params string, opts ...SearchResponseOption) *SearchResponse {
 	this := &SearchResponse{}
 	this.ExhaustiveNbHits = exhaustiveNbHits
 	this.HitsPerPage = hitsPerPage
 	this.NbHits = nbHits
 	this.NbPages = nbPages
 	this.Page = page
-	this.Params = params
 	this.ProcessingTimeMS = processingTimeMS
-	this.Query = query
 	this.Hits = hits
+	this.Query = query
+	this.Params = params
 	for _, opt := range opts {
 		opt(this)
 	}
@@ -710,30 +710,6 @@ func (o *SearchResponse) SetPage(v int32) {
 	o.Page = v
 }
 
-// GetParams returns the Params field value
-func (o *SearchResponse) GetParams() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Params
-}
-
-// GetParamsOk returns a tuple with the Params field value
-// and a boolean to check if the value has been set.
-func (o *SearchResponse) GetParamsOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Params, true
-}
-
-// SetParams sets field value
-func (o *SearchResponse) SetParams(v string) {
-	o.Params = v
-}
-
 // GetRedirect returns the Redirect field value if set, zero value otherwise.
 func (o *SearchResponse) GetRedirect() BaseSearchResponseRedirect {
 	if o == nil || o.Redirect == nil {
@@ -820,30 +796,6 @@ func (o *SearchResponse) GetProcessingTimeMSOk() (*int32, bool) {
 // SetProcessingTimeMS sets field value
 func (o *SearchResponse) SetProcessingTimeMS(v int32) {
 	o.ProcessingTimeMS = v
-}
-
-// GetQuery returns the Query field value
-func (o *SearchResponse) GetQuery() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Query
-}
-
-// GetQueryOk returns a tuple with the Query field value
-// and a boolean to check if the value has been set.
-func (o *SearchResponse) GetQueryOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Query, true
-}
-
-// SetQuery sets field value
-func (o *SearchResponse) SetQuery(v string) {
-	o.Query = v
 }
 
 // GetQueryAfterRemoval returns the QueryAfterRemoval field value if set, zero value otherwise.
@@ -998,6 +950,54 @@ func (o *SearchResponse) SetHits(v []Hit) {
 	o.Hits = v
 }
 
+// GetQuery returns the Query field value
+func (o *SearchResponse) GetQuery() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Query
+}
+
+// GetQueryOk returns a tuple with the Query field value
+// and a boolean to check if the value has been set.
+func (o *SearchResponse) GetQueryOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Query, true
+}
+
+// SetQuery sets field value
+func (o *SearchResponse) SetQuery(v string) {
+	o.Query = v
+}
+
+// GetParams returns the Params field value
+func (o *SearchResponse) GetParams() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Params
+}
+
+// GetParamsOk returns a tuple with the Params field value
+// and a boolean to check if the value has been set.
+func (o *SearchResponse) GetParamsOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Params, true
+}
+
+// SetParams sets field value
+func (o *SearchResponse) SetParams(v string) {
+	o.Params = v
+}
+
 func (o SearchResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.AbTestID != nil {
@@ -1051,9 +1051,6 @@ func (o SearchResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["page"] = o.Page
 	}
-	if true {
-		toSerialize["params"] = o.Params
-	}
 	if o.Redirect != nil {
 		toSerialize["redirect"] = o.Redirect
 	}
@@ -1062,9 +1059,6 @@ func (o SearchResponse) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["processingTimeMS"] = o.ProcessingTimeMS
-	}
-	if true {
-		toSerialize["query"] = o.Query
 	}
 	if o.QueryAfterRemoval != nil {
 		toSerialize["queryAfterRemoval"] = o.QueryAfterRemoval
@@ -1080,6 +1074,12 @@ func (o SearchResponse) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["hits"] = o.Hits
+	}
+	if true {
+		toSerialize["query"] = o.Query
+	}
+	if true {
+		toSerialize["params"] = o.Params
 	}
 	return json.Marshal(toSerialize)
 }
@@ -1103,16 +1103,16 @@ func (o SearchResponse) String() string {
 	out += fmt.Sprintf("  nbPages=%v\n", o.NbPages)
 	out += fmt.Sprintf("  nbSortedHits=%v\n", o.NbSortedHits)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
-	out += fmt.Sprintf("  params=%v\n", o.Params)
 	out += fmt.Sprintf("  redirect=%v\n", o.Redirect)
 	out += fmt.Sprintf("  parsedQuery=%v\n", o.ParsedQuery)
 	out += fmt.Sprintf("  processingTimeMS=%v\n", o.ProcessingTimeMS)
-	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  queryAfterRemoval=%v\n", o.QueryAfterRemoval)
 	out += fmt.Sprintf("  serverUsed=%v\n", o.ServerUsed)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
+	out += fmt.Sprintf("  query=%v\n", o.Query)
+	out += fmt.Sprintf("  params=%v\n", o.Params)
 	return fmt.Sprintf("SearchResponse {\n%s}", out)
 }
 
