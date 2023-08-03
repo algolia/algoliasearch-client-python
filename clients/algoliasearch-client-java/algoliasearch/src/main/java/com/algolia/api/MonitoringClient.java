@@ -29,7 +29,7 @@ public class MonitoringClient extends ApiClient {
   }
 
   public MonitoringClient(String appId, String apiKey, ClientOptions options) {
-    super(appId, apiKey, "Monitoring", "4.0.0-SNAPSHOT", options);
+    super(appId, apiKey, "Monitoring", "4.0.0-beta.1", options);
     if (options != null && options.getHosts() != null) {
       this.setHosts(options.getHosts());
     } else {
