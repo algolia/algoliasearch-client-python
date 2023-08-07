@@ -7,3 +7,5 @@ dependency_overrides:
     path: ../../clients/algoliasearch-client-dart/packages/client_search
   algolia_client_insights:
     path: ../../clients/algoliasearch-client-dart/packages/client_insights
+  algolia_client_recommend:
+    path: ../../clients/algoliasearch-client-dart/packages/client_recommend

@@ -10,6 +10,7 @@ void main() async {
     apiKey: dotenv['ALGOLIA_SEARCH_KEY']!,
     options: ClientOptions(logger: print),
   );
+  final indexName = dotenv['SEARCH_INDEX']!;
 
   // Constructing a query to search for hits in the 'instant_search' index.
   final queryHits = SearchParamsObject(
@@ -17,16 +18,16 @@ void main() async {
     hitsPerPage: 5,
   );
   // Execute the search request.
-  final responseHits = await client.searchIndex(
-    indexName: 'instant_search',
-    request: queryHits,
+  final responseHits = await client.searchSingleIndex(
+    indexName: indexName,
+    searchParams: queryHits,
   );
   // Print the search hits.
   printHits(responseHits);
 
-  // Constructing a request to search for facet values in the 'instant_search' index.
+  // Constructing a request to search for facet values in the index.
   final responseFacets = await client.searchForFacetValues(
-    indexName: 'instant_search',
+    indexName: indexName,
     facetName: 'categories',
     searchForFacetValuesRequest: SearchForFacetValuesRequest(maxFacetHits: 5),
   );

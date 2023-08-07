@@ -33,7 +33,7 @@ void main() async {
     queries: [querySuggestions, queryHits],
   );
   // Decompose the search results into separate results and suggestions.
-  final [searchResult, suggestionsResult] = responseMulti.results;
+  final [searchResult, suggestionsResult] = responseMulti.toList();
   // Print the search results and suggestions.
   printQuerySuggestion(searchResult);
   printHits(suggestionsResult);

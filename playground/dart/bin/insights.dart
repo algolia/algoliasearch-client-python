@@ -10,17 +10,17 @@ void main() async {
     apiKey: dotenv['ALGOLIA_SEARCH_KEY']!,
     options: ClientOptions(logger: print),
   );
+  final indexName = dotenv['SEARCH_INDEX']!;
 
   // Creating an InsightsEvents object with a list of EventsItems objects.
   // Each EventsItems represents an event such as a user viewing a specific item.
   final events = InsightsEvents(
     events: [
-      ViewEvent(
-        eventType: EventType.view,
+      ViewedObjectIDs(
+        eventType: ViewEvent.view,
         eventName: 'View event',
-        index: 'instant_search',
+        index: indexName,
         userToken: 'anonymous',
-        queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
         objectIDs: ['5477500'],
       )
     ],
