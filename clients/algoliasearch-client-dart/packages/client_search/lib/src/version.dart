@@ -1,2 +1,2 @@
 /// Current package version
-const packageVersion = '0.1.2+2';
+const packageVersion = '0.1.4';
