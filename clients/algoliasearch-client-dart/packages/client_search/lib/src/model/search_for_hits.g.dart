@@ -37,7 +37,7 @@ SearchForHits _$SearchForHitsFromJson(Map<String, dynamic> json) =>
           aroundLatLngViaIP:
               $checkedConvert('aroundLatLngViaIP', (v) => v as bool?),
           aroundRadius: $checkedConvert('aroundRadius', (v) => v),
-          aroundPrecision: $checkedConvert('aroundPrecision', (v) => v as int?),
+          aroundPrecision: $checkedConvert('aroundPrecision', (v) => v),
           minimumAroundRadius:
               $checkedConvert('minimumAroundRadius', (v) => v as int?),
           insideBoundingBox: $checkedConvert(

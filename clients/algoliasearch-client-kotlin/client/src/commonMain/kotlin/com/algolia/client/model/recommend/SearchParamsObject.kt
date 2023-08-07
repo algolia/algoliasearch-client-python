@@ -25,7 +25,7 @@ import kotlinx.serialization.json.*
  * @param aroundLatLng Search for entries [around a central location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point), enabling a geographical search within a circular area.
  * @param aroundLatLngViaIP Search for entries around a location. The location is automatically computed from the requester's IP address.
  * @param aroundRadius
- * @param aroundPrecision Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
+ * @param aroundPrecision
  * @param minimumAroundRadius Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
  * @param insideBoundingBox Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
  * @param insidePolygon Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
@@ -139,8 +139,7 @@ public data class SearchParamsObject(
 
   @SerialName(value = "aroundRadius") val aroundRadius: AroundRadius? = null,
 
-  /** Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/). */
-  @SerialName(value = "aroundPrecision") val aroundPrecision: Int? = null,
+  @SerialName(value = "aroundPrecision") val aroundPrecision: AroundPrecision? = null,
 
   /** Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set. */
   @SerialName(value = "minimumAroundRadius") val minimumAroundRadius: Int? = null,

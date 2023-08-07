@@ -2186,7 +2186,7 @@ class SearchTest {
                 aroundLatLng = "",
                 aroundLatLngViaIP = true,
                 aroundRadius = AroundRadiusAll.values().first { it.value == "all" },
-                aroundPrecision = 0,
+                aroundPrecision = AroundPrecision.Number(0.toNumberType()),
                 minimumAroundRadius = 0,
                 insideBoundingBox = listOf(47.3165, 4.9665),
                 insidePolygon = listOf(47.3165, 4.9665),

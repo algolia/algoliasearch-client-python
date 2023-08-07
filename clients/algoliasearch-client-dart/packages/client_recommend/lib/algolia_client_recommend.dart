@@ -8,6 +8,7 @@ export 'src/api/recommend_client.dart';
 export 'src/model/advanced_syntax_features.dart';
 export 'src/model/alternatives_as_exact.dart';
 export 'src/model/anchoring.dart';
+export 'src/model/around_precision_from_value_inner.dart';
 export 'src/model/around_radius_all.dart';
 export 'src/model/automatic_facet_filter.dart';
 export 'src/model/base_recommend_request.dart';

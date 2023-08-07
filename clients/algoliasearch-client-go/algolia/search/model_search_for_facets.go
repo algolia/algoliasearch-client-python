@@ -39,10 +39,9 @@ type SearchForFacets struct {
 	// Search for entries [around a central location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point), enabling a geographical search within a circular area.
 	AroundLatLng *string `json:"aroundLatLng,omitempty"`
 	// Search for entries around a location. The location is automatically computed from the requester's IP address.
-	AroundLatLngViaIP *bool         `json:"aroundLatLngViaIP,omitempty"`
-	AroundRadius      *AroundRadius `json:"aroundRadius,omitempty"`
-	// Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
-	AroundPrecision *int32 `json:"aroundPrecision,omitempty"`
+	AroundLatLngViaIP *bool            `json:"aroundLatLngViaIP,omitempty"`
+	AroundRadius      *AroundRadius    `json:"aroundRadius,omitempty"`
+	AroundPrecision   *AroundPrecision `json:"aroundPrecision,omitempty"`
 	// Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
 	MinimumAroundRadius *int32 `json:"minimumAroundRadius,omitempty"`
 	// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
@@ -277,7 +276,7 @@ func WithSearchForFacetsAroundRadius(val AroundRadius) SearchForFacetsOption {
 	}
 }
 
-func WithSearchForFacetsAroundPrecision(val int32) SearchForFacetsOption {
+func WithSearchForFacetsAroundPrecision(val AroundPrecision) SearchForFacetsOption {
 	return func(f *SearchForFacets) {
 		f.AroundPrecision = &val
 	}
@@ -691,8 +690,6 @@ func NewSearchForFacetsWithDefaults() *SearchForFacets {
 	this.AroundLatLng = &aroundLatLng
 	var aroundLatLngViaIP bool = false
 	this.AroundLatLngViaIP = &aroundLatLngViaIP
-	var aroundPrecision int32 = 10
-	this.AroundPrecision = &aroundPrecision
 	var personalizationImpact int32 = 100
 	this.PersonalizationImpact = &personalizationImpact
 	var getRankingInfo bool = false
@@ -1369,9 +1366,9 @@ func (o *SearchForFacets) SetAroundRadius(v AroundRadius) {
 }
 
 // GetAroundPrecision returns the AroundPrecision field value if set, zero value otherwise.
-func (o *SearchForFacets) GetAroundPrecision() int32 {
+func (o *SearchForFacets) GetAroundPrecision() AroundPrecision {
 	if o == nil || o.AroundPrecision == nil {
-		var ret int32
+		var ret AroundPrecision
 		return ret
 	}
 	return *o.AroundPrecision
@@ -1379,7 +1376,7 @@ func (o *SearchForFacets) GetAroundPrecision() int32 {
 
 // GetAroundPrecisionOk returns a tuple with the AroundPrecision field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *SearchForFacets) GetAroundPrecisionOk() (*int32, bool) {
+func (o *SearchForFacets) GetAroundPrecisionOk() (*AroundPrecision, bool) {
 	if o == nil || o.AroundPrecision == nil {
 		return nil, false
 	}
@@ -1395,8 +1392,8 @@ func (o *SearchForFacets) HasAroundPrecision() bool {
 	return false
 }
 
-// SetAroundPrecision gets a reference to the given int32 and assigns it to the AroundPrecision field.
-func (o *SearchForFacets) SetAroundPrecision(v int32) {
+// SetAroundPrecision gets a reference to the given AroundPrecision and assigns it to the AroundPrecision field.
+func (o *SearchForFacets) SetAroundPrecision(v AroundPrecision) {
 	o.AroundPrecision = &v
 }
 

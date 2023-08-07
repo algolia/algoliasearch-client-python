@@ -3169,7 +3169,7 @@ class SearchClientRequestsTests {
           AroundRadiusAll aroundRadius3 = AroundRadiusAll.fromValue("all");
           requests_02.setAroundRadius(AroundRadius.of(aroundRadius3));
           int aroundPrecision3 = 0;
-          requests_02.setAroundPrecision(aroundPrecision3);
+          requests_02.setAroundPrecision(AroundPrecision.of(aroundPrecision3));
           int minimumAroundRadius3 = 0;
           requests_02.setMinimumAroundRadius(minimumAroundRadius3);
           List<Double> insideBoundingBox3 = new ArrayList<>();

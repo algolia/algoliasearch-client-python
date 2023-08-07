@@ -1,6 +1,7 @@
 import 'package:algolia_client_recommend/src/model/advanced_syntax_features.dart';
 import 'package:algolia_client_recommend/src/model/alternatives_as_exact.dart';
 import 'package:algolia_client_recommend/src/model/anchoring.dart';
+import 'package:algolia_client_recommend/src/model/around_precision_from_value_inner.dart';
 import 'package:algolia_client_recommend/src/model/around_radius_all.dart';
 import 'package:algolia_client_recommend/src/model/automatic_facet_filter.dart';
 import 'package:algolia_client_recommend/src/model/base_recommend_request.dart';
@@ -87,6 +88,9 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return AlternativesAsExact.fromJson(value) as ReturnType;
     case 'Anchoring':
       return Anchoring.fromJson(value) as ReturnType;
+    case 'AroundPrecisionFromValueInner':
+      return AroundPrecisionFromValueInner.fromJson(
+          value as Map<String, dynamic>) as ReturnType;
     case 'AroundRadiusAll':
       return AroundRadiusAll.fromJson(value) as ReturnType;
     case 'AutomaticFacetFilter':

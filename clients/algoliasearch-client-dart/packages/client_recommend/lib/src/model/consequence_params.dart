@@ -184,9 +184,11 @@ final class ConsequenceParams {
   @JsonKey(name: r'aroundRadius')
   final dynamic aroundRadius;
 
-  /// Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
+  /// One of types:
+  /// - [List<AroundPrecisionFromValueInner>]
+  /// - [int]
   @JsonKey(name: r'aroundPrecision')
-  final int? aroundPrecision;
+  final dynamic aroundPrecision;
 
   /// Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
   // minimum: 1

@@ -12,6 +12,7 @@ export 'src/model/advanced_syntax_features.dart';
 export 'src/model/alternatives_as_exact.dart';
 export 'src/model/anchoring.dart';
 export 'src/model/api_key.dart';
+export 'src/model/around_precision_from_value_inner.dart';
 export 'src/model/around_radius_all.dart';
 export 'src/model/assign_user_id_params.dart';
 export 'src/model/automatic_facet_filter.dart';

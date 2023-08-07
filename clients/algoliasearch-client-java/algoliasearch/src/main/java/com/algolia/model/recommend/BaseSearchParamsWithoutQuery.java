@@ -63,7 +63,7 @@ public class BaseSearchParamsWithoutQuery {
   private AroundRadius aroundRadius;
 
   @JsonProperty("aroundPrecision")
-  private Integer aroundPrecision;
+  private AroundPrecision aroundPrecision;
 
   @JsonProperty("minimumAroundRadius")
   private Integer minimumAroundRadius;
@@ -394,20 +394,18 @@ public class BaseSearchParamsWithoutQuery {
     return aroundRadius;
   }
 
-  public BaseSearchParamsWithoutQuery setAroundPrecision(Integer aroundPrecision) {
+  public BaseSearchParamsWithoutQuery setAroundPrecision(AroundPrecision aroundPrecision) {
     this.aroundPrecision = aroundPrecision;
     return this;
   }
 
   /**
-   * Precision of a geographical search (in meters), to [group results that are more or less the
-   * same distance from a central
-   * point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
+   * Get aroundPrecision
    *
    * @return aroundPrecision
    */
   @javax.annotation.Nullable
-  public Integer getAroundPrecision() {
+  public AroundPrecision getAroundPrecision() {
     return aroundPrecision;
   }
 

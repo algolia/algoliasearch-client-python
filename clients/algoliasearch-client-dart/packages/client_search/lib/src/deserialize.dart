@@ -5,6 +5,7 @@ import 'package:algolia_client_search/src/model/advanced_syntax_features.dart';
 import 'package:algolia_client_search/src/model/alternatives_as_exact.dart';
 import 'package:algolia_client_search/src/model/anchoring.dart';
 import 'package:algolia_client_search/src/model/api_key.dart';
+import 'package:algolia_client_search/src/model/around_precision_from_value_inner.dart';
 import 'package:algolia_client_search/src/model/around_radius_all.dart';
 import 'package:algolia_client_search/src/model/assign_user_id_params.dart';
 import 'package:algolia_client_search/src/model/automatic_facet_filter.dart';
@@ -171,6 +172,9 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return Anchoring.fromJson(value) as ReturnType;
     case 'ApiKey':
       return ApiKey.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'AroundPrecisionFromValueInner':
+      return AroundPrecisionFromValueInner.fromJson(
+          value as Map<String, dynamic>) as ReturnType;
     case 'AroundRadiusAll':
       return AroundRadiusAll.fromJson(value) as ReturnType;
     case 'AssignUserIdParams':
