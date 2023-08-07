@@ -12,8 +12,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -25,8 +25,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -51,8 +51,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -64,8 +64,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -77,8 +77,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -90,8 +90,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -103,8 +103,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -129,8 +129,8 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.76
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
-    "@types/node": 18.17.1
-    rollup: 3.27.0
+    "@types/node": 18.17.3
+    rollup: 3.27.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -2802,13 +2802,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.1":
-  version: 18.17.1
-  resolution: "@types/node@npm:18.17.1"
-  checksum: 56201bda9a2d05d68602df63b4e67b0545ac8c6d0280bd5fb31701350a978a577a027501fbf49db99bf177f2242ebd1244896bfd35e89042d5bd7dfebff28d4e
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:18.17.3":
   version: 18.17.3
   resolution: "@types/node@npm:18.17.3"
@@ -3044,9 +3037,9 @@ __metadata:
     "@algolia/requester-browser-xhr": 5.0.0-alpha.76
     "@algolia/requester-node-http": 5.0.0-alpha.76
     "@types/jest": 29.5.3
-    "@types/node": 18.17.1
+    "@types/node": 18.17.3
     jest: 29.6.2
-    rollup: 3.27.0
+    rollup: 3.27.2
     ts-jest: 29.1.1
     typescript: 5.1.6
   languageName: unknown
@@ -8494,20 +8487,6 @@ __metadata:
   dependencies:
     estree-walker: ^0.6.1
   checksum: 339fdf866d8f4ff6e408fa274c0525412f7edb01dc46b5ccda51f575b7e0d20ad72965773376fb5db95a77a7fcfcab97bf841ec08dbadf5d6b08af02b7a2cf5e
-  languageName: node
-  linkType: hard
-
-"rollup@npm:3.27.0":
-  version: 3.27.0
-  resolution: "rollup@npm:3.27.0"
-  dependencies:
-    fsevents: ~2.3.2
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    rollup: dist/bin/rollup
-  checksum: f60c2c288d039dc14e1f6e7fd673b7fcb11928b5a781675791b37a741f63b7af110fc5d040d60d603175b6e03ff978bed83db018dd2ac542ef809fe1a5b32dae
   languageName: node
   linkType: hard
 
