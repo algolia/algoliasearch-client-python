@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.0"
-ktor = "2.3.2"
+ktor = "2.3.3"
 
 [libraries]
 # Kotlin

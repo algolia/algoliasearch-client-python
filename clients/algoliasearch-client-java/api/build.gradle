@@ -5,7 +5,7 @@ import me.champeau.gradle.japicmp.JapicmpTask
 
 plugins {
   id 'java-library'
-  id 'me.champeau.gradle.japicmp' version '0.4.1'
+  id 'me.champeau.gradle.japicmp' version '0.4.2'
 }
 
 repositories {
