@@ -105,11 +105,7 @@ baseSearchParamsWithoutQuery:
     aroundRadius:
       $ref: '#/aroundRadius'
     aroundPrecision:
-      type: integer
-      description: Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
-      default: 10
-      x-categories:
-        - Geo-Search
+      $ref: '#/aroundPrecision'
     minimumAroundRadius:
       type: integer
       description: Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
@@ -231,6 +227,26 @@ aroundRadius:
     - $ref: '#/aroundRadiusAll'
   x-categories:
     - Geo-Search
+
+aroundPrecision:
+  description: Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
+  oneOf:
+    - type: integer
+      default: 10
+    - $ref: '#/aroundPrecisionFromValue'
+  x-categories:
+    - Geo-Search
+
+aroundPrecisionFromValue:
+  description: Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
+  type: array
+  items:
+    type: object
+    properties:
+      from:
+        type: integer
+      value:
+        type: integer
 
 aroundRadiusAll:
   type: string
