@@ -381,6 +381,7 @@ async function prepareGitEnvironment(): Promise<void> {
 
   console.log('Pulling from origin...');
   await run('git fetch origin');
+  await run('git fetch --tags --force');
   await run('git pull');
 
   // Remove the local tag, and fetch it from the remote.

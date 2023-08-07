@@ -1,3 +1,9 @@
+## [4.0.0-alpha.23](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.22...4.0.0-alpha.23)
+
+- [82d7dcf5a](https://github.com/algolia/api-clients-automation/commit/82d7dcf5a) fix(specs): allow JSON array for `aroundPrecision` ([#1855](https://github.com/algolia/api-clients-automation/pull/1855)) by [@shortcuts](https://github.com/shortcuts/)
+- [c6a7ab404](https://github.com/algolia/api-clients-automation/commit/c6a7ab404) fix(specs): optional/required `query` and `params` ([#1864](https://github.com/algolia/api-clients-automation/pull/1864)) by [@aallam](https://github.com/aallam/)
+- [a5bf6232c](https://github.com/algolia/api-clients-automation/commit/a5bf6232c) feat(specs): delete Predict ([#1860](https://github.com/algolia/api-clients-automation/pull/1860)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0-alpha.22](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.21...4.0.0-alpha.22)
 
 - [58ea5dbf](https://github.com/algolia/api-clients-automation/commit/58ea5dbf) fix(specs): allow partial input update for authentications ([#1856](https://github.com/algolia/api-clients-automation/pull/1856)) by [@Fluf22](https://github.com/Fluf22/)
