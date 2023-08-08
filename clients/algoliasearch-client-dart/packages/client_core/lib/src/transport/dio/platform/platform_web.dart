@@ -6,12 +6,8 @@ import 'package:dio/dio.dart' as dio;
 /// [AgentSegment]s for web platforms.
 Iterable<AgentSegment> platformAgentSegments() => [
       AgentSegment(
-        value: web.window.navigator.appCodeName,
-        version: web.window.navigator.appVersion,
-      ),
-      AgentSegment(
         value: 'Platform',
-        version: '${web.window.navigator.platform}',
+        version: 'Web ${web.window.navigator.platform}',
       ),
     ];
 
