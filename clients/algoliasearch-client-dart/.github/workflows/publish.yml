@@ -2,19 +2,16 @@ name: Publish
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   check:
     name: Run checks
     runs-on: ubuntu-latest
-    if: "startsWith(github.event.head_commit.message, 'chore: release')"
-
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
-          
       - name: Install Tools
         run: dart pub global activate melos
       - name: Bootstrap Workspace
@@ -24,42 +21,19 @@ jobs:
       - name: Check versions
         run: melos test
 
-  version:
-    name: Tag versions
-    needs: check
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-
-      - name: Run version check script
-        id: version
-        run: .github/scripts/version.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.ALGOLIA_BOT_TOKEN }}
-      
-    outputs:
-      PUBLISH: ${{ steps.version.outputs.publish }}
-
   publish:
-    needs: version
-    name: Publish
-    runs-on: ubuntu-20.04
-    if: ${{ needs.version.outputs.PUBLISH == 'true' }}
+    needs: check
+    strategy:
+      matrix:
+        package: [
+          packages/client_core,
+          packages/client_search,
+          packages/client_insights,
+          packages/client_recommend,
+          packages/algoliasearch,
+        ]
     permissions:
       id-token: write
-    environment: pub.dev
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1
-
-      - name: Install Tools
-        run: dart pub global activate melos
-      - name: Bootstrap Workspace
-        run: melos bootstrap
-      - name: Install dependencies
-        run: melos get
-      - name: Publish packages
-        run: melos publish --no-dry-run --yes
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      working-directory: ${{ matrix.package }}
