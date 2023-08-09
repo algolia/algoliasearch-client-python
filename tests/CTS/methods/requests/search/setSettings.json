@@ -192,11 +192,27 @@
     "parameters": {
       "indexName": "theIndexName",
       "indexSettings": {
-        "replicas": [
-          ""
+        "advancedSyntax": true,
+        "advancedSyntaxFeatures": [
+          "exactPhrase"
         ],
-        "paginationLimitedTo": 0,
-        "disableTypoToleranceOnWords": [
+        "allowCompressionOfIntegerArray": true,
+        "allowTyposOnNumericTokens": true,
+        "alternativesAsExact": [
+          "singleWordSynonym"
+        ],
+        "attributeCriteriaComputedByMinProximity": true,
+        "attributeForDistinct": "test",
+        "attributesForFaceting": [
+          "algolia"
+        ],
+        "attributesToHighlight": [
+          "algolia"
+        ],
+        "attributesToRetrieve": [
+          "algolia"
+        ],
+        "attributesToSnippet": [
           "algolia"
         ],
         "attributesToTransliterate": [
@@ -205,103 +221,67 @@
         "camelCaseAttributes": [
           "algolia"
         ],
-        "decompoundedAttributes": {
-          "algolia": "aloglia"
-        },
-        "indexLanguages": [
-          "algolia"
-        ],
-        "disablePrefixOnAttributes": [
-          "algolia"
-        ],
-        "allowCompressionOfIntegerArray": true,
-        "numericAttributesForFiltering": [
-          "algolia"
-        ],
-        "separatorsToIndex": "algolia",
-        "searchableAttributes": [
-          "algolia"
-        ],
-        "userData": {
-          "user": "data"
-        },
         "customNormalization": {
           "algolia": {
             "aloglia": "aglolia"
           }
         },
-        "attributesForFaceting": [
-          "algolia"
-        ],
-        "unretrievableAttributes": [
-          "algolia"
-        ],
-        "attributesToRetrieve": [
-          "algolia"
-        ],
-        "restrictSearchableAttributes": [
-          "algolia"
-        ],
-        "ranking": [
-          "geo"
-        ],
         "customRanking": [
           "algolia"
         ],
-        "relevancyStrictness": 10,
-        "attributesToHighlight": [
-          "algolia"
-        ],
-        "attributesToSnippet": [
-          "algolia"
-        ],
-        "highlightPreTag": "<span>",
-        "highlightPostTag": "</span>",
-        "snippetEllipsisText": "---",
-        "restrictHighlightAndSnippetArrays": true,
-        "hitsPerPage": 10,
-        "minWordSizefor1Typo": 5,
-        "minWordSizefor2Typos": 11,
-        "typoTolerance": false,
-        "allowTyposOnNumericTokens": true,
-        "disableTypoToleranceOnAttributes": [
-          "algolia"
-        ],
-        "ignorePlurals": false,
-        "removeStopWords": false,
-        "keepDiacriticsOnCharacters": "abc",
-        "queryLanguages": [
-          "algolia"
-        ],
         "decompoundQuery": false,
-        "enableRules": false,
-        "enablePersonalization": true,
-        "queryType": "prefixLast",
-        "removeWordsIfNoResults": "lastWords",
-        "advancedSyntax": true,
-        "optionalWords": [
-          "algolia"
-        ],
+        "decompoundedAttributes": {
+          "algolia": "aloglia"
+        },
         "disableExactOnAttributes": [
           "algolia"
         ],
-        "exactOnSingleWordQuery": "attribute",
-        "alternativesAsExact": [
-          "singleWordSynonym"
-        ],
-        "advancedSyntaxFeatures": [
-          "exactPhrase"
-        ],
-        "distinct": 3,
-        "attributeForDistinct": "test",
-        "synonyms": false,
-        "replaceSynonymsInHighlight": true,
-        "minProximity": 6,
-        "responseFields": [
+        "disablePrefixOnAttributes": [
           "algolia"
         ],
-        "maxFacetHits": 50,
-        "attributeCriteriaComputedByMinProximity": true,
+        "disableTypoToleranceOnAttributes": [
+          "algolia"
+        ],
+        "disableTypoToleranceOnWords": [
+          "algolia"
+        ],
+        "distinct": 3,
+        "enablePersonalization": true,
+        "enableReRanking": false,
+        "enableRules": true,
+        "exactOnSingleWordQuery": "attribute",
+        "highlightPreTag": "<span>",
+        "highlightPostTag": "</span>",
+        "hitsPerPage": 10,
+        "ignorePlurals": false,
+        "indexLanguages": [
+          "algolia"
+        ],
+        "keepDiacriticsOnCharacters": "abc",
+        "maxFacetHits": 20,
+        "maxValuesPerFacet": 30,
+        "minProximity": 6,
+        "minWordSizefor1Typo": 5,
+        "minWordSizefor2Typos": 11,
+        "mode": "neuralSearch",
+        "numericAttributesForFiltering": [
+          "algolia"
+        ],
+        "optionalWords": [
+          "myspace"
+        ],
+        "paginationLimitedTo": 0,
+        "queryLanguages": [
+          "algolia"
+        ],
+        "queryType": "prefixLast",
+        "ranking": [
+          "geo"
+        ],
+        "reRankingApplyFilter": "mySearch:filters",
+        "relevancyStrictness": 10,
+        "removeStopWords": false,
+        "removeWordsIfNoResults": "lastWords",
         "renderingContent": {
           "facetOrdering": {
             "facets": {
@@ -319,6 +299,32 @@
               }
             }
           }
+        },
+        "replaceSynonymsInHighlight": true,
+        "replicas": [
+          ""
+        ],
+        "responseFields": [
+          "algolia"
+        ],
+        "restrictHighlightAndSnippetArrays": true,
+        "searchableAttributes": [
+          "foo"
+        ],
+        "semanticSearch": {
+          "eventSources": [
+            "foo"
+          ]
+        },
+        "separatorsToIndex": "bar",
+        "snippetEllipsisText": "---",
+        "sortFacetValuesBy": "date",
+        "typoTolerance": false,
+        "unretrievableAttributes": [
+          "foo"
+        ],
+        "userData": {
+          "user": "data"
         }
       }
     },
@@ -326,11 +332,27 @@
       "path": "/1/indexes/theIndexName/settings",
       "method": "PUT",
       "body": {
-        "replicas": [
-          ""
+        "advancedSyntax": true,
+        "advancedSyntaxFeatures": [
+          "exactPhrase"
         ],
-        "paginationLimitedTo": 0,
-        "disableTypoToleranceOnWords": [
+        "allowCompressionOfIntegerArray": true,
+        "allowTyposOnNumericTokens": true,
+        "alternativesAsExact": [
+          "singleWordSynonym"
+        ],
+        "attributeCriteriaComputedByMinProximity": true,
+        "attributeForDistinct": "test",
+        "attributesForFaceting": [
+          "algolia"
+        ],
+        "attributesToHighlight": [
+          "algolia"
+        ],
+        "attributesToRetrieve": [
+          "algolia"
+        ],
+        "attributesToSnippet": [
           "algolia"
         ],
         "attributesToTransliterate": [
@@ -339,103 +361,67 @@
         "camelCaseAttributes": [
           "algolia"
         ],
-        "decompoundedAttributes": {
-          "algolia": "aloglia"
-        },
-        "indexLanguages": [
-          "algolia"
-        ],
-        "disablePrefixOnAttributes": [
-          "algolia"
-        ],
-        "allowCompressionOfIntegerArray": true,
-        "numericAttributesForFiltering": [
-          "algolia"
-        ],
-        "separatorsToIndex": "algolia",
-        "searchableAttributes": [
-          "algolia"
-        ],
-        "userData": {
-          "user": "data"
-        },
         "customNormalization": {
           "algolia": {
             "aloglia": "aglolia"
           }
         },
-        "attributesForFaceting": [
-          "algolia"
-        ],
-        "unretrievableAttributes": [
-          "algolia"
-        ],
-        "attributesToRetrieve": [
-          "algolia"
-        ],
-        "restrictSearchableAttributes": [
-          "algolia"
-        ],
-        "ranking": [
-          "geo"
-        ],
         "customRanking": [
           "algolia"
         ],
-        "relevancyStrictness": 10,
-        "attributesToHighlight": [
-          "algolia"
-        ],
-        "attributesToSnippet": [
-          "algolia"
-        ],
-        "highlightPreTag": "<span>",
-        "highlightPostTag": "</span>",
-        "snippetEllipsisText": "---",
-        "restrictHighlightAndSnippetArrays": true,
-        "hitsPerPage": 10,
-        "minWordSizefor1Typo": 5,
-        "minWordSizefor2Typos": 11,
-        "typoTolerance": false,
-        "allowTyposOnNumericTokens": true,
-        "disableTypoToleranceOnAttributes": [
-          "algolia"
-        ],
-        "ignorePlurals": false,
-        "removeStopWords": false,
-        "keepDiacriticsOnCharacters": "abc",
-        "queryLanguages": [
-          "algolia"
-        ],
         "decompoundQuery": false,
-        "enableRules": false,
-        "enablePersonalization": true,
-        "queryType": "prefixLast",
-        "removeWordsIfNoResults": "lastWords",
-        "advancedSyntax": true,
-        "optionalWords": [
-          "algolia"
-        ],
+        "decompoundedAttributes": {
+          "algolia": "aloglia"
+        },
         "disableExactOnAttributes": [
           "algolia"
         ],
-        "exactOnSingleWordQuery": "attribute",
-        "alternativesAsExact": [
-          "singleWordSynonym"
-        ],
-        "advancedSyntaxFeatures": [
-          "exactPhrase"
-        ],
-        "distinct": 3,
-        "attributeForDistinct": "test",
-        "synonyms": false,
-        "replaceSynonymsInHighlight": true,
-        "minProximity": 6,
-        "responseFields": [
+        "disablePrefixOnAttributes": [
           "algolia"
         ],
-        "maxFacetHits": 50,
-        "attributeCriteriaComputedByMinProximity": true,
+        "disableTypoToleranceOnAttributes": [
+          "algolia"
+        ],
+        "disableTypoToleranceOnWords": [
+          "algolia"
+        ],
+        "distinct": 3,
+        "enablePersonalization": true,
+        "enableReRanking": false,
+        "enableRules": true,
+        "exactOnSingleWordQuery": "attribute",
+        "highlightPreTag": "<span>",
+        "highlightPostTag": "</span>",
+        "hitsPerPage": 10,
+        "ignorePlurals": false,
+        "indexLanguages": [
+          "algolia"
+        ],
+        "keepDiacriticsOnCharacters": "abc",
+        "maxFacetHits": 20,
+        "maxValuesPerFacet": 30,
+        "minProximity": 6,
+        "minWordSizefor1Typo": 5,
+        "minWordSizefor2Typos": 11,
+        "mode": "neuralSearch",
+        "numericAttributesForFiltering": [
+          "algolia"
+        ],
+        "optionalWords": [
+          "myspace"
+        ],
+        "paginationLimitedTo": 0,
+        "queryLanguages": [
+          "algolia"
+        ],
+        "queryType": "prefixLast",
+        "ranking": [
+          "geo"
+        ],
+        "reRankingApplyFilter": "mySearch:filters",
+        "relevancyStrictness": 10,
+        "removeStopWords": false,
+        "removeWordsIfNoResults": "lastWords",
         "renderingContent": {
           "facetOrdering": {
             "facets": {
@@ -453,6 +439,32 @@
               }
             }
           }
+        },
+        "replaceSynonymsInHighlight": true,
+        "replicas": [
+          ""
+        ],
+        "responseFields": [
+          "algolia"
+        ],
+        "restrictHighlightAndSnippetArrays": true,
+        "searchableAttributes": [
+          "foo"
+        ],
+        "semanticSearch": {
+          "eventSources": [
+            "foo"
+          ]
+        },
+        "separatorsToIndex": "bar",
+        "snippetEllipsisText": "---",
+        "sortFacetValuesBy": "date",
+        "typoTolerance": false,
+        "unretrievableAttributes": [
+          "foo"
+        ],
+        "userData": {
+          "user": "data"
         }
       }
     }

@@ -51,6 +51,15 @@ baseSearchParamsWithoutQuery:
       default: false
       x-categories:
         - Filtering
+    restrictSearchableAttributes:
+      type: array
+      items:
+        type: string
+      example: ['title','author']
+      description: Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
+      default: []
+      x-categories:
+        - Filtering
     facets:
       type: array
       items:
@@ -59,23 +68,11 @@ baseSearchParamsWithoutQuery:
       default: []
       x-categories:
         - Faceting
-    maxValuesPerFacet:
-      type: integer
-      description: Maximum number of facet values to return for each facet.
-      default: 100
-      x-categories:
-        - Faceting
     facetingAfterDistinct:
       type: boolean
       description: >
         Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control.
       default: false
-      x-categories:
-        - Faceting
-    sortFacetValuesBy:
-      type: string
-      description: Controls how facet values are fetched.
-      default: count
       x-categories:
         - Faceting
     page:
@@ -150,6 +147,20 @@ baseSearchParamsWithoutQuery:
       default: false
       x-categories:
         - Advanced
+    explain:
+      type: array
+      items:
+        type: string
+      description: Enriches the API's response with information about how the query was processed.
+      default: []
+      x-categories:
+        - Advanced
+    synonyms:
+      type: boolean
+      description: Whether to take into account an index's synonyms for a particular search.
+      default: true
+      x-categories:
+        - Advanced
     clickAnalytics:
       type: boolean
       description: Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
@@ -182,14 +193,6 @@ baseSearchParamsWithoutQuery:
       default: true
       x-categories:
         - Advanced
-    enableReRanking:
-      type: boolean
-      description: Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-      default: true
-      x-categories:
-        - Advanced
-    reRankingApplyFilter:
-      $ref: '#/reRankingApplyFilter'
 
 searchParamsString:
   type: object
@@ -317,15 +320,6 @@ facetFilters:
   description: >
     [Filter hits by facet value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
   example: ['category:Book','author:John Doe']
-  oneOf:
-    - $ref: '#/listOfSearchFilters'
-    - type: string
-  x-categories:
-    - Filtering
-
-reRankingApplyFilter:
-  description: When [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) is enabled, only records that match these filters will be affected by Dynamic Re-Ranking.
-  nullable: true
   oneOf:
     - $ref: '#/listOfSearchFilters'
     - type: string

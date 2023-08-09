@@ -154,15 +154,6 @@ indexSettingsAsSearchParams:
       default: ['*']
       x-categories:
         - Attributes
-    restrictSearchableAttributes:
-      type: array
-      items:
-        type: string
-      example: ['title','author']
-      description: Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
-      default: []
-      x-categories:
-        - Attributes
     ranking:
       type: array
       items:
@@ -315,18 +306,7 @@ indexSettingsAsSearchParams:
     mode:
       $ref: '#/mode'
     semanticSearch:
-      type: object
-      description: >
-        Settings for the semantic search part of NeuralSearch.
-        Only used when `mode` is _neuralSearch_.
-      properties:
-        eventSources:
-          description: Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.
-          nullable: true
-          type: array
-          items:
-            type: string
-
+      $ref: '#/semanticSearch'
     advancedSyntax:
       type: boolean
       description: Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
@@ -369,26 +349,12 @@ indexSettingsAsSearchParams:
       default: [exactPhrase, excludeWords]
       x-categories:
         - Query strategy
-    explain:
-      type: array
-      items:
-        type: string
-      description: Enriches the API's response with information about how the query was processed.
-      default: []
-      x-categories:
-        - Query strategy
     distinct:
       $ref: '#/distinct'
     attributeForDistinct:
       description: Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
       example: 'url'
       type: string
-    synonyms:
-      type: boolean
-      description: Whether to take into account an index's synonyms for a particular search.
-      default: true
-      x-categories:
-        - Advanced
     replaceSynonymsInHighlight:
       type: boolean
       description: Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
@@ -413,6 +379,18 @@ indexSettingsAsSearchParams:
         - Advanced
     maxFacetHits:
       $ref: '#/maxFacetHits'
+    maxValuesPerFacet:
+      type: integer
+      description: Maximum number of facet values to return for each facet.
+      default: 100
+      x-categories:
+        - Faceting
+    sortFacetValuesBy:
+      type: string
+      description: Controls how facet values are fetched.
+      default: count
+      x-categories:
+        - Faceting
     attributeCriteriaComputedByMinProximity:
       type: boolean
       description: When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
@@ -421,6 +399,14 @@ indexSettingsAsSearchParams:
         - Advanced
     renderingContent:
       $ref: '#/renderingContent'
+    enableReRanking:
+      type: boolean
+      description: Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+      default: true
+      x-categories:
+        - Filtering
+    reRankingApplyFilter:
+      $ref: '#/reRankingApplyFilter'
 
 maxFacetHits:
   type: integer
@@ -429,6 +415,15 @@ maxFacetHits:
   default: 10
   x-categories:
     - Advanced
+
+reRankingApplyFilter:
+  description: When [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) is enabled, only records that match these filters will be affected by Dynamic Re-Ranking.
+  nullable: true
+  oneOf:
+    - $ref: './SearchParams.yml#/listOfSearchFilters'
+    - type: string
+      x-categories:
+        - Filtering
 
 hitsPerPage:
   type: integer
@@ -613,3 +608,16 @@ sortRemainingBy:
       - `hidden`: show only pinned values.
   type: string
   enum: [count, alpha, hidden]
+
+semanticSearch:
+  type: object
+  description: >
+    Settings for the semantic search part of NeuralSearch.
+    Only used when `mode` is _neuralSearch_.
+  properties:
+    eventSources:
+      description: Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.
+      nullable: true
+      type: array
+      items:
+        type: string

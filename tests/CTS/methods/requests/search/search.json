@@ -295,37 +295,70 @@
     "parameters": {
       "requests": [
         {
-          "indexName": "theIndexName",
-          "query": "",
-          "similarQuery": "",
-          "filters": "",
+          "advancedSyntax": true,
+          "advancedSyntaxFeatures": [
+            "exactPhrase"
+          ],
+          "allowTyposOnNumericTokens": true,
+          "alternativesAsExact": [
+            "multiWordsSynonym"
+          ],
+          "analytics": true,
+          "analyticsTags": [
+            ""
+          ],
+          "aroundLatLng": "",
+          "aroundLatLngViaIP": true,
+          "aroundPrecision": 0,
+          "aroundRadius": "all",
+          "attributeCriteriaComputedByMinProximity": true,
+          "attributesForFaceting": [
+            ""
+          ],
+          "attributesToHighlight": [
+            ""
+          ],
+          "attributesToRetrieve": [
+            ""
+          ],
+          "attributesToSnippet": [
+            ""
+          ],
+          "clickAnalytics": true,
+          "customRanking": [
+            ""
+          ],
+          "decompoundQuery": true,
+          "disableExactOnAttributes": [
+            ""
+          ],
+          "disableTypoToleranceOnAttributes": [
+            ""
+          ],
+          "distinct": 0,
+          "enableABTest": true,
+          "enablePersonalization": true,
+          "enableReRanking": true,
+          "enableRules": true,
+          "exactOnSingleWordQuery": "attribute",
+          "explain": [
+            "foo",
+            "bar"
+          ],
           "facetFilters": [
             ""
           ],
-          "optionalFilters": [
-            ""
-          ],
-          "numericFilters": [
-            ""
-          ],
-          "tagFilters": [
-            ""
-          ],
-          "sumOrFiltersScores": true,
+          "facetingAfterDistinct": true,
           "facets": [
             ""
           ],
-          "maxValuesPerFacet": 0,
-          "facetingAfterDistinct": true,
-          "sortFacetValuesBy": "",
-          "page": 0,
-          "offset": 0,
-          "length": 0,
-          "aroundLatLng": "",
-          "aroundLatLngViaIP": true,
-          "aroundRadius": "all",
-          "aroundPrecision": 0,
-          "minimumAroundRadius": 0,
+          "filters": "",
+          "getRankingInfo": true,
+          "highlightPostTag": "",
+          "highlightPreTag": "",
+          "hitsPerPage": 0,
+          "ignorePlurals": false,
+          "indexName": "theIndexName",
           "insideBoundingBox": [
             47.3165,
             4.9665
@@ -334,93 +367,43 @@
             47.3165,
             4.9665
           ],
+          "keepDiacriticsOnCharacters": "",
+          "length": 0,
+          "maxValuesPerFacet": 0,
+          "minProximity": 0,
+          "minWordSizefor1Typo": 0,
+          "minWordSizefor2Typos": 0,
+          "minimumAroundRadius": 0,
           "naturalLanguages": [
             ""
           ],
-          "ruleContexts": [
+          "numericFilters": [
             ""
           ],
-          "personalizationImpact": 0,
-          "userToken": "",
-          "getRankingInfo": true,
-          "clickAnalytics": true,
-          "analytics": true,
-          "analyticsTags": [
+          "offset": 0,
+          "optionalFilters": [
             ""
           ],
-          "percentileComputation": true,
-          "enableABTest": true,
-          "enableReRanking": true,
-          "reRankingApplyFilter": [
-            ""
-          ],
-          "attributesForFaceting": [
-            ""
-          ],
-          "attributesToRetrieve": [
-            ""
-          ],
-          "restrictSearchableAttributes": [
-            ""
-          ],
-          "ranking": [
-            ""
-          ],
-          "customRanking": [
-            ""
-          ],
-          "relevancyStrictness": 0,
-          "attributesToHighlight": [
-            ""
-          ],
-          "attributesToSnippet": [
-            ""
-          ],
-          "highlightPreTag": "",
-          "highlightPostTag": "",
-          "snippetEllipsisText": "",
-          "restrictHighlightAndSnippetArrays": true,
-          "hitsPerPage": 0,
-          "minWordSizefor1Typo": 0,
-          "minWordSizefor2Typos": 0,
-          "typoTolerance": "min",
-          "allowTyposOnNumericTokens": true,
-          "disableTypoToleranceOnAttributes": [
-            ""
-          ],
-          "ignorePlurals": false,
-          "removeStopWords": true,
-          "keepDiacriticsOnCharacters": "",
-          "queryLanguages": [
-            ""
-          ],
-          "decompoundQuery": true,
-          "enableRules": true,
-          "enablePersonalization": true,
-          "queryType": "prefixAll",
-          "removeWordsIfNoResults": "allOptional",
-          "advancedSyntax": true,
           "optionalWords": [
             ""
           ],
-          "disableExactOnAttributes": [
+          "page": 0,
+          "percentileComputation": true,
+          "personalizationImpact": 0,
+          "query": "",
+          "queryLanguages": [
             ""
           ],
-          "exactOnSingleWordQuery": "attribute",
-          "alternativesAsExact": [
-            "multiWordsSynonym"
-          ],
-          "advancedSyntaxFeatures": [
-            "exactPhrase"
-          ],
-          "distinct": 0,
-          "synonyms": true,
-          "replaceSynonymsInHighlight": true,
-          "minProximity": 0,
-          "responseFields": [
+          "queryType": "prefixAll",
+          "ranking": [
             ""
           ],
-          "attributeCriteriaComputedByMinProximity": true,
+          "reRankingApplyFilter": [
+            ""
+          ],
+          "relevancyStrictness": 0,
+          "removeStopWords": true,
+          "removeWordsIfNoResults": "allOptional",
           "renderingContent": {
             "facetOrdering": {
               "facets": {
@@ -439,7 +422,28 @@
               }
             }
           },
-          "type": "default"
+          "replaceSynonymsInHighlight": true,
+          "responseFields": [
+            ""
+          ],
+          "restrictHighlightAndSnippetArrays": true,
+          "restrictSearchableAttributes": [
+            ""
+          ],
+          "ruleContexts": [
+            ""
+          ],
+          "similarQuery": "",
+          "snippetEllipsisText": "",
+          "sortFacetValuesBy": "",
+          "sumOrFiltersScores": true,
+          "synonyms": true,
+          "tagFilters": [
+            ""
+          ],
+          "type": "default",
+          "typoTolerance": "min",
+          "userToken": ""
         }
       ]
     },
@@ -449,37 +453,70 @@
       "body": {
         "requests": [
           {
-            "indexName": "theIndexName",
-            "query": "",
-            "similarQuery": "",
-            "filters": "",
+            "advancedSyntax": true,
+            "advancedSyntaxFeatures": [
+              "exactPhrase"
+            ],
+            "allowTyposOnNumericTokens": true,
+            "alternativesAsExact": [
+              "multiWordsSynonym"
+            ],
+            "analytics": true,
+            "analyticsTags": [
+              ""
+            ],
+            "aroundLatLng": "",
+            "aroundLatLngViaIP": true,
+            "aroundPrecision": 0,
+            "aroundRadius": "all",
+            "attributeCriteriaComputedByMinProximity": true,
+            "attributesForFaceting": [
+              ""
+            ],
+            "attributesToHighlight": [
+              ""
+            ],
+            "attributesToRetrieve": [
+              ""
+            ],
+            "attributesToSnippet": [
+              ""
+            ],
+            "clickAnalytics": true,
+            "customRanking": [
+              ""
+            ],
+            "decompoundQuery": true,
+            "disableExactOnAttributes": [
+              ""
+            ],
+            "disableTypoToleranceOnAttributes": [
+              ""
+            ],
+            "distinct": 0,
+            "enableABTest": true,
+            "enablePersonalization": true,
+            "enableReRanking": true,
+            "enableRules": true,
+            "exactOnSingleWordQuery": "attribute",
+            "explain": [
+              "foo",
+              "bar"
+            ],
             "facetFilters": [
               ""
             ],
-            "optionalFilters": [
-              ""
-            ],
-            "numericFilters": [
-              ""
-            ],
-            "tagFilters": [
-              ""
-            ],
-            "sumOrFiltersScores": true,
+            "facetingAfterDistinct": true,
             "facets": [
               ""
             ],
-            "maxValuesPerFacet": 0,
-            "facetingAfterDistinct": true,
-            "sortFacetValuesBy": "",
-            "page": 0,
-            "offset": 0,
-            "length": 0,
-            "aroundLatLng": "",
-            "aroundLatLngViaIP": true,
-            "aroundRadius": "all",
-            "aroundPrecision": 0,
-            "minimumAroundRadius": 0,
+            "filters": "",
+            "getRankingInfo": true,
+            "highlightPostTag": "",
+            "highlightPreTag": "",
+            "hitsPerPage": 0,
+            "ignorePlurals": false,
+            "indexName": "theIndexName",
             "insideBoundingBox": [
               47.3165,
               4.9665
@@ -488,93 +525,43 @@
               47.3165,
               4.9665
             ],
+            "keepDiacriticsOnCharacters": "",
+            "length": 0,
+            "maxValuesPerFacet": 0,
+            "minProximity": 0,
+            "minWordSizefor1Typo": 0,
+            "minWordSizefor2Typos": 0,
+            "minimumAroundRadius": 0,
             "naturalLanguages": [
               ""
             ],
-            "ruleContexts": [
+            "numericFilters": [
               ""
             ],
-            "personalizationImpact": 0,
-            "userToken": "",
-            "getRankingInfo": true,
-            "clickAnalytics": true,
-            "analytics": true,
-            "analyticsTags": [
+            "offset": 0,
+            "optionalFilters": [
               ""
             ],
-            "percentileComputation": true,
-            "enableABTest": true,
-            "enableReRanking": true,
-            "reRankingApplyFilter": [
-              ""
-            ],
-            "attributesForFaceting": [
-              ""
-            ],
-            "attributesToRetrieve": [
-              ""
-            ],
-            "restrictSearchableAttributes": [
-              ""
-            ],
-            "ranking": [
-              ""
-            ],
-            "customRanking": [
-              ""
-            ],
-            "relevancyStrictness": 0,
-            "attributesToHighlight": [
-              ""
-            ],
-            "attributesToSnippet": [
-              ""
-            ],
-            "highlightPreTag": "",
-            "highlightPostTag": "",
-            "snippetEllipsisText": "",
-            "restrictHighlightAndSnippetArrays": true,
-            "hitsPerPage": 0,
-            "minWordSizefor1Typo": 0,
-            "minWordSizefor2Typos": 0,
-            "typoTolerance": "min",
-            "allowTyposOnNumericTokens": true,
-            "disableTypoToleranceOnAttributes": [
-              ""
-            ],
-            "ignorePlurals": false,
-            "removeStopWords": true,
-            "keepDiacriticsOnCharacters": "",
-            "queryLanguages": [
-              ""
-            ],
-            "decompoundQuery": true,
-            "enableRules": true,
-            "enablePersonalization": true,
-            "queryType": "prefixAll",
-            "removeWordsIfNoResults": "allOptional",
-            "advancedSyntax": true,
             "optionalWords": [
               ""
             ],
-            "disableExactOnAttributes": [
+            "page": 0,
+            "percentileComputation": true,
+            "personalizationImpact": 0,
+            "query": "",
+            "queryLanguages": [
               ""
             ],
-            "exactOnSingleWordQuery": "attribute",
-            "alternativesAsExact": [
-              "multiWordsSynonym"
-            ],
-            "advancedSyntaxFeatures": [
-              "exactPhrase"
-            ],
-            "distinct": 0,
-            "synonyms": true,
-            "replaceSynonymsInHighlight": true,
-            "minProximity": 0,
-            "responseFields": [
+            "queryType": "prefixAll",
+            "ranking": [
               ""
             ],
-            "attributeCriteriaComputedByMinProximity": true,
+            "reRankingApplyFilter": [
+              ""
+            ],
+            "relevancyStrictness": 0,
+            "removeStopWords": true,
+            "removeWordsIfNoResults": "allOptional",
             "renderingContent": {
               "facetOrdering": {
                 "facets": {
@@ -593,7 +580,28 @@
                 }
               }
             },
-            "type": "default"
+            "replaceSynonymsInHighlight": true,
+            "responseFields": [
+              ""
+            ],
+            "restrictHighlightAndSnippetArrays": true,
+            "restrictSearchableAttributes": [
+              ""
+            ],
+            "ruleContexts": [
+              ""
+            ],
+            "similarQuery": "",
+            "snippetEllipsisText": "",
+            "sortFacetValuesBy": "",
+            "sumOrFiltersScores": true,
+            "synonyms": true,
+            "tagFilters": [
+              ""
+            ],
+            "type": "default",
+            "typoTolerance": "min",
+            "userToken": ""
           }
         ]
       }
