@@ -269,6 +269,7 @@ export function createClientName(client: string, language: string): string {
   switch (language) {
     case 'javascript':
       return camelize(client);
+    case 'dart':
     case 'go':
       return client;
     default:

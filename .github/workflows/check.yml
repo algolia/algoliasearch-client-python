@@ -144,6 +144,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Cache '${{ matrix.client }}' client folder
+        if: ${{ github.ref != 'refs/heads/main' }}
         id: cache
         uses: actions/cache@v3
         with:
@@ -192,6 +193,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Cache clients folder
+        if: ${{ github.ref != 'refs/heads/main' }}
         id: cache
         uses: actions/cache@v3
         with:
