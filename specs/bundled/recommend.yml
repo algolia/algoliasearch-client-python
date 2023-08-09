@@ -267,18 +267,6 @@ components:
         - 4.6181640625
       x-categories:
         - Geo-Search
-    reRankingApplyFilter:
-      description: >-
-        When [Dynamic
-        Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/)
-        is enabled, only records that match these filters will be affected by
-        Dynamic Re-Ranking.
-      nullable: true
-      oneOf:
-        - $ref: '#/components/schemas/listOfSearchFilters'
-        - type: string
-      x-categories:
-        - Filtering
     baseSearchParamsWithoutQuery:
       type: object
       additionalProperties: false
@@ -311,6 +299,19 @@ components:
           default: false
           x-categories:
             - Filtering
+        restrictSearchableAttributes:
+          type: array
+          items:
+            type: string
+          example:
+            - title
+            - author
+          description: >-
+            Restricts a query to only look at a subset of your [searchable
+            attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
+          default: []
+          x-categories:
+            - Filtering
         facets:
           type: array
           items:
@@ -322,12 +323,6 @@ components:
           default: []
           x-categories:
             - Faceting
-        maxValuesPerFacet:
-          type: integer
-          description: Maximum number of facet values to return for each facet.
-          default: 100
-          x-categories:
-            - Faceting
         facetingAfterDistinct:
           type: boolean
           description: >
@@ -337,12 +332,6 @@ components:
             [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
             of `attributesForFaceting` allows for more granular control.
           default: false
-          x-categories:
-            - Faceting
-        sortFacetValuesBy:
-          type: string
-          description: Controls how facet values are fetched.
-          default: count
           x-categories:
             - Faceting
         page:
@@ -445,6 +434,24 @@ components:
           default: false
           x-categories:
             - Advanced
+        explain:
+          type: array
+          items:
+            type: string
+          description: >-
+            Enriches the API's response with information about how the query was
+            processed.
+          default: []
+          x-categories:
+            - Advanced
+        synonyms:
+          type: boolean
+          description: >-
+            Whether to take into account an index's synonyms for a particular
+            search.
+          default: true
+          x-categories:
+            - Advanced
         clickAnalytics:
           type: boolean
           description: >-
@@ -486,16 +493,6 @@ components:
           default: true
           x-categories:
             - Advanced
-        enableReRanking:
-          type: boolean
-          description: >-
-            Indicates whether this search will use [Dynamic
-            Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-          default: true
-          x-categories:
-            - Advanced
-        reRankingApplyFilter:
-          $ref: '#/components/schemas/reRankingApplyFilter'
     baseSearchParams:
       allOf:
         - $ref: '#/components/schemas/searchParamsQuery'
@@ -615,6 +612,21 @@ components:
       default: keywordSearch
       x-categories:
         - Query strategy
+    semanticSearch:
+      type: object
+      description: >
+        Settings for the semantic search part of NeuralSearch. Only used when
+        `mode` is _neuralSearch_.
+      properties:
+        eventSources:
+          description: >-
+            Indices from which to collect click and conversion events. If null,
+            the current index and replica group will be used as the event
+            source.
+          nullable: true
+          type: array
+          items:
+            type: string
     exactOnSingleWordQuery:
       type: string
       enum:
@@ -725,6 +737,18 @@ components:
           $ref: '#/components/schemas/facetOrdering'
       x-categories:
         - Advanced
+    reRankingApplyFilter:
+      description: >-
+        When [Dynamic
+        Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/)
+        is enabled, only records that match these filters will be affected by
+        Dynamic Re-Ranking.
+      nullable: true
+      oneOf:
+        - $ref: '#/components/schemas/listOfSearchFilters'
+        - type: string
+          x-categories:
+            - Filtering
     indexSettingsAsSearchParams:
       type: object
       additionalProperties: false
@@ -763,19 +787,6 @@ components:
             default, the response includes all attributes.
           default:
             - '*'
-          x-categories:
-            - Attributes
-        restrictSearchableAttributes:
-          type: array
-          items:
-            type: string
-          example:
-            - title
-            - author
-          description: >-
-            Restricts a query to only look at a subset of your [searchable
-            attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
-          default: []
           x-categories:
             - Attributes
         ranking:
@@ -983,20 +994,7 @@ components:
         mode:
           $ref: '#/components/schemas/mode'
         semanticSearch:
-          type: object
-          description: >
-            Settings for the semantic search part of NeuralSearch. Only used
-            when `mode` is _neuralSearch_.
-          properties:
-            eventSources:
-              description: >-
-                Indices from which to collect click and conversion events. If
-                null, the current index and replica group will be used as the
-                event source.
-              nullable: true
-              type: array
-              items:
-                type: string
+          $ref: '#/components/schemas/semanticSearch'
         advancedSyntax:
           type: boolean
           description: >-
@@ -1058,16 +1056,6 @@ components:
             - excludeWords
           x-categories:
             - Query strategy
-        explain:
-          type: array
-          items:
-            type: string
-          description: >-
-            Enriches the API's response with information about how the query was
-            processed.
-          default: []
-          x-categories:
-            - Query strategy
         distinct:
           $ref: '#/components/schemas/distinct'
         attributeForDistinct:
@@ -1077,14 +1065,6 @@ components:
             feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
           example: url
           type: string
-        synonyms:
-          type: boolean
-          description: >-
-            Whether to take into account an index's synonyms for a particular
-            search.
-          default: true
-          x-categories:
-            - Advanced
         replaceSynonymsInHighlight:
           type: boolean
           description: >-
@@ -1115,6 +1095,18 @@ components:
             - Advanced
         maxFacetHits:
           $ref: '#/components/schemas/maxFacetHits'
+        maxValuesPerFacet:
+          type: integer
+          description: Maximum number of facet values to return for each facet.
+          default: 100
+          x-categories:
+            - Faceting
+        sortFacetValuesBy:
+          type: string
+          description: Controls how facet values are fetched.
+          default: count
+          x-categories:
+            - Faceting
         attributeCriteriaComputedByMinProximity:
           type: boolean
           description: >-
@@ -1127,6 +1119,16 @@ components:
             - Advanced
         renderingContent:
           $ref: '#/components/schemas/renderingContent'
+        enableReRanking:
+          type: boolean
+          description: >-
+            Indicates whether this search will use [Dynamic
+            Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+          default: true
+          x-categories:
+            - Filtering
+        reRankingApplyFilter:
+          $ref: '#/components/schemas/reRankingApplyFilter'
     searchParamsObject:
       allOf:
         - $ref: '#/components/schemas/baseSearchParams'

@@ -17,9 +17,6 @@ IndexSettingsAsSearchParams _$IndexSettingsAsSearchParamsFromJson(
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           attributesToRetrieve: $checkedConvert('attributesToRetrieve',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          restrictSearchableAttributes: $checkedConvert(
-              'restrictSearchableAttributes',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           ranking: $checkedConvert('ranking',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           customRanking: $checkedConvert('customRanking',
@@ -70,8 +67,7 @@ IndexSettingsAsSearchParams _$IndexSettingsAsSearchParamsFromJson(
               'semanticSearch',
               (v) => v == null
                   ? null
-                  : IndexSettingsAsSearchParamsSemanticSearch.fromJson(
-                      v as Map<String, dynamic>)),
+                  : SemanticSearch.fromJson(v as Map<String, dynamic>)),
           advancedSyntax: $checkedConvert('advancedSyntax', (v) => v as bool?),
           optionalWords: $checkedConvert('optionalWords',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
@@ -89,18 +85,19 @@ IndexSettingsAsSearchParams _$IndexSettingsAsSearchParamsFromJson(
               (v) => (v as List<dynamic>?)
                   ?.map((e) => $enumDecode(_$AdvancedSyntaxFeaturesEnumMap, e))
                   .toList()),
-          explain: $checkedConvert('explain',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           distinct: $checkedConvert('distinct', (v) => v),
           attributeForDistinct:
               $checkedConvert('attributeForDistinct', (v) => v as String?),
-          synonyms: $checkedConvert('synonyms', (v) => v as bool?),
           replaceSynonymsInHighlight:
               $checkedConvert('replaceSynonymsInHighlight', (v) => v as bool?),
           minProximity: $checkedConvert('minProximity', (v) => v as int?),
           responseFields: $checkedConvert('responseFields',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           maxFacetHits: $checkedConvert('maxFacetHits', (v) => v as int?),
+          maxValuesPerFacet:
+              $checkedConvert('maxValuesPerFacet', (v) => v as int?),
+          sortFacetValuesBy:
+              $checkedConvert('sortFacetValuesBy', (v) => v as String?),
           attributeCriteriaComputedByMinProximity: $checkedConvert(
               'attributeCriteriaComputedByMinProximity', (v) => v as bool?),
           renderingContent: $checkedConvert(
@@ -108,6 +105,10 @@ IndexSettingsAsSearchParams _$IndexSettingsAsSearchParamsFromJson(
               (v) => v == null
                   ? null
                   : RenderingContent.fromJson(v as Map<String, dynamic>)),
+          enableReRanking:
+              $checkedConvert('enableReRanking', (v) => v as bool?),
+          reRankingApplyFilter:
+              $checkedConvert('reRankingApplyFilter', (v) => v),
         );
         return val;
       },
@@ -125,8 +126,6 @@ Map<String, dynamic> _$IndexSettingsAsSearchParamsToJson(
 
   writeNotNull('attributesForFaceting', instance.attributesForFaceting);
   writeNotNull('attributesToRetrieve', instance.attributesToRetrieve);
-  writeNotNull(
-      'restrictSearchableAttributes', instance.restrictSearchableAttributes);
   writeNotNull('ranking', instance.ranking);
   writeNotNull('customRanking', instance.customRanking);
   writeNotNull('relevancyStrictness', instance.relevancyStrictness);
@@ -166,18 +165,20 @@ Map<String, dynamic> _$IndexSettingsAsSearchParamsToJson(
       instance.alternativesAsExact?.map((e) => e.toJson()).toList());
   writeNotNull('advancedSyntaxFeatures',
       instance.advancedSyntaxFeatures?.map((e) => e.toJson()).toList());
-  writeNotNull('explain', instance.explain);
   writeNotNull('distinct', instance.distinct);
   writeNotNull('attributeForDistinct', instance.attributeForDistinct);
-  writeNotNull('synonyms', instance.synonyms);
   writeNotNull(
       'replaceSynonymsInHighlight', instance.replaceSynonymsInHighlight);
   writeNotNull('minProximity', instance.minProximity);
   writeNotNull('responseFields', instance.responseFields);
   writeNotNull('maxFacetHits', instance.maxFacetHits);
+  writeNotNull('maxValuesPerFacet', instance.maxValuesPerFacet);
+  writeNotNull('sortFacetValuesBy', instance.sortFacetValuesBy);
   writeNotNull('attributeCriteriaComputedByMinProximity',
       instance.attributeCriteriaComputedByMinProximity);
   writeNotNull('renderingContent', instance.renderingContent?.toJson());
+  writeNotNull('enableReRanking', instance.enableReRanking);
+  writeNotNull('reRankingApplyFilter', instance.reRankingApplyFilter);
   return val;
 }
 

@@ -21,14 +21,13 @@ BrowseParamsObject _$BrowseParamsObjectFromJson(Map<String, dynamic> json) =>
           tagFilters: $checkedConvert('tagFilters', (v) => v),
           sumOrFiltersScores:
               $checkedConvert('sumOrFiltersScores', (v) => v as bool?),
+          restrictSearchableAttributes: $checkedConvert(
+              'restrictSearchableAttributes',
+              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           facets: $checkedConvert('facets',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          maxValuesPerFacet:
-              $checkedConvert('maxValuesPerFacet', (v) => v as int?),
           facetingAfterDistinct:
               $checkedConvert('facetingAfterDistinct', (v) => v as bool?),
-          sortFacetValuesBy:
-              $checkedConvert('sortFacetValuesBy', (v) => v as String?),
           page: $checkedConvert('page', (v) => v as int?),
           offset: $checkedConvert('offset', (v) => v as int?),
           length: $checkedConvert('length', (v) => v as int?),
@@ -57,6 +56,9 @@ BrowseParamsObject _$BrowseParamsObjectFromJson(Map<String, dynamic> json) =>
               $checkedConvert('personalizationImpact', (v) => v as int?),
           userToken: $checkedConvert('userToken', (v) => v as String?),
           getRankingInfo: $checkedConvert('getRankingInfo', (v) => v as bool?),
+          explain: $checkedConvert('explain',
+              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
+          synonyms: $checkedConvert('synonyms', (v) => v as bool?),
           clickAnalytics: $checkedConvert('clickAnalytics', (v) => v as bool?),
           analytics: $checkedConvert('analytics', (v) => v as bool?),
           analyticsTags: $checkedConvert('analyticsTags',
@@ -64,16 +66,9 @@ BrowseParamsObject _$BrowseParamsObjectFromJson(Map<String, dynamic> json) =>
           percentileComputation:
               $checkedConvert('percentileComputation', (v) => v as bool?),
           enableABTest: $checkedConvert('enableABTest', (v) => v as bool?),
-          enableReRanking:
-              $checkedConvert('enableReRanking', (v) => v as bool?),
-          reRankingApplyFilter:
-              $checkedConvert('reRankingApplyFilter', (v) => v),
           attributesForFaceting: $checkedConvert('attributesForFaceting',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           attributesToRetrieve: $checkedConvert('attributesToRetrieve',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          restrictSearchableAttributes: $checkedConvert(
-              'restrictSearchableAttributes',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           ranking: $checkedConvert('ranking',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
@@ -125,8 +120,7 @@ BrowseParamsObject _$BrowseParamsObjectFromJson(Map<String, dynamic> json) =>
               'semanticSearch',
               (v) => v == null
                   ? null
-                  : IndexSettingsAsSearchParamsSemanticSearch.fromJson(
-                      v as Map<String, dynamic>)),
+                  : SemanticSearch.fromJson(v as Map<String, dynamic>)),
           advancedSyntax: $checkedConvert('advancedSyntax', (v) => v as bool?),
           optionalWords: $checkedConvert('optionalWords',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
@@ -144,18 +138,19 @@ BrowseParamsObject _$BrowseParamsObjectFromJson(Map<String, dynamic> json) =>
               (v) => (v as List<dynamic>?)
                   ?.map((e) => $enumDecode(_$AdvancedSyntaxFeaturesEnumMap, e))
                   .toList()),
-          explain: $checkedConvert('explain',
-              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           distinct: $checkedConvert('distinct', (v) => v),
           attributeForDistinct:
               $checkedConvert('attributeForDistinct', (v) => v as String?),
-          synonyms: $checkedConvert('synonyms', (v) => v as bool?),
           replaceSynonymsInHighlight:
               $checkedConvert('replaceSynonymsInHighlight', (v) => v as bool?),
           minProximity: $checkedConvert('minProximity', (v) => v as int?),
           responseFields: $checkedConvert('responseFields',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           maxFacetHits: $checkedConvert('maxFacetHits', (v) => v as int?),
+          maxValuesPerFacet:
+              $checkedConvert('maxValuesPerFacet', (v) => v as int?),
+          sortFacetValuesBy:
+              $checkedConvert('sortFacetValuesBy', (v) => v as String?),
           attributeCriteriaComputedByMinProximity: $checkedConvert(
               'attributeCriteriaComputedByMinProximity', (v) => v as bool?),
           renderingContent: $checkedConvert(
@@ -163,6 +158,10 @@ BrowseParamsObject _$BrowseParamsObjectFromJson(Map<String, dynamic> json) =>
               (v) => v == null
                   ? null
                   : RenderingContent.fromJson(v as Map<String, dynamic>)),
+          enableReRanking:
+              $checkedConvert('enableReRanking', (v) => v as bool?),
+          reRankingApplyFilter:
+              $checkedConvert('reRankingApplyFilter', (v) => v),
           cursor: $checkedConvert('cursor', (v) => v as String?),
         );
         return val;
@@ -186,10 +185,10 @@ Map<String, dynamic> _$BrowseParamsObjectToJson(BrowseParamsObject instance) {
   writeNotNull('numericFilters', instance.numericFilters);
   writeNotNull('tagFilters', instance.tagFilters);
   writeNotNull('sumOrFiltersScores', instance.sumOrFiltersScores);
+  writeNotNull(
+      'restrictSearchableAttributes', instance.restrictSearchableAttributes);
   writeNotNull('facets', instance.facets);
-  writeNotNull('maxValuesPerFacet', instance.maxValuesPerFacet);
   writeNotNull('facetingAfterDistinct', instance.facetingAfterDistinct);
-  writeNotNull('sortFacetValuesBy', instance.sortFacetValuesBy);
   writeNotNull('page', instance.page);
   writeNotNull('offset', instance.offset);
   writeNotNull('length', instance.length);
@@ -205,17 +204,15 @@ Map<String, dynamic> _$BrowseParamsObjectToJson(BrowseParamsObject instance) {
   writeNotNull('personalizationImpact', instance.personalizationImpact);
   writeNotNull('userToken', instance.userToken);
   writeNotNull('getRankingInfo', instance.getRankingInfo);
+  writeNotNull('explain', instance.explain);
+  writeNotNull('synonyms', instance.synonyms);
   writeNotNull('clickAnalytics', instance.clickAnalytics);
   writeNotNull('analytics', instance.analytics);
   writeNotNull('analyticsTags', instance.analyticsTags);
   writeNotNull('percentileComputation', instance.percentileComputation);
   writeNotNull('enableABTest', instance.enableABTest);
-  writeNotNull('enableReRanking', instance.enableReRanking);
-  writeNotNull('reRankingApplyFilter', instance.reRankingApplyFilter);
   writeNotNull('attributesForFaceting', instance.attributesForFaceting);
   writeNotNull('attributesToRetrieve', instance.attributesToRetrieve);
-  writeNotNull(
-      'restrictSearchableAttributes', instance.restrictSearchableAttributes);
   writeNotNull('ranking', instance.ranking);
   writeNotNull('customRanking', instance.customRanking);
   writeNotNull('relevancyStrictness', instance.relevancyStrictness);
@@ -255,18 +252,20 @@ Map<String, dynamic> _$BrowseParamsObjectToJson(BrowseParamsObject instance) {
       instance.alternativesAsExact?.map((e) => e.toJson()).toList());
   writeNotNull('advancedSyntaxFeatures',
       instance.advancedSyntaxFeatures?.map((e) => e.toJson()).toList());
-  writeNotNull('explain', instance.explain);
   writeNotNull('distinct', instance.distinct);
   writeNotNull('attributeForDistinct', instance.attributeForDistinct);
-  writeNotNull('synonyms', instance.synonyms);
   writeNotNull(
       'replaceSynonymsInHighlight', instance.replaceSynonymsInHighlight);
   writeNotNull('minProximity', instance.minProximity);
   writeNotNull('responseFields', instance.responseFields);
   writeNotNull('maxFacetHits', instance.maxFacetHits);
+  writeNotNull('maxValuesPerFacet', instance.maxValuesPerFacet);
+  writeNotNull('sortFacetValuesBy', instance.sortFacetValuesBy);
   writeNotNull('attributeCriteriaComputedByMinProximity',
       instance.attributeCriteriaComputedByMinProximity);
   writeNotNull('renderingContent', instance.renderingContent?.toJson());
+  writeNotNull('enableReRanking', instance.enableReRanking);
+  writeNotNull('reRankingApplyFilter', instance.reRankingApplyFilter);
   writeNotNull('cursor', instance.cursor);
   return val;
 }

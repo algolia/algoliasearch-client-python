@@ -2715,58 +2715,108 @@ class SearchTest extends TestCase implements HttpClientInterface
         $client->search(
             ["requests" =>
   [
-  ["indexName" =>
-  "theIndexName",
-"query" =>
+  ["advancedSyntax" =>
+  true,
+"advancedSyntaxFeatures" =>
+  [
+  "exactPhrase",
+],
+"allowTyposOnNumericTokens" =>
+  true,
+"alternativesAsExact" =>
+  [
+  "multiWordsSynonym",
+],
+"analytics" =>
+  true,
+"analyticsTags" =>
+  [
   "",
-"similarQuery" =>
+],
+"aroundLatLng" =>
   "",
-"filters" =>
+"aroundLatLngViaIP" =>
+  true,
+"aroundPrecision" =>
+  0,
+"aroundRadius" =>
+  "all",
+"attributeCriteriaComputedByMinProximity" =>
+  true,
+"attributesForFaceting" =>
+  [
   "",
+],
+"attributesToHighlight" =>
+  [
+  "",
+],
+"attributesToRetrieve" =>
+  [
+  "",
+],
+"attributesToSnippet" =>
+  [
+  "",
+],
+"clickAnalytics" =>
+  true,
+"customRanking" =>
+  [
+  "",
+],
+"decompoundQuery" =>
+  true,
+"disableExactOnAttributes" =>
+  [
+  "",
+],
+"disableTypoToleranceOnAttributes" =>
+  [
+  "",
+],
+"distinct" =>
+  0,
+"enableABTest" =>
+  true,
+"enablePersonalization" =>
+  true,
+"enableReRanking" =>
+  true,
+"enableRules" =>
+  true,
+"exactOnSingleWordQuery" =>
+  "attribute",
+"explain" =>
+  [
+  "foo",
+
+  "bar",
+],
 "facetFilters" =>
   [
   "",
 ],
-"optionalFilters" =>
-  [
-  "",
-],
-"numericFilters" =>
-  [
-  "",
-],
-"tagFilters" =>
-  [
-  "",
-],
-"sumOrFiltersScores" =>
+"facetingAfterDistinct" =>
   true,
 "facets" =>
   [
   "",
 ],
-"maxValuesPerFacet" =>
-  0,
-"facetingAfterDistinct" =>
-  true,
-"sortFacetValuesBy" =>
+"filters" =>
   "",
-"page" =>
-  0,
-"offset" =>
-  0,
-"length" =>
-  0,
-"aroundLatLng" =>
-  "",
-"aroundLatLngViaIP" =>
+"getRankingInfo" =>
   true,
-"aroundRadius" =>
-  "all",
-"aroundPrecision" =>
+"highlightPostTag" =>
+  "",
+"highlightPreTag" =>
+  "",
+"hitsPerPage" =>
   0,
-"minimumAroundRadius" =>
-  0,
+"ignorePlurals" =>
+  false,
+"indexName" =>
+  "theIndexName",
 "insideBoundingBox" =>
   [
   47.3165,
@@ -2779,144 +2829,66 @@ class SearchTest extends TestCase implements HttpClientInterface
 
   4.9665,
 ],
-"naturalLanguages" =>
-  [
+"keepDiacriticsOnCharacters" =>
   "",
-],
-"ruleContexts" =>
-  [
-  "",
-],
-"personalizationImpact" =>
+"length" =>
   0,
-"userToken" =>
-  "",
-"getRankingInfo" =>
-  true,
-"clickAnalytics" =>
-  true,
-"analytics" =>
-  true,
-"analyticsTags" =>
-  [
-  "",
-],
-"percentileComputation" =>
-  true,
-"enableABTest" =>
-  true,
-"enableReRanking" =>
-  true,
-"reRankingApplyFilter" =>
-  [
-  "",
-],
-"attributesForFaceting" =>
-  [
-  "",
-],
-"attributesToRetrieve" =>
-  [
-  "",
-],
-"restrictSearchableAttributes" =>
-  [
-  "",
-],
-"ranking" =>
-  [
-  "",
-],
-"customRanking" =>
-  [
-  "",
-],
-"relevancyStrictness" =>
+"maxValuesPerFacet" =>
   0,
-"attributesToHighlight" =>
-  [
-  "",
-],
-"attributesToSnippet" =>
-  [
-  "",
-],
-"highlightPreTag" =>
-  "",
-"highlightPostTag" =>
-  "",
-"snippetEllipsisText" =>
-  "",
-"restrictHighlightAndSnippetArrays" =>
-  true,
-"hitsPerPage" =>
+"minProximity" =>
   0,
 "minWordSizefor1Typo" =>
   0,
 "minWordSizefor2Typos" =>
   0,
-"typoTolerance" =>
-  "min",
-"allowTyposOnNumericTokens" =>
-  true,
-"disableTypoToleranceOnAttributes" =>
+"minimumAroundRadius" =>
+  0,
+"naturalLanguages" =>
   [
   "",
 ],
-"ignorePlurals" =>
-  false,
-"removeStopWords" =>
+"numericFilters" =>
+  [
+  "",
+],
+"offset" =>
+  0,
+"optionalFilters" =>
+  [
+  "",
+],
+"optionalWords" =>
+  [
+  "",
+],
+"page" =>
+  0,
+"percentileComputation" =>
   true,
-"keepDiacriticsOnCharacters" =>
+"personalizationImpact" =>
+  0,
+"query" =>
   "",
 "queryLanguages" =>
   [
   "",
 ],
-"decompoundQuery" =>
-  true,
-"enableRules" =>
-  true,
-"enablePersonalization" =>
-  true,
 "queryType" =>
   "prefixAll",
+"ranking" =>
+  [
+  "",
+],
+"reRankingApplyFilter" =>
+  [
+  "",
+],
+"relevancyStrictness" =>
+  0,
+"removeStopWords" =>
+  true,
 "removeWordsIfNoResults" =>
   "allOptional",
-"advancedSyntax" =>
-  true,
-"optionalWords" =>
-  [
-  "",
-],
-"disableExactOnAttributes" =>
-  [
-  "",
-],
-"exactOnSingleWordQuery" =>
-  "attribute",
-"alternativesAsExact" =>
-  [
-  "multiWordsSynonym",
-],
-"advancedSyntaxFeatures" =>
-  [
-  "exactPhrase",
-],
-"distinct" =>
-  0,
-"synonyms" =>
-  true,
-"replaceSynonymsInHighlight" =>
-  true,
-"minProximity" =>
-  0,
-"responseFields" =>
-  [
-  "",
-],
-"attributeCriteriaComputedByMinProximity" =>
-  true,
 "renderingContent" =>
   ["facetOrdering" =>
   ["facets" =>
@@ -2939,8 +2911,42 @@ class SearchTest extends TestCase implements HttpClientInterface
 ],
 ],
 ],
+"replaceSynonymsInHighlight" =>
+  true,
+"responseFields" =>
+  [
+  "",
+],
+"restrictHighlightAndSnippetArrays" =>
+  true,
+"restrictSearchableAttributes" =>
+  [
+  "",
+],
+"ruleContexts" =>
+  [
+  "",
+],
+"similarQuery" =>
+  "",
+"snippetEllipsisText" =>
+  "",
+"sortFacetValuesBy" =>
+  "",
+"sumOrFiltersScores" =>
+  true,
+"synonyms" =>
+  true,
+"tagFilters" =>
+  [
+  "",
+],
 "type" =>
   "default",
+"typoTolerance" =>
+  "min",
+"userToken" =>
+  "",
 ],
 ],
 ],
@@ -2950,7 +2956,7 @@ class SearchTest extends TestCase implements HttpClientInterface
             [
                 "path" => "/1/indexes/*/queries",
                 "method" => "POST",
-                "body" => json_decode("{\"requests\":[{\"indexName\":\"theIndexName\",\"query\":\"\",\"similarQuery\":\"\",\"filters\":\"\",\"facetFilters\":[\"\"],\"optionalFilters\":[\"\"],\"numericFilters\":[\"\"],\"tagFilters\":[\"\"],\"sumOrFiltersScores\":true,\"facets\":[\"\"],\"maxValuesPerFacet\":0,\"facetingAfterDistinct\":true,\"sortFacetValuesBy\":\"\",\"page\":0,\"offset\":0,\"length\":0,\"aroundLatLng\":\"\",\"aroundLatLngViaIP\":true,\"aroundRadius\":\"all\",\"aroundPrecision\":0,\"minimumAroundRadius\":0,\"insideBoundingBox\":[47.3165,4.9665],\"insidePolygon\":[47.3165,4.9665],\"naturalLanguages\":[\"\"],\"ruleContexts\":[\"\"],\"personalizationImpact\":0,\"userToken\":\"\",\"getRankingInfo\":true,\"clickAnalytics\":true,\"analytics\":true,\"analyticsTags\":[\"\"],\"percentileComputation\":true,\"enableABTest\":true,\"enableReRanking\":true,\"reRankingApplyFilter\":[\"\"],\"attributesForFaceting\":[\"\"],\"attributesToRetrieve\":[\"\"],\"restrictSearchableAttributes\":[\"\"],\"ranking\":[\"\"],\"customRanking\":[\"\"],\"relevancyStrictness\":0,\"attributesToHighlight\":[\"\"],\"attributesToSnippet\":[\"\"],\"highlightPreTag\":\"\",\"highlightPostTag\":\"\",\"snippetEllipsisText\":\"\",\"restrictHighlightAndSnippetArrays\":true,\"hitsPerPage\":0,\"minWordSizefor1Typo\":0,\"minWordSizefor2Typos\":0,\"typoTolerance\":\"min\",\"allowTyposOnNumericTokens\":true,\"disableTypoToleranceOnAttributes\":[\"\"],\"ignorePlurals\":false,\"removeStopWords\":true,\"keepDiacriticsOnCharacters\":\"\",\"queryLanguages\":[\"\"],\"decompoundQuery\":true,\"enableRules\":true,\"enablePersonalization\":true,\"queryType\":\"prefixAll\",\"removeWordsIfNoResults\":\"allOptional\",\"advancedSyntax\":true,\"optionalWords\":[\"\"],\"disableExactOnAttributes\":[\"\"],\"exactOnSingleWordQuery\":\"attribute\",\"alternativesAsExact\":[\"multiWordsSynonym\"],\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"distinct\":0,\"synonyms\":true,\"replaceSynonymsInHighlight\":true,\"minProximity\":0,\"responseFields\":[\"\"],\"attributeCriteriaComputedByMinProximity\":true,\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}},\"type\":\"default\"}]}"),
+                "body" => json_decode("{\"requests\":[{\"advancedSyntax\":true,\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"allowTyposOnNumericTokens\":true,\"alternativesAsExact\":[\"multiWordsSynonym\"],\"analytics\":true,\"analyticsTags\":[\"\"],\"aroundLatLng\":\"\",\"aroundLatLngViaIP\":true,\"aroundPrecision\":0,\"aroundRadius\":\"all\",\"attributeCriteriaComputedByMinProximity\":true,\"attributesForFaceting\":[\"\"],\"attributesToHighlight\":[\"\"],\"attributesToRetrieve\":[\"\"],\"attributesToSnippet\":[\"\"],\"clickAnalytics\":true,\"customRanking\":[\"\"],\"decompoundQuery\":true,\"disableExactOnAttributes\":[\"\"],\"disableTypoToleranceOnAttributes\":[\"\"],\"distinct\":0,\"enableABTest\":true,\"enablePersonalization\":true,\"enableReRanking\":true,\"enableRules\":true,\"exactOnSingleWordQuery\":\"attribute\",\"explain\":[\"foo\",\"bar\"],\"facetFilters\":[\"\"],\"facetingAfterDistinct\":true,\"facets\":[\"\"],\"filters\":\"\",\"getRankingInfo\":true,\"highlightPostTag\":\"\",\"highlightPreTag\":\"\",\"hitsPerPage\":0,\"ignorePlurals\":false,\"indexName\":\"theIndexName\",\"insideBoundingBox\":[47.3165,4.9665],\"insidePolygon\":[47.3165,4.9665],\"keepDiacriticsOnCharacters\":\"\",\"length\":0,\"maxValuesPerFacet\":0,\"minProximity\":0,\"minWordSizefor1Typo\":0,\"minWordSizefor2Typos\":0,\"minimumAroundRadius\":0,\"naturalLanguages\":[\"\"],\"numericFilters\":[\"\"],\"offset\":0,\"optionalFilters\":[\"\"],\"optionalWords\":[\"\"],\"page\":0,\"percentileComputation\":true,\"personalizationImpact\":0,\"query\":\"\",\"queryLanguages\":[\"\"],\"queryType\":\"prefixAll\",\"ranking\":[\"\"],\"reRankingApplyFilter\":[\"\"],\"relevancyStrictness\":0,\"removeStopWords\":true,\"removeWordsIfNoResults\":\"allOptional\",\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}},\"replaceSynonymsInHighlight\":true,\"responseFields\":[\"\"],\"restrictHighlightAndSnippetArrays\":true,\"restrictSearchableAttributes\":[\"\"],\"ruleContexts\":[\"\"],\"similarQuery\":\"\",\"snippetEllipsisText\":\"\",\"sortFacetValuesBy\":\"\",\"sumOrFiltersScores\":true,\"synonyms\":true,\"tagFilters\":[\"\"],\"type\":\"default\",\"typoTolerance\":\"min\",\"userToken\":\"\"}]}"),
             ],
         ]);
     }
@@ -3507,13 +3513,37 @@ class SearchTest extends TestCase implements HttpClientInterface
         $client = $this->getClient();
         $client->setSettings(
             "theIndexName",
-            ["replicas" =>
+            ["advancedSyntax" =>
+  true,
+"advancedSyntaxFeatures" =>
   [
-  "",
+  "exactPhrase",
 ],
-"paginationLimitedTo" =>
-  0,
-"disableTypoToleranceOnWords" =>
+"allowCompressionOfIntegerArray" =>
+  true,
+"allowTyposOnNumericTokens" =>
+  true,
+"alternativesAsExact" =>
+  [
+  "singleWordSynonym",
+],
+"attributeCriteriaComputedByMinProximity" =>
+  true,
+"attributeForDistinct" =>
+  "test",
+"attributesForFaceting" =>
+  [
+  "algolia",
+],
+"attributesToHighlight" =>
+  [
+  "algolia",
+],
+"attributesToRetrieve" =>
+  [
+  "algolia",
+],
+"attributesToSnippet" =>
   [
   "algolia",
 ],
@@ -3525,11 +3555,23 @@ class SearchTest extends TestCase implements HttpClientInterface
   [
   "algolia",
 ],
+"customNormalization" =>
+  ["algolia" =>
+  ["aloglia" =>
+  "aglolia",
+],
+],
+"customRanking" =>
+  [
+  "algolia",
+],
+"decompoundQuery" =>
+  false,
 "decompoundedAttributes" =>
   ["algolia" =>
   "aloglia",
 ],
-"indexLanguages" =>
+"disableExactOnAttributes" =>
   [
   "algolia",
 ],
@@ -3537,142 +3579,78 @@ class SearchTest extends TestCase implements HttpClientInterface
   [
   "algolia",
 ],
-"allowCompressionOfIntegerArray" =>
-  true,
-"numericAttributesForFiltering" =>
-  [
-  "algolia",
-],
-"separatorsToIndex" =>
-  "algolia",
-"searchableAttributes" =>
-  [
-  "algolia",
-],
-"userData" =>
-  ["user" =>
-  "data",
-],
-"customNormalization" =>
-  ["algolia" =>
-  ["aloglia" =>
-  "aglolia",
-],
-],
-"attributesForFaceting" =>
-  [
-  "algolia",
-],
-"unretrievableAttributes" =>
-  [
-  "algolia",
-],
-"attributesToRetrieve" =>
-  [
-  "algolia",
-],
-"restrictSearchableAttributes" =>
-  [
-  "algolia",
-],
-"ranking" =>
-  [
-  "geo",
-],
-"customRanking" =>
-  [
-  "algolia",
-],
-"relevancyStrictness" =>
-  10,
-"attributesToHighlight" =>
-  [
-  "algolia",
-],
-"attributesToSnippet" =>
-  [
-  "algolia",
-],
-"highlightPreTag" =>
-  "<span>",
-"highlightPostTag" =>
-  "</span>",
-"snippetEllipsisText" =>
-  "---",
-"restrictHighlightAndSnippetArrays" =>
-  true,
-"hitsPerPage" =>
-  10,
-"minWordSizefor1Typo" =>
-  5,
-"minWordSizefor2Typos" =>
-  11,
-"typoTolerance" =>
-  false,
-"allowTyposOnNumericTokens" =>
-  true,
 "disableTypoToleranceOnAttributes" =>
   [
   "algolia",
 ],
+"disableTypoToleranceOnWords" =>
+  [
+  "algolia",
+],
+"distinct" =>
+  3,
+"enablePersonalization" =>
+  true,
+"enableReRanking" =>
+  false,
+"enableRules" =>
+  true,
+"exactOnSingleWordQuery" =>
+  "attribute",
+"highlightPreTag" =>
+  "<span>",
+"highlightPostTag" =>
+  "</span>",
+"hitsPerPage" =>
+  10,
 "ignorePlurals" =>
   false,
-"removeStopWords" =>
-  false,
+"indexLanguages" =>
+  [
+  "algolia",
+],
 "keepDiacriticsOnCharacters" =>
   "abc",
+"maxFacetHits" =>
+  20,
+"maxValuesPerFacet" =>
+  30,
+"minProximity" =>
+  6,
+"minWordSizefor1Typo" =>
+  5,
+"minWordSizefor2Typos" =>
+  11,
+"mode" =>
+  "neuralSearch",
+"numericAttributesForFiltering" =>
+  [
+  "algolia",
+],
+"optionalWords" =>
+  [
+  "myspace",
+],
+"paginationLimitedTo" =>
+  0,
 "queryLanguages" =>
   [
   "algolia",
 ],
-"decompoundQuery" =>
-  false,
-"enableRules" =>
-  false,
-"enablePersonalization" =>
-  true,
 "queryType" =>
   "prefixLast",
+"ranking" =>
+  [
+  "geo",
+],
+"reRankingApplyFilter" =>
+  "mySearch:filters",
+"relevancyStrictness" =>
+  10,
+"removeStopWords" =>
+  false,
 "removeWordsIfNoResults" =>
   "lastWords",
-"advancedSyntax" =>
-  true,
-"optionalWords" =>
-  [
-  "algolia",
-],
-"disableExactOnAttributes" =>
-  [
-  "algolia",
-],
-"exactOnSingleWordQuery" =>
-  "attribute",
-"alternativesAsExact" =>
-  [
-  "singleWordSynonym",
-],
-"advancedSyntaxFeatures" =>
-  [
-  "exactPhrase",
-],
-"distinct" =>
-  3,
-"attributeForDistinct" =>
-  "test",
-"synonyms" =>
-  false,
-"replaceSynonymsInHighlight" =>
-  true,
-"minProximity" =>
-  6,
-"responseFields" =>
-  [
-  "algolia",
-],
-"maxFacetHits" =>
-  50,
-"attributeCriteriaComputedByMinProximity" =>
-  true,
 "renderingContent" =>
   ["facetOrdering" =>
   ["facets" =>
@@ -3695,6 +3673,44 @@ class SearchTest extends TestCase implements HttpClientInterface
 ],
 ],
 ],
+"replaceSynonymsInHighlight" =>
+  true,
+"replicas" =>
+  [
+  "",
+],
+"responseFields" =>
+  [
+  "algolia",
+],
+"restrictHighlightAndSnippetArrays" =>
+  true,
+"searchableAttributes" =>
+  [
+  "foo",
+],
+"semanticSearch" =>
+  ["eventSources" =>
+  [
+  "foo",
+],
+],
+"separatorsToIndex" =>
+  "bar",
+"snippetEllipsisText" =>
+  "---",
+"sortFacetValuesBy" =>
+  "date",
+"typoTolerance" =>
+  false,
+"unretrievableAttributes" =>
+  [
+  "foo",
+],
+"userData" =>
+  ["user" =>
+  "data",
+],
 ],
         );
 
@@ -3702,7 +3718,7 @@ class SearchTest extends TestCase implements HttpClientInterface
             [
                 "path" => "/1/indexes/theIndexName/settings",
                 "method" => "PUT",
-                "body" => json_decode("{\"replicas\":[\"\"],\"paginationLimitedTo\":0,\"disableTypoToleranceOnWords\":[\"algolia\"],\"attributesToTransliterate\":[\"algolia\"],\"camelCaseAttributes\":[\"algolia\"],\"decompoundedAttributes\":{\"algolia\":\"aloglia\"},\"indexLanguages\":[\"algolia\"],\"disablePrefixOnAttributes\":[\"algolia\"],\"allowCompressionOfIntegerArray\":true,\"numericAttributesForFiltering\":[\"algolia\"],\"separatorsToIndex\":\"algolia\",\"searchableAttributes\":[\"algolia\"],\"userData\":{\"user\":\"data\"},\"customNormalization\":{\"algolia\":{\"aloglia\":\"aglolia\"}},\"attributesForFaceting\":[\"algolia\"],\"unretrievableAttributes\":[\"algolia\"],\"attributesToRetrieve\":[\"algolia\"],\"restrictSearchableAttributes\":[\"algolia\"],\"ranking\":[\"geo\"],\"customRanking\":[\"algolia\"],\"relevancyStrictness\":10,\"attributesToHighlight\":[\"algolia\"],\"attributesToSnippet\":[\"algolia\"],\"highlightPreTag\":\"<span>\",\"highlightPostTag\":\"</span>\",\"snippetEllipsisText\":\"---\",\"restrictHighlightAndSnippetArrays\":true,\"hitsPerPage\":10,\"minWordSizefor1Typo\":5,\"minWordSizefor2Typos\":11,\"typoTolerance\":false,\"allowTyposOnNumericTokens\":true,\"disableTypoToleranceOnAttributes\":[\"algolia\"],\"ignorePlurals\":false,\"removeStopWords\":false,\"keepDiacriticsOnCharacters\":\"abc\",\"queryLanguages\":[\"algolia\"],\"decompoundQuery\":false,\"enableRules\":false,\"enablePersonalization\":true,\"queryType\":\"prefixLast\",\"removeWordsIfNoResults\":\"lastWords\",\"advancedSyntax\":true,\"optionalWords\":[\"algolia\"],\"disableExactOnAttributes\":[\"algolia\"],\"exactOnSingleWordQuery\":\"attribute\",\"alternativesAsExact\":[\"singleWordSynonym\"],\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"distinct\":3,\"attributeForDistinct\":\"test\",\"synonyms\":false,\"replaceSynonymsInHighlight\":true,\"minProximity\":6,\"responseFields\":[\"algolia\"],\"maxFacetHits\":50,\"attributeCriteriaComputedByMinProximity\":true,\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}}}"),
+                "body" => json_decode("{\"advancedSyntax\":true,\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"allowCompressionOfIntegerArray\":true,\"allowTyposOnNumericTokens\":true,\"alternativesAsExact\":[\"singleWordSynonym\"],\"attributeCriteriaComputedByMinProximity\":true,\"attributeForDistinct\":\"test\",\"attributesForFaceting\":[\"algolia\"],\"attributesToHighlight\":[\"algolia\"],\"attributesToRetrieve\":[\"algolia\"],\"attributesToSnippet\":[\"algolia\"],\"attributesToTransliterate\":[\"algolia\"],\"camelCaseAttributes\":[\"algolia\"],\"customNormalization\":{\"algolia\":{\"aloglia\":\"aglolia\"}},\"customRanking\":[\"algolia\"],\"decompoundQuery\":false,\"decompoundedAttributes\":{\"algolia\":\"aloglia\"},\"disableExactOnAttributes\":[\"algolia\"],\"disablePrefixOnAttributes\":[\"algolia\"],\"disableTypoToleranceOnAttributes\":[\"algolia\"],\"disableTypoToleranceOnWords\":[\"algolia\"],\"distinct\":3,\"enablePersonalization\":true,\"enableReRanking\":false,\"enableRules\":true,\"exactOnSingleWordQuery\":\"attribute\",\"highlightPreTag\":\"<span>\",\"highlightPostTag\":\"</span>\",\"hitsPerPage\":10,\"ignorePlurals\":false,\"indexLanguages\":[\"algolia\"],\"keepDiacriticsOnCharacters\":\"abc\",\"maxFacetHits\":20,\"maxValuesPerFacet\":30,\"minProximity\":6,\"minWordSizefor1Typo\":5,\"minWordSizefor2Typos\":11,\"mode\":\"neuralSearch\",\"numericAttributesForFiltering\":[\"algolia\"],\"optionalWords\":[\"myspace\"],\"paginationLimitedTo\":0,\"queryLanguages\":[\"algolia\"],\"queryType\":\"prefixLast\",\"ranking\":[\"geo\"],\"reRankingApplyFilter\":\"mySearch:filters\",\"relevancyStrictness\":10,\"removeStopWords\":false,\"removeWordsIfNoResults\":\"lastWords\",\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}},\"replaceSynonymsInHighlight\":true,\"replicas\":[\"\"],\"responseFields\":[\"algolia\"],\"restrictHighlightAndSnippetArrays\":true,\"searchableAttributes\":[\"foo\"],\"semanticSearch\":{\"eventSources\":[\"foo\"]},\"separatorsToIndex\":\"bar\",\"snippetEllipsisText\":\"---\",\"sortFacetValuesBy\":\"date\",\"typoTolerance\":false,\"unretrievableAttributes\":[\"foo\"],\"userData\":{\"user\":\"data\"}}"),
             ],
         ]);
     }

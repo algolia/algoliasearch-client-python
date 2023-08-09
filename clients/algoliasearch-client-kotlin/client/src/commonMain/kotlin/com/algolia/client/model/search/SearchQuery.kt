@@ -32,10 +32,9 @@ public sealed interface SearchQuery {
      * @param numericFilters
      * @param tagFilters
      * @param sumOrFiltersScores Determines how to calculate [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores). If `false`, maximum score is kept. If `true`, score is summed.
+     * @param restrictSearchableAttributes Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
      * @param facets Returns [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts), their facet values, and the number of matching facet values.
-     * @param maxValuesPerFacet Maximum number of facet values to return for each facet.
      * @param facetingAfterDistinct Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control.
-     * @param sortFacetValuesBy Controls how facet values are fetched.
      * @param page Page to retrieve (the first page is `0`, not `1`).
      * @param offset Specifies the offset of the first hit to return. > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
      * @param length Sets the number of hits to retrieve (for use with `offset`). > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
@@ -51,16 +50,15 @@ public sealed interface SearchQuery {
      * @param personalizationImpact Defines how much [Personalization affects results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
      * @param userToken Associates a [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current search.
      * @param getRankingInfo Incidates whether the search response includes [detailed ranking information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
+     * @param explain Enriches the API's response with information about how the query was processed.
+     * @param synonyms Whether to take into account an index's synonyms for a particular search.
      * @param clickAnalytics Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
      * @param analytics Indicates whether this query will be included in [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
      * @param analyticsTags Tags to apply to the query for [segmenting analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
      * @param percentileComputation Whether to include or exclude a query from the processing-time percentile computation.
      * @param enableABTest Incidates whether this search will be considered in A/B testing.
-     * @param enableReRanking Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-     * @param reRankingApplyFilter
      * @param attributesForFaceting Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
      * @param attributesToRetrieve Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
-     * @param restrictSearchableAttributes Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
      * @param ranking Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
      * @param customRanking Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
      * @param relevancyStrictness Relevancy threshold below which less relevant results aren't included in the results.
@@ -93,16 +91,18 @@ public sealed interface SearchQuery {
      * @param exactOnSingleWordQuery
      * @param alternativesAsExact Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
      * @param advancedSyntaxFeatures Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
-     * @param explain Enriches the API's response with information about how the query was processed.
      * @param distinct
      * @param attributeForDistinct Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-     * @param synonyms Whether to take into account an index's synonyms for a particular search.
      * @param replaceSynonymsInHighlight Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
      * @param minProximity Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
      * @param responseFields Attributes to include in the API response for search and browse queries.
      * @param maxFacetHits Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+     * @param maxValuesPerFacet Maximum number of facet values to return for each facet.
+     * @param sortFacetValuesBy Controls how facet values are fetched.
      * @param attributeCriteriaComputedByMinProximity When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
      * @param renderingContent
+     * @param enableReRanking Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+     * @param reRankingApplyFilter
      * @param facetQuery Text to search inside the facet's values.
      */
     public fun SearchForFacets(
@@ -118,10 +118,9 @@ public sealed interface SearchQuery {
       numericFilters: NumericFilters? = null,
       tagFilters: TagFilters? = null,
       sumOrFiltersScores: Boolean? = null,
+      restrictSearchableAttributes: List<String>? = null,
       facets: List<String>? = null,
-      maxValuesPerFacet: Int? = null,
       facetingAfterDistinct: Boolean? = null,
-      sortFacetValuesBy: String? = null,
       page: Int? = null,
       offset: Int? = null,
       length: Int? = null,
@@ -137,16 +136,15 @@ public sealed interface SearchQuery {
       personalizationImpact: Int? = null,
       userToken: String? = null,
       getRankingInfo: Boolean? = null,
+      explain: List<String>? = null,
+      synonyms: Boolean? = null,
       clickAnalytics: Boolean? = null,
       analytics: Boolean? = null,
       analyticsTags: List<String>? = null,
       percentileComputation: Boolean? = null,
       enableABTest: Boolean? = null,
-      enableReRanking: Boolean? = null,
-      reRankingApplyFilter: ReRankingApplyFilter? = null,
       attributesForFaceting: List<String>? = null,
       attributesToRetrieve: List<String>? = null,
-      restrictSearchableAttributes: List<String>? = null,
       ranking: List<String>? = null,
       customRanking: List<String>? = null,
       relevancyStrictness: Int? = null,
@@ -172,23 +170,25 @@ public sealed interface SearchQuery {
       queryType: QueryType? = null,
       removeWordsIfNoResults: RemoveWordsIfNoResults? = null,
       mode: Mode? = null,
-      semanticSearch: IndexSettingsAsSearchParamsSemanticSearch? = null,
+      semanticSearch: SemanticSearch? = null,
       advancedSyntax: Boolean? = null,
       optionalWords: List<String>? = null,
       disableExactOnAttributes: List<String>? = null,
       exactOnSingleWordQuery: ExactOnSingleWordQuery? = null,
       alternativesAsExact: List<AlternativesAsExact>? = null,
       advancedSyntaxFeatures: List<AdvancedSyntaxFeatures>? = null,
-      explain: List<String>? = null,
       distinct: Distinct? = null,
       attributeForDistinct: String? = null,
-      synonyms: Boolean? = null,
       replaceSynonymsInHighlight: Boolean? = null,
       minProximity: Int? = null,
       responseFields: List<String>? = null,
       maxFacetHits: Int? = null,
+      maxValuesPerFacet: Int? = null,
+      sortFacetValuesBy: String? = null,
       attributeCriteriaComputedByMinProximity: Boolean? = null,
       renderingContent: RenderingContent? = null,
+      enableReRanking: Boolean? = null,
+      reRankingApplyFilter: ReRankingApplyFilter? = null,
       facetQuery: String? = null,
     ): SearchForFacets = com.algolia.client.model.search.SearchForFacets(
       facet = facet,
@@ -203,10 +203,9 @@ public sealed interface SearchQuery {
       numericFilters = numericFilters,
       tagFilters = tagFilters,
       sumOrFiltersScores = sumOrFiltersScores,
+      restrictSearchableAttributes = restrictSearchableAttributes,
       facets = facets,
-      maxValuesPerFacet = maxValuesPerFacet,
       facetingAfterDistinct = facetingAfterDistinct,
-      sortFacetValuesBy = sortFacetValuesBy,
       page = page,
       offset = offset,
       length = length,
@@ -222,16 +221,15 @@ public sealed interface SearchQuery {
       personalizationImpact = personalizationImpact,
       userToken = userToken,
       getRankingInfo = getRankingInfo,
+      explain = explain,
+      synonyms = synonyms,
       clickAnalytics = clickAnalytics,
       analytics = analytics,
       analyticsTags = analyticsTags,
       percentileComputation = percentileComputation,
       enableABTest = enableABTest,
-      enableReRanking = enableReRanking,
-      reRankingApplyFilter = reRankingApplyFilter,
       attributesForFaceting = attributesForFaceting,
       attributesToRetrieve = attributesToRetrieve,
-      restrictSearchableAttributes = restrictSearchableAttributes,
       ranking = ranking,
       customRanking = customRanking,
       relevancyStrictness = relevancyStrictness,
@@ -264,16 +262,18 @@ public sealed interface SearchQuery {
       exactOnSingleWordQuery = exactOnSingleWordQuery,
       alternativesAsExact = alternativesAsExact,
       advancedSyntaxFeatures = advancedSyntaxFeatures,
-      explain = explain,
       distinct = distinct,
       attributeForDistinct = attributeForDistinct,
-      synonyms = synonyms,
       replaceSynonymsInHighlight = replaceSynonymsInHighlight,
       minProximity = minProximity,
       responseFields = responseFields,
       maxFacetHits = maxFacetHits,
+      maxValuesPerFacet = maxValuesPerFacet,
+      sortFacetValuesBy = sortFacetValuesBy,
       attributeCriteriaComputedByMinProximity = attributeCriteriaComputedByMinProximity,
       renderingContent = renderingContent,
+      enableReRanking = enableReRanking,
+      reRankingApplyFilter = reRankingApplyFilter,
       facetQuery = facetQuery,
     )
 
@@ -290,10 +290,9 @@ public sealed interface SearchQuery {
      * @param numericFilters
      * @param tagFilters
      * @param sumOrFiltersScores Determines how to calculate [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores). If `false`, maximum score is kept. If `true`, score is summed.
+     * @param restrictSearchableAttributes Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
      * @param facets Returns [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts), their facet values, and the number of matching facet values.
-     * @param maxValuesPerFacet Maximum number of facet values to return for each facet.
      * @param facetingAfterDistinct Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control.
-     * @param sortFacetValuesBy Controls how facet values are fetched.
      * @param page Page to retrieve (the first page is `0`, not `1`).
      * @param offset Specifies the offset of the first hit to return. > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
      * @param length Sets the number of hits to retrieve (for use with `offset`). > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
@@ -309,16 +308,15 @@ public sealed interface SearchQuery {
      * @param personalizationImpact Defines how much [Personalization affects results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
      * @param userToken Associates a [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current search.
      * @param getRankingInfo Incidates whether the search response includes [detailed ranking information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
+     * @param explain Enriches the API's response with information about how the query was processed.
+     * @param synonyms Whether to take into account an index's synonyms for a particular search.
      * @param clickAnalytics Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
      * @param analytics Indicates whether this query will be included in [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
      * @param analyticsTags Tags to apply to the query for [segmenting analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
      * @param percentileComputation Whether to include or exclude a query from the processing-time percentile computation.
      * @param enableABTest Incidates whether this search will be considered in A/B testing.
-     * @param enableReRanking Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-     * @param reRankingApplyFilter
      * @param attributesForFaceting Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
      * @param attributesToRetrieve Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
-     * @param restrictSearchableAttributes Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
      * @param ranking Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
      * @param customRanking Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
      * @param relevancyStrictness Relevancy threshold below which less relevant results aren't included in the results.
@@ -351,16 +349,18 @@ public sealed interface SearchQuery {
      * @param exactOnSingleWordQuery
      * @param alternativesAsExact Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
      * @param advancedSyntaxFeatures Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
-     * @param explain Enriches the API's response with information about how the query was processed.
      * @param distinct
      * @param attributeForDistinct Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-     * @param synonyms Whether to take into account an index's synonyms for a particular search.
      * @param replaceSynonymsInHighlight Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
      * @param minProximity Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
      * @param responseFields Attributes to include in the API response for search and browse queries.
      * @param maxFacetHits Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+     * @param maxValuesPerFacet Maximum number of facet values to return for each facet.
+     * @param sortFacetValuesBy Controls how facet values are fetched.
      * @param attributeCriteriaComputedByMinProximity When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
      * @param renderingContent
+     * @param enableReRanking Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+     * @param reRankingApplyFilter
      * @param type
      */
     public fun SearchForHits(
@@ -374,10 +374,9 @@ public sealed interface SearchQuery {
       numericFilters: NumericFilters? = null,
       tagFilters: TagFilters? = null,
       sumOrFiltersScores: Boolean? = null,
+      restrictSearchableAttributes: List<String>? = null,
       facets: List<String>? = null,
-      maxValuesPerFacet: Int? = null,
       facetingAfterDistinct: Boolean? = null,
-      sortFacetValuesBy: String? = null,
       page: Int? = null,
       offset: Int? = null,
       length: Int? = null,
@@ -393,16 +392,15 @@ public sealed interface SearchQuery {
       personalizationImpact: Int? = null,
       userToken: String? = null,
       getRankingInfo: Boolean? = null,
+      explain: List<String>? = null,
+      synonyms: Boolean? = null,
       clickAnalytics: Boolean? = null,
       analytics: Boolean? = null,
       analyticsTags: List<String>? = null,
       percentileComputation: Boolean? = null,
       enableABTest: Boolean? = null,
-      enableReRanking: Boolean? = null,
-      reRankingApplyFilter: ReRankingApplyFilter? = null,
       attributesForFaceting: List<String>? = null,
       attributesToRetrieve: List<String>? = null,
-      restrictSearchableAttributes: List<String>? = null,
       ranking: List<String>? = null,
       customRanking: List<String>? = null,
       relevancyStrictness: Int? = null,
@@ -428,23 +426,25 @@ public sealed interface SearchQuery {
       queryType: QueryType? = null,
       removeWordsIfNoResults: RemoveWordsIfNoResults? = null,
       mode: Mode? = null,
-      semanticSearch: IndexSettingsAsSearchParamsSemanticSearch? = null,
+      semanticSearch: SemanticSearch? = null,
       advancedSyntax: Boolean? = null,
       optionalWords: List<String>? = null,
       disableExactOnAttributes: List<String>? = null,
       exactOnSingleWordQuery: ExactOnSingleWordQuery? = null,
       alternativesAsExact: List<AlternativesAsExact>? = null,
       advancedSyntaxFeatures: List<AdvancedSyntaxFeatures>? = null,
-      explain: List<String>? = null,
       distinct: Distinct? = null,
       attributeForDistinct: String? = null,
-      synonyms: Boolean? = null,
       replaceSynonymsInHighlight: Boolean? = null,
       minProximity: Int? = null,
       responseFields: List<String>? = null,
       maxFacetHits: Int? = null,
+      maxValuesPerFacet: Int? = null,
+      sortFacetValuesBy: String? = null,
       attributeCriteriaComputedByMinProximity: Boolean? = null,
       renderingContent: RenderingContent? = null,
+      enableReRanking: Boolean? = null,
+      reRankingApplyFilter: ReRankingApplyFilter? = null,
       type: SearchTypeDefault? = null,
     ): SearchForHits = com.algolia.client.model.search.SearchForHits(
       indexName = indexName,
@@ -457,10 +457,9 @@ public sealed interface SearchQuery {
       numericFilters = numericFilters,
       tagFilters = tagFilters,
       sumOrFiltersScores = sumOrFiltersScores,
+      restrictSearchableAttributes = restrictSearchableAttributes,
       facets = facets,
-      maxValuesPerFacet = maxValuesPerFacet,
       facetingAfterDistinct = facetingAfterDistinct,
-      sortFacetValuesBy = sortFacetValuesBy,
       page = page,
       offset = offset,
       length = length,
@@ -476,16 +475,15 @@ public sealed interface SearchQuery {
       personalizationImpact = personalizationImpact,
       userToken = userToken,
       getRankingInfo = getRankingInfo,
+      explain = explain,
+      synonyms = synonyms,
       clickAnalytics = clickAnalytics,
       analytics = analytics,
       analyticsTags = analyticsTags,
       percentileComputation = percentileComputation,
       enableABTest = enableABTest,
-      enableReRanking = enableReRanking,
-      reRankingApplyFilter = reRankingApplyFilter,
       attributesForFaceting = attributesForFaceting,
       attributesToRetrieve = attributesToRetrieve,
-      restrictSearchableAttributes = restrictSearchableAttributes,
       ranking = ranking,
       customRanking = customRanking,
       relevancyStrictness = relevancyStrictness,
@@ -518,16 +516,18 @@ public sealed interface SearchQuery {
       exactOnSingleWordQuery = exactOnSingleWordQuery,
       alternativesAsExact = alternativesAsExact,
       advancedSyntaxFeatures = advancedSyntaxFeatures,
-      explain = explain,
       distinct = distinct,
       attributeForDistinct = attributeForDistinct,
-      synonyms = synonyms,
       replaceSynonymsInHighlight = replaceSynonymsInHighlight,
       minProximity = minProximity,
       responseFields = responseFields,
       maxFacetHits = maxFacetHits,
+      maxValuesPerFacet = maxValuesPerFacet,
+      sortFacetValuesBy = sortFacetValuesBy,
       attributeCriteriaComputedByMinProximity = attributeCriteriaComputedByMinProximity,
       renderingContent = renderingContent,
+      enableReRanking = enableReRanking,
+      reRankingApplyFilter = reRankingApplyFilter,
       type = type,
     )
   }

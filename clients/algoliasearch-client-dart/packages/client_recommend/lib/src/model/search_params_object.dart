@@ -2,7 +2,7 @@
 // ignore_for_file: unused_element
 import 'package:algolia_client_recommend/src/model/query_type.dart';
 import 'package:algolia_client_recommend/src/model/alternatives_as_exact.dart';
-import 'package:algolia_client_recommend/src/model/index_settings_as_search_params_semantic_search.dart';
+import 'package:algolia_client_recommend/src/model/semantic_search.dart';
 import 'package:algolia_client_recommend/src/model/advanced_syntax_features.dart';
 import 'package:algolia_client_recommend/src/model/remove_words_if_no_results.dart';
 import 'package:algolia_client_recommend/src/model/exact_on_single_word_query.dart';
@@ -25,10 +25,9 @@ final class SearchParamsObject {
     this.numericFilters,
     this.tagFilters,
     this.sumOrFiltersScores,
+    this.restrictSearchableAttributes,
     this.facets,
-    this.maxValuesPerFacet,
     this.facetingAfterDistinct,
-    this.sortFacetValuesBy,
     this.page,
     this.offset,
     this.length,
@@ -44,16 +43,15 @@ final class SearchParamsObject {
     this.personalizationImpact,
     this.userToken,
     this.getRankingInfo,
+    this.explain,
+    this.synonyms,
     this.clickAnalytics,
     this.analytics,
     this.analyticsTags,
     this.percentileComputation,
     this.enableABTest,
-    this.enableReRanking,
-    this.reRankingApplyFilter,
     this.attributesForFaceting,
     this.attributesToRetrieve,
-    this.restrictSearchableAttributes,
     this.ranking,
     this.customRanking,
     this.relevancyStrictness,
@@ -86,16 +84,18 @@ final class SearchParamsObject {
     this.exactOnSingleWordQuery,
     this.alternativesAsExact,
     this.advancedSyntaxFeatures,
-    this.explain,
     this.distinct,
     this.attributeForDistinct,
-    this.synonyms,
     this.replaceSynonymsInHighlight,
     this.minProximity,
     this.responseFields,
     this.maxFacetHits,
+    this.maxValuesPerFacet,
+    this.sortFacetValuesBy,
     this.attributeCriteriaComputedByMinProximity,
     this.renderingContent,
+    this.enableReRanking,
+    this.reRankingApplyFilter,
   });
 
   /// Text to search for in an index.
@@ -142,21 +142,17 @@ final class SearchParamsObject {
   @JsonKey(name: r'sumOrFiltersScores')
   final bool? sumOrFiltersScores;
 
+  /// Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
+  @JsonKey(name: r'restrictSearchableAttributes')
+  final List<String>? restrictSearchableAttributes;
+
   /// Returns [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts), their facet values, and the number of matching facet values.
   @JsonKey(name: r'facets')
   final List<String>? facets;
 
-  /// Maximum number of facet values to return for each facet.
-  @JsonKey(name: r'maxValuesPerFacet')
-  final int? maxValuesPerFacet;
-
   /// Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control.
   @JsonKey(name: r'facetingAfterDistinct')
   final bool? facetingAfterDistinct;
-
-  /// Controls how facet values are fetched.
-  @JsonKey(name: r'sortFacetValuesBy')
-  final String? sortFacetValuesBy;
 
   /// Page to retrieve (the first page is `0`, not `1`).
   @JsonKey(name: r'page')
@@ -225,6 +221,14 @@ final class SearchParamsObject {
   @JsonKey(name: r'getRankingInfo')
   final bool? getRankingInfo;
 
+  /// Enriches the API's response with information about how the query was processed.
+  @JsonKey(name: r'explain')
+  final List<String>? explain;
+
+  /// Whether to take into account an index's synonyms for a particular search.
+  @JsonKey(name: r'synonyms')
+  final bool? synonyms;
+
   /// Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
   @JsonKey(name: r'clickAnalytics')
   final bool? clickAnalytics;
@@ -245,17 +249,6 @@ final class SearchParamsObject {
   @JsonKey(name: r'enableABTest')
   final bool? enableABTest;
 
-  /// Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-  @JsonKey(name: r'enableReRanking')
-  final bool? enableReRanking;
-
-  /// One of types:
-  /// - [List<List<String>>]
-  /// - [String]
-  /// - [List<String>]
-  @JsonKey(name: r'reRankingApplyFilter')
-  final dynamic reRankingApplyFilter;
-
   /// Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
   @JsonKey(name: r'attributesForFaceting')
   final List<String>? attributesForFaceting;
@@ -263,10 +256,6 @@ final class SearchParamsObject {
   /// Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
   @JsonKey(name: r'attributesToRetrieve')
   final List<String>? attributesToRetrieve;
-
-  /// Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
-  @JsonKey(name: r'restrictSearchableAttributes')
-  final List<String>? restrictSearchableAttributes;
 
   /// Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
   @JsonKey(name: r'ranking')
@@ -374,7 +363,7 @@ final class SearchParamsObject {
   final Mode? mode;
 
   @JsonKey(name: r'semanticSearch')
-  final IndexSettingsAsSearchParamsSemanticSearch? semanticSearch;
+  final SemanticSearch? semanticSearch;
 
   /// Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
   @JsonKey(name: r'advancedSyntax')
@@ -399,10 +388,6 @@ final class SearchParamsObject {
   @JsonKey(name: r'advancedSyntaxFeatures')
   final List<AdvancedSyntaxFeatures>? advancedSyntaxFeatures;
 
-  /// Enriches the API's response with information about how the query was processed.
-  @JsonKey(name: r'explain')
-  final List<String>? explain;
-
   /// One of types:
   /// - [bool]
   /// - [int]
@@ -412,10 +397,6 @@ final class SearchParamsObject {
   /// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
   @JsonKey(name: r'attributeForDistinct')
   final String? attributeForDistinct;
-
-  /// Whether to take into account an index's synonyms for a particular search.
-  @JsonKey(name: r'synonyms')
-  final bool? synonyms;
 
   /// Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
   @JsonKey(name: r'replaceSynonymsInHighlight')
@@ -436,12 +417,31 @@ final class SearchParamsObject {
   @JsonKey(name: r'maxFacetHits')
   final int? maxFacetHits;
 
+  /// Maximum number of facet values to return for each facet.
+  @JsonKey(name: r'maxValuesPerFacet')
+  final int? maxValuesPerFacet;
+
+  /// Controls how facet values are fetched.
+  @JsonKey(name: r'sortFacetValuesBy')
+  final String? sortFacetValuesBy;
+
   /// When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
   @JsonKey(name: r'attributeCriteriaComputedByMinProximity')
   final bool? attributeCriteriaComputedByMinProximity;
 
   @JsonKey(name: r'renderingContent')
   final RenderingContent? renderingContent;
+
+  /// Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+  @JsonKey(name: r'enableReRanking')
+  final bool? enableReRanking;
+
+  /// One of types:
+  /// - [List<List<String>>]
+  /// - [String]
+  /// - [List<String>]
+  @JsonKey(name: r'reRankingApplyFilter')
+  final dynamic reRankingApplyFilter;
 
   @override
   bool operator ==(Object other) =>
@@ -455,10 +455,9 @@ final class SearchParamsObject {
           other.numericFilters == numericFilters &&
           other.tagFilters == tagFilters &&
           other.sumOrFiltersScores == sumOrFiltersScores &&
+          other.restrictSearchableAttributes == restrictSearchableAttributes &&
           other.facets == facets &&
-          other.maxValuesPerFacet == maxValuesPerFacet &&
           other.facetingAfterDistinct == facetingAfterDistinct &&
-          other.sortFacetValuesBy == sortFacetValuesBy &&
           other.page == page &&
           other.offset == offset &&
           other.length == length &&
@@ -474,16 +473,15 @@ final class SearchParamsObject {
           other.personalizationImpact == personalizationImpact &&
           other.userToken == userToken &&
           other.getRankingInfo == getRankingInfo &&
+          other.explain == explain &&
+          other.synonyms == synonyms &&
           other.clickAnalytics == clickAnalytics &&
           other.analytics == analytics &&
           other.analyticsTags == analyticsTags &&
           other.percentileComputation == percentileComputation &&
           other.enableABTest == enableABTest &&
-          other.enableReRanking == enableReRanking &&
-          other.reRankingApplyFilter == reRankingApplyFilter &&
           other.attributesForFaceting == attributesForFaceting &&
           other.attributesToRetrieve == attributesToRetrieve &&
-          other.restrictSearchableAttributes == restrictSearchableAttributes &&
           other.ranking == ranking &&
           other.customRanking == customRanking &&
           other.relevancyStrictness == relevancyStrictness &&
@@ -518,17 +516,19 @@ final class SearchParamsObject {
           other.exactOnSingleWordQuery == exactOnSingleWordQuery &&
           other.alternativesAsExact == alternativesAsExact &&
           other.advancedSyntaxFeatures == advancedSyntaxFeatures &&
-          other.explain == explain &&
           other.distinct == distinct &&
           other.attributeForDistinct == attributeForDistinct &&
-          other.synonyms == synonyms &&
           other.replaceSynonymsInHighlight == replaceSynonymsInHighlight &&
           other.minProximity == minProximity &&
           other.responseFields == responseFields &&
           other.maxFacetHits == maxFacetHits &&
+          other.maxValuesPerFacet == maxValuesPerFacet &&
+          other.sortFacetValuesBy == sortFacetValuesBy &&
           other.attributeCriteriaComputedByMinProximity ==
               attributeCriteriaComputedByMinProximity &&
-          other.renderingContent == renderingContent;
+          other.renderingContent == renderingContent &&
+          other.enableReRanking == enableReRanking &&
+          other.reRankingApplyFilter == reRankingApplyFilter;
 
   @override
   int get hashCode =>
@@ -540,10 +540,9 @@ final class SearchParamsObject {
       numericFilters.hashCode +
       tagFilters.hashCode +
       sumOrFiltersScores.hashCode +
+      restrictSearchableAttributes.hashCode +
       facets.hashCode +
-      maxValuesPerFacet.hashCode +
       facetingAfterDistinct.hashCode +
-      sortFacetValuesBy.hashCode +
       page.hashCode +
       offset.hashCode +
       length.hashCode +
@@ -559,16 +558,15 @@ final class SearchParamsObject {
       personalizationImpact.hashCode +
       userToken.hashCode +
       getRankingInfo.hashCode +
+      explain.hashCode +
+      synonyms.hashCode +
       clickAnalytics.hashCode +
       analytics.hashCode +
       analyticsTags.hashCode +
       percentileComputation.hashCode +
       enableABTest.hashCode +
-      enableReRanking.hashCode +
-      (reRankingApplyFilter == null ? 0 : reRankingApplyFilter.hashCode) +
       attributesForFaceting.hashCode +
       attributesToRetrieve.hashCode +
-      restrictSearchableAttributes.hashCode +
       ranking.hashCode +
       customRanking.hashCode +
       relevancyStrictness.hashCode +
@@ -601,16 +599,18 @@ final class SearchParamsObject {
       exactOnSingleWordQuery.hashCode +
       alternativesAsExact.hashCode +
       advancedSyntaxFeatures.hashCode +
-      explain.hashCode +
       distinct.hashCode +
       attributeForDistinct.hashCode +
-      synonyms.hashCode +
       replaceSynonymsInHighlight.hashCode +
       minProximity.hashCode +
       responseFields.hashCode +
       maxFacetHits.hashCode +
+      maxValuesPerFacet.hashCode +
+      sortFacetValuesBy.hashCode +
       attributeCriteriaComputedByMinProximity.hashCode +
-      renderingContent.hashCode;
+      renderingContent.hashCode +
+      enableReRanking.hashCode +
+      (reRankingApplyFilter == null ? 0 : reRankingApplyFilter.hashCode);
 
   factory SearchParamsObject.fromJson(Map<String, dynamic> json) =>
       _$SearchParamsObjectFromJson(json);

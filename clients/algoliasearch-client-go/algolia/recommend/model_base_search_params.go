@@ -20,14 +20,12 @@ type BaseSearchParams struct {
 	TagFilters      *TagFilters      `json:"tagFilters,omitempty"`
 	// Determines how to calculate [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores). If `false`, maximum score is kept. If `true`, score is summed.
 	SumOrFiltersScores *bool `json:"sumOrFiltersScores,omitempty"`
+	// Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
+	RestrictSearchableAttributes []string `json:"restrictSearchableAttributes,omitempty"`
 	// Returns [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts), their facet values, and the number of matching facet values.
 	Facets []string `json:"facets,omitempty"`
-	// Maximum number of facet values to return for each facet.
-	MaxValuesPerFacet *int32 `json:"maxValuesPerFacet,omitempty"`
 	// Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control.
 	FacetingAfterDistinct *bool `json:"facetingAfterDistinct,omitempty"`
-	// Controls how facet values are fetched.
-	SortFacetValuesBy *string `json:"sortFacetValuesBy,omitempty"`
 	// Page to retrieve (the first page is `0`, not `1`).
 	Page *int32 `json:"page,omitempty"`
 	// Specifies the offset of the first hit to return. > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
@@ -56,6 +54,10 @@ type BaseSearchParams struct {
 	UserToken *string `json:"userToken,omitempty"`
 	// Incidates whether the search response includes [detailed ranking information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
 	GetRankingInfo *bool `json:"getRankingInfo,omitempty"`
+	// Enriches the API's response with information about how the query was processed.
+	Explain []string `json:"explain,omitempty"`
+	// Whether to take into account an index's synonyms for a particular search.
+	Synonyms *bool `json:"synonyms,omitempty"`
 	// Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
 	ClickAnalytics *bool `json:"clickAnalytics,omitempty"`
 	// Indicates whether this query will be included in [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
@@ -66,9 +68,6 @@ type BaseSearchParams struct {
 	PercentileComputation *bool `json:"percentileComputation,omitempty"`
 	// Incidates whether this search will be considered in A/B testing.
 	EnableABTest *bool `json:"enableABTest,omitempty"`
-	// Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-	EnableReRanking      *bool                        `json:"enableReRanking,omitempty"`
-	ReRankingApplyFilter NullableReRankingApplyFilter `json:"reRankingApplyFilter,omitempty"`
 }
 
 type BaseSearchParamsOption func(f *BaseSearchParams)
@@ -121,27 +120,21 @@ func WithBaseSearchParamsSumOrFiltersScores(val bool) BaseSearchParamsOption {
 	}
 }
 
+func WithBaseSearchParamsRestrictSearchableAttributes(val []string) BaseSearchParamsOption {
+	return func(f *BaseSearchParams) {
+		f.RestrictSearchableAttributes = val
+	}
+}
+
 func WithBaseSearchParamsFacets(val []string) BaseSearchParamsOption {
 	return func(f *BaseSearchParams) {
 		f.Facets = val
 	}
 }
 
-func WithBaseSearchParamsMaxValuesPerFacet(val int32) BaseSearchParamsOption {
-	return func(f *BaseSearchParams) {
-		f.MaxValuesPerFacet = &val
-	}
-}
-
 func WithBaseSearchParamsFacetingAfterDistinct(val bool) BaseSearchParamsOption {
 	return func(f *BaseSearchParams) {
 		f.FacetingAfterDistinct = &val
-	}
-}
-
-func WithBaseSearchParamsSortFacetValuesBy(val string) BaseSearchParamsOption {
-	return func(f *BaseSearchParams) {
-		f.SortFacetValuesBy = &val
 	}
 }
 
@@ -235,6 +228,18 @@ func WithBaseSearchParamsGetRankingInfo(val bool) BaseSearchParamsOption {
 	}
 }
 
+func WithBaseSearchParamsExplain(val []string) BaseSearchParamsOption {
+	return func(f *BaseSearchParams) {
+		f.Explain = val
+	}
+}
+
+func WithBaseSearchParamsSynonyms(val bool) BaseSearchParamsOption {
+	return func(f *BaseSearchParams) {
+		f.Synonyms = &val
+	}
+}
+
 func WithBaseSearchParamsClickAnalytics(val bool) BaseSearchParamsOption {
 	return func(f *BaseSearchParams) {
 		f.ClickAnalytics = &val
@@ -265,18 +270,6 @@ func WithBaseSearchParamsEnableABTest(val bool) BaseSearchParamsOption {
 	}
 }
 
-func WithBaseSearchParamsEnableReRanking(val bool) BaseSearchParamsOption {
-	return func(f *BaseSearchParams) {
-		f.EnableReRanking = &val
-	}
-}
-
-func WithBaseSearchParamsReRankingApplyFilter(val NullableReRankingApplyFilter) BaseSearchParamsOption {
-	return func(f *BaseSearchParams) {
-		f.ReRankingApplyFilter = val
-	}
-}
-
 // NewBaseSearchParams instantiates a new BaseSearchParams object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
@@ -302,12 +295,8 @@ func NewBaseSearchParamsWithDefaults() *BaseSearchParams {
 	this.Filters = &filters
 	var sumOrFiltersScores bool = false
 	this.SumOrFiltersScores = &sumOrFiltersScores
-	var maxValuesPerFacet int32 = 100
-	this.MaxValuesPerFacet = &maxValuesPerFacet
 	var facetingAfterDistinct bool = false
 	this.FacetingAfterDistinct = &facetingAfterDistinct
-	var sortFacetValuesBy string = "count"
-	this.SortFacetValuesBy = &sortFacetValuesBy
 	var page int32 = 0
 	this.Page = &page
 	var aroundLatLng string = ""
@@ -318,6 +307,8 @@ func NewBaseSearchParamsWithDefaults() *BaseSearchParams {
 	this.PersonalizationImpact = &personalizationImpact
 	var getRankingInfo bool = false
 	this.GetRankingInfo = &getRankingInfo
+	var synonyms bool = true
+	this.Synonyms = &synonyms
 	var clickAnalytics bool = false
 	this.ClickAnalytics = &clickAnalytics
 	var analytics bool = true
@@ -326,8 +317,6 @@ func NewBaseSearchParamsWithDefaults() *BaseSearchParams {
 	this.PercentileComputation = &percentileComputation
 	var enableABTest bool = true
 	this.EnableABTest = &enableABTest
-	var enableReRanking bool = true
-	this.EnableReRanking = &enableReRanking
 	return this
 }
 
@@ -587,6 +576,38 @@ func (o *BaseSearchParams) SetSumOrFiltersScores(v bool) {
 	o.SumOrFiltersScores = &v
 }
 
+// GetRestrictSearchableAttributes returns the RestrictSearchableAttributes field value if set, zero value otherwise.
+func (o *BaseSearchParams) GetRestrictSearchableAttributes() []string {
+	if o == nil || o.RestrictSearchableAttributes == nil {
+		var ret []string
+		return ret
+	}
+	return o.RestrictSearchableAttributes
+}
+
+// GetRestrictSearchableAttributesOk returns a tuple with the RestrictSearchableAttributes field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BaseSearchParams) GetRestrictSearchableAttributesOk() ([]string, bool) {
+	if o == nil || o.RestrictSearchableAttributes == nil {
+		return nil, false
+	}
+	return o.RestrictSearchableAttributes, true
+}
+
+// HasRestrictSearchableAttributes returns a boolean if a field has been set.
+func (o *BaseSearchParams) HasRestrictSearchableAttributes() bool {
+	if o != nil && o.RestrictSearchableAttributes != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRestrictSearchableAttributes gets a reference to the given []string and assigns it to the RestrictSearchableAttributes field.
+func (o *BaseSearchParams) SetRestrictSearchableAttributes(v []string) {
+	o.RestrictSearchableAttributes = v
+}
+
 // GetFacets returns the Facets field value if set, zero value otherwise.
 func (o *BaseSearchParams) GetFacets() []string {
 	if o == nil || o.Facets == nil {
@@ -619,38 +640,6 @@ func (o *BaseSearchParams) SetFacets(v []string) {
 	o.Facets = v
 }
 
-// GetMaxValuesPerFacet returns the MaxValuesPerFacet field value if set, zero value otherwise.
-func (o *BaseSearchParams) GetMaxValuesPerFacet() int32 {
-	if o == nil || o.MaxValuesPerFacet == nil {
-		var ret int32
-		return ret
-	}
-	return *o.MaxValuesPerFacet
-}
-
-// GetMaxValuesPerFacetOk returns a tuple with the MaxValuesPerFacet field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *BaseSearchParams) GetMaxValuesPerFacetOk() (*int32, bool) {
-	if o == nil || o.MaxValuesPerFacet == nil {
-		return nil, false
-	}
-	return o.MaxValuesPerFacet, true
-}
-
-// HasMaxValuesPerFacet returns a boolean if a field has been set.
-func (o *BaseSearchParams) HasMaxValuesPerFacet() bool {
-	if o != nil && o.MaxValuesPerFacet != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetMaxValuesPerFacet gets a reference to the given int32 and assigns it to the MaxValuesPerFacet field.
-func (o *BaseSearchParams) SetMaxValuesPerFacet(v int32) {
-	o.MaxValuesPerFacet = &v
-}
-
 // GetFacetingAfterDistinct returns the FacetingAfterDistinct field value if set, zero value otherwise.
 func (o *BaseSearchParams) GetFacetingAfterDistinct() bool {
 	if o == nil || o.FacetingAfterDistinct == nil {
@@ -681,38 +670,6 @@ func (o *BaseSearchParams) HasFacetingAfterDistinct() bool {
 // SetFacetingAfterDistinct gets a reference to the given bool and assigns it to the FacetingAfterDistinct field.
 func (o *BaseSearchParams) SetFacetingAfterDistinct(v bool) {
 	o.FacetingAfterDistinct = &v
-}
-
-// GetSortFacetValuesBy returns the SortFacetValuesBy field value if set, zero value otherwise.
-func (o *BaseSearchParams) GetSortFacetValuesBy() string {
-	if o == nil || o.SortFacetValuesBy == nil {
-		var ret string
-		return ret
-	}
-	return *o.SortFacetValuesBy
-}
-
-// GetSortFacetValuesByOk returns a tuple with the SortFacetValuesBy field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *BaseSearchParams) GetSortFacetValuesByOk() (*string, bool) {
-	if o == nil || o.SortFacetValuesBy == nil {
-		return nil, false
-	}
-	return o.SortFacetValuesBy, true
-}
-
-// HasSortFacetValuesBy returns a boolean if a field has been set.
-func (o *BaseSearchParams) HasSortFacetValuesBy() bool {
-	if o != nil && o.SortFacetValuesBy != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetSortFacetValuesBy gets a reference to the given string and assigns it to the SortFacetValuesBy field.
-func (o *BaseSearchParams) SetSortFacetValuesBy(v string) {
-	o.SortFacetValuesBy = &v
 }
 
 // GetPage returns the Page field value if set, zero value otherwise.
@@ -1195,6 +1152,70 @@ func (o *BaseSearchParams) SetGetRankingInfo(v bool) {
 	o.GetRankingInfo = &v
 }
 
+// GetExplain returns the Explain field value if set, zero value otherwise.
+func (o *BaseSearchParams) GetExplain() []string {
+	if o == nil || o.Explain == nil {
+		var ret []string
+		return ret
+	}
+	return o.Explain
+}
+
+// GetExplainOk returns a tuple with the Explain field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BaseSearchParams) GetExplainOk() ([]string, bool) {
+	if o == nil || o.Explain == nil {
+		return nil, false
+	}
+	return o.Explain, true
+}
+
+// HasExplain returns a boolean if a field has been set.
+func (o *BaseSearchParams) HasExplain() bool {
+	if o != nil && o.Explain != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExplain gets a reference to the given []string and assigns it to the Explain field.
+func (o *BaseSearchParams) SetExplain(v []string) {
+	o.Explain = v
+}
+
+// GetSynonyms returns the Synonyms field value if set, zero value otherwise.
+func (o *BaseSearchParams) GetSynonyms() bool {
+	if o == nil || o.Synonyms == nil {
+		var ret bool
+		return ret
+	}
+	return *o.Synonyms
+}
+
+// GetSynonymsOk returns a tuple with the Synonyms field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BaseSearchParams) GetSynonymsOk() (*bool, bool) {
+	if o == nil || o.Synonyms == nil {
+		return nil, false
+	}
+	return o.Synonyms, true
+}
+
+// HasSynonyms returns a boolean if a field has been set.
+func (o *BaseSearchParams) HasSynonyms() bool {
+	if o != nil && o.Synonyms != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSynonyms gets a reference to the given bool and assigns it to the Synonyms field.
+func (o *BaseSearchParams) SetSynonyms(v bool) {
+	o.Synonyms = &v
+}
+
 // GetClickAnalytics returns the ClickAnalytics field value if set, zero value otherwise.
 func (o *BaseSearchParams) GetClickAnalytics() bool {
 	if o == nil || o.ClickAnalytics == nil {
@@ -1355,81 +1376,6 @@ func (o *BaseSearchParams) SetEnableABTest(v bool) {
 	o.EnableABTest = &v
 }
 
-// GetEnableReRanking returns the EnableReRanking field value if set, zero value otherwise.
-func (o *BaseSearchParams) GetEnableReRanking() bool {
-	if o == nil || o.EnableReRanking == nil {
-		var ret bool
-		return ret
-	}
-	return *o.EnableReRanking
-}
-
-// GetEnableReRankingOk returns a tuple with the EnableReRanking field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *BaseSearchParams) GetEnableReRankingOk() (*bool, bool) {
-	if o == nil || o.EnableReRanking == nil {
-		return nil, false
-	}
-	return o.EnableReRanking, true
-}
-
-// HasEnableReRanking returns a boolean if a field has been set.
-func (o *BaseSearchParams) HasEnableReRanking() bool {
-	if o != nil && o.EnableReRanking != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetEnableReRanking gets a reference to the given bool and assigns it to the EnableReRanking field.
-func (o *BaseSearchParams) SetEnableReRanking(v bool) {
-	o.EnableReRanking = &v
-}
-
-// GetReRankingApplyFilter returns the ReRankingApplyFilter field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *BaseSearchParams) GetReRankingApplyFilter() ReRankingApplyFilter {
-	if o == nil || o.ReRankingApplyFilter.Get() == nil {
-		var ret ReRankingApplyFilter
-		return ret
-	}
-	return *o.ReRankingApplyFilter.Get()
-}
-
-// GetReRankingApplyFilterOk returns a tuple with the ReRankingApplyFilter field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *BaseSearchParams) GetReRankingApplyFilterOk() (*ReRankingApplyFilter, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.ReRankingApplyFilter.Get(), o.ReRankingApplyFilter.IsSet()
-}
-
-// HasReRankingApplyFilter returns a boolean if a field has been set.
-func (o *BaseSearchParams) HasReRankingApplyFilter() bool {
-	if o != nil && o.ReRankingApplyFilter.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetReRankingApplyFilter gets a reference to the given NullableReRankingApplyFilter and assigns it to the ReRankingApplyFilter field.
-func (o *BaseSearchParams) SetReRankingApplyFilter(v ReRankingApplyFilter) {
-	o.ReRankingApplyFilter.Set(&v)
-}
-
-// SetReRankingApplyFilterNil sets the value for ReRankingApplyFilter to be an explicit nil
-func (o *BaseSearchParams) SetReRankingApplyFilterNil() {
-	o.ReRankingApplyFilter.Set(nil)
-}
-
-// UnsetReRankingApplyFilter ensures that no value is present for ReRankingApplyFilter, not even an explicit nil
-func (o *BaseSearchParams) UnsetReRankingApplyFilter() {
-	o.ReRankingApplyFilter.Unset()
-}
-
 func (o BaseSearchParams) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.Query != nil {
@@ -1456,17 +1402,14 @@ func (o BaseSearchParams) MarshalJSON() ([]byte, error) {
 	if o.SumOrFiltersScores != nil {
 		toSerialize["sumOrFiltersScores"] = o.SumOrFiltersScores
 	}
+	if o.RestrictSearchableAttributes != nil {
+		toSerialize["restrictSearchableAttributes"] = o.RestrictSearchableAttributes
+	}
 	if o.Facets != nil {
 		toSerialize["facets"] = o.Facets
 	}
-	if o.MaxValuesPerFacet != nil {
-		toSerialize["maxValuesPerFacet"] = o.MaxValuesPerFacet
-	}
 	if o.FacetingAfterDistinct != nil {
 		toSerialize["facetingAfterDistinct"] = o.FacetingAfterDistinct
-	}
-	if o.SortFacetValuesBy != nil {
-		toSerialize["sortFacetValuesBy"] = o.SortFacetValuesBy
 	}
 	if o.Page != nil {
 		toSerialize["page"] = o.Page
@@ -1513,6 +1456,12 @@ func (o BaseSearchParams) MarshalJSON() ([]byte, error) {
 	if o.GetRankingInfo != nil {
 		toSerialize["getRankingInfo"] = o.GetRankingInfo
 	}
+	if o.Explain != nil {
+		toSerialize["explain"] = o.Explain
+	}
+	if o.Synonyms != nil {
+		toSerialize["synonyms"] = o.Synonyms
+	}
 	if o.ClickAnalytics != nil {
 		toSerialize["clickAnalytics"] = o.ClickAnalytics
 	}
@@ -1528,12 +1477,6 @@ func (o BaseSearchParams) MarshalJSON() ([]byte, error) {
 	if o.EnableABTest != nil {
 		toSerialize["enableABTest"] = o.EnableABTest
 	}
-	if o.EnableReRanking != nil {
-		toSerialize["enableReRanking"] = o.EnableReRanking
-	}
-	if o.ReRankingApplyFilter.IsSet() {
-		toSerialize["reRankingApplyFilter"] = o.ReRankingApplyFilter.Get()
-	}
 	return json.Marshal(toSerialize)
 }
 
@@ -1547,10 +1490,9 @@ func (o BaseSearchParams) String() string {
 	out += fmt.Sprintf("  numericFilters=%v\n", o.NumericFilters)
 	out += fmt.Sprintf("  tagFilters=%v\n", o.TagFilters)
 	out += fmt.Sprintf("  sumOrFiltersScores=%v\n", o.SumOrFiltersScores)
+	out += fmt.Sprintf("  restrictSearchableAttributes=%v\n", o.RestrictSearchableAttributes)
 	out += fmt.Sprintf("  facets=%v\n", o.Facets)
-	out += fmt.Sprintf("  maxValuesPerFacet=%v\n", o.MaxValuesPerFacet)
 	out += fmt.Sprintf("  facetingAfterDistinct=%v\n", o.FacetingAfterDistinct)
-	out += fmt.Sprintf("  sortFacetValuesBy=%v\n", o.SortFacetValuesBy)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
 	out += fmt.Sprintf("  offset=%v\n", o.Offset)
 	out += fmt.Sprintf("  length=%v\n", o.Length)
@@ -1566,13 +1508,13 @@ func (o BaseSearchParams) String() string {
 	out += fmt.Sprintf("  personalizationImpact=%v\n", o.PersonalizationImpact)
 	out += fmt.Sprintf("  userToken=%v\n", o.UserToken)
 	out += fmt.Sprintf("  getRankingInfo=%v\n", o.GetRankingInfo)
+	out += fmt.Sprintf("  explain=%v\n", o.Explain)
+	out += fmt.Sprintf("  synonyms=%v\n", o.Synonyms)
 	out += fmt.Sprintf("  clickAnalytics=%v\n", o.ClickAnalytics)
 	out += fmt.Sprintf("  analytics=%v\n", o.Analytics)
 	out += fmt.Sprintf("  analyticsTags=%v\n", o.AnalyticsTags)
 	out += fmt.Sprintf("  percentileComputation=%v\n", o.PercentileComputation)
 	out += fmt.Sprintf("  enableABTest=%v\n", o.EnableABTest)
-	out += fmt.Sprintf("  enableReRanking=%v\n", o.EnableReRanking)
-	out += fmt.Sprintf("  reRankingApplyFilter=%v\n", o.ReRankingApplyFilter)
 	return fmt.Sprintf("BaseSearchParams {\n%s}", out)
 }
 

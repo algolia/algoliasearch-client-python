@@ -3,12 +3,12 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'index_settings_as_search_params_semantic_search.g.dart';
+part 'semantic_search.g.dart';
 
 @JsonSerializable()
-final class IndexSettingsAsSearchParamsSemanticSearch {
-  /// Returns a new [IndexSettingsAsSearchParamsSemanticSearch] instance.
-  const IndexSettingsAsSearchParamsSemanticSearch({
+final class SemanticSearch {
+  /// Returns a new [SemanticSearch] instance.
+  const SemanticSearch({
     this.eventSources,
   });
 
@@ -19,18 +19,15 @@ final class IndexSettingsAsSearchParamsSemanticSearch {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IndexSettingsAsSearchParamsSemanticSearch &&
-          other.eventSources == eventSources;
+      other is SemanticSearch && other.eventSources == eventSources;
 
   @override
   int get hashCode => (eventSources == null ? 0 : eventSources.hashCode);
 
-  factory IndexSettingsAsSearchParamsSemanticSearch.fromJson(
-          Map<String, dynamic> json) =>
-      _$IndexSettingsAsSearchParamsSemanticSearchFromJson(json);
+  factory SemanticSearch.fromJson(Map<String, dynamic> json) =>
+      _$SemanticSearchFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$IndexSettingsAsSearchParamsSemanticSearchToJson(this);
+  Map<String, dynamic> toJson() => _$SemanticSearchToJson(this);
 
   @override
   String toString() {

@@ -29,7 +29,6 @@ import 'package:algolia_client_recommend/src/model/get_recommendations_params.da
 import 'package:algolia_client_recommend/src/model/get_recommendations_response.dart';
 import 'package:algolia_client_recommend/src/model/highlight_result_option.dart';
 import 'package:algolia_client_recommend/src/model/index_settings_as_search_params.dart';
-import 'package:algolia_client_recommend/src/model/index_settings_as_search_params_semantic_search.dart';
 import 'package:algolia_client_recommend/src/model/match_level.dart';
 import 'package:algolia_client_recommend/src/model/matched_geo_location.dart';
 import 'package:algolia_client_recommend/src/model/mode.dart';
@@ -55,6 +54,7 @@ import 'package:algolia_client_recommend/src/model/search_params_object.dart';
 import 'package:algolia_client_recommend/src/model/search_params_query.dart';
 import 'package:algolia_client_recommend/src/model/search_recommend_rules_params.dart';
 import 'package:algolia_client_recommend/src/model/search_recommend_rules_response.dart';
+import 'package:algolia_client_recommend/src/model/semantic_search.dart';
 import 'package:algolia_client_recommend/src/model/snippet_result_option.dart';
 import 'package:algolia_client_recommend/src/model/sort_remaining_by.dart';
 import 'package:algolia_client_recommend/src/model/task_status.dart';
@@ -163,9 +163,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'IndexSettingsAsSearchParams':
       return IndexSettingsAsSearchParams.fromJson(value as Map<String, dynamic>)
           as ReturnType;
-    case 'IndexSettingsAsSearchParamsSemanticSearch':
-      return IndexSettingsAsSearchParamsSemanticSearch.fromJson(
-          value as Map<String, dynamic>) as ReturnType;
     case 'MatchLevel':
       return MatchLevel.fromJson(value) as ReturnType;
     case 'MatchedGeoLocation':
@@ -231,6 +228,9 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'SearchRecommendRulesResponse':
       return SearchRecommendRulesResponse.fromJson(
           value as Map<String, dynamic>) as ReturnType;
+    case 'SemanticSearch':
+      return SemanticSearch.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'SnippetResultOption':
       return SnippetResultOption.fromJson(value as Map<String, dynamic>)
           as ReturnType;

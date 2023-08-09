@@ -35,17 +35,14 @@ public class BaseSearchParams {
   @JsonProperty("sumOrFiltersScores")
   private Boolean sumOrFiltersScores;
 
+  @JsonProperty("restrictSearchableAttributes")
+  private List<String> restrictSearchableAttributes;
+
   @JsonProperty("facets")
   private List<String> facets;
 
-  @JsonProperty("maxValuesPerFacet")
-  private Integer maxValuesPerFacet;
-
   @JsonProperty("facetingAfterDistinct")
   private Boolean facetingAfterDistinct;
-
-  @JsonProperty("sortFacetValuesBy")
-  private String sortFacetValuesBy;
 
   @JsonProperty("page")
   private Integer page;
@@ -92,6 +89,12 @@ public class BaseSearchParams {
   @JsonProperty("getRankingInfo")
   private Boolean getRankingInfo;
 
+  @JsonProperty("explain")
+  private List<String> explain;
+
+  @JsonProperty("synonyms")
+  private Boolean synonyms;
+
   @JsonProperty("clickAnalytics")
   private Boolean clickAnalytics;
 
@@ -106,12 +109,6 @@ public class BaseSearchParams {
 
   @JsonProperty("enableABTest")
   private Boolean enableABTest;
-
-  @JsonProperty("enableReRanking")
-  private Boolean enableReRanking;
-
-  @JsonProperty("reRankingApplyFilter")
-  private ReRankingApplyFilter reRankingApplyFilter;
 
   public BaseSearchParams setQuery(String query) {
     this.query = query;
@@ -236,6 +233,30 @@ public class BaseSearchParams {
     return sumOrFiltersScores;
   }
 
+  public BaseSearchParams setRestrictSearchableAttributes(List<String> restrictSearchableAttributes) {
+    this.restrictSearchableAttributes = restrictSearchableAttributes;
+    return this;
+  }
+
+  public BaseSearchParams addRestrictSearchableAttributes(String restrictSearchableAttributesItem) {
+    if (this.restrictSearchableAttributes == null) {
+      this.restrictSearchableAttributes = new ArrayList<>();
+    }
+    this.restrictSearchableAttributes.add(restrictSearchableAttributesItem);
+    return this;
+  }
+
+  /**
+   * Restricts a query to only look at a subset of your [searchable
+   * attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
+   *
+   * @return restrictSearchableAttributes
+   */
+  @javax.annotation.Nullable
+  public List<String> getRestrictSearchableAttributes() {
+    return restrictSearchableAttributes;
+  }
+
   public BaseSearchParams setFacets(List<String> facets) {
     this.facets = facets;
     return this;
@@ -261,21 +282,6 @@ public class BaseSearchParams {
     return facets;
   }
 
-  public BaseSearchParams setMaxValuesPerFacet(Integer maxValuesPerFacet) {
-    this.maxValuesPerFacet = maxValuesPerFacet;
-    return this;
-  }
-
-  /**
-   * Maximum number of facet values to return for each facet.
-   *
-   * @return maxValuesPerFacet
-   */
-  @javax.annotation.Nullable
-  public Integer getMaxValuesPerFacet() {
-    return maxValuesPerFacet;
-  }
-
   public BaseSearchParams setFacetingAfterDistinct(Boolean facetingAfterDistinct) {
     this.facetingAfterDistinct = facetingAfterDistinct;
     return this;
@@ -293,21 +299,6 @@ public class BaseSearchParams {
   @javax.annotation.Nullable
   public Boolean getFacetingAfterDistinct() {
     return facetingAfterDistinct;
-  }
-
-  public BaseSearchParams setSortFacetValuesBy(String sortFacetValuesBy) {
-    this.sortFacetValuesBy = sortFacetValuesBy;
-    return this;
-  }
-
-  /**
-   * Controls how facet values are fetched.
-   *
-   * @return sortFacetValuesBy
-   */
-  @javax.annotation.Nullable
-  public String getSortFacetValuesBy() {
-    return sortFacetValuesBy;
   }
 
   public BaseSearchParams setPage(Integer page) {
@@ -593,6 +584,44 @@ public class BaseSearchParams {
     return getRankingInfo;
   }
 
+  public BaseSearchParams setExplain(List<String> explain) {
+    this.explain = explain;
+    return this;
+  }
+
+  public BaseSearchParams addExplain(String explainItem) {
+    if (this.explain == null) {
+      this.explain = new ArrayList<>();
+    }
+    this.explain.add(explainItem);
+    return this;
+  }
+
+  /**
+   * Enriches the API's response with information about how the query was processed.
+   *
+   * @return explain
+   */
+  @javax.annotation.Nullable
+  public List<String> getExplain() {
+    return explain;
+  }
+
+  public BaseSearchParams setSynonyms(Boolean synonyms) {
+    this.synonyms = synonyms;
+    return this;
+  }
+
+  /**
+   * Whether to take into account an index's synonyms for a particular search.
+   *
+   * @return synonyms
+   */
+  @javax.annotation.Nullable
+  public Boolean getSynonyms() {
+    return synonyms;
+  }
+
   public BaseSearchParams setClickAnalytics(Boolean clickAnalytics) {
     this.clickAnalytics = clickAnalytics;
     return this;
@@ -680,37 +709,6 @@ public class BaseSearchParams {
     return enableABTest;
   }
 
-  public BaseSearchParams setEnableReRanking(Boolean enableReRanking) {
-    this.enableReRanking = enableReRanking;
-    return this;
-  }
-
-  /**
-   * Indicates whether this search will use [Dynamic
-   * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-   *
-   * @return enableReRanking
-   */
-  @javax.annotation.Nullable
-  public Boolean getEnableReRanking() {
-    return enableReRanking;
-  }
-
-  public BaseSearchParams setReRankingApplyFilter(ReRankingApplyFilter reRankingApplyFilter) {
-    this.reRankingApplyFilter = reRankingApplyFilter;
-    return this;
-  }
-
-  /**
-   * Get reRankingApplyFilter
-   *
-   * @return reRankingApplyFilter
-   */
-  @javax.annotation.Nullable
-  public ReRankingApplyFilter getReRankingApplyFilter() {
-    return reRankingApplyFilter;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -729,10 +727,9 @@ public class BaseSearchParams {
       Objects.equals(this.numericFilters, baseSearchParams.numericFilters) &&
       Objects.equals(this.tagFilters, baseSearchParams.tagFilters) &&
       Objects.equals(this.sumOrFiltersScores, baseSearchParams.sumOrFiltersScores) &&
+      Objects.equals(this.restrictSearchableAttributes, baseSearchParams.restrictSearchableAttributes) &&
       Objects.equals(this.facets, baseSearchParams.facets) &&
-      Objects.equals(this.maxValuesPerFacet, baseSearchParams.maxValuesPerFacet) &&
       Objects.equals(this.facetingAfterDistinct, baseSearchParams.facetingAfterDistinct) &&
-      Objects.equals(this.sortFacetValuesBy, baseSearchParams.sortFacetValuesBy) &&
       Objects.equals(this.page, baseSearchParams.page) &&
       Objects.equals(this.offset, baseSearchParams.offset) &&
       Objects.equals(this.length, baseSearchParams.length) &&
@@ -748,13 +745,13 @@ public class BaseSearchParams {
       Objects.equals(this.personalizationImpact, baseSearchParams.personalizationImpact) &&
       Objects.equals(this.userToken, baseSearchParams.userToken) &&
       Objects.equals(this.getRankingInfo, baseSearchParams.getRankingInfo) &&
+      Objects.equals(this.explain, baseSearchParams.explain) &&
+      Objects.equals(this.synonyms, baseSearchParams.synonyms) &&
       Objects.equals(this.clickAnalytics, baseSearchParams.clickAnalytics) &&
       Objects.equals(this.analytics, baseSearchParams.analytics) &&
       Objects.equals(this.analyticsTags, baseSearchParams.analyticsTags) &&
       Objects.equals(this.percentileComputation, baseSearchParams.percentileComputation) &&
-      Objects.equals(this.enableABTest, baseSearchParams.enableABTest) &&
-      Objects.equals(this.enableReRanking, baseSearchParams.enableReRanking) &&
-      Objects.equals(this.reRankingApplyFilter, baseSearchParams.reRankingApplyFilter)
+      Objects.equals(this.enableABTest, baseSearchParams.enableABTest)
     );
   }
 
@@ -769,10 +766,9 @@ public class BaseSearchParams {
       numericFilters,
       tagFilters,
       sumOrFiltersScores,
+      restrictSearchableAttributes,
       facets,
-      maxValuesPerFacet,
       facetingAfterDistinct,
-      sortFacetValuesBy,
       page,
       offset,
       length,
@@ -788,13 +784,13 @@ public class BaseSearchParams {
       personalizationImpact,
       userToken,
       getRankingInfo,
+      explain,
+      synonyms,
       clickAnalytics,
       analytics,
       analyticsTags,
       percentileComputation,
-      enableABTest,
-      enableReRanking,
-      reRankingApplyFilter
+      enableABTest
     );
   }
 
@@ -810,10 +806,9 @@ public class BaseSearchParams {
     sb.append("    numericFilters: ").append(toIndentedString(numericFilters)).append("\n");
     sb.append("    tagFilters: ").append(toIndentedString(tagFilters)).append("\n");
     sb.append("    sumOrFiltersScores: ").append(toIndentedString(sumOrFiltersScores)).append("\n");
+    sb.append("    restrictSearchableAttributes: ").append(toIndentedString(restrictSearchableAttributes)).append("\n");
     sb.append("    facets: ").append(toIndentedString(facets)).append("\n");
-    sb.append("    maxValuesPerFacet: ").append(toIndentedString(maxValuesPerFacet)).append("\n");
     sb.append("    facetingAfterDistinct: ").append(toIndentedString(facetingAfterDistinct)).append("\n");
-    sb.append("    sortFacetValuesBy: ").append(toIndentedString(sortFacetValuesBy)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
     sb.append("    length: ").append(toIndentedString(length)).append("\n");
@@ -829,13 +824,13 @@ public class BaseSearchParams {
     sb.append("    personalizationImpact: ").append(toIndentedString(personalizationImpact)).append("\n");
     sb.append("    userToken: ").append(toIndentedString(userToken)).append("\n");
     sb.append("    getRankingInfo: ").append(toIndentedString(getRankingInfo)).append("\n");
+    sb.append("    explain: ").append(toIndentedString(explain)).append("\n");
+    sb.append("    synonyms: ").append(toIndentedString(synonyms)).append("\n");
     sb.append("    clickAnalytics: ").append(toIndentedString(clickAnalytics)).append("\n");
     sb.append("    analytics: ").append(toIndentedString(analytics)).append("\n");
     sb.append("    analyticsTags: ").append(toIndentedString(analyticsTags)).append("\n");
     sb.append("    percentileComputation: ").append(toIndentedString(percentileComputation)).append("\n");
     sb.append("    enableABTest: ").append(toIndentedString(enableABTest)).append("\n");
-    sb.append("    enableReRanking: ").append(toIndentedString(enableReRanking)).append("\n");
-    sb.append("    reRankingApplyFilter: ").append(toIndentedString(reRankingApplyFilter)).append("\n");
     sb.append("}");
     return sb.toString();
   }

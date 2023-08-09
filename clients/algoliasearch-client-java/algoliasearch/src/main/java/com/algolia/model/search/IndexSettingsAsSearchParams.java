@@ -17,9 +17,6 @@ public class IndexSettingsAsSearchParams {
   @JsonProperty("attributesToRetrieve")
   private List<String> attributesToRetrieve;
 
-  @JsonProperty("restrictSearchableAttributes")
-  private List<String> restrictSearchableAttributes;
-
   @JsonProperty("ranking")
   private List<String> ranking;
 
@@ -96,7 +93,7 @@ public class IndexSettingsAsSearchParams {
   private Mode mode;
 
   @JsonProperty("semanticSearch")
-  private IndexSettingsAsSearchParamsSemanticSearch semanticSearch;
+  private SemanticSearch semanticSearch;
 
   @JsonProperty("advancedSyntax")
   private Boolean advancedSyntax;
@@ -116,17 +113,11 @@ public class IndexSettingsAsSearchParams {
   @JsonProperty("advancedSyntaxFeatures")
   private List<AdvancedSyntaxFeatures> advancedSyntaxFeatures;
 
-  @JsonProperty("explain")
-  private List<String> explain;
-
   @JsonProperty("distinct")
   private Distinct distinct;
 
   @JsonProperty("attributeForDistinct")
   private String attributeForDistinct;
-
-  @JsonProperty("synonyms")
-  private Boolean synonyms;
 
   @JsonProperty("replaceSynonymsInHighlight")
   private Boolean replaceSynonymsInHighlight;
@@ -140,11 +131,23 @@ public class IndexSettingsAsSearchParams {
   @JsonProperty("maxFacetHits")
   private Integer maxFacetHits;
 
+  @JsonProperty("maxValuesPerFacet")
+  private Integer maxValuesPerFacet;
+
+  @JsonProperty("sortFacetValuesBy")
+  private String sortFacetValuesBy;
+
   @JsonProperty("attributeCriteriaComputedByMinProximity")
   private Boolean attributeCriteriaComputedByMinProximity;
 
   @JsonProperty("renderingContent")
   private RenderingContent renderingContent;
+
+  @JsonProperty("enableReRanking")
+  private Boolean enableReRanking;
+
+  @JsonProperty("reRankingApplyFilter")
+  private ReRankingApplyFilter reRankingApplyFilter;
 
   public IndexSettingsAsSearchParams setAttributesForFaceting(List<String> attributesForFaceting) {
     this.attributesForFaceting = attributesForFaceting;
@@ -195,30 +198,6 @@ public class IndexSettingsAsSearchParams {
   @javax.annotation.Nullable
   public List<String> getAttributesToRetrieve() {
     return attributesToRetrieve;
-  }
-
-  public IndexSettingsAsSearchParams setRestrictSearchableAttributes(List<String> restrictSearchableAttributes) {
-    this.restrictSearchableAttributes = restrictSearchableAttributes;
-    return this;
-  }
-
-  public IndexSettingsAsSearchParams addRestrictSearchableAttributes(String restrictSearchableAttributesItem) {
-    if (this.restrictSearchableAttributes == null) {
-      this.restrictSearchableAttributes = new ArrayList<>();
-    }
-    this.restrictSearchableAttributes.add(restrictSearchableAttributesItem);
-    return this;
-  }
-
-  /**
-   * Restricts a query to only look at a subset of your [searchable
-   * attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
-   *
-   * @return restrictSearchableAttributes
-   */
-  @javax.annotation.Nullable
-  public List<String> getRestrictSearchableAttributes() {
-    return restrictSearchableAttributes;
   }
 
   public IndexSettingsAsSearchParams setRanking(List<String> ranking) {
@@ -664,7 +643,7 @@ public class IndexSettingsAsSearchParams {
     return mode;
   }
 
-  public IndexSettingsAsSearchParams setSemanticSearch(IndexSettingsAsSearchParamsSemanticSearch semanticSearch) {
+  public IndexSettingsAsSearchParams setSemanticSearch(SemanticSearch semanticSearch) {
     this.semanticSearch = semanticSearch;
     return this;
   }
@@ -675,7 +654,7 @@ public class IndexSettingsAsSearchParams {
    * @return semanticSearch
    */
   @javax.annotation.Nullable
-  public IndexSettingsAsSearchParamsSemanticSearch getSemanticSearch() {
+  public SemanticSearch getSemanticSearch() {
     return semanticSearch;
   }
 
@@ -807,29 +786,6 @@ public class IndexSettingsAsSearchParams {
     return advancedSyntaxFeatures;
   }
 
-  public IndexSettingsAsSearchParams setExplain(List<String> explain) {
-    this.explain = explain;
-    return this;
-  }
-
-  public IndexSettingsAsSearchParams addExplain(String explainItem) {
-    if (this.explain == null) {
-      this.explain = new ArrayList<>();
-    }
-    this.explain.add(explainItem);
-    return this;
-  }
-
-  /**
-   * Enriches the API's response with information about how the query was processed.
-   *
-   * @return explain
-   */
-  @javax.annotation.Nullable
-  public List<String> getExplain() {
-    return explain;
-  }
-
   public IndexSettingsAsSearchParams setDistinct(Distinct distinct) {
     this.distinct = distinct;
     return this;
@@ -859,21 +815,6 @@ public class IndexSettingsAsSearchParams {
   @javax.annotation.Nullable
   public String getAttributeForDistinct() {
     return attributeForDistinct;
-  }
-
-  public IndexSettingsAsSearchParams setSynonyms(Boolean synonyms) {
-    this.synonyms = synonyms;
-    return this;
-  }
-
-  /**
-   * Whether to take into account an index's synonyms for a particular search.
-   *
-   * @return synonyms
-   */
-  @javax.annotation.Nullable
-  public Boolean getSynonyms() {
-    return synonyms;
   }
 
   public IndexSettingsAsSearchParams setReplaceSynonymsInHighlight(Boolean replaceSynonymsInHighlight) {
@@ -949,6 +890,36 @@ public class IndexSettingsAsSearchParams {
     return maxFacetHits;
   }
 
+  public IndexSettingsAsSearchParams setMaxValuesPerFacet(Integer maxValuesPerFacet) {
+    this.maxValuesPerFacet = maxValuesPerFacet;
+    return this;
+  }
+
+  /**
+   * Maximum number of facet values to return for each facet.
+   *
+   * @return maxValuesPerFacet
+   */
+  @javax.annotation.Nullable
+  public Integer getMaxValuesPerFacet() {
+    return maxValuesPerFacet;
+  }
+
+  public IndexSettingsAsSearchParams setSortFacetValuesBy(String sortFacetValuesBy) {
+    this.sortFacetValuesBy = sortFacetValuesBy;
+    return this;
+  }
+
+  /**
+   * Controls how facet values are fetched.
+   *
+   * @return sortFacetValuesBy
+   */
+  @javax.annotation.Nullable
+  public String getSortFacetValuesBy() {
+    return sortFacetValuesBy;
+  }
+
   public IndexSettingsAsSearchParams setAttributeCriteriaComputedByMinProximity(Boolean attributeCriteriaComputedByMinProximity) {
     this.attributeCriteriaComputedByMinProximity = attributeCriteriaComputedByMinProximity;
     return this;
@@ -982,6 +953,37 @@ public class IndexSettingsAsSearchParams {
     return renderingContent;
   }
 
+  public IndexSettingsAsSearchParams setEnableReRanking(Boolean enableReRanking) {
+    this.enableReRanking = enableReRanking;
+    return this;
+  }
+
+  /**
+   * Indicates whether this search will use [Dynamic
+   * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+   *
+   * @return enableReRanking
+   */
+  @javax.annotation.Nullable
+  public Boolean getEnableReRanking() {
+    return enableReRanking;
+  }
+
+  public IndexSettingsAsSearchParams setReRankingApplyFilter(ReRankingApplyFilter reRankingApplyFilter) {
+    this.reRankingApplyFilter = reRankingApplyFilter;
+    return this;
+  }
+
+  /**
+   * Get reRankingApplyFilter
+   *
+   * @return reRankingApplyFilter
+   */
+  @javax.annotation.Nullable
+  public ReRankingApplyFilter getReRankingApplyFilter() {
+    return reRankingApplyFilter;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -994,7 +996,6 @@ public class IndexSettingsAsSearchParams {
     return (
       Objects.equals(this.attributesForFaceting, indexSettingsAsSearchParams.attributesForFaceting) &&
       Objects.equals(this.attributesToRetrieve, indexSettingsAsSearchParams.attributesToRetrieve) &&
-      Objects.equals(this.restrictSearchableAttributes, indexSettingsAsSearchParams.restrictSearchableAttributes) &&
       Objects.equals(this.ranking, indexSettingsAsSearchParams.ranking) &&
       Objects.equals(this.customRanking, indexSettingsAsSearchParams.customRanking) &&
       Objects.equals(this.relevancyStrictness, indexSettingsAsSearchParams.relevancyStrictness) &&
@@ -1027,16 +1028,18 @@ public class IndexSettingsAsSearchParams {
       Objects.equals(this.exactOnSingleWordQuery, indexSettingsAsSearchParams.exactOnSingleWordQuery) &&
       Objects.equals(this.alternativesAsExact, indexSettingsAsSearchParams.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, indexSettingsAsSearchParams.advancedSyntaxFeatures) &&
-      Objects.equals(this.explain, indexSettingsAsSearchParams.explain) &&
       Objects.equals(this.distinct, indexSettingsAsSearchParams.distinct) &&
       Objects.equals(this.attributeForDistinct, indexSettingsAsSearchParams.attributeForDistinct) &&
-      Objects.equals(this.synonyms, indexSettingsAsSearchParams.synonyms) &&
       Objects.equals(this.replaceSynonymsInHighlight, indexSettingsAsSearchParams.replaceSynonymsInHighlight) &&
       Objects.equals(this.minProximity, indexSettingsAsSearchParams.minProximity) &&
       Objects.equals(this.responseFields, indexSettingsAsSearchParams.responseFields) &&
       Objects.equals(this.maxFacetHits, indexSettingsAsSearchParams.maxFacetHits) &&
+      Objects.equals(this.maxValuesPerFacet, indexSettingsAsSearchParams.maxValuesPerFacet) &&
+      Objects.equals(this.sortFacetValuesBy, indexSettingsAsSearchParams.sortFacetValuesBy) &&
       Objects.equals(this.attributeCriteriaComputedByMinProximity, indexSettingsAsSearchParams.attributeCriteriaComputedByMinProximity) &&
-      Objects.equals(this.renderingContent, indexSettingsAsSearchParams.renderingContent)
+      Objects.equals(this.renderingContent, indexSettingsAsSearchParams.renderingContent) &&
+      Objects.equals(this.enableReRanking, indexSettingsAsSearchParams.enableReRanking) &&
+      Objects.equals(this.reRankingApplyFilter, indexSettingsAsSearchParams.reRankingApplyFilter)
     );
   }
 
@@ -1045,7 +1048,6 @@ public class IndexSettingsAsSearchParams {
     return Objects.hash(
       attributesForFaceting,
       attributesToRetrieve,
-      restrictSearchableAttributes,
       ranking,
       customRanking,
       relevancyStrictness,
@@ -1078,16 +1080,18 @@ public class IndexSettingsAsSearchParams {
       exactOnSingleWordQuery,
       alternativesAsExact,
       advancedSyntaxFeatures,
-      explain,
       distinct,
       attributeForDistinct,
-      synonyms,
       replaceSynonymsInHighlight,
       minProximity,
       responseFields,
       maxFacetHits,
+      maxValuesPerFacet,
+      sortFacetValuesBy,
       attributeCriteriaComputedByMinProximity,
-      renderingContent
+      renderingContent,
+      enableReRanking,
+      reRankingApplyFilter
     );
   }
 
@@ -1097,7 +1101,6 @@ public class IndexSettingsAsSearchParams {
     sb.append("class IndexSettingsAsSearchParams {\n");
     sb.append("    attributesForFaceting: ").append(toIndentedString(attributesForFaceting)).append("\n");
     sb.append("    attributesToRetrieve: ").append(toIndentedString(attributesToRetrieve)).append("\n");
-    sb.append("    restrictSearchableAttributes: ").append(toIndentedString(restrictSearchableAttributes)).append("\n");
     sb.append("    ranking: ").append(toIndentedString(ranking)).append("\n");
     sb.append("    customRanking: ").append(toIndentedString(customRanking)).append("\n");
     sb.append("    relevancyStrictness: ").append(toIndentedString(relevancyStrictness)).append("\n");
@@ -1130,19 +1133,21 @@ public class IndexSettingsAsSearchParams {
     sb.append("    exactOnSingleWordQuery: ").append(toIndentedString(exactOnSingleWordQuery)).append("\n");
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
-    sb.append("    explain: ").append(toIndentedString(explain)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
     sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
-    sb.append("    synonyms: ").append(toIndentedString(synonyms)).append("\n");
     sb.append("    replaceSynonymsInHighlight: ").append(toIndentedString(replaceSynonymsInHighlight)).append("\n");
     sb.append("    minProximity: ").append(toIndentedString(minProximity)).append("\n");
     sb.append("    responseFields: ").append(toIndentedString(responseFields)).append("\n");
     sb.append("    maxFacetHits: ").append(toIndentedString(maxFacetHits)).append("\n");
+    sb.append("    maxValuesPerFacet: ").append(toIndentedString(maxValuesPerFacet)).append("\n");
+    sb.append("    sortFacetValuesBy: ").append(toIndentedString(sortFacetValuesBy)).append("\n");
     sb
       .append("    attributeCriteriaComputedByMinProximity: ")
       .append(toIndentedString(attributeCriteriaComputedByMinProximity))
       .append("\n");
     sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
+    sb.append("    enableReRanking: ").append(toIndentedString(enableReRanking)).append("\n");
+    sb.append("    reRankingApplyFilter: ").append(toIndentedString(reRankingApplyFilter)).append("\n");
     sb.append("}");
     return sb.toString();
   }

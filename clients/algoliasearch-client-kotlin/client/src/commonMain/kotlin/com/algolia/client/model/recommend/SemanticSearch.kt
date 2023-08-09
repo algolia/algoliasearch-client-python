@@ -10,7 +10,7 @@ import kotlinx.serialization.json.*
  * @param eventSources Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.
  */
 @Serializable
-public data class IndexSettingsAsSearchParamsSemanticSearch(
+public data class SemanticSearch(
 
   /** Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source. */
   @SerialName(value = "eventSources") val eventSources: List<String>? = null,

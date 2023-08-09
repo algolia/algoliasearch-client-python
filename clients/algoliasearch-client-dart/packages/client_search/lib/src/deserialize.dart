@@ -65,7 +65,6 @@ import 'package:algolia_client_search/src/model/highlight_result_option.dart';
 import 'package:algolia_client_search/src/model/hit.dart';
 import 'package:algolia_client_search/src/model/index_settings.dart';
 import 'package:algolia_client_search/src/model/index_settings_as_search_params.dart';
-import 'package:algolia_client_search/src/model/index_settings_as_search_params_semantic_search.dart';
 import 'package:algolia_client_search/src/model/languages.dart';
 import 'package:algolia_client_search/src/model/list_api_keys_response.dart';
 import 'package:algolia_client_search/src/model/list_clusters_response.dart';
@@ -120,6 +119,7 @@ import 'package:algolia_client_search/src/model/search_type_default.dart';
 import 'package:algolia_client_search/src/model/search_type_facet.dart';
 import 'package:algolia_client_search/src/model/search_user_ids_params.dart';
 import 'package:algolia_client_search/src/model/search_user_ids_response.dart';
+import 'package:algolia_client_search/src/model/semantic_search.dart';
 import 'package:algolia_client_search/src/model/snippet_result_option.dart';
 import 'package:algolia_client_search/src/model/sort_remaining_by.dart';
 import 'package:algolia_client_search/src/model/source.dart';
@@ -333,9 +333,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'IndexSettingsAsSearchParams':
       return IndexSettingsAsSearchParams.fromJson(value as Map<String, dynamic>)
           as ReturnType;
-    case 'IndexSettingsAsSearchParamsSemanticSearch':
-      return IndexSettingsAsSearchParamsSemanticSearch.fromJson(
-          value as Map<String, dynamic>) as ReturnType;
     case 'Languages':
       return Languages.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'ListApiKeysResponse':
@@ -480,6 +477,9 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
           as ReturnType;
     case 'SearchUserIdsResponse':
       return SearchUserIdsResponse.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'SemanticSearch':
+      return SemanticSearch.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'SnippetResultOption':
       return SnippetResultOption.fromJson(value as Map<String, dynamic>)

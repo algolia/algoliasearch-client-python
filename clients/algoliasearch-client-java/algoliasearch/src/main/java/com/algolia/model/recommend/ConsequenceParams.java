@@ -32,17 +32,14 @@ public class ConsequenceParams {
   @JsonProperty("sumOrFiltersScores")
   private Boolean sumOrFiltersScores;
 
+  @JsonProperty("restrictSearchableAttributes")
+  private List<String> restrictSearchableAttributes;
+
   @JsonProperty("facets")
   private List<String> facets;
 
-  @JsonProperty("maxValuesPerFacet")
-  private Integer maxValuesPerFacet;
-
   @JsonProperty("facetingAfterDistinct")
   private Boolean facetingAfterDistinct;
-
-  @JsonProperty("sortFacetValuesBy")
-  private String sortFacetValuesBy;
 
   @JsonProperty("page")
   private Integer page;
@@ -89,6 +86,12 @@ public class ConsequenceParams {
   @JsonProperty("getRankingInfo")
   private Boolean getRankingInfo;
 
+  @JsonProperty("explain")
+  private List<String> explain;
+
+  @JsonProperty("synonyms")
+  private Boolean synonyms;
+
   @JsonProperty("clickAnalytics")
   private Boolean clickAnalytics;
 
@@ -104,20 +107,11 @@ public class ConsequenceParams {
   @JsonProperty("enableABTest")
   private Boolean enableABTest;
 
-  @JsonProperty("enableReRanking")
-  private Boolean enableReRanking;
-
-  @JsonProperty("reRankingApplyFilter")
-  private ReRankingApplyFilter reRankingApplyFilter;
-
   @JsonProperty("attributesForFaceting")
   private List<String> attributesForFaceting;
 
   @JsonProperty("attributesToRetrieve")
   private List<String> attributesToRetrieve;
-
-  @JsonProperty("restrictSearchableAttributes")
-  private List<String> restrictSearchableAttributes;
 
   @JsonProperty("ranking")
   private List<String> ranking;
@@ -195,7 +189,7 @@ public class ConsequenceParams {
   private Mode mode;
 
   @JsonProperty("semanticSearch")
-  private IndexSettingsAsSearchParamsSemanticSearch semanticSearch;
+  private SemanticSearch semanticSearch;
 
   @JsonProperty("advancedSyntax")
   private Boolean advancedSyntax;
@@ -215,17 +209,11 @@ public class ConsequenceParams {
   @JsonProperty("advancedSyntaxFeatures")
   private List<AdvancedSyntaxFeatures> advancedSyntaxFeatures;
 
-  @JsonProperty("explain")
-  private List<String> explain;
-
   @JsonProperty("distinct")
   private Distinct distinct;
 
   @JsonProperty("attributeForDistinct")
   private String attributeForDistinct;
-
-  @JsonProperty("synonyms")
-  private Boolean synonyms;
 
   @JsonProperty("replaceSynonymsInHighlight")
   private Boolean replaceSynonymsInHighlight;
@@ -239,11 +227,23 @@ public class ConsequenceParams {
   @JsonProperty("maxFacetHits")
   private Integer maxFacetHits;
 
+  @JsonProperty("maxValuesPerFacet")
+  private Integer maxValuesPerFacet;
+
+  @JsonProperty("sortFacetValuesBy")
+  private String sortFacetValuesBy;
+
   @JsonProperty("attributeCriteriaComputedByMinProximity")
   private Boolean attributeCriteriaComputedByMinProximity;
 
   @JsonProperty("renderingContent")
   private RenderingContent renderingContent;
+
+  @JsonProperty("enableReRanking")
+  private Boolean enableReRanking;
+
+  @JsonProperty("reRankingApplyFilter")
+  private ReRankingApplyFilter reRankingApplyFilter;
 
   @JsonProperty("query")
   private ConsequenceQuery query;
@@ -362,6 +362,30 @@ public class ConsequenceParams {
     return sumOrFiltersScores;
   }
 
+  public ConsequenceParams setRestrictSearchableAttributes(List<String> restrictSearchableAttributes) {
+    this.restrictSearchableAttributes = restrictSearchableAttributes;
+    return this;
+  }
+
+  public ConsequenceParams addRestrictSearchableAttributes(String restrictSearchableAttributesItem) {
+    if (this.restrictSearchableAttributes == null) {
+      this.restrictSearchableAttributes = new ArrayList<>();
+    }
+    this.restrictSearchableAttributes.add(restrictSearchableAttributesItem);
+    return this;
+  }
+
+  /**
+   * Restricts a query to only look at a subset of your [searchable
+   * attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
+   *
+   * @return restrictSearchableAttributes
+   */
+  @javax.annotation.Nullable
+  public List<String> getRestrictSearchableAttributes() {
+    return restrictSearchableAttributes;
+  }
+
   public ConsequenceParams setFacets(List<String> facets) {
     this.facets = facets;
     return this;
@@ -387,21 +411,6 @@ public class ConsequenceParams {
     return facets;
   }
 
-  public ConsequenceParams setMaxValuesPerFacet(Integer maxValuesPerFacet) {
-    this.maxValuesPerFacet = maxValuesPerFacet;
-    return this;
-  }
-
-  /**
-   * Maximum number of facet values to return for each facet.
-   *
-   * @return maxValuesPerFacet
-   */
-  @javax.annotation.Nullable
-  public Integer getMaxValuesPerFacet() {
-    return maxValuesPerFacet;
-  }
-
   public ConsequenceParams setFacetingAfterDistinct(Boolean facetingAfterDistinct) {
     this.facetingAfterDistinct = facetingAfterDistinct;
     return this;
@@ -419,21 +428,6 @@ public class ConsequenceParams {
   @javax.annotation.Nullable
   public Boolean getFacetingAfterDistinct() {
     return facetingAfterDistinct;
-  }
-
-  public ConsequenceParams setSortFacetValuesBy(String sortFacetValuesBy) {
-    this.sortFacetValuesBy = sortFacetValuesBy;
-    return this;
-  }
-
-  /**
-   * Controls how facet values are fetched.
-   *
-   * @return sortFacetValuesBy
-   */
-  @javax.annotation.Nullable
-  public String getSortFacetValuesBy() {
-    return sortFacetValuesBy;
   }
 
   public ConsequenceParams setPage(Integer page) {
@@ -719,6 +713,44 @@ public class ConsequenceParams {
     return getRankingInfo;
   }
 
+  public ConsequenceParams setExplain(List<String> explain) {
+    this.explain = explain;
+    return this;
+  }
+
+  public ConsequenceParams addExplain(String explainItem) {
+    if (this.explain == null) {
+      this.explain = new ArrayList<>();
+    }
+    this.explain.add(explainItem);
+    return this;
+  }
+
+  /**
+   * Enriches the API's response with information about how the query was processed.
+   *
+   * @return explain
+   */
+  @javax.annotation.Nullable
+  public List<String> getExplain() {
+    return explain;
+  }
+
+  public ConsequenceParams setSynonyms(Boolean synonyms) {
+    this.synonyms = synonyms;
+    return this;
+  }
+
+  /**
+   * Whether to take into account an index's synonyms for a particular search.
+   *
+   * @return synonyms
+   */
+  @javax.annotation.Nullable
+  public Boolean getSynonyms() {
+    return synonyms;
+  }
+
   public ConsequenceParams setClickAnalytics(Boolean clickAnalytics) {
     this.clickAnalytics = clickAnalytics;
     return this;
@@ -806,37 +838,6 @@ public class ConsequenceParams {
     return enableABTest;
   }
 
-  public ConsequenceParams setEnableReRanking(Boolean enableReRanking) {
-    this.enableReRanking = enableReRanking;
-    return this;
-  }
-
-  /**
-   * Indicates whether this search will use [Dynamic
-   * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-   *
-   * @return enableReRanking
-   */
-  @javax.annotation.Nullable
-  public Boolean getEnableReRanking() {
-    return enableReRanking;
-  }
-
-  public ConsequenceParams setReRankingApplyFilter(ReRankingApplyFilter reRankingApplyFilter) {
-    this.reRankingApplyFilter = reRankingApplyFilter;
-    return this;
-  }
-
-  /**
-   * Get reRankingApplyFilter
-   *
-   * @return reRankingApplyFilter
-   */
-  @javax.annotation.Nullable
-  public ReRankingApplyFilter getReRankingApplyFilter() {
-    return reRankingApplyFilter;
-  }
-
   public ConsequenceParams setAttributesForFaceting(List<String> attributesForFaceting) {
     this.attributesForFaceting = attributesForFaceting;
     return this;
@@ -886,30 +887,6 @@ public class ConsequenceParams {
   @javax.annotation.Nullable
   public List<String> getAttributesToRetrieve() {
     return attributesToRetrieve;
-  }
-
-  public ConsequenceParams setRestrictSearchableAttributes(List<String> restrictSearchableAttributes) {
-    this.restrictSearchableAttributes = restrictSearchableAttributes;
-    return this;
-  }
-
-  public ConsequenceParams addRestrictSearchableAttributes(String restrictSearchableAttributesItem) {
-    if (this.restrictSearchableAttributes == null) {
-      this.restrictSearchableAttributes = new ArrayList<>();
-    }
-    this.restrictSearchableAttributes.add(restrictSearchableAttributesItem);
-    return this;
-  }
-
-  /**
-   * Restricts a query to only look at a subset of your [searchable
-   * attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
-   *
-   * @return restrictSearchableAttributes
-   */
-  @javax.annotation.Nullable
-  public List<String> getRestrictSearchableAttributes() {
-    return restrictSearchableAttributes;
   }
 
   public ConsequenceParams setRanking(List<String> ranking) {
@@ -1355,7 +1332,7 @@ public class ConsequenceParams {
     return mode;
   }
 
-  public ConsequenceParams setSemanticSearch(IndexSettingsAsSearchParamsSemanticSearch semanticSearch) {
+  public ConsequenceParams setSemanticSearch(SemanticSearch semanticSearch) {
     this.semanticSearch = semanticSearch;
     return this;
   }
@@ -1366,7 +1343,7 @@ public class ConsequenceParams {
    * @return semanticSearch
    */
   @javax.annotation.Nullable
-  public IndexSettingsAsSearchParamsSemanticSearch getSemanticSearch() {
+  public SemanticSearch getSemanticSearch() {
     return semanticSearch;
   }
 
@@ -1498,29 +1475,6 @@ public class ConsequenceParams {
     return advancedSyntaxFeatures;
   }
 
-  public ConsequenceParams setExplain(List<String> explain) {
-    this.explain = explain;
-    return this;
-  }
-
-  public ConsequenceParams addExplain(String explainItem) {
-    if (this.explain == null) {
-      this.explain = new ArrayList<>();
-    }
-    this.explain.add(explainItem);
-    return this;
-  }
-
-  /**
-   * Enriches the API's response with information about how the query was processed.
-   *
-   * @return explain
-   */
-  @javax.annotation.Nullable
-  public List<String> getExplain() {
-    return explain;
-  }
-
   public ConsequenceParams setDistinct(Distinct distinct) {
     this.distinct = distinct;
     return this;
@@ -1550,21 +1504,6 @@ public class ConsequenceParams {
   @javax.annotation.Nullable
   public String getAttributeForDistinct() {
     return attributeForDistinct;
-  }
-
-  public ConsequenceParams setSynonyms(Boolean synonyms) {
-    this.synonyms = synonyms;
-    return this;
-  }
-
-  /**
-   * Whether to take into account an index's synonyms for a particular search.
-   *
-   * @return synonyms
-   */
-  @javax.annotation.Nullable
-  public Boolean getSynonyms() {
-    return synonyms;
   }
 
   public ConsequenceParams setReplaceSynonymsInHighlight(Boolean replaceSynonymsInHighlight) {
@@ -1640,6 +1579,36 @@ public class ConsequenceParams {
     return maxFacetHits;
   }
 
+  public ConsequenceParams setMaxValuesPerFacet(Integer maxValuesPerFacet) {
+    this.maxValuesPerFacet = maxValuesPerFacet;
+    return this;
+  }
+
+  /**
+   * Maximum number of facet values to return for each facet.
+   *
+   * @return maxValuesPerFacet
+   */
+  @javax.annotation.Nullable
+  public Integer getMaxValuesPerFacet() {
+    return maxValuesPerFacet;
+  }
+
+  public ConsequenceParams setSortFacetValuesBy(String sortFacetValuesBy) {
+    this.sortFacetValuesBy = sortFacetValuesBy;
+    return this;
+  }
+
+  /**
+   * Controls how facet values are fetched.
+   *
+   * @return sortFacetValuesBy
+   */
+  @javax.annotation.Nullable
+  public String getSortFacetValuesBy() {
+    return sortFacetValuesBy;
+  }
+
   public ConsequenceParams setAttributeCriteriaComputedByMinProximity(Boolean attributeCriteriaComputedByMinProximity) {
     this.attributeCriteriaComputedByMinProximity = attributeCriteriaComputedByMinProximity;
     return this;
@@ -1671,6 +1640,37 @@ public class ConsequenceParams {
   @javax.annotation.Nullable
   public RenderingContent getRenderingContent() {
     return renderingContent;
+  }
+
+  public ConsequenceParams setEnableReRanking(Boolean enableReRanking) {
+    this.enableReRanking = enableReRanking;
+    return this;
+  }
+
+  /**
+   * Indicates whether this search will use [Dynamic
+   * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+   *
+   * @return enableReRanking
+   */
+  @javax.annotation.Nullable
+  public Boolean getEnableReRanking() {
+    return enableReRanking;
+  }
+
+  public ConsequenceParams setReRankingApplyFilter(ReRankingApplyFilter reRankingApplyFilter) {
+    this.reRankingApplyFilter = reRankingApplyFilter;
+    return this;
+  }
+
+  /**
+   * Get reRankingApplyFilter
+   *
+   * @return reRankingApplyFilter
+   */
+  @javax.annotation.Nullable
+  public ReRankingApplyFilter getReRankingApplyFilter() {
+    return reRankingApplyFilter;
   }
 
   public ConsequenceParams setQuery(ConsequenceQuery query) {
@@ -1735,10 +1735,9 @@ public class ConsequenceParams {
       Objects.equals(this.numericFilters, consequenceParams.numericFilters) &&
       Objects.equals(this.tagFilters, consequenceParams.tagFilters) &&
       Objects.equals(this.sumOrFiltersScores, consequenceParams.sumOrFiltersScores) &&
+      Objects.equals(this.restrictSearchableAttributes, consequenceParams.restrictSearchableAttributes) &&
       Objects.equals(this.facets, consequenceParams.facets) &&
-      Objects.equals(this.maxValuesPerFacet, consequenceParams.maxValuesPerFacet) &&
       Objects.equals(this.facetingAfterDistinct, consequenceParams.facetingAfterDistinct) &&
-      Objects.equals(this.sortFacetValuesBy, consequenceParams.sortFacetValuesBy) &&
       Objects.equals(this.page, consequenceParams.page) &&
       Objects.equals(this.offset, consequenceParams.offset) &&
       Objects.equals(this.length, consequenceParams.length) &&
@@ -1754,16 +1753,15 @@ public class ConsequenceParams {
       Objects.equals(this.personalizationImpact, consequenceParams.personalizationImpact) &&
       Objects.equals(this.userToken, consequenceParams.userToken) &&
       Objects.equals(this.getRankingInfo, consequenceParams.getRankingInfo) &&
+      Objects.equals(this.explain, consequenceParams.explain) &&
+      Objects.equals(this.synonyms, consequenceParams.synonyms) &&
       Objects.equals(this.clickAnalytics, consequenceParams.clickAnalytics) &&
       Objects.equals(this.analytics, consequenceParams.analytics) &&
       Objects.equals(this.analyticsTags, consequenceParams.analyticsTags) &&
       Objects.equals(this.percentileComputation, consequenceParams.percentileComputation) &&
       Objects.equals(this.enableABTest, consequenceParams.enableABTest) &&
-      Objects.equals(this.enableReRanking, consequenceParams.enableReRanking) &&
-      Objects.equals(this.reRankingApplyFilter, consequenceParams.reRankingApplyFilter) &&
       Objects.equals(this.attributesForFaceting, consequenceParams.attributesForFaceting) &&
       Objects.equals(this.attributesToRetrieve, consequenceParams.attributesToRetrieve) &&
-      Objects.equals(this.restrictSearchableAttributes, consequenceParams.restrictSearchableAttributes) &&
       Objects.equals(this.ranking, consequenceParams.ranking) &&
       Objects.equals(this.customRanking, consequenceParams.customRanking) &&
       Objects.equals(this.relevancyStrictness, consequenceParams.relevancyStrictness) &&
@@ -1796,16 +1794,18 @@ public class ConsequenceParams {
       Objects.equals(this.exactOnSingleWordQuery, consequenceParams.exactOnSingleWordQuery) &&
       Objects.equals(this.alternativesAsExact, consequenceParams.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, consequenceParams.advancedSyntaxFeatures) &&
-      Objects.equals(this.explain, consequenceParams.explain) &&
       Objects.equals(this.distinct, consequenceParams.distinct) &&
       Objects.equals(this.attributeForDistinct, consequenceParams.attributeForDistinct) &&
-      Objects.equals(this.synonyms, consequenceParams.synonyms) &&
       Objects.equals(this.replaceSynonymsInHighlight, consequenceParams.replaceSynonymsInHighlight) &&
       Objects.equals(this.minProximity, consequenceParams.minProximity) &&
       Objects.equals(this.responseFields, consequenceParams.responseFields) &&
       Objects.equals(this.maxFacetHits, consequenceParams.maxFacetHits) &&
+      Objects.equals(this.maxValuesPerFacet, consequenceParams.maxValuesPerFacet) &&
+      Objects.equals(this.sortFacetValuesBy, consequenceParams.sortFacetValuesBy) &&
       Objects.equals(this.attributeCriteriaComputedByMinProximity, consequenceParams.attributeCriteriaComputedByMinProximity) &&
       Objects.equals(this.renderingContent, consequenceParams.renderingContent) &&
+      Objects.equals(this.enableReRanking, consequenceParams.enableReRanking) &&
+      Objects.equals(this.reRankingApplyFilter, consequenceParams.reRankingApplyFilter) &&
       Objects.equals(this.query, consequenceParams.query) &&
       Objects.equals(this.automaticFacetFilters, consequenceParams.automaticFacetFilters) &&
       Objects.equals(this.automaticOptionalFacetFilters, consequenceParams.automaticOptionalFacetFilters)
@@ -1822,10 +1822,9 @@ public class ConsequenceParams {
       numericFilters,
       tagFilters,
       sumOrFiltersScores,
+      restrictSearchableAttributes,
       facets,
-      maxValuesPerFacet,
       facetingAfterDistinct,
-      sortFacetValuesBy,
       page,
       offset,
       length,
@@ -1841,16 +1840,15 @@ public class ConsequenceParams {
       personalizationImpact,
       userToken,
       getRankingInfo,
+      explain,
+      synonyms,
       clickAnalytics,
       analytics,
       analyticsTags,
       percentileComputation,
       enableABTest,
-      enableReRanking,
-      reRankingApplyFilter,
       attributesForFaceting,
       attributesToRetrieve,
-      restrictSearchableAttributes,
       ranking,
       customRanking,
       relevancyStrictness,
@@ -1883,16 +1881,18 @@ public class ConsequenceParams {
       exactOnSingleWordQuery,
       alternativesAsExact,
       advancedSyntaxFeatures,
-      explain,
       distinct,
       attributeForDistinct,
-      synonyms,
       replaceSynonymsInHighlight,
       minProximity,
       responseFields,
       maxFacetHits,
+      maxValuesPerFacet,
+      sortFacetValuesBy,
       attributeCriteriaComputedByMinProximity,
       renderingContent,
+      enableReRanking,
+      reRankingApplyFilter,
       query,
       automaticFacetFilters,
       automaticOptionalFacetFilters
@@ -1910,10 +1910,9 @@ public class ConsequenceParams {
     sb.append("    numericFilters: ").append(toIndentedString(numericFilters)).append("\n");
     sb.append("    tagFilters: ").append(toIndentedString(tagFilters)).append("\n");
     sb.append("    sumOrFiltersScores: ").append(toIndentedString(sumOrFiltersScores)).append("\n");
+    sb.append("    restrictSearchableAttributes: ").append(toIndentedString(restrictSearchableAttributes)).append("\n");
     sb.append("    facets: ").append(toIndentedString(facets)).append("\n");
-    sb.append("    maxValuesPerFacet: ").append(toIndentedString(maxValuesPerFacet)).append("\n");
     sb.append("    facetingAfterDistinct: ").append(toIndentedString(facetingAfterDistinct)).append("\n");
-    sb.append("    sortFacetValuesBy: ").append(toIndentedString(sortFacetValuesBy)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
     sb.append("    length: ").append(toIndentedString(length)).append("\n");
@@ -1929,16 +1928,15 @@ public class ConsequenceParams {
     sb.append("    personalizationImpact: ").append(toIndentedString(personalizationImpact)).append("\n");
     sb.append("    userToken: ").append(toIndentedString(userToken)).append("\n");
     sb.append("    getRankingInfo: ").append(toIndentedString(getRankingInfo)).append("\n");
+    sb.append("    explain: ").append(toIndentedString(explain)).append("\n");
+    sb.append("    synonyms: ").append(toIndentedString(synonyms)).append("\n");
     sb.append("    clickAnalytics: ").append(toIndentedString(clickAnalytics)).append("\n");
     sb.append("    analytics: ").append(toIndentedString(analytics)).append("\n");
     sb.append("    analyticsTags: ").append(toIndentedString(analyticsTags)).append("\n");
     sb.append("    percentileComputation: ").append(toIndentedString(percentileComputation)).append("\n");
     sb.append("    enableABTest: ").append(toIndentedString(enableABTest)).append("\n");
-    sb.append("    enableReRanking: ").append(toIndentedString(enableReRanking)).append("\n");
-    sb.append("    reRankingApplyFilter: ").append(toIndentedString(reRankingApplyFilter)).append("\n");
     sb.append("    attributesForFaceting: ").append(toIndentedString(attributesForFaceting)).append("\n");
     sb.append("    attributesToRetrieve: ").append(toIndentedString(attributesToRetrieve)).append("\n");
-    sb.append("    restrictSearchableAttributes: ").append(toIndentedString(restrictSearchableAttributes)).append("\n");
     sb.append("    ranking: ").append(toIndentedString(ranking)).append("\n");
     sb.append("    customRanking: ").append(toIndentedString(customRanking)).append("\n");
     sb.append("    relevancyStrictness: ").append(toIndentedString(relevancyStrictness)).append("\n");
@@ -1971,19 +1969,21 @@ public class ConsequenceParams {
     sb.append("    exactOnSingleWordQuery: ").append(toIndentedString(exactOnSingleWordQuery)).append("\n");
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
-    sb.append("    explain: ").append(toIndentedString(explain)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
     sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
-    sb.append("    synonyms: ").append(toIndentedString(synonyms)).append("\n");
     sb.append("    replaceSynonymsInHighlight: ").append(toIndentedString(replaceSynonymsInHighlight)).append("\n");
     sb.append("    minProximity: ").append(toIndentedString(minProximity)).append("\n");
     sb.append("    responseFields: ").append(toIndentedString(responseFields)).append("\n");
     sb.append("    maxFacetHits: ").append(toIndentedString(maxFacetHits)).append("\n");
+    sb.append("    maxValuesPerFacet: ").append(toIndentedString(maxValuesPerFacet)).append("\n");
+    sb.append("    sortFacetValuesBy: ").append(toIndentedString(sortFacetValuesBy)).append("\n");
     sb
       .append("    attributeCriteriaComputedByMinProximity: ")
       .append(toIndentedString(attributeCriteriaComputedByMinProximity))
       .append("\n");
     sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
+    sb.append("    enableReRanking: ").append(toIndentedString(enableReRanking)).append("\n");
+    sb.append("    reRankingApplyFilter: ").append(toIndentedString(reRankingApplyFilter)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    automaticFacetFilters: ").append(toIndentedString(automaticFacetFilters)).append("\n");
     sb.append("    automaticOptionalFacetFilters: ").append(toIndentedString(automaticOptionalFacetFilters)).append("\n");

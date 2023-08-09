@@ -9,7 +9,6 @@ import kotlinx.serialization.json.*
  *
  * @param attributesForFaceting Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
  * @param attributesToRetrieve Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
- * @param restrictSearchableAttributes Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
  * @param ranking Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
  * @param customRanking Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
  * @param relevancyStrictness Relevancy threshold below which less relevant results aren't included in the results.
@@ -42,16 +41,18 @@ import kotlinx.serialization.json.*
  * @param exactOnSingleWordQuery
  * @param alternativesAsExact Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
  * @param advancedSyntaxFeatures Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
- * @param explain Enriches the API's response with information about how the query was processed.
  * @param distinct
  * @param attributeForDistinct Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
- * @param synonyms Whether to take into account an index's synonyms for a particular search.
  * @param replaceSynonymsInHighlight Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
  * @param minProximity Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
  * @param responseFields Attributes to include in the API response for search and browse queries.
  * @param maxFacetHits Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+ * @param maxValuesPerFacet Maximum number of facet values to return for each facet.
+ * @param sortFacetValuesBy Controls how facet values are fetched.
  * @param attributeCriteriaComputedByMinProximity When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
  * @param renderingContent
+ * @param enableReRanking Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+ * @param reRankingApplyFilter
  */
 @Serializable
 public data class IndexSettingsAsSearchParams(
@@ -61,9 +62,6 @@ public data class IndexSettingsAsSearchParams(
 
   /** Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes. */
   @SerialName(value = "attributesToRetrieve") val attributesToRetrieve: List<String>? = null,
-
-  /** Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/). */
-  @SerialName(value = "restrictSearchableAttributes") val restrictSearchableAttributes: List<String>? = null,
 
   /** Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/). */
   @SerialName(value = "ranking") val ranking: List<String>? = null,
@@ -134,7 +132,7 @@ public data class IndexSettingsAsSearchParams(
 
   @SerialName(value = "mode") val mode: Mode? = null,
 
-  @SerialName(value = "semanticSearch") val semanticSearch: IndexSettingsAsSearchParamsSemanticSearch? = null,
+  @SerialName(value = "semanticSearch") val semanticSearch: SemanticSearch? = null,
 
   /** Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax). */
   @SerialName(value = "advancedSyntax") val advancedSyntax: Boolean? = null,
@@ -153,16 +151,10 @@ public data class IndexSettingsAsSearchParams(
   /** Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled. */
   @SerialName(value = "advancedSyntaxFeatures") val advancedSyntaxFeatures: List<AdvancedSyntaxFeatures>? = null,
 
-  /** Enriches the API's response with information about how the query was processed. */
-  @SerialName(value = "explain") val explain: List<String>? = null,
-
   @SerialName(value = "distinct") val distinct: Distinct? = null,
 
   /** Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature). */
   @SerialName(value = "attributeForDistinct") val attributeForDistinct: String? = null,
-
-  /** Whether to take into account an index's synonyms for a particular search. */
-  @SerialName(value = "synonyms") val synonyms: Boolean? = null,
 
   /** Whether to highlight and snippet the original word that matches the synonym or the synonym itself. */
   @SerialName(value = "replaceSynonymsInHighlight") val replaceSynonymsInHighlight: Boolean? = null,
@@ -176,8 +168,19 @@ public data class IndexSettingsAsSearchParams(
   /** Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). */
   @SerialName(value = "maxFacetHits") val maxFacetHits: Int? = null,
 
+  /** Maximum number of facet values to return for each facet. */
+  @SerialName(value = "maxValuesPerFacet") val maxValuesPerFacet: Int? = null,
+
+  /** Controls how facet values are fetched. */
+  @SerialName(value = "sortFacetValuesBy") val sortFacetValuesBy: String? = null,
+
   /** When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage. */
   @SerialName(value = "attributeCriteriaComputedByMinProximity") val attributeCriteriaComputedByMinProximity: Boolean? = null,
 
   @SerialName(value = "renderingContent") val renderingContent: RenderingContent? = null,
+
+  /** Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/). */
+  @SerialName(value = "enableReRanking") val enableReRanking: Boolean? = null,
+
+  @SerialName(value = "reRankingApplyFilter") val reRankingApplyFilter: ReRankingApplyFilter? = null,
 )

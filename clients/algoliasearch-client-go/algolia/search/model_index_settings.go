@@ -42,8 +42,6 @@ type IndexSettings struct {
 	AttributesForFaceting []string `json:"attributesForFaceting,omitempty"`
 	// Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
 	AttributesToRetrieve []string `json:"attributesToRetrieve,omitempty"`
-	// Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
-	RestrictSearchableAttributes []string `json:"restrictSearchableAttributes,omitempty"`
 	// Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
 	Ranking []string `json:"ranking,omitempty"`
 	// Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
@@ -84,11 +82,11 @@ type IndexSettings struct {
 	// Incidates whether [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
 	EnableRules *bool `json:"enableRules,omitempty"`
 	// Incidates whether [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/) is enabled.
-	EnablePersonalization  *bool                                      `json:"enablePersonalization,omitempty"`
-	QueryType              *QueryType                                 `json:"queryType,omitempty"`
-	RemoveWordsIfNoResults *RemoveWordsIfNoResults                    `json:"removeWordsIfNoResults,omitempty"`
-	Mode                   *Mode                                      `json:"mode,omitempty"`
-	SemanticSearch         *IndexSettingsAsSearchParamsSemanticSearch `json:"semanticSearch,omitempty"`
+	EnablePersonalization  *bool                   `json:"enablePersonalization,omitempty"`
+	QueryType              *QueryType              `json:"queryType,omitempty"`
+	RemoveWordsIfNoResults *RemoveWordsIfNoResults `json:"removeWordsIfNoResults,omitempty"`
+	Mode                   *Mode                   `json:"mode,omitempty"`
+	SemanticSearch         *SemanticSearch         `json:"semanticSearch,omitempty"`
 	// Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
 	AdvancedSyntax *bool `json:"advancedSyntax,omitempty"`
 	// Words which should be considered [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words) when found in a query.
@@ -100,13 +98,9 @@ type IndexSettings struct {
 	AlternativesAsExact []AlternativesAsExact `json:"alternativesAsExact,omitempty"`
 	// Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
 	AdvancedSyntaxFeatures []AdvancedSyntaxFeatures `json:"advancedSyntaxFeatures,omitempty"`
-	// Enriches the API's response with information about how the query was processed.
-	Explain  []string  `json:"explain,omitempty"`
-	Distinct *Distinct `json:"distinct,omitempty"`
+	Distinct               *Distinct                `json:"distinct,omitempty"`
 	// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
 	AttributeForDistinct *string `json:"attributeForDistinct,omitempty"`
-	// Whether to take into account an index's synonyms for a particular search.
-	Synonyms *bool `json:"synonyms,omitempty"`
 	// Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
 	ReplaceSynonymsInHighlight *bool `json:"replaceSynonymsInHighlight,omitempty"`
 	// Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
@@ -115,9 +109,16 @@ type IndexSettings struct {
 	ResponseFields []string `json:"responseFields,omitempty"`
 	// Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
 	MaxFacetHits *int32 `json:"maxFacetHits,omitempty"`
+	// Maximum number of facet values to return for each facet.
+	MaxValuesPerFacet *int32 `json:"maxValuesPerFacet,omitempty"`
+	// Controls how facet values are fetched.
+	SortFacetValuesBy *string `json:"sortFacetValuesBy,omitempty"`
 	// When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.
 	AttributeCriteriaComputedByMinProximity *bool             `json:"attributeCriteriaComputedByMinProximity,omitempty"`
 	RenderingContent                        *RenderingContent `json:"renderingContent,omitempty"`
+	// Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
+	EnableReRanking      *bool                        `json:"enableReRanking,omitempty"`
+	ReRankingApplyFilter NullableReRankingApplyFilter `json:"reRankingApplyFilter,omitempty"`
 }
 
 type IndexSettingsOption func(f *IndexSettings)
@@ -221,12 +222,6 @@ func WithIndexSettingsAttributesForFaceting(val []string) IndexSettingsOption {
 func WithIndexSettingsAttributesToRetrieve(val []string) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.AttributesToRetrieve = val
-	}
-}
-
-func WithIndexSettingsRestrictSearchableAttributes(val []string) IndexSettingsOption {
-	return func(f *IndexSettings) {
-		f.RestrictSearchableAttributes = val
 	}
 }
 
@@ -380,7 +375,7 @@ func WithIndexSettingsMode(val Mode) IndexSettingsOption {
 	}
 }
 
-func WithIndexSettingsSemanticSearch(val IndexSettingsAsSearchParamsSemanticSearch) IndexSettingsOption {
+func WithIndexSettingsSemanticSearch(val SemanticSearch) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.SemanticSearch = &val
 	}
@@ -422,12 +417,6 @@ func WithIndexSettingsAdvancedSyntaxFeatures(val []AdvancedSyntaxFeatures) Index
 	}
 }
 
-func WithIndexSettingsExplain(val []string) IndexSettingsOption {
-	return func(f *IndexSettings) {
-		f.Explain = val
-	}
-}
-
 func WithIndexSettingsDistinct(val Distinct) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.Distinct = &val
@@ -437,12 +426,6 @@ func WithIndexSettingsDistinct(val Distinct) IndexSettingsOption {
 func WithIndexSettingsAttributeForDistinct(val string) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.AttributeForDistinct = &val
-	}
-}
-
-func WithIndexSettingsSynonyms(val bool) IndexSettingsOption {
-	return func(f *IndexSettings) {
-		f.Synonyms = &val
 	}
 }
 
@@ -470,6 +453,18 @@ func WithIndexSettingsMaxFacetHits(val int32) IndexSettingsOption {
 	}
 }
 
+func WithIndexSettingsMaxValuesPerFacet(val int32) IndexSettingsOption {
+	return func(f *IndexSettings) {
+		f.MaxValuesPerFacet = &val
+	}
+}
+
+func WithIndexSettingsSortFacetValuesBy(val string) IndexSettingsOption {
+	return func(f *IndexSettings) {
+		f.SortFacetValuesBy = &val
+	}
+}
+
 func WithIndexSettingsAttributeCriteriaComputedByMinProximity(val bool) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.AttributeCriteriaComputedByMinProximity = &val
@@ -479,6 +474,18 @@ func WithIndexSettingsAttributeCriteriaComputedByMinProximity(val bool) IndexSet
 func WithIndexSettingsRenderingContent(val RenderingContent) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.RenderingContent = &val
+	}
+}
+
+func WithIndexSettingsEnableReRanking(val bool) IndexSettingsOption {
+	return func(f *IndexSettings) {
+		f.EnableReRanking = &val
+	}
+}
+
+func WithIndexSettingsReRankingApplyFilter(val NullableReRankingApplyFilter) IndexSettingsOption {
+	return func(f *IndexSettings) {
+		f.ReRankingApplyFilter = val
 	}
 }
 
@@ -541,16 +548,20 @@ func NewIndexSettingsWithDefaults() *IndexSettings {
 	this.AdvancedSyntax = &advancedSyntax
 	var exactOnSingleWordQuery ExactOnSingleWordQuery = EXACTONSINGLEWORDQUERY_ATTRIBUTE
 	this.ExactOnSingleWordQuery = &exactOnSingleWordQuery
-	var synonyms bool = true
-	this.Synonyms = &synonyms
 	var replaceSynonymsInHighlight bool = false
 	this.ReplaceSynonymsInHighlight = &replaceSynonymsInHighlight
 	var minProximity int32 = 1
 	this.MinProximity = &minProximity
 	var maxFacetHits int32 = 10
 	this.MaxFacetHits = &maxFacetHits
+	var maxValuesPerFacet int32 = 100
+	this.MaxValuesPerFacet = &maxValuesPerFacet
+	var sortFacetValuesBy string = "count"
+	this.SortFacetValuesBy = &sortFacetValuesBy
 	var attributeCriteriaComputedByMinProximity bool = false
 	this.AttributeCriteriaComputedByMinProximity = &attributeCriteriaComputedByMinProximity
+	var enableReRanking bool = true
+	this.EnableReRanking = &enableReRanking
 	return this
 }
 
@@ -1096,38 +1107,6 @@ func (o *IndexSettings) HasAttributesToRetrieve() bool {
 // SetAttributesToRetrieve gets a reference to the given []string and assigns it to the AttributesToRetrieve field.
 func (o *IndexSettings) SetAttributesToRetrieve(v []string) {
 	o.AttributesToRetrieve = v
-}
-
-// GetRestrictSearchableAttributes returns the RestrictSearchableAttributes field value if set, zero value otherwise.
-func (o *IndexSettings) GetRestrictSearchableAttributes() []string {
-	if o == nil || o.RestrictSearchableAttributes == nil {
-		var ret []string
-		return ret
-	}
-	return o.RestrictSearchableAttributes
-}
-
-// GetRestrictSearchableAttributesOk returns a tuple with the RestrictSearchableAttributes field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *IndexSettings) GetRestrictSearchableAttributesOk() ([]string, bool) {
-	if o == nil || o.RestrictSearchableAttributes == nil {
-		return nil, false
-	}
-	return o.RestrictSearchableAttributes, true
-}
-
-// HasRestrictSearchableAttributes returns a boolean if a field has been set.
-func (o *IndexSettings) HasRestrictSearchableAttributes() bool {
-	if o != nil && o.RestrictSearchableAttributes != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetRestrictSearchableAttributes gets a reference to the given []string and assigns it to the RestrictSearchableAttributes field.
-func (o *IndexSettings) SetRestrictSearchableAttributes(v []string) {
-	o.RestrictSearchableAttributes = v
 }
 
 // GetRanking returns the Ranking field value if set, zero value otherwise.
@@ -1931,9 +1910,9 @@ func (o *IndexSettings) SetMode(v Mode) {
 }
 
 // GetSemanticSearch returns the SemanticSearch field value if set, zero value otherwise.
-func (o *IndexSettings) GetSemanticSearch() IndexSettingsAsSearchParamsSemanticSearch {
+func (o *IndexSettings) GetSemanticSearch() SemanticSearch {
 	if o == nil || o.SemanticSearch == nil {
-		var ret IndexSettingsAsSearchParamsSemanticSearch
+		var ret SemanticSearch
 		return ret
 	}
 	return *o.SemanticSearch
@@ -1941,7 +1920,7 @@ func (o *IndexSettings) GetSemanticSearch() IndexSettingsAsSearchParamsSemanticS
 
 // GetSemanticSearchOk returns a tuple with the SemanticSearch field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *IndexSettings) GetSemanticSearchOk() (*IndexSettingsAsSearchParamsSemanticSearch, bool) {
+func (o *IndexSettings) GetSemanticSearchOk() (*SemanticSearch, bool) {
 	if o == nil || o.SemanticSearch == nil {
 		return nil, false
 	}
@@ -1957,8 +1936,8 @@ func (o *IndexSettings) HasSemanticSearch() bool {
 	return false
 }
 
-// SetSemanticSearch gets a reference to the given IndexSettingsAsSearchParamsSemanticSearch and assigns it to the SemanticSearch field.
-func (o *IndexSettings) SetSemanticSearch(v IndexSettingsAsSearchParamsSemanticSearch) {
+// SetSemanticSearch gets a reference to the given SemanticSearch and assigns it to the SemanticSearch field.
+func (o *IndexSettings) SetSemanticSearch(v SemanticSearch) {
 	o.SemanticSearch = &v
 }
 
@@ -2154,38 +2133,6 @@ func (o *IndexSettings) SetAdvancedSyntaxFeatures(v []AdvancedSyntaxFeatures) {
 	o.AdvancedSyntaxFeatures = v
 }
 
-// GetExplain returns the Explain field value if set, zero value otherwise.
-func (o *IndexSettings) GetExplain() []string {
-	if o == nil || o.Explain == nil {
-		var ret []string
-		return ret
-	}
-	return o.Explain
-}
-
-// GetExplainOk returns a tuple with the Explain field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *IndexSettings) GetExplainOk() ([]string, bool) {
-	if o == nil || o.Explain == nil {
-		return nil, false
-	}
-	return o.Explain, true
-}
-
-// HasExplain returns a boolean if a field has been set.
-func (o *IndexSettings) HasExplain() bool {
-	if o != nil && o.Explain != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetExplain gets a reference to the given []string and assigns it to the Explain field.
-func (o *IndexSettings) SetExplain(v []string) {
-	o.Explain = v
-}
-
 // GetDistinct returns the Distinct field value if set, zero value otherwise.
 func (o *IndexSettings) GetDistinct() Distinct {
 	if o == nil || o.Distinct == nil {
@@ -2248,38 +2195,6 @@ func (o *IndexSettings) HasAttributeForDistinct() bool {
 // SetAttributeForDistinct gets a reference to the given string and assigns it to the AttributeForDistinct field.
 func (o *IndexSettings) SetAttributeForDistinct(v string) {
 	o.AttributeForDistinct = &v
-}
-
-// GetSynonyms returns the Synonyms field value if set, zero value otherwise.
-func (o *IndexSettings) GetSynonyms() bool {
-	if o == nil || o.Synonyms == nil {
-		var ret bool
-		return ret
-	}
-	return *o.Synonyms
-}
-
-// GetSynonymsOk returns a tuple with the Synonyms field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *IndexSettings) GetSynonymsOk() (*bool, bool) {
-	if o == nil || o.Synonyms == nil {
-		return nil, false
-	}
-	return o.Synonyms, true
-}
-
-// HasSynonyms returns a boolean if a field has been set.
-func (o *IndexSettings) HasSynonyms() bool {
-	if o != nil && o.Synonyms != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetSynonyms gets a reference to the given bool and assigns it to the Synonyms field.
-func (o *IndexSettings) SetSynonyms(v bool) {
-	o.Synonyms = &v
 }
 
 // GetReplaceSynonymsInHighlight returns the ReplaceSynonymsInHighlight field value if set, zero value otherwise.
@@ -2410,6 +2325,70 @@ func (o *IndexSettings) SetMaxFacetHits(v int32) {
 	o.MaxFacetHits = &v
 }
 
+// GetMaxValuesPerFacet returns the MaxValuesPerFacet field value if set, zero value otherwise.
+func (o *IndexSettings) GetMaxValuesPerFacet() int32 {
+	if o == nil || o.MaxValuesPerFacet == nil {
+		var ret int32
+		return ret
+	}
+	return *o.MaxValuesPerFacet
+}
+
+// GetMaxValuesPerFacetOk returns a tuple with the MaxValuesPerFacet field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IndexSettings) GetMaxValuesPerFacetOk() (*int32, bool) {
+	if o == nil || o.MaxValuesPerFacet == nil {
+		return nil, false
+	}
+	return o.MaxValuesPerFacet, true
+}
+
+// HasMaxValuesPerFacet returns a boolean if a field has been set.
+func (o *IndexSettings) HasMaxValuesPerFacet() bool {
+	if o != nil && o.MaxValuesPerFacet != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetMaxValuesPerFacet gets a reference to the given int32 and assigns it to the MaxValuesPerFacet field.
+func (o *IndexSettings) SetMaxValuesPerFacet(v int32) {
+	o.MaxValuesPerFacet = &v
+}
+
+// GetSortFacetValuesBy returns the SortFacetValuesBy field value if set, zero value otherwise.
+func (o *IndexSettings) GetSortFacetValuesBy() string {
+	if o == nil || o.SortFacetValuesBy == nil {
+		var ret string
+		return ret
+	}
+	return *o.SortFacetValuesBy
+}
+
+// GetSortFacetValuesByOk returns a tuple with the SortFacetValuesBy field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IndexSettings) GetSortFacetValuesByOk() (*string, bool) {
+	if o == nil || o.SortFacetValuesBy == nil {
+		return nil, false
+	}
+	return o.SortFacetValuesBy, true
+}
+
+// HasSortFacetValuesBy returns a boolean if a field has been set.
+func (o *IndexSettings) HasSortFacetValuesBy() bool {
+	if o != nil && o.SortFacetValuesBy != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSortFacetValuesBy gets a reference to the given string and assigns it to the SortFacetValuesBy field.
+func (o *IndexSettings) SetSortFacetValuesBy(v string) {
+	o.SortFacetValuesBy = &v
+}
+
 // GetAttributeCriteriaComputedByMinProximity returns the AttributeCriteriaComputedByMinProximity field value if set, zero value otherwise.
 func (o *IndexSettings) GetAttributeCriteriaComputedByMinProximity() bool {
 	if o == nil || o.AttributeCriteriaComputedByMinProximity == nil {
@@ -2474,6 +2453,81 @@ func (o *IndexSettings) SetRenderingContent(v RenderingContent) {
 	o.RenderingContent = &v
 }
 
+// GetEnableReRanking returns the EnableReRanking field value if set, zero value otherwise.
+func (o *IndexSettings) GetEnableReRanking() bool {
+	if o == nil || o.EnableReRanking == nil {
+		var ret bool
+		return ret
+	}
+	return *o.EnableReRanking
+}
+
+// GetEnableReRankingOk returns a tuple with the EnableReRanking field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IndexSettings) GetEnableReRankingOk() (*bool, bool) {
+	if o == nil || o.EnableReRanking == nil {
+		return nil, false
+	}
+	return o.EnableReRanking, true
+}
+
+// HasEnableReRanking returns a boolean if a field has been set.
+func (o *IndexSettings) HasEnableReRanking() bool {
+	if o != nil && o.EnableReRanking != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetEnableReRanking gets a reference to the given bool and assigns it to the EnableReRanking field.
+func (o *IndexSettings) SetEnableReRanking(v bool) {
+	o.EnableReRanking = &v
+}
+
+// GetReRankingApplyFilter returns the ReRankingApplyFilter field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *IndexSettings) GetReRankingApplyFilter() ReRankingApplyFilter {
+	if o == nil || o.ReRankingApplyFilter.Get() == nil {
+		var ret ReRankingApplyFilter
+		return ret
+	}
+	return *o.ReRankingApplyFilter.Get()
+}
+
+// GetReRankingApplyFilterOk returns a tuple with the ReRankingApplyFilter field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *IndexSettings) GetReRankingApplyFilterOk() (*ReRankingApplyFilter, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ReRankingApplyFilter.Get(), o.ReRankingApplyFilter.IsSet()
+}
+
+// HasReRankingApplyFilter returns a boolean if a field has been set.
+func (o *IndexSettings) HasReRankingApplyFilter() bool {
+	if o != nil && o.ReRankingApplyFilter.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetReRankingApplyFilter gets a reference to the given NullableReRankingApplyFilter and assigns it to the ReRankingApplyFilter field.
+func (o *IndexSettings) SetReRankingApplyFilter(v ReRankingApplyFilter) {
+	o.ReRankingApplyFilter.Set(&v)
+}
+
+// SetReRankingApplyFilterNil sets the value for ReRankingApplyFilter to be an explicit nil
+func (o *IndexSettings) SetReRankingApplyFilterNil() {
+	o.ReRankingApplyFilter.Set(nil)
+}
+
+// UnsetReRankingApplyFilter ensures that no value is present for ReRankingApplyFilter, not even an explicit nil
+func (o *IndexSettings) UnsetReRankingApplyFilter() {
+	o.ReRankingApplyFilter.Unset()
+}
+
 func (o IndexSettings) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.Replicas != nil {
@@ -2526,9 +2580,6 @@ func (o IndexSettings) MarshalJSON() ([]byte, error) {
 	}
 	if o.AttributesToRetrieve != nil {
 		toSerialize["attributesToRetrieve"] = o.AttributesToRetrieve
-	}
-	if o.RestrictSearchableAttributes != nil {
-		toSerialize["restrictSearchableAttributes"] = o.RestrictSearchableAttributes
 	}
 	if o.Ranking != nil {
 		toSerialize["ranking"] = o.Ranking
@@ -2626,17 +2677,11 @@ func (o IndexSettings) MarshalJSON() ([]byte, error) {
 	if o.AdvancedSyntaxFeatures != nil {
 		toSerialize["advancedSyntaxFeatures"] = o.AdvancedSyntaxFeatures
 	}
-	if o.Explain != nil {
-		toSerialize["explain"] = o.Explain
-	}
 	if o.Distinct != nil {
 		toSerialize["distinct"] = o.Distinct
 	}
 	if o.AttributeForDistinct != nil {
 		toSerialize["attributeForDistinct"] = o.AttributeForDistinct
-	}
-	if o.Synonyms != nil {
-		toSerialize["synonyms"] = o.Synonyms
 	}
 	if o.ReplaceSynonymsInHighlight != nil {
 		toSerialize["replaceSynonymsInHighlight"] = o.ReplaceSynonymsInHighlight
@@ -2650,11 +2695,23 @@ func (o IndexSettings) MarshalJSON() ([]byte, error) {
 	if o.MaxFacetHits != nil {
 		toSerialize["maxFacetHits"] = o.MaxFacetHits
 	}
+	if o.MaxValuesPerFacet != nil {
+		toSerialize["maxValuesPerFacet"] = o.MaxValuesPerFacet
+	}
+	if o.SortFacetValuesBy != nil {
+		toSerialize["sortFacetValuesBy"] = o.SortFacetValuesBy
+	}
 	if o.AttributeCriteriaComputedByMinProximity != nil {
 		toSerialize["attributeCriteriaComputedByMinProximity"] = o.AttributeCriteriaComputedByMinProximity
 	}
 	if o.RenderingContent != nil {
 		toSerialize["renderingContent"] = o.RenderingContent
+	}
+	if o.EnableReRanking != nil {
+		toSerialize["enableReRanking"] = o.EnableReRanking
+	}
+	if o.ReRankingApplyFilter.IsSet() {
+		toSerialize["reRankingApplyFilter"] = o.ReRankingApplyFilter.Get()
 	}
 	return json.Marshal(toSerialize)
 }
@@ -2678,7 +2735,6 @@ func (o IndexSettings) String() string {
 	out += fmt.Sprintf("  customNormalization=%v\n", o.CustomNormalization)
 	out += fmt.Sprintf("  attributesForFaceting=%v\n", o.AttributesForFaceting)
 	out += fmt.Sprintf("  attributesToRetrieve=%v\n", o.AttributesToRetrieve)
-	out += fmt.Sprintf("  restrictSearchableAttributes=%v\n", o.RestrictSearchableAttributes)
 	out += fmt.Sprintf("  ranking=%v\n", o.Ranking)
 	out += fmt.Sprintf("  customRanking=%v\n", o.CustomRanking)
 	out += fmt.Sprintf("  relevancyStrictness=%v\n", o.RelevancyStrictness)
@@ -2711,16 +2767,18 @@ func (o IndexSettings) String() string {
 	out += fmt.Sprintf("  exactOnSingleWordQuery=%v\n", o.ExactOnSingleWordQuery)
 	out += fmt.Sprintf("  alternativesAsExact=%v\n", o.AlternativesAsExact)
 	out += fmt.Sprintf("  advancedSyntaxFeatures=%v\n", o.AdvancedSyntaxFeatures)
-	out += fmt.Sprintf("  explain=%v\n", o.Explain)
 	out += fmt.Sprintf("  distinct=%v\n", o.Distinct)
 	out += fmt.Sprintf("  attributeForDistinct=%v\n", o.AttributeForDistinct)
-	out += fmt.Sprintf("  synonyms=%v\n", o.Synonyms)
 	out += fmt.Sprintf("  replaceSynonymsInHighlight=%v\n", o.ReplaceSynonymsInHighlight)
 	out += fmt.Sprintf("  minProximity=%v\n", o.MinProximity)
 	out += fmt.Sprintf("  responseFields=%v\n", o.ResponseFields)
 	out += fmt.Sprintf("  maxFacetHits=%v\n", o.MaxFacetHits)
+	out += fmt.Sprintf("  maxValuesPerFacet=%v\n", o.MaxValuesPerFacet)
+	out += fmt.Sprintf("  sortFacetValuesBy=%v\n", o.SortFacetValuesBy)
 	out += fmt.Sprintf("  attributeCriteriaComputedByMinProximity=%v\n", o.AttributeCriteriaComputedByMinProximity)
 	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
+	out += fmt.Sprintf("  enableReRanking=%v\n", o.EnableReRanking)
+	out += fmt.Sprintf("  reRankingApplyFilter=%v\n", o.ReRankingApplyFilter)
 	return fmt.Sprintf("IndexSettings {\n%s}", out)
 }
 

@@ -21,14 +21,13 @@ BaseSearchParamsWithoutQuery _$BaseSearchParamsWithoutQueryFromJson(
           tagFilters: $checkedConvert('tagFilters', (v) => v),
           sumOrFiltersScores:
               $checkedConvert('sumOrFiltersScores', (v) => v as bool?),
+          restrictSearchableAttributes: $checkedConvert(
+              'restrictSearchableAttributes',
+              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           facets: $checkedConvert('facets',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
-          maxValuesPerFacet:
-              $checkedConvert('maxValuesPerFacet', (v) => v as int?),
           facetingAfterDistinct:
               $checkedConvert('facetingAfterDistinct', (v) => v as bool?),
-          sortFacetValuesBy:
-              $checkedConvert('sortFacetValuesBy', (v) => v as String?),
           page: $checkedConvert('page', (v) => v as int?),
           offset: $checkedConvert('offset', (v) => v as int?),
           length: $checkedConvert('length', (v) => v as int?),
@@ -57,6 +56,9 @@ BaseSearchParamsWithoutQuery _$BaseSearchParamsWithoutQueryFromJson(
               $checkedConvert('personalizationImpact', (v) => v as int?),
           userToken: $checkedConvert('userToken', (v) => v as String?),
           getRankingInfo: $checkedConvert('getRankingInfo', (v) => v as bool?),
+          explain: $checkedConvert('explain',
+              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
+          synonyms: $checkedConvert('synonyms', (v) => v as bool?),
           clickAnalytics: $checkedConvert('clickAnalytics', (v) => v as bool?),
           analytics: $checkedConvert('analytics', (v) => v as bool?),
           analyticsTags: $checkedConvert('analyticsTags',
@@ -64,10 +66,6 @@ BaseSearchParamsWithoutQuery _$BaseSearchParamsWithoutQueryFromJson(
           percentileComputation:
               $checkedConvert('percentileComputation', (v) => v as bool?),
           enableABTest: $checkedConvert('enableABTest', (v) => v as bool?),
-          enableReRanking:
-              $checkedConvert('enableReRanking', (v) => v as bool?),
-          reRankingApplyFilter:
-              $checkedConvert('reRankingApplyFilter', (v) => v),
         );
         return val;
       },
@@ -90,10 +88,10 @@ Map<String, dynamic> _$BaseSearchParamsWithoutQueryToJson(
   writeNotNull('numericFilters', instance.numericFilters);
   writeNotNull('tagFilters', instance.tagFilters);
   writeNotNull('sumOrFiltersScores', instance.sumOrFiltersScores);
+  writeNotNull(
+      'restrictSearchableAttributes', instance.restrictSearchableAttributes);
   writeNotNull('facets', instance.facets);
-  writeNotNull('maxValuesPerFacet', instance.maxValuesPerFacet);
   writeNotNull('facetingAfterDistinct', instance.facetingAfterDistinct);
-  writeNotNull('sortFacetValuesBy', instance.sortFacetValuesBy);
   writeNotNull('page', instance.page);
   writeNotNull('offset', instance.offset);
   writeNotNull('length', instance.length);
@@ -109,12 +107,12 @@ Map<String, dynamic> _$BaseSearchParamsWithoutQueryToJson(
   writeNotNull('personalizationImpact', instance.personalizationImpact);
   writeNotNull('userToken', instance.userToken);
   writeNotNull('getRankingInfo', instance.getRankingInfo);
+  writeNotNull('explain', instance.explain);
+  writeNotNull('synonyms', instance.synonyms);
   writeNotNull('clickAnalytics', instance.clickAnalytics);
   writeNotNull('analytics', instance.analytics);
   writeNotNull('analyticsTags', instance.analyticsTags);
   writeNotNull('percentileComputation', instance.percentileComputation);
   writeNotNull('enableABTest', instance.enableABTest);
-  writeNotNull('enableReRanking', instance.enableReRanking);
-  writeNotNull('reRankingApplyFilter', instance.reRankingApplyFilter);
   return val;
 }
