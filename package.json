@@ -33,12 +33,12 @@
     "website:build-specs": "BUNDLE_WITH_DOC=true DOCKER=true yarn cli build specs all -s"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.22.9",
+    "@babel/eslint-parser": "7.22.10",
     "@openapitools/openapi-generator-cli": "2.7.0",
     "@redocly/cli": "1.0.0-beta.112",
-    "@typescript-eslint/eslint-plugin": "6.2.1",
-    "@typescript-eslint/parser": "6.2.1",
-    "eslint": "8.46.0",
+    "@typescript-eslint/eslint-plugin": "6.3.0",
+    "@typescript-eslint/parser": "6.3.0",
+    "eslint": "8.47.0",
     "eslint-config-algolia": "22.0.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-algolia": "2.0.0",

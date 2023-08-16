@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   setup:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     steps:
       - name: debugging - dump GitHub context
@@ -76,7 +76,7 @@ jobs:
       RUN_CODEGEN: ${{ steps.setup.outputs.RUN_CODEGEN }}
 
   scripts:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     needs: setup
     if: ${{ needs.setup.outputs.RUN_SCRIPTS == 'true' }}
@@ -98,7 +98,7 @@ jobs:
         run: yarn workspace eslint-plugin-automation-custom test
 
   specs:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     needs: setup
     steps:
@@ -130,7 +130,7 @@ jobs:
 
   client_javascript_utils:
     timeout-minutes: 10
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: setup
     if: ${{ needs.setup.outputs.RUN_JS_UTILS == 'true' }}
     strategy:
@@ -176,7 +176,7 @@ jobs:
 
   client_gen:
     timeout-minutes: 15
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - setup
       - specs
@@ -293,7 +293,7 @@ jobs:
           path: clients-${{matrix.client.language }}.zip
 
   codegen:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     needs:
       - setup
