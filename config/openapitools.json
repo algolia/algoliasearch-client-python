@@ -161,25 +161,25 @@
       "dart-algoliasearch": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/algoliasearch",
         "additionalProperties": {
-          "packageVersion": "0.2.0"
+          "packageVersion": "0.2.0+1"
         }
       },
       "dart-search": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/client_search",
         "additionalProperties": {
-          "packageVersion": "0.2.0"
+          "packageVersion": "0.2.0+1"
         }
       },
       "dart-insights": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/client_insights",
         "additionalProperties": {
-          "packageVersion": "0.2.0"
+          "packageVersion": "0.2.0+1"
         }
       },
       "dart-recommend": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/client_recommend",
         "additionalProperties": {
-          "packageVersion": "0.2.0"
+          "packageVersion": "0.2.0+1"
         }
       }
     }

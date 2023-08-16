@@ -1,3 +1,7 @@
+## [4.0.0-alpha.25](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.24...4.0.0-alpha.25)
+
+- [5a9d949db](https://github.com/algolia/api-clients-automation/commit/5a9d949db) fix(specs): mixed `SearchParams` and `IndexSettings` ([#1889](https://github.com/algolia/api-clients-automation/pull/1889)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0-alpha.23](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.22...4.0.0-alpha.23)
 
 - [82d7dcf5a](https://github.com/algolia/api-clients-automation/commit/82d7dcf5a) fix(specs): allow JSON array for `aroundPrecision` ([#1855](https://github.com/algolia/api-clients-automation/pull/1855)) by [@shortcuts](https://github.com/shortcuts/)

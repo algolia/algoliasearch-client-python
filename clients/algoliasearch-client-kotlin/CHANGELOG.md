@@ -1,5 +1,9 @@
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
 
+- [5a9d949db](https://github.com/algolia/api-clients-automation/commit/5a9d949db) fix(specs): mixed `SearchParams` and `IndexSettings` ([#1889](https://github.com/algolia/api-clients-automation/pull/1889)) by [@shortcuts](https://github.com/shortcuts/)
+
+## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
+
 - [82d7dcf5a](https://github.com/algolia/api-clients-automation/commit/82d7dcf5a) fix(specs): allow JSON array for `aroundPrecision` ([#1855](https://github.com/algolia/api-clients-automation/pull/1855)) by [@shortcuts](https://github.com/shortcuts/)
 - [c6a7ab404](https://github.com/algolia/api-clients-automation/commit/c6a7ab404) fix(specs): optional/required `query` and `params` ([#1864](https://github.com/algolia/api-clients-automation/pull/1864)) by [@aallam](https://github.com/aallam/)
 - [a5bf6232c](https://github.com/algolia/api-clients-automation/commit/a5bf6232c) feat(specs): delete Predict ([#1860](https://github.com/algolia/api-clients-automation/pull/1860)) by [@shortcuts](https://github.com/shortcuts/)

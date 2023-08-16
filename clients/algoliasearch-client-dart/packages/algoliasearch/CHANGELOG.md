@@ -1,3 +1,7 @@
+## [0.2.0+1](https://github.com/algolia/algoliasearch-client-dart/compare/0.2.0...0.2.0+1)
+
+- [5a9d949db](https://github.com/algolia/api-clients-automation/commit/5a9d949db) fix(specs): mixed `SearchParams` and `IndexSettings` ([#1889](https://github.com/algolia/api-clients-automation/pull/1889)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [0.2.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.1.2+1...0.2.0)
 
 - [f91e1587](https://github.com/algolia/api-clients-automation/commit/f91e1587) fix(dart): user agent for web ([#1886](https://github.com/algolia/api-clients-automation/pull/1886)) by [@aallam](https://github.com/aallam/)
