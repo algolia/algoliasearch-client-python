@@ -101,7 +101,7 @@ func getDefaultHosts(appID string) []*transport.StatefulHost {
 	return hosts
 }
 func getUserAgent() string {
-	return fmt.Sprintf("Algolia for Go (4.0.0-alpha.23); Go (%s); Monitoring (4.0.0-alpha.23)", runtime.Version())
+	return fmt.Sprintf("Algolia for Go (4.0.0-alpha.25); Go (%s); Monitoring (4.0.0-alpha.25)", runtime.Version())
 }
 
 func atoi(in string) (int, error) {
