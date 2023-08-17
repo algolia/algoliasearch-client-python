@@ -158,7 +158,7 @@ class RecommendTest {
         getRecommendations(
           getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-              RecommendationRequest(
+              RecommendationsQuery(
                 indexName = "indexName",
                 objectID = "objectID",
                 model = RecommendationModels.values().first { it.value == "related-products" },
@@ -183,7 +183,7 @@ class RecommendTest {
         getRecommendations(
           getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-              RecommendationRequest(
+              RecommendationsQuery(
                 indexName = "indexName",
                 objectID = "objectID",
                 model = RecommendationModels.values().first { it.value == "related-products" },
@@ -217,9 +217,9 @@ class RecommendTest {
         getRecommendations(
           getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-              TrendingRequest(
+              TrendingItemsQuery(
                 indexName = "indexName",
-                model = TrendingModels.values().first { it.value == "trending-items" },
+                model = TrendingItemsModel.values().first { it.value == "trending-items" },
                 threshold = 42,
               ),
             ),
@@ -241,9 +241,9 @@ class RecommendTest {
         getRecommendations(
           getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-              TrendingRequest(
+              TrendingItemsQuery(
                 indexName = "indexName",
-                model = TrendingModels.values().first { it.value == "trending-items" },
+                model = TrendingItemsModel.values().first { it.value == "trending-items" },
                 threshold = 42,
                 maxRecommendations = 10,
                 facetName = "myFacetName",
@@ -276,13 +276,13 @@ class RecommendTest {
         getRecommendations(
           getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-              RecommendationRequest(
+              RecommendationsQuery(
                 indexName = "indexName1",
                 objectID = "objectID1",
                 model = RecommendationModels.values().first { it.value == "related-products" },
                 threshold = 21,
               ),
-              RecommendationRequest(
+              RecommendationsQuery(
                 indexName = "indexName2",
                 objectID = "objectID2",
                 model = RecommendationModels.values().first { it.value == "related-products" },
@@ -307,7 +307,7 @@ class RecommendTest {
         getRecommendations(
           getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-              RecommendationRequest(
+              RecommendationsQuery(
                 indexName = "indexName1",
                 objectID = "objectID1",
                 model = RecommendationModels.values().first { it.value == "related-products" },
@@ -322,7 +322,7 @@ class RecommendTest {
                   facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("fallback1"))),
                 ),
               ),
-              RecommendationRequest(
+              RecommendationsQuery(
                 indexName = "indexName2",
                 objectID = "objectID2",
                 model = RecommendationModels.values().first { it.value == "related-products" },
@@ -356,7 +356,7 @@ class RecommendTest {
         getRecommendations(
           getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-              RecommendationRequest(
+              RecommendationsQuery(
                 indexName = "indexName1",
                 objectID = "objectID1",
                 model = RecommendationModels.values().first { it.value == "bought-together" },

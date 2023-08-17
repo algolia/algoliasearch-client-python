@@ -18,14 +18,14 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
       * @var string[]
       */
     protected static $modelTypes = [
-        'model' => '\Algolia\AlgoliaSearch\Model\Recommend\RecommendationModels',
         'facetName' => 'string',
         'facetValue' => 'string',
+        'model' => '\Algolia\AlgoliaSearch\Model\Recommend\RecommendationModels',
+        'queryParameters' => '\Algolia\AlgoliaSearch\Model\Recommend\SearchParamsObject',
+        'fallbackParameters' => '\Algolia\AlgoliaSearch\Model\Recommend\SearchParamsObject',
         'indexName' => 'string',
         'threshold' => 'int',
         'maxRecommendations' => 'int',
-        'queryParameters' => '\Algolia\AlgoliaSearch\Model\Recommend\SearchParamsObject',
-        'fallbackParameters' => '\Algolia\AlgoliaSearch\Model\Recommend\SearchParamsObject',
         'objectID' => 'string',
     ];
 
@@ -35,14 +35,14 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
       * @var string[]
       */
     protected static $modelFormats = [
-        'model' => null,
         'facetName' => null,
         'facetValue' => null,
+        'model' => null,
+        'queryParameters' => null,
+        'fallbackParameters' => null,
         'indexName' => null,
         'threshold' => null,
         'maxRecommendations' => null,
-        'queryParameters' => null,
-        'fallbackParameters' => null,
         'objectID' => null,
     ];
 
@@ -53,14 +53,14 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
       * @var string[]
     */
     protected static $attributeMap = [
-        'model' => 'model',
         'facetName' => 'facetName',
         'facetValue' => 'facetValue',
+        'model' => 'model',
+        'queryParameters' => 'queryParameters',
+        'fallbackParameters' => 'fallbackParameters',
         'indexName' => 'indexName',
         'threshold' => 'threshold',
         'maxRecommendations' => 'maxRecommendations',
-        'queryParameters' => 'queryParameters',
-        'fallbackParameters' => 'fallbackParameters',
         'objectID' => 'objectID',
     ];
 
@@ -101,14 +101,14 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
      * @var string[]
      */
     protected static $setters = [
-        'model' => 'setModel',
         'facetName' => 'setFacetName',
         'facetValue' => 'setFacetValue',
+        'model' => 'setModel',
+        'queryParameters' => 'setQueryParameters',
+        'fallbackParameters' => 'setFallbackParameters',
         'indexName' => 'setIndexName',
         'threshold' => 'setThreshold',
         'maxRecommendations' => 'setMaxRecommendations',
-        'queryParameters' => 'setQueryParameters',
-        'fallbackParameters' => 'setFallbackParameters',
         'objectID' => 'setObjectID',
     ];
 
@@ -118,14 +118,14 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
      * @var string[]
      */
     protected static $getters = [
-        'model' => 'getModel',
         'facetName' => 'getFacetName',
         'facetValue' => 'getFacetValue',
+        'model' => 'getModel',
+        'queryParameters' => 'getQueryParameters',
+        'fallbackParameters' => 'getFallbackParameters',
         'indexName' => 'getIndexName',
         'threshold' => 'getThreshold',
         'maxRecommendations' => 'getMaxRecommendations',
-        'queryParameters' => 'getQueryParameters',
-        'fallbackParameters' => 'getFallbackParameters',
         'objectID' => 'getObjectID',
     ];
 
@@ -163,14 +163,20 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
      */
     public function __construct(array $data = null)
     {
-        if (isset($data['model'])) {
-            $this->container['model'] = $data['model'];
-        }
         if (isset($data['facetName'])) {
             $this->container['facetName'] = $data['facetName'];
         }
         if (isset($data['facetValue'])) {
             $this->container['facetValue'] = $data['facetValue'];
+        }
+        if (isset($data['model'])) {
+            $this->container['model'] = $data['model'];
+        }
+        if (isset($data['queryParameters'])) {
+            $this->container['queryParameters'] = $data['queryParameters'];
+        }
+        if (isset($data['fallbackParameters'])) {
+            $this->container['fallbackParameters'] = $data['fallbackParameters'];
         }
         if (isset($data['indexName'])) {
             $this->container['indexName'] = $data['indexName'];
@@ -180,12 +186,6 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
         }
         if (isset($data['maxRecommendations'])) {
             $this->container['maxRecommendations'] = $data['maxRecommendations'];
-        }
-        if (isset($data['queryParameters'])) {
-            $this->container['queryParameters'] = $data['queryParameters'];
-        }
-        if (isset($data['fallbackParameters'])) {
-            $this->container['fallbackParameters'] = $data['fallbackParameters'];
         }
         if (isset($data['objectID'])) {
             $this->container['objectID'] = $data['objectID'];
@@ -201,20 +201,20 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
     {
         $invalidProperties = [];
 
+        if (!isset($this->container['facetName']) || $this->container['facetName'] === null) {
+            $invalidProperties[] = "'facetName' can't be null";
+        }
         if (!isset($this->container['model']) || $this->container['model'] === null) {
             $invalidProperties[] = "'model' can't be null";
         }
         if (!isset($this->container['indexName']) || $this->container['indexName'] === null) {
             $invalidProperties[] = "'indexName' can't be null";
         }
-        if (!isset($this->container['threshold']) || $this->container['threshold'] === null) {
-            $invalidProperties[] = "'threshold' can't be null";
-        }
-        if (($this->container['threshold'] > 100)) {
+        if (isset($this->container['threshold']) && ($this->container['threshold'] > 100)) {
             $invalidProperties[] = "invalid value for 'threshold', must be smaller than or equal to 100.";
         }
 
-        if (($this->container['threshold'] < 0)) {
+        if (isset($this->container['threshold']) && ($this->container['threshold'] < 0)) {
             $invalidProperties[] = "invalid value for 'threshold', must be bigger than or equal to 0.";
         }
 
@@ -237,33 +237,9 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
     }
 
     /**
-     * Gets model
-     *
-     * @return \Algolia\AlgoliaSearch\Model\Recommend\RecommendationModels
-     */
-    public function getModel()
-    {
-        return $this->container['model'] ?? null;
-    }
-
-    /**
-     * Sets model
-     *
-     * @param \Algolia\AlgoliaSearch\Model\Recommend\RecommendationModels $model model
-     *
-     * @return self
-     */
-    public function setModel($model)
-    {
-        $this->container['model'] = $model;
-
-        return $this;
-    }
-
-    /**
      * Gets facetName
      *
-     * @return string|null
+     * @return string
      */
     public function getFacetName()
     {
@@ -273,7 +249,7 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
     /**
      * Sets facetName
      *
-     * @param string|null $facetName facet name for trending models
+     * @param string $facetName facet name for trending models
      *
      * @return self
      */
@@ -309,81 +285,25 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
     }
 
     /**
-     * Gets indexName
+     * Gets model
      *
-     * @return string
+     * @return \Algolia\AlgoliaSearch\Model\Recommend\RecommendationModels
      */
-    public function getIndexName()
+    public function getModel()
     {
-        return $this->container['indexName'] ?? null;
+        return $this->container['model'] ?? null;
     }
 
     /**
-     * Sets indexName
+     * Sets model
      *
-     * @param string $indexName algolia index name
+     * @param \Algolia\AlgoliaSearch\Model\Recommend\RecommendationModels $model model
      *
      * @return self
      */
-    public function setIndexName($indexName)
+    public function setModel($model)
     {
-        $this->container['indexName'] = $indexName;
-
-        return $this;
-    }
-
-    /**
-     * Gets threshold
-     *
-     * @return int
-     */
-    public function getThreshold()
-    {
-        return $this->container['threshold'] ?? null;
-    }
-
-    /**
-     * Sets threshold
-     *
-     * @param int $threshold Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
-     *
-     * @return self
-     */
-    public function setThreshold($threshold)
-    {
-
-        if (($threshold > 100)) {
-            throw new \InvalidArgumentException('invalid value for $threshold when calling RecommendationsRequest., must be smaller than or equal to 100.');
-        }
-        if (($threshold < 0)) {
-            throw new \InvalidArgumentException('invalid value for $threshold when calling RecommendationsRequest., must be bigger than or equal to 0.');
-        }
-
-        $this->container['threshold'] = $threshold;
-
-        return $this;
-    }
-
-    /**
-     * Gets maxRecommendations
-     *
-     * @return int|null
-     */
-    public function getMaxRecommendations()
-    {
-        return $this->container['maxRecommendations'] ?? null;
-    }
-
-    /**
-     * Sets maxRecommendations
-     *
-     * @param int|null $maxRecommendations Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-     *
-     * @return self
-     */
-    public function setMaxRecommendations($maxRecommendations)
-    {
-        $this->container['maxRecommendations'] = $maxRecommendations;
+        $this->container['model'] = $model;
 
         return $this;
     }
@@ -432,6 +352,86 @@ class RecommendationsRequest extends \Algolia\AlgoliaSearch\Model\AbstractModel 
     public function setFallbackParameters($fallbackParameters)
     {
         $this->container['fallbackParameters'] = $fallbackParameters;
+
+        return $this;
+    }
+
+    /**
+     * Gets indexName
+     *
+     * @return string
+     */
+    public function getIndexName()
+    {
+        return $this->container['indexName'] ?? null;
+    }
+
+    /**
+     * Sets indexName
+     *
+     * @param string $indexName algolia index name
+     *
+     * @return self
+     */
+    public function setIndexName($indexName)
+    {
+        $this->container['indexName'] = $indexName;
+
+        return $this;
+    }
+
+    /**
+     * Gets threshold
+     *
+     * @return int|null
+     */
+    public function getThreshold()
+    {
+        return $this->container['threshold'] ?? null;
+    }
+
+    /**
+     * Sets threshold
+     *
+     * @param int|null $threshold Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
+     *
+     * @return self
+     */
+    public function setThreshold($threshold)
+    {
+
+        if (!is_null($threshold) && ($threshold > 100)) {
+            throw new \InvalidArgumentException('invalid value for $threshold when calling RecommendationsRequest., must be smaller than or equal to 100.');
+        }
+        if (!is_null($threshold) && ($threshold < 0)) {
+            throw new \InvalidArgumentException('invalid value for $threshold when calling RecommendationsRequest., must be bigger than or equal to 0.');
+        }
+
+        $this->container['threshold'] = $threshold;
+
+        return $this;
+    }
+
+    /**
+     * Gets maxRecommendations
+     *
+     * @return int|null
+     */
+    public function getMaxRecommendations()
+    {
+        return $this->container['maxRecommendations'] ?? null;
+    }
+
+    /**
+     * Sets maxRecommendations
+     *
+     * @param int|null $maxRecommendations Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
+     *
+     * @return self
+     */
+    public function setMaxRecommendations($maxRecommendations)
+    {
+        $this->container['maxRecommendations'] = $maxRecommendations;
 
         return $this;
     }

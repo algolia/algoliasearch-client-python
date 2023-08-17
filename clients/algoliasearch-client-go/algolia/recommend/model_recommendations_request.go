@@ -8,51 +8,72 @@ import (
 
 // RecommendationsRequest - struct for RecommendationsRequest
 type RecommendationsRequest struct {
-	RecommendationRequest *RecommendationRequest
-	TrendingRequest       *TrendingRequest
+	RecommendationsQuery *RecommendationsQuery
+	TrendingFacetsQuery  *TrendingFacetsQuery
+	TrendingItemsQuery   *TrendingItemsQuery
 }
 
-// RecommendationRequestAsRecommendationsRequest is a convenience function that returns RecommendationRequest wrapped in RecommendationsRequest
-func RecommendationRequestAsRecommendationsRequest(v *RecommendationRequest) RecommendationsRequest {
+// RecommendationsQueryAsRecommendationsRequest is a convenience function that returns RecommendationsQuery wrapped in RecommendationsRequest
+func RecommendationsQueryAsRecommendationsRequest(v *RecommendationsQuery) RecommendationsRequest {
 	return RecommendationsRequest{
-		RecommendationRequest: v,
+		RecommendationsQuery: v,
 	}
 }
 
-// TrendingRequestAsRecommendationsRequest is a convenience function that returns TrendingRequest wrapped in RecommendationsRequest
-func TrendingRequestAsRecommendationsRequest(v *TrendingRequest) RecommendationsRequest {
+// TrendingFacetsQueryAsRecommendationsRequest is a convenience function that returns TrendingFacetsQuery wrapped in RecommendationsRequest
+func TrendingFacetsQueryAsRecommendationsRequest(v *TrendingFacetsQuery) RecommendationsRequest {
 	return RecommendationsRequest{
-		TrendingRequest: v,
+		TrendingFacetsQuery: v,
+	}
+}
+
+// TrendingItemsQueryAsRecommendationsRequest is a convenience function that returns TrendingItemsQuery wrapped in RecommendationsRequest
+func TrendingItemsQueryAsRecommendationsRequest(v *TrendingItemsQuery) RecommendationsRequest {
+	return RecommendationsRequest{
+		TrendingItemsQuery: v,
 	}
 }
 
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *RecommendationsRequest) UnmarshalJSON(data []byte) error {
 	var err error
-	// try to unmarshal data into RecommendationRequest
-	err = newStrictDecoder(data).Decode(&dst.RecommendationRequest)
-	if err == nil && validateStruct(dst.RecommendationRequest) == nil {
-		jsonRecommendationRequest, _ := json.Marshal(dst.RecommendationRequest)
-		if string(jsonRecommendationRequest) == "{}" { // empty struct
-			dst.RecommendationRequest = nil
+	// try to unmarshal data into RecommendationsQuery
+	err = newStrictDecoder(data).Decode(&dst.RecommendationsQuery)
+	if err == nil && validateStruct(dst.RecommendationsQuery) == nil {
+		jsonRecommendationsQuery, _ := json.Marshal(dst.RecommendationsQuery)
+		if string(jsonRecommendationsQuery) == "{}" { // empty struct
+			dst.RecommendationsQuery = nil
 		} else {
 			return nil
 		}
 	} else {
-		dst.RecommendationRequest = nil
+		dst.RecommendationsQuery = nil
 	}
 
-	// try to unmarshal data into TrendingRequest
-	err = newStrictDecoder(data).Decode(&dst.TrendingRequest)
-	if err == nil && validateStruct(dst.TrendingRequest) == nil {
-		jsonTrendingRequest, _ := json.Marshal(dst.TrendingRequest)
-		if string(jsonTrendingRequest) == "{}" { // empty struct
-			dst.TrendingRequest = nil
+	// try to unmarshal data into TrendingFacetsQuery
+	err = newStrictDecoder(data).Decode(&dst.TrendingFacetsQuery)
+	if err == nil && validateStruct(dst.TrendingFacetsQuery) == nil {
+		jsonTrendingFacetsQuery, _ := json.Marshal(dst.TrendingFacetsQuery)
+		if string(jsonTrendingFacetsQuery) == "{}" { // empty struct
+			dst.TrendingFacetsQuery = nil
 		} else {
 			return nil
 		}
 	} else {
-		dst.TrendingRequest = nil
+		dst.TrendingFacetsQuery = nil
+	}
+
+	// try to unmarshal data into TrendingItemsQuery
+	err = newStrictDecoder(data).Decode(&dst.TrendingItemsQuery)
+	if err == nil && validateStruct(dst.TrendingItemsQuery) == nil {
+		jsonTrendingItemsQuery, _ := json.Marshal(dst.TrendingItemsQuery)
+		if string(jsonTrendingItemsQuery) == "{}" { // empty struct
+			dst.TrendingItemsQuery = nil
+		} else {
+			return nil
+		}
+	} else {
+		dst.TrendingItemsQuery = nil
 	}
 
 	return fmt.Errorf("Data failed to match schemas in oneOf(RecommendationsRequest)")
@@ -60,12 +81,16 @@ func (dst *RecommendationsRequest) UnmarshalJSON(data []byte) error {
 
 // Marshal data from the first non-nil pointers in the struct to JSON
 func (src RecommendationsRequest) MarshalJSON() ([]byte, error) {
-	if src.RecommendationRequest != nil {
-		return json.Marshal(&src.RecommendationRequest)
+	if src.RecommendationsQuery != nil {
+		return json.Marshal(&src.RecommendationsQuery)
 	}
 
-	if src.TrendingRequest != nil {
-		return json.Marshal(&src.TrendingRequest)
+	if src.TrendingFacetsQuery != nil {
+		return json.Marshal(&src.TrendingFacetsQuery)
+	}
+
+	if src.TrendingItemsQuery != nil {
+		return json.Marshal(&src.TrendingItemsQuery)
 	}
 
 	return nil, nil // no data in oneOf schemas
@@ -76,12 +101,16 @@ func (obj *RecommendationsRequest) GetActualInstance() any {
 	if obj == nil {
 		return nil
 	}
-	if obj.RecommendationRequest != nil {
-		return obj.RecommendationRequest
+	if obj.RecommendationsQuery != nil {
+		return obj.RecommendationsQuery
 	}
 
-	if obj.TrendingRequest != nil {
-		return obj.TrendingRequest
+	if obj.TrendingFacetsQuery != nil {
+		return obj.TrendingFacetsQuery
+	}
+
+	if obj.TrendingItemsQuery != nil {
+		return obj.TrendingItemsQuery
 	}
 
 	// all schemas are nil

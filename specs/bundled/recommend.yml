@@ -70,16 +70,14 @@ components:
         message:
           type: string
           example: Invalid Application-Id or API-Key
-    trendingModels:
-      description: Trending model.
+    facetName:
+      type: string
+      description: Facet name for trending models.
+    trendingItemsModel:
+      description: Trending items model.
       type: string
       enum:
-        - trending-facets
         - trending-items
-    indexName:
-      type: string
-      example: products
-      description: Algolia index name.
     query:
       type: string
       description: Text to search for in an index.
@@ -1133,6 +1131,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/baseSearchParams'
         - $ref: '#/components/schemas/indexSettingsAsSearchParams'
+    indexName:
+      type: string
+      example: products
+      description: Algolia index name.
     baseRecommendRequest:
       type: object
       additionalProperties: false
@@ -1156,29 +1158,43 @@ components:
           description: >-
             Maximum number of recommendations to retrieve. If 0, all
             recommendations will be returned.
-        queryParameters:
-          $ref: '#/components/schemas/searchParamsObject'
-        fallbackParameters:
-          $ref: '#/components/schemas/searchParamsObject'
       required:
         - indexName
-        - threshold
-    trendingRequest:
+    trendingItemsQuery:
       allOf:
         - type: object
-          title: baseTrendingRequest
+          title: baseTrendingItemsQuery
           additionalProperties: false
           properties:
-            model:
-              $ref: '#/components/schemas/trendingModels'
             facetName:
-              type: string
-              description: Facet name for trending models.
+              $ref: '#/components/schemas/facetName'
             facetValue:
               type: string
               description: Facet value for trending models.
+            model:
+              $ref: '#/components/schemas/trendingItemsModel'
+            queryParameters:
+              $ref: '#/components/schemas/searchParamsObject'
+            fallbackParameters:
+              $ref: '#/components/schemas/searchParamsObject'
+        - $ref: '#/components/schemas/baseRecommendRequest'
+    trendingFacetsModel:
+      description: Trending facets model.
+      type: string
+      enum:
+        - trending-facets
+    trendingFacetsQuery:
+      allOf:
+        - type: object
+          title: baseTrendingFacetsQuery
+          additionalProperties: false
+          properties:
+            facetName:
+              $ref: '#/components/schemas/facetName'
+            model:
+              $ref: '#/components/schemas/trendingFacetsModel'
           required:
-            - model
+            - facetName
         - $ref: '#/components/schemas/baseRecommendRequest'
     recommendationModels:
       description: Recommendation model.
@@ -1190,24 +1206,29 @@ components:
       type: string
       description: Unique object identifier.
       example: product-1
-    recommendationRequest:
+    recommendationsQuery:
       allOf:
         - type: object
-          title: baseRecommendationRequest
+          title: baseRecommendationsQuery
           additionalProperties: false
           properties:
             model:
               $ref: '#/components/schemas/recommendationModels'
             objectID:
               $ref: '#/components/schemas/objectID'
+            queryParameters:
+              $ref: '#/components/schemas/searchParamsObject'
+            fallbackParameters:
+              $ref: '#/components/schemas/searchParamsObject'
           required:
             - model
             - objectID
         - $ref: '#/components/schemas/baseRecommendRequest'
     recommendationsRequest:
       oneOf:
-        - $ref: '#/components/schemas/trendingRequest'
-        - $ref: '#/components/schemas/recommendationRequest'
+        - $ref: '#/components/schemas/trendingItemsQuery'
+        - $ref: '#/components/schemas/trendingFacetsQuery'
+        - $ref: '#/components/schemas/recommendationsQuery'
     nbHits:
       type: integer
       description: Number of hits the search query matched.

@@ -172,7 +172,7 @@ void main() {
       call: (client) => client.getRecommendations(
         getRecommendationsParams: GetRecommendationsParams(
           requests: [
-            RecommendationRequest(
+            RecommendationsQuery(
               indexName: "indexName",
               objectID: "objectID",
               model: RecommendationModels.fromJson("related-products"),
@@ -202,7 +202,7 @@ void main() {
       call: (client) => client.getRecommendations(
         getRecommendationsParams: GetRecommendationsParams(
           requests: [
-            RecommendationRequest(
+            RecommendationsQuery(
               indexName: "indexName",
               objectID: "objectID",
               model: RecommendationModels.fromJson("related-products"),
@@ -245,9 +245,9 @@ void main() {
       call: (client) => client.getRecommendations(
         getRecommendationsParams: GetRecommendationsParams(
           requests: [
-            TrendingRequest(
+            TrendingItemsQuery(
               indexName: "indexName",
-              model: TrendingModels.fromJson("trending-items"),
+              model: TrendingItemsModel.fromJson("trending-items"),
               threshold: 42,
             ),
           ],
@@ -274,9 +274,9 @@ void main() {
       call: (client) => client.getRecommendations(
         getRecommendationsParams: GetRecommendationsParams(
           requests: [
-            TrendingRequest(
+            TrendingItemsQuery(
               indexName: "indexName",
-              model: TrendingModels.fromJson("trending-items"),
+              model: TrendingItemsModel.fromJson("trending-items"),
               threshold: 42,
               maxRecommendations: 10,
               facetName: "myFacetName",
@@ -318,13 +318,13 @@ void main() {
       call: (client) => client.getRecommendations(
         getRecommendationsParams: GetRecommendationsParams(
           requests: [
-            RecommendationRequest(
+            RecommendationsQuery(
               indexName: "indexName1",
               objectID: "objectID1",
               model: RecommendationModels.fromJson("related-products"),
               threshold: 21,
             ),
-            RecommendationRequest(
+            RecommendationsQuery(
               indexName: "indexName2",
               objectID: "objectID2",
               model: RecommendationModels.fromJson("related-products"),
@@ -354,7 +354,7 @@ void main() {
       call: (client) => client.getRecommendations(
         getRecommendationsParams: GetRecommendationsParams(
           requests: [
-            RecommendationRequest(
+            RecommendationsQuery(
               indexName: "indexName1",
               objectID: "objectID1",
               model: RecommendationModels.fromJson("related-products"),
@@ -373,7 +373,7 @@ void main() {
                 ],
               ),
             ),
-            RecommendationRequest(
+            RecommendationsQuery(
               indexName: "indexName2",
               objectID: "objectID2",
               model: RecommendationModels.fromJson("related-products"),
@@ -416,7 +416,7 @@ void main() {
       call: (client) => client.getRecommendations(
         getRecommendationsParams: GetRecommendationsParams(
           requests: [
-            RecommendationRequest(
+            RecommendationsQuery(
               indexName: "indexName1",
               objectID: "objectID1",
               model: RecommendationModels.fromJson("bought-together"),

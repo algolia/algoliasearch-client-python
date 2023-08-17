@@ -192,7 +192,7 @@ class RecommendClientRequestsTests {
     {
       List<RecommendationsRequest> requests1 = new ArrayList<>();
       {
-        RecommendationRequest requests_02 = new RecommendationRequest();
+        RecommendationsQuery requests_02 = new RecommendationsQuery();
         {
           String indexName3 = "indexName";
           requests_02.setIndexName(indexName3);
@@ -231,7 +231,7 @@ class RecommendClientRequestsTests {
     {
       List<RecommendationsRequest> requests1 = new ArrayList<>();
       {
-        RecommendationRequest requests_02 = new RecommendationRequest();
+        RecommendationsQuery requests_02 = new RecommendationsQuery();
         {
           String indexName3 = "indexName";
           requests_02.setIndexName(indexName3);
@@ -296,11 +296,11 @@ class RecommendClientRequestsTests {
     {
       List<RecommendationsRequest> requests1 = new ArrayList<>();
       {
-        TrendingRequest requests_02 = new TrendingRequest();
+        TrendingItemsQuery requests_02 = new TrendingItemsQuery();
         {
           String indexName3 = "indexName";
           requests_02.setIndexName(indexName3);
-          TrendingModels model3 = TrendingModels.fromValue("trending-items");
+          TrendingItemsModel model3 = TrendingItemsModel.fromValue("trending-items");
           requests_02.setModel(model3);
           int threshold3 = 42;
           requests_02.setThreshold(threshold3);
@@ -333,11 +333,11 @@ class RecommendClientRequestsTests {
     {
       List<RecommendationsRequest> requests1 = new ArrayList<>();
       {
-        TrendingRequest requests_02 = new TrendingRequest();
+        TrendingItemsQuery requests_02 = new TrendingItemsQuery();
         {
           String indexName3 = "indexName";
           requests_02.setIndexName(indexName3);
-          TrendingModels model3 = TrendingModels.fromValue("trending-items");
+          TrendingItemsModel model3 = TrendingItemsModel.fromValue("trending-items");
           requests_02.setModel(model3);
           int threshold3 = 42;
           requests_02.setThreshold(threshold3);
@@ -400,7 +400,7 @@ class RecommendClientRequestsTests {
     {
       List<RecommendationsRequest> requests1 = new ArrayList<>();
       {
-        RecommendationRequest requests_02 = new RecommendationRequest();
+        RecommendationsQuery requests_02 = new RecommendationsQuery();
         {
           String indexName3 = "indexName1";
           requests_02.setIndexName(indexName3);
@@ -412,7 +412,7 @@ class RecommendClientRequestsTests {
           requests_02.setThreshold(threshold3);
         }
         requests1.add(RecommendationsRequest.of(requests_02));
-        RecommendationRequest requests_12 = new RecommendationRequest();
+        RecommendationsQuery requests_12 = new RecommendationsQuery();
         {
           String indexName3 = "indexName2";
           requests_12.setIndexName(indexName3);
@@ -451,7 +451,7 @@ class RecommendClientRequestsTests {
     {
       List<RecommendationsRequest> requests1 = new ArrayList<>();
       {
-        RecommendationRequest requests_02 = new RecommendationRequest();
+        RecommendationsQuery requests_02 = new RecommendationsQuery();
         {
           String indexName3 = "indexName1";
           requests_02.setIndexName(indexName3);
@@ -489,7 +489,7 @@ class RecommendClientRequestsTests {
           requests_02.setFallbackParameters(fallbackParameters3);
         }
         requests1.add(RecommendationsRequest.of(requests_02));
-        RecommendationRequest requests_12 = new RecommendationRequest();
+        RecommendationsQuery requests_12 = new RecommendationsQuery();
         {
           String indexName3 = "indexName2";
           requests_12.setIndexName(indexName3);
@@ -554,7 +554,7 @@ class RecommendClientRequestsTests {
     {
       List<RecommendationsRequest> requests1 = new ArrayList<>();
       {
-        RecommendationRequest requests_02 = new RecommendationRequest();
+        RecommendationsQuery requests_02 = new RecommendationsQuery();
         {
           String indexName3 = "indexName1";
           requests_02.setIndexName(indexName3);

@@ -14,8 +14,9 @@ final class GetRecommendationsParams {
 
   /// Request parameters depend on the model (recommendations or trending).
   /// One of types:
-  /// - [RecommendationRequest]
-  /// - [TrendingRequest]
+  /// - [TrendingItemsQuery]
+  /// - [RecommendationsQuery]
+  /// - [TrendingFacetsQuery]
   @JsonKey(name: r'requests')
   final Iterable<dynamic> requests;
 
