@@ -1,40 +1,8 @@
 recommendationsRequest:
   oneOf:
-    - $ref: '#/trendingRequest'
-    - $ref: '#/recommendationRequest'
-
-trendingRequest:
-  allOf:
-    - type: object
-      title: baseTrendingRequest
-      additionalProperties: false
-      properties:
-        model:
-          $ref: '#/trendingModels'
-        facetName:
-          type: string
-          description: Facet name for trending models.
-        facetValue:
-          type: string
-          description: Facet value for trending models.
-      required:
-        - model
-    - $ref: '#/baseRecommendRequest'
-
-recommendationRequest:
-  allOf:
-    - type: object
-      title: baseRecommendationRequest
-      additionalProperties: false
-      properties:
-        model:
-          $ref: '#/recommendationModels'
-        objectID:
-          $ref: '../../../common/parameters.yml#/objectID'
-      required:
-        - model
-        - objectID
-    - $ref: '#/baseRecommendRequest'
+    - $ref: './TrendingQuery.yml#/trendingItemsQuery'
+    - $ref: './TrendingQuery.yml#/trendingFacetsQuery'
+    - $ref: './RecommendationsQuery.yml#/recommendationsQuery'
 
 baseRecommendRequest:
   type: object
@@ -54,20 +22,5 @@ baseRecommendRequest:
       type: integer
       default: 0
       description: Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-    queryParameters:
-      $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
-    fallbackParameters:
-      $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
   required:
     - indexName
-    - threshold
-
-trendingModels:
-  description: Trending model.
-  type: string
-  enum: [trending-facets, trending-items]
-
-recommendationModels:
-  description: Recommendation model.
-  type: string
-  enum: [related-products, bought-together]
