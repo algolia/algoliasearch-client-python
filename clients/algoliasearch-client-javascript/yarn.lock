@@ -12,7 +12,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -25,7 +25,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -51,7 +51,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -64,7 +64,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -77,7 +77,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -90,7 +90,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -103,7 +103,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -129,7 +129,7 @@ __metadata:
     "@algolia/client-common": 5.0.0-alpha.78
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     rollup: 3.28.0
     typescript: 5.1.6
   languageName: unknown
@@ -2953,13 +2953,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.5":
-  version: 18.17.5
-  resolution: "@types/node@npm:18.17.5"
-  checksum: b8c658a99234b99425243c324b641ed7b9ceb6bee6b06421fdc9bb7c58f9a5552e353225cc549e6982462ac384abe1985022ed76e2e4728797f59b21f659ca2b
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:18.17.6":
   version: 18.17.6
   resolution: "@types/node@npm:18.17.6"
@@ -3195,7 +3188,7 @@ __metadata:
     "@algolia/requester-browser-xhr": 5.0.0-alpha.78
     "@algolia/requester-node-http": 5.0.0-alpha.78
     "@types/jest": 29.5.3
-    "@types/node": 18.17.5
+    "@types/node": 18.17.6
     jest: 29.6.2
     rollup: 3.28.0
     ts-jest: 29.1.1
