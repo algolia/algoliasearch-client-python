@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.*;
 import org.openapitools.codegen.SupportingFile;
 
-public class JavaScriptCTSManager implements CTSManager {
+public class JavascriptCTSManager implements CTSManager {
 
   private final String client;
 
-  public JavaScriptCTSManager(String client) {
+  public JavascriptCTSManager(String client) {
     this.client = client;
   }
 

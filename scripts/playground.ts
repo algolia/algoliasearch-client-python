@@ -39,11 +39,7 @@ export async function playground({
       break;
     case 'go':
       // eslint-disable-next-line no-console
-      console.log(
-        await run(
-          `cd playground/go && /usr/local/go/bin/go run . --client ${client}`
-        )
-      );
+      console.log(await run(`cd playground/go && /usr/local/go/bin/go run . --client ${client}`));
       break;
     default:
   }

@@ -18,9 +18,7 @@ export function getGitAuthor(): { name: string; email: string } {
  *
  * @param ppath - The absolute path to the file.
  */
-export async function readJsonFile(
-  ppath: string
-): Promise<Record<string, any>> {
+export async function readJsonFile(ppath: string): Promise<Record<string, any>> {
   return JSON.parse(
     await fsp.readFile(ppath, {
       encoding: 'utf-8',
@@ -34,9 +32,6 @@ export async function readJsonFile(
  * @param ppath - The absolute path to the file.
  * @param data - The data to store.
  */
-export async function writeJsonFile(
-  ppath: string,
-  data: Record<string, any>
-): Promise<void> {
+export async function writeJsonFile(ppath: string, data: Record<string, any>): Promise<void> {
   await fsp.writeFile(ppath, JSON.stringify(data, null, 2).concat('\n'));
 }

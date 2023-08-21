@@ -2,13 +2,7 @@ import fsp from 'fs/promises';
 
 import yaml from 'js-yaml';
 
-import {
-  BUNDLE_WITH_DOC,
-  checkForCache,
-  exists,
-  run,
-  toAbsolutePath,
-} from './common.js';
+import { BUNDLE_WITH_DOC, checkForCache, exists, run, toAbsolutePath } from './common.js';
 import { createSpinner } from './spinners.js';
 import type { Spec } from './types.js';
 
@@ -37,9 +31,7 @@ async function transformBundle({
     throw new Error(`Bundled file not found ${bundledPath}.`);
   }
 
-  const bundledSpec = yaml.load(
-    await fsp.readFile(bundledPath, 'utf8')
-  ) as Spec;
+  const bundledSpec = yaml.load(await fsp.readFile(bundledPath, 'utf8')) as Spec;
 
   let bundledDocSpec: Spec | undefined;
   if (withDoc) {
@@ -71,19 +63,13 @@ async function transformBundle({
       // Checks that specified tags are well defined at root level
       for (const tag of docMethod.tags) {
         if (tag === clientName) {
-          throw new Error(
-            `Tag name "${tag}" must be different from client name ${clientName}`
-          );
+          throw new Error(`Tag name "${tag}" must be different from client name ${clientName}`);
         }
         if (alias && tag === alias) {
-          throw new Error(
-            `Tag name "${tag} must be different from alias ${alias}`
-          );
+          throw new Error(`Tag name "${tag} must be different from alias ${alias}`);
         }
 
-        const tagExists = tagsDefinitions
-          ? tagsDefinitions.find((t) => t.name === tag)
-          : null;
+        const tagExists = tagsDefinitions ? tagsDefinitions.find((t) => t.name === tag) : null;
         if (!tagExists) {
           throw new Error(
             `Tag "${tag}" in "client[${clientName}] -> operation[${specMethod.operationId}]" is not defined`
@@ -160,18 +146,13 @@ async function buildLiteSpec({
   bundledPath: string;
   outputFormat: string;
 }): Promise<void> {
-  const parsed = yaml.load(
-    await fsp.readFile(toAbsolutePath(bundledPath), 'utf8')
-  ) as Spec;
+  const parsed = yaml.load(await fsp.readFile(toAbsolutePath(bundledPath), 'utf8')) as Spec;
 
   // Filter methods.
   parsed.paths = Object.entries(parsed.paths).reduce(
     (acc, [path, operations]) => {
       for (const [method, operation] of Object.entries(operations)) {
-        if (
-          method === 'post' &&
-          ALGOLIASEARCH_LITE_OPERATIONS.includes(operation.operationId)
-        ) {
+        if (method === 'post' && ALGOLIASEARCH_LITE_OPERATIONS.includes(operation.operationId)) {
           return { ...acc, [path]: { post: operation } };
         }
       }
@@ -195,11 +176,7 @@ async function buildLiteSpec({
 /**
  * Build spec file.
  */
-async function buildSpec(
-  spec: string,
-  outputFormat: string,
-  useCache: boolean
-): Promise<void> {
+async function buildSpec(spec: string, outputFormat: string, useCache: boolean): Promise<void> {
   const isAlgoliasearch = spec === 'algoliasearch';
   // In case of lite we use a the `search` spec as a base because only its bundled form exists.
   const specBase = isAlgoliasearch ? 'search' : spec;
@@ -276,7 +253,5 @@ export async function buildSpecs(
 
   await lintCommon(useCache);
 
-  await Promise.all(
-    clients.map((client) => buildSpec(client, outputFormat, useCache))
-  );
+  await Promise.all(clients.map((client) => buildSpec(client, outputFormat, useCache)));
 }

@@ -36,9 +36,7 @@ export const ROOT_DIR = path.resolve(process.cwd(), '..');
 export const ROOT_ENV_PATH = path.resolve(ROOT_DIR, '.env');
 
 // Build `GENERATORS` from the openapitools file
-export const GENERATORS = Object.entries(
-  openapiConfig['generator-cli'].generators
-).reduce(
+export const GENERATORS = Object.entries(openapiConfig['generator-cli'].generators).reduce(
   (current, [key, { output, ...gen }]) => {
     const language = key.slice(0, key.indexOf('-')) as Language;
 
@@ -54,9 +52,7 @@ export const GENERATORS = Object.entries(
 
     if (language === 'javascript') {
       // eslint-disable-next-line no-param-reassign
-      current[key].additionalProperties.packageName = output.substring(
-        output.lastIndexOf('/') + 1
-      );
+      current[key].additionalProperties.packageName = output.substring(output.lastIndexOf('/') + 1);
     }
 
     return current;
@@ -64,13 +60,9 @@ export const GENERATORS = Object.entries(
   {} as Record<string, Generator>
 );
 
-export const LANGUAGES = [
-  ...new Set(Object.values(GENERATORS).map((gen) => gen.language)),
-];
+export const LANGUAGES = [...new Set(Object.values(GENERATORS).map((gen) => gen.language))];
 
-export const CLIENTS = [
-  ...new Set(Object.values(GENERATORS).map((gen) => gen.client)),
-];
+export const CLIENTS = [...new Set(Object.values(GENERATORS).map((gen) => gen.client))];
 
 export const CLIENTS_JS_UTILS = [
   'client-common',
@@ -99,10 +91,7 @@ export async function run(
         ).all ?? ''
       );
     }
-    return (
-      (await execaCommand(command, { shell: 'bash', all: true, cwd: realCwd }))
-        .all ?? ''
-    );
+    return (await execaCommand(command, { shell: 'bash', all: true, cwd: realCwd })).all ?? '';
   } catch (err) {
     if (errorMessage) {
       throw new Error(`[ERROR] ${errorMessage}`);
@@ -150,9 +139,7 @@ export async function gitCommit({
   coAuthors?: string[];
   cwd?: string;
 }): Promise<void> {
-  const messageWithCoAuthors = coAuthors
-    ? `${message}\n\n\n${coAuthors.join('\n')}`
-    : message;
+  const messageWithCoAuthors = coAuthors ? `${message}\n\n\n${coAuthors.join('\n')}` : message;
 
   await execa('git', ['commit', '-m', messageWithCoAuthors], { cwd });
 }
@@ -168,11 +155,7 @@ export async function checkForCache({
     hash: '',
   };
   const generatedFilesExists = (
-    await Promise.all(
-      generatedFiles.map((generatedFile) =>
-        exists(`${folder}/${generatedFile}`)
-      )
-    )
+    await Promise.all(generatedFiles.map((generatedFile) => exists(`${folder}/${generatedFile}`)))
   ).every((exist) => exist);
 
   for (const fileToCache of filesToCache) {

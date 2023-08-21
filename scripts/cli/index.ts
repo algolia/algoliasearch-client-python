@@ -27,12 +27,8 @@ if (!CI && !DOCKER) {
 }
 
 const args = {
-  language: new Argument('[language]', 'The language').choices(
-    PROMPT_LANGUAGES
-  ),
-  clients: new Argument('[client...]', 'The client').choices(
-    getClientChoices('all')
-  ),
+  language: new Argument('[language]', 'The language').choices(PROMPT_LANGUAGES),
+  clients: new Argument('[client...]', 'The client').choices(getClientChoices('all')),
   client: new Argument('[client]', 'The client').choices(PROMPT_CLIENTS),
 };
 
@@ -64,19 +60,17 @@ program
   .addArgument(args.clients)
   .option(flags.verbose.flag, flags.verbose.description)
   .option(flags.interactive.flag, flags.interactive.description)
-  .action(
-    async (langArg: LangArg, clientArg: string[], { verbose, interactive }) => {
-      const { language, client, clientList } = await prompt({
-        langArg,
-        clientArg,
-        interactive,
-      });
+  .action(async (langArg: LangArg, clientArg: string[], { verbose, interactive }) => {
+    const { language, client, clientList } = await prompt({
+      langArg,
+      clientArg,
+      interactive,
+    });
 
-      setVerbose(Boolean(verbose));
+    setVerbose(Boolean(verbose));
 
-      await generate(generatorList({ language, client, clientList }));
-    }
-  );
+    await generate(generatorList({ language, client, clientList }));
+  });
 
 const buildCommand = program.command('build');
 
@@ -87,19 +81,17 @@ buildCommand
   .addArgument(args.clients)
   .option(flags.verbose.flag, flags.verbose.description)
   .option(flags.interactive.flag, flags.interactive.description)
-  .action(
-    async (langArg: LangArg, clientArg: string[], { verbose, interactive }) => {
-      const { language, client, clientList } = await prompt({
-        langArg,
-        clientArg,
-        interactive,
-      });
+  .action(async (langArg: LangArg, clientArg: string[], { verbose, interactive }) => {
+    const { language, client, clientList } = await prompt({
+      langArg,
+      clientArg,
+      interactive,
+    });
 
-      setVerbose(Boolean(verbose));
+    setVerbose(Boolean(verbose));
 
-      await buildClients(generatorList({ language, client, clientList }));
-    }
-  );
+    await buildClients(generatorList({ language, client, clientList }));
+  });
 
 buildCommand
   .command('specs')
@@ -109,29 +101,20 @@ buildCommand
   .option(flags.interactive.flag, flags.interactive.description)
   .option(flags.skipCache.flag, flags.skipCache.description)
   .option(flags.outputType.flag, flags.outputType.description)
-  .action(
-    async (
-      clientArg: string[],
-      { verbose, interactive, skipCache, outputJson }
-    ) => {
-      const { client, clientList } = await prompt({
-        langArg: ALL,
-        clientArg,
-        interactive,
-      });
+  .action(async (clientArg: string[], { verbose, interactive, skipCache, outputJson }) => {
+    const { client, clientList } = await prompt({
+      langArg: ALL,
+      clientArg,
+      interactive,
+    });
 
-      setVerbose(Boolean(verbose));
+    setVerbose(Boolean(verbose));
 
-      const outputFormat = outputJson ? 'json' : 'yml';
+    const outputFormat = outputJson ? 'json' : 'yml';
 
-      // ignore cache when building from cli
-      await buildSpecs(
-        client[0] === ALL ? clientList : client,
-        outputFormat,
-        !skipCache
-      );
-    }
-  );
+    // ignore cache when building from cli
+    await buildSpecs(client[0] === ALL ? clientList : client, outputFormat, !skipCache);
+  });
 
 const ctsCommand = program.command('cts');
 
@@ -142,19 +125,17 @@ ctsCommand
   .addArgument(args.clients)
   .option(flags.verbose.flag, flags.verbose.description)
   .option(flags.interactive.flag, flags.interactive.description)
-  .action(
-    async (langArg: LangArg, clientArg: string[], { verbose, interactive }) => {
-      const { language, client, clientList } = await prompt({
-        langArg,
-        clientArg,
-        interactive,
-      });
+  .action(async (langArg: LangArg, clientArg: string[], { verbose, interactive }) => {
+    const { language, client, clientList } = await prompt({
+      langArg,
+      clientArg,
+      interactive,
+    });
 
-      setVerbose(Boolean(verbose));
+    setVerbose(Boolean(verbose));
 
-      await ctsGenerateMany(generatorList({ language, client, clientList }));
-    }
-  );
+    await ctsGenerateMany(generatorList({ language, client, clientList }));
+  });
 
 ctsCommand
   .command('run')

@@ -1,79 +1,61 @@
 /* eslint-disable no-case-declarations */
 import * as core from '@actions/core';
 
-import {
-  CLIENTS,
-  createClientName,
-  GENERATORS,
-  LANGUAGES,
-} from '../../common.js';
+import { CLIENTS, createClientName, GENERATORS, LANGUAGES } from '../../common.js';
 import {
   getClientsConfigField,
   getLanguageFolder,
   getTestExtension,
   getTestOutputFolder,
 } from '../../config.js';
-import type { Language } from '../../types.js';
-import { getNbGitDiff } from '../utils.js';
 
-import { DEPENDENCIES, COMMON_DEPENDENCIES } from './setRunVariables.js';
-import type {
-  ClientMatrix,
-  CreateMatrix,
-  Matrix,
-  SpecMatrix,
-  ToRunMatrix,
-} from './types.js';
+import { COMMON_DEPENDENCIES, DEPENDENCIES } from './setRunVariables.js';
+import type { ClientMatrix, CreateMatrix, Matrix, SpecMatrix, ToRunMatrix } from './types.js';
 import { computeCacheKey, isBaseChanged } from './utils.js';
 
 // This empty matrix is required by the CI, otherwise it throws
 const EMPTY_MATRIX = { client: ['no-run'] };
 
-async function getClientMatrix(baseBranch: string): Promise<void> {
-  const matrix = LANGUAGES.reduce(
-    (curr, lang) => ({
-      ...curr,
-      [lang]: {
-        path: getLanguageFolder(lang),
-        toRun: [],
-        cacheToCompute: [],
-      },
-    }),
-    {} as Record<Language, ToRunMatrix>
-  );
+async function createClientMatrix(baseBranch: string): Promise<void> {
+  const matrix: Record<string, ToRunMatrix> = {};
 
+  // iterate over every generators to see what changed
   for (const { language, client, output } of Object.values(GENERATORS)) {
-    const languageDependencies = Object.entries(DEPENDENCIES).reduce(
-      (finalDeps, [key, deps]) => {
-        if (key.startsWith(`${language.toUpperCase()}_`)) {
-          return {
-            ...finalDeps,
-            [key]: deps,
-          };
-        }
+    const key = `${language.toUpperCase()}_CLIENT_CHANGED`;
 
-        return finalDeps;
-      },
-      {} as Record<string, string[]>
-    );
+    const languageDependencies = {
+      [key]: DEPENDENCIES[key],
+    };
 
+    // only JS have other dependencies for its utils packages
+    if (language === 'javascript') {
+      languageDependencies.JAVASCRIPT_UTILS_CHANGED = DEPENDENCIES.JAVASCRIPT_UTILS_CHANGED;
+    }
+
+    // We will check if dependencies have changed for each clients of each languages:
+    //   - language specific dependencies
+    //   - common dependencies of every clients
+    //   - output of the client
+    //   - specs that generated the client
     const bundledSpec = client === 'algoliasearch' ? 'search' : client;
-    const specChanges = await getNbGitDiff({
-      branch: baseBranch,
-      path: `specs/${bundledSpec}`,
-    });
-    const clientChanges = await getNbGitDiff({
-      branch: baseBranch,
-      path: output,
-    });
-    const baseChanged = await isBaseChanged(baseBranch, {
+    const dependenciesChanged = await isBaseChanged(baseBranch, {
       ...COMMON_DEPENDENCIES,
       ...languageDependencies,
+      output: [output],
+      specs: [`specs/${bundledSpec}`],
     });
 
     // No changes found, we don't put this job in the matrix
-    if (clientChanges === 0 && specChanges === 0 && !baseChanged) {
+    if (!dependenciesChanged) {
       continue;
+    }
+
+    if (!(language in matrix)) {
+      matrix[language] = {
+        path: getLanguageFolder(language),
+        toRun: [],
+        cacheToCompute: ['specs/common', `templates/${language}`, `generators/src`],
+      };
     }
 
     matrix[language].toRun.push(client);
@@ -84,18 +66,15 @@ async function getClientMatrix(baseBranch: string): Promise<void> {
     client: [],
   };
 
-  // Set output variables for the CI
+  // Now that we've built a map of what changed, we can create the matrix for the CI
   for (const language of LANGUAGES) {
-    if (matrix[language].toRun.length === 0) {
+    if (!matrix[language] || matrix[language].toRun.length === 0) {
       continue;
     }
 
     const testsRootFolder = `tests/output/${language}`;
-    const testsOutputBase = `${testsRootFolder}/${getTestOutputFolder(
-      language
-    )}`;
-    // We delete all tests because the CTS runs everything present in the folder
-    // but we then re-generate the ones that needs to run
+    const testsOutputBase = `${testsRootFolder}/${getTestOutputFolder(language)}`;
+    // We delete tests to ensure the CI only run tests against what changed.
     const testsToDelete = `${testsOutputBase}/client ${testsOutputBase}/methods/requests`;
 
     // We only store tests of clients that ran during this job, the rest stay as is
@@ -107,9 +86,11 @@ async function getClientMatrix(baseBranch: string): Promise<void> {
         return `${testsOutputBase}/client/${clientName}${extension} ${testsOutputBase}/methods/requests/${clientName}${extension}`;
       })
       .join(' ');
+
     const toRun = matrix[language].toRun.join(' ');
     let buildCommand = `yarn cli build clients ${language} ${toRun}`;
 
+    // some clients have specific files required for testing
     switch (language) {
       case 'java':
         testsToStore = `${testsToStore} ${testsRootFolder}/build.gradle`;
@@ -117,29 +98,18 @@ async function getClientMatrix(baseBranch: string): Promise<void> {
       case 'go':
         testsToStore = `${testsToStore} ${testsOutputBase}/methods/requests/common.go`;
         break;
-      /**
-       * The CI runs on a node docker image, therefore it's not needed to run
-       * via the CLI for the JavaScript client.
-       */
       case 'javascript':
-        const npmNamespace = getClientsConfigField(
-          'javascript',
-          'npmNamespace'
-        );
+        const npmNamespace = getClientsConfigField('javascript', 'npmNamespace');
         const packageNames = matrix[language].toRun.map((client) => {
-          const packageName =
-            GENERATORS[`${language}-${client}`].additionalProperties
-              .packageName;
+          const packageName = GENERATORS[`${language}-${client}`].additionalProperties.packageName;
 
           // `algoliasearch` is not preceded by `@algolia`
-          return client === 'algoliasearch'
-            ? packageName
-            : `${npmNamespace}/${packageName}`;
+          return client === 'algoliasearch' ? packageName : `${npmNamespace}/${packageName}`;
         });
 
-        buildCommand = `cd ${
-          matrix[language].path
-        } && yarn build:many '{${packageNames.join(',')},}'`;
+        buildCommand = `cd ${matrix[language].path} && yarn build:many '{${packageNames.join(
+          ','
+        )},}'`;
 
         testsToStore = `${testsToStore} ${testsRootFolder}/package.json`;
         break;
@@ -152,12 +122,7 @@ async function getClientMatrix(baseBranch: string): Promise<void> {
       path: matrix[language].path,
       toRun,
       buildCommand,
-      cacheKey: await computeCacheKey(`clients-${language}`, [
-        ...matrix[language].cacheToCompute,
-        'specs/common',
-        `templates/${language}`,
-        `generators/src`,
-      ]),
+      cacheKey: await computeCacheKey(`clients-${language}`, matrix[language].cacheToCompute),
       testsRootFolder,
       testsToDelete,
       testsToStore,
@@ -168,21 +133,18 @@ async function getClientMatrix(baseBranch: string): Promise<void> {
   const shouldRun = clientMatrix.client.length > 0;
 
   core.setOutput('RUN_GEN', shouldRun);
-  core.setOutput(
-    'GEN_MATRIX',
-    JSON.stringify(shouldRun ? clientMatrix : EMPTY_MATRIX)
-  );
+  core.setOutput('GEN_MATRIX', JSON.stringify(shouldRun ? clientMatrix : EMPTY_MATRIX));
 }
 
-async function getSpecMatrix(): Promise<void> {
+async function createSpecMatrix(): Promise<void> {
   const matrix: ToRunMatrix = {
     path: 'specs/bundled',
     toRun: [],
-    cacheToCompute: [],
+    cacheToCompute: ['specs/common'],
   };
 
   for (const client of CLIENTS) {
-    // The `algoliasearch` spec is created by the `search` spec, for the `lite` JavaScript client.
+    // The `algoliasearch` spec is created by the `search` spec.
     const bundledSpecName = client === 'algoliasearch' ? 'search' : client;
 
     matrix.toRun.push(client);
@@ -192,10 +154,7 @@ async function getSpecMatrix(): Promise<void> {
   const ciMatrix: SpecMatrix = {
     bundledPath: matrix.path,
     toRun: matrix.toRun.join(' '),
-    cacheKey: await computeCacheKey('specs', [
-      ...matrix.cacheToCompute,
-      'specs/common',
-    ]),
+    cacheKey: await computeCacheKey('specs', matrix.cacheToCompute),
   };
 
   core.setOutput('MATRIX', JSON.stringify(ciMatrix));
@@ -206,10 +165,10 @@ async function getSpecMatrix(): Promise<void> {
  */
 async function createMatrix(opts: CreateMatrix): Promise<void> {
   if (opts.forClients) {
-    return await getClientMatrix(opts.baseBranch);
+    return await createClientMatrix(opts.baseBranch);
   }
 
-  return await getSpecMatrix();
+  return await createSpecMatrix();
 }
 
 if (import.meta.url.endsWith(process.argv[1])) {

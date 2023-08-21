@@ -1,10 +1,5 @@
 /* eslint-disable no-console */
-import {
-  configureGitHubAuthor,
-  ensureGitHubToken,
-  MAIN_BRANCH,
-  run,
-} from '../../common.js';
+import { configureGitHubAuthor, ensureGitHubToken, MAIN_BRANCH, run } from '../../common.js';
 import { getNbGitDiff } from '../utils.js';
 
 import text, { commitStartPrepareRelease } from './text.js';
@@ -13,9 +8,7 @@ const PR_NUMBER = parseInt(process.env.PR_NUMBER || '0', 10);
 
 async function isUpToDate(baseBranch: string): Promise<boolean> {
   await run('git fetch origin');
-  return (await run(`git pull origin ${baseBranch}`)).includes(
-    'Already up to date.'
-  );
+  return (await run(`git pull origin ${baseBranch}`)).includes('Already up to date.');
 }
 
 /**

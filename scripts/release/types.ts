@@ -12,10 +12,7 @@ export type Version = {
 
 export type Versions = Record<string, Version>;
 
-export type VersionsBeforeBump = Record<
-  string,
-  Omit<Version, 'next' | 'releaseType'>
->;
+export type VersionsBeforeBump = Record<string, Omit<Version, 'next' | 'releaseType'>>;
 
 export type Scope = Language | 'clients' | 'specs';
 
@@ -50,6 +47,4 @@ export type Changelog = {
   [lang in Language]?: string;
 };
 
-export type BeforeClientCommitCommand = (params: {
-  dir: string;
-}) => Promise<void>;
+export type BeforeClientCommitCommand = (params: { dir: string }) => Promise<void>;

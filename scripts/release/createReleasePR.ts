@@ -49,8 +49,7 @@ export function readVersions(): VersionsBeforeBump {
 
 export function getVersionChangesText(versions: Versions): string {
   return LANGUAGES.map((lang) => {
-    const { current, releaseType, noCommit, skipRelease, next } =
-      versions[lang];
+    const { current, releaseType, noCommit, skipRelease, next } = versions[lang];
 
     if (noCommit) {
       return `- ~${lang}: ${current} (${TEXT.noCommit})~`;
@@ -78,10 +77,7 @@ export function getSkippedCommitsText({
   commitsWithoutLanguageScope: string[];
   commitsWithUnknownLanguageScope: string[];
 }): string {
-  if (
-    commitsWithoutLanguageScope.length === 0 &&
-    commitsWithUnknownLanguageScope.length === 0
-  ) {
+  if (commitsWithoutLanguageScope.length === 0 && commitsWithUnknownLanguageScope.length === 0) {
     return '_(None)_';
   }
 
@@ -127,11 +123,7 @@ export async function parseCommit(commit: string): Promise<Commit> {
   }
 
   // We skip generation commits as they do not appear in changelogs
-  if (
-    message
-      .toLocaleLowerCase()
-      .startsWith(generationCommitText.commitStartMessage)
-  ) {
+  if (message.toLocaleLowerCase().startsWith(generationCommitText.commitStartMessage)) {
     return {
       error: 'generation-commit',
     };
@@ -158,9 +150,7 @@ export async function parseCommit(commit: string): Promise<Commit> {
     });
 
     if (data.user) {
-      fetchedUsers[
-        authorEmail
-      ] = `[@${data.user.login}](https://github.com/${data.user.login}/)`;
+      fetchedUsers[authorEmail] = `[@${data.user.login}](https://github.com/${data.user.login}/)`;
     }
   }
 
@@ -178,10 +168,7 @@ export async function parseCommit(commit: string): Promise<Commit> {
 /**
  * Returns the next version of the client.
  */
-export function getNextVersion(
-  current: string,
-  releaseType: semver.ReleaseType | null
-): string {
+export function getNextVersion(current: string, releaseType: semver.ReleaseType | null): string {
   if (releaseType === null) {
     return current;
   }
@@ -196,14 +183,10 @@ export function getNextVersion(
   }
 
   if (!nextVersion) {
-    throw new Error(
-      `Unable to bump version: '${current}' with release type: '${releaseType}'`
-    );
+    throw new Error(`Unable to bump version: '${current}' with release type: '${releaseType}'`);
   }
 
-  console.log(
-    `    > Next version is '${nextVersion}', release type: '${releaseType}'`
-  );
+  console.log(`    > Next version is '${nextVersion}', release type: '${releaseType}'`);
 
   return nextVersion;
 }
@@ -216,73 +199,62 @@ export function decideReleaseStrategy({
   versions: VersionsBeforeBump;
   commits: PassedCommit[];
 }): Versions {
-  return Object.entries(versions).reduce(
-    (versionsWithReleaseType: Versions, [lang, version]) => {
-      const commitsPerLang = commits.filter(
-        (commit) =>
-          commit.scope === lang || COMMON_SCOPES.includes(commit.scope)
-      );
-      const currentVersion = versions[lang].current;
+  return Object.entries(versions).reduce((versionsWithReleaseType: Versions, [lang, version]) => {
+    const commitsPerLang = commits.filter(
+      (commit) => commit.scope === lang || COMMON_SCOPES.includes(commit.scope)
+    );
+    const currentVersion = versions[lang].current;
 
-      if (commitsPerLang.length === 0) {
-        versionsWithReleaseType[lang] = {
-          ...version,
-          noCommit: true,
-          releaseType: null,
-          next: getNextVersion(currentVersion, null),
-        };
-        return versionsWithReleaseType;
-      }
-
-      console.log(`Deciding next version bump for ${lang}.`);
-
-      // snapshots should not be bumped as prerelease
-      if (
-        semver.prerelease(currentVersion) &&
-        !currentVersion.endsWith('-SNAPSHOT')
-      ) {
-        // if version is like 0.1.2-beta.1, it increases to 0.1.2-beta.2, even if there's a breaking change.
-        versionsWithReleaseType[lang] = {
-          ...version,
-          releaseType: 'prerelease',
-          next: getNextVersion(currentVersion, 'prerelease'),
-        };
-        return versionsWithReleaseType;
-      }
-
-      if (
-        commitsPerLang.some((commit) =>
-          commit.message.includes('BREAKING CHANGE')
-        )
-      ) {
-        versionsWithReleaseType[lang] = {
-          ...version,
-          releaseType: 'major',
-          next: getNextVersion(currentVersion, 'major'),
-        };
-        return versionsWithReleaseType;
-      }
-
-      const commitTypes = new Set(commitsPerLang.map(({ type }) => type));
-      if (commitTypes.has('feat')) {
-        versionsWithReleaseType[lang] = {
-          ...version,
-          releaseType: 'minor',
-          next: getNextVersion(currentVersion, 'minor'),
-        };
-        return versionsWithReleaseType;
-      }
-
+    if (commitsPerLang.length === 0) {
       versionsWithReleaseType[lang] = {
         ...version,
-        releaseType: 'patch',
-        ...(commitTypes.has('fix') ? undefined : { skipRelease: true }),
-        next: getNextVersion(currentVersion, 'patch'),
+        noCommit: true,
+        releaseType: null,
+        next: getNextVersion(currentVersion, null),
       };
       return versionsWithReleaseType;
-    },
-    {}
-  );
+    }
+
+    console.log(`Deciding next version bump for ${lang}.`);
+
+    // snapshots should not be bumped as prerelease
+    if (semver.prerelease(currentVersion) && !currentVersion.endsWith('-SNAPSHOT')) {
+      // if version is like 0.1.2-beta.1, it increases to 0.1.2-beta.2, even if there's a breaking change.
+      versionsWithReleaseType[lang] = {
+        ...version,
+        releaseType: 'prerelease',
+        next: getNextVersion(currentVersion, 'prerelease'),
+      };
+      return versionsWithReleaseType;
+    }
+
+    if (commitsPerLang.some((commit) => commit.message.includes('BREAKING CHANGE'))) {
+      versionsWithReleaseType[lang] = {
+        ...version,
+        releaseType: 'major',
+        next: getNextVersion(currentVersion, 'major'),
+      };
+      return versionsWithReleaseType;
+    }
+
+    const commitTypes = new Set(commitsPerLang.map(({ type }) => type));
+    if (commitTypes.has('feat')) {
+      versionsWithReleaseType[lang] = {
+        ...version,
+        releaseType: 'minor',
+        next: getNextVersion(currentVersion, 'minor'),
+      };
+      return versionsWithReleaseType;
+    }
+
+    versionsWithReleaseType[lang] = {
+      ...version,
+      releaseType: 'patch',
+      ...(commitTypes.has('fix') ? undefined : { skipRelease: true }),
+      next: getNextVersion(currentVersion, 'patch'),
+    };
+    return versionsWithReleaseType;
+  }, {});
 }
 /* eslint-enable no-param-reassign */
 
@@ -297,9 +269,7 @@ async function getCommits(): Promise<{
 }> {
   // Reading commits since last release
   const latestCommits = (
-    await run(
-      `git log --pretty=format:"%h|%ae|%s" ${RELEASED_TAG}..${MAIN_BRANCH}`
-    )
+    await run(`git log --pretty=format:"%h|%ae|%s" ${RELEASED_TAG}..${MAIN_BRANCH}`)
   )
     .split('\n')
     .filter(Boolean);
@@ -360,9 +330,7 @@ async function prepareGitEnvironment(): Promise<void> {
   }
 
   if ((await run('git rev-parse --abbrev-ref HEAD')) !== MAIN_BRANCH) {
-    throw new Error(
-      `You can run this script only from \`${MAIN_BRANCH}\` branch.`
-    );
+    throw new Error(`You can run this script only from \`${MAIN_BRANCH}\` branch.`);
   }
 
   if (
@@ -370,9 +338,7 @@ async function prepareGitEnvironment(): Promise<void> {
       head: null,
     })) !== 0
   ) {
-    throw new Error(
-      'Working directory is not clean. Commit all the changes first.'
-    );
+    throw new Error('Working directory is not clean. Commit all the changes first.');
   }
 
   await run(`git rev-parse --verify refs/tags/${RELEASED_TAG}`, {
@@ -387,9 +353,7 @@ async function prepareGitEnvironment(): Promise<void> {
   // Remove the local tag, and fetch it from the remote.
   // We move the `released` tag as we release, so we need to make it up-to-date.
   await run(`git tag -d ${RELEASED_TAG}`);
-  await run(
-    `git fetch origin refs/tags/${RELEASED_TAG}:refs/tags/${RELEASED_TAG}`
-  );
+  await run(`git fetch origin refs/tags/${RELEASED_TAG}:refs/tags/${RELEASED_TAG}`);
 }
 
 async function createReleasePR(): Promise<void> {
@@ -412,10 +376,7 @@ async function createReleasePR(): Promise<void> {
 
     const changelogCommits: string[] = [];
     for (const validCommit of validCommits) {
-      if (
-        validCommit.scope !== lang &&
-        !COMMON_SCOPES.includes(validCommit.scope)
-      ) {
+      if (validCommit.scope !== lang && !COMMON_SCOPES.includes(validCommit.scope)) {
         continue;
       }
 

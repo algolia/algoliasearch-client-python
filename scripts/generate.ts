@@ -2,10 +2,7 @@ import { buildSpecs } from './buildSpecs.js';
 import { buildCustomGenerators, CI, run } from './common.js';
 import { getCustomGenerator, getLanguageFolder } from './config.js';
 import { formatter } from './formatter.js';
-import {
-  generateOpenapitools,
-  removeExistingCodegen,
-} from './pre-gen/index.js';
+import { generateOpenapitools, removeExistingCodegen } from './pre-gen/index.js';
 import { createSpinner } from './spinners.js';
 import type { Generator } from './types.js';
 
@@ -33,9 +30,7 @@ export async function generate(generators: Generator[]): Promise<void> {
   await generateOpenapitools(generators);
 
   const langs = [...new Set(generators.map((gen) => gen.language))];
-  const useCustomGenerator = langs
-    .map((lang) => getCustomGenerator(lang))
-    .some(Boolean);
+  const useCustomGenerator = langs.map((lang) => getCustomGenerator(lang)).some(Boolean);
   if (useCustomGenerator) {
     await buildCustomGenerators();
   }

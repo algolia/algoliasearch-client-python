@@ -2,10 +2,7 @@ import clientsConfig from '../config/clients.config.json' assert { type: 'json' 
 
 import type { Language, LanguageConfig } from './types.js';
 
-export function getClientsConfigField(
-  language: Language,
-  pathToField: string[] | string
-): any {
+export function getClientsConfigField(language: Language, pathToField: string[] | string): any {
   const config: LanguageConfig = clientsConfig[language];
   const path = Array.isArray(pathToField) ? pathToField : [pathToField];
 
@@ -50,10 +47,7 @@ export function getPackageVersionDefault(language: Language): string {
   return getClientsConfigField(language, 'packageVersion');
 }
 
-export function getGitHubUrl(
-  language: Language,
-  options?: { token: string }
-): string {
+export function getGitHubUrl(language: Language, options?: { token: string }): string {
   const { gitRepoId } = clientsConfig[language];
 
   // GitHub Action provides a default token for authentication

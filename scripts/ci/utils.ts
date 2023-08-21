@@ -30,10 +30,9 @@ export async function getNbGitDiff({
 
   return parseInt(
     (
-      await run(
-        `git add -N . && git diff --shortstat ${branch}${checkHead} -- ${path} | wc -l`,
-        { cwd }
-      )
+      await run(`git add -N . && git diff --shortstat ${branch}${checkHead} -- ${path} | wc -l`, {
+        cwd,
+      })
     ).trim(),
     10
   );
@@ -53,9 +52,7 @@ export async function cloneRepository({
   const gitHubUrl = getGitHubUrl(lang, { token: githubToken });
   const tempGitDir = resolve(tempDir, lang);
   await fsp.rm(tempGitDir, { force: true, recursive: true });
-  await run(
-    `git clone --depth 1 --branch ${targetBranch} ${gitHubUrl} ${tempGitDir}`
-  );
+  await run(`git clone --depth 1 --branch ${targetBranch} ${gitHubUrl} ${tempGitDir}`);
 
   return {
     tempGitDir,

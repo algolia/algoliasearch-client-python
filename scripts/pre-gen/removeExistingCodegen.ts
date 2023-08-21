@@ -57,14 +57,14 @@ export async function removeExistingCodegen({
   }
 
   // Delete client model folder/file
-  await fsp.rm(
-    toAbsolutePath(path.resolve('..', output, baseModelFolder, clientModel)),
-    { force: true, recursive: true }
-  );
+  await fsp.rm(toAbsolutePath(path.resolve('..', output, baseModelFolder, clientModel)), {
+    force: true,
+    recursive: true,
+  });
 
   // Delete client api folder/file
-  await fsp.rm(
-    toAbsolutePath(path.resolve('..', output, baseApiFolder, clientApi)),
-    { force: true, recursive: true }
-  );
+  await fsp.rm(toAbsolutePath(path.resolve('..', output, baseApiFolder, clientApi)), {
+    force: true,
+    recursive: true,
+  });
 }

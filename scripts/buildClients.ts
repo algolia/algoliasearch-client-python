@@ -7,10 +7,7 @@ import type { Generator, Language } from './types.js';
 /**
  * Build client for a language at the same time, for those who live in the same folder.
  */
-async function buildClient(
-  language: Language,
-  gens: Generator[]
-): Promise<void> {
+async function buildClient(language: Language, gens: Generator[]): Promise<void> {
   const cwd = getLanguageFolder(language);
   const spinner = createSpinner(`building '${language}'`);
   switch (language) {
@@ -22,11 +19,8 @@ async function buildClient(
       break;
     case 'javascript':
       const npmNamespace = getClientsConfigField('javascript', 'npmNamespace');
-      const packageNames = gens.map(
-        ({ additionalProperties: { packageName } }) =>
-          packageName === 'algoliasearch'
-            ? packageName
-            : `${npmNamespace}/${packageName}`
+      const packageNames = gens.map(({ additionalProperties: { packageName } }) =>
+        packageName === 'algoliasearch' ? packageName : `${npmNamespace}/${packageName}`
       );
 
       await run('YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install', { cwd });
@@ -54,7 +48,5 @@ export async function buildClients(generators: Generator[]): Promise<void> {
     {} as Record<Language, Generator[]>
   );
 
-  await Promise.all(
-    langs.map((lang) => buildClient(lang, generatorsMap[lang]))
-  );
+  await Promise.all(langs.map((lang) => buildClient(lang, generatorsMap[lang])));
 }

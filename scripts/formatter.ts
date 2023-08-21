@@ -1,10 +1,7 @@
 import { run, runComposerUpdate } from './common.js';
 import { createSpinner } from './spinners.js';
 
-export async function formatter(
-  language: string,
-  folder: string
-): Promise<void> {
+export async function formatter(language: string, folder: string): Promise<void> {
   const spinner = createSpinner(`formatting '${language}'`);
   let cmd = '';
   switch (language) {

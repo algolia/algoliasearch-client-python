@@ -9,7 +9,7 @@ public class CTSManagerFactory {
   public static CTSManager getManager(String language, String client) {
     switch (language) {
       case "javascript":
-        return new JavaScriptCTSManager(client);
+        return new JavascriptCTSManager(client);
       case "java":
         return new JavaCTSManager(client);
       case "php":

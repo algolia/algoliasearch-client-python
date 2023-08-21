@@ -16,17 +16,9 @@ const AVAILABLE_CUSTOM_GEN = Object.values(clientsConfig)
  * Defaults options are used to
  * - Set config path.
  */
-export async function generateOpenapitools(
-  generators: Generator[]
-): Promise<void> {
+export async function generateOpenapitools(generators: Generator[]): Promise<void> {
   const result = {};
-  for (const {
-    key,
-    client,
-    language,
-    additionalProperties,
-    ...rest
-  } of generators) {
+  for (const { key, client, language, additionalProperties, ...rest } of generators) {
     const templateDir =
       language === 'javascript'
         ? `#{cwd}/templates/${language}/clients`

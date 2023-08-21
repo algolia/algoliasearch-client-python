@@ -22,13 +22,8 @@ type Prompt = {
   interactive: boolean;
 };
 
-export function getClientChoices(
-  language?: LangArg,
-  clientList = PROMPT_CLIENTS
-): string[] {
-  const withoutAlgoliaSearch = clientList.filter(
-    (client) => client !== 'algoliasearch'
-  );
+export function getClientChoices(language?: LangArg, clientList = PROMPT_CLIENTS): string[] {
+  const withoutAlgoliaSearch = clientList.filter((client) => client !== 'algoliasearch');
 
   return language === ALL || language === 'javascript' || language === 'dart'
     ? clientList
@@ -52,11 +47,7 @@ export function generatorList({
     .filter(Boolean);
 }
 
-export async function prompt({
-  langArg,
-  clientArg,
-  interactive,
-}: Prompt): Promise<PromptDecision> {
+export async function prompt({ langArg, clientArg, interactive }: Prompt): Promise<PromptDecision> {
   const decision: PromptDecision = {
     client: [ALL],
     language: ALL,

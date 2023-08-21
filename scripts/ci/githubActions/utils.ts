@@ -27,6 +27,7 @@ const commonCacheKey = (async function (): Promise<string> {
       include: [
         'openapitools.json',
         'clients.config.json',
+        'generation.config.mjs',
         'base.tsconfig.json',
       ],
     },
@@ -49,10 +50,7 @@ const commonCacheKey = (async function (): Promise<string> {
  *
  * The `paths` parameter is an array of string, that needs to be treated as dependencies.
  */
-export async function computeCacheKey(
-  baseName: string,
-  paths: string[]
-): Promise<string> {
+export async function computeCacheKey(baseName: string, paths: string[]): Promise<string> {
   let hash = '';
 
   for (const path of paths) {

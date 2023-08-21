@@ -32,9 +32,7 @@ async function preCommit(log) {
     await run('git merge HEAD');
   } catch (e) {
     if (e.exitCode === 128) {
-      console.log(
-        'Skipping the pre-commit check because a merge is in progress'
-      );
+      console.log('Skipping the pre-commit check because a merge is in progress');
       return;
     }
   }
@@ -48,10 +46,7 @@ async function preCommit(log) {
 
   if (log) {
     toUnstage.forEach((file) =>
-      console.log(
-        chalk.black.bgYellow('[INFO]'),
-        `Generated file found, unstaging: ${file}`
-      )
+      console.log(chalk.black.bgYellow('[INFO]'), `Generated file found, unstaging: ${file}`)
     );
   }
   await run(`git restore --staged ${toUnstage.join(' ')}`);

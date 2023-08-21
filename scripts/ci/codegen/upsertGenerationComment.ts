@@ -7,12 +7,7 @@ const BOT_NAME = 'algolia-bot';
 const PR_NUMBER = parseInt(process.env.PR_NUMBER || '0', 10);
 
 const args = process.argv.slice(2);
-const allowedTriggers = [
-  'notification',
-  'codegen',
-  'noGen',
-  'cleanup',
-] as const;
+const allowedTriggers = ['notification', 'codegen', 'noGen', 'cleanup'] as const;
 
 type Trigger = (typeof allowedTriggers)[number];
 
@@ -27,18 +22,11 @@ export async function getCommentBody(trigger: Trigger): Promise<string> {
 
   const baseBranch = generatedBranch.replace('generated/', '');
   const baseCommit = await run(`git show ${baseBranch} -s --format=%H`);
-  const generatedCommit = await run(
-    `git show ${generatedBranch} -s --format=%H`
-  );
+  const generatedCommit = await run(`git show ${generatedBranch} -s --format=%H`);
 
   return `${commentText[trigger].header}
 
-${commentText[trigger].body(
-  generatedCommit,
-  generatedBranch,
-  baseCommit,
-  PR_NUMBER
-)}`;
+${commentText[trigger].body(generatedCommit, generatedBranch, baseCommit, PR_NUMBER)}`;
 }
 
 /**
@@ -48,16 +36,12 @@ export async function upsertGenerationComment(trigger: Trigger): Promise<void> {
   const octokit = getOctokit();
   if (!trigger || allowedTriggers.includes(trigger) === false) {
     throw new Error(
-      `'upsertGenerationComment' requires a 'trigger' parameter (${allowedTriggers.join(
-        ' | '
-      )}).`
+      `'upsertGenerationComment' requires a 'trigger' parameter (${allowedTriggers.join(' | ')}).`
     );
   }
 
   if (!PR_NUMBER) {
-    throw new Error(
-      '`upsertGenerationComment` requires a `PR_NUMBER` environment variable.'
-    );
+    throw new Error('`upsertGenerationComment` requires a `PR_NUMBER` environment variable.');
   }
 
   console.log(`Upserting comment for trigger: ${trigger}`);
