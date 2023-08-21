@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Renovate Automatic Branch
-        uses: bodinsamuel/renovate-automatic-branch@v1.0.9
+        uses: bodinsamuel/renovate-automatic-branch@v1.0.10
         with:
           github-token: ${{ secrets.ALGOLIA_BOT_TOKEN }}
           repo-owner: algolia
