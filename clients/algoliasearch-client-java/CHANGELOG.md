@@ -1,3 +1,7 @@
+## [4.0.0-beta.5](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.4...4.0.0-beta.5)
+
+- [693631cc7](https://github.com/algolia/api-clients-automation/commit/693631cc7) fix(specs): remove some parameters from trending requests ([#1915](https://github.com/algolia/api-clients-automation/pull/1915)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0-beta.4](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.3...4.0.0-beta.4)
 
 - [9d6368a75](https://github.com/algolia/api-clients-automation/commit/9d6368a75) chore(java): use new gradle syntax ([#1891](https://github.com/algolia/api-clients-automation/pull/1891)) by [@millotp](https://github.com/millotp/)

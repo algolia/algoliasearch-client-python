@@ -1,5 +1,9 @@
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
 
+- [693631cc7](https://github.com/algolia/api-clients-automation/commit/693631cc7) fix(specs): remove some parameters from trending requests ([#1915](https://github.com/algolia/api-clients-automation/pull/1915)) by [@shortcuts](https://github.com/shortcuts/)
+
+## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
+
 - [5a9d949db](https://github.com/algolia/api-clients-automation/commit/5a9d949db) fix(specs): mixed `SearchParams` and `IndexSettings` ([#1889](https://github.com/algolia/api-clients-automation/pull/1889)) by [@shortcuts](https://github.com/shortcuts/)
 
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
