@@ -3,8 +3,6 @@ import type config from '../config/clients.config.json';
 /**
  * Config.
  */
-export type ClientsConfig = Record<Language, LanguageConfig>;
-
 export type LanguageConfig = {
   folder: string;
   gitRepoId: string;
@@ -18,17 +16,17 @@ export type LanguageConfig = {
   };
 };
 
+type AdditionalProperties = Partial<{
+  packageName: string;
+}> &
+  Record<string, any>;
+
 export type Generator = Record<string, any> & {
   language: Language;
   client: string;
   key: string;
   additionalProperties: AdditionalProperties;
 };
-
-export type AdditionalProperties = Partial<{
-  packageName: string;
-}> &
-  Record<string, any>;
 
 export type CheckForCacheOptions = {
   folder: string;

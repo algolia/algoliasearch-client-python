@@ -3,7 +3,6 @@ import fsp from 'fs/promises';
 import config from '../../config/release.config.json' assert { type: 'json' };
 
 export const RELEASED_TAG = config.releasedTag;
-export const TEAM_SLUG = config.teamSlug;
 
 export function getTargetBranch(language: string): string {
   return config.targetBranch[language] || config.defaultTargetBranch;
@@ -11,19 +10,6 @@ export function getTargetBranch(language: string): string {
 
 export function getGitAuthor(): { name: string; email: string } {
   return config.gitAuthor;
-}
-
-/**
- * Reads a JSON file and returns its parsed data.
- *
- * @param ppath - The absolute path to the file.
- */
-export async function readJsonFile(ppath: string): Promise<Record<string, any>> {
-  return JSON.parse(
-    await fsp.readFile(ppath, {
-      encoding: 'utf-8',
-    })
-  );
 }
 
 /**

@@ -31,7 +31,7 @@ export const DOCKER = Boolean(process.env.DOCKER);
 export const BUNDLE_WITH_DOC = process.env.BUNDLE_WITH_DOC === 'true';
 
 // This script is run by `yarn workspace ...`, which means the current working directory is `./script`
-export const ROOT_DIR = path.resolve(process.cwd(), '..');
+const ROOT_DIR = path.resolve(process.cwd(), '..');
 
 export const ROOT_ENV_PATH = path.resolve(ROOT_DIR, '.env');
 
@@ -117,17 +117,6 @@ export async function exists(ppath: string): Promise<boolean> {
 
 export function toAbsolutePath(ppath: string): string {
   return path.resolve(ROOT_DIR, ppath);
-}
-
-export async function runIfExists(
-  scriptFile: string,
-  args: string,
-  opts: RunOptions = {}
-): Promise<string> {
-  if (await exists(toAbsolutePath(scriptFile))) {
-    return await run(`${scriptFile} ${args}`, opts);
-  }
-  return '';
 }
 
 export async function gitCommit({
@@ -239,15 +228,6 @@ export function getOctokit(): Octokit {
   });
 }
 
-export function wait(waitTime: number): Promise<void> {
-  if (waitTime <= 0) {
-    return Promise.resolve();
-  }
-  return new Promise((resolve) => {
-    setTimeout(resolve, waitTime);
-  });
-}
-
 export function createClientName(client: string, language: string): string {
   switch (language) {
     case 'javascript':
@@ -266,7 +246,7 @@ export function createClientName(client: string, language: string): string {
  *
  * `search-client` -> `searchClient`.
  */
-export function camelize(str: string, delimiter: string = '-'): string {
+function camelize(str: string, delimiter: string = '-'): string {
   return str
     .split(delimiter)
     .map((part, i) => (i === 0 ? part : capitalize(part)))

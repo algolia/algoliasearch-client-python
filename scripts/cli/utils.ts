@@ -10,7 +10,7 @@ export const PROMPT_CLIENTS = [ALL, ...CLIENTS];
 export type AllLanguage = Language | typeof ALL;
 export type LangArg = AllLanguage | undefined;
 
-export type PromptDecision = {
+type PromptDecision = {
   language: AllLanguage;
   client: string[];
   clientList: string[];
