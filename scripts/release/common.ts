@@ -1,8 +1,17 @@
 import fsp from 'fs/promises';
 
 import config from '../../config/release.config.json' assert { type: 'json' };
+import { run } from '../common.js';
 
-export const RELEASED_TAG = config.releasedTag;
+export function getLastReleasedTag(): Promise<string> {
+  return run(`git describe --abbrev=0 --tags --match "${config.releasedTag}*"`);
+}
+
+export function getNewReleasedTag(): string {
+  const now = new Date().toISOString().split('T')[0];
+
+  return `${config.releasedTag} - ${now}`;
+}
 
 export function getTargetBranch(language: string): string {
   return config.targetBranch[language] || config.defaultTargetBranch;

@@ -13,7 +13,7 @@ import {
   setVerbose,
 } from '../../common.js';
 import { getLanguageFolder, getPackageVersionDefault } from '../../config.js';
-import { RELEASED_TAG } from '../../release/common.js';
+import { getNewReleasedTag } from '../../release/common.js';
 import { cloneRepository, getNbGitDiff } from '../utils.js';
 
 import text, { commitStartRelease } from './text.js';
@@ -64,13 +64,8 @@ async function spreadGeneration(): Promise<void> {
   // At this point, we know the release will happen on at least one client
   // So we want to set the released tag at the monorepo level too.
   if (IS_RELEASE_COMMIT) {
-    console.log('Processing release commit, removing old `released` tag on the monorepo');
-    await run(`git fetch origin refs/tags/${RELEASED_TAG}:refs/tags/${RELEASED_TAG}`);
-    await run(`git tag -d ${RELEASED_TAG}`);
-    await run(`git push --delete origin ${RELEASED_TAG}`);
-
     console.log('Creating new `released` tag for latest commit');
-    await run(`git tag ${RELEASED_TAG}`);
+    await run(`git tag ${getNewReleasedTag()}`);
     await run('git push --tags');
   }
 

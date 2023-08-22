@@ -19,7 +19,7 @@ import {
 import { getGitHubUrl, getLanguageFolder } from '../config.js';
 import type { Language } from '../types.js';
 
-import { RELEASED_TAG, writeJsonFile } from './common.js';
+import { getLastReleasedTag, writeJsonFile } from './common.js';
 import type { Changelog, Versions, VersionsToRelease } from './types.js';
 
 dotenv.config({ path: ROOT_ENV_PATH });
@@ -135,7 +135,7 @@ async function updateDartPackages(changelog: string, releaseType: ReleaseType): 
     }
 
     await run(
-      `melos version --manual-version=${packageName}:${releaseType} --no-changelog --no-git-tag-version --yes --diff ${RELEASED_TAG}`,
+      `melos version --manual-version=${packageName}:${releaseType} --no-changelog --no-git-tag-version --yes --diff ${await getLastReleasedTag()}`,
       { cwd: gen.output }
     );
 

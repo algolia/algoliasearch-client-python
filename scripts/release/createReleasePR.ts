@@ -22,7 +22,7 @@ import {
 } from '../common.js';
 import { getPackageVersionDefault } from '../config.js';
 
-import { RELEASED_TAG } from './common.js';
+import { getLastReleasedTag } from './common.js';
 import TEXT from './text.js';
 import type {
   Versions,
@@ -269,7 +269,7 @@ async function getCommits(): Promise<{
 }> {
   // Reading commits since last release
   const latestCommits = (
-    await run(`git log --pretty=format:"%h|%ae|%s" ${RELEASED_TAG}..${MAIN_BRANCH}`)
+    await run(`git log --pretty=format:"%h|%ae|%s" ${await getLastReleasedTag()}..${MAIN_BRANCH}`)
   )
     .split('\n')
     .filter(Boolean);
@@ -341,7 +341,7 @@ async function prepareGitEnvironment(): Promise<void> {
     throw new Error('Working directory is not clean. Commit all the changes first.');
   }
 
-  await run(`git rev-parse --verify refs/tags/${RELEASED_TAG}`, {
+  await run(`git rev-parse --verify refs/tags/${await getLastReleasedTag()}`, {
     errorMessage: '`released` tag is missing in this repository.',
   });
 
@@ -349,11 +349,6 @@ async function prepareGitEnvironment(): Promise<void> {
   await run('git fetch origin');
   await run('git fetch --tags --force');
   await run('git pull');
-
-  // Remove the local tag, and fetch it from the remote.
-  // We move the `released` tag as we release, so we need to make it up-to-date.
-  await run(`git tag -d ${RELEASED_TAG}`);
-  await run(`git fetch origin refs/tags/${RELEASED_TAG}:refs/tags/${RELEASED_TAG}`);
 }
 
 async function createReleasePR(): Promise<void> {
