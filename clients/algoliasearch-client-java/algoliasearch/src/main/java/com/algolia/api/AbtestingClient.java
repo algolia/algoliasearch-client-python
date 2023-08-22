@@ -35,7 +35,7 @@ public class AbtestingClient extends ApiClient {
   }
 
   public AbtestingClient(String appId, String apiKey, String region, ClientOptions options) {
-    super(appId, apiKey, "Abtesting", "4.0.0-beta.5", options);
+    super(appId, apiKey, "Abtesting", "4.0.0-beta.1", options);
     if (options != null && options.getHosts() != null) {
       this.setHosts(options.getHosts());
     } else {
