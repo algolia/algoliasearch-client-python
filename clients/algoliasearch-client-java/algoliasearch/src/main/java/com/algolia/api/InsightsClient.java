@@ -35,7 +35,7 @@ public class InsightsClient extends ApiClient {
   }
 
   public InsightsClient(String appId, String apiKey, String region, ClientOptions options) {
-    super(appId, apiKey, "Insights", "4.0.0-beta.1", options);
+    super(appId, apiKey, "Insights", "4.0.0-beta.2", options);
     if (options != null && options.getHosts() != null) {
       this.setHosts(options.getHosts());
     } else {
