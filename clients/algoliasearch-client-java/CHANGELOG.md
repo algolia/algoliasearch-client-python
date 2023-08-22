@@ -1,3 +1,7 @@
+## [4.0.0-beta.2](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.1...4.0.0-beta.2)
+
+- [25d2d44d8](https://github.com/algolia/api-clients-automation/commit/25d2d44d8) chore(java): rename artifact to `algoliasearch` ([#1935](https://github.com/algolia/api-clients-automation/pull/1935)) by [@aallam](https://github.com/aallam/)
+
 ## [4.0.0-beta.1](https://github.com/algolia/algoliasearch-client-java-2/next)
 
 - [25d2d44d8](https://github.com/algolia/api-clients-automation/commit/25d2d44d8) chore(java): rename artifact to `algoliasearch` ([#1935](https://github.com/algolia/api-clients-automation/pull/1935)) by [@aallam](https://github.com/aallam/)
