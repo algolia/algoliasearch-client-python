@@ -35,7 +35,7 @@ public class AnalyticsClient extends ApiClient {
   }
 
   public AnalyticsClient(String appId, String apiKey, String region, ClientOptions options) {
-    super(appId, apiKey, "Analytics", "4.0.0-beta.2", options);
+    super(appId, apiKey, "Analytics", "4.0.0-beta.3", options);
     if (options != null && options.getHosts() != null) {
       this.setHosts(options.getHosts());
     } else {
