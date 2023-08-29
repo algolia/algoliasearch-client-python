@@ -128,8 +128,34 @@ SourceBigCommerce:
       description: The store hash identifying the store the shopper is signing in to.
     channel:
       $ref: '#/BigCommerceChannel'
+    customFields:
+      type: array
+      items:
+        type: string
+    productMetafields:
+      type: array
+      items:
+        $ref: '#/BigCommerceMetafield'
+    variantMetafields:
+      type: array
+      items:
+        $ref: '#/BigCommerceMetafield'
   required:
     - store_hash
+
+BigCommerceMetafield:
+  type: object
+  additionalProperties: false
+  properties:
+    namespace:
+      type: string
+      description: The namespace of the metafield.
+    key:
+      type: string
+      description: The key identifier of the metafield.
+  required:
+    - namespace
+    - key
 
 BigCommerceChannel:
   type: object
