@@ -9,6 +9,9 @@ import kotlinx.serialization.json.*
  *
  * @param storeHash The store hash identifying the store the shopper is signing in to.
  * @param channel
+ * @param customFields
+ * @param productMetafields
+ * @param variantMetafields
  */
 @Serializable
 public data class SourceBigCommerce(
@@ -17,4 +20,10 @@ public data class SourceBigCommerce(
   @SerialName(value = "storeHash") val storeHash: String? = null,
 
   @SerialName(value = "channel") val channel: BigCommerceChannel? = null,
+
+  @SerialName(value = "customFields") val customFields: List<String>? = null,
+
+  @SerialName(value = "productMetafields") val productMetafields: List<BigCommerceMetafield>? = null,
+
+  @SerialName(value = "variantMetafields") val variantMetafields: List<BigCommerceMetafield>? = null,
 ) : SourceInput

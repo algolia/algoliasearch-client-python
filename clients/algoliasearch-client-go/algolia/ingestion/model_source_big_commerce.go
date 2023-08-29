@@ -9,8 +9,11 @@ import (
 // SourceBigCommerce struct for SourceBigCommerce
 type SourceBigCommerce struct {
 	// The store hash identifying the store the shopper is signing in to.
-	StoreHash *string             `json:"storeHash,omitempty"`
-	Channel   *BigCommerceChannel `json:"channel,omitempty"`
+	StoreHash         *string                `json:"storeHash,omitempty"`
+	Channel           *BigCommerceChannel    `json:"channel,omitempty"`
+	CustomFields      []string               `json:"customFields,omitempty"`
+	ProductMetafields []BigCommerceMetafield `json:"productMetafields,omitempty"`
+	VariantMetafields []BigCommerceMetafield `json:"variantMetafields,omitempty"`
 }
 
 type SourceBigCommerceOption func(f *SourceBigCommerce)
@@ -24,6 +27,24 @@ func WithSourceBigCommerceStoreHash(val string) SourceBigCommerceOption {
 func WithSourceBigCommerceChannel(val BigCommerceChannel) SourceBigCommerceOption {
 	return func(f *SourceBigCommerce) {
 		f.Channel = &val
+	}
+}
+
+func WithSourceBigCommerceCustomFields(val []string) SourceBigCommerceOption {
+	return func(f *SourceBigCommerce) {
+		f.CustomFields = val
+	}
+}
+
+func WithSourceBigCommerceProductMetafields(val []BigCommerceMetafield) SourceBigCommerceOption {
+	return func(f *SourceBigCommerce) {
+		f.ProductMetafields = val
+	}
+}
+
+func WithSourceBigCommerceVariantMetafields(val []BigCommerceMetafield) SourceBigCommerceOption {
+	return func(f *SourceBigCommerce) {
+		f.VariantMetafields = val
 	}
 }
 
@@ -111,6 +132,102 @@ func (o *SourceBigCommerce) SetChannel(v BigCommerceChannel) {
 	o.Channel = &v
 }
 
+// GetCustomFields returns the CustomFields field value if set, zero value otherwise.
+func (o *SourceBigCommerce) GetCustomFields() []string {
+	if o == nil || o.CustomFields == nil {
+		var ret []string
+		return ret
+	}
+	return o.CustomFields
+}
+
+// GetCustomFieldsOk returns a tuple with the CustomFields field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceBigCommerce) GetCustomFieldsOk() ([]string, bool) {
+	if o == nil || o.CustomFields == nil {
+		return nil, false
+	}
+	return o.CustomFields, true
+}
+
+// HasCustomFields returns a boolean if a field has been set.
+func (o *SourceBigCommerce) HasCustomFields() bool {
+	if o != nil && o.CustomFields != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCustomFields gets a reference to the given []string and assigns it to the CustomFields field.
+func (o *SourceBigCommerce) SetCustomFields(v []string) {
+	o.CustomFields = v
+}
+
+// GetProductMetafields returns the ProductMetafields field value if set, zero value otherwise.
+func (o *SourceBigCommerce) GetProductMetafields() []BigCommerceMetafield {
+	if o == nil || o.ProductMetafields == nil {
+		var ret []BigCommerceMetafield
+		return ret
+	}
+	return o.ProductMetafields
+}
+
+// GetProductMetafieldsOk returns a tuple with the ProductMetafields field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceBigCommerce) GetProductMetafieldsOk() ([]BigCommerceMetafield, bool) {
+	if o == nil || o.ProductMetafields == nil {
+		return nil, false
+	}
+	return o.ProductMetafields, true
+}
+
+// HasProductMetafields returns a boolean if a field has been set.
+func (o *SourceBigCommerce) HasProductMetafields() bool {
+	if o != nil && o.ProductMetafields != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetProductMetafields gets a reference to the given []BigCommerceMetafield and assigns it to the ProductMetafields field.
+func (o *SourceBigCommerce) SetProductMetafields(v []BigCommerceMetafield) {
+	o.ProductMetafields = v
+}
+
+// GetVariantMetafields returns the VariantMetafields field value if set, zero value otherwise.
+func (o *SourceBigCommerce) GetVariantMetafields() []BigCommerceMetafield {
+	if o == nil || o.VariantMetafields == nil {
+		var ret []BigCommerceMetafield
+		return ret
+	}
+	return o.VariantMetafields
+}
+
+// GetVariantMetafieldsOk returns a tuple with the VariantMetafields field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceBigCommerce) GetVariantMetafieldsOk() ([]BigCommerceMetafield, bool) {
+	if o == nil || o.VariantMetafields == nil {
+		return nil, false
+	}
+	return o.VariantMetafields, true
+}
+
+// HasVariantMetafields returns a boolean if a field has been set.
+func (o *SourceBigCommerce) HasVariantMetafields() bool {
+	if o != nil && o.VariantMetafields != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetVariantMetafields gets a reference to the given []BigCommerceMetafield and assigns it to the VariantMetafields field.
+func (o *SourceBigCommerce) SetVariantMetafields(v []BigCommerceMetafield) {
+	o.VariantMetafields = v
+}
+
 func (o SourceBigCommerce) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.StoreHash != nil {
@@ -119,6 +236,15 @@ func (o SourceBigCommerce) MarshalJSON() ([]byte, error) {
 	if o.Channel != nil {
 		toSerialize["channel"] = o.Channel
 	}
+	if o.CustomFields != nil {
+		toSerialize["customFields"] = o.CustomFields
+	}
+	if o.ProductMetafields != nil {
+		toSerialize["productMetafields"] = o.ProductMetafields
+	}
+	if o.VariantMetafields != nil {
+		toSerialize["variantMetafields"] = o.VariantMetafields
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -126,6 +252,9 @@ func (o SourceBigCommerce) String() string {
 	out := ""
 	out += fmt.Sprintf("  storeHash=%v\n", o.StoreHash)
 	out += fmt.Sprintf("  channel=%v\n", o.Channel)
+	out += fmt.Sprintf("  customFields=%v\n", o.CustomFields)
+	out += fmt.Sprintf("  productMetafields=%v\n", o.ProductMetafields)
+	out += fmt.Sprintf("  variantMetafields=%v\n", o.VariantMetafields)
 	return fmt.Sprintf("SourceBigCommerce {\n%s}", out)
 }
 

@@ -22,13 +22,22 @@ public sealed interface SourceInput {
      *
      * @param storeHash The store hash identifying the store the shopper is signing in to.
      * @param channel
+     * @param customFields
+     * @param productMetafields
+     * @param variantMetafields
      */
     public fun SourceBigCommerce(
       storeHash: String? = null,
       channel: BigCommerceChannel? = null,
+      customFields: List<String>? = null,
+      productMetafields: List<BigCommerceMetafield>? = null,
+      variantMetafields: List<BigCommerceMetafield>? = null,
     ): SourceBigCommerce = com.algolia.client.model.ingestion.SourceBigCommerce(
       storeHash = storeHash,
       channel = channel,
+      customFields = customFields,
+      productMetafields = productMetafields,
+      variantMetafields = variantMetafields,
     )
 
     /**

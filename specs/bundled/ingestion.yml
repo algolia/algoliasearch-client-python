@@ -839,6 +839,19 @@ components:
             example: usd
       required:
         - id
+    BigCommerceMetafield:
+      type: object
+      additionalProperties: false
+      properties:
+        namespace:
+          type: string
+          description: The namespace of the metafield.
+        key:
+          type: string
+          description: The key identifier of the metafield.
+      required:
+        - namespace
+        - key
     SourceBigCommerce:
       type: object
       additionalProperties: false
@@ -848,6 +861,18 @@ components:
           description: The store hash identifying the store the shopper is signing in to.
         channel:
           $ref: '#/components/schemas/BigCommerceChannel'
+        customFields:
+          type: array
+          items:
+            type: string
+        productMetafields:
+          type: array
+          items:
+            $ref: '#/components/schemas/BigCommerceMetafield'
+        variantMetafields:
+          type: array
+          items:
+            $ref: '#/components/schemas/BigCommerceMetafield'
       required:
         - store_hash
     UniqueIDColumn:
