@@ -1,3 +1,7 @@
+## [4.0.0-alpha.27](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.26...4.0.0-alpha.27)
+
+- [f89612fe](https://github.com/algolia/api-clients-automation/commit/f89612fe) chore(clients): dependency upgrade ([#1940](https://github.com/algolia/api-clients-automation/pull/1940)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0-alpha.26](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.25...4.0.0-alpha.26)
 
 - [693631cc7](https://github.com/algolia/api-clients-automation/commit/693631cc7) fix(specs): remove some parameters from trending requests ([#1915](https://github.com/algolia/api-clients-automation/pull/1915)) by [@shortcuts](https://github.com/shortcuts/)
