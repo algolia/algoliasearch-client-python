@@ -17,11 +17,7 @@ public class IndexingTimeResponse {
     return this;
   }
 
-  /**
-   * Get metrics
-   *
-   * @return metrics
-   */
+  /** Get metrics */
   @javax.annotation.Nullable
   public IndexingTimeResponseMetrics getMetrics() {
     return metrics;

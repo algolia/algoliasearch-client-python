@@ -23,11 +23,7 @@ public class SearchNoResultEvent {
     return this;
   }
 
-  /**
-   * User query.
-   *
-   * @return search
-   */
+  /** User query. */
   @javax.annotation.Nonnull
   public String getSearch() {
     return search;
@@ -38,11 +34,7 @@ public class SearchNoResultEvent {
     return this;
   }
 
-  /**
-   * Number of occurrences.
-   *
-   * @return count
-   */
+  /** Number of occurrences. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;
@@ -53,11 +45,7 @@ public class SearchNoResultEvent {
     return this;
   }
 
-  /**
-   * Number of hits the search query matched.
-   *
-   * @return nbHits
-   */
+  /** Number of hits the search query matched. */
   @javax.annotation.Nonnull
   public Integer getNbHits() {
     return nbHits;

@@ -24,8 +24,6 @@ public class DeletedAtResponse {
    * Unique identifier of a task. A successful API response means that a task was added to a queue.
    * It might not run immediately. You can check the task's progress with the `task` operation and
    * this `taskID`.
-   *
-   * @return taskID
    */
   @javax.annotation.Nonnull
   public Long getTaskID() {
@@ -37,11 +35,7 @@ public class DeletedAtResponse {
     return this;
   }
 
-  /**
-   * Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
-   *
-   * @return deletedAt
-   */
+  /** Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @javax.annotation.Nonnull
   public String getDeletedAt() {
     return deletedAt;

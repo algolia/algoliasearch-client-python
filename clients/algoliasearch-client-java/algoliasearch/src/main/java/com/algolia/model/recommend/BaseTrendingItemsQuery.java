@@ -29,11 +29,7 @@ public class BaseTrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Facet name for trending models.
-   *
-   * @return facetName
-   */
+  /** Facet name for trending models. */
   @javax.annotation.Nullable
   public String getFacetName() {
     return facetName;
@@ -44,11 +40,7 @@ public class BaseTrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Facet value for trending models.
-   *
-   * @return facetValue
-   */
+  /** Facet value for trending models. */
   @javax.annotation.Nullable
   public String getFacetValue() {
     return facetValue;
@@ -59,11 +51,7 @@ public class BaseTrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Get model
-   *
-   * @return model
-   */
+  /** Get model */
   @javax.annotation.Nullable
   public TrendingItemsModel getModel() {
     return model;
@@ -74,11 +62,7 @@ public class BaseTrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Get queryParameters
-   *
-   * @return queryParameters
-   */
+  /** Get queryParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getQueryParameters() {
     return queryParameters;
@@ -89,11 +73,7 @@ public class BaseTrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Get fallbackParameters
-   *
-   * @return fallbackParameters
-   */
+  /** Get fallbackParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getFallbackParameters() {
     return fallbackParameters;

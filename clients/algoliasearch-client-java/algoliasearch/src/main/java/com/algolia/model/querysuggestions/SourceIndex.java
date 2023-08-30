@@ -40,11 +40,7 @@ public class SourceIndex {
     return this;
   }
 
-  /**
-   * Name of the Algolia index to use as source for query suggestions.
-   *
-   * @return indexName
-   */
+  /** Name of the Algolia index to use as source for query suggestions. */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;
@@ -58,8 +54,6 @@ public class SourceIndex {
   /**
    * If true, Query Suggestions uses all replicas of the primary index to find popular searches. If
    * false, only the primary index is used.
-   *
-   * @return replicas
    */
   @javax.annotation.Nullable
   public Boolean getReplicas() {
@@ -82,8 +76,6 @@ public class SourceIndex {
   /**
    * [Analytics tags](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) for
    * filtering the popular searches.
-   *
-   * @return analyticsTags
    */
   @javax.annotation.Nullable
   public List<String> getAnalyticsTags() {
@@ -106,8 +98,6 @@ public class SourceIndex {
   /**
    * Facets to use as top categories with your suggestions. If provided, Query Suggestions adds the
    * top facet values to each suggestion.
-   *
-   * @return facets
    */
   @javax.annotation.Nullable
   public List<Facet> getFacets() {
@@ -122,8 +112,6 @@ public class SourceIndex {
   /**
    * Minimum number of hits required to be included as a suggestion. A search query must at least
    * generate `minHits` hits to be included in the Query Suggestions index. minimum: 0
-   *
-   * @return minHits
    */
   @javax.annotation.Nullable
   public Integer getMinHits() {
@@ -138,8 +126,6 @@ public class SourceIndex {
   /**
    * Minimum letters required to be included as a suggestion. A search query must be at least
    * `minLetters` long to be included in the Query Suggestions index. minimum: 0
-   *
-   * @return minLetters
    */
   @javax.annotation.Nullable
   public Integer getMinLetters() {
@@ -159,11 +145,7 @@ public class SourceIndex {
     return this;
   }
 
-  /**
-   * Get generate
-   *
-   * @return generate
-   */
+  /** Get generate */
   @javax.annotation.Nullable
   public List<List<String>> getGenerate() {
     return generate;
@@ -189,8 +171,6 @@ public class SourceIndex {
    * searches from an external analytics tool, such as Google Analytics or Adobe Analytics, and feed
    * this data into an external Algolia index. You can use this external index to generate query
    * suggestions until your Algolia analytics has collected enough data.
-   *
-   * @return external
    */
   @javax.annotation.Nullable
   public List<String> getExternal() {

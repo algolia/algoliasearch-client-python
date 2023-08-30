@@ -26,11 +26,7 @@ public class GetLogFile200Response {
     return this;
   }
 
-  /**
-   * Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
-   *
-   * @return timestamp
-   */
+  /** Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @javax.annotation.Nullable
   public String getTimestamp() {
     return timestamp;
@@ -41,11 +37,7 @@ public class GetLogFile200Response {
     return this;
   }
 
-  /**
-   * Get level
-   *
-   * @return level
-   */
+  /** Get level */
   @javax.annotation.Nullable
   public LogLevel getLevel() {
     return level;
@@ -56,11 +48,7 @@ public class GetLogFile200Response {
     return this;
   }
 
-  /**
-   * Details about this log entry.
-   *
-   * @return message
-   */
+  /** Details about this log entry. */
   @javax.annotation.Nullable
   public String getMessage() {
     return message;
@@ -75,8 +63,6 @@ public class GetLogFile200Response {
    * Level indicating the position of a suggestion in a hierarchy of records. For example, a
    * `contextLevel` of 1 indicates that this suggestion belongs to a previous suggestion with
    * `contextLevel` 0.
-   *
-   * @return contextLevel
    */
   @javax.annotation.Nullable
   public Integer getContextLevel() {

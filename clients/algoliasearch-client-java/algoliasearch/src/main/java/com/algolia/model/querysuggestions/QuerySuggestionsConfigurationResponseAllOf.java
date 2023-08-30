@@ -26,11 +26,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     return this;
   }
 
-  /**
-   * Your Algolia application ID.
-   *
-   * @return appId
-   */
+  /** Your Algolia application ID. */
   @javax.annotation.Nullable
   public String getAppId() {
     return appId;
@@ -41,11 +37,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     return this;
   }
 
-  /**
-   * API key used to read from your source index.
-   *
-   * @return sourceIndicesAPIKey
-   */
+  /** API key used to read from your source index. */
   @javax.annotation.Nullable
   public String getSourceIndicesAPIKey() {
     return sourceIndicesAPIKey;
@@ -56,11 +48,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     return this;
   }
 
-  /**
-   * API key used to write and configure your Query Suggestions index.
-   *
-   * @return suggestionsIndicesAPIKey
-   */
+  /** API key used to write and configure your Query Suggestions index. */
   @javax.annotation.Nullable
   public String getSuggestionsIndicesAPIKey() {
     return suggestionsIndicesAPIKey;
@@ -71,11 +59,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     return this;
   }
 
-  /**
-   * API key used to read from external Algolia indices.
-   *
-   * @return externalIndicesAPIKey
-   */
+  /** API key used to read from external Algolia indices. */
   @javax.annotation.Nullable
   public String getExternalIndicesAPIKey() {
     return externalIndicesAPIKey;

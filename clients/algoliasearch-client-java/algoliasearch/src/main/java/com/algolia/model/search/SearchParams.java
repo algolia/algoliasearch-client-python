@@ -17,43 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** SearchParams */
-@JsonDeserialize(using = SearchParams.SearchParamsDeserializer.class)
-@JsonSerialize(using = SearchParams.SearchParamsSerializer.class)
-public abstract class SearchParams implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(SearchParams.class.getName());
-
-  public static SearchParams of(SearchParamsObject inside) {
+@JsonDeserialize(using = SearchParams.Deserializer.class)
+@JsonSerialize(using = SearchParams.Serializer.class)
+public interface SearchParams<T> extends CompoundType<T> {
+  static SearchParams<SearchParamsObject> of(SearchParamsObject inside) {
     return new SearchParamsSearchParamsObject(inside);
   }
 
-  public static SearchParams of(SearchParamsString inside) {
+  static SearchParams<SearchParamsString> of(SearchParamsString inside) {
     return new SearchParamsSearchParamsString(inside);
   }
 
-  public static class SearchParamsSerializer extends StdSerializer<SearchParams> {
+  class Serializer extends StdSerializer<SearchParams> {
 
-    public SearchParamsSerializer(Class<SearchParams> t) {
+    public Serializer(Class<SearchParams> t) {
       super(t);
     }
 
-    public SearchParamsSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(SearchParams value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(SearchParams value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class SearchParamsDeserializer extends StdDeserializer<SearchParams> {
+  class Deserializer extends StdDeserializer<SearchParams> {
 
-    public SearchParamsDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(SearchParams.class);
     }
 
-    public SearchParamsDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -93,30 +92,30 @@ public abstract class SearchParams implements CompoundType {
   }
 }
 
-class SearchParamsSearchParamsObject extends SearchParams {
+class SearchParamsSearchParamsObject implements SearchParams<SearchParamsObject> {
 
-  private final SearchParamsObject insideValue;
+  private final SearchParamsObject value;
 
-  SearchParamsSearchParamsObject(SearchParamsObject insideValue) {
-    this.insideValue = insideValue;
+  SearchParamsSearchParamsObject(SearchParamsObject value) {
+    this.value = value;
   }
 
   @Override
-  public SearchParamsObject getInsideValue() {
-    return insideValue;
+  public SearchParamsObject get() {
+    return value;
   }
 }
 
-class SearchParamsSearchParamsString extends SearchParams {
+class SearchParamsSearchParamsString implements SearchParams<SearchParamsString> {
 
-  private final SearchParamsString insideValue;
+  private final SearchParamsString value;
 
-  SearchParamsSearchParamsString(SearchParamsString insideValue) {
-    this.insideValue = insideValue;
+  SearchParamsSearchParamsString(SearchParamsString value) {
+    this.value = value;
   }
 
   @Override
-  public SearchParamsString getInsideValue() {
-    return insideValue;
+  public SearchParamsString get() {
+    return value;
   }
 }

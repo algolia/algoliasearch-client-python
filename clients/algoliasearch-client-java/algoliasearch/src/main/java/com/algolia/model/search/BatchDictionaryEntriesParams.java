@@ -25,8 +25,6 @@ public class BatchDictionaryEntriesParams {
   /**
    * Incidates whether to replace all custom entries in the dictionary with the ones sent with this
    * request.
-   *
-   * @return clearExistingDictionaryEntries
    */
   @javax.annotation.Nullable
   public Boolean getClearExistingDictionaryEntries() {
@@ -43,11 +41,7 @@ public class BatchDictionaryEntriesParams {
     return this;
   }
 
-  /**
-   * Operations to batch.
-   *
-   * @return requests
-   */
+  /** Operations to batch. */
   @javax.annotation.Nonnull
   public List<BatchDictionaryEntriesRequest> getRequests() {
     return requests;

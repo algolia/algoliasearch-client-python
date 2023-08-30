@@ -34,11 +34,7 @@ public class SearchRecommendRulesParams {
     return this;
   }
 
-  /**
-   * Full-text query.
-   *
-   * @return query
-   */
+  /** Full-text query. */
   @javax.annotation.Nullable
   public String getQuery() {
     return query;
@@ -52,8 +48,6 @@ public class SearchRecommendRulesParams {
   /**
    * Restricts responses to the specified [contextual
    * rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules).
-   *
-   * @return context
    */
   @javax.annotation.Nullable
   public String getContext() {
@@ -65,11 +59,7 @@ public class SearchRecommendRulesParams {
     return this;
   }
 
-  /**
-   * Requested page (the first page is page 0). minimum: 0
-   *
-   * @return page
-   */
+  /** Requested page (the first page is page 0). minimum: 0 */
   @javax.annotation.Nullable
   public Integer getPage() {
     return page;
@@ -80,11 +70,7 @@ public class SearchRecommendRulesParams {
     return this;
   }
 
-  /**
-   * Maximum number of hits per page. minimum: 1 maximum: 1000
-   *
-   * @return hitsPerPage
-   */
+  /** Maximum number of hits per page. minimum: 1 maximum: 1000 */
   @javax.annotation.Nullable
   public Integer getHitsPerPage() {
     return hitsPerPage;
@@ -95,11 +81,7 @@ public class SearchRecommendRulesParams {
     return this;
   }
 
-  /**
-   * Restricts responses to enabled rules. When absent (default), _all_ rules are retrieved.
-   *
-   * @return enabled
-   */
+  /** Restricts responses to enabled rules. When absent (default), _all_ rules are retrieved. */
   @javax.annotation.Nullable
   public Boolean getEnabled() {
     return enabled;
@@ -118,11 +100,7 @@ public class SearchRecommendRulesParams {
     return this;
   }
 
-  /**
-   * Request options to send with the API call.
-   *
-   * @return requestOptions
-   */
+  /** Request options to send with the API call. */
   @javax.annotation.Nullable
   public List<Object> getRequestOptions() {
     return requestOptions;

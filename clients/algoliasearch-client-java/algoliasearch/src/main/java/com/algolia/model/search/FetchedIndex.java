@@ -49,11 +49,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Index name.
-   *
-   * @return name
-   */
+  /** Index name. */
   @javax.annotation.Nonnull
   public String getName() {
     return name;
@@ -64,11 +60,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Index creation date. An empty string means that the index has no records.
-   *
-   * @return createdAt
-   */
+  /** Index creation date. An empty string means that the index has no records. */
   @javax.annotation.Nonnull
   public String getCreatedAt() {
     return createdAt;
@@ -79,11 +71,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
-   *
-   * @return updatedAt
-   */
+  /** Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @javax.annotation.Nonnull
   public String getUpdatedAt() {
     return updatedAt;
@@ -94,11 +82,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Number of records contained in the index.
-   *
-   * @return entries
-   */
+  /** Number of records contained in the index. */
   @javax.annotation.Nonnull
   public Integer getEntries() {
     return entries;
@@ -109,11 +93,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Number of bytes of the index in minified format.
-   *
-   * @return dataSize
-   */
+  /** Number of bytes of the index in minified format. */
   @javax.annotation.Nonnull
   public Integer getDataSize() {
     return dataSize;
@@ -124,11 +104,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Number of bytes of the index binary file.
-   *
-   * @return fileSize
-   */
+  /** Number of bytes of the index binary file. */
   @javax.annotation.Nonnull
   public Integer getFileSize() {
     return fileSize;
@@ -139,11 +115,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Last build time.
-   *
-   * @return lastBuildTimeS
-   */
+  /** Last build time. */
   @javax.annotation.Nonnull
   public Integer getLastBuildTimeS() {
     return lastBuildTimeS;
@@ -154,11 +126,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Number of pending indexing operations. This value is deprecated and should not be used.
-   *
-   * @return numberOfPendingTasks
-   */
+  /** Number of pending indexing operations. This value is deprecated and should not be used. */
   @javax.annotation.Nonnull
   public Integer getNumberOfPendingTasks() {
     return numberOfPendingTasks;
@@ -172,8 +140,6 @@ public class FetchedIndex {
   /**
    * A boolean which says whether the index has pending tasks. This value is deprecated and should
    * not be used.
-   *
-   * @return pendingTask
    */
   @javax.annotation.Nonnull
   public Boolean getPendingTask() {
@@ -185,11 +151,7 @@ public class FetchedIndex {
     return this;
   }
 
-  /**
-   * Only present if the index is a replica. Contains the name of the related primary index.
-   *
-   * @return primary
-   */
+  /** Only present if the index is a replica. Contains the name of the related primary index. */
   @javax.annotation.Nullable
   public String getPrimary() {
     return primary;
@@ -211,8 +173,6 @@ public class FetchedIndex {
   /**
    * Only present if the index is a primary index with replicas. Contains the names of all linked
    * replicas.
-   *
-   * @return replicas
    */
   @javax.annotation.Nullable
   public List<String> getReplicas() {

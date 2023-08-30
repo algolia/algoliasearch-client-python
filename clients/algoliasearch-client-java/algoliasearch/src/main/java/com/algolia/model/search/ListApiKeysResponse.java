@@ -24,11 +24,7 @@ public class ListApiKeysResponse {
     return this;
   }
 
-  /**
-   * API keys.
-   *
-   * @return keys
-   */
+  /** API keys. */
   @javax.annotation.Nonnull
   public List<GetApiKeyResponse> getKeys() {
     return keys;

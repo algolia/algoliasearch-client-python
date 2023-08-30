@@ -20,11 +20,7 @@ public class Incident {
     return this;
   }
 
-  /**
-   * Description of the incident.
-   *
-   * @return title
-   */
+  /** Description of the incident. */
   @javax.annotation.Nullable
   public String getTitle() {
     return title;
@@ -35,11 +31,7 @@ public class Incident {
     return this;
   }
 
-  /**
-   * Get status
-   *
-   * @return status
-   */
+  /** Get status */
   @javax.annotation.Nullable
   public Status getStatus() {
     return status;

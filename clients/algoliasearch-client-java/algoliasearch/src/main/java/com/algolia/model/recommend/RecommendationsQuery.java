@@ -35,11 +35,7 @@ public class RecommendationsQuery {
     return this;
   }
 
-  /**
-   * Get model
-   *
-   * @return model
-   */
+  /** Get model */
   @javax.annotation.Nonnull
   public RecommendationModels getModel() {
     return model;
@@ -50,11 +46,7 @@ public class RecommendationsQuery {
     return this;
   }
 
-  /**
-   * Unique object identifier.
-   *
-   * @return objectID
-   */
+  /** Unique object identifier. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -65,11 +57,7 @@ public class RecommendationsQuery {
     return this;
   }
 
-  /**
-   * Get queryParameters
-   *
-   * @return queryParameters
-   */
+  /** Get queryParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getQueryParameters() {
     return queryParameters;
@@ -80,11 +68,7 @@ public class RecommendationsQuery {
     return this;
   }
 
-  /**
-   * Get fallbackParameters
-   *
-   * @return fallbackParameters
-   */
+  /** Get fallbackParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getFallbackParameters() {
     return fallbackParameters;
@@ -95,11 +79,7 @@ public class RecommendationsQuery {
     return this;
   }
 
-  /**
-   * Algolia index name.
-   *
-   * @return indexName
-   */
+  /** Algolia index name. */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;
@@ -114,8 +94,6 @@ public class RecommendationsQuery {
    * Recommendations with a confidence score lower than `threshold` won't appear in results. >
    * **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to
    * 100, the more relevant the recommendations are. minimum: 0 maximum: 100
-   *
-   * @return threshold
    */
   @javax.annotation.Nullable
   public Integer getThreshold() {
@@ -127,11 +105,7 @@ public class RecommendationsQuery {
     return this;
   }
 
-  /**
-   * Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-   *
-   * @return maxRecommendations
-   */
+  /** Maximum number of recommendations to retrieve. If 0, all recommendations will be returned. */
   @javax.annotation.Nullable
   public Integer getMaxRecommendations() {
     return maxRecommendations;

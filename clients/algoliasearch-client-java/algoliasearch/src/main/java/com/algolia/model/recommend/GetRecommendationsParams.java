@@ -24,11 +24,7 @@ public class GetRecommendationsParams {
     return this;
   }
 
-  /**
-   * Request parameters depend on the model (recommendations or trending).
-   *
-   * @return requests
-   */
+  /** Request parameters depend on the model (recommendations or trending). */
   @javax.annotation.Nonnull
   public List<RecommendationsRequest> getRequests() {
     return requests;

@@ -20,11 +20,7 @@ public class ProbesMetric {
     return this;
   }
 
-  /**
-   * Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds.
-   *
-   * @return t
-   */
+  /** Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds. */
   @javax.annotation.Nullable
   public Long getT() {
     return t;
@@ -35,11 +31,7 @@ public class ProbesMetric {
     return this;
   }
 
-  /**
-   * Value of the metric.
-   *
-   * @return v
-   */
+  /** Value of the metric. */
   @javax.annotation.Nullable
   public Integer getV() {
     return v;

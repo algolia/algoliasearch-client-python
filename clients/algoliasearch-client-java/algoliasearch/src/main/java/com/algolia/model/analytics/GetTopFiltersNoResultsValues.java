@@ -22,11 +22,7 @@ public class GetTopFiltersNoResultsValues {
     return this;
   }
 
-  /**
-   * Number of occurrences.
-   *
-   * @return count
-   */
+  /** Number of occurrences. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;
@@ -42,11 +38,7 @@ public class GetTopFiltersNoResultsValues {
     return this;
   }
 
-  /**
-   * Filters with no results.
-   *
-   * @return values
-   */
+  /** Filters with no results. */
   @javax.annotation.Nonnull
   public List<GetTopFiltersNoResultsValue> getValues() {
     return values;

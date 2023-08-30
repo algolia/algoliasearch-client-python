@@ -17,44 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** GetTopHitsResponse */
-@JsonDeserialize(using = GetTopHitsResponse.GetTopHitsResponseDeserializer.class)
-@JsonSerialize(using = GetTopHitsResponse.GetTopHitsResponseSerializer.class)
-public abstract class GetTopHitsResponse implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(GetTopHitsResponse.class.getName());
-
-  public static GetTopHitsResponse of(TopHitsResponse inside) {
+@JsonDeserialize(using = GetTopHitsResponse.Deserializer.class)
+@JsonSerialize(using = GetTopHitsResponse.Serializer.class)
+public interface GetTopHitsResponse<T> extends CompoundType<T> {
+  static GetTopHitsResponse<TopHitsResponse> of(TopHitsResponse inside) {
     return new GetTopHitsResponseTopHitsResponse(inside);
   }
 
-  public static GetTopHitsResponse of(TopHitsResponseWithAnalytics inside) {
+  static GetTopHitsResponse<TopHitsResponseWithAnalytics> of(TopHitsResponseWithAnalytics inside) {
     return new GetTopHitsResponseTopHitsResponseWithAnalytics(inside);
   }
 
-  public static class GetTopHitsResponseSerializer extends StdSerializer<GetTopHitsResponse> {
+  class Serializer extends StdSerializer<GetTopHitsResponse> {
 
-    public GetTopHitsResponseSerializer(Class<GetTopHitsResponse> t) {
+    public Serializer(Class<GetTopHitsResponse> t) {
       super(t);
     }
 
-    public GetTopHitsResponseSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(GetTopHitsResponse value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(GetTopHitsResponse value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class GetTopHitsResponseDeserializer extends StdDeserializer<GetTopHitsResponse> {
+  class Deserializer extends StdDeserializer<GetTopHitsResponse> {
 
-    public GetTopHitsResponseDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(GetTopHitsResponse.class);
     }
 
-    public GetTopHitsResponseDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -96,30 +94,30 @@ public abstract class GetTopHitsResponse implements CompoundType {
   }
 }
 
-class GetTopHitsResponseTopHitsResponse extends GetTopHitsResponse {
+class GetTopHitsResponseTopHitsResponse implements GetTopHitsResponse<TopHitsResponse> {
 
-  private final TopHitsResponse insideValue;
+  private final TopHitsResponse value;
 
-  GetTopHitsResponseTopHitsResponse(TopHitsResponse insideValue) {
-    this.insideValue = insideValue;
+  GetTopHitsResponseTopHitsResponse(TopHitsResponse value) {
+    this.value = value;
   }
 
   @Override
-  public TopHitsResponse getInsideValue() {
-    return insideValue;
+  public TopHitsResponse get() {
+    return value;
   }
 }
 
-class GetTopHitsResponseTopHitsResponseWithAnalytics extends GetTopHitsResponse {
+class GetTopHitsResponseTopHitsResponseWithAnalytics implements GetTopHitsResponse<TopHitsResponseWithAnalytics> {
 
-  private final TopHitsResponseWithAnalytics insideValue;
+  private final TopHitsResponseWithAnalytics value;
 
-  GetTopHitsResponseTopHitsResponseWithAnalytics(TopHitsResponseWithAnalytics insideValue) {
-    this.insideValue = insideValue;
+  GetTopHitsResponseTopHitsResponseWithAnalytics(TopHitsResponseWithAnalytics value) {
+    this.value = value;
   }
 
   @Override
-  public TopHitsResponseWithAnalytics getInsideValue() {
-    return insideValue;
+  public TopHitsResponseWithAnalytics get() {
+    return value;
   }
 }

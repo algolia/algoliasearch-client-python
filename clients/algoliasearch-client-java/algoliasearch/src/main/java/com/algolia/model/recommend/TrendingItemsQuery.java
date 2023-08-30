@@ -38,11 +38,7 @@ public class TrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Facet name for trending models.
-   *
-   * @return facetName
-   */
+  /** Facet name for trending models. */
   @javax.annotation.Nullable
   public String getFacetName() {
     return facetName;
@@ -53,11 +49,7 @@ public class TrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Facet value for trending models.
-   *
-   * @return facetValue
-   */
+  /** Facet value for trending models. */
   @javax.annotation.Nullable
   public String getFacetValue() {
     return facetValue;
@@ -68,11 +60,7 @@ public class TrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Get model
-   *
-   * @return model
-   */
+  /** Get model */
   @javax.annotation.Nullable
   public TrendingItemsModel getModel() {
     return model;
@@ -83,11 +71,7 @@ public class TrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Get queryParameters
-   *
-   * @return queryParameters
-   */
+  /** Get queryParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getQueryParameters() {
     return queryParameters;
@@ -98,11 +82,7 @@ public class TrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Get fallbackParameters
-   *
-   * @return fallbackParameters
-   */
+  /** Get fallbackParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getFallbackParameters() {
     return fallbackParameters;
@@ -113,11 +93,7 @@ public class TrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Algolia index name.
-   *
-   * @return indexName
-   */
+  /** Algolia index name. */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;
@@ -132,8 +108,6 @@ public class TrendingItemsQuery {
    * Recommendations with a confidence score lower than `threshold` won't appear in results. >
    * **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to
    * 100, the more relevant the recommendations are. minimum: 0 maximum: 100
-   *
-   * @return threshold
    */
   @javax.annotation.Nullable
   public Integer getThreshold() {
@@ -145,11 +119,7 @@ public class TrendingItemsQuery {
     return this;
   }
 
-  /**
-   * Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-   *
-   * @return maxRecommendations
-   */
+  /** Maximum number of recommendations to retrieve. If 0, all recommendations will be returned. */
   @javax.annotation.Nullable
   public Integer getMaxRecommendations() {
     return maxRecommendations;

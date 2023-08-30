@@ -26,11 +26,7 @@ public class SearchDictionaryEntriesParams {
     return this;
   }
 
-  /**
-   * Text to search for in an index.
-   *
-   * @return query
-   */
+  /** Text to search for in an index. */
   @javax.annotation.Nonnull
   public String getQuery() {
     return query;
@@ -41,11 +37,7 @@ public class SearchDictionaryEntriesParams {
     return this;
   }
 
-  /**
-   * Page to retrieve (the first page is `0`, not `1`).
-   *
-   * @return page
-   */
+  /** Page to retrieve (the first page is `0`, not `1`). */
   @javax.annotation.Nullable
   public Integer getPage() {
     return page;
@@ -56,11 +48,7 @@ public class SearchDictionaryEntriesParams {
     return this;
   }
 
-  /**
-   * Number of hits per page. minimum: 1 maximum: 1000
-   *
-   * @return hitsPerPage
-   */
+  /** Number of hits per page. minimum: 1 maximum: 1000 */
   @javax.annotation.Nullable
   public Integer getHitsPerPage() {
     return hitsPerPage;
@@ -74,8 +62,6 @@ public class SearchDictionaryEntriesParams {
   /**
    * [Supported language ISO
    * code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
-   *
-   * @return language
    */
   @javax.annotation.Nullable
   public String getLanguage() {

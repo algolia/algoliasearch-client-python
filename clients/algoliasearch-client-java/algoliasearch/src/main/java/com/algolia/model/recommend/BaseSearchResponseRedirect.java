@@ -30,11 +30,7 @@ public class BaseSearchResponseRedirect {
     return this;
   }
 
-  /**
-   * Get index
-   *
-   * @return index
-   */
+  /** Get index */
   @javax.annotation.Nullable
   public List<RedirectRuleIndexMetadata> getIndex() {
     return index;

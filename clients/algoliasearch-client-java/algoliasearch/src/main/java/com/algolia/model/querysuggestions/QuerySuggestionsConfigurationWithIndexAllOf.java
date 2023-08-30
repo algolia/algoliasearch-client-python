@@ -17,11 +17,7 @@ public class QuerySuggestionsConfigurationWithIndexAllOf {
     return this;
   }
 
-  /**
-   * Query Suggestions index name.
-   *
-   * @return indexName
-   */
+  /** Query Suggestions index name. */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;

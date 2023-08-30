@@ -24,11 +24,7 @@ public class SearchResponses<T> {
     return this;
   }
 
-  /**
-   * Get results
-   *
-   * @return results
-   */
+  /** Get results */
   @javax.annotation.Nonnull
   public List<SearchResult<T>> getResults() {
     return results;

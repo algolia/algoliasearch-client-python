@@ -61,11 +61,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
-   *
-   * @return timestamp
-   */
+  /** Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @javax.annotation.Nonnull
   public String getTimestamp() {
     return timestamp;
@@ -76,11 +72,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * HTTP method of the performed request.
-   *
-   * @return method
-   */
+  /** HTTP method of the performed request. */
   @javax.annotation.Nonnull
   public String getMethod() {
     return method;
@@ -91,11 +83,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * HTTP response code.
-   *
-   * @return answerCode
-   */
+  /** HTTP response code. */
   @javax.annotation.Nonnull
   public String getAnswerCode() {
     return answerCode;
@@ -106,11 +94,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Request body. Truncated after 1,000 characters.
-   *
-   * @return queryBody
-   */
+  /** Request body. Truncated after 1,000 characters. */
   @javax.annotation.Nonnull
   public String getQueryBody() {
     return queryBody;
@@ -121,11 +105,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Answer body. Truncated after 1,000 characters.
-   *
-   * @return answer
-   */
+  /** Answer body. Truncated after 1,000 characters. */
   @javax.annotation.Nonnull
   public String getAnswer() {
     return answer;
@@ -136,11 +116,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Request URL.
-   *
-   * @return url
-   */
+  /** Request URL. */
   @javax.annotation.Nonnull
   public String getUrl() {
     return url;
@@ -151,11 +127,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * IP address of the client that performed the request.
-   *
-   * @return ip
-   */
+  /** IP address of the client that performed the request. */
   @javax.annotation.Nonnull
   public String getIp() {
     return ip;
@@ -166,11 +138,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Request headers (API key is obfuscated).
-   *
-   * @return queryHeaders
-   */
+  /** Request headers (API key is obfuscated). */
   @javax.annotation.Nonnull
   public String getQueryHeaders() {
     return queryHeaders;
@@ -181,11 +149,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * SHA1 signature of the log entry.
-   *
-   * @return sha1
-   */
+  /** SHA1 signature of the log entry. */
   @javax.annotation.Nonnull
   public String getSha1() {
     return sha1;
@@ -196,11 +160,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Number of API calls.
-   *
-   * @return nbApiCalls
-   */
+  /** Number of API calls. */
   @javax.annotation.Nonnull
   public String getNbApiCalls() {
     return nbApiCalls;
@@ -211,11 +171,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Processing time for the query. Doesn't include network time.
-   *
-   * @return processingTimeMs
-   */
+  /** Processing time for the query. Doesn't include network time. */
   @javax.annotation.Nonnull
   public String getProcessingTimeMs() {
     return processingTimeMs;
@@ -226,11 +182,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Index targeted by the query.
-   *
-   * @return index
-   */
+  /** Index targeted by the query. */
   @javax.annotation.Nullable
   public String getIndex() {
     return index;
@@ -241,11 +193,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Query parameters sent with the request.
-   *
-   * @return queryParams
-   */
+  /** Query parameters sent with the request. */
   @javax.annotation.Nullable
   public String getQueryParams() {
     return queryParams;
@@ -256,11 +204,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Number of hits returned for the query.
-   *
-   * @return queryNbHits
-   */
+  /** Number of hits returned for the query. */
   @javax.annotation.Nullable
   public String getQueryNbHits() {
     return queryNbHits;
@@ -279,11 +223,7 @@ public class Log {
     return this;
   }
 
-  /**
-   * Performed queries for the given request.
-   *
-   * @return innerQueries
-   */
+  /** Performed queries for the given request. */
   @javax.annotation.Nullable
   public List<LogQuery> getInnerQueries() {
     return innerQueries;

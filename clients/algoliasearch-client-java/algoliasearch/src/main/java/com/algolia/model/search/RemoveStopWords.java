@@ -27,44 +27,42 @@ import java.util.logging.Logger;
  * (this is the default) or those set by `queryLanguages`. _false_: turns off the stop words
  * feature, allowing stop words to be taken into account in a search.
  */
-@JsonDeserialize(using = RemoveStopWords.RemoveStopWordsDeserializer.class)
-@JsonSerialize(using = RemoveStopWords.RemoveStopWordsSerializer.class)
-public abstract class RemoveStopWords implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(RemoveStopWords.class.getName());
-
-  public static RemoveStopWords of(Boolean inside) {
+@JsonDeserialize(using = RemoveStopWords.Deserializer.class)
+@JsonSerialize(using = RemoveStopWords.Serializer.class)
+public interface RemoveStopWords<T> extends CompoundType<T> {
+  static RemoveStopWords<Boolean> of(Boolean inside) {
     return new RemoveStopWordsBoolean(inside);
   }
 
-  public static RemoveStopWords of(List<String> inside) {
+  static RemoveStopWords<List<String>> of(List<String> inside) {
     return new RemoveStopWordsListOfString(inside);
   }
 
-  public static class RemoveStopWordsSerializer extends StdSerializer<RemoveStopWords> {
+  class Serializer extends StdSerializer<RemoveStopWords> {
 
-    public RemoveStopWordsSerializer(Class<RemoveStopWords> t) {
+    public Serializer(Class<RemoveStopWords> t) {
       super(t);
     }
 
-    public RemoveStopWordsSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(RemoveStopWords value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(RemoveStopWords value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class RemoveStopWordsDeserializer extends StdDeserializer<RemoveStopWords> {
+  class Deserializer extends StdDeserializer<RemoveStopWords> {
 
-    public RemoveStopWordsDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(RemoveStopWords.class);
     }
 
-    public RemoveStopWordsDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -104,30 +102,30 @@ public abstract class RemoveStopWords implements CompoundType {
   }
 }
 
-class RemoveStopWordsBoolean extends RemoveStopWords {
+class RemoveStopWordsBoolean implements RemoveStopWords<Boolean> {
 
-  private final Boolean insideValue;
+  private final Boolean value;
 
-  RemoveStopWordsBoolean(Boolean insideValue) {
-    this.insideValue = insideValue;
+  RemoveStopWordsBoolean(Boolean value) {
+    this.value = value;
   }
 
   @Override
-  public Boolean getInsideValue() {
-    return insideValue;
+  public Boolean get() {
+    return value;
   }
 }
 
-class RemoveStopWordsListOfString extends RemoveStopWords {
+class RemoveStopWordsListOfString implements RemoveStopWords<List<String>> {
 
-  private final List<String> insideValue;
+  private final List<String> value;
 
-  RemoveStopWordsListOfString(List<String> insideValue) {
-    this.insideValue = insideValue;
+  RemoveStopWordsListOfString(List<String> value) {
+    this.value = value;
   }
 
   @Override
-  public List<String> getInsideValue() {
-    return insideValue;
+  public List<String> get() {
+    return value;
   }
 }

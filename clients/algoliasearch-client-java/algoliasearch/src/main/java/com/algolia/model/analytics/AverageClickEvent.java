@@ -23,11 +23,7 @@ public class AverageClickEvent {
     return this;
   }
 
-  /**
-   * Average count of all click events.
-   *
-   * @return average
-   */
+  /** Average count of all click events. */
   @javax.annotation.Nonnull
   public Double getAverage() {
     return average;
@@ -38,11 +34,7 @@ public class AverageClickEvent {
     return this;
   }
 
-  /**
-   * Number of click events.
-   *
-   * @return clickCount
-   */
+  /** Number of click events. */
   @javax.annotation.Nonnull
   public Integer getClickCount() {
     return clickCount;
@@ -53,11 +45,7 @@ public class AverageClickEvent {
     return this;
   }
 
-  /**
-   * Date of the event in the format YYYY-MM-DD.
-   *
-   * @return date
-   */
+  /** Date of the event in the format YYYY-MM-DD. */
   @javax.annotation.Nonnull
   public String getDate() {
     return date;

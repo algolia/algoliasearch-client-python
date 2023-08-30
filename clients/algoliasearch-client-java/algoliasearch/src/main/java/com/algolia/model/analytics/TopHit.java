@@ -20,11 +20,7 @@ public class TopHit {
     return this;
   }
 
-  /**
-   * Hit.
-   *
-   * @return hit
-   */
+  /** Hit. */
   @javax.annotation.Nonnull
   public String getHit() {
     return hit;
@@ -35,11 +31,7 @@ public class TopHit {
     return this;
   }
 
-  /**
-   * Number of occurrences.
-   *
-   * @return count
-   */
+  /** Number of occurrences. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;

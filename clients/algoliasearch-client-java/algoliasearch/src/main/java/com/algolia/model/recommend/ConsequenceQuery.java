@@ -20,44 +20,42 @@ import java.util.logging.Logger;
  * When providing a string, it replaces the entire query string. When providing an object, it
  * describes incremental edits to be made to the query string (but you can't do both).
  */
-@JsonDeserialize(using = ConsequenceQuery.ConsequenceQueryDeserializer.class)
-@JsonSerialize(using = ConsequenceQuery.ConsequenceQuerySerializer.class)
-public abstract class ConsequenceQuery implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(ConsequenceQuery.class.getName());
-
-  public static ConsequenceQuery of(ConsequenceQueryObject inside) {
+@JsonDeserialize(using = ConsequenceQuery.Deserializer.class)
+@JsonSerialize(using = ConsequenceQuery.Serializer.class)
+public interface ConsequenceQuery<T> extends CompoundType<T> {
+  static ConsequenceQuery<ConsequenceQueryObject> of(ConsequenceQueryObject inside) {
     return new ConsequenceQueryConsequenceQueryObject(inside);
   }
 
-  public static ConsequenceQuery of(String inside) {
+  static ConsequenceQuery<String> of(String inside) {
     return new ConsequenceQueryString(inside);
   }
 
-  public static class ConsequenceQuerySerializer extends StdSerializer<ConsequenceQuery> {
+  class Serializer extends StdSerializer<ConsequenceQuery> {
 
-    public ConsequenceQuerySerializer(Class<ConsequenceQuery> t) {
+    public Serializer(Class<ConsequenceQuery> t) {
       super(t);
     }
 
-    public ConsequenceQuerySerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(ConsequenceQuery value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(ConsequenceQuery value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class ConsequenceQueryDeserializer extends StdDeserializer<ConsequenceQuery> {
+  class Deserializer extends StdDeserializer<ConsequenceQuery> {
 
-    public ConsequenceQueryDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(ConsequenceQuery.class);
     }
 
-    public ConsequenceQueryDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -99,30 +97,30 @@ public abstract class ConsequenceQuery implements CompoundType {
   }
 }
 
-class ConsequenceQueryConsequenceQueryObject extends ConsequenceQuery {
+class ConsequenceQueryConsequenceQueryObject implements ConsequenceQuery<ConsequenceQueryObject> {
 
-  private final ConsequenceQueryObject insideValue;
+  private final ConsequenceQueryObject value;
 
-  ConsequenceQueryConsequenceQueryObject(ConsequenceQueryObject insideValue) {
-    this.insideValue = insideValue;
+  ConsequenceQueryConsequenceQueryObject(ConsequenceQueryObject value) {
+    this.value = value;
   }
 
   @Override
-  public ConsequenceQueryObject getInsideValue() {
-    return insideValue;
+  public ConsequenceQueryObject get() {
+    return value;
   }
 }
 
-class ConsequenceQueryString extends ConsequenceQuery {
+class ConsequenceQueryString implements ConsequenceQuery<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  ConsequenceQueryString(String insideValue) {
-    this.insideValue = insideValue;
+  ConsequenceQueryString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

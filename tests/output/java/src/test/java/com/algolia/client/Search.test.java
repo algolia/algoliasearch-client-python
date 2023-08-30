@@ -7,11 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.algolia.EchoInterceptor;
 import com.algolia.EchoResponse;
 import com.algolia.api.SearchClient;
+import com.algolia.config.*;
 import com.algolia.model.search.*;
-import com.algolia.utils.ClientOptions;
-import com.algolia.utils.HttpRequester;
 import java.util.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,28 +17,24 @@ import org.junit.jupiter.api.TestInstance;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SearchClientClientTests {
 
-  private HttpRequester requester;
-  private EchoInterceptor echo;
-
-  @BeforeAll
-  void init() {
-    requester = new HttpRequester();
-    echo = new EchoInterceptor();
-    requester.addInterceptor(echo.getEchoInterceptor());
-  }
+  private EchoInterceptor echo = new EchoInterceptor();
 
   SearchClient createClient() {
-    return new SearchClient("appId", "apiKey", new ClientOptions().setRequester(requester));
+    return new SearchClient("appId", "apiKey", buildClientOptions());
+  }
+
+  private ClientOptions buildClientOptions() {
+    return ClientOptions.builder().setRequesterConfig(requester -> requester.addInterceptor(echo)).build();
   }
 
   @Test
   @DisplayName("calls api with correct read host")
   void apiTest0() {
-    SearchClient $client = new SearchClient("test-app-id", "test-api-key", new ClientOptions().setRequester(requester));
+    SearchClient client = new SearchClient("test-app-id", "test-api-key", buildClientOptions());
 
     String path0 = "/test";
 
-    $client.get(path0);
+    client.get(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals("test-app-id-dsn.algolia.net", result.host);
@@ -49,11 +43,11 @@ class SearchClientClientTests {
   @Test
   @DisplayName("calls api with correct write host")
   void apiTest1() {
-    SearchClient $client = new SearchClient("test-app-id", "test-api-key", new ClientOptions().setRequester(requester));
+    SearchClient client = new SearchClient("test-app-id", "test-api-key", buildClientOptions());
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals("test-app-id.algolia.net", result.host);
@@ -62,11 +56,11 @@ class SearchClientClientTests {
   @Test
   @DisplayName("calls api with correct user agent")
   void commonApiTest0() {
-    SearchClient $client = createClient();
+    SearchClient client = createClient();
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     {
@@ -85,11 +79,11 @@ class SearchClientClientTests {
   @Test
   @DisplayName("calls api with default read timeouts")
   void commonApiTest1() {
-    SearchClient $client = createClient();
+    SearchClient client = createClient();
 
     String path0 = "/test";
 
-    $client.get(path0);
+    client.get(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals(2000, result.connectTimeout);
@@ -99,11 +93,11 @@ class SearchClientClientTests {
   @Test
   @DisplayName("calls api with default write timeouts")
   void commonApiTest2() {
-    SearchClient $client = createClient();
+    SearchClient client = createClient();
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals(2000, result.connectTimeout);
@@ -117,7 +111,7 @@ class SearchClientClientTests {
       Exception exception = assertThrows(
         Exception.class,
         () -> {
-          SearchClient $client = new SearchClient("", "", new ClientOptions().setRequester(requester));
+          SearchClient client = new SearchClient("", "", buildClientOptions());
         }
       );
       assertEquals("`appId` is missing.", exception.getMessage());
@@ -126,7 +120,7 @@ class SearchClientClientTests {
       Exception exception = assertThrows(
         Exception.class,
         () -> {
-          SearchClient $client = new SearchClient("", "my-api-key", new ClientOptions().setRequester(requester));
+          SearchClient client = new SearchClient("", "my-api-key", buildClientOptions());
         }
       );
       assertEquals("`appId` is missing.", exception.getMessage());
@@ -135,7 +129,7 @@ class SearchClientClientTests {
       Exception exception = assertThrows(
         Exception.class,
         () -> {
-          SearchClient $client = new SearchClient("my-app-id", "", new ClientOptions().setRequester(requester));
+          SearchClient client = new SearchClient("my-app-id", "", buildClientOptions());
         }
       );
       assertEquals("`apiKey` is missing.", exception.getMessage());
@@ -145,7 +139,7 @@ class SearchClientClientTests {
   @Test
   @DisplayName("`addApiKey` throws with invalid parameters")
   void parametersTest1() {
-    SearchClient $client = createClient();
+    SearchClient client = createClient();
 
     {
       Exception exception = assertThrows(
@@ -153,7 +147,7 @@ class SearchClientClientTests {
         () -> {
           ApiKey apiKey0 = null;
 
-          $client.addApiKey(apiKey0);
+          client.addApiKey(apiKey0);
           EchoResponse result = echo.getLastResponse();
         }
       );
@@ -164,7 +158,7 @@ class SearchClientClientTests {
   @Test
   @DisplayName("`addOrUpdateObject` throws with invalid parameters")
   void parametersTest2() {
-    SearchClient $client = createClient();
+    SearchClient client = createClient();
 
     {
       Exception exception = assertThrows(
@@ -175,7 +169,7 @@ class SearchClientClientTests {
           Map<String, Object> body0 = new HashMap<>();
           {}
 
-          $client.addOrUpdateObject(indexName0, objectID0, body0);
+          client.addOrUpdateObject(indexName0, objectID0, body0);
           EchoResponse result = echo.getLastResponse();
         }
       );
@@ -190,7 +184,7 @@ class SearchClientClientTests {
           Map<String, Object> body0 = new HashMap<>();
           {}
 
-          $client.addOrUpdateObject(indexName0, objectID0, body0);
+          client.addOrUpdateObject(indexName0, objectID0, body0);
           EchoResponse result = echo.getLastResponse();
         }
       );
@@ -204,7 +198,7 @@ class SearchClientClientTests {
           String objectID0 = "my-object-id";
           Object body0 = null;
 
-          $client.addOrUpdateObject(indexName0, objectID0, body0);
+          client.addOrUpdateObject(indexName0, objectID0, body0);
           EchoResponse result = echo.getLastResponse();
         }
       );

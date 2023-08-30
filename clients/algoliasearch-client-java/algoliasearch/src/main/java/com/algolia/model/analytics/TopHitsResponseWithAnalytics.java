@@ -24,11 +24,7 @@ public class TopHitsResponseWithAnalytics {
     return this;
   }
 
-  /**
-   * Top hits.
-   *
-   * @return hits
-   */
+  /** Top hits. */
   @javax.annotation.Nonnull
   public List<TopHitWithAnalytics> getHits() {
     return hits;

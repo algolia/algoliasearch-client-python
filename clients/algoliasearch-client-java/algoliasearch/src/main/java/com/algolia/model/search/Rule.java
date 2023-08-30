@@ -34,11 +34,7 @@ public class Rule {
     return this;
   }
 
-  /**
-   * Unique identifier for a rule object.
-   *
-   * @return objectID
-   */
+  /** Unique identifier for a rule object. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -60,8 +56,6 @@ public class Rule {
   /**
    * [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions)
    * required to activate a rule. You can use up to 25 conditions per rule.
-   *
-   * @return conditions
    */
   @javax.annotation.Nullable
   public List<Condition> getConditions() {
@@ -73,11 +67,7 @@ public class Rule {
     return this;
   }
 
-  /**
-   * Get consequence
-   *
-   * @return consequence
-   */
+  /** Get consequence */
   @javax.annotation.Nullable
   public Consequence getConsequence() {
     return consequence;
@@ -90,8 +80,6 @@ public class Rule {
 
   /**
    * Description of the rule's purpose. This can be helpful for display in the Algolia dashboard.
-   *
-   * @return description
    */
   @javax.annotation.Nullable
   public String getDescription() {
@@ -103,11 +91,7 @@ public class Rule {
     return this;
   }
 
-  /**
-   * Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time.
-   *
-   * @return enabled
-   */
+  /** Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time. */
   @javax.annotation.Nullable
   public Boolean getEnabled() {
     return enabled;
@@ -129,8 +113,6 @@ public class Rule {
   /**
    * If you specify a validity period, the rule _only_ applies only during that period. If
    * specified, the array must not be empty.
-   *
-   * @return validity
    */
   @javax.annotation.Nullable
   public List<TimeRange> getValidity() {

@@ -24,11 +24,7 @@ public class GetObjectsParams {
     return this;
   }
 
-  /**
-   * Get requests
-   *
-   * @return requests
-   */
+  /** Get requests */
   @javax.annotation.Nonnull
   public List<GetObjectsRequest> getRequests() {
     return requests;

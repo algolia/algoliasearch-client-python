@@ -17,44 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** AttributeToUpdate */
-@JsonDeserialize(using = AttributeToUpdate.AttributeToUpdateDeserializer.class)
-@JsonSerialize(using = AttributeToUpdate.AttributeToUpdateSerializer.class)
-public abstract class AttributeToUpdate implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(AttributeToUpdate.class.getName());
-
-  public static AttributeToUpdate of(BuiltInOperation inside) {
+@JsonDeserialize(using = AttributeToUpdate.Deserializer.class)
+@JsonSerialize(using = AttributeToUpdate.Serializer.class)
+public interface AttributeToUpdate<T> extends CompoundType<T> {
+  static AttributeToUpdate<BuiltInOperation> of(BuiltInOperation inside) {
     return new AttributeToUpdateBuiltInOperation(inside);
   }
 
-  public static AttributeToUpdate of(String inside) {
+  static AttributeToUpdate<String> of(String inside) {
     return new AttributeToUpdateString(inside);
   }
 
-  public static class AttributeToUpdateSerializer extends StdSerializer<AttributeToUpdate> {
+  class Serializer extends StdSerializer<AttributeToUpdate> {
 
-    public AttributeToUpdateSerializer(Class<AttributeToUpdate> t) {
+    public Serializer(Class<AttributeToUpdate> t) {
       super(t);
     }
 
-    public AttributeToUpdateSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(AttributeToUpdate value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(AttributeToUpdate value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class AttributeToUpdateDeserializer extends StdDeserializer<AttributeToUpdate> {
+  class Deserializer extends StdDeserializer<AttributeToUpdate> {
 
-    public AttributeToUpdateDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(AttributeToUpdate.class);
     }
 
-    public AttributeToUpdateDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -94,30 +92,30 @@ public abstract class AttributeToUpdate implements CompoundType {
   }
 }
 
-class AttributeToUpdateBuiltInOperation extends AttributeToUpdate {
+class AttributeToUpdateBuiltInOperation implements AttributeToUpdate<BuiltInOperation> {
 
-  private final BuiltInOperation insideValue;
+  private final BuiltInOperation value;
 
-  AttributeToUpdateBuiltInOperation(BuiltInOperation insideValue) {
-    this.insideValue = insideValue;
+  AttributeToUpdateBuiltInOperation(BuiltInOperation value) {
+    this.value = value;
   }
 
   @Override
-  public BuiltInOperation getInsideValue() {
-    return insideValue;
+  public BuiltInOperation get() {
+    return value;
   }
 }
 
-class AttributeToUpdateString extends AttributeToUpdate {
+class AttributeToUpdateString implements AttributeToUpdate<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  AttributeToUpdateString(String insideValue) {
-    this.insideValue = insideValue;
+  AttributeToUpdateString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

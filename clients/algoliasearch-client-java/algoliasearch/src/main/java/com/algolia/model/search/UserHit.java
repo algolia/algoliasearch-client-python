@@ -32,11 +32,7 @@ public class UserHit {
     return this;
   }
 
-  /**
-   * userID of the user.
-   *
-   * @return userID
-   */
+  /** userID of the user. */
   @javax.annotation.Nonnull
   public String getUserID() {
     return userID;
@@ -47,11 +43,7 @@ public class UserHit {
     return this;
   }
 
-  /**
-   * Cluster name.
-   *
-   * @return clusterName
-   */
+  /** Cluster name. */
   @javax.annotation.Nonnull
   public String getClusterName() {
     return clusterName;
@@ -62,11 +54,7 @@ public class UserHit {
     return this;
   }
 
-  /**
-   * Number of records in the cluster.
-   *
-   * @return nbRecords
-   */
+  /** Number of records in the cluster. */
   @javax.annotation.Nonnull
   public Integer getNbRecords() {
     return nbRecords;
@@ -77,11 +65,7 @@ public class UserHit {
     return this;
   }
 
-  /**
-   * Data size taken by all the users assigned to the cluster.
-   *
-   * @return dataSize
-   */
+  /** Data size taken by all the users assigned to the cluster. */
   @javax.annotation.Nonnull
   public Integer getDataSize() {
     return dataSize;
@@ -92,11 +76,7 @@ public class UserHit {
     return this;
   }
 
-  /**
-   * userID of the requested user. Same as userID.
-   *
-   * @return objectID
-   */
+  /** userID of the requested user. Same as userID. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -107,11 +87,7 @@ public class UserHit {
     return this;
   }
 
-  /**
-   * Get highlightResult
-   *
-   * @return highlightResult
-   */
+  /** Get highlightResult */
   @javax.annotation.Nonnull
   public UserHighlightResult getHighlightResult() {
     return highlightResult;

@@ -7,11 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.algolia.EchoInterceptor;
 import com.algolia.EchoResponse;
 import com.algolia.api.InsightsClient;
+import com.algolia.config.*;
 import com.algolia.model.insights.*;
-import com.algolia.utils.ClientOptions;
-import com.algolia.utils.HttpRequester;
 import java.util.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,28 +17,24 @@ import org.junit.jupiter.api.TestInstance;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class InsightsClientClientTests {
 
-  private HttpRequester requester;
-  private EchoInterceptor echo;
-
-  @BeforeAll
-  void init() {
-    requester = new HttpRequester();
-    echo = new EchoInterceptor();
-    requester.addInterceptor(echo.getEchoInterceptor());
-  }
+  private EchoInterceptor echo = new EchoInterceptor();
 
   InsightsClient createClient() {
-    return new InsightsClient("appId", "apiKey", "us", new ClientOptions().setRequester(requester));
+    return new InsightsClient("appId", "apiKey", "us", buildClientOptions());
+  }
+
+  private ClientOptions buildClientOptions() {
+    return ClientOptions.builder().setRequesterConfig(requester -> requester.addInterceptor(echo)).build();
   }
 
   @Test
   @DisplayName("calls api with correct user agent")
   void commonApiTest0() {
-    InsightsClient $client = createClient();
+    InsightsClient client = createClient();
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     {
@@ -59,11 +53,11 @@ class InsightsClientClientTests {
   @Test
   @DisplayName("calls api with default read timeouts")
   void commonApiTest1() {
-    InsightsClient $client = createClient();
+    InsightsClient client = createClient();
 
     String path0 = "/test";
 
-    $client.get(path0);
+    client.get(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals(2000, result.connectTimeout);
@@ -73,11 +67,11 @@ class InsightsClientClientTests {
   @Test
   @DisplayName("calls api with default write timeouts")
   void commonApiTest2() {
-    InsightsClient $client = createClient();
+    InsightsClient client = createClient();
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals(2000, result.connectTimeout);
@@ -87,7 +81,7 @@ class InsightsClientClientTests {
   @Test
   @DisplayName("fallbacks to the alias when region is not given")
   void parametersTest0() {
-    InsightsClient $client = new InsightsClient("my-app-id", "my-api-key", new ClientOptions().setRequester(requester));
+    InsightsClient client = new InsightsClient("my-app-id", "my-api-key", buildClientOptions());
 
     InsightsEvents insightsEvents0 = new InsightsEvents();
     {
@@ -96,7 +90,7 @@ class InsightsClientClientTests {
       insightsEvents0.setEvents(events1);
     }
 
-    $client.pushEvents(insightsEvents0);
+    client.pushEvents(insightsEvents0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals("insights.algolia.io", result.host);
@@ -105,11 +99,11 @@ class InsightsClientClientTests {
   @Test
   @DisplayName("uses the correct region")
   void parametersTest1() {
-    InsightsClient $client = new InsightsClient("my-app-id", "my-api-key", "us", new ClientOptions().setRequester(requester));
+    InsightsClient client = new InsightsClient("my-app-id", "my-api-key", "us", buildClientOptions());
 
     String path0 = "/test";
 
-    $client.del(path0);
+    client.del(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals("insights.us.algolia.io", result.host);
@@ -122,12 +116,7 @@ class InsightsClientClientTests {
       Exception exception = assertThrows(
         Exception.class,
         () -> {
-          InsightsClient $client = new InsightsClient(
-            "my-app-id",
-            "my-api-key",
-            "not_a_region",
-            new ClientOptions().setRequester(requester)
-          );
+          InsightsClient client = new InsightsClient("my-app-id", "my-api-key", "not_a_region", buildClientOptions());
         }
       );
       assertEquals("`region` must be one of the following: de, us", exception.getMessage());

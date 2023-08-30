@@ -4,19 +4,17 @@
 package com.algolia.api;
 
 import com.algolia.ApiClient;
+import com.algolia.config.*;
+import com.algolia.config.ClientOptions;
 import com.algolia.exceptions.*;
 import com.algolia.model.insights.*;
 import com.algolia.utils.*;
-import com.algolia.utils.retry.CallType;
-import com.algolia.utils.retry.StatefulHost;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import okhttp3.Call;
 
 public class InsightsClient extends ApiClient {
 
@@ -35,19 +33,11 @@ public class InsightsClient extends ApiClient {
   }
 
   public InsightsClient(String appId, String apiKey, String region, ClientOptions options) {
-    super(appId, apiKey, "Insights", "4.0.0-beta.3", options);
-    if (options != null && options.getHosts() != null) {
-      this.setHosts(options.getHosts());
-    } else {
-      this.setHosts(getDefaultHosts(region));
-    }
-    this.setConnectTimeout(2000);
-    this.setReadTimeout(5000);
-    this.setWriteTimeout(30000);
+    super(appId, apiKey, "Insights", options, getDefaultHosts(region));
   }
 
-  private static List<StatefulHost> getDefaultHosts(String region) throws AlgoliaRuntimeException {
-    List<StatefulHost> hosts = new ArrayList<StatefulHost>();
+  private static List<Host> getDefaultHosts(String region) throws AlgoliaRuntimeException {
+    List<Host> hosts = new ArrayList<>();
 
     boolean found = region == null;
     if (region != null) {
@@ -65,7 +55,7 @@ public class InsightsClient extends ApiClient {
 
     String url = region == null ? "insights.algolia.io" : "insights.{region}.algolia.io".replace("{region}", region);
 
-    hosts.add(new StatefulHost(url, "https", EnumSet.of(CallType.READ, CallType.WRITE)));
+    hosts.add(new Host(url, EnumSet.of(CallType.READ, CallType.WRITE)));
     return hosts;
   }
 
@@ -76,7 +66,6 @@ public class InsightsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -88,7 +77,6 @@ public class InsightsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -101,7 +89,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -112,7 +99,6 @@ public class InsightsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path) throws AlgoliaRuntimeException {
@@ -126,7 +112,6 @@ public class InsightsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -135,22 +120,8 @@ public class InsightsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `del`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "DELETE", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("DELETE").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -158,7 +129,6 @@ public class InsightsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -171,7 +141,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -182,7 +151,6 @@ public class InsightsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path) throws AlgoliaRuntimeException {
@@ -196,7 +164,6 @@ public class InsightsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -208,7 +175,6 @@ public class InsightsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -221,7 +187,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -232,7 +197,6 @@ public class InsightsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path) throws AlgoliaRuntimeException {
@@ -246,7 +210,6 @@ public class InsightsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -255,22 +218,8 @@ public class InsightsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `get`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("GET").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -278,7 +227,6 @@ public class InsightsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -291,7 +239,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -302,7 +249,6 @@ public class InsightsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path) throws AlgoliaRuntimeException {
@@ -317,7 +263,6 @@ public class InsightsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -331,7 +276,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -344,7 +288,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -355,7 +298,6 @@ public class InsightsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path) throws AlgoliaRuntimeException {
@@ -370,7 +312,6 @@ public class InsightsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -379,22 +320,14 @@ public class InsightsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `post`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("POST")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -403,7 +336,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -416,7 +348,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -427,7 +358,6 @@ public class InsightsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path) throws AlgoliaRuntimeException {
@@ -441,7 +371,6 @@ public class InsightsClient extends ApiClient {
    * @param insightsEvents (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return EventsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public EventsResponse pushEvents(InsightsEvents insightsEvents, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -453,7 +382,6 @@ public class InsightsClient extends ApiClient {
    * request, but the request body must be smaller than 2&nbsp;MB.
    *
    * @param insightsEvents (required)
-   * @return EventsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public EventsResponse pushEvents(InsightsEvents insightsEvents) throws AlgoliaRuntimeException {
@@ -467,7 +395,6 @@ public class InsightsClient extends ApiClient {
    * @param insightsEvents (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<EventsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<EventsResponse> pushEventsAsync(InsightsEvents insightsEvents, RequestOptions requestOptions)
@@ -476,16 +403,8 @@ public class InsightsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `insightsEvents` is required when calling `pushEvents`.");
     }
 
-    Object bodyObj = insightsEvents;
-
-    // create path and map variables
-    String requestPath = "/1/events";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<EventsResponse>() {});
+    HttpRequest request = HttpRequest.builder().setPath("/1/events").setMethod("POST").setBody(insightsEvents).build();
+    return executeAsync(request, requestOptions, new TypeReference<EventsResponse>() {});
   }
 
   /**
@@ -493,7 +412,6 @@ public class InsightsClient extends ApiClient {
    * in a single request, but the request body must be smaller than 2&amp;nbsp;MB.
    *
    * @param insightsEvents (required)
-   * @return CompletableFuture<EventsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<EventsResponse> pushEventsAsync(InsightsEvents insightsEvents) throws AlgoliaRuntimeException {
@@ -508,7 +426,6 @@ public class InsightsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -522,7 +439,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -535,7 +451,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -546,7 +461,6 @@ public class InsightsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path) throws AlgoliaRuntimeException {
@@ -561,7 +475,6 @@ public class InsightsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -570,22 +483,14 @@ public class InsightsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `put`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "PUT", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("PUT")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -594,7 +499,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -607,7 +511,6 @@ public class InsightsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -618,7 +521,6 @@ public class InsightsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path) throws AlgoliaRuntimeException {

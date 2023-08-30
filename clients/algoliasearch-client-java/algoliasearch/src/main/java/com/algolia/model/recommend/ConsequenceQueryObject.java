@@ -30,11 +30,7 @@ public class ConsequenceQueryObject {
     return this;
   }
 
-  /**
-   * Words to remove.
-   *
-   * @return remove
-   */
+  /** Words to remove. */
   @javax.annotation.Nullable
   public List<String> getRemove() {
     return remove;
@@ -53,11 +49,7 @@ public class ConsequenceQueryObject {
     return this;
   }
 
-  /**
-   * Edits to apply.
-   *
-   * @return edits
-   */
+  /** Edits to apply. */
   @javax.annotation.Nullable
   public List<Edit> getEdits() {
     return edits;

@@ -28,11 +28,7 @@ public class IndexingTimeResponseMetrics {
     return this;
   }
 
-  /**
-   * Get indexing
-   *
-   * @return indexing
-   */
+  /** Get indexing */
   @javax.annotation.Nullable
   public Map<String, List<TimeInner>> getIndexing() {
     return indexing;

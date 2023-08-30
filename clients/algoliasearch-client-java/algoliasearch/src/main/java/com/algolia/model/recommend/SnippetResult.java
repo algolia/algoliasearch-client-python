@@ -18,44 +18,42 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /** SnippetResult */
-@JsonDeserialize(using = SnippetResult.SnippetResultDeserializer.class)
-@JsonSerialize(using = SnippetResult.SnippetResultSerializer.class)
-public abstract class SnippetResult implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(SnippetResult.class.getName());
-
-  public static SnippetResult of(List<SnippetResultOption> inside) {
+@JsonDeserialize(using = SnippetResult.Deserializer.class)
+@JsonSerialize(using = SnippetResult.Serializer.class)
+public interface SnippetResult<T> extends CompoundType<T> {
+  static SnippetResult<List<SnippetResultOption>> of(List<SnippetResultOption> inside) {
     return new SnippetResultListOfSnippetResultOption(inside);
   }
 
-  public static SnippetResult of(SnippetResultOption inside) {
+  static SnippetResult<SnippetResultOption> of(SnippetResultOption inside) {
     return new SnippetResultSnippetResultOption(inside);
   }
 
-  public static class SnippetResultSerializer extends StdSerializer<SnippetResult> {
+  class Serializer extends StdSerializer<SnippetResult> {
 
-    public SnippetResultSerializer(Class<SnippetResult> t) {
+    public Serializer(Class<SnippetResult> t) {
       super(t);
     }
 
-    public SnippetResultSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(SnippetResult value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(SnippetResult value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class SnippetResultDeserializer extends StdDeserializer<SnippetResult> {
+  class Deserializer extends StdDeserializer<SnippetResult> {
 
-    public SnippetResultDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(SnippetResult.class);
     }
 
-    public SnippetResultDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -97,30 +95,30 @@ public abstract class SnippetResult implements CompoundType {
   }
 }
 
-class SnippetResultListOfSnippetResultOption extends SnippetResult {
+class SnippetResultListOfSnippetResultOption implements SnippetResult<List<SnippetResultOption>> {
 
-  private final List<SnippetResultOption> insideValue;
+  private final List<SnippetResultOption> value;
 
-  SnippetResultListOfSnippetResultOption(List<SnippetResultOption> insideValue) {
-    this.insideValue = insideValue;
+  SnippetResultListOfSnippetResultOption(List<SnippetResultOption> value) {
+    this.value = value;
   }
 
   @Override
-  public List<SnippetResultOption> getInsideValue() {
-    return insideValue;
+  public List<SnippetResultOption> get() {
+    return value;
   }
 }
 
-class SnippetResultSnippetResultOption extends SnippetResult {
+class SnippetResultSnippetResultOption implements SnippetResult<SnippetResultOption> {
 
-  private final SnippetResultOption insideValue;
+  private final SnippetResultOption value;
 
-  SnippetResultSnippetResultOption(SnippetResultOption insideValue) {
-    this.insideValue = insideValue;
+  SnippetResultSnippetResultOption(SnippetResultOption value) {
+    this.value = value;
   }
 
   @Override
-  public SnippetResultOption getInsideValue() {
-    return insideValue;
+  public SnippetResultOption get() {
+    return value;
   }
 }

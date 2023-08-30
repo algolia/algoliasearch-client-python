@@ -22,11 +22,7 @@ public class GetSearchesCountResponse {
     return this;
   }
 
-  /**
-   * Number of occurrences.
-   *
-   * @return count
-   */
+  /** Number of occurrences. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;
@@ -42,11 +38,7 @@ public class GetSearchesCountResponse {
     return this;
   }
 
-  /**
-   * Search events with their associated dates and hit counts.
-   *
-   * @return dates
-   */
+  /** Search events with their associated dates and hit counts. */
   @javax.annotation.Nonnull
   public List<SearchEvent> getDates() {
     return dates;

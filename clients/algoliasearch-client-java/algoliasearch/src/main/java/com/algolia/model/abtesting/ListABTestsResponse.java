@@ -30,11 +30,7 @@ public class ListABTestsResponse {
     return this;
   }
 
-  /**
-   * A/B tests.
-   *
-   * @return abtests
-   */
+  /** A/B tests. */
   @javax.annotation.Nonnull
   public List<ABTest> getAbtests() {
     return abtests;
@@ -45,11 +41,7 @@ public class ListABTestsResponse {
     return this;
   }
 
-  /**
-   * Number of A/B tests implemented.
-   *
-   * @return count
-   */
+  /** Number of A/B tests implemented. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;
@@ -60,11 +52,7 @@ public class ListABTestsResponse {
     return this;
   }
 
-  /**
-   * Number of retrievable A/B tests.
-   *
-   * @return total
-   */
+  /** Number of retrievable A/B tests. */
   @javax.annotation.Nonnull
   public Integer getTotal() {
     return total;

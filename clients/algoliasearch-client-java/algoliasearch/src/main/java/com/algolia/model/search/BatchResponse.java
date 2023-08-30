@@ -26,8 +26,6 @@ public class BatchResponse {
    * Unique identifier of a task. A successful API response means that a task was added to a queue.
    * It might not run immediately. You can check the task's progress with the `task` operation and
    * this `taskID`.
-   *
-   * @return taskID
    */
   @javax.annotation.Nonnull
   public Long getTaskID() {
@@ -44,11 +42,7 @@ public class BatchResponse {
     return this;
   }
 
-  /**
-   * Unique object (record) identifiers.
-   *
-   * @return objectIDs
-   */
+  /** Unique object (record) identifiers. */
   @javax.annotation.Nonnull
   public List<String> getObjectIDs() {
     return objectIDs;

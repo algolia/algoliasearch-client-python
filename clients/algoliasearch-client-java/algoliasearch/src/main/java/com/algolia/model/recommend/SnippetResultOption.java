@@ -23,11 +23,7 @@ public class SnippetResultOption {
     return this;
   }
 
-  /**
-   * Markup text with `facetQuery` matches highlighted.
-   *
-   * @return value
-   */
+  /** Markup text with `facetQuery` matches highlighted. */
   @javax.annotation.Nonnull
   public String getValue() {
     return value;
@@ -38,11 +34,7 @@ public class SnippetResultOption {
     return this;
   }
 
-  /**
-   * Get matchLevel
-   *
-   * @return matchLevel
-   */
+  /** Get matchLevel */
   @javax.annotation.Nonnull
   public MatchLevel getMatchLevel() {
     return matchLevel;

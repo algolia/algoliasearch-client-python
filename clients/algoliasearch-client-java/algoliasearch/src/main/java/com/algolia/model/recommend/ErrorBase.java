@@ -32,11 +32,7 @@ public class ErrorBase {
     return this;
   }
 
-  /**
-   * Get message
-   *
-   * @return message
-   */
+  /** Get message */
   @javax.annotation.Nullable
   public String getMessage() {
     return message;

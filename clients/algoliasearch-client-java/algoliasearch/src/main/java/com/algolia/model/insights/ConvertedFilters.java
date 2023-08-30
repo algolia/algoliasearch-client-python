@@ -39,8 +39,6 @@ public class ConvertedFilters {
    * adopting Segment's
    * [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework)
    * framework.
-   *
-   * @return eventName
    */
   @javax.annotation.Nonnull
   public String getEventName() {
@@ -52,11 +50,7 @@ public class ConvertedFilters {
     return this;
   }
 
-  /**
-   * Get eventType
-   *
-   * @return eventType
-   */
+  /** Get eventType */
   @javax.annotation.Nonnull
   public ConversionEvent getEventType() {
     return eventType;
@@ -67,11 +61,7 @@ public class ConvertedFilters {
     return this;
   }
 
-  /**
-   * Name of the Algolia index.
-   *
-   * @return index
-   */
+  /** Name of the Algolia index. */
   @javax.annotation.Nonnull
   public String getIndex() {
     return index;
@@ -87,11 +77,7 @@ public class ConvertedFilters {
     return this;
   }
 
-  /**
-   * Facet filters. Each facet filter string must be URL-encoded, such as, `discount:10%25`.
-   *
-   * @return filters
-   */
+  /** Facet filters. Each facet filter string must be URL-encoded, such as, `discount:10%25`. */
   @javax.annotation.Nonnull
   public List<String> getFilters() {
     return filters;
@@ -105,8 +91,6 @@ public class ConvertedFilters {
   /**
    * Anonymous or pseudonymous user identifier. > **Note**: Never include personally identifiable
    * information in user tokens.
-   *
-   * @return userToken
    */
   @javax.annotation.Nonnull
   public String getUserToken() {
@@ -121,8 +105,6 @@ public class ConvertedFilters {
   /**
    * Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time).
    * By default, the Insights API uses the time it receives an event as its timestamp.
-   *
-   * @return timestamp
    */
   @javax.annotation.Nullable
   public Long getTimestamp() {

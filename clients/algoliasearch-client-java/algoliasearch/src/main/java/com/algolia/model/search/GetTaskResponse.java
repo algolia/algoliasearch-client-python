@@ -17,11 +17,7 @@ public class GetTaskResponse {
     return this;
   }
 
-  /**
-   * Get status
-   *
-   * @return status
-   */
+  /** Get status */
   @javax.annotation.Nonnull
   public TaskStatus getStatus() {
     return status;

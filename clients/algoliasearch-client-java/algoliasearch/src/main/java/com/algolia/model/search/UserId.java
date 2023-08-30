@@ -26,11 +26,7 @@ public class UserId {
     return this;
   }
 
-  /**
-   * userID of the user.
-   *
-   * @return userID
-   */
+  /** userID of the user. */
   @javax.annotation.Nonnull
   public String getUserID() {
     return userID;
@@ -41,11 +37,7 @@ public class UserId {
     return this;
   }
 
-  /**
-   * Cluster to which the user is assigned.
-   *
-   * @return clusterName
-   */
+  /** Cluster to which the user is assigned. */
   @javax.annotation.Nonnull
   public String getClusterName() {
     return clusterName;
@@ -56,11 +48,7 @@ public class UserId {
     return this;
   }
 
-  /**
-   * Number of records belonging to the user.
-   *
-   * @return nbRecords
-   */
+  /** Number of records belonging to the user. */
   @javax.annotation.Nonnull
   public Integer getNbRecords() {
     return nbRecords;
@@ -71,11 +59,7 @@ public class UserId {
     return this;
   }
 
-  /**
-   * Data size used by the user.
-   *
-   * @return dataSize
-   */
+  /** Data size used by the user. */
   @javax.annotation.Nonnull
   public Integer getDataSize() {
     return dataSize;

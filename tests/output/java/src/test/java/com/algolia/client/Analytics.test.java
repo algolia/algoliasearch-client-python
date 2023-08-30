@@ -7,11 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.algolia.EchoInterceptor;
 import com.algolia.EchoResponse;
 import com.algolia.api.AnalyticsClient;
+import com.algolia.config.*;
 import com.algolia.model.analytics.*;
-import com.algolia.utils.ClientOptions;
-import com.algolia.utils.HttpRequester;
 import java.util.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,28 +17,24 @@ import org.junit.jupiter.api.TestInstance;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AnalyticsClientClientTests {
 
-  private HttpRequester requester;
-  private EchoInterceptor echo;
-
-  @BeforeAll
-  void init() {
-    requester = new HttpRequester();
-    echo = new EchoInterceptor();
-    requester.addInterceptor(echo.getEchoInterceptor());
-  }
+  private EchoInterceptor echo = new EchoInterceptor();
 
   AnalyticsClient createClient() {
-    return new AnalyticsClient("appId", "apiKey", "us", new ClientOptions().setRequester(requester));
+    return new AnalyticsClient("appId", "apiKey", "us", buildClientOptions());
+  }
+
+  private ClientOptions buildClientOptions() {
+    return ClientOptions.builder().setRequesterConfig(requester -> requester.addInterceptor(echo)).build();
   }
 
   @Test
   @DisplayName("calls api with correct user agent")
   void commonApiTest0() {
-    AnalyticsClient $client = createClient();
+    AnalyticsClient client = createClient();
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     {
@@ -59,11 +53,11 @@ class AnalyticsClientClientTests {
   @Test
   @DisplayName("calls api with default read timeouts")
   void commonApiTest1() {
-    AnalyticsClient $client = createClient();
+    AnalyticsClient client = createClient();
 
     String path0 = "/test";
 
-    $client.get(path0);
+    client.get(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals(2000, result.connectTimeout);
@@ -73,11 +67,11 @@ class AnalyticsClientClientTests {
   @Test
   @DisplayName("calls api with default write timeouts")
   void commonApiTest2() {
-    AnalyticsClient $client = createClient();
+    AnalyticsClient client = createClient();
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals(2000, result.connectTimeout);
@@ -87,11 +81,11 @@ class AnalyticsClientClientTests {
   @Test
   @DisplayName("fallbacks to the alias when region is not given")
   void parametersTest0() {
-    AnalyticsClient $client = new AnalyticsClient("my-app-id", "my-api-key", new ClientOptions().setRequester(requester));
+    AnalyticsClient client = new AnalyticsClient("my-app-id", "my-api-key", buildClientOptions());
 
     String index0 = "my-index";
 
-    $client.getAverageClickPosition(index0);
+    client.getAverageClickPosition(index0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals("analytics.algolia.com", result.host);
@@ -100,11 +94,11 @@ class AnalyticsClientClientTests {
   @Test
   @DisplayName("uses the correct region")
   void parametersTest1() {
-    AnalyticsClient $client = new AnalyticsClient("my-app-id", "my-api-key", "de", new ClientOptions().setRequester(requester));
+    AnalyticsClient client = new AnalyticsClient("my-app-id", "my-api-key", "de", buildClientOptions());
 
     String path0 = "/test";
 
-    $client.post(path0);
+    client.post(path0);
     EchoResponse result = echo.getLastResponse();
 
     assertEquals("analytics.de.algolia.com", result.host);
@@ -117,12 +111,7 @@ class AnalyticsClientClientTests {
       Exception exception = assertThrows(
         Exception.class,
         () -> {
-          AnalyticsClient $client = new AnalyticsClient(
-            "my-app-id",
-            "my-api-key",
-            "not_a_region",
-            new ClientOptions().setRequester(requester)
-          );
+          AnalyticsClient client = new AnalyticsClient("my-app-id", "my-api-key", "not_a_region", buildClientOptions());
         }
       );
       assertEquals("`region` must be one of the following: de, us", exception.getMessage());
@@ -132,7 +121,7 @@ class AnalyticsClientClientTests {
   @Test
   @DisplayName("getAverageClickPosition throws without index")
   void parametersTest3() {
-    AnalyticsClient $client = createClient();
+    AnalyticsClient client = createClient();
 
     {
       Exception exception = assertThrows(
@@ -140,7 +129,7 @@ class AnalyticsClientClientTests {
         () -> {
           String index0 = null;
 
-          $client.getClickPositions(index0);
+          client.getClickPositions(index0);
           EchoResponse result = echo.getLastResponse();
         }
       );

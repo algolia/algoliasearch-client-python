@@ -17,43 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** SearchQuery */
-@JsonDeserialize(using = SearchQuery.SearchQueryDeserializer.class)
-@JsonSerialize(using = SearchQuery.SearchQuerySerializer.class)
-public abstract class SearchQuery implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(SearchQuery.class.getName());
-
-  public static SearchQuery of(SearchForFacets inside) {
+@JsonDeserialize(using = SearchQuery.Deserializer.class)
+@JsonSerialize(using = SearchQuery.Serializer.class)
+public interface SearchQuery<T> extends CompoundType<T> {
+  static SearchQuery<SearchForFacets> of(SearchForFacets inside) {
     return new SearchQuerySearchForFacets(inside);
   }
 
-  public static SearchQuery of(SearchForHits inside) {
+  static SearchQuery<SearchForHits> of(SearchForHits inside) {
     return new SearchQuerySearchForHits(inside);
   }
 
-  public static class SearchQuerySerializer extends StdSerializer<SearchQuery> {
+  class Serializer extends StdSerializer<SearchQuery> {
 
-    public SearchQuerySerializer(Class<SearchQuery> t) {
+    public Serializer(Class<SearchQuery> t) {
       super(t);
     }
 
-    public SearchQuerySerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(SearchQuery value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(SearchQuery value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class SearchQueryDeserializer extends StdDeserializer<SearchQuery> {
+  class Deserializer extends StdDeserializer<SearchQuery> {
 
-    public SearchQueryDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(SearchQuery.class);
     }
 
-    public SearchQueryDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -93,30 +92,30 @@ public abstract class SearchQuery implements CompoundType {
   }
 }
 
-class SearchQuerySearchForFacets extends SearchQuery {
+class SearchQuerySearchForFacets implements SearchQuery<SearchForFacets> {
 
-  private final SearchForFacets insideValue;
+  private final SearchForFacets value;
 
-  SearchQuerySearchForFacets(SearchForFacets insideValue) {
-    this.insideValue = insideValue;
+  SearchQuerySearchForFacets(SearchForFacets value) {
+    this.value = value;
   }
 
   @Override
-  public SearchForFacets getInsideValue() {
-    return insideValue;
+  public SearchForFacets get() {
+    return value;
   }
 }
 
-class SearchQuerySearchForHits extends SearchQuery {
+class SearchQuerySearchForHits implements SearchQuery<SearchForHits> {
 
-  private final SearchForHits insideValue;
+  private final SearchForHits value;
 
-  SearchQuerySearchForHits(SearchForHits insideValue) {
-    this.insideValue = insideValue;
+  SearchQuerySearchForHits(SearchForHits value) {
+    this.value = value;
   }
 
   @Override
-  public SearchForHits getInsideValue() {
-    return insideValue;
+  public SearchForHits get() {
+    return value;
   }
 }

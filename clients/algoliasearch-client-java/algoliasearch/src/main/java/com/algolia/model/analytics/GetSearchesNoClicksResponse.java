@@ -24,11 +24,7 @@ public class GetSearchesNoClicksResponse {
     return this;
   }
 
-  /**
-   * Searches with no clicks.
-   *
-   * @return searches
-   */
+  /** Searches with no clicks. */
   @javax.annotation.Nonnull
   public List<SearchNoClickEvent> getSearches() {
     return searches;

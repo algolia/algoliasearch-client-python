@@ -26,11 +26,7 @@ public class BaseRecommendationsQuery {
     return this;
   }
 
-  /**
-   * Get model
-   *
-   * @return model
-   */
+  /** Get model */
   @javax.annotation.Nonnull
   public RecommendationModels getModel() {
     return model;
@@ -41,11 +37,7 @@ public class BaseRecommendationsQuery {
     return this;
   }
 
-  /**
-   * Unique object identifier.
-   *
-   * @return objectID
-   */
+  /** Unique object identifier. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -56,11 +48,7 @@ public class BaseRecommendationsQuery {
     return this;
   }
 
-  /**
-   * Get queryParameters
-   *
-   * @return queryParameters
-   */
+  /** Get queryParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getQueryParameters() {
     return queryParameters;
@@ -71,11 +59,7 @@ public class BaseRecommendationsQuery {
     return this;
   }
 
-  /**
-   * Get fallbackParameters
-   *
-   * @return fallbackParameters
-   */
+  /** Get fallbackParameters */
   @javax.annotation.Nullable
   public SearchParamsObject getFallbackParameters() {
     return fallbackParameters;

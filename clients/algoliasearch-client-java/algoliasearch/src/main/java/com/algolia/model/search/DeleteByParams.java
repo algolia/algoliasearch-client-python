@@ -40,11 +40,7 @@ public class DeleteByParams {
     return this;
   }
 
-  /**
-   * Get facetFilters
-   *
-   * @return facetFilters
-   */
+  /** Get facetFilters */
   @javax.annotation.Nullable
   public FacetFilters getFacetFilters() {
     return facetFilters;
@@ -58,8 +54,6 @@ public class DeleteByParams {
   /**
    * [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the
    * query with numeric, facet, or tag filters.
-   *
-   * @return filters
    */
   @javax.annotation.Nullable
   public String getFilters() {
@@ -71,11 +65,7 @@ public class DeleteByParams {
     return this;
   }
 
-  /**
-   * Get numericFilters
-   *
-   * @return numericFilters
-   */
+  /** Get numericFilters */
   @javax.annotation.Nullable
   public NumericFilters getNumericFilters() {
     return numericFilters;
@@ -86,11 +76,7 @@ public class DeleteByParams {
     return this;
   }
 
-  /**
-   * Get tagFilters
-   *
-   * @return tagFilters
-   */
+  /** Get tagFilters */
   @javax.annotation.Nullable
   public TagFilters getTagFilters() {
     return tagFilters;
@@ -105,8 +91,6 @@ public class DeleteByParams {
    * Search for entries [around a central
    * location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point),
    * enabling a geographical search within a circular area.
-   *
-   * @return aroundLatLng
    */
   @javax.annotation.Nullable
   public String getAroundLatLng() {
@@ -118,11 +102,7 @@ public class DeleteByParams {
     return this;
   }
 
-  /**
-   * Get aroundRadius
-   *
-   * @return aroundRadius
-   */
+  /** Get aroundRadius */
   @javax.annotation.Nullable
   public AroundRadius getAroundRadius() {
     return aroundRadius;
@@ -145,8 +125,6 @@ public class DeleteByParams {
    * Search inside a [rectangular
    * area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
    * (in geographical coordinates).
-   *
-   * @return insideBoundingBox
    */
   @javax.annotation.Nullable
   public List<Double> getInsideBoundingBox() {
@@ -170,8 +148,6 @@ public class DeleteByParams {
    * Search inside a
    * [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
    * (in geographical coordinates).
-   *
-   * @return insidePolygon
    */
   @javax.annotation.Nullable
   public List<Double> getInsidePolygon() {

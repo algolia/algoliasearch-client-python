@@ -17,48 +17,46 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** RecommendationsRequest */
-@JsonDeserialize(using = RecommendationsRequest.RecommendationsRequestDeserializer.class)
-@JsonSerialize(using = RecommendationsRequest.RecommendationsRequestSerializer.class)
-public abstract class RecommendationsRequest implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(RecommendationsRequest.class.getName());
-
-  public static RecommendationsRequest of(RecommendationsQuery inside) {
+@JsonDeserialize(using = RecommendationsRequest.Deserializer.class)
+@JsonSerialize(using = RecommendationsRequest.Serializer.class)
+public interface RecommendationsRequest<T> extends CompoundType<T> {
+  static RecommendationsRequest<RecommendationsQuery> of(RecommendationsQuery inside) {
     return new RecommendationsRequestRecommendationsQuery(inside);
   }
 
-  public static RecommendationsRequest of(TrendingFacetsQuery inside) {
+  static RecommendationsRequest<TrendingFacetsQuery> of(TrendingFacetsQuery inside) {
     return new RecommendationsRequestTrendingFacetsQuery(inside);
   }
 
-  public static RecommendationsRequest of(TrendingItemsQuery inside) {
+  static RecommendationsRequest<TrendingItemsQuery> of(TrendingItemsQuery inside) {
     return new RecommendationsRequestTrendingItemsQuery(inside);
   }
 
-  public static class RecommendationsRequestSerializer extends StdSerializer<RecommendationsRequest> {
+  class Serializer extends StdSerializer<RecommendationsRequest> {
 
-    public RecommendationsRequestSerializer(Class<RecommendationsRequest> t) {
+    public Serializer(Class<RecommendationsRequest> t) {
       super(t);
     }
 
-    public RecommendationsRequestSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(RecommendationsRequest value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(RecommendationsRequest value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class RecommendationsRequestDeserializer extends StdDeserializer<RecommendationsRequest> {
+  class Deserializer extends StdDeserializer<RecommendationsRequest> {
 
-    public RecommendationsRequestDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(RecommendationsRequest.class);
     }
 
-    public RecommendationsRequestDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -109,44 +107,44 @@ public abstract class RecommendationsRequest implements CompoundType {
   }
 }
 
-class RecommendationsRequestRecommendationsQuery extends RecommendationsRequest {
+class RecommendationsRequestRecommendationsQuery implements RecommendationsRequest<RecommendationsQuery> {
 
-  private final RecommendationsQuery insideValue;
+  private final RecommendationsQuery value;
 
-  RecommendationsRequestRecommendationsQuery(RecommendationsQuery insideValue) {
-    this.insideValue = insideValue;
+  RecommendationsRequestRecommendationsQuery(RecommendationsQuery value) {
+    this.value = value;
   }
 
   @Override
-  public RecommendationsQuery getInsideValue() {
-    return insideValue;
+  public RecommendationsQuery get() {
+    return value;
   }
 }
 
-class RecommendationsRequestTrendingFacetsQuery extends RecommendationsRequest {
+class RecommendationsRequestTrendingFacetsQuery implements RecommendationsRequest<TrendingFacetsQuery> {
 
-  private final TrendingFacetsQuery insideValue;
+  private final TrendingFacetsQuery value;
 
-  RecommendationsRequestTrendingFacetsQuery(TrendingFacetsQuery insideValue) {
-    this.insideValue = insideValue;
+  RecommendationsRequestTrendingFacetsQuery(TrendingFacetsQuery value) {
+    this.value = value;
   }
 
   @Override
-  public TrendingFacetsQuery getInsideValue() {
-    return insideValue;
+  public TrendingFacetsQuery get() {
+    return value;
   }
 }
 
-class RecommendationsRequestTrendingItemsQuery extends RecommendationsRequest {
+class RecommendationsRequestTrendingItemsQuery implements RecommendationsRequest<TrendingItemsQuery> {
 
-  private final TrendingItemsQuery insideValue;
+  private final TrendingItemsQuery value;
 
-  RecommendationsRequestTrendingItemsQuery(TrendingItemsQuery insideValue) {
-    this.insideValue = insideValue;
+  RecommendationsRequestTrendingItemsQuery(TrendingItemsQuery value) {
+    this.value = value;
   }
 
   @Override
-  public TrendingItemsQuery getInsideValue() {
-    return insideValue;
+  public TrendingItemsQuery get() {
+    return value;
   }
 }

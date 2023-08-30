@@ -17,11 +17,7 @@ public class SetPersonalizationStrategyResponse {
     return this;
   }
 
-  /**
-   * A message confirming the strategy update.
-   *
-   * @return message
-   */
+  /** A message confirming the strategy update. */
   @javax.annotation.Nonnull
   public String getMessage() {
     return message;

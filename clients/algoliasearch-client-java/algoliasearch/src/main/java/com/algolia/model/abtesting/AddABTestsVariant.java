@@ -17,44 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** AddABTestsVariant */
-@JsonDeserialize(using = AddABTestsVariant.AddABTestsVariantDeserializer.class)
-@JsonSerialize(using = AddABTestsVariant.AddABTestsVariantSerializer.class)
-public abstract class AddABTestsVariant implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(AddABTestsVariant.class.getName());
-
-  public static AddABTestsVariant of(AbTestsVariant inside) {
+@JsonDeserialize(using = AddABTestsVariant.Deserializer.class)
+@JsonSerialize(using = AddABTestsVariant.Serializer.class)
+public interface AddABTestsVariant<T> extends CompoundType<T> {
+  static AddABTestsVariant<AbTestsVariant> of(AbTestsVariant inside) {
     return new AddABTestsVariantAbTestsVariant(inside);
   }
 
-  public static AddABTestsVariant of(AbTestsVariantSearchParams inside) {
+  static AddABTestsVariant<AbTestsVariantSearchParams> of(AbTestsVariantSearchParams inside) {
     return new AddABTestsVariantAbTestsVariantSearchParams(inside);
   }
 
-  public static class AddABTestsVariantSerializer extends StdSerializer<AddABTestsVariant> {
+  class Serializer extends StdSerializer<AddABTestsVariant> {
 
-    public AddABTestsVariantSerializer(Class<AddABTestsVariant> t) {
+    public Serializer(Class<AddABTestsVariant> t) {
       super(t);
     }
 
-    public AddABTestsVariantSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(AddABTestsVariant value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(AddABTestsVariant value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class AddABTestsVariantDeserializer extends StdDeserializer<AddABTestsVariant> {
+  class Deserializer extends StdDeserializer<AddABTestsVariant> {
 
-    public AddABTestsVariantDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(AddABTestsVariant.class);
     }
 
-    public AddABTestsVariantDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -96,30 +94,30 @@ public abstract class AddABTestsVariant implements CompoundType {
   }
 }
 
-class AddABTestsVariantAbTestsVariant extends AddABTestsVariant {
+class AddABTestsVariantAbTestsVariant implements AddABTestsVariant<AbTestsVariant> {
 
-  private final AbTestsVariant insideValue;
+  private final AbTestsVariant value;
 
-  AddABTestsVariantAbTestsVariant(AbTestsVariant insideValue) {
-    this.insideValue = insideValue;
+  AddABTestsVariantAbTestsVariant(AbTestsVariant value) {
+    this.value = value;
   }
 
   @Override
-  public AbTestsVariant getInsideValue() {
-    return insideValue;
+  public AbTestsVariant get() {
+    return value;
   }
 }
 
-class AddABTestsVariantAbTestsVariantSearchParams extends AddABTestsVariant {
+class AddABTestsVariantAbTestsVariantSearchParams implements AddABTestsVariant<AbTestsVariantSearchParams> {
 
-  private final AbTestsVariantSearchParams insideValue;
+  private final AbTestsVariantSearchParams value;
 
-  AddABTestsVariantAbTestsVariantSearchParams(AbTestsVariantSearchParams insideValue) {
-    this.insideValue = insideValue;
+  AddABTestsVariantAbTestsVariantSearchParams(AbTestsVariantSearchParams value) {
+    this.value = value;
   }
 
   @Override
-  public AbTestsVariantSearchParams getInsideValue() {
-    return insideValue;
+  public AbTestsVariantSearchParams get() {
+    return value;
   }
 }

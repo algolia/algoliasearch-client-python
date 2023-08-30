@@ -17,11 +17,7 @@ public class GetRecommendTaskResponse {
     return this;
   }
 
-  /**
-   * Get status
-   *
-   * @return status
-   */
+  /** Get status */
   @javax.annotation.Nonnull
   public TaskStatus getStatus() {
     return status;

@@ -30,8 +30,6 @@ public class SearchUserIdsParams {
    * Query to search. The search is a prefix search with [typo
    * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/)
    * enabled. An empty query will retrieve all users.
-   *
-   * @return query
    */
   @javax.annotation.Nonnull
   public String getQuery() {
@@ -43,11 +41,7 @@ public class SearchUserIdsParams {
     return this;
   }
 
-  /**
-   * Cluster name.
-   *
-   * @return clusterName
-   */
+  /** Cluster name. */
   @javax.annotation.Nullable
   public String getClusterName() {
     return clusterName;
@@ -58,11 +52,7 @@ public class SearchUserIdsParams {
     return this;
   }
 
-  /**
-   * Page to retrieve (the first page is `0`, not `1`).
-   *
-   * @return page
-   */
+  /** Page to retrieve (the first page is `0`, not `1`). */
   @javax.annotation.Nullable
   public Integer getPage() {
     return page;
@@ -73,11 +63,7 @@ public class SearchUserIdsParams {
     return this;
   }
 
-  /**
-   * Number of hits per page. minimum: 1 maximum: 1000
-   *
-   * @return hitsPerPage
-   */
+  /** Number of hits per page. minimum: 1 maximum: 1000 */
   @javax.annotation.Nullable
   public Integer getHitsPerPage() {
     return hitsPerPage;

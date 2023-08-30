@@ -20,11 +20,7 @@ public class UserWithDate {
     return this;
   }
 
-  /**
-   * Date of the event in the format YYYY-MM-DD.
-   *
-   * @return date
-   */
+  /** Date of the event in the format YYYY-MM-DD. */
   @javax.annotation.Nonnull
   public String getDate() {
     return date;
@@ -35,11 +31,7 @@ public class UserWithDate {
     return this;
   }
 
-  /**
-   * Number of occurrences.
-   *
-   * @return count
-   */
+  /** Number of occurrences. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;

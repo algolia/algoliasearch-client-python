@@ -37,11 +37,7 @@ public class StandardEntries {
     return this;
   }
 
-  /**
-   * Key-value pair of a language ISO code and a boolean value.
-   *
-   * @return plurals
-   */
+  /** Key-value pair of a language ISO code and a boolean value. */
   @javax.annotation.Nullable
   public Map<String, Boolean> getPlurals() {
     return plurals;
@@ -60,11 +56,7 @@ public class StandardEntries {
     return this;
   }
 
-  /**
-   * Key-value pair of a language ISO code and a boolean value.
-   *
-   * @return stopwords
-   */
+  /** Key-value pair of a language ISO code and a boolean value. */
   @javax.annotation.Nullable
   public Map<String, Boolean> getStopwords() {
     return stopwords;
@@ -83,11 +75,7 @@ public class StandardEntries {
     return this;
   }
 
-  /**
-   * Key-value pair of a language ISO code and a boolean value.
-   *
-   * @return compounds
-   */
+  /** Key-value pair of a language ISO code and a boolean value. */
   @javax.annotation.Nullable
   public Map<String, Boolean> getCompounds() {
     return compounds;

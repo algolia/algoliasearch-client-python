@@ -26,11 +26,7 @@ public class AbTestsVariantSearchParams {
     return this;
   }
 
-  /**
-   * A/B test index.
-   *
-   * @return index
-   */
+  /** A/B test index. */
   @javax.annotation.Nonnull
   public String getIndex() {
     return index;
@@ -41,11 +37,7 @@ public class AbTestsVariantSearchParams {
     return this;
   }
 
-  /**
-   * A/B test traffic percentage.
-   *
-   * @return trafficPercentage
-   */
+  /** A/B test traffic percentage. */
   @javax.annotation.Nonnull
   public Integer getTrafficPercentage() {
     return trafficPercentage;
@@ -56,11 +48,7 @@ public class AbTestsVariantSearchParams {
     return this;
   }
 
-  /**
-   * A/B test description.
-   *
-   * @return description
-   */
+  /** A/B test description. */
   @javax.annotation.Nullable
   public String getDescription() {
     return description;
@@ -71,11 +59,7 @@ public class AbTestsVariantSearchParams {
     return this;
   }
 
-  /**
-   * Get customSearchParameters
-   *
-   * @return customSearchParameters
-   */
+  /** Get customSearchParameters */
   @javax.annotation.Nonnull
   public Object getCustomSearchParameters() {
     return customSearchParameters;

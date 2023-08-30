@@ -23,11 +23,7 @@ public class SearchForFacetValuesRequest {
     return this;
   }
 
-  /**
-   * Search parameters as a URL-encoded query string.
-   *
-   * @return params
-   */
+  /** Search parameters as a URL-encoded query string. */
   @javax.annotation.Nullable
   public String getParams() {
     return params;
@@ -38,11 +34,7 @@ public class SearchForFacetValuesRequest {
     return this;
   }
 
-  /**
-   * Text to search inside the facet's values.
-   *
-   * @return facetQuery
-   */
+  /** Text to search inside the facet's values. */
   @javax.annotation.Nullable
   public String getFacetQuery() {
     return facetQuery;
@@ -57,8 +49,6 @@ public class SearchForFacetValuesRequest {
    * Maximum number of facet hits to return when [searching for facet
    * values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
    * maximum: 100
-   *
-   * @return maxFacetHits
    */
   @javax.annotation.Nullable
   public Integer getMaxFacetHits() {

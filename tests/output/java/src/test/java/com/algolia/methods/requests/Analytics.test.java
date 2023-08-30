@@ -8,19 +8,15 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.algolia.EchoInterceptor;
 import com.algolia.EchoResponse;
 import com.algolia.api.AnalyticsClient;
+import com.algolia.config.*;
 import com.algolia.model.analytics.*;
-import com.algolia.utils.ClientOptions;
-import com.algolia.utils.HttpRequester;
-import com.algolia.utils.JSONBuilder;
-import com.algolia.utils.RequestOptions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -33,11 +29,15 @@ class AnalyticsClientRequestsTests {
 
   @BeforeAll
   void init() {
-    json = new JSONBuilder().failOnUnknown(true).build();
-    HttpRequester requester = new HttpRequester();
-    echo = new EchoInterceptor();
-    requester.addInterceptor(echo.getEchoInterceptor());
-    client = new AnalyticsClient("appId", "apiKey", "us", new ClientOptions().setRequester(requester));
+    this.json = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
+    this.echo = new EchoInterceptor();
+    var options = ClientOptions.builder().setRequesterConfig(requester -> requester.addInterceptor(echo)).build();
+    this.client = new AnalyticsClient("appId", "apiKey", "us", options);
+  }
+
+  @AfterAll
+  void tearUp() throws Exception {
+    client.close();
   }
 
   @Test
@@ -49,9 +49,8 @@ class AnalyticsClientRequestsTests {
       client.del(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "DELETE");
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("DELETE", req.method);
     assertNull(req.body);
   }
 
@@ -69,9 +68,8 @@ class AnalyticsClientRequestsTests {
       client.del(path0, parameters0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "DELETE");
+    assertEquals("/1/test/all", req.path);
+    assertEquals("DELETE", req.method);
     assertNull(req.body);
 
     try {
@@ -96,9 +94,8 @@ class AnalyticsClientRequestsTests {
       client.get(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "GET");
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
   }
 
@@ -116,9 +113,8 @@ class AnalyticsClientRequestsTests {
       client.get(path0, parameters0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "GET");
+    assertEquals("/1/test/all", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -143,9 +139,8 @@ class AnalyticsClientRequestsTests {
       client.getAverageClickPosition(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/clicks/averageClickPosition");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/clicks/averageClickPosition", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -173,9 +168,8 @@ class AnalyticsClientRequestsTests {
       client.getAverageClickPosition(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/clicks/averageClickPosition");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/clicks/averageClickPosition", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -203,9 +197,8 @@ class AnalyticsClientRequestsTests {
       client.getClickPositions(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/clicks/positions");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/clicks/positions", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -233,9 +226,8 @@ class AnalyticsClientRequestsTests {
       client.getClickPositions(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/clicks/positions");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/clicks/positions", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -263,9 +255,8 @@ class AnalyticsClientRequestsTests {
       client.getClickThroughRate(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/clicks/clickThroughRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/clicks/clickThroughRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -293,9 +284,8 @@ class AnalyticsClientRequestsTests {
       client.getClickThroughRate(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/clicks/clickThroughRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/clicks/clickThroughRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -323,9 +313,8 @@ class AnalyticsClientRequestsTests {
       client.getConversationRate(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/conversions/conversionRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/conversions/conversionRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -353,9 +342,8 @@ class AnalyticsClientRequestsTests {
       client.getConversationRate(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/conversions/conversionRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/conversions/conversionRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -383,9 +371,8 @@ class AnalyticsClientRequestsTests {
       client.getNoClickRate(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noClickRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noClickRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -413,9 +400,8 @@ class AnalyticsClientRequestsTests {
       client.getNoClickRate(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noClickRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noClickRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -443,9 +429,8 @@ class AnalyticsClientRequestsTests {
       client.getNoResultsRate(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noResultRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noResultRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -473,9 +458,8 @@ class AnalyticsClientRequestsTests {
       client.getNoResultsRate(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noResultRate");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noResultRate", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -503,9 +487,8 @@ class AnalyticsClientRequestsTests {
       client.getSearchesCount(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/count");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/count", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -533,9 +516,8 @@ class AnalyticsClientRequestsTests {
       client.getSearchesCount(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/count");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/count", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -563,9 +545,8 @@ class AnalyticsClientRequestsTests {
       client.getSearchesNoClicks(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noClicks");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noClicks", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -595,9 +576,8 @@ class AnalyticsClientRequestsTests {
       client.getSearchesNoClicks(index0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noClicks");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noClicks", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -625,9 +605,8 @@ class AnalyticsClientRequestsTests {
       client.getSearchesNoResults(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noResults");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noResults", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -657,9 +636,8 @@ class AnalyticsClientRequestsTests {
       client.getSearchesNoResults(index0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches/noResults");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches/noResults", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -687,9 +665,8 @@ class AnalyticsClientRequestsTests {
       client.getStatus(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/status");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/status", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -714,9 +691,8 @@ class AnalyticsClientRequestsTests {
       client.getTopCountries(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/countries");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/countries", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -746,9 +722,8 @@ class AnalyticsClientRequestsTests {
       client.getTopCountries(index0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/countries");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/countries", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -776,9 +751,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFilterAttributes(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -809,9 +783,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFilterAttributes(index0, search0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -840,9 +813,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFilterForAttribute(attribute0, index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters/myAttribute");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters/myAttribute", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -868,9 +840,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFilterForAttribute(attribute0, index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters/myAttribute1%2CmyAttribute2");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters/myAttribute1%2CmyAttribute2", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -902,9 +873,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFilterForAttribute(attribute0, index0, search0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters/myAttribute");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters/myAttribute", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -939,9 +909,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFilterForAttribute(attribute0, index0, search0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters/myAttribute1%2CmyAttribute2");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters/myAttribute1%2CmyAttribute2", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -969,9 +938,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFiltersNoResults(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters/noResults");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters/noResults", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1002,9 +970,8 @@ class AnalyticsClientRequestsTests {
       client.getTopFiltersNoResults(index0, search0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/filters/noResults");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/filters/noResults", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1032,9 +999,8 @@ class AnalyticsClientRequestsTests {
       client.getTopHits(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/hits");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/hits", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1066,9 +1032,8 @@ class AnalyticsClientRequestsTests {
       client.getTopHits(index0, search0, clickAnalytics0, startDate0, endDate0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/hits");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/hits", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1096,9 +1061,8 @@ class AnalyticsClientRequestsTests {
       client.getTopSearches(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1131,9 +1095,8 @@ class AnalyticsClientRequestsTests {
       client.getTopSearches(index0, clickAnalytics0, startDate0, endDate0, orderBy0, direction0, limit0, offset0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/searches");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/searches", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1161,9 +1124,8 @@ class AnalyticsClientRequestsTests {
       client.getUsersCount(index0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/users/count");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/users/count", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1191,9 +1153,8 @@ class AnalyticsClientRequestsTests {
       client.getUsersCount(index0, startDate0, endDate0, tags0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/2/users/count");
-    assertEquals(req.method, "GET");
+    assertEquals("/2/users/count", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -1221,12 +1182,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT));
   }
 
   @Test
@@ -1248,12 +1206,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/all", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});
@@ -1290,12 +1245,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1335,12 +1287,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1380,12 +1329,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});
@@ -1407,7 +1353,7 @@ class AnalyticsClientRequestsTests {
       Map<String, String> actualHeaders = req.headers;
 
       for (Map.Entry<String, String> p : expectedHeaders.entrySet()) {
-        assertEquals(actualHeaders.get(p.getKey()), p.getValue());
+        assertEquals(p.getValue(), actualHeaders.get(p.getKey()));
       }
     } catch (JsonProcessingException e) {
       fail("failed to parse headers json");
@@ -1436,12 +1382,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});
@@ -1463,7 +1406,7 @@ class AnalyticsClientRequestsTests {
       Map<String, String> actualHeaders = req.headers;
 
       for (Map.Entry<String, String> p : expectedHeaders.entrySet()) {
-        assertEquals(actualHeaders.get(p.getKey()), p.getValue());
+        assertEquals(p.getValue(), actualHeaders.get(p.getKey()));
       }
     } catch (JsonProcessingException e) {
       fail("failed to parse headers json");
@@ -1492,12 +1435,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1537,12 +1477,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1582,12 +1519,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1627,12 +1561,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1672,12 +1603,9 @@ class AnalyticsClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1704,12 +1632,9 @@ class AnalyticsClientRequestsTests {
       client.put(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "PUT");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("PUT", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT));
   }
 
   @Test
@@ -1731,12 +1656,9 @@ class AnalyticsClientRequestsTests {
       client.put(path0, parameters0, body0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "PUT");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/all", req.path);
+    assertEquals("PUT", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});

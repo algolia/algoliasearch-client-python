@@ -22,11 +22,7 @@ public class GetUsersCountResponse {
     return this;
   }
 
-  /**
-   * Number of occurrences.
-   *
-   * @return count
-   */
+  /** Number of occurrences. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;
@@ -42,11 +38,7 @@ public class GetUsersCountResponse {
     return this;
   }
 
-  /**
-   * User count.
-   *
-   * @return dates
-   */
+  /** User count. */
   @javax.annotation.Nonnull
   public List<UserWithDate> getDates() {
     return dates;

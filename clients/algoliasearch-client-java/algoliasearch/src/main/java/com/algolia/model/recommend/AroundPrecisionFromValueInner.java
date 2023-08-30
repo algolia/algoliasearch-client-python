@@ -20,11 +20,7 @@ public class AroundPrecisionFromValueInner {
     return this;
   }
 
-  /**
-   * Get from
-   *
-   * @return from
-   */
+  /** Get from */
   @javax.annotation.Nullable
   public Integer getFrom() {
     return from;
@@ -35,11 +31,7 @@ public class AroundPrecisionFromValueInner {
     return this;
   }
 
-  /**
-   * Get value
-   *
-   * @return value
-   */
+  /** Get value */
   @javax.annotation.Nullable
   public Integer getValue() {
     return value;

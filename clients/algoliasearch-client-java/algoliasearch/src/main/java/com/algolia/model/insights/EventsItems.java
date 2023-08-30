@@ -17,67 +17,66 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** EventsItems */
-@JsonDeserialize(using = EventsItems.EventsItemsDeserializer.class)
-@JsonSerialize(using = EventsItems.EventsItemsSerializer.class)
-public abstract class EventsItems implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(EventsItems.class.getName());
-
-  public static EventsItems of(ClickedFilters inside) {
+@JsonDeserialize(using = EventsItems.Deserializer.class)
+@JsonSerialize(using = EventsItems.Serializer.class)
+public interface EventsItems<T> extends CompoundType<T> {
+  static EventsItems<ClickedFilters> of(ClickedFilters inside) {
     return new EventsItemsClickedFilters(inside);
   }
 
-  public static EventsItems of(ClickedObjectIDs inside) {
+  static EventsItems<ClickedObjectIDs> of(ClickedObjectIDs inside) {
     return new EventsItemsClickedObjectIDs(inside);
   }
 
-  public static EventsItems of(ClickedObjectIDsAfterSearch inside) {
+  static EventsItems<ClickedObjectIDsAfterSearch> of(ClickedObjectIDsAfterSearch inside) {
     return new EventsItemsClickedObjectIDsAfterSearch(inside);
   }
 
-  public static EventsItems of(ConvertedFilters inside) {
+  static EventsItems<ConvertedFilters> of(ConvertedFilters inside) {
     return new EventsItemsConvertedFilters(inside);
   }
 
-  public static EventsItems of(ConvertedObjectIDs inside) {
+  static EventsItems<ConvertedObjectIDs> of(ConvertedObjectIDs inside) {
     return new EventsItemsConvertedObjectIDs(inside);
   }
 
-  public static EventsItems of(ConvertedObjectIDsAfterSearch inside) {
+  static EventsItems<ConvertedObjectIDsAfterSearch> of(ConvertedObjectIDsAfterSearch inside) {
     return new EventsItemsConvertedObjectIDsAfterSearch(inside);
   }
 
-  public static EventsItems of(ViewedFilters inside) {
+  static EventsItems<ViewedFilters> of(ViewedFilters inside) {
     return new EventsItemsViewedFilters(inside);
   }
 
-  public static EventsItems of(ViewedObjectIDs inside) {
+  static EventsItems<ViewedObjectIDs> of(ViewedObjectIDs inside) {
     return new EventsItemsViewedObjectIDs(inside);
   }
 
-  public static class EventsItemsSerializer extends StdSerializer<EventsItems> {
+  class Serializer extends StdSerializer<EventsItems> {
 
-    public EventsItemsSerializer(Class<EventsItems> t) {
+    public Serializer(Class<EventsItems> t) {
       super(t);
     }
 
-    public EventsItemsSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(EventsItems value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(EventsItems value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class EventsItemsDeserializer extends StdDeserializer<EventsItems> {
+  class Deserializer extends StdDeserializer<EventsItems> {
 
-    public EventsItemsDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(EventsItems.class);
     }
 
-    public EventsItemsDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -189,114 +188,114 @@ public abstract class EventsItems implements CompoundType {
   }
 }
 
-class EventsItemsClickedFilters extends EventsItems {
+class EventsItemsClickedFilters implements EventsItems<ClickedFilters> {
 
-  private final ClickedFilters insideValue;
+  private final ClickedFilters value;
 
-  EventsItemsClickedFilters(ClickedFilters insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsClickedFilters(ClickedFilters value) {
+    this.value = value;
   }
 
   @Override
-  public ClickedFilters getInsideValue() {
-    return insideValue;
+  public ClickedFilters get() {
+    return value;
   }
 }
 
-class EventsItemsClickedObjectIDs extends EventsItems {
+class EventsItemsClickedObjectIDs implements EventsItems<ClickedObjectIDs> {
 
-  private final ClickedObjectIDs insideValue;
+  private final ClickedObjectIDs value;
 
-  EventsItemsClickedObjectIDs(ClickedObjectIDs insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsClickedObjectIDs(ClickedObjectIDs value) {
+    this.value = value;
   }
 
   @Override
-  public ClickedObjectIDs getInsideValue() {
-    return insideValue;
+  public ClickedObjectIDs get() {
+    return value;
   }
 }
 
-class EventsItemsClickedObjectIDsAfterSearch extends EventsItems {
+class EventsItemsClickedObjectIDsAfterSearch implements EventsItems<ClickedObjectIDsAfterSearch> {
 
-  private final ClickedObjectIDsAfterSearch insideValue;
+  private final ClickedObjectIDsAfterSearch value;
 
-  EventsItemsClickedObjectIDsAfterSearch(ClickedObjectIDsAfterSearch insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsClickedObjectIDsAfterSearch(ClickedObjectIDsAfterSearch value) {
+    this.value = value;
   }
 
   @Override
-  public ClickedObjectIDsAfterSearch getInsideValue() {
-    return insideValue;
+  public ClickedObjectIDsAfterSearch get() {
+    return value;
   }
 }
 
-class EventsItemsConvertedFilters extends EventsItems {
+class EventsItemsConvertedFilters implements EventsItems<ConvertedFilters> {
 
-  private final ConvertedFilters insideValue;
+  private final ConvertedFilters value;
 
-  EventsItemsConvertedFilters(ConvertedFilters insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsConvertedFilters(ConvertedFilters value) {
+    this.value = value;
   }
 
   @Override
-  public ConvertedFilters getInsideValue() {
-    return insideValue;
+  public ConvertedFilters get() {
+    return value;
   }
 }
 
-class EventsItemsConvertedObjectIDs extends EventsItems {
+class EventsItemsConvertedObjectIDs implements EventsItems<ConvertedObjectIDs> {
 
-  private final ConvertedObjectIDs insideValue;
+  private final ConvertedObjectIDs value;
 
-  EventsItemsConvertedObjectIDs(ConvertedObjectIDs insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsConvertedObjectIDs(ConvertedObjectIDs value) {
+    this.value = value;
   }
 
   @Override
-  public ConvertedObjectIDs getInsideValue() {
-    return insideValue;
+  public ConvertedObjectIDs get() {
+    return value;
   }
 }
 
-class EventsItemsConvertedObjectIDsAfterSearch extends EventsItems {
+class EventsItemsConvertedObjectIDsAfterSearch implements EventsItems<ConvertedObjectIDsAfterSearch> {
 
-  private final ConvertedObjectIDsAfterSearch insideValue;
+  private final ConvertedObjectIDsAfterSearch value;
 
-  EventsItemsConvertedObjectIDsAfterSearch(ConvertedObjectIDsAfterSearch insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsConvertedObjectIDsAfterSearch(ConvertedObjectIDsAfterSearch value) {
+    this.value = value;
   }
 
   @Override
-  public ConvertedObjectIDsAfterSearch getInsideValue() {
-    return insideValue;
+  public ConvertedObjectIDsAfterSearch get() {
+    return value;
   }
 }
 
-class EventsItemsViewedFilters extends EventsItems {
+class EventsItemsViewedFilters implements EventsItems<ViewedFilters> {
 
-  private final ViewedFilters insideValue;
+  private final ViewedFilters value;
 
-  EventsItemsViewedFilters(ViewedFilters insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsViewedFilters(ViewedFilters value) {
+    this.value = value;
   }
 
   @Override
-  public ViewedFilters getInsideValue() {
-    return insideValue;
+  public ViewedFilters get() {
+    return value;
   }
 }
 
-class EventsItemsViewedObjectIDs extends EventsItems {
+class EventsItemsViewedObjectIDs implements EventsItems<ViewedObjectIDs> {
 
-  private final ViewedObjectIDs insideValue;
+  private final ViewedObjectIDs value;
 
-  EventsItemsViewedObjectIDs(ViewedObjectIDs insideValue) {
-    this.insideValue = insideValue;
+  EventsItemsViewedObjectIDs(ViewedObjectIDs value) {
+    this.value = value;
   }
 
   @Override
-  public ViewedObjectIDs getInsideValue() {
-    return insideValue;
+  public ViewedObjectIDs get() {
+    return value;
   }
 }

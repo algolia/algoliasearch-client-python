@@ -21,11 +21,7 @@ public class CustomSearchParams {
     return this;
   }
 
-  /**
-   * Get customSearchParameters
-   *
-   * @return customSearchParameters
-   */
+  /** Get customSearchParameters */
   @javax.annotation.Nonnull
   public Object getCustomSearchParameters() {
     return customSearchParameters;

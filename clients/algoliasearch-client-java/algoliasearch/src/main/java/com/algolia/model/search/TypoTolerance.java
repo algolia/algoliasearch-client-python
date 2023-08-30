@@ -21,44 +21,42 @@ import java.util.logging.Logger;
  * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/)
  * is enabled and how it is applied.
  */
-@JsonDeserialize(using = TypoTolerance.TypoToleranceDeserializer.class)
-@JsonSerialize(using = TypoTolerance.TypoToleranceSerializer.class)
-public abstract class TypoTolerance implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(TypoTolerance.class.getName());
-
-  public static TypoTolerance of(Boolean inside) {
+@JsonDeserialize(using = TypoTolerance.Deserializer.class)
+@JsonSerialize(using = TypoTolerance.Serializer.class)
+public interface TypoTolerance<T> extends CompoundType<T> {
+  static TypoTolerance<Boolean> of(Boolean inside) {
     return new TypoToleranceBoolean(inside);
   }
 
-  public static TypoTolerance of(TypoToleranceEnum inside) {
+  static TypoTolerance<TypoToleranceEnum> of(TypoToleranceEnum inside) {
     return new TypoToleranceTypoToleranceEnum(inside);
   }
 
-  public static class TypoToleranceSerializer extends StdSerializer<TypoTolerance> {
+  class Serializer extends StdSerializer<TypoTolerance> {
 
-    public TypoToleranceSerializer(Class<TypoTolerance> t) {
+    public Serializer(Class<TypoTolerance> t) {
       super(t);
     }
 
-    public TypoToleranceSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(TypoTolerance value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(TypoTolerance value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class TypoToleranceDeserializer extends StdDeserializer<TypoTolerance> {
+  class Deserializer extends StdDeserializer<TypoTolerance> {
 
-    public TypoToleranceDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(TypoTolerance.class);
     }
 
-    public TypoToleranceDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -98,30 +96,30 @@ public abstract class TypoTolerance implements CompoundType {
   }
 }
 
-class TypoToleranceBoolean extends TypoTolerance {
+class TypoToleranceBoolean implements TypoTolerance<Boolean> {
 
-  private final Boolean insideValue;
+  private final Boolean value;
 
-  TypoToleranceBoolean(Boolean insideValue) {
-    this.insideValue = insideValue;
+  TypoToleranceBoolean(Boolean value) {
+    this.value = value;
   }
 
   @Override
-  public Boolean getInsideValue() {
-    return insideValue;
+  public Boolean get() {
+    return value;
   }
 }
 
-class TypoToleranceTypoToleranceEnum extends TypoTolerance {
+class TypoToleranceTypoToleranceEnum implements TypoTolerance<TypoToleranceEnum> {
 
-  private final TypoToleranceEnum insideValue;
+  private final TypoToleranceEnum value;
 
-  TypoToleranceTypoToleranceEnum(TypoToleranceEnum insideValue) {
-    this.insideValue = insideValue;
+  TypoToleranceTypoToleranceEnum(TypoToleranceEnum value) {
+    this.value = value;
   }
 
   @Override
-  public TypoToleranceEnum getInsideValue() {
-    return insideValue;
+  public TypoToleranceEnum get() {
+    return value;
   }
 }

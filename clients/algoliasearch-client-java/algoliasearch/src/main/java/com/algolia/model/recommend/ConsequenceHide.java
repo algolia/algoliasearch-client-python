@@ -17,11 +17,7 @@ public class ConsequenceHide {
     return this;
   }
 
-  /**
-   * Unique object identifier.
-   *
-   * @return objectID
-   */
+  /** Unique object identifier. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;

@@ -21,44 +21,42 @@ import java.util.logging.Logger;
  * Names of facets to which automatic filtering must be applied; they must match the facet name of a
  * facet value placeholder in the query pattern.
  */
-@JsonDeserialize(using = AutomaticFacetFilters.AutomaticFacetFiltersDeserializer.class)
-@JsonSerialize(using = AutomaticFacetFilters.AutomaticFacetFiltersSerializer.class)
-public abstract class AutomaticFacetFilters implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(AutomaticFacetFilters.class.getName());
-
-  public static AutomaticFacetFilters ofListOfAutomaticFacetFilter(List<AutomaticFacetFilter> inside) {
+@JsonDeserialize(using = AutomaticFacetFilters.Deserializer.class)
+@JsonSerialize(using = AutomaticFacetFilters.Serializer.class)
+public interface AutomaticFacetFilters<T> extends CompoundType<T> {
+  static AutomaticFacetFilters<List<AutomaticFacetFilter>> ofListOfAutomaticFacetFilter(List<AutomaticFacetFilter> inside) {
     return new AutomaticFacetFiltersListOfAutomaticFacetFilter(inside);
   }
 
-  public static AutomaticFacetFilters ofListOfString(List<String> inside) {
+  static AutomaticFacetFilters<List<String>> ofListOfString(List<String> inside) {
     return new AutomaticFacetFiltersListOfString(inside);
   }
 
-  public static class AutomaticFacetFiltersSerializer extends StdSerializer<AutomaticFacetFilters> {
+  class Serializer extends StdSerializer<AutomaticFacetFilters> {
 
-    public AutomaticFacetFiltersSerializer(Class<AutomaticFacetFilters> t) {
+    public Serializer(Class<AutomaticFacetFilters> t) {
       super(t);
     }
 
-    public AutomaticFacetFiltersSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(AutomaticFacetFilters value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(AutomaticFacetFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class AutomaticFacetFiltersDeserializer extends StdDeserializer<AutomaticFacetFilters> {
+  class Deserializer extends StdDeserializer<AutomaticFacetFilters> {
 
-    public AutomaticFacetFiltersDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(AutomaticFacetFilters.class);
     }
 
-    public AutomaticFacetFiltersDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -100,30 +98,30 @@ public abstract class AutomaticFacetFilters implements CompoundType {
   }
 }
 
-class AutomaticFacetFiltersListOfAutomaticFacetFilter extends AutomaticFacetFilters {
+class AutomaticFacetFiltersListOfAutomaticFacetFilter implements AutomaticFacetFilters<List<AutomaticFacetFilter>> {
 
-  private final List<AutomaticFacetFilter> insideValue;
+  private final List<AutomaticFacetFilter> value;
 
-  AutomaticFacetFiltersListOfAutomaticFacetFilter(List<AutomaticFacetFilter> insideValue) {
-    this.insideValue = insideValue;
+  AutomaticFacetFiltersListOfAutomaticFacetFilter(List<AutomaticFacetFilter> value) {
+    this.value = value;
   }
 
   @Override
-  public List<AutomaticFacetFilter> getInsideValue() {
-    return insideValue;
+  public List<AutomaticFacetFilter> get() {
+    return value;
   }
 }
 
-class AutomaticFacetFiltersListOfString extends AutomaticFacetFilters {
+class AutomaticFacetFiltersListOfString implements AutomaticFacetFilters<List<String>> {
 
-  private final List<String> insideValue;
+  private final List<String> value;
 
-  AutomaticFacetFiltersListOfString(List<String> insideValue) {
-    this.insideValue = insideValue;
+  AutomaticFacetFiltersListOfString(List<String> value) {
+    this.value = value;
   }
 
   @Override
-  public List<String> getInsideValue() {
-    return insideValue;
+  public List<String> get() {
+    return value;
   }
 }

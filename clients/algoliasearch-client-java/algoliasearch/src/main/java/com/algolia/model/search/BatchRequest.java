@@ -20,11 +20,7 @@ public class BatchRequest {
     return this;
   }
 
-  /**
-   * Get action
-   *
-   * @return action
-   */
+  /** Get action */
   @javax.annotation.Nonnull
   public Action getAction() {
     return action;
@@ -35,11 +31,7 @@ public class BatchRequest {
     return this;
   }
 
-  /**
-   * Operation arguments (varies with specified `action`).
-   *
-   * @return body
-   */
+  /** Operation arguments (varies with specified `action`). */
   @javax.annotation.Nonnull
   public Object getBody() {
     return body;

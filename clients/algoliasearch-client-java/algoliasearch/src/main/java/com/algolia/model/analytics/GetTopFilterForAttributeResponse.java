@@ -24,11 +24,7 @@ public class GetTopFilterForAttributeResponse {
     return this;
   }
 
-  /**
-   * Filter values for an attribute.
-   *
-   * @return values
-   */
+  /** Filter values for an attribute. */
   @javax.annotation.Nonnull
   public List<GetTopFilterForAttribute> getValues() {
     return values;

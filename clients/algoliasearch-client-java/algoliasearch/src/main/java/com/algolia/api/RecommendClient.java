@@ -4,23 +4,21 @@
 package com.algolia.api;
 
 import com.algolia.ApiClient;
+import com.algolia.config.*;
+import com.algolia.config.ClientOptions;
 import com.algolia.exceptions.*;
 import com.algolia.model.recommend.*;
 import com.algolia.utils.*;
-import com.algolia.utils.retry.CallType;
-import com.algolia.utils.retry.StatefulHost;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import okhttp3.Call;
 
 public class RecommendClient extends ApiClient {
 
@@ -29,26 +27,18 @@ public class RecommendClient extends ApiClient {
   }
 
   public RecommendClient(String appId, String apiKey, ClientOptions options) {
-    super(appId, apiKey, "Recommend", "4.0.0-beta.3", options);
-    if (options != null && options.getHosts() != null) {
-      this.setHosts(options.getHosts());
-    } else {
-      this.setHosts(getDefaultHosts(appId));
-    }
-    this.setConnectTimeout(2000);
-    this.setReadTimeout(5000);
-    this.setWriteTimeout(30000);
+    super(appId, apiKey, "Recommend", options, getDefaultHosts(appId));
   }
 
-  private static List<StatefulHost> getDefaultHosts(String appId) {
-    List<StatefulHost> hosts = new ArrayList<StatefulHost>();
-    hosts.add(new StatefulHost(appId + "-dsn.algolia.net", "https", EnumSet.of(CallType.READ)));
-    hosts.add(new StatefulHost(appId + ".algolia.net", "https", EnumSet.of(CallType.WRITE)));
+  private static List<Host> getDefaultHosts(String appId) {
+    List<Host> hosts = new ArrayList<>();
+    hosts.add(new Host(appId + "-dsn.algolia.net", EnumSet.of(CallType.READ)));
+    hosts.add(new Host(appId + ".algolia.net", EnumSet.of(CallType.WRITE)));
 
-    List<StatefulHost> commonHosts = new ArrayList<StatefulHost>();
-    hosts.add(new StatefulHost(appId + "-1.algolianet.net", "https", EnumSet.of(CallType.READ, CallType.WRITE)));
-    hosts.add(new StatefulHost(appId + "-2.algolianet.net", "https", EnumSet.of(CallType.READ, CallType.WRITE)));
-    hosts.add(new StatefulHost(appId + "-3.algolianet.net", "https", EnumSet.of(CallType.READ, CallType.WRITE)));
+    List<Host> commonHosts = new ArrayList<>();
+    hosts.add(new Host(appId + "-1.algolianet.net", EnumSet.of(CallType.READ, CallType.WRITE)));
+    hosts.add(new Host(appId + "-2.algolianet.net", EnumSet.of(CallType.READ, CallType.WRITE)));
+    hosts.add(new Host(appId + "-3.algolianet.net", EnumSet.of(CallType.READ, CallType.WRITE)));
 
     Collections.shuffle(commonHosts, new Random());
 
@@ -62,7 +52,6 @@ public class RecommendClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -74,7 +63,6 @@ public class RecommendClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -87,7 +75,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -98,7 +85,6 @@ public class RecommendClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path) throws AlgoliaRuntimeException {
@@ -112,7 +98,6 @@ public class RecommendClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -121,22 +106,8 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `del`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "DELETE", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("DELETE").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -144,7 +115,6 @@ public class RecommendClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -157,7 +127,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -168,7 +137,6 @@ public class RecommendClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path) throws AlgoliaRuntimeException {
@@ -185,7 +153,6 @@ public class RecommendClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return DeletedAtResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public DeletedAtResponse deleteRecommendRule(String indexName, RecommendModels model, String objectID, RequestOptions requestOptions)
@@ -201,7 +168,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param objectID Unique record (object) identifier. (required)
-   * @return DeletedAtResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public DeletedAtResponse deleteRecommendRule(String indexName, RecommendModels model, String objectID) throws AlgoliaRuntimeException {
@@ -219,7 +185,6 @@ public class RecommendClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<DeletedAtResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<DeletedAtResponse> deleteRecommendRuleAsync(
@@ -240,19 +205,12 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `deleteRecommendRule`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath =
-      "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replaceAll("\\{indexName\\}", this.escapeString(indexName.toString()))
-        .replaceAll("\\{model\\}", this.escapeString(model.toString()))
-        .replaceAll("\\{objectID\\}", this.escapeString(objectID.toString()));
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "DELETE", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<DeletedAtResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/1/indexes/{indexName}/{model}/recommend/rules/{objectID}", indexName, model, objectID)
+      .setMethod("DELETE")
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<DeletedAtResponse>() {});
   }
 
   /**
@@ -264,7 +222,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param objectID Unique record (object) identifier. (required)
-   * @return CompletableFuture<DeletedAtResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<DeletedAtResponse> deleteRecommendRuleAsync(String indexName, RecommendModels model, String objectID)
@@ -279,7 +236,6 @@ public class RecommendClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -291,7 +247,6 @@ public class RecommendClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -304,7 +259,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -315,7 +269,6 @@ public class RecommendClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path) throws AlgoliaRuntimeException {
@@ -329,7 +282,6 @@ public class RecommendClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -338,22 +290,8 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `get`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("GET").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -361,7 +299,6 @@ public class RecommendClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -374,7 +311,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -385,7 +321,6 @@ public class RecommendClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path) throws AlgoliaRuntimeException {
@@ -402,7 +337,6 @@ public class RecommendClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return RuleResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public RuleResponse getRecommendRule(String indexName, RecommendModels model, String objectID, RequestOptions requestOptions)
@@ -418,7 +352,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param objectID Unique record (object) identifier. (required)
-   * @return RuleResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public RuleResponse getRecommendRule(String indexName, RecommendModels model, String objectID) throws AlgoliaRuntimeException {
@@ -436,7 +369,6 @@ public class RecommendClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<RuleResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<RuleResponse> getRecommendRuleAsync(
@@ -457,19 +389,12 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `getRecommendRule`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath =
-      "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replaceAll("\\{indexName\\}", this.escapeString(indexName.toString()))
-        .replaceAll("\\{model\\}", this.escapeString(model.toString()))
-        .replaceAll("\\{objectID\\}", this.escapeString(objectID.toString()));
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<RuleResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/1/indexes/{indexName}/{model}/recommend/rules/{objectID}", indexName, model, objectID)
+      .setMethod("GET")
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<RuleResponse>() {});
   }
 
   /**
@@ -481,7 +406,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param objectID Unique record (object) identifier. (required)
-   * @return CompletableFuture<RuleResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<RuleResponse> getRecommendRuleAsync(String indexName, RecommendModels model, String objectID)
@@ -500,7 +424,6 @@ public class RecommendClient extends ApiClient {
    * @param taskID Unique identifier of a task. Numeric value (up to 64bits). (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetRecommendTaskResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetRecommendTaskResponse getRecommendStatus(String indexName, RecommendModels model, Long taskID, RequestOptions requestOptions)
@@ -517,7 +440,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param taskID Unique identifier of a task. Numeric value (up to 64bits). (required)
-   * @return GetRecommendTaskResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetRecommendTaskResponse getRecommendStatus(String indexName, RecommendModels model, Long taskID) throws AlgoliaRuntimeException {
@@ -535,7 +457,6 @@ public class RecommendClient extends ApiClient {
    * @param taskID Unique identifier of a task. Numeric value (up to 64bits). (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetRecommendTaskResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetRecommendTaskResponse> getRecommendStatusAsync(
@@ -556,19 +477,12 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `taskID` is required when calling `getRecommendStatus`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath =
-      "/1/indexes/{indexName}/{model}/task/{taskID}".replaceAll("\\{indexName\\}", this.escapeString(indexName.toString()))
-        .replaceAll("\\{model\\}", this.escapeString(model.toString()))
-        .replaceAll("\\{taskID\\}", this.escapeString(taskID.toString()));
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetRecommendTaskResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/1/indexes/{indexName}/{model}/task/{taskID}", indexName, model, taskID)
+      .setMethod("GET")
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetRecommendTaskResponse>() {});
   }
 
   /**
@@ -580,7 +494,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param taskID Unique identifier of a task. Numeric value (up to 64bits). (required)
-   * @return CompletableFuture<GetRecommendTaskResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetRecommendTaskResponse> getRecommendStatusAsync(String indexName, RecommendModels model, Long taskID)
@@ -600,7 +513,6 @@ public class RecommendClient extends ApiClient {
    * @param getRecommendationsParams (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetRecommendationsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetRecommendationsResponse getRecommendations(GetRecommendationsParams getRecommendationsParams, RequestOptions requestOptions)
@@ -618,7 +530,6 @@ public class RecommendClient extends ApiClient {
    * Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
    *
    * @param getRecommendationsParams (required)
-   * @return GetRecommendationsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetRecommendationsResponse getRecommendations(GetRecommendationsParams getRecommendationsParams) throws AlgoliaRuntimeException {
@@ -637,7 +548,6 @@ public class RecommendClient extends ApiClient {
    * @param getRecommendationsParams (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetRecommendationsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetRecommendationsResponse> getRecommendationsAsync(
@@ -648,16 +558,14 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `getRecommendationsParams` is required when calling `getRecommendations`.");
     }
 
-    Object bodyObj = getRecommendationsParams;
-
-    // create path and map variables
-    String requestPath = "/1/indexes/*/recommendations";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, true);
-    return this.executeAsync(call, new TypeReference<GetRecommendationsResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/1/indexes/*/recommendations")
+      .setMethod("POST")
+      .setBody(getRecommendationsParams)
+      .setRead(true)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetRecommendationsResponse>() {});
   }
 
   /**
@@ -670,7 +578,6 @@ public class RecommendClient extends ApiClient {
    * Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
    *
    * @param getRecommendationsParams (required)
-   * @return CompletableFuture<GetRecommendationsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetRecommendationsResponse> getRecommendationsAsync(GetRecommendationsParams getRecommendationsParams)
@@ -686,7 +593,6 @@ public class RecommendClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -700,7 +606,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -713,7 +618,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -724,7 +628,6 @@ public class RecommendClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path) throws AlgoliaRuntimeException {
@@ -739,7 +642,6 @@ public class RecommendClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -748,22 +650,14 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `post`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("POST")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -772,7 +666,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -785,7 +678,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -796,7 +688,6 @@ public class RecommendClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path) throws AlgoliaRuntimeException {
@@ -811,7 +702,6 @@ public class RecommendClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -825,7 +715,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -838,7 +727,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -849,7 +737,6 @@ public class RecommendClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path) throws AlgoliaRuntimeException {
@@ -864,7 +751,6 @@ public class RecommendClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -873,22 +759,14 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `put`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "PUT", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("PUT")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -897,7 +775,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -910,7 +787,6 @@ public class RecommendClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -921,7 +797,6 @@ public class RecommendClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path) throws AlgoliaRuntimeException {
@@ -938,7 +813,6 @@ public class RecommendClient extends ApiClient {
    * @param searchRecommendRulesParams (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return SearchRecommendRulesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchRecommendRulesResponse searchRecommendRules(
@@ -958,7 +832,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param searchRecommendRulesParams (optional)
-   * @return SearchRecommendRulesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchRecommendRulesResponse searchRecommendRules(
@@ -978,7 +851,6 @@ public class RecommendClient extends ApiClient {
    *     (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return SearchRecommendRulesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchRecommendRulesResponse searchRecommendRules(String indexName, RecommendModels model, RequestOptions requestOptions)
@@ -993,7 +865,6 @@ public class RecommendClient extends ApiClient {
    * @param model [Recommend
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
-   * @return SearchRecommendRulesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchRecommendRulesResponse searchRecommendRules(String indexName, RecommendModels model) throws AlgoliaRuntimeException {
@@ -1011,7 +882,6 @@ public class RecommendClient extends ApiClient {
    * @param searchRecommendRulesParams (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<SearchRecommendRulesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchRecommendRulesResponse> searchRecommendRulesAsync(
@@ -1028,18 +898,14 @@ public class RecommendClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `model` is required when calling `searchRecommendRules`.");
     }
 
-    Object bodyObj = searchRecommendRulesParams != null ? searchRecommendRulesParams : new Object();
-
-    // create path and map variables
-    String requestPath =
-      "/1/indexes/{indexName}/{model}/recommend/rules/search".replaceAll("\\{indexName\\}", this.escapeString(indexName.toString()))
-        .replaceAll("\\{model\\}", this.escapeString(model.toString()));
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, true);
-    return this.executeAsync(call, new TypeReference<SearchRecommendRulesResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/1/indexes/{indexName}/{model}/recommend/rules/search", indexName, model)
+      .setMethod("POST")
+      .setBody(searchRecommendRulesParams)
+      .setRead(true)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<SearchRecommendRulesResponse>() {});
   }
 
   /**
@@ -1051,7 +917,6 @@ public class RecommendClient extends ApiClient {
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
    * @param searchRecommendRulesParams (optional)
-   * @return CompletableFuture<SearchRecommendRulesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchRecommendRulesResponse> searchRecommendRulesAsync(
@@ -1072,7 +937,6 @@ public class RecommendClient extends ApiClient {
    *     (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<SearchRecommendRulesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchRecommendRulesResponse> searchRecommendRulesAsync(
@@ -1091,7 +955,6 @@ public class RecommendClient extends ApiClient {
    * @param model [Recommend
    *     models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).
    *     (required)
-   * @return CompletableFuture<SearchRecommendRulesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchRecommendRulesResponse> searchRecommendRulesAsync(String indexName, RecommendModels model)

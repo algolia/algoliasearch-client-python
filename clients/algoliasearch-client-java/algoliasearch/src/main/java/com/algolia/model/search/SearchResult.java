@@ -17,43 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** SearchResult */
-@JsonDeserialize(using = SearchResult.SearchResultDeserializer.class)
-@JsonSerialize(using = SearchResult.SearchResultSerializer.class)
-public abstract class SearchResult<T> implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(SearchResult.class.getName());
-
-  public static SearchResult of(SearchForFacetValuesResponse inside) {
+@JsonDeserialize(using = SearchResult.Deserializer.class)
+@JsonSerialize(using = SearchResult.Serializer.class)
+public interface SearchResult<T> extends CompoundType<T> {
+  static SearchResult<SearchForFacetValuesResponse> of(SearchForFacetValuesResponse inside) {
     return new SearchResultSearchForFacetValuesResponse(inside);
   }
 
-  public static SearchResult of(SearchResponse inside) {
+  static SearchResult<SearchResponse> of(SearchResponse inside) {
     return new SearchResultSearchResponse(inside);
   }
 
-  public static class SearchResultSerializer extends StdSerializer<SearchResult> {
+  class Serializer extends StdSerializer<SearchResult> {
 
-    public SearchResultSerializer(Class<SearchResult> t) {
+    public Serializer(Class<SearchResult> t) {
       super(t);
     }
 
-    public SearchResultSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(SearchResult value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(SearchResult value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class SearchResultDeserializer extends StdDeserializer<SearchResult> {
+  class Deserializer extends StdDeserializer<SearchResult> {
 
-    public SearchResultDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(SearchResult.class);
     }
 
-    public SearchResultDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -95,30 +94,30 @@ public abstract class SearchResult<T> implements CompoundType {
   }
 }
 
-class SearchResultSearchForFacetValuesResponse extends SearchResult {
+class SearchResultSearchForFacetValuesResponse implements SearchResult<SearchForFacetValuesResponse> {
 
-  private final SearchForFacetValuesResponse insideValue;
+  private final SearchForFacetValuesResponse value;
 
-  SearchResultSearchForFacetValuesResponse(SearchForFacetValuesResponse insideValue) {
-    this.insideValue = insideValue;
+  SearchResultSearchForFacetValuesResponse(SearchForFacetValuesResponse value) {
+    this.value = value;
   }
 
   @Override
-  public SearchForFacetValuesResponse getInsideValue() {
-    return insideValue;
+  public SearchForFacetValuesResponse get() {
+    return value;
   }
 }
 
-class SearchResultSearchResponse extends SearchResult {
+class SearchResultSearchResponse implements SearchResult<SearchResponse> {
 
-  private final SearchResponse insideValue;
+  private final SearchResponse value;
 
-  SearchResultSearchResponse(SearchResponse insideValue) {
-    this.insideValue = insideValue;
+  SearchResultSearchResponse(SearchResponse value) {
+    this.value = value;
   }
 
   @Override
-  public SearchResponse getInsideValue() {
-    return insideValue;
+  public SearchResponse get() {
+    return value;
   }
 }

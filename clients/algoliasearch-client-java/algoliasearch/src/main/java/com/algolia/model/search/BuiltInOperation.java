@@ -22,11 +22,7 @@ public class BuiltInOperation {
     return this;
   }
 
-  /**
-   * Get operation
-   *
-   * @return operation
-   */
+  /** Get operation */
   @javax.annotation.Nonnull
   public BuiltInOperationType getOperation() {
     return operation;
@@ -40,8 +36,6 @@ public class BuiltInOperation {
   /**
    * Value that corresponds to the operation, for example an `Increment` or `Decrement` step, `Add`
    * or `Remove` value.
-   *
-   * @return value
    */
   @javax.annotation.Nonnull
   public String getValue() {

@@ -28,8 +28,6 @@ public class GetTopUserIdsResponse {
   /**
    * Key-value pairs with cluster names as keys and lists of users with the highest number of
    * records per cluster as values.
-   *
-   * @return topUsers
    */
   @javax.annotation.Nonnull
   public List<Map<String, List<UserId>>> getTopUsers() {

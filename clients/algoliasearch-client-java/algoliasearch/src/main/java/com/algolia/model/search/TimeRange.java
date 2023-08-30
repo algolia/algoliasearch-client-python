@@ -20,11 +20,7 @@ public class TimeRange {
     return this;
   }
 
-  /**
-   * Lower bound of the time range (Unix timestamp).
-   *
-   * @return from
-   */
+  /** Lower bound of the time range (Unix timestamp). */
   @javax.annotation.Nonnull
   public Integer getFrom() {
     return from;
@@ -35,11 +31,7 @@ public class TimeRange {
     return this;
   }
 
-  /**
-   * Upper bound of the time range (Unix timestamp).
-   *
-   * @return until
-   */
+  /** Upper bound of the time range (Unix timestamp). */
   @javax.annotation.Nonnull
   public Integer getUntil() {
     return until;

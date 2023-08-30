@@ -47,11 +47,7 @@ public class RecommendHit {
     return this;
   }
 
-  /**
-   * Unique object identifier.
-   *
-   * @return objectID
-   */
+  /** Unique object identifier. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -70,11 +66,7 @@ public class RecommendHit {
     return this;
   }
 
-  /**
-   * Show highlighted section and words matched on a query.
-   *
-   * @return highlightResult
-   */
+  /** Show highlighted section and words matched on a query. */
   @javax.annotation.Nullable
   public Map<String, HighlightResult> getHighlightResult() {
     return highlightResult;
@@ -96,8 +88,6 @@ public class RecommendHit {
   /**
    * Snippeted attributes show parts of the matched attributes. Only returned when
    * attributesToSnippet is non-empty.
-   *
-   * @return snippetResult
    */
   @javax.annotation.Nullable
   public Map<String, SnippetResult> getSnippetResult() {
@@ -109,11 +99,7 @@ public class RecommendHit {
     return this;
   }
 
-  /**
-   * Get rankingInfo
-   *
-   * @return rankingInfo
-   */
+  /** Get rankingInfo */
   @javax.annotation.Nullable
   public RankingInfo getRankingInfo() {
     return rankingInfo;
@@ -124,11 +110,7 @@ public class RecommendHit {
     return this;
   }
 
-  /**
-   * Get distinctSeqID
-   *
-   * @return distinctSeqID
-   */
+  /** Get distinctSeqID */
   @javax.annotation.Nullable
   public Integer getDistinctSeqID() {
     return distinctSeqID;
@@ -139,11 +121,7 @@ public class RecommendHit {
     return this;
   }
 
-  /**
-   * Recommendation score. minimum: 0 maximum: 100
-   *
-   * @return score
-   */
+  /** Recommendation score. minimum: 0 maximum: 100 */
   @javax.annotation.Nonnull
   public Double getScore() {
     return score;

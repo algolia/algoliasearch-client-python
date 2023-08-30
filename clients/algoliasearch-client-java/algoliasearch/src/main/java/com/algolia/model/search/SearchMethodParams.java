@@ -27,11 +27,7 @@ public class SearchMethodParams {
     return this;
   }
 
-  /**
-   * Get requests
-   *
-   * @return requests
-   */
+  /** Get requests */
   @javax.annotation.Nonnull
   public List<SearchQuery> getRequests() {
     return requests;
@@ -42,11 +38,7 @@ public class SearchMethodParams {
     return this;
   }
 
-  /**
-   * Get strategy
-   *
-   * @return strategy
-   */
+  /** Get strategy */
   @javax.annotation.Nullable
   public SearchStrategy getStrategy() {
     return strategy;

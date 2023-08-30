@@ -35,11 +35,7 @@ public class TopHitWithAnalytics {
     return this;
   }
 
-  /**
-   * Hit.
-   *
-   * @return hit
-   */
+  /** Hit. */
   @javax.annotation.Nonnull
   public String getHit() {
     return hit;
@@ -50,11 +46,7 @@ public class TopHitWithAnalytics {
     return this;
   }
 
-  /**
-   * Number of occurrences.
-   *
-   * @return count
-   */
+  /** Number of occurrences. */
   @javax.annotation.Nonnull
   public Integer getCount() {
     return count;
@@ -69,8 +61,6 @@ public class TopHitWithAnalytics {
    * [Click-through rate
    * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
    * minimum: 0 maximum: 1
-   *
-   * @return clickThroughRate
    */
   @javax.annotation.Nonnull
   public Double getClickThroughRate() {
@@ -85,8 +75,6 @@ public class TopHitWithAnalytics {
   /**
    * [Conversion rate
    * (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
-   *
-   * @return conversionRate
    */
   @javax.annotation.Nonnull
   public Double getConversionRate() {
@@ -101,8 +89,6 @@ public class TopHitWithAnalytics {
   /**
    * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
    * parameter is `true`.
-   *
-   * @return trackedSearchCount
    */
   @javax.annotation.Nonnull
   public Integer getTrackedSearchCount() {
@@ -114,11 +100,7 @@ public class TopHitWithAnalytics {
     return this;
   }
 
-  /**
-   * Number of click events.
-   *
-   * @return clickCount
-   */
+  /** Number of click events. */
   @javax.annotation.Nonnull
   public Integer getClickCount() {
     return clickCount;
@@ -129,11 +111,7 @@ public class TopHitWithAnalytics {
     return this;
   }
 
-  /**
-   * Number of converted clicks.
-   *
-   * @return conversionCount
-   */
+  /** Number of converted clicks. */
   @javax.annotation.Nonnull
   public Integer getConversionCount() {
     return conversionCount;

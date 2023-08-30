@@ -29,11 +29,7 @@ public class GetConfigStatus200Response {
     return this;
   }
 
-  /**
-   * Query Suggestions index name.
-   *
-   * @return indexName
-   */
+  /** Query Suggestions index name. */
   @javax.annotation.Nullable
   public String getIndexName() {
     return indexName;
@@ -44,11 +40,7 @@ public class GetConfigStatus200Response {
     return this;
   }
 
-  /**
-   * Indicates whether the creation or update of the Query Suggestions is in progress.
-   *
-   * @return isRunning
-   */
+  /** Indicates whether the creation or update of the Query Suggestions is in progress. */
   @javax.annotation.Nullable
   public Boolean getIsRunning() {
     return isRunning;
@@ -62,8 +54,6 @@ public class GetConfigStatus200Response {
   /**
    * Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format when the Query Suggestions
    * index was last built.
-   *
-   * @return lastBuiltAt
    */
   @javax.annotation.Nullable
   public String getLastBuiltAt() {
@@ -78,8 +68,6 @@ public class GetConfigStatus200Response {
   /**
    * Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format when the Query Suggestions
    * index was last updated successfully.
-   *
-   * @return lastSuccessfulBuiltAt
    */
   @javax.annotation.Nullable
   public String getLastSuccessfulBuiltAt() {
@@ -91,11 +79,7 @@ public class GetConfigStatus200Response {
     return this;
   }
 
-  /**
-   * Duration of the last successful build in seconds.
-   *
-   * @return lastSuccessfulBuildDuration
-   */
+  /** Duration of the last successful build in seconds. */
   @javax.annotation.Nullable
   public String getLastSuccessfulBuildDuration() {
     return lastSuccessfulBuildDuration;

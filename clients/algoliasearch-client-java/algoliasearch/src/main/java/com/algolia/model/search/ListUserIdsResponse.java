@@ -24,11 +24,7 @@ public class ListUserIdsResponse {
     return this;
   }
 
-  /**
-   * User IDs.
-   *
-   * @return userIDs
-   */
+  /** User IDs. */
   @javax.annotation.Nonnull
   public List<UserId> getUserIDs() {
     return userIDs;

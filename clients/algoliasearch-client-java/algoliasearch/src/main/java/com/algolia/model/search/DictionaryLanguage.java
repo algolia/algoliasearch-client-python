@@ -20,8 +20,6 @@ public class DictionaryLanguage {
   /**
    * If `0`, the dictionary hasn't been customized and only contains standard entries provided by
    * Algolia. If `null`, that feature isn't available or isn't supported for that language.
-   *
-   * @return nbCustomEntries
    */
   @javax.annotation.Nullable
   public Integer getNbCustomEntries() {

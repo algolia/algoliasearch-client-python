@@ -27,11 +27,7 @@ public class InventoryResponse {
     return this;
   }
 
-  /**
-   * Get inventory
-   *
-   * @return inventory
-   */
+  /** Get inventory */
   @javax.annotation.Nullable
   public List<Server> getInventory() {
     return inventory;

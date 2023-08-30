@@ -17,43 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** BrowseParams */
-@JsonDeserialize(using = BrowseParams.BrowseParamsDeserializer.class)
-@JsonSerialize(using = BrowseParams.BrowseParamsSerializer.class)
-public abstract class BrowseParams implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(BrowseParams.class.getName());
-
-  public static BrowseParams of(BrowseParamsObject inside) {
+@JsonDeserialize(using = BrowseParams.Deserializer.class)
+@JsonSerialize(using = BrowseParams.Serializer.class)
+public interface BrowseParams<T> extends CompoundType<T> {
+  static BrowseParams<BrowseParamsObject> of(BrowseParamsObject inside) {
     return new BrowseParamsBrowseParamsObject(inside);
   }
 
-  public static BrowseParams of(SearchParamsString inside) {
+  static BrowseParams<SearchParamsString> of(SearchParamsString inside) {
     return new BrowseParamsSearchParamsString(inside);
   }
 
-  public static class BrowseParamsSerializer extends StdSerializer<BrowseParams> {
+  class Serializer extends StdSerializer<BrowseParams> {
 
-    public BrowseParamsSerializer(Class<BrowseParams> t) {
+    public Serializer(Class<BrowseParams> t) {
       super(t);
     }
 
-    public BrowseParamsSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(BrowseParams value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(BrowseParams value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class BrowseParamsDeserializer extends StdDeserializer<BrowseParams> {
+  class Deserializer extends StdDeserializer<BrowseParams> {
 
-    public BrowseParamsDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(BrowseParams.class);
     }
 
-    public BrowseParamsDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -93,30 +92,30 @@ public abstract class BrowseParams implements CompoundType {
   }
 }
 
-class BrowseParamsBrowseParamsObject extends BrowseParams {
+class BrowseParamsBrowseParamsObject implements BrowseParams<BrowseParamsObject> {
 
-  private final BrowseParamsObject insideValue;
+  private final BrowseParamsObject value;
 
-  BrowseParamsBrowseParamsObject(BrowseParamsObject insideValue) {
-    this.insideValue = insideValue;
+  BrowseParamsBrowseParamsObject(BrowseParamsObject value) {
+    this.value = value;
   }
 
   @Override
-  public BrowseParamsObject getInsideValue() {
-    return insideValue;
+  public BrowseParamsObject get() {
+    return value;
   }
 }
 
-class BrowseParamsSearchParamsString extends BrowseParams {
+class BrowseParamsSearchParamsString implements BrowseParams<SearchParamsString> {
 
-  private final SearchParamsString insideValue;
+  private final SearchParamsString value;
 
-  BrowseParamsSearchParamsString(SearchParamsString insideValue) {
-    this.insideValue = insideValue;
+  BrowseParamsSearchParamsString(SearchParamsString value) {
+    this.value = value;
   }
 
   @Override
-  public SearchParamsString getInsideValue() {
-    return insideValue;
+  public SearchParamsString get() {
+    return value;
   }
 }

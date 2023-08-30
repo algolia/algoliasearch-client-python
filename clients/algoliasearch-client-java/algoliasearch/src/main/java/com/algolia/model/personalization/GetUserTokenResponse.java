@@ -23,11 +23,7 @@ public class GetUserTokenResponse {
     return this;
   }
 
-  /**
-   * userToken representing the user for which to fetch the Personalization profile.
-   *
-   * @return userToken
-   */
+  /** userToken representing the user for which to fetch the Personalization profile. */
   @javax.annotation.Nonnull
   public String getUserToken() {
     return userToken;
@@ -38,11 +34,7 @@ public class GetUserTokenResponse {
     return this;
   }
 
-  /**
-   * Date of last event update. (ISO-8601 format).
-   *
-   * @return lastEventAt
-   */
+  /** Date of last event update. (ISO-8601 format). */
   @javax.annotation.Nonnull
   public String getLastEventAt() {
     return lastEventAt;
@@ -53,11 +45,7 @@ public class GetUserTokenResponse {
     return this;
   }
 
-  /**
-   * The userToken scores.
-   *
-   * @return scores
-   */
+  /** The userToken scores. */
   @javax.annotation.Nonnull
   public Object getScores() {
     return scores;

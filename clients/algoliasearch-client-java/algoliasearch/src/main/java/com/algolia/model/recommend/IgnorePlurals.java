@@ -28,44 +28,42 @@ import java.util.logging.Logger;
  * feature, so that singulars and plurals aren't considered to be the same (\"foot\" will not find
  * \"feet\").
  */
-@JsonDeserialize(using = IgnorePlurals.IgnorePluralsDeserializer.class)
-@JsonSerialize(using = IgnorePlurals.IgnorePluralsSerializer.class)
-public abstract class IgnorePlurals implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(IgnorePlurals.class.getName());
-
-  public static IgnorePlurals of(Boolean inside) {
+@JsonDeserialize(using = IgnorePlurals.Deserializer.class)
+@JsonSerialize(using = IgnorePlurals.Serializer.class)
+public interface IgnorePlurals<T> extends CompoundType<T> {
+  static IgnorePlurals<Boolean> of(Boolean inside) {
     return new IgnorePluralsBoolean(inside);
   }
 
-  public static IgnorePlurals of(List<String> inside) {
+  static IgnorePlurals<List<String>> of(List<String> inside) {
     return new IgnorePluralsListOfString(inside);
   }
 
-  public static class IgnorePluralsSerializer extends StdSerializer<IgnorePlurals> {
+  class Serializer extends StdSerializer<IgnorePlurals> {
 
-    public IgnorePluralsSerializer(Class<IgnorePlurals> t) {
+    public Serializer(Class<IgnorePlurals> t) {
       super(t);
     }
 
-    public IgnorePluralsSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(IgnorePlurals value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(IgnorePlurals value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class IgnorePluralsDeserializer extends StdDeserializer<IgnorePlurals> {
+  class Deserializer extends StdDeserializer<IgnorePlurals> {
 
-    public IgnorePluralsDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(IgnorePlurals.class);
     }
 
-    public IgnorePluralsDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -105,30 +103,30 @@ public abstract class IgnorePlurals implements CompoundType {
   }
 }
 
-class IgnorePluralsBoolean extends IgnorePlurals {
+class IgnorePluralsBoolean implements IgnorePlurals<Boolean> {
 
-  private final Boolean insideValue;
+  private final Boolean value;
 
-  IgnorePluralsBoolean(Boolean insideValue) {
-    this.insideValue = insideValue;
+  IgnorePluralsBoolean(Boolean value) {
+    this.value = value;
   }
 
   @Override
-  public Boolean getInsideValue() {
-    return insideValue;
+  public Boolean get() {
+    return value;
   }
 }
 
-class IgnorePluralsListOfString extends IgnorePlurals {
+class IgnorePluralsListOfString implements IgnorePlurals<List<String>> {
 
-  private final List<String> insideValue;
+  private final List<String> value;
 
-  IgnorePluralsListOfString(List<String> insideValue) {
-    this.insideValue = insideValue;
+  IgnorePluralsListOfString(List<String> value) {
+    this.value = value;
   }
 
   @Override
-  public List<String> getInsideValue() {
-    return insideValue;
+  public List<String> get() {
+    return value;
   }
 }

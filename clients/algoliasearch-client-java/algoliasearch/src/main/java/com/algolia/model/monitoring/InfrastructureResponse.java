@@ -17,11 +17,7 @@ public class InfrastructureResponse {
     return this;
   }
 
-  /**
-   * Get metrics
-   *
-   * @return metrics
-   */
+  /** Get metrics */
   @javax.annotation.Nullable
   public InfrastructureResponseMetrics getMetrics() {
     return metrics;

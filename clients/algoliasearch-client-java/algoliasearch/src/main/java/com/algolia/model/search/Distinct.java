@@ -20,43 +20,42 @@ import java.util.logging.Logger;
  * Enables [deduplication or grouping of results (Algolia's _distinct_
  * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
  */
-@JsonDeserialize(using = Distinct.DistinctDeserializer.class)
-@JsonSerialize(using = Distinct.DistinctSerializer.class)
-public abstract class Distinct implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(Distinct.class.getName());
-
-  public static Distinct of(Boolean inside) {
+@JsonDeserialize(using = Distinct.Deserializer.class)
+@JsonSerialize(using = Distinct.Serializer.class)
+public interface Distinct<T> extends CompoundType<T> {
+  static Distinct<Boolean> of(Boolean inside) {
     return new DistinctBoolean(inside);
   }
 
-  public static Distinct of(Integer inside) {
+  static Distinct<Integer> of(Integer inside) {
     return new DistinctInteger(inside);
   }
 
-  public static class DistinctSerializer extends StdSerializer<Distinct> {
+  class Serializer extends StdSerializer<Distinct> {
 
-    public DistinctSerializer(Class<Distinct> t) {
+    public Serializer(Class<Distinct> t) {
       super(t);
     }
 
-    public DistinctSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(Distinct value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(Distinct value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class DistinctDeserializer extends StdDeserializer<Distinct> {
+  class Deserializer extends StdDeserializer<Distinct> {
 
-    public DistinctDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(Distinct.class);
     }
 
-    public DistinctDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -96,30 +95,30 @@ public abstract class Distinct implements CompoundType {
   }
 }
 
-class DistinctBoolean extends Distinct {
+class DistinctBoolean implements Distinct<Boolean> {
 
-  private final Boolean insideValue;
+  private final Boolean value;
 
-  DistinctBoolean(Boolean insideValue) {
-    this.insideValue = insideValue;
+  DistinctBoolean(Boolean value) {
+    this.value = value;
   }
 
   @Override
-  public Boolean getInsideValue() {
-    return insideValue;
+  public Boolean get() {
+    return value;
   }
 }
 
-class DistinctInteger extends Distinct {
+class DistinctInteger implements Distinct<Integer> {
 
-  private final Integer insideValue;
+  private final Integer value;
 
-  DistinctInteger(Integer insideValue) {
-    this.insideValue = insideValue;
+  DistinctInteger(Integer value) {
+    this.value = value;
   }
 
   @Override
-  public Integer getInsideValue() {
-    return insideValue;
+  public Integer get() {
+    return value;
   }
 }

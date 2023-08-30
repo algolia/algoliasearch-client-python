@@ -17,11 +17,7 @@ public class SearchParamsString {
     return this;
   }
 
-  /**
-   * Search parameters as a URL-encoded query string.
-   *
-   * @return params
-   */
+  /** Search parameters as a URL-encoded query string. */
   @javax.annotation.Nullable
   public String getParams() {
     return params;

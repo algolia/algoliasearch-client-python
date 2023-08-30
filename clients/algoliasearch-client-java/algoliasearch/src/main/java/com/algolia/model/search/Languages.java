@@ -23,11 +23,7 @@ public class Languages {
     return this;
   }
 
-  /**
-   * Get plurals
-   *
-   * @return plurals
-   */
+  /** Get plurals */
   @javax.annotation.Nullable
   public DictionaryLanguage getPlurals() {
     return plurals;
@@ -38,11 +34,7 @@ public class Languages {
     return this;
   }
 
-  /**
-   * Get stopwords
-   *
-   * @return stopwords
-   */
+  /** Get stopwords */
   @javax.annotation.Nullable
   public DictionaryLanguage getStopwords() {
     return stopwords;
@@ -53,11 +45,7 @@ public class Languages {
     return this;
   }
 
-  /**
-   * Get compounds
-   *
-   * @return compounds
-   */
+  /** Get compounds */
   @javax.annotation.Nullable
   public DictionaryLanguage getCompounds() {
     return compounds;

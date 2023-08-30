@@ -30,11 +30,7 @@ public class Value {
     return this;
   }
 
-  /**
-   * Pinned order of facet lists.
-   *
-   * @return order
-   */
+  /** Pinned order of facet lists. */
   @javax.annotation.Nullable
   public List<String> getOrder() {
     return order;
@@ -45,11 +41,7 @@ public class Value {
     return this;
   }
 
-  /**
-   * Get sortRemainingBy
-   *
-   * @return sortRemainingBy
-   */
+  /** Get sortRemainingBy */
   @javax.annotation.Nullable
   public SortRemainingBy getSortRemainingBy() {
     return sortRemainingBy;

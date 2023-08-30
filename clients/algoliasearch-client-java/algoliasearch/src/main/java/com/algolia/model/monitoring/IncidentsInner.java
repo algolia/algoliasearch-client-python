@@ -20,11 +20,7 @@ public class IncidentsInner {
     return this;
   }
 
-  /**
-   * Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds.
-   *
-   * @return t
-   */
+  /** Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds. */
   @javax.annotation.Nullable
   public Long getT() {
     return t;
@@ -35,11 +31,7 @@ public class IncidentsInner {
     return this;
   }
 
-  /**
-   * Get v
-   *
-   * @return v
-   */
+  /** Get v */
   @javax.annotation.Nullable
   public Incident getV() {
     return v;

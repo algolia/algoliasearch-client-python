@@ -23,44 +23,42 @@ import java.util.logging.Logger;
  * don't match the optional filter are still included in the results, only their ranking is
  * affected.
  */
-@JsonDeserialize(using = OptionalFilters.OptionalFiltersDeserializer.class)
-@JsonSerialize(using = OptionalFilters.OptionalFiltersSerializer.class)
-public abstract class OptionalFilters implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(OptionalFilters.class.getName());
-
-  public static OptionalFilters of(List<MixedSearchFilters> inside) {
+@JsonDeserialize(using = OptionalFilters.Deserializer.class)
+@JsonSerialize(using = OptionalFilters.Serializer.class)
+public interface OptionalFilters<T> extends CompoundType<T> {
+  static OptionalFilters<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
     return new OptionalFiltersListOfMixedSearchFilters(inside);
   }
 
-  public static OptionalFilters of(String inside) {
+  static OptionalFilters<String> of(String inside) {
     return new OptionalFiltersString(inside);
   }
 
-  public static class OptionalFiltersSerializer extends StdSerializer<OptionalFilters> {
+  class Serializer extends StdSerializer<OptionalFilters> {
 
-    public OptionalFiltersSerializer(Class<OptionalFilters> t) {
+    public Serializer(Class<OptionalFilters> t) {
       super(t);
     }
 
-    public OptionalFiltersSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(OptionalFilters value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(OptionalFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class OptionalFiltersDeserializer extends StdDeserializer<OptionalFilters> {
+  class Deserializer extends StdDeserializer<OptionalFilters> {
 
-    public OptionalFiltersDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(OptionalFilters.class);
     }
 
-    public OptionalFiltersDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -102,30 +100,30 @@ public abstract class OptionalFilters implements CompoundType {
   }
 }
 
-class OptionalFiltersListOfMixedSearchFilters extends OptionalFilters {
+class OptionalFiltersListOfMixedSearchFilters implements OptionalFilters<List<MixedSearchFilters>> {
 
-  private final List<MixedSearchFilters> insideValue;
+  private final List<MixedSearchFilters> value;
 
-  OptionalFiltersListOfMixedSearchFilters(List<MixedSearchFilters> insideValue) {
-    this.insideValue = insideValue;
+  OptionalFiltersListOfMixedSearchFilters(List<MixedSearchFilters> value) {
+    this.value = value;
   }
 
   @Override
-  public List<MixedSearchFilters> getInsideValue() {
-    return insideValue;
+  public List<MixedSearchFilters> get() {
+    return value;
   }
 }
 
-class OptionalFiltersString extends OptionalFilters {
+class OptionalFiltersString implements OptionalFilters<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  OptionalFiltersString(String insideValue) {
-    this.insideValue = insideValue;
+  OptionalFiltersString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

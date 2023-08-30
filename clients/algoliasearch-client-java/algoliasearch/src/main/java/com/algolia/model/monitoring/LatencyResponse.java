@@ -17,11 +17,7 @@ public class LatencyResponse {
     return this;
   }
 
-  /**
-   * Get metrics
-   *
-   * @return metrics
-   */
+  /** Get metrics */
   @javax.annotation.Nullable
   public LatencyResponseMetrics getMetrics() {
     return metrics;

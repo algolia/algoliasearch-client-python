@@ -23,11 +23,7 @@ public class MatchedGeoLocation {
     return this;
   }
 
-  /**
-   * Latitude of the matched location.
-   *
-   * @return lat
-   */
+  /** Latitude of the matched location. */
   @javax.annotation.Nullable
   public Double getLat() {
     return lat;
@@ -38,11 +34,7 @@ public class MatchedGeoLocation {
     return this;
   }
 
-  /**
-   * Longitude of the matched location.
-   *
-   * @return lng
-   */
+  /** Longitude of the matched location. */
   @javax.annotation.Nullable
   public Double getLng() {
     return lng;
@@ -53,11 +45,7 @@ public class MatchedGeoLocation {
     return this;
   }
 
-  /**
-   * Distance between the matched location and the search location (in meters).
-   *
-   * @return distance
-   */
+  /** Distance between the matched location and the search location (in meters). */
   @javax.annotation.Nullable
   public Integer getDistance() {
     return distance;

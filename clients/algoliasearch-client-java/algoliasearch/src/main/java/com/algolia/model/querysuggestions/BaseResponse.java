@@ -20,11 +20,7 @@ public class BaseResponse {
     return this;
   }
 
-  /**
-   * HTTP status code.
-   *
-   * @return status
-   */
+  /** HTTP status code. */
   @javax.annotation.Nullable
   public Integer getStatus() {
     return status;
@@ -35,11 +31,7 @@ public class BaseResponse {
     return this;
   }
 
-  /**
-   * Details about the response, such as error messages.
-   *
-   * @return message
-   */
+  /** Details about the response, such as error messages. */
   @javax.annotation.Nullable
   public String getMessage() {
     return message;

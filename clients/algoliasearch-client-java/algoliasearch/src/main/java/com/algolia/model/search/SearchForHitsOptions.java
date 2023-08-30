@@ -20,11 +20,7 @@ public class SearchForHitsOptions {
     return this;
   }
 
-  /**
-   * Algolia index name.
-   *
-   * @return indexName
-   */
+  /** Algolia index name. */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;
@@ -35,11 +31,7 @@ public class SearchForHitsOptions {
     return this;
   }
 
-  /**
-   * Get type
-   *
-   * @return type
-   */
+  /** Get type */
   @javax.annotation.Nullable
   public SearchTypeDefault getType() {
     return type;

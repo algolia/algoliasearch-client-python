@@ -24,11 +24,7 @@ public class GetLogsResponse {
     return this;
   }
 
-  /**
-   * Get logs
-   *
-   * @return logs
-   */
+  /** Get logs */
   @javax.annotation.Nonnull
   public List<Log> getLogs() {
     return logs;

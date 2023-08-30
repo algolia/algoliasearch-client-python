@@ -26,11 +26,7 @@ public class NoResultsRateEvent {
     return this;
   }
 
-  /**
-   * Date of the event in the format YYYY-MM-DD.
-   *
-   * @return date
-   */
+  /** Date of the event in the format YYYY-MM-DD. */
   @javax.annotation.Nonnull
   public String getDate() {
     return date;
@@ -41,11 +37,7 @@ public class NoResultsRateEvent {
     return this;
   }
 
-  /**
-   * Number of occurences.
-   *
-   * @return noResultCount
-   */
+  /** Number of occurences. */
   @javax.annotation.Nonnull
   public Integer getNoResultCount() {
     return noResultCount;
@@ -58,8 +50,6 @@ public class NoResultsRateEvent {
 
   /**
    * Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
-   *
-   * @return count
    */
   @javax.annotation.Nonnull
   public Integer getCount() {
@@ -75,8 +65,6 @@ public class NoResultsRateEvent {
    * [Click-through rate
    * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
    * minimum: 0 maximum: 1
-   *
-   * @return rate
    */
   @javax.annotation.Nonnull
   public Double getRate() {

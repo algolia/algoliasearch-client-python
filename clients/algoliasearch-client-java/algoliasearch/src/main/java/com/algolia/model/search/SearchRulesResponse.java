@@ -33,11 +33,7 @@ public class SearchRulesResponse {
     return this;
   }
 
-  /**
-   * Fetched rules.
-   *
-   * @return hits
-   */
+  /** Fetched rules. */
   @javax.annotation.Nonnull
   public List<Rule> getHits() {
     return hits;
@@ -48,11 +44,7 @@ public class SearchRulesResponse {
     return this;
   }
 
-  /**
-   * Number of fetched rules.
-   *
-   * @return nbHits
-   */
+  /** Number of fetched rules. */
   @javax.annotation.Nonnull
   public Integer getNbHits() {
     return nbHits;
@@ -63,11 +55,7 @@ public class SearchRulesResponse {
     return this;
   }
 
-  /**
-   * Current page.
-   *
-   * @return page
-   */
+  /** Current page. */
   @javax.annotation.Nonnull
   public Integer getPage() {
     return page;
@@ -78,11 +66,7 @@ public class SearchRulesResponse {
     return this;
   }
 
-  /**
-   * Number of pages.
-   *
-   * @return nbPages
-   */
+  /** Number of pages. */
   @javax.annotation.Nonnull
   public Integer getNbPages() {
     return nbPages;

@@ -17,11 +17,7 @@ public class GetInventory403Response {
     return this;
   }
 
-  /**
-   * Get reason
-   *
-   * @return reason
-   */
+  /** Get reason */
   @javax.annotation.Nullable
   public String getReason() {
     return reason;

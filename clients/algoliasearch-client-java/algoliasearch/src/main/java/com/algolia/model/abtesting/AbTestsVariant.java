@@ -23,11 +23,7 @@ public class AbTestsVariant {
     return this;
   }
 
-  /**
-   * A/B test index.
-   *
-   * @return index
-   */
+  /** A/B test index. */
   @javax.annotation.Nonnull
   public String getIndex() {
     return index;
@@ -38,11 +34,7 @@ public class AbTestsVariant {
     return this;
   }
 
-  /**
-   * A/B test traffic percentage.
-   *
-   * @return trafficPercentage
-   */
+  /** A/B test traffic percentage. */
   @javax.annotation.Nonnull
   public Integer getTrafficPercentage() {
     return trafficPercentage;
@@ -53,11 +45,7 @@ public class AbTestsVariant {
     return this;
   }
 
-  /**
-   * A/B test description.
-   *
-   * @return description
-   */
+  /** A/B test description. */
   @javax.annotation.Nullable
   public String getDescription() {
     return description;

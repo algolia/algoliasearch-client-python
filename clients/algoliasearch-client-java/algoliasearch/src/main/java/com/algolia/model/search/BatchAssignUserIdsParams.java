@@ -22,11 +22,7 @@ public class BatchAssignUserIdsParams {
     return this;
   }
 
-  /**
-   * Cluster name.
-   *
-   * @return cluster
-   */
+  /** Cluster name. */
   @javax.annotation.Nonnull
   public String getCluster() {
     return cluster;
@@ -42,11 +38,7 @@ public class BatchAssignUserIdsParams {
     return this;
   }
 
-  /**
-   * User IDs to assign.
-   *
-   * @return users
-   */
+  /** User IDs to assign. */
   @javax.annotation.Nonnull
   public List<String> getUsers() {
     return users;

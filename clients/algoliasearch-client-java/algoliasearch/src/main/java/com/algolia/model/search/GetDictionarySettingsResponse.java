@@ -17,11 +17,7 @@ public class GetDictionarySettingsResponse {
     return this;
   }
 
-  /**
-   * Get disableStandardEntries
-   *
-   * @return disableStandardEntries
-   */
+  /** Get disableStandardEntries */
   @javax.annotation.Nonnull
   public StandardEntries getDisableStandardEntries() {
     return disableStandardEntries;

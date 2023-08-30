@@ -21,44 +21,42 @@ import java.util.logging.Logger;
  * [Filter on numeric
  * attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
  */
-@JsonDeserialize(using = NumericFilters.NumericFiltersDeserializer.class)
-@JsonSerialize(using = NumericFilters.NumericFiltersSerializer.class)
-public abstract class NumericFilters implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(NumericFilters.class.getName());
-
-  public static NumericFilters of(List<MixedSearchFilters> inside) {
+@JsonDeserialize(using = NumericFilters.Deserializer.class)
+@JsonSerialize(using = NumericFilters.Serializer.class)
+public interface NumericFilters<T> extends CompoundType<T> {
+  static NumericFilters<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
     return new NumericFiltersListOfMixedSearchFilters(inside);
   }
 
-  public static NumericFilters of(String inside) {
+  static NumericFilters<String> of(String inside) {
     return new NumericFiltersString(inside);
   }
 
-  public static class NumericFiltersSerializer extends StdSerializer<NumericFilters> {
+  class Serializer extends StdSerializer<NumericFilters> {
 
-    public NumericFiltersSerializer(Class<NumericFilters> t) {
+    public Serializer(Class<NumericFilters> t) {
       super(t);
     }
 
-    public NumericFiltersSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(NumericFilters value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(NumericFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class NumericFiltersDeserializer extends StdDeserializer<NumericFilters> {
+  class Deserializer extends StdDeserializer<NumericFilters> {
 
-    public NumericFiltersDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(NumericFilters.class);
     }
 
-    public NumericFiltersDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -100,30 +98,30 @@ public abstract class NumericFilters implements CompoundType {
   }
 }
 
-class NumericFiltersListOfMixedSearchFilters extends NumericFilters {
+class NumericFiltersListOfMixedSearchFilters implements NumericFilters<List<MixedSearchFilters>> {
 
-  private final List<MixedSearchFilters> insideValue;
+  private final List<MixedSearchFilters> value;
 
-  NumericFiltersListOfMixedSearchFilters(List<MixedSearchFilters> insideValue) {
-    this.insideValue = insideValue;
+  NumericFiltersListOfMixedSearchFilters(List<MixedSearchFilters> value) {
+    this.value = value;
   }
 
   @Override
-  public List<MixedSearchFilters> getInsideValue() {
-    return insideValue;
+  public List<MixedSearchFilters> get() {
+    return value;
   }
 }
 
-class NumericFiltersString extends NumericFilters {
+class NumericFiltersString implements NumericFilters<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  NumericFiltersString(String insideValue) {
-    this.insideValue = insideValue;
+  NumericFiltersString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

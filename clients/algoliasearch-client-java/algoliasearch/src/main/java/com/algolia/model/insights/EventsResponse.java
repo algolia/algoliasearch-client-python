@@ -20,11 +20,7 @@ public class EventsResponse {
     return this;
   }
 
-  /**
-   * Details about the response, such as error messages.
-   *
-   * @return message
-   */
+  /** Details about the response, such as error messages. */
   @javax.annotation.Nullable
   public String getMessage() {
     return message;
@@ -35,11 +31,7 @@ public class EventsResponse {
     return this;
   }
 
-  /**
-   * The HTTP status code of the response.
-   *
-   * @return status
-   */
+  /** The HTTP status code of the response. */
   @javax.annotation.Nullable
   public Integer getStatus() {
     return status;

@@ -27,11 +27,7 @@ public class PromoteObjectIDs {
     return this;
   }
 
-  /**
-   * Unique identifiers of the records to promote.
-   *
-   * @return objectIDs
-   */
+  /** Unique identifiers of the records to promote. */
   @javax.annotation.Nonnull
   public List<String> getObjectIDs() {
     return objectIDs;
@@ -46,8 +42,6 @@ public class PromoteObjectIDs {
    * The position to promote the records to. If you pass objectIDs, the records are placed at this
    * position as a group. For example, if you pronmote four objectIDs to position 0, the records
    * take the first four positions.
-   *
-   * @return position
    */
   @javax.annotation.Nonnull
   public Integer getPosition() {

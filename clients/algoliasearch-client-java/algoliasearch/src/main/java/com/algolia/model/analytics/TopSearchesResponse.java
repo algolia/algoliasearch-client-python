@@ -24,11 +24,7 @@ public class TopSearchesResponse {
     return this;
   }
 
-  /**
-   * Top searches with their hits count.
-   *
-   * @return searches
-   */
+  /** Top searches with their hits count. */
   @javax.annotation.Nonnull
   public List<TopSearch> getSearches() {
     return searches;

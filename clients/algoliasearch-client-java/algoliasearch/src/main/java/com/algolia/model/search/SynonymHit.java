@@ -40,11 +40,7 @@ public class SynonymHit {
     return this;
   }
 
-  /**
-   * Unique identifier of a synonym object.
-   *
-   * @return objectID
-   */
+  /** Unique identifier of a synonym object. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -55,11 +51,7 @@ public class SynonymHit {
     return this;
   }
 
-  /**
-   * Get type
-   *
-   * @return type
-   */
+  /** Get type */
   @javax.annotation.Nonnull
   public SynonymType getType() {
     return type;
@@ -78,11 +70,7 @@ public class SynonymHit {
     return this;
   }
 
-  /**
-   * Words or phrases considered equivalent.
-   *
-   * @return synonyms
-   */
+  /** Words or phrases considered equivalent. */
   @javax.annotation.Nullable
   public List<String> getSynonyms() {
     return synonyms;
@@ -96,8 +84,6 @@ public class SynonymHit {
   /**
    * Word or phrase to appear in query strings (for
    * [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)).
-   *
-   * @return input
    */
   @javax.annotation.Nullable
   public String getInput() {
@@ -112,8 +98,6 @@ public class SynonymHit {
   /**
    * Word or phrase to appear in query strings (for [`altcorrection1` and
    * `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)).
-   *
-   * @return word
    */
   @javax.annotation.Nullable
   public String getWord() {
@@ -133,11 +117,7 @@ public class SynonymHit {
     return this;
   }
 
-  /**
-   * Words to be matched in records.
-   *
-   * @return corrections
-   */
+  /** Words to be matched in records. */
   @javax.annotation.Nullable
   public List<String> getCorrections() {
     return corrections;
@@ -152,8 +132,6 @@ public class SynonymHit {
    * [Placeholder
    * token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/)
    * to be put inside records.
-   *
-   * @return placeholder
    */
   @javax.annotation.Nullable
   public String getPlaceholder() {
@@ -176,8 +154,6 @@ public class SynonymHit {
   /**
    * Query words that will match the [placeholder
    * token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/).
-   *
-   * @return replacements
    */
   @javax.annotation.Nullable
   public List<String> getReplacements() {

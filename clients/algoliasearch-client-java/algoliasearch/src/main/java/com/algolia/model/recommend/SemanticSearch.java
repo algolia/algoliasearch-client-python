@@ -32,8 +32,6 @@ public class SemanticSearch {
   /**
    * Indices from which to collect click and conversion events. If null, the current index and
    * replica group will be used as the event source.
-   *
-   * @return eventSources
    */
   @javax.annotation.Nullable
   public List<String> getEventSources() {

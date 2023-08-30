@@ -26,11 +26,7 @@ public class Params {
     return this;
   }
 
-  /**
-   * Get query
-   *
-   * @return query
-   */
+  /** Get query */
   @javax.annotation.Nullable
   public ConsequenceQuery getQuery() {
     return query;
@@ -41,11 +37,7 @@ public class Params {
     return this;
   }
 
-  /**
-   * Get automaticFacetFilters
-   *
-   * @return automaticFacetFilters
-   */
+  /** Get automaticFacetFilters */
   @javax.annotation.Nullable
   public AutomaticFacetFilters getAutomaticFacetFilters() {
     return automaticFacetFilters;
@@ -56,11 +48,7 @@ public class Params {
     return this;
   }
 
-  /**
-   * Get automaticOptionalFacetFilters
-   *
-   * @return automaticOptionalFacetFilters
-   */
+  /** Get automaticOptionalFacetFilters */
   @javax.annotation.Nullable
   public AutomaticFacetFilters getAutomaticOptionalFacetFilters() {
     return automaticOptionalFacetFilters;
@@ -71,11 +59,7 @@ public class Params {
     return this;
   }
 
-  /**
-   * Get renderingContent
-   *
-   * @return renderingContent
-   */
+  /** Get renderingContent */
   @javax.annotation.Nullable
   public RenderingContent getRenderingContent() {
     return renderingContent;

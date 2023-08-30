@@ -24,11 +24,7 @@ public class GetSearchesNoResultsResponse {
     return this;
   }
 
-  /**
-   * Searches with no results.
-   *
-   * @return searches
-   */
+  /** Searches with no results. */
   @javax.annotation.Nonnull
   public List<SearchNoResultEvent> getSearches() {
     return searches;

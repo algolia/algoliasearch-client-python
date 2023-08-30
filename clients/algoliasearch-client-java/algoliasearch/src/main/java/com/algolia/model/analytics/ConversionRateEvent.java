@@ -30,8 +30,6 @@ public class ConversionRateEvent {
    * [Click-through rate
    * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
    * minimum: 0 maximum: 1
-   *
-   * @return rate
    */
   @javax.annotation.Nonnull
   public Double getRate() {
@@ -46,8 +44,6 @@ public class ConversionRateEvent {
   /**
    * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
    * parameter is `true`.
-   *
-   * @return trackedSearchCount
    */
   @javax.annotation.Nonnull
   public Integer getTrackedSearchCount() {
@@ -59,11 +55,7 @@ public class ConversionRateEvent {
     return this;
   }
 
-  /**
-   * Number of converted clicks.
-   *
-   * @return conversionCount
-   */
+  /** Number of converted clicks. */
   @javax.annotation.Nonnull
   public Integer getConversionCount() {
     return conversionCount;
@@ -74,11 +66,7 @@ public class ConversionRateEvent {
     return this;
   }
 
-  /**
-   * Date of the event in the format YYYY-MM-DD.
-   *
-   * @return date
-   */
+  /** Date of the event in the format YYYY-MM-DD. */
   @javax.annotation.Nonnull
   public String getDate() {
     return date;

@@ -23,11 +23,7 @@ public class GetTopFiltersNoResultsValue {
     return this;
   }
 
-  /**
-   * Attribute name.
-   *
-   * @return attribute
-   */
+  /** Attribute name. */
   @javax.annotation.Nonnull
   public String getAttribute() {
     return attribute;
@@ -38,11 +34,7 @@ public class GetTopFiltersNoResultsValue {
     return this;
   }
 
-  /**
-   * Operator.
-   *
-   * @return operator
-   */
+  /** Operator. */
   @javax.annotation.Nonnull
   public String getOperator() {
     return operator;
@@ -53,11 +45,7 @@ public class GetTopFiltersNoResultsValue {
     return this;
   }
 
-  /**
-   * Attribute value.
-   *
-   * @return value
-   */
+  /** Attribute value. */
   @javax.annotation.Nonnull
   public String getValue() {
     return value;

@@ -268,11 +268,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Search parameters as a URL-encoded query string.
-   *
-   * @return params
-   */
+  /** Search parameters as a URL-encoded query string. */
   @javax.annotation.Nullable
   public String getParams() {
     return params;
@@ -283,11 +279,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Text to search for in an index.
-   *
-   * @return query
-   */
+  /** Text to search for in an index. */
   @javax.annotation.Nullable
   public String getQuery() {
     return query;
@@ -298,11 +290,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Overrides the query parameter and performs a more generic search.
-   *
-   * @return similarQuery
-   */
+  /** Overrides the query parameter and performs a more generic search. */
   @javax.annotation.Nullable
   public String getSimilarQuery() {
     return similarQuery;
@@ -316,8 +304,6 @@ public class SearchForFacets {
   /**
    * [Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the
    * query with numeric, facet, or tag filters.
-   *
-   * @return filters
    */
   @javax.annotation.Nullable
   public String getFilters() {
@@ -329,11 +315,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get facetFilters
-   *
-   * @return facetFilters
-   */
+  /** Get facetFilters */
   @javax.annotation.Nullable
   public FacetFilters getFacetFilters() {
     return facetFilters;
@@ -344,11 +326,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get optionalFilters
-   *
-   * @return optionalFilters
-   */
+  /** Get optionalFilters */
   @javax.annotation.Nullable
   public OptionalFilters getOptionalFilters() {
     return optionalFilters;
@@ -359,11 +337,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get numericFilters
-   *
-   * @return numericFilters
-   */
+  /** Get numericFilters */
   @javax.annotation.Nullable
   public NumericFilters getNumericFilters() {
     return numericFilters;
@@ -374,11 +348,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get tagFilters
-   *
-   * @return tagFilters
-   */
+  /** Get tagFilters */
   @javax.annotation.Nullable
   public TagFilters getTagFilters() {
     return tagFilters;
@@ -393,8 +363,6 @@ public class SearchForFacets {
    * Determines how to calculate [filter
    * scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores).
    * If `false`, maximum score is kept. If `true`, score is summed.
-   *
-   * @return sumOrFiltersScores
    */
   @javax.annotation.Nullable
   public Boolean getSumOrFiltersScores() {
@@ -417,8 +385,6 @@ public class SearchForFacets {
   /**
    * Restricts a query to only look at a subset of your [searchable
    * attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).
-   *
-   * @return restrictSearchableAttributes
    */
   @javax.annotation.Nullable
   public List<String> getRestrictSearchableAttributes() {
@@ -442,8 +408,6 @@ public class SearchForFacets {
    * Returns
    * [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts),
    * their facet values, and the number of matching facet values.
-   *
-   * @return facets
    */
   @javax.annotation.Nullable
   public List<String> getFacets() {
@@ -461,8 +425,6 @@ public class SearchForFacets {
    * (with the distinct feature). Alternatively, the `afterDistinct`
    * [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
    * of `attributesForFaceting` allows for more granular control.
-   *
-   * @return facetingAfterDistinct
    */
   @javax.annotation.Nullable
   public Boolean getFacetingAfterDistinct() {
@@ -474,11 +436,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Page to retrieve (the first page is `0`, not `1`).
-   *
-   * @return page
-   */
+  /** Page to retrieve (the first page is `0`, not `1`). */
   @javax.annotation.Nullable
   public Integer getPage() {
     return page;
@@ -495,8 +453,6 @@ public class SearchForFacets {
    * results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/).
    * However, you can use `offset` and `length` to implement [an alternative approach to
    * paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
-   *
-   * @return offset
    */
   @javax.annotation.Nullable
   public Integer getOffset() {
@@ -515,8 +471,6 @@ public class SearchForFacets {
    * However, you can use `offset` and `length` to implement [an alternative approach to
    * paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length).
    * minimum: 1 maximum: 1000
-   *
-   * @return length
    */
   @javax.annotation.Nullable
   public Integer getLength() {
@@ -532,8 +486,6 @@ public class SearchForFacets {
    * Search for entries [around a central
    * location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point),
    * enabling a geographical search within a circular area.
-   *
-   * @return aroundLatLng
    */
   @javax.annotation.Nullable
   public String getAroundLatLng() {
@@ -548,8 +500,6 @@ public class SearchForFacets {
   /**
    * Search for entries around a location. The location is automatically computed from the
    * requester's IP address.
-   *
-   * @return aroundLatLngViaIP
    */
   @javax.annotation.Nullable
   public Boolean getAroundLatLngViaIP() {
@@ -561,11 +511,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get aroundRadius
-   *
-   * @return aroundRadius
-   */
+  /** Get aroundRadius */
   @javax.annotation.Nullable
   public AroundRadius getAroundRadius() {
     return aroundRadius;
@@ -576,11 +522,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get aroundPrecision
-   *
-   * @return aroundPrecision
-   */
+  /** Get aroundPrecision */
   @javax.annotation.Nullable
   public AroundPrecision getAroundPrecision() {
     return aroundPrecision;
@@ -594,8 +536,6 @@ public class SearchForFacets {
   /**
    * Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
    * minimum: 1
-   *
-   * @return minimumAroundRadius
    */
   @javax.annotation.Nullable
   public Integer getMinimumAroundRadius() {
@@ -619,8 +559,6 @@ public class SearchForFacets {
    * Search inside a [rectangular
    * area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
    * (in geographical coordinates).
-   *
-   * @return insideBoundingBox
    */
   @javax.annotation.Nullable
   public List<Double> getInsideBoundingBox() {
@@ -644,8 +582,6 @@ public class SearchForFacets {
    * Search inside a
    * [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
    * (in geographical coordinates).
-   *
-   * @return insidePolygon
    */
   @javax.annotation.Nullable
   public List<Double> getInsidePolygon() {
@@ -670,8 +606,6 @@ public class SearchForFacets {
    * `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and
    * `ruleContexts`. These parameters work well together when the query consists of fuller natural
    * language strings instead of keywords, for example when processing voice search queries.
-   *
-   * @return naturalLanguages
    */
   @javax.annotation.Nullable
   public List<String> getNaturalLanguages() {
@@ -695,8 +629,6 @@ public class SearchForFacets {
    * Assigns [rule
    * contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context)
    * to search queries.
-   *
-   * @return ruleContexts
    */
   @javax.annotation.Nullable
   public List<String> getRuleContexts() {
@@ -711,8 +643,6 @@ public class SearchForFacets {
   /**
    * Defines how much [Personalization affects
    * results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).
-   *
-   * @return personalizationImpact
    */
   @javax.annotation.Nullable
   public Integer getPersonalizationImpact() {
@@ -728,8 +658,6 @@ public class SearchForFacets {
    * Associates a [user
    * token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current
    * search.
-   *
-   * @return userToken
    */
   @javax.annotation.Nullable
   public String getUserToken() {
@@ -744,8 +672,6 @@ public class SearchForFacets {
   /**
    * Incidates whether the search response includes [detailed ranking
    * information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).
-   *
-   * @return getRankingInfo
    */
   @javax.annotation.Nullable
   public Boolean getGetRankingInfo() {
@@ -765,11 +691,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Enriches the API's response with information about how the query was processed.
-   *
-   * @return explain
-   */
+  /** Enriches the API's response with information about how the query was processed. */
   @javax.annotation.Nullable
   public List<String> getExplain() {
     return explain;
@@ -780,11 +702,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Whether to take into account an index's synonyms for a particular search.
-   *
-   * @return synonyms
-   */
+  /** Whether to take into account an index's synonyms for a particular search. */
   @javax.annotation.Nullable
   public Boolean getSynonyms() {
     return synonyms;
@@ -799,8 +717,6 @@ public class SearchForFacets {
    * Indicates whether a query ID parameter is included in the search response. This is required for
    * [tracking click and conversion
    * events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).
-   *
-   * @return clickAnalytics
    */
   @javax.annotation.Nullable
   public Boolean getClickAnalytics() {
@@ -815,8 +731,6 @@ public class SearchForFacets {
   /**
    * Indicates whether this query will be included in
    * [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).
-   *
-   * @return analytics
    */
   @javax.annotation.Nullable
   public Boolean getAnalytics() {
@@ -839,8 +753,6 @@ public class SearchForFacets {
   /**
    * Tags to apply to the query for [segmenting analytics
    * data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
-   *
-   * @return analyticsTags
    */
   @javax.annotation.Nullable
   public List<String> getAnalyticsTags() {
@@ -852,11 +764,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Whether to include or exclude a query from the processing-time percentile computation.
-   *
-   * @return percentileComputation
-   */
+  /** Whether to include or exclude a query from the processing-time percentile computation. */
   @javax.annotation.Nullable
   public Boolean getPercentileComputation() {
     return percentileComputation;
@@ -867,11 +775,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Incidates whether this search will be considered in A/B testing.
-   *
-   * @return enableABTest
-   */
+  /** Incidates whether this search will be considered in A/B testing. */
   @javax.annotation.Nullable
   public Boolean getEnableABTest() {
     return enableABTest;
@@ -896,8 +800,6 @@ public class SearchForFacets {
    * the
    * [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
    * that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
-   *
-   * @return attributesForFaceting
    */
   @javax.annotation.Nullable
   public List<String> getAttributesForFaceting() {
@@ -920,8 +822,6 @@ public class SearchForFacets {
   /**
    * Attributes to include in the API response. To reduce the size of your response, you can
    * retrieve only some of the attributes. By default, the response includes all attributes.
-   *
-   * @return attributesToRetrieve
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToRetrieve() {
@@ -944,8 +844,6 @@ public class SearchForFacets {
   /**
    * Determines the order in which Algolia [returns your
    * results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
-   *
-   * @return ranking
    */
   @javax.annotation.Nullable
   public List<String> getRanking() {
@@ -969,8 +867,6 @@ public class SearchForFacets {
    * Specifies the [Custom ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use
    * the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
-   *
-   * @return customRanking
    */
   @javax.annotation.Nullable
   public List<String> getCustomRanking() {
@@ -982,11 +878,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Relevancy threshold below which less relevant results aren't included in the results.
-   *
-   * @return relevancyStrictness
-   */
+  /** Relevancy threshold below which less relevant results aren't included in the results. */
   @javax.annotation.Nullable
   public Integer getRelevancyStrictness() {
     return relevancyStrictness;
@@ -1008,8 +900,6 @@ public class SearchForFacets {
   /**
    * Attributes to highlight. Strings that match the search query in the attributes are highlighted
    * by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).
-   *
-   * @return attributesToHighlight
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToHighlight() {
@@ -1033,8 +923,6 @@ public class SearchForFacets {
    * Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words.
    * If not specified, the attribute is shortened to the 10 words around the matching string but you
    * can specify the number. For example: `body:20`.
-   *
-   * @return attributesToSnippet
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToSnippet() {
@@ -1046,11 +934,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * HTML string to insert before the highlighted parts in all highlight and snippet results.
-   *
-   * @return highlightPreTag
-   */
+  /** HTML string to insert before the highlighted parts in all highlight and snippet results. */
   @javax.annotation.Nullable
   public String getHighlightPreTag() {
     return highlightPreTag;
@@ -1061,11 +945,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * HTML string to insert after the highlighted parts in all highlight and snippet results.
-   *
-   * @return highlightPostTag
-   */
+  /** HTML string to insert after the highlighted parts in all highlight and snippet results. */
   @javax.annotation.Nullable
   public String getHighlightPostTag() {
     return highlightPostTag;
@@ -1076,11 +956,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * String used as an ellipsis indicator when a snippet is truncated.
-   *
-   * @return snippetEllipsisText
-   */
+  /** String used as an ellipsis indicator when a snippet is truncated. */
   @javax.annotation.Nullable
   public String getSnippetEllipsisText() {
     return snippetEllipsisText;
@@ -1091,11 +967,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Restrict highlighting and snippeting to items that matched the query.
-   *
-   * @return restrictHighlightAndSnippetArrays
-   */
+  /** Restrict highlighting and snippeting to items that matched the query. */
   @javax.annotation.Nullable
   public Boolean getRestrictHighlightAndSnippetArrays() {
     return restrictHighlightAndSnippetArrays;
@@ -1106,11 +978,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Number of hits per page. minimum: 1 maximum: 1000
-   *
-   * @return hitsPerPage
-   */
+  /** Number of hits per page. minimum: 1 maximum: 1000 */
   @javax.annotation.Nullable
   public Integer getHitsPerPage() {
     return hitsPerPage;
@@ -1125,8 +993,6 @@ public class SearchForFacets {
    * Minimum number of characters a word in the query string must contain to accept matches with
    * [one
    * typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
-   *
-   * @return minWordSizefor1Typo
    */
   @javax.annotation.Nullable
   public Integer getMinWordSizefor1Typo() {
@@ -1142,8 +1008,6 @@ public class SearchForFacets {
    * Minimum number of characters a word in the query string must contain to accept matches with
    * [two
    * typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
-   *
-   * @return minWordSizefor2Typos
    */
   @javax.annotation.Nullable
   public Integer getMinWordSizefor2Typos() {
@@ -1155,11 +1019,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get typoTolerance
-   *
-   * @return typoTolerance
-   */
+  /** Get typoTolerance */
   @javax.annotation.Nullable
   public TypoTolerance getTypoTolerance() {
     return typoTolerance;
@@ -1170,11 +1030,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Whether to allow typos on numbers (\"numeric tokens\") in the query string.
-   *
-   * @return allowTyposOnNumericTokens
-   */
+  /** Whether to allow typos on numbers (\"numeric tokens\") in the query string. */
   @javax.annotation.Nullable
   public Boolean getAllowTyposOnNumericTokens() {
     return allowTyposOnNumericTokens;
@@ -1196,8 +1052,6 @@ public class SearchForFacets {
   /**
    * Attributes for which you want to turn off [typo
    * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
-   *
-   * @return disableTypoToleranceOnAttributes
    */
   @javax.annotation.Nullable
   public List<String> getDisableTypoToleranceOnAttributes() {
@@ -1209,11 +1063,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get ignorePlurals
-   *
-   * @return ignorePlurals
-   */
+  /** Get ignorePlurals */
   @javax.annotation.Nullable
   public IgnorePlurals getIgnorePlurals() {
     return ignorePlurals;
@@ -1224,11 +1074,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get removeStopWords
-   *
-   * @return removeStopWords
-   */
+  /** Get removeStopWords */
   @javax.annotation.Nullable
   public RemoveStopWords getRemoveStopWords() {
     return removeStopWords;
@@ -1242,8 +1088,6 @@ public class SearchForFacets {
   /**
    * Characters that the engine shouldn't automatically
    * [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
-   *
-   * @return keepDiacriticsOnCharacters
    */
   @javax.annotation.Nullable
   public String getKeepDiacriticsOnCharacters() {
@@ -1268,8 +1112,6 @@ public class SearchForFacets {
    * `ignorePlurals`, `removeStopWords`, and
    * [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk)
    * word detection.
-   *
-   * @return queryLanguages
    */
   @javax.annotation.Nullable
   public List<String> getQueryLanguages() {
@@ -1285,8 +1127,6 @@ public class SearchForFacets {
    * [Splits compound
    * words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words)
    * into their component word parts in the query.
-   *
-   * @return decompoundQuery
    */
   @javax.annotation.Nullable
   public Boolean getDecompoundQuery() {
@@ -1301,8 +1141,6 @@ public class SearchForFacets {
   /**
    * Incidates whether
    * [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
-   *
-   * @return enableRules
    */
   @javax.annotation.Nullable
   public Boolean getEnableRules() {
@@ -1318,8 +1156,6 @@ public class SearchForFacets {
    * Incidates whether
    * [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/)
    * is enabled.
-   *
-   * @return enablePersonalization
    */
   @javax.annotation.Nullable
   public Boolean getEnablePersonalization() {
@@ -1331,11 +1167,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get queryType
-   *
-   * @return queryType
-   */
+  /** Get queryType */
   @javax.annotation.Nullable
   public QueryType getQueryType() {
     return queryType;
@@ -1346,11 +1178,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get removeWordsIfNoResults
-   *
-   * @return removeWordsIfNoResults
-   */
+  /** Get removeWordsIfNoResults */
   @javax.annotation.Nullable
   public RemoveWordsIfNoResults getRemoveWordsIfNoResults() {
     return removeWordsIfNoResults;
@@ -1361,11 +1189,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get mode
-   *
-   * @return mode
-   */
+  /** Get mode */
   @javax.annotation.Nullable
   public Mode getMode() {
     return mode;
@@ -1376,11 +1200,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get semanticSearch
-   *
-   * @return semanticSearch
-   */
+  /** Get semanticSearch */
   @javax.annotation.Nullable
   public SemanticSearch getSemanticSearch() {
     return semanticSearch;
@@ -1394,8 +1214,6 @@ public class SearchForFacets {
   /**
    * Enables the [advanced query
    * syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
-   *
-   * @return advancedSyntax
    */
   @javax.annotation.Nullable
   public Boolean getAdvancedSyntax() {
@@ -1419,8 +1237,6 @@ public class SearchForFacets {
    * Words which should be considered
    * [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words)
    * when found in a query.
-   *
-   * @return optionalWords
    */
   @javax.annotation.Nullable
   public List<String> getOptionalWords() {
@@ -1443,8 +1259,6 @@ public class SearchForFacets {
   /**
    * Attributes for which you want to [turn off the exact ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
-   *
-   * @return disableExactOnAttributes
    */
   @javax.annotation.Nullable
   public List<String> getDisableExactOnAttributes() {
@@ -1456,11 +1270,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get exactOnSingleWordQuery
-   *
-   * @return exactOnSingleWordQuery
-   */
+  /** Get exactOnSingleWordQuery */
   @javax.annotation.Nullable
   public ExactOnSingleWordQuery getExactOnSingleWordQuery() {
     return exactOnSingleWordQuery;
@@ -1482,8 +1292,6 @@ public class SearchForFacets {
   /**
    * Alternatives that should be considered an exact match by [the exact ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
-   *
-   * @return alternativesAsExact
    */
   @javax.annotation.Nullable
   public List<AlternativesAsExact> getAlternativesAsExact() {
@@ -1506,8 +1314,6 @@ public class SearchForFacets {
   /**
    * Allows you to specify which advanced syntax features are active when `advancedSyntax` is
    * enabled.
-   *
-   * @return advancedSyntaxFeatures
    */
   @javax.annotation.Nullable
   public List<AdvancedSyntaxFeatures> getAdvancedSyntaxFeatures() {
@@ -1519,11 +1325,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get distinct
-   *
-   * @return distinct
-   */
+  /** Get distinct */
   @javax.annotation.Nullable
   public Distinct getDistinct() {
     return distinct;
@@ -1537,8 +1339,6 @@ public class SearchForFacets {
   /**
    * Name of the deduplication attribute to be used with Algolia's [_distinct_
    * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-   *
-   * @return attributeForDistinct
    */
   @javax.annotation.Nullable
   public String getAttributeForDistinct() {
@@ -1553,8 +1353,6 @@ public class SearchForFacets {
   /**
    * Whether to highlight and snippet the original word that matches the synonym or the synonym
    * itself.
-   *
-   * @return replaceSynonymsInHighlight
    */
   @javax.annotation.Nullable
   public Boolean getReplaceSynonymsInHighlight() {
@@ -1570,8 +1368,6 @@ public class SearchForFacets {
    * Precision of the [proximity ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
    * minimum: 1 maximum: 7
-   *
-   * @return minProximity
    */
   @javax.annotation.Nullable
   public Integer getMinProximity() {
@@ -1591,11 +1387,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Attributes to include in the API response for search and browse queries.
-   *
-   * @return responseFields
-   */
+  /** Attributes to include in the API response for search and browse queries. */
   @javax.annotation.Nullable
   public List<String> getResponseFields() {
     return responseFields;
@@ -1610,8 +1402,6 @@ public class SearchForFacets {
    * Maximum number of facet hits to return when [searching for facet
    * values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
    * maximum: 100
-   *
-   * @return maxFacetHits
    */
   @javax.annotation.Nullable
   public Integer getMaxFacetHits() {
@@ -1623,11 +1413,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Maximum number of facet values to return for each facet.
-   *
-   * @return maxValuesPerFacet
-   */
+  /** Maximum number of facet values to return for each facet. */
   @javax.annotation.Nullable
   public Integer getMaxValuesPerFacet() {
     return maxValuesPerFacet;
@@ -1638,11 +1424,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Controls how facet values are fetched.
-   *
-   * @return sortFacetValuesBy
-   */
+  /** Controls how facet values are fetched. */
   @javax.annotation.Nullable
   public String getSortFacetValuesBy() {
     return sortFacetValuesBy;
@@ -1658,8 +1440,6 @@ public class SearchForFacets {
    * Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations)
    * in your ranking formula, Proximity is used to select which searchable attribute is matched in
    * the Attribute ranking stage.
-   *
-   * @return attributeCriteriaComputedByMinProximity
    */
   @javax.annotation.Nullable
   public Boolean getAttributeCriteriaComputedByMinProximity() {
@@ -1671,11 +1451,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get renderingContent
-   *
-   * @return renderingContent
-   */
+  /** Get renderingContent */
   @javax.annotation.Nullable
   public RenderingContent getRenderingContent() {
     return renderingContent;
@@ -1689,8 +1465,6 @@ public class SearchForFacets {
   /**
    * Indicates whether this search will use [Dynamic
    * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-   *
-   * @return enableReRanking
    */
   @javax.annotation.Nullable
   public Boolean getEnableReRanking() {
@@ -1702,11 +1476,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get reRankingApplyFilter
-   *
-   * @return reRankingApplyFilter
-   */
+  /** Get reRankingApplyFilter */
   @javax.annotation.Nullable
   public ReRankingApplyFilter getReRankingApplyFilter() {
     return reRankingApplyFilter;
@@ -1717,11 +1487,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Facet name.
-   *
-   * @return facet
-   */
+  /** Facet name. */
   @javax.annotation.Nonnull
   public String getFacet() {
     return facet;
@@ -1732,11 +1498,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Algolia index name.
-   *
-   * @return indexName
-   */
+  /** Algolia index name. */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;
@@ -1747,11 +1509,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Text to search inside the facet's values.
-   *
-   * @return facetQuery
-   */
+  /** Text to search inside the facet's values. */
   @javax.annotation.Nullable
   public String getFacetQuery() {
     return facetQuery;
@@ -1762,11 +1520,7 @@ public class SearchForFacets {
     return this;
   }
 
-  /**
-   * Get type
-   *
-   * @return type
-   */
+  /** Get type */
   @javax.annotation.Nonnull
   public SearchTypeFacet getType() {
     return type;

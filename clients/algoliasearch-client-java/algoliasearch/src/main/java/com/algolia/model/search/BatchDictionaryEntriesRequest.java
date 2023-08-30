@@ -20,11 +20,7 @@ public class BatchDictionaryEntriesRequest {
     return this;
   }
 
-  /**
-   * Get action
-   *
-   * @return action
-   */
+  /** Get action */
   @javax.annotation.Nonnull
   public DictionaryAction getAction() {
     return action;
@@ -35,11 +31,7 @@ public class BatchDictionaryEntriesRequest {
     return this;
   }
 
-  /**
-   * Get body
-   *
-   * @return body
-   */
+  /** Get body */
   @javax.annotation.Nonnull
   public DictionaryEntry getBody() {
     return body;

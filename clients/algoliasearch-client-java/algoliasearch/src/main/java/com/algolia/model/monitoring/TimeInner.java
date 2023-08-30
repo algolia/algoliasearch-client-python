@@ -20,11 +20,7 @@ public class TimeInner {
     return this;
   }
 
-  /**
-   * Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds.
-   *
-   * @return t
-   */
+  /** Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds. */
   @javax.annotation.Nullable
   public Long getT() {
     return t;
@@ -35,11 +31,7 @@ public class TimeInner {
     return this;
   }
 
-  /**
-   * Time in ms.
-   *
-   * @return v
-   */
+  /** Time in ms. */
   @javax.annotation.Nullable
   public Integer getV() {
     return v;

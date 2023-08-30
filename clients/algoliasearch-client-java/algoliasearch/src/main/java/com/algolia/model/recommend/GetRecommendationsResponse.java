@@ -27,11 +27,7 @@ public class GetRecommendationsResponse {
     return this;
   }
 
-  /**
-   * Get results
-   *
-   * @return results
-   */
+  /** Get results */
   @javax.annotation.Nullable
   public List<RecommendationsResponse> getResults() {
     return results;

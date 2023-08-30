@@ -53,11 +53,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * This field is reserved for advanced usage.
-   *
-   * @return filters
-   */
+  /** This field is reserved for advanced usage. */
   @javax.annotation.Nonnull
   public Integer getFilters() {
     return filters;
@@ -68,11 +64,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Position of the most important matched attribute in the attributes to index list.
-   *
-   * @return firstMatchedWord
-   */
+  /** Position of the most important matched attribute in the attributes to index list. */
   @javax.annotation.Nonnull
   public Integer getFirstMatchedWord() {
     return firstMatchedWord;
@@ -86,8 +78,6 @@ public class RankingInfo {
   /**
    * Distance between the geo location in the search query and the best matching geo location in the
    * record, divided by the geo precision (in meters).
-   *
-   * @return geoDistance
    */
   @javax.annotation.Nonnull
   public Integer getGeoDistance() {
@@ -99,11 +89,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Precision used when computing the geo distance, in meters.
-   *
-   * @return geoPrecision
-   */
+  /** Precision used when computing the geo distance, in meters. */
   @javax.annotation.Nullable
   public Integer getGeoPrecision() {
     return geoPrecision;
@@ -114,11 +100,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Get matchedGeoLocation
-   *
-   * @return matchedGeoLocation
-   */
+  /** Get matchedGeoLocation */
   @javax.annotation.Nullable
   public MatchedGeoLocation getMatchedGeoLocation() {
     return matchedGeoLocation;
@@ -129,11 +111,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Get personalization
-   *
-   * @return personalization
-   */
+  /** Get personalization */
   @javax.annotation.Nullable
   public Personalization getPersonalization() {
     return personalization;
@@ -144,11 +122,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Number of exactly matched words.
-   *
-   * @return nbExactWords
-   */
+  /** Number of exactly matched words. */
   @javax.annotation.Nonnull
   public Integer getNbExactWords() {
     return nbExactWords;
@@ -159,11 +133,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Number of typos encountered when matching the record.
-   *
-   * @return nbTypos
-   */
+  /** Number of typos encountered when matching the record. */
   @javax.annotation.Nonnull
   public Integer getNbTypos() {
     return nbTypos;
@@ -174,11 +144,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Present and set to true if a Rule promoted the hit.
-   *
-   * @return promoted
-   */
+  /** Present and set to true if a Rule promoted the hit. */
   @javax.annotation.Nonnull
   public Boolean getPromoted() {
     return promoted;
@@ -192,8 +158,6 @@ public class RankingInfo {
   /**
    * When the query contains more than one word, the sum of the distances between matched words (in
    * meters).
-   *
-   * @return proximityDistance
    */
   @javax.annotation.Nullable
   public Integer getProximityDistance() {
@@ -205,11 +169,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Custom ranking for the object, expressed as a single integer value.
-   *
-   * @return userScore
-   */
+  /** Custom ranking for the object, expressed as a single integer value. */
   @javax.annotation.Nonnull
   public Integer getUserScore() {
     return userScore;
@@ -220,11 +180,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Number of matched words, including prefixes and typos.
-   *
-   * @return words
-   */
+  /** Number of matched words, including prefixes and typos. */
   @javax.annotation.Nonnull
   public Integer getWords() {
     return words;
@@ -235,11 +191,7 @@ public class RankingInfo {
     return this;
   }
 
-  /**
-   * Wether the record are promoted by the re-ranking strategy.
-   *
-   * @return promotedByReRanking
-   */
+  /** Wether the record are promoted by the re-ranking strategy. */
   @javax.annotation.Nullable
   public Boolean getPromotedByReRanking() {
     return promotedByReRanking;

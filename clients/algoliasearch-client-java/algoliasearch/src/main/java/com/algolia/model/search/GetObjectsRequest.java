@@ -33,11 +33,7 @@ public class GetObjectsRequest {
     return this;
   }
 
-  /**
-   * Attributes to retrieve. If not specified, all retrievable attributes are returned.
-   *
-   * @return attributesToRetrieve
-   */
+  /** Attributes to retrieve. If not specified, all retrievable attributes are returned. */
   @javax.annotation.Nullable
   public List<String> getAttributesToRetrieve() {
     return attributesToRetrieve;
@@ -48,11 +44,7 @@ public class GetObjectsRequest {
     return this;
   }
 
-  /**
-   * Record's objectID.
-   *
-   * @return objectID
-   */
+  /** Record's objectID. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -63,11 +55,7 @@ public class GetObjectsRequest {
     return this;
   }
 
-  /**
-   * Name of the index containing the required records.
-   *
-   * @return indexName
-   */
+  /** Name of the index containing the required records. */
   @javax.annotation.Nonnull
   public String getIndexName() {
     return indexName;

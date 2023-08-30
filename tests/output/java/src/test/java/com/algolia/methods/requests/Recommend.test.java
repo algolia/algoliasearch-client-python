@@ -8,19 +8,15 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.algolia.EchoInterceptor;
 import com.algolia.EchoResponse;
 import com.algolia.api.RecommendClient;
+import com.algolia.config.*;
 import com.algolia.model.recommend.*;
-import com.algolia.utils.ClientOptions;
-import com.algolia.utils.HttpRequester;
-import com.algolia.utils.JSONBuilder;
-import com.algolia.utils.RequestOptions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -33,11 +29,15 @@ class RecommendClientRequestsTests {
 
   @BeforeAll
   void init() {
-    json = new JSONBuilder().failOnUnknown(true).build();
-    HttpRequester requester = new HttpRequester();
-    echo = new EchoInterceptor();
-    requester.addInterceptor(echo.getEchoInterceptor());
-    client = new RecommendClient("appId", "apiKey", new ClientOptions().setRequester(requester));
+    this.json = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
+    this.echo = new EchoInterceptor();
+    var options = ClientOptions.builder().setRequesterConfig(requester -> requester.addInterceptor(echo)).build();
+    this.client = new RecommendClient("appId", "apiKey", options);
+  }
+
+  @AfterAll
+  void tearUp() throws Exception {
+    client.close();
   }
 
   @Test
@@ -49,9 +49,8 @@ class RecommendClientRequestsTests {
       client.del(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "DELETE");
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("DELETE", req.method);
     assertNull(req.body);
   }
 
@@ -69,9 +68,8 @@ class RecommendClientRequestsTests {
       client.del(path0, parameters0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "DELETE");
+    assertEquals("/1/test/all", req.path);
+    assertEquals("DELETE", req.method);
     assertNull(req.body);
 
     try {
@@ -98,9 +96,8 @@ class RecommendClientRequestsTests {
       client.deleteRecommendRule(indexName0, model0, objectID0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/indexName/related-products/recommend/rules/objectID");
-    assertEquals(req.method, "DELETE");
+    assertEquals("/1/indexes/indexName/related-products/recommend/rules/objectID", req.path);
+    assertEquals("DELETE", req.method);
     assertNull(req.body);
   }
 
@@ -113,9 +110,8 @@ class RecommendClientRequestsTests {
       client.get(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "GET");
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
   }
 
@@ -133,9 +129,8 @@ class RecommendClientRequestsTests {
       client.get(path0, parameters0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "GET");
+    assertEquals("/1/test/all", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
 
     try {
@@ -162,9 +157,8 @@ class RecommendClientRequestsTests {
       client.getRecommendRule(indexName0, model0, objectID0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/indexName/related-products/recommend/rules/objectID");
-    assertEquals(req.method, "GET");
+    assertEquals("/1/indexes/indexName/related-products/recommend/rules/objectID", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
   }
 
@@ -179,9 +173,8 @@ class RecommendClientRequestsTests {
       client.getRecommendStatus(indexName0, model0, taskID0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/indexName/related-products/task/12345");
-    assertEquals(req.method, "GET");
+    assertEquals("/1/indexes/indexName/related-products/task/12345", req.path);
+    assertEquals("GET", req.method);
     assertNull(req.body);
   }
 
@@ -212,16 +205,15 @@ class RecommendClientRequestsTests {
       client.getRecommendations(getRecommendationsParams0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/*/recommendations");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
+    assertEquals("/1/indexes/*/recommendations", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"requests\":[{\"indexName\":\"indexName\",\"objectID\":\"objectID\",\"model\":\"related-products\",\"threshold\":42}]}",
         req.body,
         JSONCompareMode.STRICT
-      );
-    });
+      )
+    );
   }
 
   @Test
@@ -277,16 +269,15 @@ class RecommendClientRequestsTests {
       client.getRecommendations(getRecommendationsParams0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/*/recommendations");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
+    assertEquals("/1/indexes/*/recommendations", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"requests\":[{\"indexName\":\"indexName\",\"objectID\":\"objectID\",\"model\":\"related-products\",\"threshold\":42,\"maxRecommendations\":10,\"queryParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"query\"]},\"fallbackParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"fallback\"]}}]}",
         req.body,
         JSONCompareMode.STRICT
-      );
-    });
+      )
+    );
   }
 
   @Test
@@ -314,16 +305,15 @@ class RecommendClientRequestsTests {
       client.getRecommendations(getRecommendationsParams0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/*/recommendations");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
+    assertEquals("/1/indexes/*/recommendations", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"requests\":[{\"indexName\":\"indexName\",\"model\":\"trending-items\",\"threshold\":42}]}",
         req.body,
         JSONCompareMode.STRICT
-      );
-    });
+      )
+    );
   }
 
   @Test
@@ -381,16 +371,15 @@ class RecommendClientRequestsTests {
       client.getRecommendations(getRecommendationsParams0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/*/recommendations");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
+    assertEquals("/1/indexes/*/recommendations", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"requests\":[{\"indexName\":\"indexName\",\"model\":\"trending-items\",\"threshold\":42,\"maxRecommendations\":10,\"facetName\":\"myFacetName\",\"facetValue\":\"myFacetValue\",\"queryParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"query\"]},\"fallbackParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"fallback\"]}}]}",
         req.body,
         JSONCompareMode.STRICT
-      );
-    });
+      )
+    );
   }
 
   @Test
@@ -432,16 +421,15 @@ class RecommendClientRequestsTests {
       client.getRecommendations(getRecommendationsParams0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/*/recommendations");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
+    assertEquals("/1/indexes/*/recommendations", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"requests\":[{\"indexName\":\"indexName1\",\"objectID\":\"objectID1\",\"model\":\"related-products\",\"threshold\":21},{\"indexName\":\"indexName2\",\"objectID\":\"objectID2\",\"model\":\"related-products\",\"threshold\":21}]}",
         req.body,
         JSONCompareMode.STRICT
-      );
-    });
+      )
+    );
   }
 
   @Test
@@ -535,16 +523,15 @@ class RecommendClientRequestsTests {
       client.getRecommendations(getRecommendationsParams0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/*/recommendations");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
+    assertEquals("/1/indexes/*/recommendations", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"requests\":[{\"indexName\":\"indexName1\",\"objectID\":\"objectID1\",\"model\":\"related-products\",\"threshold\":21,\"maxRecommendations\":10,\"queryParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"query1\"]},\"fallbackParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"fallback1\"]}},{\"indexName\":\"indexName2\",\"objectID\":\"objectID2\",\"model\":\"related-products\",\"threshold\":21,\"maxRecommendations\":10,\"queryParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"query2\"]},\"fallbackParameters\":{\"query\":\"myQuery\",\"facetFilters\":[\"fallback2\"]}}]}",
         req.body,
         JSONCompareMode.STRICT
-      );
-    });
+      )
+    );
   }
 
   @Test
@@ -574,16 +561,15 @@ class RecommendClientRequestsTests {
       client.getRecommendations(getRecommendationsParams0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/*/recommendations");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
+    assertEquals("/1/indexes/*/recommendations", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"requests\":[{\"indexName\":\"indexName1\",\"objectID\":\"objectID1\",\"model\":\"bought-together\",\"threshold\":42}]}",
         req.body,
         JSONCompareMode.STRICT
-      );
-    });
+      )
+    );
   }
 
   @Test
@@ -595,12 +581,9 @@ class RecommendClientRequestsTests {
       client.post(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT));
   }
 
   @Test
@@ -622,12 +605,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/all", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});
@@ -664,12 +644,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -709,12 +686,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -754,12 +728,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});
@@ -781,7 +752,7 @@ class RecommendClientRequestsTests {
       Map<String, String> actualHeaders = req.headers;
 
       for (Map.Entry<String, String> p : expectedHeaders.entrySet()) {
-        assertEquals(actualHeaders.get(p.getKey()), p.getValue());
+        assertEquals(p.getValue(), actualHeaders.get(p.getKey()));
       }
     } catch (JsonProcessingException e) {
       fail("failed to parse headers json");
@@ -810,12 +781,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});
@@ -837,7 +805,7 @@ class RecommendClientRequestsTests {
       Map<String, String> actualHeaders = req.headers;
 
       for (Map.Entry<String, String> p : expectedHeaders.entrySet()) {
-        assertEquals(actualHeaders.get(p.getKey()), p.getValue());
+        assertEquals(p.getValue(), actualHeaders.get(p.getKey()));
       }
     } catch (JsonProcessingException e) {
       fail("failed to parse headers json");
@@ -866,12 +834,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -911,12 +876,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -956,12 +918,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1001,12 +960,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1046,12 +1002,9 @@ class RecommendClientRequestsTests {
       client.post(path0, parameters0, body0, requestOptions);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/requestOptions");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/requestOptions", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"facet\":\"filters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue(
@@ -1078,12 +1031,9 @@ class RecommendClientRequestsTests {
       client.put(path0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/minimal");
-    assertEquals(req.method, "PUT");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/minimal", req.path);
+    assertEquals("PUT", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT));
   }
 
   @Test
@@ -1105,12 +1055,9 @@ class RecommendClientRequestsTests {
       client.put(path0, parameters0, body0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/test/all");
-    assertEquals(req.method, "PUT");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/test/all", req.path);
+    assertEquals("PUT", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{\"body\":\"parameters\"}", req.body, JSONCompareMode.STRICT));
 
     try {
       Map<String, String> expectedQuery = json.readValue("{\"query\":\"parameters\"}", new TypeReference<HashMap<String, String>>() {});
@@ -1135,11 +1082,8 @@ class RecommendClientRequestsTests {
       client.searchRecommendRules(indexName0, model0);
     });
     EchoResponse req = echo.getLastResponse();
-
-    assertEquals(req.path, "/1/indexes/indexName/related-products/recommend/rules/search");
-    assertEquals(req.method, "POST");
-    assertDoesNotThrow(() -> {
-      JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT);
-    });
+    assertEquals("/1/indexes/indexName/related-products/recommend/rules/search", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() -> JSONAssert.assertEquals("{}", req.body, JSONCompareMode.STRICT));
   }
 }

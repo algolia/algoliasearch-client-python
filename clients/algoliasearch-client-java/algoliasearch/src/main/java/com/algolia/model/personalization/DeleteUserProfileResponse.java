@@ -20,11 +20,7 @@ public class DeleteUserProfileResponse {
     return this;
   }
 
-  /**
-   * userToken representing the user for which to fetch the Personalization profile.
-   *
-   * @return userToken
-   */
+  /** userToken representing the user for which to fetch the Personalization profile. */
   @javax.annotation.Nonnull
   public String getUserToken() {
     return userToken;
@@ -38,8 +34,6 @@ public class DeleteUserProfileResponse {
   /**
    * A date until which the data can safely be considered as deleted for the given user. Any data
    * received after the `deletedUntil` date will start building a new user profile.
-   *
-   * @return deletedUntil
    */
   @javax.annotation.Nonnull
   public String getDeletedUntil() {

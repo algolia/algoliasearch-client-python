@@ -18,44 +18,42 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /** HighlightResult */
-@JsonDeserialize(using = HighlightResult.HighlightResultDeserializer.class)
-@JsonSerialize(using = HighlightResult.HighlightResultSerializer.class)
-public abstract class HighlightResult implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(HighlightResult.class.getName());
-
-  public static HighlightResult of(HighlightResultOption inside) {
+@JsonDeserialize(using = HighlightResult.Deserializer.class)
+@JsonSerialize(using = HighlightResult.Serializer.class)
+public interface HighlightResult<T> extends CompoundType<T> {
+  static HighlightResult<HighlightResultOption> of(HighlightResultOption inside) {
     return new HighlightResultHighlightResultOption(inside);
   }
 
-  public static HighlightResult of(List<HighlightResultOption> inside) {
+  static HighlightResult<List<HighlightResultOption>> of(List<HighlightResultOption> inside) {
     return new HighlightResultListOfHighlightResultOption(inside);
   }
 
-  public static class HighlightResultSerializer extends StdSerializer<HighlightResult> {
+  class Serializer extends StdSerializer<HighlightResult> {
 
-    public HighlightResultSerializer(Class<HighlightResult> t) {
+    public Serializer(Class<HighlightResult> t) {
       super(t);
     }
 
-    public HighlightResultSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(HighlightResult value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(HighlightResult value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class HighlightResultDeserializer extends StdDeserializer<HighlightResult> {
+  class Deserializer extends StdDeserializer<HighlightResult> {
 
-    public HighlightResultDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(HighlightResult.class);
     }
 
-    public HighlightResultDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -97,30 +95,30 @@ public abstract class HighlightResult implements CompoundType {
   }
 }
 
-class HighlightResultHighlightResultOption extends HighlightResult {
+class HighlightResultHighlightResultOption implements HighlightResult<HighlightResultOption> {
 
-  private final HighlightResultOption insideValue;
+  private final HighlightResultOption value;
 
-  HighlightResultHighlightResultOption(HighlightResultOption insideValue) {
-    this.insideValue = insideValue;
+  HighlightResultHighlightResultOption(HighlightResultOption value) {
+    this.value = value;
   }
 
   @Override
-  public HighlightResultOption getInsideValue() {
-    return insideValue;
+  public HighlightResultOption get() {
+    return value;
   }
 }
 
-class HighlightResultListOfHighlightResultOption extends HighlightResult {
+class HighlightResultListOfHighlightResultOption implements HighlightResult<List<HighlightResultOption>> {
 
-  private final List<HighlightResultOption> insideValue;
+  private final List<HighlightResultOption> value;
 
-  HighlightResultListOfHighlightResultOption(List<HighlightResultOption> insideValue) {
-    this.insideValue = insideValue;
+  HighlightResultListOfHighlightResultOption(List<HighlightResultOption> value) {
+    this.value = value;
   }
 
   @Override
-  public List<HighlightResultOption> getInsideValue() {
-    return insideValue;
+  public List<HighlightResultOption> get() {
+    return value;
   }
 }

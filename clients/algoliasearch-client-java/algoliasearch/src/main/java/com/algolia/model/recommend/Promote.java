@@ -17,43 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** Promote */
-@JsonDeserialize(using = Promote.PromoteDeserializer.class)
-@JsonSerialize(using = Promote.PromoteSerializer.class)
-public abstract class Promote implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(Promote.class.getName());
-
-  public static Promote of(PromoteObjectID inside) {
+@JsonDeserialize(using = Promote.Deserializer.class)
+@JsonSerialize(using = Promote.Serializer.class)
+public interface Promote<T> extends CompoundType<T> {
+  static Promote<PromoteObjectID> of(PromoteObjectID inside) {
     return new PromotePromoteObjectID(inside);
   }
 
-  public static Promote of(PromoteObjectIDs inside) {
+  static Promote<PromoteObjectIDs> of(PromoteObjectIDs inside) {
     return new PromotePromoteObjectIDs(inside);
   }
 
-  public static class PromoteSerializer extends StdSerializer<Promote> {
+  class Serializer extends StdSerializer<Promote> {
 
-    public PromoteSerializer(Class<Promote> t) {
+    public Serializer(Class<Promote> t) {
       super(t);
     }
 
-    public PromoteSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(Promote value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(Promote value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class PromoteDeserializer extends StdDeserializer<Promote> {
+  class Deserializer extends StdDeserializer<Promote> {
 
-    public PromoteDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(Promote.class);
     }
 
-    public PromoteDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -93,30 +92,30 @@ public abstract class Promote implements CompoundType {
   }
 }
 
-class PromotePromoteObjectID extends Promote {
+class PromotePromoteObjectID implements Promote<PromoteObjectID> {
 
-  private final PromoteObjectID insideValue;
+  private final PromoteObjectID value;
 
-  PromotePromoteObjectID(PromoteObjectID insideValue) {
-    this.insideValue = insideValue;
+  PromotePromoteObjectID(PromoteObjectID value) {
+    this.value = value;
   }
 
   @Override
-  public PromoteObjectID getInsideValue() {
-    return insideValue;
+  public PromoteObjectID get() {
+    return value;
   }
 }
 
-class PromotePromoteObjectIDs extends Promote {
+class PromotePromoteObjectIDs implements Promote<PromoteObjectIDs> {
 
-  private final PromoteObjectIDs insideValue;
+  private final PromoteObjectIDs value;
 
-  PromotePromoteObjectIDs(PromoteObjectIDs insideValue) {
-    this.insideValue = insideValue;
+  PromotePromoteObjectIDs(PromoteObjectIDs value) {
+    this.value = value;
   }
 
   @Override
-  public PromoteObjectIDs getInsideValue() {
-    return insideValue;
+  public PromoteObjectIDs get() {
+    return value;
   }
 }

@@ -4,19 +4,17 @@
 package com.algolia.api;
 
 import com.algolia.ApiClient;
+import com.algolia.config.*;
+import com.algolia.config.ClientOptions;
 import com.algolia.exceptions.*;
 import com.algolia.model.analytics.*;
 import com.algolia.utils.*;
-import com.algolia.utils.retry.CallType;
-import com.algolia.utils.retry.StatefulHost;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import okhttp3.Call;
 
 public class AnalyticsClient extends ApiClient {
 
@@ -35,19 +33,11 @@ public class AnalyticsClient extends ApiClient {
   }
 
   public AnalyticsClient(String appId, String apiKey, String region, ClientOptions options) {
-    super(appId, apiKey, "Analytics", "4.0.0-beta.3", options);
-    if (options != null && options.getHosts() != null) {
-      this.setHosts(options.getHosts());
-    } else {
-      this.setHosts(getDefaultHosts(region));
-    }
-    this.setConnectTimeout(2000);
-    this.setReadTimeout(5000);
-    this.setWriteTimeout(30000);
+    super(appId, apiKey, "Analytics", options, getDefaultHosts(region));
   }
 
-  private static List<StatefulHost> getDefaultHosts(String region) throws AlgoliaRuntimeException {
-    List<StatefulHost> hosts = new ArrayList<StatefulHost>();
+  private static List<Host> getDefaultHosts(String region) throws AlgoliaRuntimeException {
+    List<Host> hosts = new ArrayList<>();
 
     boolean found = region == null;
     if (region != null) {
@@ -65,7 +55,7 @@ public class AnalyticsClient extends ApiClient {
 
     String url = region == null ? "analytics.algolia.com" : "analytics.{region}.algolia.com".replace("{region}", region);
 
-    hosts.add(new StatefulHost(url, "https", EnumSet.of(CallType.READ, CallType.WRITE)));
+    hosts.add(new Host(url, EnumSet.of(CallType.READ, CallType.WRITE)));
     return hosts;
   }
 
@@ -76,7 +66,6 @@ public class AnalyticsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -88,7 +77,6 @@ public class AnalyticsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -101,7 +89,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -112,7 +99,6 @@ public class AnalyticsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path) throws AlgoliaRuntimeException {
@@ -126,7 +112,6 @@ public class AnalyticsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -135,22 +120,8 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `del`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "DELETE", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("DELETE").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -158,7 +129,6 @@ public class AnalyticsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -171,7 +141,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -182,7 +151,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path) throws AlgoliaRuntimeException {
@@ -196,7 +164,6 @@ public class AnalyticsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -208,7 +175,6 @@ public class AnalyticsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -221,7 +187,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -232,7 +197,6 @@ public class AnalyticsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path) throws AlgoliaRuntimeException {
@@ -246,7 +210,6 @@ public class AnalyticsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -255,22 +218,8 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `get`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("GET").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -278,7 +227,6 @@ public class AnalyticsClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -291,7 +239,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -302,7 +249,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path) throws AlgoliaRuntimeException {
@@ -326,7 +272,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetAverageClickPositionResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetAverageClickPositionResponse getAverageClickPosition(
@@ -354,7 +299,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetAverageClickPositionResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetAverageClickPositionResponse getAverageClickPosition(String index, String startDate, String endDate, String tags)
@@ -371,7 +315,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetAverageClickPositionResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetAverageClickPositionResponse getAverageClickPosition(String index, RequestOptions requestOptions)
@@ -386,7 +329,6 @@ public class AnalyticsClient extends ApiClient {
    * `clickAnalytics` parameter is `true`.
    *
    * @param index Index name to target. (required)
-   * @return GetAverageClickPositionResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetAverageClickPositionResponse getAverageClickPosition(String index) throws AlgoliaRuntimeException {
@@ -411,7 +353,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetAverageClickPositionResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetAverageClickPositionResponse> getAverageClickPositionAsync(
@@ -425,32 +366,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getAverageClickPosition`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/clicks/averageClickPosition";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetAverageClickPositionResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/clicks/averageClickPosition")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetAverageClickPositionResponse>() {});
   }
 
   /**
@@ -469,7 +394,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetAverageClickPositionResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetAverageClickPositionResponse> getAverageClickPositionAsync(
@@ -491,7 +415,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetAverageClickPositionResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetAverageClickPositionResponse> getAverageClickPositionAsync(String index, RequestOptions requestOptions)
@@ -507,7 +430,6 @@ public class AnalyticsClient extends ApiClient {
    * parameter is &#x60;true&#x60;.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetAverageClickPositionResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetAverageClickPositionResponse> getAverageClickPositionAsync(String index) throws AlgoliaRuntimeException {
@@ -531,7 +453,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetClickPositionsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickPositionsResponse getClickPositions(
@@ -559,7 +480,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetClickPositionsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickPositionsResponse getClickPositions(String index, String startDate, String endDate, String tags)
@@ -576,7 +496,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetClickPositionsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickPositionsResponse getClickPositions(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -590,7 +509,6 @@ public class AnalyticsClient extends ApiClient {
    * `clickAnalytics` parameter is `true`.
    *
    * @param index Index name to target. (required)
-   * @return GetClickPositionsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickPositionsResponse getClickPositions(String index) throws AlgoliaRuntimeException {
@@ -615,7 +533,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetClickPositionsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickPositionsResponse> getClickPositionsAsync(
@@ -629,32 +546,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getClickPositions`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/clicks/positions";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetClickPositionsResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/clicks/positions")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetClickPositionsResponse>() {});
   }
 
   /**
@@ -673,7 +574,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetClickPositionsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickPositionsResponse> getClickPositionsAsync(String index, String startDate, String endDate, String tags)
@@ -691,7 +591,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetClickPositionsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickPositionsResponse> getClickPositionsAsync(String index, RequestOptions requestOptions)
@@ -707,7 +606,6 @@ public class AnalyticsClient extends ApiClient {
    * parameter is &#x60;true&#x60;.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetClickPositionsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickPositionsResponse> getClickPositionsAsync(String index) throws AlgoliaRuntimeException {
@@ -729,7 +627,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetClickThroughRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickThroughRateResponse getClickThroughRate(
@@ -755,7 +652,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetClickThroughRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickThroughRateResponse getClickThroughRate(String index, String startDate, String endDate, String tags)
@@ -770,7 +666,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetClickThroughRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickThroughRateResponse getClickThroughRate(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -782,7 +677,6 @@ public class AnalyticsClient extends ApiClient {
    * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
    *
    * @param index Index name to target. (required)
-   * @return GetClickThroughRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetClickThroughRateResponse getClickThroughRate(String index) throws AlgoliaRuntimeException {
@@ -804,7 +698,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetClickThroughRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickThroughRateResponse> getClickThroughRateAsync(
@@ -818,32 +711,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getClickThroughRate`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/clicks/clickThroughRate";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetClickThroughRateResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/clicks/clickThroughRate")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetClickThroughRateResponse>() {});
   }
 
   /**
@@ -859,7 +736,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetClickThroughRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickThroughRateResponse> getClickThroughRateAsync(
@@ -878,7 +754,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetClickThroughRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickThroughRateResponse> getClickThroughRateAsync(String index, RequestOptions requestOptions)
@@ -891,7 +766,6 @@ public class AnalyticsClient extends ApiClient {
    * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetClickThroughRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetClickThroughRateResponse> getClickThroughRateAsync(String index) throws AlgoliaRuntimeException {
@@ -913,7 +787,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetConversationRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetConversationRateResponse getConversationRate(
@@ -939,7 +812,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetConversationRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetConversationRateResponse getConversationRate(String index, String startDate, String endDate, String tags)
@@ -954,7 +826,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetConversationRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetConversationRateResponse getConversationRate(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -966,7 +837,6 @@ public class AnalyticsClient extends ApiClient {
    * rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
    *
    * @param index Index name to target. (required)
-   * @return GetConversationRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetConversationRateResponse getConversationRate(String index) throws AlgoliaRuntimeException {
@@ -988,7 +858,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetConversationRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetConversationRateResponse> getConversationRateAsync(
@@ -1002,32 +871,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getConversationRate`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/conversions/conversionRate";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetConversationRateResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/conversions/conversionRate")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetConversationRateResponse>() {});
   }
 
   /**
@@ -1043,7 +896,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetConversationRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetConversationRateResponse> getConversationRateAsync(
@@ -1062,7 +914,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetConversationRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetConversationRateResponse> getConversationRateAsync(String index, RequestOptions requestOptions)
@@ -1075,7 +926,6 @@ public class AnalyticsClient extends ApiClient {
    * rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetConversationRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetConversationRateResponse> getConversationRateAsync(String index) throws AlgoliaRuntimeException {
@@ -1098,7 +948,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetNoClickRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoClickRateResponse getNoClickRate(String index, String startDate, String endDate, String tags, RequestOptions requestOptions)
@@ -1120,7 +969,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetNoClickRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoClickRateResponse getNoClickRate(String index, String startDate, String endDate, String tags) throws AlgoliaRuntimeException {
@@ -1135,7 +983,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetNoClickRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoClickRateResponse getNoClickRate(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -1148,7 +995,6 @@ public class AnalyticsClient extends ApiClient {
    * searches and searches without clicks.
    *
    * @param index Index name to target. (required)
-   * @return GetNoClickRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoClickRateResponse getNoClickRate(String index) throws AlgoliaRuntimeException {
@@ -1171,7 +1017,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetNoClickRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoClickRateResponse> getNoClickRateAsync(
@@ -1185,32 +1030,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getNoClickRate`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/searches/noClickRate";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetNoClickRateResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/searches/noClickRate")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetNoClickRateResponse>() {});
   }
 
   /**
@@ -1227,7 +1056,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetNoClickRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoClickRateResponse> getNoClickRateAsync(String index, String startDate, String endDate, String tags)
@@ -1243,7 +1071,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetNoClickRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoClickRateResponse> getNoClickRateAsync(String index, RequestOptions requestOptions)
@@ -1257,7 +1084,6 @@ public class AnalyticsClient extends ApiClient {
    * the count of searches and searches without clicks.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetNoClickRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoClickRateResponse> getNoClickRateAsync(String index) throws AlgoliaRuntimeException {
@@ -1278,7 +1104,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetNoResultsRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoResultsRateResponse getNoResultsRate(
@@ -1303,7 +1128,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetNoResultsRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoResultsRateResponse getNoResultsRate(String index, String startDate, String endDate, String tags)
@@ -1317,7 +1141,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetNoResultsRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoResultsRateResponse getNoResultsRate(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -1328,7 +1151,6 @@ public class AnalyticsClient extends ApiClient {
    * Returns the rate at which searches didn't return any results.
    *
    * @param index Index name to target. (required)
-   * @return GetNoResultsRateResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetNoResultsRateResponse getNoResultsRate(String index) throws AlgoliaRuntimeException {
@@ -1349,7 +1171,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetNoResultsRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoResultsRateResponse> getNoResultsRateAsync(
@@ -1363,32 +1184,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getNoResultsRate`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/searches/noResultRate";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetNoResultsRateResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/searches/noResultRate")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetNoResultsRateResponse>() {});
   }
 
   /**
@@ -1403,7 +1208,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetNoResultsRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoResultsRateResponse> getNoResultsRateAsync(String index, String startDate, String endDate, String tags)
@@ -1417,7 +1221,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetNoResultsRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoResultsRateResponse> getNoResultsRateAsync(String index, RequestOptions requestOptions)
@@ -1429,7 +1232,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) Returns the rate at which searches didn&#39;t return any results.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetNoResultsRateResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetNoResultsRateResponse> getNoResultsRateAsync(String index) throws AlgoliaRuntimeException {
@@ -1450,7 +1252,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetSearchesCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesCountResponse getSearchesCount(
@@ -1475,7 +1276,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetSearchesCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesCountResponse getSearchesCount(String index, String startDate, String endDate, String tags)
@@ -1489,7 +1289,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetSearchesCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesCountResponse getSearchesCount(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -1500,7 +1299,6 @@ public class AnalyticsClient extends ApiClient {
    * Returns the number of searches within a time range.
    *
    * @param index Index name to target. (required)
-   * @return GetSearchesCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesCountResponse getSearchesCount(String index) throws AlgoliaRuntimeException {
@@ -1521,7 +1319,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetSearchesCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesCountResponse> getSearchesCountAsync(
@@ -1535,32 +1332,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getSearchesCount`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/searches/count";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetSearchesCountResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/searches/count")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetSearchesCountResponse>() {});
   }
 
   /**
@@ -1575,7 +1356,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetSearchesCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesCountResponse> getSearchesCountAsync(String index, String startDate, String endDate, String tags)
@@ -1589,7 +1369,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetSearchesCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesCountResponse> getSearchesCountAsync(String index, RequestOptions requestOptions)
@@ -1601,7 +1380,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) Returns the number of searches within a time range.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetSearchesCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesCountResponse> getSearchesCountAsync(String index) throws AlgoliaRuntimeException {
@@ -1625,7 +1403,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetSearchesNoClicksResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoClicksResponse getSearchesNoClicks(
@@ -1655,7 +1432,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetSearchesNoClicksResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoClicksResponse getSearchesNoClicks(
@@ -1675,7 +1451,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetSearchesNoClicksResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoClicksResponse getSearchesNoClicks(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -1686,7 +1461,6 @@ public class AnalyticsClient extends ApiClient {
    * Return the most popular of the last 1,000 searches that didn't lead to any clicks.
    *
    * @param index Index name to target. (required)
-   * @return GetSearchesNoClicksResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoClicksResponse getSearchesNoClicks(String index) throws AlgoliaRuntimeException {
@@ -1711,7 +1485,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetSearchesNoClicksResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoClicksResponse> getSearchesNoClicksAsync(
@@ -1727,40 +1500,18 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getSearchesNoClicks`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/searches/noClicks";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetSearchesNoClicksResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/searches/noClicks")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetSearchesNoClicksResponse>() {});
   }
 
   /**
@@ -1779,7 +1530,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetSearchesNoClicksResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoClicksResponse> getSearchesNoClicksAsync(
@@ -1800,7 +1550,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetSearchesNoClicksResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoClicksResponse> getSearchesNoClicksAsync(String index, RequestOptions requestOptions)
@@ -1813,7 +1562,6 @@ public class AnalyticsClient extends ApiClient {
    * clicks.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetSearchesNoClicksResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoClicksResponse> getSearchesNoClicksAsync(String index) throws AlgoliaRuntimeException {
@@ -1837,7 +1585,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetSearchesNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoResultsResponse getSearchesNoResults(
@@ -1867,7 +1614,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetSearchesNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoResultsResponse getSearchesNoResults(
@@ -1887,7 +1633,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetSearchesNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoResultsResponse getSearchesNoResults(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -1898,7 +1643,6 @@ public class AnalyticsClient extends ApiClient {
    * Returns the most popular of the latest 1,000 searches that didn't return any results.
    *
    * @param index Index name to target. (required)
-   * @return GetSearchesNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetSearchesNoResultsResponse getSearchesNoResults(String index) throws AlgoliaRuntimeException {
@@ -1923,7 +1667,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetSearchesNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoResultsResponse> getSearchesNoResultsAsync(
@@ -1939,40 +1682,18 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getSearchesNoResults`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/searches/noResults";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetSearchesNoResultsResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/searches/noResults")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetSearchesNoResultsResponse>() {});
   }
 
   /**
@@ -1991,7 +1712,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetSearchesNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoResultsResponse> getSearchesNoResultsAsync(
@@ -2012,7 +1732,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetSearchesNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoResultsResponse> getSearchesNoResultsAsync(String index, RequestOptions requestOptions)
@@ -2025,7 +1744,6 @@ public class AnalyticsClient extends ApiClient {
    * any results.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetSearchesNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetSearchesNoResultsResponse> getSearchesNoResultsAsync(String index) throws AlgoliaRuntimeException {
@@ -2040,7 +1758,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetStatusResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetStatusResponse getStatus(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -2053,7 +1770,6 @@ public class AnalyticsClient extends ApiClient {
    * Analytics API is updated every 5&nbsp;minutes.
    *
    * @param index Index name to target. (required)
-   * @return GetStatusResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetStatusResponse getStatus(String index) throws AlgoliaRuntimeException {
@@ -2068,7 +1784,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetStatusResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetStatusResponse> getStatusAsync(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -2076,20 +1791,8 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getStatus`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/status";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetStatusResponse>() {});
+    HttpRequest request = HttpRequest.builder().setPath("/2/status").setMethod("GET").addQueryParameter("index", index).build();
+    return executeAsync(request, requestOptions, new TypeReference<GetStatusResponse>() {});
   }
 
   /**
@@ -2098,7 +1801,6 @@ public class AnalyticsClient extends ApiClient {
    * &#x60;null&#x60;. &gt; **Note**: The Analytics API is updated every 5&amp;nbsp;minutes.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetStatusResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetStatusResponse> getStatusAsync(String index) throws AlgoliaRuntimeException {
@@ -2122,7 +1824,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopCountriesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopCountriesResponse getTopCountries(
@@ -2152,7 +1853,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetTopCountriesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopCountriesResponse getTopCountries(
@@ -2172,7 +1872,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopCountriesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopCountriesResponse getTopCountries(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -2183,7 +1882,6 @@ public class AnalyticsClient extends ApiClient {
    * Returns top countries. Limited to the 1,000 most frequent ones.
    *
    * @param index Index name to target. (required)
-   * @return GetTopCountriesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopCountriesResponse getTopCountries(String index) throws AlgoliaRuntimeException {
@@ -2207,7 +1905,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopCountriesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopCountriesResponse> getTopCountriesAsync(
@@ -2223,40 +1920,18 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getTopCountries`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/countries";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetTopCountriesResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/countries")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetTopCountriesResponse>() {});
   }
 
   /**
@@ -2274,7 +1949,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetTopCountriesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopCountriesResponse> getTopCountriesAsync(
@@ -2294,7 +1968,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopCountriesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopCountriesResponse> getTopCountriesAsync(String index, RequestOptions requestOptions)
@@ -2306,7 +1979,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) Returns top countries. Limited to the 1,000 most frequent ones.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetTopCountriesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopCountriesResponse> getTopCountriesAsync(String index) throws AlgoliaRuntimeException {
@@ -2333,7 +2005,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopFilterAttributesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterAttributesResponse getTopFilterAttributes(
@@ -2367,7 +2038,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetTopFilterAttributesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterAttributesResponse getTopFilterAttributes(
@@ -2390,7 +2060,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopFilterAttributesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterAttributesResponse getTopFilterAttributes(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -2403,7 +2072,6 @@ public class AnalyticsClient extends ApiClient {
    * the 1,000 most recently used filters.
    *
    * @param index Index name to target. (required)
-   * @return GetTopFilterAttributesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterAttributesResponse getTopFilterAttributes(String index) throws AlgoliaRuntimeException {
@@ -2430,7 +2098,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopFilterAttributesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterAttributesResponse> getTopFilterAttributesAsync(
@@ -2447,44 +2114,19 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getTopFilterAttributes`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/filters";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (search != null) {
-      queryParameters.put("search", parameterToString(search));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetTopFilterAttributesResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/filters")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("search", search)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetTopFilterAttributesResponse>() {});
   }
 
   /**
@@ -2505,7 +2147,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetTopFilterAttributesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterAttributesResponse> getTopFilterAttributesAsync(
@@ -2528,7 +2169,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopFilterAttributesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterAttributesResponse> getTopFilterAttributesAsync(String index, RequestOptions requestOptions)
@@ -2542,7 +2182,6 @@ public class AnalyticsClient extends ApiClient {
    * the 1,000 most recently used filters.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetTopFilterAttributesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterAttributesResponse> getTopFilterAttributesAsync(String index) throws AlgoliaRuntimeException {
@@ -2569,7 +2208,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopFilterForAttributeResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterForAttributeResponse getTopFilterForAttribute(
@@ -2606,7 +2244,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetTopFilterForAttributeResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterForAttributeResponse getTopFilterForAttribute(
@@ -2630,7 +2267,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopFilterForAttributeResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterForAttributeResponse getTopFilterForAttribute(String attribute, String index, RequestOptions requestOptions)
@@ -2644,7 +2280,6 @@ public class AnalyticsClient extends ApiClient {
    *
    * @param attribute Attribute name. (required)
    * @param index Index name to target. (required)
-   * @return GetTopFilterForAttributeResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFilterForAttributeResponse getTopFilterForAttribute(String attribute, String index) throws AlgoliaRuntimeException {
@@ -2671,7 +2306,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopFilterForAttributeResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterForAttributeResponse> getTopFilterForAttributeAsync(
@@ -2693,44 +2327,19 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getTopFilterForAttribute`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/filters/{attribute}".replaceAll("\\{attribute\\}", this.escapeString(attribute.toString()));
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (search != null) {
-      queryParameters.put("search", parameterToString(search));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetTopFilterForAttributeResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/filters/{attribute}", attribute)
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("search", search)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetTopFilterForAttributeResponse>() {});
   }
 
   /**
@@ -2751,7 +2360,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetTopFilterForAttributeResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterForAttributeResponse> getTopFilterForAttributeAsync(
@@ -2775,7 +2383,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopFilterForAttributeResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterForAttributeResponse> getTopFilterForAttributeAsync(
@@ -2792,7 +2399,6 @@ public class AnalyticsClient extends ApiClient {
    *
    * @param attribute Attribute name. (required)
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetTopFilterForAttributeResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFilterForAttributeResponse> getTopFilterForAttributeAsync(String attribute, String index)
@@ -2819,7 +2425,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopFiltersNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFiltersNoResultsResponse getTopFiltersNoResults(
@@ -2852,7 +2457,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetTopFiltersNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFiltersNoResultsResponse getTopFiltersNoResults(
@@ -2874,7 +2478,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopFiltersNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFiltersNoResultsResponse getTopFiltersNoResults(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -2886,7 +2489,6 @@ public class AnalyticsClient extends ApiClient {
    * most recently used filters.
    *
    * @param index Index name to target. (required)
-   * @return GetTopFiltersNoResultsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopFiltersNoResultsResponse getTopFiltersNoResults(String index) throws AlgoliaRuntimeException {
@@ -2912,7 +2514,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopFiltersNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFiltersNoResultsResponse> getTopFiltersNoResultsAsync(
@@ -2929,44 +2530,19 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getTopFiltersNoResults`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/filters/noResults";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (search != null) {
-      queryParameters.put("search", parameterToString(search));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetTopFiltersNoResultsResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/filters/noResults")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("search", search)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetTopFiltersNoResultsResponse>() {});
   }
 
   /**
@@ -2986,7 +2562,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetTopFiltersNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFiltersNoResultsResponse> getTopFiltersNoResultsAsync(
@@ -3008,7 +2583,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopFiltersNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFiltersNoResultsResponse> getTopFiltersNoResultsAsync(String index, RequestOptions requestOptions)
@@ -3021,7 +2595,6 @@ public class AnalyticsClient extends ApiClient {
    * Limited to the 1,000 most recently used filters.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetTopFiltersNoResultsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopFiltersNoResultsResponse> getTopFiltersNoResultsAsync(String index) throws AlgoliaRuntimeException {
@@ -3049,7 +2622,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopHitsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopHitsResponse getTopHits(
@@ -3085,7 +2657,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetTopHitsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopHitsResponse getTopHits(
@@ -3107,7 +2678,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopHitsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopHitsResponse getTopHits(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3118,7 +2688,6 @@ public class AnalyticsClient extends ApiClient {
    * Return the most popular clicked results in the last 1,000 searches.
    *
    * @param index Index name to target. (required)
-   * @return GetTopHitsResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopHitsResponse getTopHits(String index) throws AlgoliaRuntimeException {
@@ -3146,7 +2715,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopHitsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopHitsResponse> getTopHitsAsync(
@@ -3164,48 +2732,20 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getTopHits`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/hits";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (search != null) {
-      queryParameters.put("search", parameterToString(search));
-    }
-
-    if (clickAnalytics != null) {
-      queryParameters.put("clickAnalytics", parameterToString(clickAnalytics));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetTopHitsResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/hits")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("search", search)
+      .addQueryParameter("clickAnalytics", clickAnalytics)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetTopHitsResponse>() {});
   }
 
   /**
@@ -3227,7 +2767,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetTopHitsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopHitsResponse> getTopHitsAsync(
@@ -3249,7 +2788,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopHitsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopHitsResponse> getTopHitsAsync(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3260,7 +2798,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) Return the most popular clicked results in the last 1,000 searches.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetTopHitsResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopHitsResponse> getTopHitsAsync(String index) throws AlgoliaRuntimeException {
@@ -3291,7 +2828,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopSearchesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopSearchesResponse getTopSearches(
@@ -3333,7 +2869,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetTopSearchesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopSearchesResponse getTopSearches(
@@ -3357,7 +2892,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetTopSearchesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopSearchesResponse getTopSearches(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3369,7 +2903,6 @@ public class AnalyticsClient extends ApiClient {
    * of hits.
    *
    * @param index Index name to target. (required)
-   * @return GetTopSearchesResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetTopSearchesResponse getTopSearches(String index) throws AlgoliaRuntimeException {
@@ -3400,7 +2933,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopSearchesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopSearchesResponse> getTopSearchesAsync(
@@ -3419,52 +2951,21 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getTopSearches`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/searches";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (clickAnalytics != null) {
-      queryParameters.put("clickAnalytics", parameterToString(clickAnalytics));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (orderBy != null) {
-      queryParameters.put("orderBy", parameterToString(orderBy));
-    }
-
-    if (direction != null) {
-      queryParameters.put("direction", parameterToString(direction));
-    }
-
-    if (limit != null) {
-      queryParameters.put("limit", parameterToString(limit));
-    }
-
-    if (offset != null) {
-      queryParameters.put("offset", parameterToString(offset));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetTopSearchesResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/searches")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("clickAnalytics", clickAnalytics)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("orderBy", orderBy)
+      .addQueryParameter("direction", direction)
+      .addQueryParameter("limit", limit)
+      .addQueryParameter("offset", offset)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetTopSearchesResponse>() {});
   }
 
   /**
@@ -3489,7 +2990,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetTopSearchesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopSearchesResponse> getTopSearchesAsync(
@@ -3513,7 +3013,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetTopSearchesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopSearchesResponse> getTopSearchesAsync(String index, RequestOptions requestOptions)
@@ -3526,7 +3025,6 @@ public class AnalyticsClient extends ApiClient {
    * returns the number of hits.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetTopSearchesResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetTopSearchesResponse> getTopSearchesAsync(String index) throws AlgoliaRuntimeException {
@@ -3547,7 +3045,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetUsersCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetUsersCountResponse getUsersCount(String index, String startDate, String endDate, String tags, RequestOptions requestOptions)
@@ -3567,7 +3064,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return GetUsersCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetUsersCountResponse getUsersCount(String index, String startDate, String endDate, String tags) throws AlgoliaRuntimeException {
@@ -3580,7 +3076,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetUsersCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetUsersCountResponse getUsersCount(String index, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3591,7 +3086,6 @@ public class AnalyticsClient extends ApiClient {
    * Return the count of unique users.
    *
    * @param index Index name to target. (required)
-   * @return GetUsersCountResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetUsersCountResponse getUsersCount(String index) throws AlgoliaRuntimeException {
@@ -3612,7 +3106,6 @@ public class AnalyticsClient extends ApiClient {
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetUsersCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetUsersCountResponse> getUsersCountAsync(
@@ -3626,32 +3119,16 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `index` is required when calling `getUsersCount`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/2/users/count";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (index != null) {
-      queryParameters.put("index", parameterToString(index));
-    }
-
-    if (startDate != null) {
-      queryParameters.put("startDate", parameterToString(startDate));
-    }
-
-    if (endDate != null) {
-      queryParameters.put("endDate", parameterToString(endDate));
-    }
-
-    if (tags != null) {
-      queryParameters.put("tags", parameterToString(tags));
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetUsersCountResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/2/users/count")
+      .setMethod("GET")
+      .addQueryParameter("index", index)
+      .addQueryParameter("startDate", startDate)
+      .addQueryParameter("endDate", endDate)
+      .addQueryParameter("tags", tags)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<GetUsersCountResponse>() {});
   }
 
   /**
@@ -3666,7 +3143,6 @@ public class AnalyticsClient extends ApiClient {
    *     [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/)
    *     set at search time. Multiple tags can be combined with the operators OR and AND. If a tag
    *     contains characters like spaces or parentheses, it must be URL-encoded. (optional)
-   * @return CompletableFuture<GetUsersCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetUsersCountResponse> getUsersCountAsync(String index, String startDate, String endDate, String tags)
@@ -3680,7 +3156,6 @@ public class AnalyticsClient extends ApiClient {
    * @param index Index name to target. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetUsersCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetUsersCountResponse> getUsersCountAsync(String index, RequestOptions requestOptions)
@@ -3692,7 +3167,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) Return the count of unique users.
    *
    * @param index Index name to target. (required)
-   * @return CompletableFuture<GetUsersCountResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetUsersCountResponse> getUsersCountAsync(String index) throws AlgoliaRuntimeException {
@@ -3707,7 +3181,6 @@ public class AnalyticsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -3721,7 +3194,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -3734,7 +3206,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3745,7 +3216,6 @@ public class AnalyticsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path) throws AlgoliaRuntimeException {
@@ -3760,7 +3230,6 @@ public class AnalyticsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -3769,22 +3238,14 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `post`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("POST")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -3793,7 +3254,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -3806,7 +3266,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3817,7 +3276,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path) throws AlgoliaRuntimeException {
@@ -3832,7 +3290,6 @@ public class AnalyticsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -3846,7 +3303,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -3859,7 +3315,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3870,7 +3325,6 @@ public class AnalyticsClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path) throws AlgoliaRuntimeException {
@@ -3885,7 +3339,6 @@ public class AnalyticsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -3894,22 +3347,14 @@ public class AnalyticsClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `put`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "PUT", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("PUT")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -3918,7 +3363,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -3931,7 +3375,6 @@ public class AnalyticsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -3942,7 +3385,6 @@ public class AnalyticsClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path) throws AlgoliaRuntimeException {

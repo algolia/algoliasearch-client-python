@@ -21,43 +21,42 @@ import java.util.logging.Logger;
  * [Filter hits by facet
  * value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
  */
-@JsonDeserialize(using = FacetFilters.FacetFiltersDeserializer.class)
-@JsonSerialize(using = FacetFilters.FacetFiltersSerializer.class)
-public abstract class FacetFilters implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(FacetFilters.class.getName());
-
-  public static FacetFilters of(List<MixedSearchFilters> inside) {
+@JsonDeserialize(using = FacetFilters.Deserializer.class)
+@JsonSerialize(using = FacetFilters.Serializer.class)
+public interface FacetFilters<T> extends CompoundType<T> {
+  static FacetFilters<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
     return new FacetFiltersListOfMixedSearchFilters(inside);
   }
 
-  public static FacetFilters of(String inside) {
+  static FacetFilters<String> of(String inside) {
     return new FacetFiltersString(inside);
   }
 
-  public static class FacetFiltersSerializer extends StdSerializer<FacetFilters> {
+  class Serializer extends StdSerializer<FacetFilters> {
 
-    public FacetFiltersSerializer(Class<FacetFilters> t) {
+    public Serializer(Class<FacetFilters> t) {
       super(t);
     }
 
-    public FacetFiltersSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(FacetFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(FacetFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class FacetFiltersDeserializer extends StdDeserializer<FacetFilters> {
+  class Deserializer extends StdDeserializer<FacetFilters> {
 
-    public FacetFiltersDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(FacetFilters.class);
     }
 
-    public FacetFiltersDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -99,30 +98,30 @@ public abstract class FacetFilters implements CompoundType {
   }
 }
 
-class FacetFiltersListOfMixedSearchFilters extends FacetFilters {
+class FacetFiltersListOfMixedSearchFilters implements FacetFilters<List<MixedSearchFilters>> {
 
-  private final List<MixedSearchFilters> insideValue;
+  private final List<MixedSearchFilters> value;
 
-  FacetFiltersListOfMixedSearchFilters(List<MixedSearchFilters> insideValue) {
-    this.insideValue = insideValue;
+  FacetFiltersListOfMixedSearchFilters(List<MixedSearchFilters> value) {
+    this.value = value;
   }
 
   @Override
-  public List<MixedSearchFilters> getInsideValue() {
-    return insideValue;
+  public List<MixedSearchFilters> get() {
+    return value;
   }
 }
 
-class FacetFiltersString extends FacetFilters {
+class FacetFiltersString implements FacetFilters<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  FacetFiltersString(String insideValue) {
-    this.insideValue = insideValue;
+  FacetFiltersString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

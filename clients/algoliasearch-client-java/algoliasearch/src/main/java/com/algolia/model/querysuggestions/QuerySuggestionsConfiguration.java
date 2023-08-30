@@ -36,11 +36,7 @@ public class QuerySuggestionsConfiguration {
     return this;
   }
 
-  /**
-   * Algolia indices from which to get the popular searches for query suggestions.
-   *
-   * @return sourceIndices
-   */
+  /** Algolia indices from which to get the popular searches for query suggestions. */
   @javax.annotation.Nonnull
   public List<SourceIndex> getSourceIndices() {
     return sourceIndices;
@@ -51,11 +47,7 @@ public class QuerySuggestionsConfiguration {
     return this;
   }
 
-  /**
-   * Get languages
-   *
-   * @return languages
-   */
+  /** Get languages */
   @javax.annotation.Nullable
   public Languages getLanguages() {
     return languages;
@@ -74,11 +66,7 @@ public class QuerySuggestionsConfiguration {
     return this;
   }
 
-  /**
-   * Patterns to exclude from query suggestions.
-   *
-   * @return exclude
-   */
+  /** Patterns to exclude from query suggestions. */
   @javax.annotation.Nullable
   public List<String> getExclude() {
     return exclude;
@@ -89,11 +77,7 @@ public class QuerySuggestionsConfiguration {
     return this;
   }
 
-  /**
-   * Turn on personalized query suggestions.
-   *
-   * @return enablePersonalization
-   */
+  /** Turn on personalized query suggestions. */
   @javax.annotation.Nullable
   public Boolean getEnablePersonalization() {
     return enablePersonalization;
@@ -104,11 +88,7 @@ public class QuerySuggestionsConfiguration {
     return this;
   }
 
-  /**
-   * Allow suggestions with special characters.
-   *
-   * @return allowSpecialCharacters
-   */
+  /** Allow suggestions with special characters. */
   @javax.annotation.Nullable
   public Boolean getAllowSpecialCharacters() {
     return allowSpecialCharacters;

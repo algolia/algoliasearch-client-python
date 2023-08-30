@@ -24,11 +24,7 @@ public class TopHitsResponse {
     return this;
   }
 
-  /**
-   * Top hits.
-   *
-   * @return hits
-   */
+  /** Top hits. */
   @javax.annotation.Nonnull
   public List<TopHit> getHits() {
     return hits;

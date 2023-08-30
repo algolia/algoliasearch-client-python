@@ -24,11 +24,7 @@ public class GetTopFiltersNoResultsResponse {
     return this;
   }
 
-  /**
-   * Filters with no results.
-   *
-   * @return values
-   */
+  /** Filters with no results. */
   @javax.annotation.Nonnull
   public List<GetTopFiltersNoResultsValues> getValues() {
     return values;

@@ -28,11 +28,7 @@ public class IncidentsResponse {
     return this;
   }
 
-  /**
-   * Get incidents
-   *
-   * @return incidents
-   */
+  /** Get incidents */
   @javax.annotation.Nullable
   public Map<String, List<IncidentsInner>> getIncidents() {
     return incidents;

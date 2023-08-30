@@ -18,43 +18,42 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /** [Filter hits by tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/). */
-@JsonDeserialize(using = TagFilters.TagFiltersDeserializer.class)
-@JsonSerialize(using = TagFilters.TagFiltersSerializer.class)
-public abstract class TagFilters implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(TagFilters.class.getName());
-
-  public static TagFilters of(List<MixedSearchFilters> inside) {
+@JsonDeserialize(using = TagFilters.Deserializer.class)
+@JsonSerialize(using = TagFilters.Serializer.class)
+public interface TagFilters<T> extends CompoundType<T> {
+  static TagFilters<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
     return new TagFiltersListOfMixedSearchFilters(inside);
   }
 
-  public static TagFilters of(String inside) {
+  static TagFilters<String> of(String inside) {
     return new TagFiltersString(inside);
   }
 
-  public static class TagFiltersSerializer extends StdSerializer<TagFilters> {
+  class Serializer extends StdSerializer<TagFilters> {
 
-    public TagFiltersSerializer(Class<TagFilters> t) {
+    public Serializer(Class<TagFilters> t) {
       super(t);
     }
 
-    public TagFiltersSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(TagFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(TagFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class TagFiltersDeserializer extends StdDeserializer<TagFilters> {
+  class Deserializer extends StdDeserializer<TagFilters> {
 
-    public TagFiltersDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(TagFilters.class);
     }
 
-    public TagFiltersDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -96,30 +95,30 @@ public abstract class TagFilters implements CompoundType {
   }
 }
 
-class TagFiltersListOfMixedSearchFilters extends TagFilters {
+class TagFiltersListOfMixedSearchFilters implements TagFilters<List<MixedSearchFilters>> {
 
-  private final List<MixedSearchFilters> insideValue;
+  private final List<MixedSearchFilters> value;
 
-  TagFiltersListOfMixedSearchFilters(List<MixedSearchFilters> insideValue) {
-    this.insideValue = insideValue;
+  TagFiltersListOfMixedSearchFilters(List<MixedSearchFilters> value) {
+    this.value = value;
   }
 
   @Override
-  public List<MixedSearchFilters> getInsideValue() {
-    return insideValue;
+  public List<MixedSearchFilters> get() {
+    return value;
   }
 }
 
-class TagFiltersString extends TagFilters {
+class TagFiltersString implements TagFilters<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  TagFiltersString(String insideValue) {
-    this.insideValue = insideValue;
+  TagFiltersString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

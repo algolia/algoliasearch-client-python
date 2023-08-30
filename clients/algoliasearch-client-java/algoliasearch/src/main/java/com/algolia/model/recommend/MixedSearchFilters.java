@@ -18,44 +18,42 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /** MixedSearchFilters */
-@JsonDeserialize(using = MixedSearchFilters.MixedSearchFiltersDeserializer.class)
-@JsonSerialize(using = MixedSearchFilters.MixedSearchFiltersSerializer.class)
-public abstract class MixedSearchFilters implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(MixedSearchFilters.class.getName());
-
-  public static MixedSearchFilters of(List<String> inside) {
+@JsonDeserialize(using = MixedSearchFilters.Deserializer.class)
+@JsonSerialize(using = MixedSearchFilters.Serializer.class)
+public interface MixedSearchFilters<T> extends CompoundType<T> {
+  static MixedSearchFilters<List<String>> of(List<String> inside) {
     return new MixedSearchFiltersListOfString(inside);
   }
 
-  public static MixedSearchFilters of(String inside) {
+  static MixedSearchFilters<String> of(String inside) {
     return new MixedSearchFiltersString(inside);
   }
 
-  public static class MixedSearchFiltersSerializer extends StdSerializer<MixedSearchFilters> {
+  class Serializer extends StdSerializer<MixedSearchFilters> {
 
-    public MixedSearchFiltersSerializer(Class<MixedSearchFilters> t) {
+    public Serializer(Class<MixedSearchFilters> t) {
       super(t);
     }
 
-    public MixedSearchFiltersSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(MixedSearchFilters value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(MixedSearchFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class MixedSearchFiltersDeserializer extends StdDeserializer<MixedSearchFilters> {
+  class Deserializer extends StdDeserializer<MixedSearchFilters> {
 
-    public MixedSearchFiltersDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(MixedSearchFilters.class);
     }
 
-    public MixedSearchFiltersDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -95,30 +93,30 @@ public abstract class MixedSearchFilters implements CompoundType {
   }
 }
 
-class MixedSearchFiltersListOfString extends MixedSearchFilters {
+class MixedSearchFiltersListOfString implements MixedSearchFilters<List<String>> {
 
-  private final List<String> insideValue;
+  private final List<String> value;
 
-  MixedSearchFiltersListOfString(List<String> insideValue) {
-    this.insideValue = insideValue;
+  MixedSearchFiltersListOfString(List<String> value) {
+    this.value = value;
   }
 
   @Override
-  public List<String> getInsideValue() {
-    return insideValue;
+  public List<String> get() {
+    return value;
   }
 }
 
-class MixedSearchFiltersString extends MixedSearchFilters {
+class MixedSearchFiltersString implements MixedSearchFilters<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  MixedSearchFiltersString(String insideValue) {
-    this.insideValue = insideValue;
+  MixedSearchFiltersString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

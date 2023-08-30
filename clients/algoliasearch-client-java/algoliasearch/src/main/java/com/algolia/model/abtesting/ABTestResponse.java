@@ -23,11 +23,7 @@ public class ABTestResponse {
     return this;
   }
 
-  /**
-   * A/B test index.
-   *
-   * @return index
-   */
+  /** A/B test index. */
   @javax.annotation.Nonnull
   public String getIndex() {
     return index;
@@ -38,11 +34,7 @@ public class ABTestResponse {
     return this;
   }
 
-  /**
-   * Unique A/B test ID.
-   *
-   * @return abTestID
-   */
+  /** Unique A/B test ID. */
   @javax.annotation.Nonnull
   public Integer getAbTestID() {
     return abTestID;
@@ -57,8 +49,6 @@ public class ABTestResponse {
    * Unique identifier of a task. A successful API response means that a task was added to a queue.
    * It might not run immediately. You can check the task's progress with the `task` operation and
    * this `taskID`.
-   *
-   * @return taskID
    */
   @javax.annotation.Nonnull
   public Long getTaskID() {

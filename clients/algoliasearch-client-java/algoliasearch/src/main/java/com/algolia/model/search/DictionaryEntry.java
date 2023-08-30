@@ -49,11 +49,7 @@ public class DictionaryEntry {
     return this;
   }
 
-  /**
-   * Unique identifier for a dictionary object.
-   *
-   * @return objectID
-   */
+  /** Unique identifier for a dictionary object. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -67,8 +63,6 @@ public class DictionaryEntry {
   /**
    * [Supported language ISO
    * code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).
-   *
-   * @return language
    */
   @javax.annotation.Nonnull
   public String getLanguage() {
@@ -89,8 +83,6 @@ public class DictionaryEntry {
    * \"kino\". When `decomposition` isn't empty: creates a decomposition exception. For example,
    * when decomposition is set to the [\"hund\", \"hutte\"] exception, \"hundehutte\" decomposes
    * into “hund” and “hutte”, discarding the linking \"e\".
-   *
-   * @return word
    */
   @javax.annotation.Nullable
   public String getWord() {
@@ -115,8 +107,6 @@ public class DictionaryEntry {
    * declensions](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/).
    * If the entry already exists in Algolia's standard dictionary, you can override its behavior by
    * adding it to the custom dictionary and setting its `state` to `disabled`.
-   *
-   * @return words
    */
   @javax.annotation.Nullable
   public List<String> getWords() {
@@ -136,11 +126,7 @@ public class DictionaryEntry {
     return this;
   }
 
-  /**
-   * For compound entries, governs the behavior of the `word` parameter.
-   *
-   * @return decomposition
-   */
+  /** For compound entries, governs the behavior of the `word` parameter. */
   @javax.annotation.Nullable
   public List<String> getDecomposition() {
     return decomposition;
@@ -151,11 +137,7 @@ public class DictionaryEntry {
     return this;
   }
 
-  /**
-   * Get state
-   *
-   * @return state
-   */
+  /** Get state */
   @javax.annotation.Nullable
   public DictionaryEntryState getState() {
     return state;

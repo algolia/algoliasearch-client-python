@@ -75,8 +75,6 @@ public class BaseIndexSettings {
    * Creates
    * [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/),
    * which are copies of a primary index with the same records but different settings.
-   *
-   * @return replicas
    */
   @javax.annotation.Nullable
   public List<String> getReplicas() {
@@ -88,11 +86,7 @@ public class BaseIndexSettings {
     return this;
   }
 
-  /**
-   * Maximum number of hits accessible through pagination.
-   *
-   * @return paginationLimitedTo
-   */
+  /** Maximum number of hits accessible through pagination. */
   @javax.annotation.Nullable
   public Integer getPaginationLimitedTo() {
     return paginationLimitedTo;
@@ -111,11 +105,7 @@ public class BaseIndexSettings {
     return this;
   }
 
-  /**
-   * Attributes that can't be retrieved at query time.
-   *
-   * @return unretrievableAttributes
-   */
+  /** Attributes that can't be retrieved at query time. */
   @javax.annotation.Nullable
   public List<String> getUnretrievableAttributes() {
     return unretrievableAttributes;
@@ -137,8 +127,6 @@ public class BaseIndexSettings {
   /**
    * Words for which you want to turn off [typo
    * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
-   *
-   * @return disableTypoToleranceOnWords
    */
   @javax.annotation.Nullable
   public List<String> getDisableTypoToleranceOnWords() {
@@ -163,8 +151,6 @@ public class BaseIndexSettings {
    * transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead)
    * applies. This will ensure that words indexed in Katakana or Kanji can also be searched in
    * Hiragana.
-   *
-   * @return attributesToTransliterate
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToTransliterate() {
@@ -184,11 +170,7 @@ public class BaseIndexSettings {
     return this;
   }
 
-  /**
-   * Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words.
-   *
-   * @return camelCaseAttributes
-   */
+  /** Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words. */
   @javax.annotation.Nullable
   public List<String> getCamelCaseAttributes() {
     return camelCaseAttributes;
@@ -203,8 +185,6 @@ public class BaseIndexSettings {
    * Attributes in your index to which [word
    * segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/)
    * (decompounding) applies.
-   *
-   * @return decompoundedAttributes
    */
   @javax.annotation.Nullable
   public Object getDecompoundedAttributes() {
@@ -229,8 +209,6 @@ public class BaseIndexSettings {
    * [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/)
    * and
    * [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
-   *
-   * @return indexLanguages
    */
   @javax.annotation.Nullable
   public List<String> getIndexLanguages() {
@@ -253,8 +231,6 @@ public class BaseIndexSettings {
   /**
    * Attributes for which you want to turn off [prefix
    * matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search).
-   *
-   * @return disablePrefixOnAttributes
    */
   @javax.annotation.Nullable
   public List<String> getDisablePrefixOnAttributes() {
@@ -269,8 +245,6 @@ public class BaseIndexSettings {
   /**
    * Incidates whether the engine compresses arrays with exclusively non-negative integers. When
    * enabled, the compressed arrays may be reordered.
-   *
-   * @return allowCompressionOfIntegerArray
    */
   @javax.annotation.Nullable
   public Boolean getAllowCompressionOfIntegerArray() {
@@ -293,8 +267,6 @@ public class BaseIndexSettings {
   /**
    * Numeric attributes that can be used as [numerical
    * filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters).
-   *
-   * @return numericAttributesForFiltering
    */
   @javax.annotation.Nullable
   public List<String> getNumericAttributesForFiltering() {
@@ -310,8 +282,6 @@ public class BaseIndexSettings {
    * Controls which separators are added to an Algolia index as part of
    * [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean).
    * Separators are all non-letter characters except spaces and currency characters, such as $€£¥.
-   *
-   * @return separatorsToIndex
    */
   @javax.annotation.Nullable
   public String getSeparatorsToIndex() {
@@ -336,8 +306,6 @@ public class BaseIndexSettings {
    * searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/),
    * including determining [if matches at the beginning of a word are important (ordered) or not
    * (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
-   *
-   * @return searchableAttributes
    */
   @javax.annotation.Nullable
   public List<String> getSearchableAttributes() {
@@ -349,11 +317,7 @@ public class BaseIndexSettings {
     return this;
   }
 
-  /**
-   * Lets you store custom data in your indices.
-   *
-   * @return userData
-   */
+  /** Lets you store custom data in your indices. */
   @javax.annotation.Nullable
   public Object getUserData() {
     return userData;
@@ -375,8 +339,6 @@ public class BaseIndexSettings {
   /**
    * A list of characters and their normalized replacements to override Algolia's default
    * [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
-   *
-   * @return customNormalization
    */
   @javax.annotation.Nullable
   public Map<String, Map<String, String>> getCustomNormalization() {

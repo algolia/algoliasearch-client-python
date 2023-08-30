@@ -27,11 +27,7 @@ public class ListIndicesResponse {
     return this;
   }
 
-  /**
-   * All indices in your Algolia application.
-   *
-   * @return items
-   */
+  /** All indices in your Algolia application. */
   @javax.annotation.Nonnull
   public List<FetchedIndex> getItems() {
     return items;
@@ -42,11 +38,7 @@ public class ListIndicesResponse {
     return this;
   }
 
-  /**
-   * Number of pages.
-   *
-   * @return nbPages
-   */
+  /** Number of pages. */
   @javax.annotation.Nullable
   public Integer getNbPages() {
     return nbPages;

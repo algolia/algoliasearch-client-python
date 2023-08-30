@@ -25,11 +25,7 @@ public class GetAverageClickPositionResponse {
     return this;
   }
 
-  /**
-   * Average count of all click events.
-   *
-   * @return average
-   */
+  /** Average count of all click events. */
   @javax.annotation.Nonnull
   public Double getAverage() {
     return average;
@@ -40,11 +36,7 @@ public class GetAverageClickPositionResponse {
     return this;
   }
 
-  /**
-   * Number of click events.
-   *
-   * @return clickCount
-   */
+  /** Number of click events. */
   @javax.annotation.Nonnull
   public Integer getClickCount() {
     return clickCount;
@@ -60,11 +52,7 @@ public class GetAverageClickPositionResponse {
     return this;
   }
 
-  /**
-   * Average click positions.
-   *
-   * @return dates
-   */
+  /** Average click positions. */
   @javax.annotation.Nonnull
   public List<AverageClickEvent> getDates() {
     return dates;

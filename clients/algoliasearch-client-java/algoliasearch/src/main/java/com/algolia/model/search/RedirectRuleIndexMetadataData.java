@@ -17,11 +17,7 @@ public class RedirectRuleIndexMetadataData {
     return this;
   }
 
-  /**
-   * Get ruleObjectID
-   *
-   * @return ruleObjectID
-   */
+  /** Get ruleObjectID */
   @javax.annotation.Nonnull
   public String getRuleObjectID() {
     return ruleObjectID;

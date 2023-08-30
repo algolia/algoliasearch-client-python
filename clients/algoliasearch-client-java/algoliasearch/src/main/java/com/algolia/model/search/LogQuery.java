@@ -23,11 +23,7 @@ public class LogQuery {
     return this;
   }
 
-  /**
-   * Index targeted by the query.
-   *
-   * @return indexName
-   */
+  /** Index targeted by the query. */
   @javax.annotation.Nullable
   public String getIndexName() {
     return indexName;
@@ -38,11 +34,7 @@ public class LogQuery {
     return this;
   }
 
-  /**
-   * User identifier.
-   *
-   * @return userToken
-   */
+  /** User identifier. */
   @javax.annotation.Nullable
   public String getUserToken() {
     return userToken;
@@ -53,11 +45,7 @@ public class LogQuery {
     return this;
   }
 
-  /**
-   * Unique query identifier.
-   *
-   * @return queryId
-   */
+  /** Unique query identifier. */
   @javax.annotation.Nullable
   public String getQueryId() {
     return queryId;

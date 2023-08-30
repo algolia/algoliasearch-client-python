@@ -22,11 +22,7 @@ public class RenderingContent {
     return this;
   }
 
-  /**
-   * Get facetOrdering
-   *
-   * @return facetOrdering
-   */
+  /** Get facetOrdering */
   @javax.annotation.Nullable
   public FacetOrdering getFacetOrdering() {
     return facetOrdering;

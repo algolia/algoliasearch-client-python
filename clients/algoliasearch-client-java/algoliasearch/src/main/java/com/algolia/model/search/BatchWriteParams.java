@@ -24,11 +24,7 @@ public class BatchWriteParams {
     return this;
   }
 
-  /**
-   * Get requests
-   *
-   * @return requests
-   */
+  /** Get requests */
   @javax.annotation.Nonnull
   public List<BatchRequest> getRequests() {
     return requests;

@@ -24,11 +24,7 @@ public class GetTopCountriesResponse {
     return this;
   }
 
-  /**
-   * Countries
-   *
-   * @return countries
-   */
+  /** Countries */
   @javax.annotation.Nonnull
   public List<TopCountry> getCountries() {
     return countries;

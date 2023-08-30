@@ -17,11 +17,7 @@ public class SearchSynonymsParams {
     return this;
   }
 
-  /**
-   * Text to search for in an index.
-   *
-   * @return query
-   */
+  /** Text to search for in an index. */
   @javax.annotation.Nullable
   public String getQuery() {
     return query;

@@ -48,8 +48,6 @@ public class ApiKey {
   /**
    * [Permissions](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl)
    * associated with the key.
-   *
-   * @return acl
    */
   @javax.annotation.Nonnull
   public List<Acl> getAcl() {
@@ -61,11 +59,7 @@ public class ApiKey {
     return this;
   }
 
-  /**
-   * Description of an API key for you and your team members.
-   *
-   * @return description
-   */
+  /** Description of an API key for you and your team members. */
   @javax.annotation.Nullable
   public String getDescription() {
     return description;
@@ -90,8 +84,6 @@ public class ApiKey {
    * wildcard character (or both). For example: - `dev_*` matches all indices starting with \"dev_\"
    * - `*_dev` matches all indices ending with \"_dev\" - `*_products_*` matches all indices
    * containing \"_products_\".
-   *
-   * @return indexes
    */
   @javax.annotation.Nullable
   public List<String> getIndexes() {
@@ -107,8 +99,6 @@ public class ApiKey {
    * Maximum number of hits this API key can retrieve in one query. If zero, no limit is enforced. >
    * **Note**: Use this parameter to protect you from third-party attempts to retrieve your entire
    * content by massively querying the index.
-   *
-   * @return maxHitsPerQuery
    */
   @javax.annotation.Nullable
   public Integer getMaxHitsPerQuery() {
@@ -127,8 +117,6 @@ public class ApiKey {
    * number of calls within the last hour, the API returns an error with the status code `429` (Too
    * Many Requests). > **Note**: Use this parameter to protect you from third-party attempts to
    * retrieve your entire content by massively querying the index.
-   *
-   * @return maxQueriesPerIPPerHour
    */
   @javax.annotation.Nullable
   public Integer getMaxQueriesPerIPPerHour() {
@@ -143,8 +131,6 @@ public class ApiKey {
   /**
    * Force some [query parameters](https://www.algolia.com/doc/api-reference/api-parameters/) to be
    * applied for each query made with this API key. It's a URL-encoded query string.
-   *
-   * @return queryParameters
    */
   @javax.annotation.Nullable
   public String getQueryParameters() {
@@ -170,8 +156,6 @@ public class ApiKey {
    * If empty, all referrers are allowed. For example: - `https://algolia.com/_*` matches all
    * referrers starting with \"https://algolia.com/\" - `*.algolia.com` matches all referrers ending
    * with \".algolia.com\" - `*algolia.com*` allows everything in the domain \"algolia.com\".
-   *
-   * @return referers
    */
   @javax.annotation.Nullable
   public List<String> getReferers() {
@@ -191,8 +175,6 @@ public class ApiKey {
    * app](https://www.algolia.com/doc/guides/security/security-best-practices/#use-secured-api-keys-in-mobile-apps).
    * So instead of encoding keys into your app as you would for a web app, you should dynamically
    * fetch them from your mobile app's backend.
-   *
-   * @return validity
    */
   @javax.annotation.Nullable
   public Integer getValidity() {

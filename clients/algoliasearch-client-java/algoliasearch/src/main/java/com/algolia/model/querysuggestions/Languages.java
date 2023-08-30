@@ -21,43 +21,42 @@ import java.util.logging.Logger;
  * Set the language for deduplicating singular and plural suggestions. If specified, only the more
  * popular form is included.
  */
-@JsonDeserialize(using = Languages.LanguagesDeserializer.class)
-@JsonSerialize(using = Languages.LanguagesSerializer.class)
-public abstract class Languages implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(Languages.class.getName());
-
-  public static Languages of(Boolean inside) {
+@JsonDeserialize(using = Languages.Deserializer.class)
+@JsonSerialize(using = Languages.Serializer.class)
+public interface Languages<T> extends CompoundType<T> {
+  static Languages<Boolean> of(Boolean inside) {
     return new LanguagesBoolean(inside);
   }
 
-  public static Languages of(List<String> inside) {
+  static Languages<List<String>> of(List<String> inside) {
     return new LanguagesListOfString(inside);
   }
 
-  public static class LanguagesSerializer extends StdSerializer<Languages> {
+  class Serializer extends StdSerializer<Languages> {
 
-    public LanguagesSerializer(Class<Languages> t) {
+    public Serializer(Class<Languages> t) {
       super(t);
     }
 
-    public LanguagesSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(Languages value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(Languages value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class LanguagesDeserializer extends StdDeserializer<Languages> {
+  class Deserializer extends StdDeserializer<Languages> {
 
-    public LanguagesDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(Languages.class);
     }
 
-    public LanguagesDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -97,30 +96,30 @@ public abstract class Languages implements CompoundType {
   }
 }
 
-class LanguagesBoolean extends Languages {
+class LanguagesBoolean implements Languages<Boolean> {
 
-  private final Boolean insideValue;
+  private final Boolean value;
 
-  LanguagesBoolean(Boolean insideValue) {
-    this.insideValue = insideValue;
+  LanguagesBoolean(Boolean value) {
+    this.value = value;
   }
 
   @Override
-  public Boolean getInsideValue() {
-    return insideValue;
+  public Boolean get() {
+    return value;
   }
 }
 
-class LanguagesListOfString extends Languages {
+class LanguagesListOfString implements Languages<List<String>> {
 
-  private final List<String> insideValue;
+  private final List<String> value;
 
-  LanguagesListOfString(List<String> insideValue) {
-    this.insideValue = insideValue;
+  LanguagesListOfString(List<String> value) {
+    this.value = value;
   }
 
   @Override
-  public List<String> getInsideValue() {
-    return insideValue;
+  public List<String> get() {
+    return value;
   }
 }

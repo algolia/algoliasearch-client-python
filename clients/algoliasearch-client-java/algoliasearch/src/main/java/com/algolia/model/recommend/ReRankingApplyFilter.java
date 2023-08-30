@@ -21,44 +21,42 @@ import java.util.logging.Logger;
  * When [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) is enabled,
  * only records that match these filters will be affected by Dynamic Re-Ranking.
  */
-@JsonDeserialize(using = ReRankingApplyFilter.ReRankingApplyFilterDeserializer.class)
-@JsonSerialize(using = ReRankingApplyFilter.ReRankingApplyFilterSerializer.class)
-public abstract class ReRankingApplyFilter implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(ReRankingApplyFilter.class.getName());
-
-  public static ReRankingApplyFilter of(List<MixedSearchFilters> inside) {
+@JsonDeserialize(using = ReRankingApplyFilter.Deserializer.class)
+@JsonSerialize(using = ReRankingApplyFilter.Serializer.class)
+public interface ReRankingApplyFilter<T> extends CompoundType<T> {
+  static ReRankingApplyFilter<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
     return new ReRankingApplyFilterListOfMixedSearchFilters(inside);
   }
 
-  public static ReRankingApplyFilter of(String inside) {
+  static ReRankingApplyFilter<String> of(String inside) {
     return new ReRankingApplyFilterString(inside);
   }
 
-  public static class ReRankingApplyFilterSerializer extends StdSerializer<ReRankingApplyFilter> {
+  class Serializer extends StdSerializer<ReRankingApplyFilter> {
 
-    public ReRankingApplyFilterSerializer(Class<ReRankingApplyFilter> t) {
+    public Serializer(Class<ReRankingApplyFilter> t) {
       super(t);
     }
 
-    public ReRankingApplyFilterSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(ReRankingApplyFilter value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(ReRankingApplyFilter value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class ReRankingApplyFilterDeserializer extends StdDeserializer<ReRankingApplyFilter> {
+  class Deserializer extends StdDeserializer<ReRankingApplyFilter> {
 
-    public ReRankingApplyFilterDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(ReRankingApplyFilter.class);
     }
 
-    public ReRankingApplyFilterDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -100,30 +98,30 @@ public abstract class ReRankingApplyFilter implements CompoundType {
   }
 }
 
-class ReRankingApplyFilterListOfMixedSearchFilters extends ReRankingApplyFilter {
+class ReRankingApplyFilterListOfMixedSearchFilters implements ReRankingApplyFilter<List<MixedSearchFilters>> {
 
-  private final List<MixedSearchFilters> insideValue;
+  private final List<MixedSearchFilters> value;
 
-  ReRankingApplyFilterListOfMixedSearchFilters(List<MixedSearchFilters> insideValue) {
-    this.insideValue = insideValue;
+  ReRankingApplyFilterListOfMixedSearchFilters(List<MixedSearchFilters> value) {
+    this.value = value;
   }
 
   @Override
-  public List<MixedSearchFilters> getInsideValue() {
-    return insideValue;
+  public List<MixedSearchFilters> get() {
+    return value;
   }
 }
 
-class ReRankingApplyFilterString extends ReRankingApplyFilter {
+class ReRankingApplyFilterString implements ReRankingApplyFilter<String> {
 
-  private final String insideValue;
+  private final String value;
 
-  ReRankingApplyFilterString(String insideValue) {
-    this.insideValue = insideValue;
+  ReRankingApplyFilterString(String value) {
+    this.value = value;
   }
 
   @Override
-  public String getInsideValue() {
-    return insideValue;
+  public String get() {
+    return value;
   }
 }

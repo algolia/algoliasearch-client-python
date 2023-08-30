@@ -22,11 +22,7 @@ public class FacetOrdering {
     return this;
   }
 
-  /**
-   * Get facets
-   *
-   * @return facets
-   */
+  /** Get facets */
   @javax.annotation.Nullable
   public Facets getFacets() {
     return facets;
@@ -45,11 +41,7 @@ public class FacetOrdering {
     return this;
   }
 
-  /**
-   * Ordering of facet values within an individual facet.
-   *
-   * @return values
-   */
+  /** Ordering of facet values within an individual facet. */
   @javax.annotation.Nullable
   public Map<String, Value> getValues() {
     return values;

@@ -4,19 +4,17 @@
 package com.algolia.api;
 
 import com.algolia.ApiClient;
+import com.algolia.config.*;
+import com.algolia.config.ClientOptions;
 import com.algolia.exceptions.*;
 import com.algolia.model.personalization.*;
 import com.algolia.utils.*;
-import com.algolia.utils.retry.CallType;
-import com.algolia.utils.retry.StatefulHost;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import okhttp3.Call;
 
 public class PersonalizationClient extends ApiClient {
 
@@ -27,19 +25,11 @@ public class PersonalizationClient extends ApiClient {
   }
 
   public PersonalizationClient(String appId, String apiKey, String region, ClientOptions options) {
-    super(appId, apiKey, "Personalization", "4.0.0-beta.3", options);
-    if (options != null && options.getHosts() != null) {
-      this.setHosts(options.getHosts());
-    } else {
-      this.setHosts(getDefaultHosts(region));
-    }
-    this.setConnectTimeout(2000);
-    this.setReadTimeout(5000);
-    this.setWriteTimeout(30000);
+    super(appId, apiKey, "Personalization", options, getDefaultHosts(region));
   }
 
-  private static List<StatefulHost> getDefaultHosts(String region) throws AlgoliaRuntimeException {
-    List<StatefulHost> hosts = new ArrayList<StatefulHost>();
+  private static List<Host> getDefaultHosts(String region) throws AlgoliaRuntimeException {
+    List<Host> hosts = new ArrayList<>();
 
     boolean found = false;
     if (region != null) {
@@ -57,7 +47,7 @@ public class PersonalizationClient extends ApiClient {
 
     String url = "personalization.{region}.algolia.com".replace("{region}", region);
 
-    hosts.add(new StatefulHost(url, "https", EnumSet.of(CallType.READ, CallType.WRITE)));
+    hosts.add(new Host(url, EnumSet.of(CallType.READ, CallType.WRITE)));
     return hosts;
   }
 
@@ -68,7 +58,6 @@ public class PersonalizationClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -80,7 +69,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -93,7 +81,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -104,7 +91,6 @@ public class PersonalizationClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object del(String path) throws AlgoliaRuntimeException {
@@ -118,7 +104,6 @@ public class PersonalizationClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -127,22 +112,8 @@ public class PersonalizationClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `del`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "DELETE", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("DELETE").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -150,7 +121,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -163,7 +133,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -174,7 +143,6 @@ public class PersonalizationClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> delAsync(String path) throws AlgoliaRuntimeException {
@@ -192,7 +160,6 @@ public class PersonalizationClient extends ApiClient {
    *     profile. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return DeleteUserProfileResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public DeleteUserProfileResponse deleteUserProfile(String userToken, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -208,7 +175,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param userToken userToken representing the user for which to fetch the Personalization
    *     profile. (required)
-   * @return DeleteUserProfileResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public DeleteUserProfileResponse deleteUserProfile(String userToken) throws AlgoliaRuntimeException {
@@ -226,7 +192,6 @@ public class PersonalizationClient extends ApiClient {
    *     profile. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<DeleteUserProfileResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<DeleteUserProfileResponse> deleteUserProfileAsync(String userToken, RequestOptions requestOptions)
@@ -235,16 +200,8 @@ public class PersonalizationClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `userToken` is required when calling `deleteUserProfile`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1/profiles/{userToken}".replaceAll("\\{userToken\\}", this.escapeString(userToken.toString()));
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "DELETE", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<DeleteUserProfileResponse>() {});
+    HttpRequest request = HttpRequest.builder().setPath("/1/profiles/{userToken}", userToken).setMethod("DELETE").build();
+    return executeAsync(request, requestOptions, new TypeReference<DeleteUserProfileResponse>() {});
   }
 
   /**
@@ -256,7 +213,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param userToken userToken representing the user for which to fetch the Personalization
    *     profile. (required)
-   * @return CompletableFuture<DeleteUserProfileResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<DeleteUserProfileResponse> deleteUserProfileAsync(String userToken) throws AlgoliaRuntimeException {
@@ -270,7 +226,6 @@ public class PersonalizationClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -282,7 +237,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -295,7 +249,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -306,7 +259,6 @@ public class PersonalizationClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object get(String path) throws AlgoliaRuntimeException {
@@ -320,7 +272,6 @@ public class PersonalizationClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
@@ -329,22 +280,8 @@ public class PersonalizationClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `get`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("GET").addQueryParameters(parameters).build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -352,7 +289,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
@@ -365,7 +301,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -376,7 +311,6 @@ public class PersonalizationClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> getAsync(String path) throws AlgoliaRuntimeException {
@@ -389,7 +323,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return PersonalizationStrategyParams
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public PersonalizationStrategyParams getPersonalizationStrategy(RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -400,7 +333,6 @@ public class PersonalizationClient extends ApiClient {
    * The strategy contains information on the events and facets that impact user profiles and
    * personalized search results.
    *
-   * @return PersonalizationStrategyParams
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public PersonalizationStrategyParams getPersonalizationStrategy() throws AlgoliaRuntimeException {
@@ -413,28 +345,19 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<PersonalizationStrategyParams> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<PersonalizationStrategyParams> getPersonalizationStrategyAsync(RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    Object bodyObj = null;
+    HttpRequest request = HttpRequest.builder().setPath("/1/strategies/personalization").setMethod("GET").build();
 
-    // create path and map variables
-    String requestPath = "/1/strategies/personalization";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<PersonalizationStrategyParams>() {});
+    return executeAsync(request, requestOptions, new TypeReference<PersonalizationStrategyParams>() {});
   }
 
   /**
    * (asynchronously) The strategy contains information on the events and facets that impact user
    * profiles and personalized search results.
    *
-   * @return CompletableFuture<PersonalizationStrategyParams> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<PersonalizationStrategyParams> getPersonalizationStrategyAsync() throws AlgoliaRuntimeException {
@@ -452,7 +375,6 @@ public class PersonalizationClient extends ApiClient {
    *     profile. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return GetUserTokenResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetUserTokenResponse getUserTokenProfile(String userToken, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -468,7 +390,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param userToken userToken representing the user for which to fetch the Personalization
    *     profile. (required)
-   * @return GetUserTokenResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public GetUserTokenResponse getUserTokenProfile(String userToken) throws AlgoliaRuntimeException {
@@ -486,7 +407,6 @@ public class PersonalizationClient extends ApiClient {
    *     profile. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<GetUserTokenResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetUserTokenResponse> getUserTokenProfileAsync(String userToken, RequestOptions requestOptions)
@@ -495,16 +415,8 @@ public class PersonalizationClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `userToken` is required when calling `getUserTokenProfile`.");
     }
 
-    Object bodyObj = null;
-
-    // create path and map variables
-    String requestPath = "/1/profiles/personalization/{userToken}".replaceAll("\\{userToken\\}", this.escapeString(userToken.toString()));
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "GET", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<GetUserTokenResponse>() {});
+    HttpRequest request = HttpRequest.builder().setPath("/1/profiles/personalization/{userToken}", userToken).setMethod("GET").build();
+    return executeAsync(request, requestOptions, new TypeReference<GetUserTokenResponse>() {});
   }
 
   /**
@@ -516,7 +428,6 @@ public class PersonalizationClient extends ApiClient {
    *
    * @param userToken userToken representing the user for which to fetch the Personalization
    *     profile. (required)
-   * @return CompletableFuture<GetUserTokenResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<GetUserTokenResponse> getUserTokenProfileAsync(String userToken) throws AlgoliaRuntimeException {
@@ -531,7 +442,6 @@ public class PersonalizationClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -545,7 +455,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -558,7 +467,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -569,7 +477,6 @@ public class PersonalizationClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object post(String path) throws AlgoliaRuntimeException {
@@ -584,7 +491,6 @@ public class PersonalizationClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -593,22 +499,14 @@ public class PersonalizationClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `post`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("POST")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -617,7 +515,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -630,7 +527,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -641,7 +537,6 @@ public class PersonalizationClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> postAsync(String path) throws AlgoliaRuntimeException {
@@ -656,7 +551,6 @@ public class PersonalizationClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -670,7 +564,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -683,7 +576,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -694,7 +586,6 @@ public class PersonalizationClient extends ApiClient {
    * This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return Object
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public Object put(String path) throws AlgoliaRuntimeException {
@@ -709,7 +600,6 @@ public class PersonalizationClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
@@ -718,22 +608,14 @@ public class PersonalizationClient extends ApiClient {
       throw new AlgoliaRuntimeException("Parameter `path` is required when calling `put`.");
     }
 
-    Object bodyObj = body != null ? body : new Object();
-
-    // create path and map variables
-    String requestPath = "/1{path}".replaceAll("\\{path\\}", path.toString());
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    if (parameters != null) {
-      for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-        queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-      }
-    }
-
-    Call call = this.buildCall(requestPath, "PUT", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<Object>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPathEncoded("/1{path}", path)
+      .setMethod("PUT")
+      .setBody(body)
+      .addQueryParameters(parameters)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<Object>() {});
   }
 
   /**
@@ -742,7 +624,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param parameters Query parameters to apply to the current query. (optional)
    * @param body Parameters to send with the custom request. (optional)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
@@ -755,7 +636,6 @@ public class PersonalizationClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
@@ -766,7 +646,6 @@ public class PersonalizationClient extends ApiClient {
    * (asynchronously) This method allow you to send requests to the Algolia REST API.
    *
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
-   * @return CompletableFuture<Object> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Object> putAsync(String path) throws AlgoliaRuntimeException {
@@ -780,7 +659,6 @@ public class PersonalizationClient extends ApiClient {
    * @param personalizationStrategyParams (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return SetPersonalizationStrategyResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SetPersonalizationStrategyResponse setPersonalizationStrategy(
@@ -795,7 +673,6 @@ public class PersonalizationClient extends ApiClient {
    * results.
    *
    * @param personalizationStrategyParams (required)
-   * @return SetPersonalizationStrategyResponse
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SetPersonalizationStrategyResponse setPersonalizationStrategy(PersonalizationStrategyParams personalizationStrategyParams)
@@ -810,7 +687,6 @@ public class PersonalizationClient extends ApiClient {
    * @param personalizationStrategyParams (required)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
-   * @return CompletableFuture<SetPersonalizationStrategyResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SetPersonalizationStrategyResponse> setPersonalizationStrategyAsync(
@@ -823,16 +699,13 @@ public class PersonalizationClient extends ApiClient {
       );
     }
 
-    Object bodyObj = personalizationStrategyParams;
-
-    // create path and map variables
-    String requestPath = "/1/strategies/personalization";
-
-    Map<String, Object> queryParameters = new HashMap<String, Object>();
-    Map<String, String> headers = new HashMap<String, String>();
-
-    Call call = this.buildCall(requestPath, "POST", queryParameters, bodyObj, headers, requestOptions, false);
-    return this.executeAsync(call, new TypeReference<SetPersonalizationStrategyResponse>() {});
+    HttpRequest request = HttpRequest
+      .builder()
+      .setPath("/1/strategies/personalization")
+      .setMethod("POST")
+      .setBody(personalizationStrategyParams)
+      .build();
+    return executeAsync(request, requestOptions, new TypeReference<SetPersonalizationStrategyResponse>() {});
   }
 
   /**
@@ -840,7 +713,6 @@ public class PersonalizationClient extends ApiClient {
    * personalized search results.
    *
    * @param personalizationStrategyParams (required)
-   * @return CompletableFuture<SetPersonalizationStrategyResponse> The awaitable future
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SetPersonalizationStrategyResponse> setPersonalizationStrategyAsync(

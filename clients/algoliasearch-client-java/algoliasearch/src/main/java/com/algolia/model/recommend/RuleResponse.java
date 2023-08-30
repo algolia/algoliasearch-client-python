@@ -34,11 +34,7 @@ public class RuleResponse {
     return this;
   }
 
-  /**
-   * Get metadata
-   *
-   * @return metadata
-   */
+  /** Get metadata */
   @javax.annotation.Nullable
   public RuleResponseMetadata getMetadata() {
     return metadata;
@@ -49,11 +45,7 @@ public class RuleResponse {
     return this;
   }
 
-  /**
-   * Unique identifier for a rule object.
-   *
-   * @return objectID
-   */
+  /** Unique identifier for a rule object. */
   @javax.annotation.Nonnull
   public String getObjectID() {
     return objectID;
@@ -75,8 +67,6 @@ public class RuleResponse {
   /**
    * [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions)
    * required to activate a rule. You can use up to 25 conditions per rule.
-   *
-   * @return conditions
    */
   @javax.annotation.Nullable
   public List<Condition> getConditions() {
@@ -88,11 +78,7 @@ public class RuleResponse {
     return this;
   }
 
-  /**
-   * Get consequence
-   *
-   * @return consequence
-   */
+  /** Get consequence */
   @javax.annotation.Nullable
   public Consequence getConsequence() {
     return consequence;
@@ -105,8 +91,6 @@ public class RuleResponse {
 
   /**
    * Description of the rule's purpose. This can be helpful for display in the Algolia dashboard.
-   *
-   * @return description
    */
   @javax.annotation.Nullable
   public String getDescription() {
@@ -118,11 +102,7 @@ public class RuleResponse {
     return this;
   }
 
-  /**
-   * Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time.
-   *
-   * @return enabled
-   */
+  /** Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time. */
   @javax.annotation.Nullable
   public Boolean getEnabled() {
     return enabled;

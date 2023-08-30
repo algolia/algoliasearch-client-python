@@ -32,8 +32,6 @@ public class GetClickThroughRateResponse {
    * [Click-through rate
    * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
    * minimum: 0 maximum: 1
-   *
-   * @return rate
    */
   @javax.annotation.Nonnull
   public Double getRate() {
@@ -45,11 +43,7 @@ public class GetClickThroughRateResponse {
     return this;
   }
 
-  /**
-   * Number of click events.
-   *
-   * @return clickCount
-   */
+  /** Number of click events. */
   @javax.annotation.Nonnull
   public Integer getClickCount() {
     return clickCount;
@@ -63,8 +57,6 @@ public class GetClickThroughRateResponse {
   /**
    * Number of tracked searches. This is the number of search requests where the `clickAnalytics`
    * parameter is `true`.
-   *
-   * @return trackedSearchCount
    */
   @javax.annotation.Nonnull
   public Integer getTrackedSearchCount() {
@@ -81,11 +73,7 @@ public class GetClickThroughRateResponse {
     return this;
   }
 
-  /**
-   * Click-through rate events.
-   *
-   * @return dates
-   */
+  /** Click-through rate events. */
   @javax.annotation.Nonnull
   public List<ClickThroughRateEvent> getDates() {
     return dates;

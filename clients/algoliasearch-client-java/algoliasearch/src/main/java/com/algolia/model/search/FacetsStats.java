@@ -26,11 +26,7 @@ public class FacetsStats {
     return this;
   }
 
-  /**
-   * Minimum value in the results.
-   *
-   * @return min
-   */
+  /** Minimum value in the results. */
   @javax.annotation.Nullable
   public Double getMin() {
     return min;
@@ -41,11 +37,7 @@ public class FacetsStats {
     return this;
   }
 
-  /**
-   * Maximum value in the results.
-   *
-   * @return max
-   */
+  /** Maximum value in the results. */
   @javax.annotation.Nullable
   public Double getMax() {
     return max;
@@ -56,11 +48,7 @@ public class FacetsStats {
     return this;
   }
 
-  /**
-   * Average facet value in the results.
-   *
-   * @return avg
-   */
+  /** Average facet value in the results. */
   @javax.annotation.Nullable
   public Double getAvg() {
     return avg;
@@ -71,11 +59,7 @@ public class FacetsStats {
     return this;
   }
 
-  /**
-   * Sum of all values in the results.
-   *
-   * @return sum
-   */
+  /** Sum of all values in the results. */
   @javax.annotation.Nullable
   public Double getSum() {
     return sum;

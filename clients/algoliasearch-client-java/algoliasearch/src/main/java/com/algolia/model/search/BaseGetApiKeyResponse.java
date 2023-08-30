@@ -20,11 +20,7 @@ public class BaseGetApiKeyResponse {
     return this;
   }
 
-  /**
-   * API key.
-   *
-   * @return value
-   */
+  /** API key. */
   @javax.annotation.Nullable
   public String getValue() {
     return value;
@@ -38,8 +34,6 @@ public class BaseGetApiKeyResponse {
   /**
    * Timestamp of creation in milliseconds in [Unix epoch
    * time](https://wikipedia.org/wiki/Unix_time).
-   *
-   * @return createdAt
    */
   @javax.annotation.Nonnull
   public Long getCreatedAt() {

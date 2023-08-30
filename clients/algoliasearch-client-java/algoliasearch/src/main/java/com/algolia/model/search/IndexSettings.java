@@ -213,8 +213,6 @@ public class IndexSettings {
    * Creates
    * [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/),
    * which are copies of a primary index with the same records but different settings.
-   *
-   * @return replicas
    */
   @javax.annotation.Nullable
   public List<String> getReplicas() {
@@ -226,11 +224,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Maximum number of hits accessible through pagination.
-   *
-   * @return paginationLimitedTo
-   */
+  /** Maximum number of hits accessible through pagination. */
   @javax.annotation.Nullable
   public Integer getPaginationLimitedTo() {
     return paginationLimitedTo;
@@ -249,11 +243,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Attributes that can't be retrieved at query time.
-   *
-   * @return unretrievableAttributes
-   */
+  /** Attributes that can't be retrieved at query time. */
   @javax.annotation.Nullable
   public List<String> getUnretrievableAttributes() {
     return unretrievableAttributes;
@@ -275,8 +265,6 @@ public class IndexSettings {
   /**
    * Words for which you want to turn off [typo
    * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
-   *
-   * @return disableTypoToleranceOnWords
    */
   @javax.annotation.Nullable
   public List<String> getDisableTypoToleranceOnWords() {
@@ -301,8 +289,6 @@ public class IndexSettings {
    * transliteration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#japanese-transliteration-and-type-ahead)
    * applies. This will ensure that words indexed in Katakana or Kanji can also be searched in
    * Hiragana.
-   *
-   * @return attributesToTransliterate
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToTransliterate() {
@@ -322,11 +308,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words.
-   *
-   * @return camelCaseAttributes
-   */
+  /** Attributes on which to split [camel case](https://wikipedia.org/wiki/Camel_case) words. */
   @javax.annotation.Nullable
   public List<String> getCamelCaseAttributes() {
     return camelCaseAttributes;
@@ -341,8 +323,6 @@ public class IndexSettings {
    * Attributes in your index to which [word
    * segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/)
    * (decompounding) applies.
-   *
-   * @return decompoundedAttributes
    */
   @javax.annotation.Nullable
   public Object getDecompoundedAttributes() {
@@ -367,8 +347,6 @@ public class IndexSettings {
    * [tokenization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/tokenization/)
    * and
    * [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
-   *
-   * @return indexLanguages
    */
   @javax.annotation.Nullable
   public List<String> getIndexLanguages() {
@@ -391,8 +369,6 @@ public class IndexSettings {
   /**
    * Attributes for which you want to turn off [prefix
    * matching](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#adjusting-prefix-search).
-   *
-   * @return disablePrefixOnAttributes
    */
   @javax.annotation.Nullable
   public List<String> getDisablePrefixOnAttributes() {
@@ -407,8 +383,6 @@ public class IndexSettings {
   /**
    * Incidates whether the engine compresses arrays with exclusively non-negative integers. When
    * enabled, the compressed arrays may be reordered.
-   *
-   * @return allowCompressionOfIntegerArray
    */
   @javax.annotation.Nullable
   public Boolean getAllowCompressionOfIntegerArray() {
@@ -431,8 +405,6 @@ public class IndexSettings {
   /**
    * Numeric attributes that can be used as [numerical
    * filters](https://www.algolia.com/doc/guides/managing-results/rules/detecting-intent/how-to/applying-a-custom-filter-for-a-specific-query/#numerical-filters).
-   *
-   * @return numericAttributesForFiltering
    */
   @javax.annotation.Nullable
   public List<String> getNumericAttributesForFiltering() {
@@ -448,8 +420,6 @@ public class IndexSettings {
    * Controls which separators are added to an Algolia index as part of
    * [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean).
    * Separators are all non-letter characters except spaces and currency characters, such as $€£¥.
-   *
-   * @return separatorsToIndex
    */
   @javax.annotation.Nullable
   public String getSeparatorsToIndex() {
@@ -474,8 +444,6 @@ public class IndexSettings {
    * searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/),
    * including determining [if matches at the beginning of a word are important (ordered) or not
    * (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
-   *
-   * @return searchableAttributes
    */
   @javax.annotation.Nullable
   public List<String> getSearchableAttributes() {
@@ -487,11 +455,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Lets you store custom data in your indices.
-   *
-   * @return userData
-   */
+  /** Lets you store custom data in your indices. */
   @javax.annotation.Nullable
   public Object getUserData() {
     return userData;
@@ -513,8 +477,6 @@ public class IndexSettings {
   /**
    * A list of characters and their normalized replacements to override Algolia's default
    * [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
-   *
-   * @return customNormalization
    */
   @javax.annotation.Nullable
   public Map<String, Map<String, String>> getCustomNormalization() {
@@ -540,8 +502,6 @@ public class IndexSettings {
    * the
    * [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers)
    * that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
-   *
-   * @return attributesForFaceting
    */
   @javax.annotation.Nullable
   public List<String> getAttributesForFaceting() {
@@ -564,8 +524,6 @@ public class IndexSettings {
   /**
    * Attributes to include in the API response. To reduce the size of your response, you can
    * retrieve only some of the attributes. By default, the response includes all attributes.
-   *
-   * @return attributesToRetrieve
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToRetrieve() {
@@ -588,8 +546,6 @@ public class IndexSettings {
   /**
    * Determines the order in which Algolia [returns your
    * results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).
-   *
-   * @return ranking
    */
   @javax.annotation.Nullable
   public List<String> getRanking() {
@@ -613,8 +569,6 @@ public class IndexSettings {
    * Specifies the [Custom ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use
    * the `asc` and `desc` modifiers to specify the ranking order: ascending or descending.
-   *
-   * @return customRanking
    */
   @javax.annotation.Nullable
   public List<String> getCustomRanking() {
@@ -626,11 +580,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Relevancy threshold below which less relevant results aren't included in the results.
-   *
-   * @return relevancyStrictness
-   */
+  /** Relevancy threshold below which less relevant results aren't included in the results. */
   @javax.annotation.Nullable
   public Integer getRelevancyStrictness() {
     return relevancyStrictness;
@@ -652,8 +602,6 @@ public class IndexSettings {
   /**
    * Attributes to highlight. Strings that match the search query in the attributes are highlighted
    * by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).
-   *
-   * @return attributesToHighlight
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToHighlight() {
@@ -677,8 +625,6 @@ public class IndexSettings {
    * Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words.
    * If not specified, the attribute is shortened to the 10 words around the matching string but you
    * can specify the number. For example: `body:20`.
-   *
-   * @return attributesToSnippet
    */
   @javax.annotation.Nullable
   public List<String> getAttributesToSnippet() {
@@ -690,11 +636,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * HTML string to insert before the highlighted parts in all highlight and snippet results.
-   *
-   * @return highlightPreTag
-   */
+  /** HTML string to insert before the highlighted parts in all highlight and snippet results. */
   @javax.annotation.Nullable
   public String getHighlightPreTag() {
     return highlightPreTag;
@@ -705,11 +647,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * HTML string to insert after the highlighted parts in all highlight and snippet results.
-   *
-   * @return highlightPostTag
-   */
+  /** HTML string to insert after the highlighted parts in all highlight and snippet results. */
   @javax.annotation.Nullable
   public String getHighlightPostTag() {
     return highlightPostTag;
@@ -720,11 +658,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * String used as an ellipsis indicator when a snippet is truncated.
-   *
-   * @return snippetEllipsisText
-   */
+  /** String used as an ellipsis indicator when a snippet is truncated. */
   @javax.annotation.Nullable
   public String getSnippetEllipsisText() {
     return snippetEllipsisText;
@@ -735,11 +669,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Restrict highlighting and snippeting to items that matched the query.
-   *
-   * @return restrictHighlightAndSnippetArrays
-   */
+  /** Restrict highlighting and snippeting to items that matched the query. */
   @javax.annotation.Nullable
   public Boolean getRestrictHighlightAndSnippetArrays() {
     return restrictHighlightAndSnippetArrays;
@@ -750,11 +680,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Number of hits per page. minimum: 1 maximum: 1000
-   *
-   * @return hitsPerPage
-   */
+  /** Number of hits per page. minimum: 1 maximum: 1000 */
   @javax.annotation.Nullable
   public Integer getHitsPerPage() {
     return hitsPerPage;
@@ -769,8 +695,6 @@ public class IndexSettings {
    * Minimum number of characters a word in the query string must contain to accept matches with
    * [one
    * typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
-   *
-   * @return minWordSizefor1Typo
    */
   @javax.annotation.Nullable
   public Integer getMinWordSizefor1Typo() {
@@ -786,8 +710,6 @@ public class IndexSettings {
    * Minimum number of characters a word in the query string must contain to accept matches with
    * [two
    * typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).
-   *
-   * @return minWordSizefor2Typos
    */
   @javax.annotation.Nullable
   public Integer getMinWordSizefor2Typos() {
@@ -799,11 +721,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get typoTolerance
-   *
-   * @return typoTolerance
-   */
+  /** Get typoTolerance */
   @javax.annotation.Nullable
   public TypoTolerance getTypoTolerance() {
     return typoTolerance;
@@ -814,11 +732,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Whether to allow typos on numbers (\"numeric tokens\") in the query string.
-   *
-   * @return allowTyposOnNumericTokens
-   */
+  /** Whether to allow typos on numbers (\"numeric tokens\") in the query string. */
   @javax.annotation.Nullable
   public Boolean getAllowTyposOnNumericTokens() {
     return allowTyposOnNumericTokens;
@@ -840,8 +754,6 @@ public class IndexSettings {
   /**
    * Attributes for which you want to turn off [typo
    * tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).
-   *
-   * @return disableTypoToleranceOnAttributes
    */
   @javax.annotation.Nullable
   public List<String> getDisableTypoToleranceOnAttributes() {
@@ -853,11 +765,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get ignorePlurals
-   *
-   * @return ignorePlurals
-   */
+  /** Get ignorePlurals */
   @javax.annotation.Nullable
   public IgnorePlurals getIgnorePlurals() {
     return ignorePlurals;
@@ -868,11 +776,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get removeStopWords
-   *
-   * @return removeStopWords
-   */
+  /** Get removeStopWords */
   @javax.annotation.Nullable
   public RemoveStopWords getRemoveStopWords() {
     return removeStopWords;
@@ -886,8 +790,6 @@ public class IndexSettings {
   /**
    * Characters that the engine shouldn't automatically
    * [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
-   *
-   * @return keepDiacriticsOnCharacters
    */
   @javax.annotation.Nullable
   public String getKeepDiacriticsOnCharacters() {
@@ -912,8 +814,6 @@ public class IndexSettings {
    * `ignorePlurals`, `removeStopWords`, and
    * [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk)
    * word detection.
-   *
-   * @return queryLanguages
    */
   @javax.annotation.Nullable
   public List<String> getQueryLanguages() {
@@ -929,8 +829,6 @@ public class IndexSettings {
    * [Splits compound
    * words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words)
    * into their component word parts in the query.
-   *
-   * @return decompoundQuery
    */
   @javax.annotation.Nullable
   public Boolean getDecompoundQuery() {
@@ -945,8 +843,6 @@ public class IndexSettings {
   /**
    * Incidates whether
    * [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.
-   *
-   * @return enableRules
    */
   @javax.annotation.Nullable
   public Boolean getEnableRules() {
@@ -962,8 +858,6 @@ public class IndexSettings {
    * Incidates whether
    * [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/)
    * is enabled.
-   *
-   * @return enablePersonalization
    */
   @javax.annotation.Nullable
   public Boolean getEnablePersonalization() {
@@ -975,11 +869,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get queryType
-   *
-   * @return queryType
-   */
+  /** Get queryType */
   @javax.annotation.Nullable
   public QueryType getQueryType() {
     return queryType;
@@ -990,11 +880,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get removeWordsIfNoResults
-   *
-   * @return removeWordsIfNoResults
-   */
+  /** Get removeWordsIfNoResults */
   @javax.annotation.Nullable
   public RemoveWordsIfNoResults getRemoveWordsIfNoResults() {
     return removeWordsIfNoResults;
@@ -1005,11 +891,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get mode
-   *
-   * @return mode
-   */
+  /** Get mode */
   @javax.annotation.Nullable
   public Mode getMode() {
     return mode;
@@ -1020,11 +902,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get semanticSearch
-   *
-   * @return semanticSearch
-   */
+  /** Get semanticSearch */
   @javax.annotation.Nullable
   public SemanticSearch getSemanticSearch() {
     return semanticSearch;
@@ -1038,8 +916,6 @@ public class IndexSettings {
   /**
    * Enables the [advanced query
    * syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).
-   *
-   * @return advancedSyntax
    */
   @javax.annotation.Nullable
   public Boolean getAdvancedSyntax() {
@@ -1063,8 +939,6 @@ public class IndexSettings {
    * Words which should be considered
    * [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words)
    * when found in a query.
-   *
-   * @return optionalWords
    */
   @javax.annotation.Nullable
   public List<String> getOptionalWords() {
@@ -1087,8 +961,6 @@ public class IndexSettings {
   /**
    * Attributes for which you want to [turn off the exact ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
-   *
-   * @return disableExactOnAttributes
    */
   @javax.annotation.Nullable
   public List<String> getDisableExactOnAttributes() {
@@ -1100,11 +972,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get exactOnSingleWordQuery
-   *
-   * @return exactOnSingleWordQuery
-   */
+  /** Get exactOnSingleWordQuery */
   @javax.annotation.Nullable
   public ExactOnSingleWordQuery getExactOnSingleWordQuery() {
     return exactOnSingleWordQuery;
@@ -1126,8 +994,6 @@ public class IndexSettings {
   /**
    * Alternatives that should be considered an exact match by [the exact ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).
-   *
-   * @return alternativesAsExact
    */
   @javax.annotation.Nullable
   public List<AlternativesAsExact> getAlternativesAsExact() {
@@ -1150,8 +1016,6 @@ public class IndexSettings {
   /**
    * Allows you to specify which advanced syntax features are active when `advancedSyntax` is
    * enabled.
-   *
-   * @return advancedSyntaxFeatures
    */
   @javax.annotation.Nullable
   public List<AdvancedSyntaxFeatures> getAdvancedSyntaxFeatures() {
@@ -1163,11 +1027,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get distinct
-   *
-   * @return distinct
-   */
+  /** Get distinct */
   @javax.annotation.Nullable
   public Distinct getDistinct() {
     return distinct;
@@ -1181,8 +1041,6 @@ public class IndexSettings {
   /**
    * Name of the deduplication attribute to be used with Algolia's [_distinct_
    * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-   *
-   * @return attributeForDistinct
    */
   @javax.annotation.Nullable
   public String getAttributeForDistinct() {
@@ -1197,8 +1055,6 @@ public class IndexSettings {
   /**
    * Whether to highlight and snippet the original word that matches the synonym or the synonym
    * itself.
-   *
-   * @return replaceSynonymsInHighlight
    */
   @javax.annotation.Nullable
   public Boolean getReplaceSynonymsInHighlight() {
@@ -1214,8 +1070,6 @@ public class IndexSettings {
    * Precision of the [proximity ranking
    * criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
    * minimum: 1 maximum: 7
-   *
-   * @return minProximity
    */
   @javax.annotation.Nullable
   public Integer getMinProximity() {
@@ -1235,11 +1089,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Attributes to include in the API response for search and browse queries.
-   *
-   * @return responseFields
-   */
+  /** Attributes to include in the API response for search and browse queries. */
   @javax.annotation.Nullable
   public List<String> getResponseFields() {
     return responseFields;
@@ -1254,8 +1104,6 @@ public class IndexSettings {
    * Maximum number of facet hits to return when [searching for facet
    * values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
    * maximum: 100
-   *
-   * @return maxFacetHits
    */
   @javax.annotation.Nullable
   public Integer getMaxFacetHits() {
@@ -1267,11 +1115,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Maximum number of facet values to return for each facet.
-   *
-   * @return maxValuesPerFacet
-   */
+  /** Maximum number of facet values to return for each facet. */
   @javax.annotation.Nullable
   public Integer getMaxValuesPerFacet() {
     return maxValuesPerFacet;
@@ -1282,11 +1126,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Controls how facet values are fetched.
-   *
-   * @return sortFacetValuesBy
-   */
+  /** Controls how facet values are fetched. */
   @javax.annotation.Nullable
   public String getSortFacetValuesBy() {
     return sortFacetValuesBy;
@@ -1302,8 +1142,6 @@ public class IndexSettings {
    * Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations)
    * in your ranking formula, Proximity is used to select which searchable attribute is matched in
    * the Attribute ranking stage.
-   *
-   * @return attributeCriteriaComputedByMinProximity
    */
   @javax.annotation.Nullable
   public Boolean getAttributeCriteriaComputedByMinProximity() {
@@ -1315,11 +1153,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get renderingContent
-   *
-   * @return renderingContent
-   */
+  /** Get renderingContent */
   @javax.annotation.Nullable
   public RenderingContent getRenderingContent() {
     return renderingContent;
@@ -1333,8 +1167,6 @@ public class IndexSettings {
   /**
    * Indicates whether this search will use [Dynamic
    * Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).
-   *
-   * @return enableReRanking
    */
   @javax.annotation.Nullable
   public Boolean getEnableReRanking() {
@@ -1346,11 +1178,7 @@ public class IndexSettings {
     return this;
   }
 
-  /**
-   * Get reRankingApplyFilter
-   *
-   * @return reRankingApplyFilter
-   */
+  /** Get reRankingApplyFilter */
   @javax.annotation.Nullable
   public ReRankingApplyFilter getReRankingApplyFilter() {
     return reRankingApplyFilter;

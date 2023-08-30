@@ -17,44 +17,42 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /** GetTopSearchesResponse */
-@JsonDeserialize(using = GetTopSearchesResponse.GetTopSearchesResponseDeserializer.class)
-@JsonSerialize(using = GetTopSearchesResponse.GetTopSearchesResponseSerializer.class)
-public abstract class GetTopSearchesResponse implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(GetTopSearchesResponse.class.getName());
-
-  public static GetTopSearchesResponse of(TopSearchesResponse inside) {
+@JsonDeserialize(using = GetTopSearchesResponse.Deserializer.class)
+@JsonSerialize(using = GetTopSearchesResponse.Serializer.class)
+public interface GetTopSearchesResponse<T> extends CompoundType<T> {
+  static GetTopSearchesResponse<TopSearchesResponse> of(TopSearchesResponse inside) {
     return new GetTopSearchesResponseTopSearchesResponse(inside);
   }
 
-  public static GetTopSearchesResponse of(TopSearchesResponseWithAnalytics inside) {
+  static GetTopSearchesResponse<TopSearchesResponseWithAnalytics> of(TopSearchesResponseWithAnalytics inside) {
     return new GetTopSearchesResponseTopSearchesResponseWithAnalytics(inside);
   }
 
-  public static class GetTopSearchesResponseSerializer extends StdSerializer<GetTopSearchesResponse> {
+  class Serializer extends StdSerializer<GetTopSearchesResponse> {
 
-    public GetTopSearchesResponseSerializer(Class<GetTopSearchesResponse> t) {
+    public Serializer(Class<GetTopSearchesResponse> t) {
       super(t);
     }
 
-    public GetTopSearchesResponseSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(GetTopSearchesResponse value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(GetTopSearchesResponse value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class GetTopSearchesResponseDeserializer extends StdDeserializer<GetTopSearchesResponse> {
+  class Deserializer extends StdDeserializer<GetTopSearchesResponse> {
 
-    public GetTopSearchesResponseDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(GetTopSearchesResponse.class);
     }
 
-    public GetTopSearchesResponseDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -98,30 +96,30 @@ public abstract class GetTopSearchesResponse implements CompoundType {
   }
 }
 
-class GetTopSearchesResponseTopSearchesResponse extends GetTopSearchesResponse {
+class GetTopSearchesResponseTopSearchesResponse implements GetTopSearchesResponse<TopSearchesResponse> {
 
-  private final TopSearchesResponse insideValue;
+  private final TopSearchesResponse value;
 
-  GetTopSearchesResponseTopSearchesResponse(TopSearchesResponse insideValue) {
-    this.insideValue = insideValue;
+  GetTopSearchesResponseTopSearchesResponse(TopSearchesResponse value) {
+    this.value = value;
   }
 
   @Override
-  public TopSearchesResponse getInsideValue() {
-    return insideValue;
+  public TopSearchesResponse get() {
+    return value;
   }
 }
 
-class GetTopSearchesResponseTopSearchesResponseWithAnalytics extends GetTopSearchesResponse {
+class GetTopSearchesResponseTopSearchesResponseWithAnalytics implements GetTopSearchesResponse<TopSearchesResponseWithAnalytics> {
 
-  private final TopSearchesResponseWithAnalytics insideValue;
+  private final TopSearchesResponseWithAnalytics value;
 
-  GetTopSearchesResponseTopSearchesResponseWithAnalytics(TopSearchesResponseWithAnalytics insideValue) {
-    this.insideValue = insideValue;
+  GetTopSearchesResponseTopSearchesResponseWithAnalytics(TopSearchesResponseWithAnalytics value) {
+    this.value = value;
   }
 
   @Override
-  public TopSearchesResponseWithAnalytics getInsideValue() {
-    return insideValue;
+  public TopSearchesResponseWithAnalytics get() {
+    return value;
   }
 }

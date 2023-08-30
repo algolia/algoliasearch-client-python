@@ -21,43 +21,42 @@ import java.util.logging.Logger;
  * radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius)
  * for a geographical search (in meters).
  */
-@JsonDeserialize(using = AroundRadius.AroundRadiusDeserializer.class)
-@JsonSerialize(using = AroundRadius.AroundRadiusSerializer.class)
-public abstract class AroundRadius implements CompoundType {
-
-  private static final Logger LOGGER = Logger.getLogger(AroundRadius.class.getName());
-
-  public static AroundRadius of(AroundRadiusAll inside) {
+@JsonDeserialize(using = AroundRadius.Deserializer.class)
+@JsonSerialize(using = AroundRadius.Serializer.class)
+public interface AroundRadius<T> extends CompoundType<T> {
+  static AroundRadius<AroundRadiusAll> of(AroundRadiusAll inside) {
     return new AroundRadiusAroundRadiusAll(inside);
   }
 
-  public static AroundRadius of(Integer inside) {
+  static AroundRadius<Integer> of(Integer inside) {
     return new AroundRadiusInteger(inside);
   }
 
-  public static class AroundRadiusSerializer extends StdSerializer<AroundRadius> {
+  class Serializer extends StdSerializer<AroundRadius> {
 
-    public AroundRadiusSerializer(Class<AroundRadius> t) {
+    public Serializer(Class<AroundRadius> t) {
       super(t);
     }
 
-    public AroundRadiusSerializer() {
+    public Serializer() {
       this(null);
     }
 
     @Override
-    public void serialize(AroundRadius value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      jgen.writeObject(value.getInsideValue());
+    public void serialize(AroundRadius value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+      jgen.writeObject(value.get());
     }
   }
 
-  public static class AroundRadiusDeserializer extends StdDeserializer<AroundRadius> {
+  class Deserializer extends StdDeserializer<AroundRadius> {
 
-    public AroundRadiusDeserializer() {
+    private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+    public Deserializer() {
       this(AroundRadius.class);
     }
 
-    public AroundRadiusDeserializer(Class<?> vc) {
+    public Deserializer(Class<?> vc) {
       super(vc);
     }
 
@@ -97,30 +96,30 @@ public abstract class AroundRadius implements CompoundType {
   }
 }
 
-class AroundRadiusAroundRadiusAll extends AroundRadius {
+class AroundRadiusAroundRadiusAll implements AroundRadius<AroundRadiusAll> {
 
-  private final AroundRadiusAll insideValue;
+  private final AroundRadiusAll value;
 
-  AroundRadiusAroundRadiusAll(AroundRadiusAll insideValue) {
-    this.insideValue = insideValue;
+  AroundRadiusAroundRadiusAll(AroundRadiusAll value) {
+    this.value = value;
   }
 
   @Override
-  public AroundRadiusAll getInsideValue() {
-    return insideValue;
+  public AroundRadiusAll get() {
+    return value;
   }
 }
 
-class AroundRadiusInteger extends AroundRadius {
+class AroundRadiusInteger implements AroundRadius<Integer> {
 
-  private final Integer insideValue;
+  private final Integer value;
 
-  AroundRadiusInteger(Integer insideValue) {
-    this.insideValue = insideValue;
+  AroundRadiusInteger(Integer value) {
+    this.value = value;
   }
 
   @Override
-  public Integer getInsideValue() {
-    return insideValue;
+  public Integer get() {
+    return value;
   }
 }

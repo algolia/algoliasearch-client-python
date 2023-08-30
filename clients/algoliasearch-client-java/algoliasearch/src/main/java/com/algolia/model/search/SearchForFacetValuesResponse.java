@@ -24,11 +24,7 @@ public class SearchForFacetValuesResponse {
     return this;
   }
 
-  /**
-   * Get facetHits
-   *
-   * @return facetHits
-   */
+  /** Get facetHits */
   @javax.annotation.Nonnull
   public List<FacetHits> getFacetHits() {
     return facetHits;

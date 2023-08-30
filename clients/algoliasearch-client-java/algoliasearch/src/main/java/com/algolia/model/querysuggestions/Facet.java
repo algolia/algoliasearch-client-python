@@ -20,11 +20,7 @@ public class Facet {
     return this;
   }
 
-  /**
-   * Facet name.
-   *
-   * @return attribute
-   */
+  /** Facet name. */
   @javax.annotation.Nullable
   public String getAttribute() {
     return attribute;
@@ -35,11 +31,7 @@ public class Facet {
     return this;
   }
 
-  /**
-   * Number of suggestions.
-   *
-   * @return amount
-   */
+  /** Number of suggestions. */
   @javax.annotation.Nullable
   public Integer getAmount() {
     return amount;

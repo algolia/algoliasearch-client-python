@@ -24,11 +24,7 @@ public class GetClickPositionsResponse {
     return this;
   }
 
-  /**
-   * Click positions.
-   *
-   * @return positions
-   */
+  /** Click positions. */
   @javax.annotation.Nonnull
   public List<ClickPosition> getPositions() {
     return positions;

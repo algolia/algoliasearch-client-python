@@ -24,11 +24,7 @@ public class GetObjectsResponse<T> {
     return this;
   }
 
-  /**
-   * Retrieved results.
-   *
-   * @return results
-   */
+  /** Retrieved results. */
   @javax.annotation.Nonnull
   public List<T> getResults() {
     return results;

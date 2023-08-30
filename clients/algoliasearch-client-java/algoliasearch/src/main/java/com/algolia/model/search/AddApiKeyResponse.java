@@ -20,11 +20,7 @@ public class AddApiKeyResponse {
     return this;
   }
 
-  /**
-   * API key.
-   *
-   * @return key
-   */
+  /** API key. */
   @javax.annotation.Nonnull
   public String getKey() {
     return key;
@@ -35,11 +31,7 @@ public class AddApiKeyResponse {
     return this;
   }
 
-  /**
-   * Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
-   *
-   * @return createdAt
-   */
+  /** Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @javax.annotation.Nonnull
   public String getCreatedAt() {
     return createdAt;
