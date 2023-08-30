@@ -16,6 +16,8 @@ type Run struct {
 	Status   RunStatus    `json:"status" validate:"required"`
 	Progress *RunProgress `json:"progress,omitempty"`
 	Outcome  *RunOutcome  `json:"outcome,omitempty"`
+	// A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
+	FailureThrehsold *int32 `json:"failureThrehsold,omitempty"`
 	// Explains the result of outcome.
 	Reason     *string        `json:"reason,omitempty"`
 	ReasonCode *RunReasonCode `json:"reasonCode,omitempty"`
@@ -39,6 +41,12 @@ func WithRunProgress(val RunProgress) RunOption {
 func WithRunOutcome(val RunOutcome) RunOption {
 	return func(f *Run) {
 		f.Outcome = &val
+	}
+}
+
+func WithRunFailureThrehsold(val int32) RunOption {
+	return func(f *Run) {
+		f.FailureThrehsold = &val
 	}
 }
 
@@ -252,6 +260,38 @@ func (o *Run) SetOutcome(v RunOutcome) {
 	o.Outcome = &v
 }
 
+// GetFailureThrehsold returns the FailureThrehsold field value if set, zero value otherwise.
+func (o *Run) GetFailureThrehsold() int32 {
+	if o == nil || o.FailureThrehsold == nil {
+		var ret int32
+		return ret
+	}
+	return *o.FailureThrehsold
+}
+
+// GetFailureThrehsoldOk returns a tuple with the FailureThrehsold field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Run) GetFailureThrehsoldOk() (*int32, bool) {
+	if o == nil || o.FailureThrehsold == nil {
+		return nil, false
+	}
+	return o.FailureThrehsold, true
+}
+
+// HasFailureThrehsold returns a boolean if a field has been set.
+func (o *Run) HasFailureThrehsold() bool {
+	if o != nil && o.FailureThrehsold != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureThrehsold gets a reference to the given int32 and assigns it to the FailureThrehsold field.
+func (o *Run) SetFailureThrehsold(v int32) {
+	o.FailureThrehsold = &v
+}
+
 // GetReason returns the Reason field value if set, zero value otherwise.
 func (o *Run) GetReason() string {
 	if o == nil || o.Reason == nil {
@@ -448,6 +488,9 @@ func (o Run) MarshalJSON() ([]byte, error) {
 	if o.Outcome != nil {
 		toSerialize["outcome"] = o.Outcome
 	}
+	if o.FailureThrehsold != nil {
+		toSerialize["failureThrehsold"] = o.FailureThrehsold
+	}
 	if o.Reason != nil {
 		toSerialize["reason"] = o.Reason
 	}
@@ -477,6 +520,7 @@ func (o Run) String() string {
 	out += fmt.Sprintf("  status=%v\n", o.Status)
 	out += fmt.Sprintf("  progress=%v\n", o.Progress)
 	out += fmt.Sprintf("  outcome=%v\n", o.Outcome)
+	out += fmt.Sprintf("  failureThrehsold=%v\n", o.FailureThrehsold)
 	out += fmt.Sprintf("  reason=%v\n", o.Reason)
 	out += fmt.Sprintf("  reasonCode=%v\n", o.ReasonCode)
 	out += fmt.Sprintf("  type=%v\n", o.Type)

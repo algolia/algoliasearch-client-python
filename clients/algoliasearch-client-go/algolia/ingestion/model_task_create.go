@@ -15,8 +15,10 @@ type TaskCreate struct {
 	Trigger       TaskCreateTrigger `json:"trigger" validate:"required"`
 	Action        ActionType        `json:"action" validate:"required"`
 	// Whether the task is enabled or not.
-	Enabled *bool      `json:"enabled,omitempty"`
-	Input   *TaskInput `json:"input,omitempty"`
+	Enabled *bool `json:"enabled,omitempty"`
+	// A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
+	FailureThreshold *int32     `json:"failureThreshold,omitempty"`
+	Input            *TaskInput `json:"input,omitempty"`
 }
 
 type TaskCreateOption func(f *TaskCreate)
@@ -24,6 +26,12 @@ type TaskCreateOption func(f *TaskCreate)
 func WithTaskCreateEnabled(val bool) TaskCreateOption {
 	return func(f *TaskCreate) {
 		f.Enabled = &val
+	}
+}
+
+func WithTaskCreateFailureThreshold(val int32) TaskCreateOption {
+	return func(f *TaskCreate) {
+		f.FailureThreshold = &val
 	}
 }
 
@@ -185,6 +193,38 @@ func (o *TaskCreate) SetEnabled(v bool) {
 	o.Enabled = &v
 }
 
+// GetFailureThreshold returns the FailureThreshold field value if set, zero value otherwise.
+func (o *TaskCreate) GetFailureThreshold() int32 {
+	if o == nil || o.FailureThreshold == nil {
+		var ret int32
+		return ret
+	}
+	return *o.FailureThreshold
+}
+
+// GetFailureThresholdOk returns a tuple with the FailureThreshold field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TaskCreate) GetFailureThresholdOk() (*int32, bool) {
+	if o == nil || o.FailureThreshold == nil {
+		return nil, false
+	}
+	return o.FailureThreshold, true
+}
+
+// HasFailureThreshold returns a boolean if a field has been set.
+func (o *TaskCreate) HasFailureThreshold() bool {
+	if o != nil && o.FailureThreshold != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureThreshold gets a reference to the given int32 and assigns it to the FailureThreshold field.
+func (o *TaskCreate) SetFailureThreshold(v int32) {
+	o.FailureThreshold = &v
+}
+
 // GetInput returns the Input field value if set, zero value otherwise.
 func (o *TaskCreate) GetInput() TaskInput {
 	if o == nil || o.Input == nil {
@@ -234,6 +274,9 @@ func (o TaskCreate) MarshalJSON() ([]byte, error) {
 	if o.Enabled != nil {
 		toSerialize["enabled"] = o.Enabled
 	}
+	if o.FailureThreshold != nil {
+		toSerialize["failureThreshold"] = o.FailureThreshold
+	}
 	if o.Input != nil {
 		toSerialize["input"] = o.Input
 	}
@@ -247,6 +290,7 @@ func (o TaskCreate) String() string {
 	out += fmt.Sprintf("  trigger=%v\n", o.Trigger)
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
+	out += fmt.Sprintf("  failureThreshold=%v\n", o.FailureThreshold)
 	out += fmt.Sprintf("  input=%v\n", o.Input)
 	return fmt.Sprintf("TaskCreate {\n%s}", out)
 }

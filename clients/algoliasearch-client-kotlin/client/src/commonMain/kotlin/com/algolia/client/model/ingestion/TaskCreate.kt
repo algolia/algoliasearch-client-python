@@ -12,6 +12,7 @@ import kotlinx.serialization.json.*
  * @param trigger
  * @param action
  * @param enabled Whether the task is enabled or not.
+ * @param failureThreshold A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
  * @param input
  */
 @Serializable
@@ -29,6 +30,9 @@ public data class TaskCreate(
 
   /** Whether the task is enabled or not. */
   @SerialName(value = "enabled") val enabled: Boolean? = null,
+
+  /** A percentage representing the accepted failure threshold to determine if a `run` succeeded or not. */
+  @SerialName(value = "failureThreshold") val failureThreshold: Int? = null,
 
   @SerialName(value = "input") val input: TaskInput? = null,
 )

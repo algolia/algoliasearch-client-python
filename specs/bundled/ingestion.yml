@@ -1314,6 +1314,13 @@ components:
         - $ref: '#/components/schemas/OnDemandTriggerInput'
         - $ref: '#/components/schemas/ScheduleTriggerInput'
         - $ref: '#/components/schemas/SubscriptionTrigger'
+    failureThreshold:
+      type: integer
+      minimum: 0
+      maximum: 100
+      description: >-
+        A percentage representing the accepted failure threshold to determine if
+        a `run` succeeded or not.
     TaskCreate:
       type: object
       additionalProperties: false
@@ -1330,6 +1337,8 @@ components:
         enabled:
           type: boolean
           description: Whether the task is enabled or not.
+        failureThreshold:
+          $ref: '#/components/schemas/failureThreshold'
         input:
           $ref: '#/components/schemas/TaskInput'
       required:
@@ -1477,6 +1486,8 @@ components:
               type: integer
         outcome:
           $ref: '#/components/schemas/RunOutcome'
+        failureThrehsold:
+          $ref: '#/components/schemas/failureThreshold'
         reason:
           type: string
           description: Explains the result of outcome.
