@@ -17,41 +17,42 @@ import java.util.logging.Logger;
  * @deprecated{{/isDeprecated}}
  */{{#isDeprecated}}
 @Deprecated{{/isDeprecated}}
-@JsonDeserialize(using = {{classname}}.{{classname}}Deserializer.class)
-@JsonSerialize(using = {{classname}}.{{classname}}Serializer.class)
+@JsonDeserialize(using = {{classname}}.Deserializer.class)
+@JsonSerialize(using = {{classname}}.Serializer.class)
 {{>additionalModelTypeAnnotations}}
-public abstract class {{classname}}{{#vendorExtensions.x-propagated-generic}}<T>{{/vendorExtensions.x-propagated-generic}} implements CompoundType {
-
-    private static final Logger LOGGER = Logger.getLogger({{classname}}.class.getName());
+public interface {{classname}}<T> extends CompoundType<T> {
 
     {{#vendorExtensions.x-one-of-list}}
-    public static {{classname}} of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}({{{type}}} inside) {
+    static {{classname}}<{{{type}}}> of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}({{{type}}} inside) {
         return new {{classname}}{{name}}(inside);
     }
 
     {{/vendorExtensions.x-one-of-list}}
 
-    public static class {{classname}}Serializer extends StdSerializer<{{classname}}> {
-        public {{classname}}Serializer(Class<{{classname}}> t) {
+    class Serializer extends StdSerializer<{{classname}}> {
+        public Serializer(Class<{{classname}}> t) {
             super(t);
         }
 
-        public {{classname}}Serializer() {
+        public Serializer() {
             this(null);
         }
 
         @Override
-        public void serialize({{classname}} value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-            jgen.writeObject(value.getInsideValue());
+        public void serialize({{classname}} value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+            jgen.writeObject(value.get());
         }
     }
 
-    public static class {{classname}}Deserializer extends StdDeserializer<{{classname}}> {
-        public {{classname}}Deserializer() {
+    class Deserializer extends StdDeserializer<{{classname}}> {
+
+        private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
+
+        public Deserializer() {
             this({{classname}}.class);
         }
 
-        public {{classname}}Deserializer(Class<?> vc) {
+        public Deserializer(Class<?> vc) {
             super(vc);
         }
 
@@ -90,16 +91,16 @@ public abstract class {{classname}}{{#vendorExtensions.x-propagated-generic}}<T>
 }
 
 {{#vendorExtensions.x-one-of-list}}
-class {{classname}}{{name}} extends {{classname}} {
-    private final {{{type}}} insideValue;
+class {{classname}}{{name}} implements {{classname}}<{{{type}}}> {
+    private final {{{type}}} value;
 
-    {{classname}}{{name}}({{{type}}} insideValue) {
-        this.insideValue = insideValue;
+    {{classname}}{{name}}({{{type}}} value) {
+        this.value = value;
     }
 
     @Override
-    public {{{type}}} getInsideValue() {
-        return insideValue;
+    public {{{type}}} get() {
+        return value;
     }
 }
 {{/vendorExtensions.x-one-of-list}}

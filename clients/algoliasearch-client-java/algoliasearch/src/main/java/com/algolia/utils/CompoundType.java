@@ -1,5 +1,5 @@
 package com.algolia.utils;
 
-public interface CompoundType {
-  Object getInsideValue();
+public interface CompoundType<T> {
+  T get();
 }

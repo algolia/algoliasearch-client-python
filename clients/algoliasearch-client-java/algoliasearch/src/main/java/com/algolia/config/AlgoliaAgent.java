@@ -1,9 +1,11 @@
-package com.algolia.utils;
+package com.algolia.config;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
-public class AlgoliaAgent {
+public final class AlgoliaAgent {
 
   private final Set<String> segments;
 
@@ -11,22 +13,29 @@ public class AlgoliaAgent {
 
   public AlgoliaAgent(String clientVersion) {
     this.finalValue = String.format("Algolia for Java (%s)", clientVersion);
-    this.segments = new LinkedHashSet<String>();
+    this.segments = new LinkedHashSet<>();
     this.addSegment(new Segment("JVM", System.getProperty("java.version")));
   }
 
-  public String addSegment(Segment seg) {
+  public AlgoliaAgent addSegment(@NotNull Segment seg) {
     String segment = seg.toString();
-    if (segments.contains(segment)) {
-      return finalValue;
+    if (!segments.contains(segment)) {
+      segments.add(segment);
+      finalValue += segment;
     }
-    segments.add(segment);
-    finalValue += segment;
-    return finalValue;
+    return this;
   }
 
-  public boolean removeSegment(Segment seg) {
-    return segments.remove(seg.toString());
+  public AlgoliaAgent addSegments(@NotNull List<Segment> segments) {
+    for (Segment segment : segments) {
+      addSegment(segment);
+    }
+    return this;
+  }
+
+  public AlgoliaAgent removeSegment(@NotNull Segment seg) {
+    segments.remove(seg.toString());
+    return this;
   }
 
   @Override

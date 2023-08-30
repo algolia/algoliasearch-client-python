@@ -6,7 +6,11 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.zone.ZoneRules;
 
-public class Utils {
+public class DateTimeUtils {
+
+  private DateTimeUtils() {
+    // Empty.
+  }
 
   private static final ZoneRules ZONE_RULES_UTC = ZoneOffset.UTC.getRules();
 

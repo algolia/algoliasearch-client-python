@@ -3,6 +3,7 @@
 package {{package}};
 
 import {{invokerPackage}}.ApiClient;
+import {{invokerPackage}}.config.ClientOptions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -12,8 +13,7 @@ import okhttp3.Request;
 import {{invokerPackage}}.utils.*;
 import {{modelPackage}}.*;
 import {{invokerPackage}}.exceptions.*;
-import {{invokerPackage}}.utils.retry.CallType;
-import {{invokerPackage}}.utils.retry.StatefulHost;
+import {{invokerPackage}}.config.*;
 import java.util.function.IntUnaryOperator;
 
 import java.util.EnumSet;
@@ -47,15 +47,7 @@ public class {{classname}} extends ApiClient {
     }
 
     public {{classname}}(String appId, String apiKey, String region, ClientOptions options) {
-      super(appId, apiKey, "{{{baseName}}}", "{{{packageVersion}}}", options);
-      if (options != null && options.getHosts() != null) {
-        this.setHosts(options.getHosts());
-      } else {
-        this.setHosts(getDefaultHosts(region));
-      }
-      this.setConnectTimeout(2000);
-      this.setReadTimeout(5000);
-      this.setWriteTimeout(30000);
+      super(appId, apiKey, "{{{baseName}}}", options, getDefaultHosts(region));
     }
     
     {{/hasRegionalHost}}
@@ -65,28 +57,20 @@ public class {{classname}} extends ApiClient {
     }
 
     public {{classname}}(String appId, String apiKey, ClientOptions options) {
-      super(appId, apiKey, "{{{baseName}}}", "{{{packageVersion}}}", options);
-      if (options != null && options.getHosts() != null) {
-        this.setHosts(options.getHosts());
-      } else {
-        this.setHosts(getDefaultHosts(appId));
-      }
-      this.setConnectTimeout(2000);
-      this.setReadTimeout(5000);
-      this.setWriteTimeout(30000);
+      super(appId, apiKey, "{{{baseName}}}", options, getDefaultHosts(appId));
     }
     {{/hasRegionalHost}}
 
     {{^hasRegionalHost}}
-    private static List<StatefulHost> getDefaultHosts(String appId) {
-      List<StatefulHost> hosts = new ArrayList<StatefulHost>();
-      hosts.add(new StatefulHost(appId + "-dsn.algolia.net", "https", EnumSet.of(CallType.READ)));
-      hosts.add(new StatefulHost(appId + ".algolia.net", "https", EnumSet.of(CallType.WRITE)));
+    private static List<Host> getDefaultHosts(String appId) {
+      List<Host> hosts = new ArrayList<>();
+      hosts.add(new Host(appId + "-dsn.algolia.net", EnumSet.of(CallType.READ)));
+      hosts.add(new Host(appId + ".algolia.net", EnumSet.of(CallType.WRITE)));
 
-      List<StatefulHost> commonHosts = new ArrayList<StatefulHost>();
-      hosts.add(new StatefulHost(appId + "-1.algolianet.net", "https", EnumSet.of(CallType.READ, CallType.WRITE)));
-      hosts.add(new StatefulHost(appId + "-2.algolianet.net", "https", EnumSet.of(CallType.READ, CallType.WRITE)));
-      hosts.add(new StatefulHost(appId + "-3.algolianet.net", "https", EnumSet.of(CallType.READ, CallType.WRITE)));
+      List<Host> commonHosts = new ArrayList<>();
+      hosts.add(new Host(appId + "-1.algolianet.net", EnumSet.of(CallType.READ, CallType.WRITE)));
+      hosts.add(new Host(appId + "-2.algolianet.net", EnumSet.of(CallType.READ, CallType.WRITE)));
+      hosts.add(new Host(appId + "-3.algolianet.net", EnumSet.of(CallType.READ, CallType.WRITE)));
 
       Collections.shuffle(commonHosts, new Random());
 
@@ -95,8 +79,8 @@ public class {{classname}} extends ApiClient {
     {{/hasRegionalHost}}
 
     {{#hasRegionalHost}}
-    private static List<StatefulHost> getDefaultHosts(String region) throws AlgoliaRuntimeException {
-      List<StatefulHost> hosts = new ArrayList<StatefulHost>();
+    private static List<Host> getDefaultHosts(String region) throws AlgoliaRuntimeException {
+      List<Host> hosts = new ArrayList<>();
 
       boolean found = {{^fallbackToAliasHost}}false{{/fallbackToAliasHost}}{{#fallbackToAliasHost}}region == null{{/fallbackToAliasHost}};
       if (region != null) {
@@ -114,7 +98,7 @@ public class {{classname}} extends ApiClient {
 
       String url = {{#fallbackToAliasHost}}region == null ? "{{{hostWithFallback}}}" : {{/fallbackToAliasHost}} "{{{regionalHost}}}".replace("{region}", region);
 
-      hosts.add(new StatefulHost(url, "https", EnumSet.of(CallType.READ, CallType.WRITE)));
+      hosts.add(new Host(url, EnumSet.of(CallType.READ, CallType.WRITE)));
       return hosts;
     }
     {{/hasRegionalHost}}
@@ -125,7 +109,6 @@ public class {{classname}} extends ApiClient {
      * @param {{paramName}} {{{description}}}{{#required}} (required){{/required}}{{^required}} (optional{{^isContainer}}{{#defaultValue}}, default to {{.}}{{/defaultValue}}{{/isContainer}}){{/required}}{{/allParams}}{{#vendorExtensions.x-is-generic}}
      * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
      * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions.
-     * @return {{> return_type}}
     {{> api_javadoc}}
     public {{> return_type}} {{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}, {{/allParams}}{{#vendorExtensions.x-is-generic}}Class<T> innerType, {{/vendorExtensions.x-is-generic}}RequestOptions requestOptions) throws AlgoliaRuntimeException {
         return LaunderThrowable.await({{operationId}}Async({{#allParams}}{{paramName}}, {{/allParams}}{{#vendorExtensions.x-is-generic}}innerType, {{/vendorExtensions.x-is-generic}}requestOptions));
@@ -136,7 +119,6 @@ public class {{classname}} extends ApiClient {
     * {{{notes}}}{{#allParams}}
     * @param {{paramName}} {{{description}}}{{#required}} (required){{/required}}{{^required}} (optional{{^isContainer}}{{#defaultValue}}, default to {{.}}{{/defaultValue}}{{/isContainer}}){{/required}}{{/allParams}}{{#vendorExtensions.x-is-generic}}
     * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
-    * @return {{> return_type}}
     {{> api_javadoc}}
   public {{> return_type}} {{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{#vendorExtensions.x-is-generic}}, Class<T> innerType{{/vendorExtensions.x-is-generic}}) throws AlgoliaRuntimeException {
     {{#returnType}}return {{/returnType}}this.{{operationId}}({{#allParams}}{{paramName}}, {{/allParams}}{{#vendorExtensions.x-is-generic}}innerType, {{/vendorExtensions.x-is-generic}}null);
@@ -149,7 +131,6 @@ public class {{classname}} extends ApiClient {
     * @param {{paramName}} {{{description}}} (required){{/requiredParams}}{{#vendorExtensions.x-is-generic}}
     * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
     * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions.
-    * @return {{> return_type}}
    {{> api_javadoc}}
   public {{> return_type}} {{operationId}}({{#requiredParams}}{{{dataType}}} {{paramName}}, {{/requiredParams}}{{#vendorExtensions.x-is-generic}}Class<T> innerType, {{/vendorExtensions.x-is-generic}}RequestOptions requestOptions) throws AlgoliaRuntimeException {
     {{#returnType}}return {{/returnType}}this.{{operationId}}({{#requiredParams}}{{paramName}}{{^-last}}, {{/-last}}{{/requiredParams}}{{#requiredParams.0}},{{/requiredParams.0}}{{#optionalParams}}null{{^-last}},{{/-last}}{{/optionalParams}}, {{#vendorExtensions.x-is-generic}}innerType, {{/vendorExtensions.x-is-generic}}requestOptions);
@@ -162,7 +143,6 @@ public class {{classname}} extends ApiClient {
     * {{{notes}}}{{#requiredParams}}
     * @param {{paramName}} {{{description}}} (required){{/requiredParams}}{{#vendorExtensions.x-is-generic}}
     * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
-    * @return {{> return_type}}
    {{> api_javadoc}}
   public {{> return_type}} {{operationId}}({{#requiredParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/requiredParams}}{{#vendorExtensions.x-is-generic}}, Class<T> innerType{{/vendorExtensions.x-is-generic}}) throws AlgoliaRuntimeException {
     {{#returnType}}return {{/returnType}}this.{{operationId}}({{#requiredParams}}{{paramName}}{{^-last}}, {{/-last}}{{/requiredParams}}{{#requiredParams.0}},{{/requiredParams.0}}{{#optionalParams}}null{{^-last}},{{/-last}}{{/optionalParams}}, {{#vendorExtensions.x-is-generic}}innerType, {{/vendorExtensions.x-is-generic}}null);
@@ -175,7 +155,6 @@ public class {{classname}} extends ApiClient {
   * @param {{paramName}} {{{description}}}{{#required}} (required){{/required}}{{^required}} (optional{{^isContainer}}{{#defaultValue}}, default to {{.}}{{/defaultValue}}{{/isContainer}}){{/required}}{{/allParams}}{{#vendorExtensions.x-is-generic}}
   * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
   * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions.
-  * @return {{> return_type_async}} The awaitable future
   {{> api_javadoc}}
   public {{> return_type_async}} {{operationId}}Async({{#allParams}}{{{dataType}}} {{paramName}}, {{/allParams}}{{#vendorExtensions.x-is-generic}}Class<T> innerType, {{/vendorExtensions.x-is-generic}}RequestOptions requestOptions) throws AlgoliaRuntimeException {
     {{#allParams}}{{#required}}
@@ -184,38 +163,15 @@ public class {{classname}} extends ApiClient {
     }
     {{/required}}{{/allParams}}
 
-    Object bodyObj = {{#bodyParam}}{{paramName}}{{^required}} != null ? {{paramName}} : new Object(){{/required}}{{/bodyParam}}{{^bodyParam}}null{{/bodyParam}};
-
-    // create path and map variables
-    String requestPath = "{{{path}}}"{{#vendorExtensions}}{{#pathParams}}.replaceAll(
-        {{=<% %>=}}"\\{<%baseName%>\\}"<%={{ }}=%>,
-        {{#x-is-custom-request}}{{{paramName}}}.toString(){{/x-is-custom-request}}{{^x-is-custom-request}}this.escapeString({{{paramName}}}.toString()){{/x-is-custom-request}}
-    ){{/pathParams}}{{/vendorExtensions}};
-
-    {{javaUtilPrefix}}Map<String, Object> queryParameters = new {{javaUtilPrefix}}HashMap<String, Object>();
-    {{javaUtilPrefix}}Map<String, String> headers = new {{javaUtilPrefix}}HashMap<String, String>();
-
-    {{#vendorExtensions}}{{#queryParams}}
-    if ({{paramName}} != null) {
-      {{^x-is-custom-request}}
-        queryParameters.put("{{baseName}}", parameterToString({{paramName}}));
-      {{/x-is-custom-request}}
-      {{#x-is-custom-request}}
-        for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-          queryParameters.put(parameter.getKey().toString(), parameterToString(parameter.getValue()));
-        }
-      {{/x-is-custom-request}}
-    }
-
-    {{/queryParams}}{{/vendorExtensions}}
-    {{#headerParams}}
-    if ({{paramName}} != null) {
-        headers.put("{{baseName}}", this.parameterToString({{paramName}}));
-    }
-
-    {{/headerParams}}
-    Call call = this.buildCall(requestPath, "{{httpMethod}}", queryParameters, bodyObj, headers, requestOptions, {{#vendorExtensions.x-use-read-transporter}}true{{/vendorExtensions.x-use-read-transporter}}{{^vendorExtensions.x-use-read-transporter}}false{{/vendorExtensions.x-use-read-transporter}});
-    return this.executeAsync(call, {{#vendorExtensions.x-is-generic}}{{{returnType}}}.class, innerType{{/vendorExtensions.x-is-generic}}{{^vendorExtensions.x-is-generic}}new TypeReference<{{{returnType}}}>() {}{{/vendorExtensions.x-is-generic}});
+    HttpRequest request = HttpRequest.builder()
+        {{#vendorExtensions}}{{#x-is-custom-request}}.setPathEncoded("{{{path}}}", path){{/x-is-custom-request}}{{^x-is-custom-request}}.setPath("{{{path}}}"{{#pathParams}}, {{{paramName}}}{{/pathParams}}){{/x-is-custom-request}}{{/vendorExtensions}}
+        .setMethod("{{httpMethod}}")
+        {{#bodyParam}}.setBody({{paramName}}){{/bodyParam}}
+        {{#vendorExtensions.x-use-read-transporter}}.setRead(true){{/vendorExtensions.x-use-read-transporter}}
+        {{#headerParams}}.addHeader("{{baseName}}", {{paramName}}){{/headerParams}}    
+          {{#vendorExtensions}}{{#queryParams}}{{^x-is-custom-request}}.addQueryParameter("{{baseName}}", {{paramName}}){{/x-is-custom-request}}{{#x-is-custom-request}}.addQueryParameters(parameters){{/x-is-custom-request}}{{/queryParams}}{{/vendorExtensions}}
+        .build();
+    return executeAsync(request, requestOptions, {{#vendorExtensions.x-is-generic}}{{{returnType}}}.class, innerType{{/vendorExtensions.x-is-generic}}{{^vendorExtensions.x-is-generic}}new TypeReference<{{{returnType}}}>() {}{{/vendorExtensions.x-is-generic}});
   }
 
   {{! This case only sets `requestOptions` as optional }}
@@ -224,7 +180,6 @@ public class {{classname}} extends ApiClient {
   * {{notes}}{{#allParams}}
   * @param {{paramName}} {{{description}}}{{#required}} (required){{/required}}{{^required}} (optional{{^isContainer}}{{#defaultValue}}, default to {{.}}{{/defaultValue}}{{/isContainer}}){{/required}}{{/allParams}}{{#vendorExtensions.x-is-generic}}
   * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
-  * @return {{> return_type_async}} The awaitable future
   {{> api_javadoc}}
   public {{> return_type_async}} {{operationId}}Async({{#allParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{#vendorExtensions.x-is-generic}}, Class<T> innerType{{/vendorExtensions.x-is-generic}}) throws AlgoliaRuntimeException {
     {{#returnType}}return {{/returnType}}this.{{operationId}}Async({{#allParams}}{{paramName}}, {{/allParams}}{{#vendorExtensions.x-is-generic}}innerType, {{/vendorExtensions.x-is-generic}}null);
@@ -238,7 +193,6 @@ public class {{classname}} extends ApiClient {
   * @param {{paramName}} {{{description}}} (required){{/requiredParams}}{{#vendorExtensions.x-is-generic}}
   * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
   * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions.
-  * @return {{> return_type_async}} The awaitable future
   {{> api_javadoc}}
   public {{> return_type_async}} {{operationId}}Async({{#requiredParams}}{{{dataType}}} {{paramName}}, {{/requiredParams}}{{#vendorExtensions.x-is-generic}}Class<T> innerType, {{/vendorExtensions.x-is-generic}}RequestOptions requestOptions) throws AlgoliaRuntimeException {
     {{#returnType}}return {{/returnType}}this.{{operationId}}Async({{#requiredParams}}{{paramName}}{{^-last}}, {{/-last}}{{/requiredParams}}{{#requiredParams.0}},{{/requiredParams.0}}{{#optionalParams}}null{{^-last}},{{/-last}}{{/optionalParams}}, {{#vendorExtensions.x-is-generic}}innerType, {{/vendorExtensions.x-is-generic}}requestOptions);
@@ -252,7 +206,6 @@ public class {{classname}} extends ApiClient {
   * {{notes}}{{#requiredParams}}
   * @param {{paramName}} {{{description}}} (required){{/requiredParams}}{{#vendorExtensions.x-is-generic}}
   * @param innerType The class held by the index, could be your custom class or {@link Object}.{{/vendorExtensions.x-is-generic}}
-  * @return {{> return_type_async}} The awaitable future
   {{> api_javadoc}}
   public {{> return_type_async}} {{operationId}}Async({{#requiredParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/requiredParams}}{{#vendorExtensions.x-is-generic}}, Class<T> innerType{{/vendorExtensions.x-is-generic}}) throws AlgoliaRuntimeException {
     {{#returnType}}return {{/returnType}}this.{{operationId}}Async({{#requiredParams}}{{paramName}}{{^-last}}, {{/-last}}{{/requiredParams}}{{#requiredParams.0}},{{/requiredParams.0}}{{#optionalParams}}null{{^-last}},{{/-last}}{{/optionalParams}}, {{#vendorExtensions.x-is-generic}}innerType, {{/vendorExtensions.x-is-generic}}null);

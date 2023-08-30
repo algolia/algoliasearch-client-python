@@ -4,20 +4,14 @@ import com.algolia.utils.UseReadTransporter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okhttp3.*;
 import okio.Buffer;
+import org.jetbrains.annotations.NotNull;
 
-public class EchoInterceptor {
+public class EchoInterceptor implements Interceptor {
 
   private EchoResponse lastResponse;
-  private int httpCode;
+  private final int httpCode;
 
   public EchoInterceptor(int httpCode) {
     this.httpCode = httpCode;
@@ -27,38 +21,35 @@ public class EchoInterceptor {
     this(200);
   }
 
-  public Interceptor getEchoInterceptor() {
-    return new Interceptor() {
-      @Override
-      public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request();
-        try {
-          UseReadTransporter useReadTransporter = (UseReadTransporter) request.tag();
-          EchoResponse echo = new EchoResponse();
-          echo.path = request.url().encodedPath();
-          echo.host = request.url().host();
-          echo.method = request.method();
-          echo.body = processResponseBody(request);
-          echo.queryParameters = buildQueryParameters(request);
-          echo.headers = buildHeaders(request.headers());
-          echo.connectTimeout = chain.connectTimeoutMillis();
-          echo.responseTimeout =
-            (useReadTransporter != null || request.method().equals("GET")) ? chain.readTimeoutMillis() : chain.writeTimeoutMillis();
+  @NotNull
+  @Override
+  public Response intercept(@NotNull Chain chain) {
+    Request request = chain.request();
+    try {
+      UseReadTransporter useReadTransporter = (UseReadTransporter) request.tag();
+      EchoResponse echo = new EchoResponse();
+      echo.path = request.url().encodedPath();
+      echo.host = request.url().host();
+      echo.method = request.method();
+      echo.body = processResponseBody(request);
+      echo.queryParameters = buildQueryParameters(request);
+      echo.headers = buildHeaders(request.headers());
+      echo.connectTimeout = chain.connectTimeoutMillis();
+      echo.responseTimeout =
+        (useReadTransporter != null || request.method().equals("GET")) ? chain.readTimeoutMillis() : chain.writeTimeoutMillis();
 
-          lastResponse = echo;
-        } catch (Exception e) {
-          e.printStackTrace();
-          lastResponse = null;
-        }
-        Response.Builder builder = new Response.Builder();
-        builder.code(httpCode);
-        builder.request(request);
-        builder.protocol(Protocol.HTTP_2);
-        builder.message("EchoMessage");
-        builder.body(ResponseBody.create("", MediaType.parse("application/json")));
-        return builder.build();
-      }
-    };
+      lastResponse = echo;
+    } catch (Exception e) {
+      System.err.println(e);
+      lastResponse = null;
+    }
+    return new Response.Builder()
+      .code(httpCode)
+      .request(request)
+      .protocol(Protocol.HTTP_2)
+      .message("EchoMessage")
+      .body(ResponseBody.create("", MediaType.parse("application/json")))
+      .build();
   }
 
   private String processResponseBody(Request request) {
@@ -96,9 +87,5 @@ public class EchoInterceptor {
 
   public EchoResponse getLastResponse() {
     return this.lastResponse;
-  }
-
-  public void setHttpCode(int httpCode) {
-    this.httpCode = httpCode;
   }
 }

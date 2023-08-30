@@ -74,7 +74,7 @@ public GetApiKeyResponse waitForApiKey(
 ) {
   if (operation == ApiKeyOperation.UPDATE) {
     if (apiKey == null) {
-      throw new AlgoliaRetryException("`apiKey` is required when waiting for an `update` operation.");
+      throw new AlgoliaRuntimeException("`apiKey` is required when waiting for an `update` operation.");
     }
 
     // when updating an api key, we poll the api until we receive a different key
@@ -112,7 +112,7 @@ public GetApiKeyResponse waitForApiKey(
         // magic number to signify we found the key
         return -2;
       } catch (AlgoliaApiException e) {
-        return e.getHttpErrorCode();
+        return e.getStatusCode();
       }
     },
     (Integer status) -> {
@@ -360,7 +360,6 @@ public Iterable<Rule> browseRules(String indexName) {
   *
   * @param searchMethodParams Query requests and strategies. Results will be received in the same
   *     order as the queries. (required)
-  * @return CompletableFuture<SearchResponses<Object>> The awaitable future
   * @throws AlgoliaRuntimeException If it fails to process the API call
   */
 public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
@@ -373,7 +372,6 @@ public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams
   *
   * @param searchMethodParams Query requests and strategies. Results will be received in the same
   *     order as the queries. (required)
-  * @return CompletableFuture<SearchResponses<Object>> The awaitable future
   * @throws AlgoliaRuntimeException If it fails to process the API call
   */
 public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams)
@@ -388,7 +386,6 @@ public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams
   *     order as the queries. (required)
   * @param requestOptions The requestOptions to send along with the query, they will be merged with
   *     the transporter requestOptions.
-  * @return SearchResponses<Object>
   * @throws AlgoliaRuntimeException If it fails to process the API call
   */
 public SearchResponses<Object> search(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
@@ -401,7 +398,6 @@ public SearchResponses<Object> search(SearchMethodParams searchMethodParams, Req
   *
   * @param searchMethodParams Query requests and strategies. Results will be received in the same
   *     order as the queries. (required)
-  * @return SearchResponses<Object>
   * @throws AlgoliaRuntimeException If it fails to process the API call
   */
 public SearchResponses<Object> search(SearchMethodParams searchMethodParams)

@@ -3,8 +3,11 @@ package com.algolia.exceptions;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-@SuppressWarnings("WeakerAccess")
 public class LaunderThrowable {
+
+  private LaunderThrowable() {
+    // Empty.
+  }
 
   /**
    * Performs a get() on the asynchronous method. Launders both Interrupted and Execution exception
@@ -16,24 +19,16 @@ public class LaunderThrowable {
     try {
       return f.get();
     } catch (InterruptedException | ExecutionException e) {
-      throw LaunderThrowable.launder(e);
+      throw launder(e);
     }
   }
 
   /** Launders both Interrupted and Execution exception into business exception */
-  public static RuntimeException launder(Throwable t) {
-    if (t.getCause() instanceof AlgoliaApiException) {
-      throw (AlgoliaApiException) t.getCause();
+  public static AlgoliaRuntimeException launder(Throwable t) {
+    Throwable cause = t.getCause();
+    if (cause instanceof AlgoliaRuntimeException) {
+      return (AlgoliaRuntimeException) cause;
     }
-
-    if (t.getCause() instanceof AlgoliaRetryException) {
-      throw (AlgoliaRetryException) t.getCause();
-    }
-
-    if (t.getCause() instanceof AlgoliaRuntimeException) {
-      throw (AlgoliaRuntimeException) t.getCause();
-    }
-
-    throw new AlgoliaRuntimeException(t);
+    return new AlgoliaRuntimeException(t);
   }
 }

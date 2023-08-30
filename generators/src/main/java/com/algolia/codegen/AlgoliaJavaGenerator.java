@@ -43,6 +43,8 @@ public class AlgoliaJavaGenerator extends JavaClientCodegen {
     modelDocTemplateFiles.clear();
 
     supportingFiles.clear();
+    final String invokerFolder = (sourceFolder + '/' + invokerPackage).replace(".", "/");
+    supportingFiles.add(new SupportingFile("build_config.mustache", invokerFolder, "BuildConfig.java"));
     supportingFiles.add(new SupportingFile("gradle.properties.mustache", "", "gradle.properties"));
     additionalProperties.put("isSearchClient", client.equals("search"));
 

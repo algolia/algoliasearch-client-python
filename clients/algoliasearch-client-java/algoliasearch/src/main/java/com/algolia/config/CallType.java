@@ -1,4 +1,4 @@
-package com.algolia.utils.retry;
+package com.algolia.config;
 
 public enum CallType {
   READ,

@@ -11,6 +11,7 @@ export const patterns = [
   'clients/algoliasearch-client-java/gradle.properties',
   'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/api/**',
   'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/model/**',
+  'clients/algoliasearch-client-java/algoliasearch/src/main/java/com/algolia/BuildConfig.java',
 
   'tests/output/java/build.gradle',
 

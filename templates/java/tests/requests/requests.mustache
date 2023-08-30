@@ -8,23 +8,19 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.*;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.BeforeAll;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.junit.jupiter.api.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import com.algolia.utils.JSONBuilder;
-import com.algolia.utils.ClientOptions;
-import com.algolia.utils.RequestOptions;
+import com.algolia.config.*;
 import com.algolia.model.{{import}}.*;
 import com.algolia.api.{{client}};
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import com.algolia.utils.HttpRequester;
 import com.algolia.EchoInterceptor;
 import com.algolia.EchoResponse;
 
@@ -36,11 +32,17 @@ class {{client}}RequestsTests {
 
     @BeforeAll
     void init() {
-        json = new JSONBuilder().failOnUnknown(true).build();
-        HttpRequester requester = new HttpRequester();
-        echo = new EchoInterceptor();
-        requester.addInterceptor(echo.getEchoInterceptor());
-        client = new {{client}}("appId", "apiKey", {{#hasRegionalHost}}"{{defaultRegion}}", {{/hasRegionalHost}}new ClientOptions().setRequester(requester));
+        this.json = JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).build();
+        this.echo = new EchoInterceptor();
+        var options = ClientOptions.builder()
+                .setRequesterConfig(requester -> requester.addInterceptor(echo))
+                .build();
+        this.client = new {{client}}("appId", "apiKey", {{#hasRegionalHost}}"{{defaultRegion}}", {{/hasRegionalHost}}options);
+    }
+
+    @AfterAll
+    void tearUp() throws Exception {
+      client.close();
     }
 
     {{#blocksRequests}}
@@ -64,26 +66,24 @@ class {{client}}RequestsTests {
             client.{{method}}({{#parametersWithDataType}}{{> maybeConvertOneOf}}{{^-last}},{{/-last}}{{/parametersWithDataType}}{{#isGeneric}}, Object.class{{/isGeneric}}{{#hasRequestOptions}}, requestOptions{{/hasRequestOptions}});
         });
         EchoResponse req = echo.getLastResponse();
+        {{#request}}
+        assertEquals("{{{path}}}", req.path);
+        assertEquals("{{{method}}}", req.method);
+        {{#body}}
+        assertDoesNotThrow(() -> JSONAssert.assertEquals("{{#lambda.escapeQuotes}}{{{body}}}{{/lambda.escapeQuotes}}", req.body, JSONCompareMode.STRICT));
+        {{/body}}
+        {{^body}}
+        {{#assertNullBody}}
+        assertNull(req.body);
+        {{/assertNullBody}}
+        {{^assertNullBody}}
+        assertEquals("{}", req.body);
+        {{/assertNullBody}}
+        {{/body}}
 
-        assertEquals(req.path, "{{{request.path}}}");
-        assertEquals(req.method, "{{{request.method}}}");
-        {{#request.body}}
-        assertDoesNotThrow(() -> {
-            JSONAssert.assertEquals("{{#lambda.escapeQuotes}}{{{request.body}}}{{/lambda.escapeQuotes}}", req.body, JSONCompareMode.STRICT);
-        });
-        {{/request.body}}
-        {{^request.body}}
-          {{#assertNullBody}}
-            assertNull(req.body);
-          {{/assertNullBody}}
-          {{^assertNullBody}}
-            assertEquals(req.body, "");
-          {{/assertNullBody}}
-        {{/request.body}}
-
-        {{#request.queryParameters}}
+        {{#queryParameters}}
         try {
-          Map<String, String> expectedQuery = json.readValue("{{#lambda.escapeQuotes}}{{{request.queryParameters}}}{{/lambda.escapeQuotes}}", new TypeReference<HashMap<String, String>>() {});
+          Map<String, String> expectedQuery = json.readValue("{{#lambda.escapeQuotes}}{{{queryParameters}}}{{/lambda.escapeQuotes}}", new TypeReference<HashMap<String, String>>() {});
           Map<String, Object> actualQuery = req.queryParameters;
 
           assertEquals(expectedQuery.size(), actualQuery.size());
@@ -93,20 +93,21 @@ class {{client}}RequestsTests {
         } catch(JsonProcessingException e) {
           fail("failed to parse queryParameters json");
         }
-        {{/request.queryParameters}}
+        {{/queryParameters}}
 
-        {{#request.headers}}
+        {{#headers}}
         try {
-          Map<String, String> expectedHeaders = json.readValue("{{#lambda.escapeQuotes}}{{{request.headers}}}{{/lambda.escapeQuotes}}", new TypeReference<HashMap<String, String>>() {});
+          Map<String, String> expectedHeaders = json.readValue("{{#lambda.escapeQuotes}}{{{headers}}}{{/lambda.escapeQuotes}}", new TypeReference<HashMap<String, String>>() {});
           Map<String, String> actualHeaders = req.headers;
 
           for (Map.Entry<String, String> p : expectedHeaders.entrySet()) {
-            assertEquals(actualHeaders.get(p.getKey()), p.getValue());
+            assertEquals(p.getValue(), actualHeaders.get(p.getKey()));
           }
         } catch(JsonProcessingException e) {
           fail("failed to parse headers json");
         }
-        {{/request.headers}}
+        {{/headers}}
+        {{/request}}   
     }
     {{/tests}}
     {{/blocksRequests}}
