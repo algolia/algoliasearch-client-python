@@ -47,6 +47,8 @@ Run:
           type: integer
     outcome:
       $ref: '#/RunOutcome'
+    failureThrehsold:
+      $ref: './task.yml#/failureThreshold'
     reason:
       type: string
       description: 'Explains the result of outcome.'

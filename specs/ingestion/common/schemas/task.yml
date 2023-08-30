@@ -56,6 +56,8 @@ TaskCreate:
     enabled:
       type: boolean
       description: Whether the task is enabled or not.
+    failureThreshold:
+      $ref: '#/failureThreshold'
     input:
       $ref: '#/TaskInput'
     # lastCursorValue:
@@ -277,3 +279,9 @@ ScheduleDateUtilsInput:
       maximum: 30
   required:
     - timeframe
+
+failureThreshold:
+  type: integer
+  minimum: 0
+  maximum: 100
+  description: A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
