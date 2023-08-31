@@ -553,7 +553,7 @@ public class ParametersWithDataType {
         int commonCount = 0;
         for (String prop : map.keySet()) {
           for (CodegenProperty propOneOf : oneOf.vars) {
-            if (prop.equals(propOneOf.name)) {
+            if (prop.equals(propOneOf.name) && couldMatchEnum(map.get(prop), propOneOf)) {
               commonCount++;
             }
           }
@@ -608,5 +608,16 @@ public class ParametersWithDataType {
       }
     }
     return null;
+  }
+
+  // If the model is an enum and contains a valid list of allowed values,
+  // it will check that 'value' is in the list.
+  // Otherwise return true by default to avoid false negative.
+  private boolean couldMatchEnum(Object value, CodegenProperty model) {
+    if (!model.getIsEnumOrRef() || model.allowableValues == null || !model.allowableValues.containsKey("values")) return true;
+    Object values = model.allowableValues.get("values");
+    if (!(values instanceof List)) return true;
+
+    return ((List) values).contains(value);
   }
 }

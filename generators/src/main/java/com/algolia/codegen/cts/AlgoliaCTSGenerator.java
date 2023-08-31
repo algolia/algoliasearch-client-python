@@ -2,6 +2,7 @@ package com.algolia.codegen.cts;
 
 import com.algolia.codegen.GenericPropagator;
 import com.algolia.codegen.Utils;
+import com.algolia.codegen.cts.lambda.*;
 import com.algolia.codegen.cts.manager.CTSManager;
 import com.algolia.codegen.cts.manager.CTSManagerFactory;
 import com.algolia.codegen.cts.tests.*;
@@ -85,9 +86,6 @@ public class AlgoliaCTSGenerator extends DefaultCodegen {
     lambdas.put("escapeQuotes", new EscapeQuotesLambda());
     lambdas.put("escapeSlash", new EscapeSlashLambda());
     lambdas.put("replaceBacktick", new ReplaceBacktickLambda());
-    lambdas.put("escapeReserved", new EscapeDartLambda());
-    lambdas.put("escapeDollarSign", new EscapeDollarSignLambda());
-    lambdas.put("lowerCamelCase", new LowerCamelCaseLambda());
     return lambdas;
   }
 
