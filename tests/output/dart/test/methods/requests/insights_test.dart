@@ -501,6 +501,127 @@ void main() {
     ),
   );
 
+  // pushEvents
+  test(
+    'Many events type',
+    () => runTest(
+      builder: (requester) => InsightsClient(
+        appId: 'appId',
+        apiKey: 'apiKey',
+        region: 'us',
+        options: ClientOptions(requester: requester),
+      ),
+      call: (client) => client.pushEvents(
+        insightsEvents: InsightsEvents(
+          events: [
+            ConvertedObjectIDsAfterSearch(
+              eventType: ConversionEvent.fromJson("conversion"),
+              eventName: "Product Purchased",
+              index: "products",
+              userToken: "user-123456",
+              timestamp: 1641290601962,
+              objectIDs: [
+                "9780545139700",
+                "9780439784542",
+              ],
+              queryID: "43b15df305339e827f0ac0bdc5ebcaa7",
+            ),
+            ViewedObjectIDs(
+              eventType: ViewEvent.fromJson("view"),
+              eventName: "Product Detail Page Viewed",
+              index: "products",
+              userToken: "user-123456",
+              timestamp: 1641290601962,
+              objectIDs: [
+                "9780545139700",
+                "9780439784542",
+              ],
+            ),
+          ],
+        ),
+      ),
+      intercept: (request) {
+        expectPath(request.path, '/1/events');
+        expect(request.method, 'post');
+        expectBody(request.body,
+            """{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""");
+      },
+    ),
+  );
+
+  // pushEvents
+  test(
+    'ConvertedObjectIDsAfterSearch',
+    () => runTest(
+      builder: (requester) => InsightsClient(
+        appId: 'appId',
+        apiKey: 'apiKey',
+        region: 'us',
+        options: ClientOptions(requester: requester),
+      ),
+      call: (client) => client.pushEvents(
+        insightsEvents: InsightsEvents(
+          events: [
+            ConvertedObjectIDsAfterSearch(
+              eventType: ConversionEvent.fromJson("conversion"),
+              eventName: "Product Purchased",
+              index: "products",
+              userToken: "user-123456",
+              timestamp: 1641290601962,
+              objectIDs: [
+                "9780545139700",
+                "9780439784542",
+              ],
+              queryID: "43b15df305339e827f0ac0bdc5ebcaa7",
+            ),
+          ],
+        ),
+      ),
+      intercept: (request) {
+        expectPath(request.path, '/1/events');
+        expect(request.method, 'post');
+        expectBody(request.body,
+            """{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}""");
+      },
+    ),
+  );
+
+  // pushEvents
+  test(
+    'ViewedObjectIDs',
+    () => runTest(
+      builder: (requester) => InsightsClient(
+        appId: 'appId',
+        apiKey: 'apiKey',
+        region: 'us',
+        options: ClientOptions(requester: requester),
+      ),
+      call: (client) => client.pushEvents(
+        insightsEvents: InsightsEvents(
+          events: [
+            ViewedObjectIDs(
+              eventType: ViewEvent.fromJson("view"),
+              eventName: "Product Detail Page Viewed",
+              index: "products",
+              userToken: "user-123456",
+              timestamp: 1641290601962,
+              objectIDs: [
+                "9780545139700",
+                "9780439784542",
+              ],
+            ),
+          ],
+        ),
+      ),
+      intercept: (request) {
+        expectPath(request.path, '/1/events');
+        expect(request.method, 'post');
+        expectBody(request.body,
+            """{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""");
+      },
+    ),
+  );
+
   // put
   test(
     'allow put method for a custom path with minimal parameters',

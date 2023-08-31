@@ -324,6 +324,119 @@ describe('pushEvents', () => {
     });
     expect(req.searchParams).toStrictEqual(undefined);
   });
+
+  test('Many events type', async () => {
+    const req = (await client.pushEvents({
+      events: [
+        {
+          eventType: 'conversion',
+          eventName: 'Product Purchased',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+          queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
+        },
+        {
+          eventType: 'view',
+          eventName: 'Product Detail Page Viewed',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+        },
+      ],
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual('/1/events');
+    expect(req.method).toEqual('POST');
+    expect(req.data).toEqual({
+      events: [
+        {
+          eventType: 'conversion',
+          eventName: 'Product Purchased',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+          queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
+        },
+        {
+          eventType: 'view',
+          eventName: 'Product Detail Page Viewed',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+        },
+      ],
+    });
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
+
+  test('ConvertedObjectIDsAfterSearch', async () => {
+    const req = (await client.pushEvents({
+      events: [
+        {
+          eventType: 'conversion',
+          eventName: 'Product Purchased',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+          queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
+        },
+      ],
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual('/1/events');
+    expect(req.method).toEqual('POST');
+    expect(req.data).toEqual({
+      events: [
+        {
+          eventType: 'conversion',
+          eventName: 'Product Purchased',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+          queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
+        },
+      ],
+    });
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
+
+  test('ViewedObjectIDs', async () => {
+    const req = (await client.pushEvents({
+      events: [
+        {
+          eventType: 'view',
+          eventName: 'Product Detail Page Viewed',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+        },
+      ],
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual('/1/events');
+    expect(req.method).toEqual('POST');
+    expect(req.data).toEqual({
+      events: [
+        {
+          eventType: 'view',
+          eventName: 'Product Detail Page Viewed',
+          index: 'products',
+          userToken: 'user-123456',
+          timestamp: 1641290601962,
+          objectIDs: ['9780545139700', '9780439784542'],
+        },
+      ],
+    });
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
 });
 
 describe('put', () => {

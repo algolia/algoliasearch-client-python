@@ -640,6 +640,181 @@ class InsightsClientRequestsTests {
   }
 
   @Test
+  @DisplayName("Many events type")
+  void pushEventsTest1() {
+    InsightsEvents insightsEvents0 = new InsightsEvents();
+    {
+      List<EventsItems> events1 = new ArrayList<>();
+      {
+        ConvertedObjectIDsAfterSearch events_02 = new ConvertedObjectIDsAfterSearch();
+        {
+          ConversionEvent eventType3 = ConversionEvent.fromValue("conversion");
+          events_02.setEventType(eventType3);
+          String eventName3 = "Product Purchased";
+          events_02.setEventName(eventName3);
+          String index3 = "products";
+          events_02.setIndex(index3);
+          String userToken3 = "user-123456";
+          events_02.setUserToken(userToken3);
+          long timestamp3 = 1641290601962L;
+          events_02.setTimestamp(timestamp3);
+          List<String> objectIDs3 = new ArrayList<>();
+          {
+            String objectIDs_04 = "9780545139700";
+            objectIDs3.add(objectIDs_04);
+            String objectIDs_14 = "9780439784542";
+            objectIDs3.add(objectIDs_14);
+          }
+          events_02.setObjectIDs(objectIDs3);
+          String queryID3 = "43b15df305339e827f0ac0bdc5ebcaa7";
+          events_02.setQueryID(queryID3);
+        }
+        events1.add(EventsItems.of(events_02));
+        ViewedObjectIDs events_12 = new ViewedObjectIDs();
+        {
+          ViewEvent eventType3 = ViewEvent.fromValue("view");
+          events_12.setEventType(eventType3);
+          String eventName3 = "Product Detail Page Viewed";
+          events_12.setEventName(eventName3);
+          String index3 = "products";
+          events_12.setIndex(index3);
+          String userToken3 = "user-123456";
+          events_12.setUserToken(userToken3);
+          long timestamp3 = 1641290601962L;
+          events_12.setTimestamp(timestamp3);
+          List<String> objectIDs3 = new ArrayList<>();
+          {
+            String objectIDs_04 = "9780545139700";
+            objectIDs3.add(objectIDs_04);
+            String objectIDs_14 = "9780439784542";
+            objectIDs3.add(objectIDs_14);
+          }
+          events_12.setObjectIDs(objectIDs3);
+        }
+        events1.add(EventsItems.of(events_12));
+      }
+      insightsEvents0.setEvents(events1);
+    }
+
+    assertDoesNotThrow(() -> {
+      client.pushEvents(insightsEvents0);
+    });
+    EchoResponse req = echo.getLastResponse();
+    assertEquals("/1/events", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
+      JSONAssert.assertEquals(
+        "{\"events\":[{\"eventType\":\"conversion\",\"eventName\":\"Product" +
+        " Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"},{\"eventType\":\"view\",\"eventName\":\"Product" +
+        " Detail Page" +
+        " Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}",
+        req.body,
+        JSONCompareMode.STRICT
+      )
+    );
+  }
+
+  @Test
+  @DisplayName("ConvertedObjectIDsAfterSearch")
+  void pushEventsTest2() {
+    InsightsEvents insightsEvents0 = new InsightsEvents();
+    {
+      List<EventsItems> events1 = new ArrayList<>();
+      {
+        ConvertedObjectIDsAfterSearch events_02 = new ConvertedObjectIDsAfterSearch();
+        {
+          ConversionEvent eventType3 = ConversionEvent.fromValue("conversion");
+          events_02.setEventType(eventType3);
+          String eventName3 = "Product Purchased";
+          events_02.setEventName(eventName3);
+          String index3 = "products";
+          events_02.setIndex(index3);
+          String userToken3 = "user-123456";
+          events_02.setUserToken(userToken3);
+          long timestamp3 = 1641290601962L;
+          events_02.setTimestamp(timestamp3);
+          List<String> objectIDs3 = new ArrayList<>();
+          {
+            String objectIDs_04 = "9780545139700";
+            objectIDs3.add(objectIDs_04);
+            String objectIDs_14 = "9780439784542";
+            objectIDs3.add(objectIDs_14);
+          }
+          events_02.setObjectIDs(objectIDs3);
+          String queryID3 = "43b15df305339e827f0ac0bdc5ebcaa7";
+          events_02.setQueryID(queryID3);
+        }
+        events1.add(EventsItems.of(events_02));
+      }
+      insightsEvents0.setEvents(events1);
+    }
+
+    assertDoesNotThrow(() -> {
+      client.pushEvents(insightsEvents0);
+    });
+    EchoResponse req = echo.getLastResponse();
+    assertEquals("/1/events", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
+      JSONAssert.assertEquals(
+        "{\"events\":[{\"eventType\":\"conversion\",\"eventName\":\"Product" +
+        " Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"}]}",
+        req.body,
+        JSONCompareMode.STRICT
+      )
+    );
+  }
+
+  @Test
+  @DisplayName("ViewedObjectIDs")
+  void pushEventsTest3() {
+    InsightsEvents insightsEvents0 = new InsightsEvents();
+    {
+      List<EventsItems> events1 = new ArrayList<>();
+      {
+        ViewedObjectIDs events_02 = new ViewedObjectIDs();
+        {
+          ViewEvent eventType3 = ViewEvent.fromValue("view");
+          events_02.setEventType(eventType3);
+          String eventName3 = "Product Detail Page Viewed";
+          events_02.setEventName(eventName3);
+          String index3 = "products";
+          events_02.setIndex(index3);
+          String userToken3 = "user-123456";
+          events_02.setUserToken(userToken3);
+          long timestamp3 = 1641290601962L;
+          events_02.setTimestamp(timestamp3);
+          List<String> objectIDs3 = new ArrayList<>();
+          {
+            String objectIDs_04 = "9780545139700";
+            objectIDs3.add(objectIDs_04);
+            String objectIDs_14 = "9780439784542";
+            objectIDs3.add(objectIDs_14);
+          }
+          events_02.setObjectIDs(objectIDs3);
+        }
+        events1.add(EventsItems.of(events_02));
+      }
+      insightsEvents0.setEvents(events1);
+    }
+
+    assertDoesNotThrow(() -> {
+      client.pushEvents(insightsEvents0);
+    });
+    EchoResponse req = echo.getLastResponse();
+    assertEquals("/1/events", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
+      JSONAssert.assertEquals(
+        "{\"events\":[{\"eventType\":\"view\",\"eventName\":\"Product Detail Page" +
+        " Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}",
+        req.body,
+        JSONCompareMode.STRICT
+      )
+    );
+  }
+
+  @Test
   @DisplayName("allow put method for a custom path with minimal parameters")
   void putTest0() {
     String path0 = "/test/minimal";

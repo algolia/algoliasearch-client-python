@@ -597,6 +597,148 @@ class InsightsTest extends TestCase implements HttpClientInterface
     }
 
     /**
+    * Test case for PushEvents
+    * Many events type
+    */
+    public function testPushEvents1()
+    {
+        $client = $this->getClient();
+        $client->pushEvents(
+            ["events" =>
+  [
+  ["eventType" =>
+  "conversion",
+"eventName" =>
+  "Product Purchased",
+"index" =>
+  "products",
+"userToken" =>
+  "user-123456",
+"timestamp" =>
+  1641290601962,
+"objectIDs" =>
+  [
+  "9780545139700",
+
+  "9780439784542",
+],
+"queryID" =>
+  "43b15df305339e827f0ac0bdc5ebcaa7",
+],
+
+  ["eventType" =>
+  "view",
+"eventName" =>
+  "Product Detail Page Viewed",
+"index" =>
+  "products",
+"userToken" =>
+  "user-123456",
+"timestamp" =>
+  1641290601962,
+"objectIDs" =>
+  [
+  "9780545139700",
+
+  "9780439784542",
+],
+],
+],
+],
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/1/events",
+                "method" => "POST",
+                "body" => json_decode("{\"events\":[{\"eventType\":\"conversion\",\"eventName\":\"Product Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"},{\"eventType\":\"view\",\"eventName\":\"Product Detail Page Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}"),
+            ],
+        ]);
+    }
+
+    /**
+    * Test case for PushEvents
+    * ConvertedObjectIDsAfterSearch
+    */
+    public function testPushEvents2()
+    {
+        $client = $this->getClient();
+        $client->pushEvents(
+            ["events" =>
+  [
+  ["eventType" =>
+  "conversion",
+"eventName" =>
+  "Product Purchased",
+"index" =>
+  "products",
+"userToken" =>
+  "user-123456",
+"timestamp" =>
+  1641290601962,
+"objectIDs" =>
+  [
+  "9780545139700",
+
+  "9780439784542",
+],
+"queryID" =>
+  "43b15df305339e827f0ac0bdc5ebcaa7",
+],
+],
+],
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/1/events",
+                "method" => "POST",
+                "body" => json_decode("{\"events\":[{\"eventType\":\"conversion\",\"eventName\":\"Product Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"}]}"),
+            ],
+        ]);
+    }
+
+    /**
+    * Test case for PushEvents
+    * ViewedObjectIDs
+    */
+    public function testPushEvents3()
+    {
+        $client = $this->getClient();
+        $client->pushEvents(
+            ["events" =>
+  [
+  ["eventType" =>
+  "view",
+"eventName" =>
+  "Product Detail Page Viewed",
+"index" =>
+  "products",
+"userToken" =>
+  "user-123456",
+"timestamp" =>
+  1641290601962,
+"objectIDs" =>
+  [
+  "9780545139700",
+
+  "9780439784542",
+],
+],
+],
+],
+        );
+
+        $this->assertRequests([
+            [
+                "path" => "/1/events",
+                "method" => "POST",
+                "body" => json_decode("{\"events\":[{\"eventType\":\"view\",\"eventName\":\"Product Detail Page Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}"),
+            ],
+        ]);
+    }
+
+    /**
     * Test case for Put
     * allow put method for a custom path with minimal parameters
     */

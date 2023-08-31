@@ -490,6 +490,60 @@ func TestInsights_PushEvents(t *testing.T) {
 				ja.Assertf(*echo.body, `{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}`)
 			},
 		},
+		{
+			name: "Many events type",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`
+				req := insights.ApiPushEventsRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.PushEvents(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/events")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "POST", echo.method)
+
+				ja := jsonassert.New(t)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`)
+			},
+		},
+		{
+			name: "ConvertedObjectIDsAfterSearch",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}`
+				req := insights.ApiPushEventsRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.PushEvents(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/events")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "POST", echo.method)
+
+				ja := jsonassert.New(t)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}`)
+			},
+		},
+		{
+			name: "ViewedObjectIDs",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`
+				req := insights.ApiPushEventsRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.PushEvents(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/events")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "POST", echo.method)
+
+				ja := jsonassert.New(t)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`)
+			},
+		},
 	}
 	for _, test := range tests {
 		test := test
