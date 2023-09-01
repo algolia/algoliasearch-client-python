@@ -7,12 +7,15 @@ use Algolia\AlgoliaSearch\Configuration\AnalyticsConfig;
 use Algolia\AlgoliaSearch\Http\HttpClientInterface;
 use Algolia\AlgoliaSearch\Http\Psr7\Response;
 use Algolia\AlgoliaSearch\RetryStrategy\ApiWrapper;
-use Algolia\AlgoliaSearch\RetryStrategy\ClusterHosts;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Client tests for AnalyticsClient
+ * Client tests for AnalyticsClient.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class AnalyticsTest extends TestCase implements HttpClientInterface
 {
@@ -23,22 +26,6 @@ class AnalyticsTest extends TestCase implements HttpClientInterface
      * @var RequestInterface
      */
     private $recordedRequest;
-
-    /**
-     * @return AnalyticsClient
-     */
-    private function createClient($appId, $apiKey, $region = 'us')
-    {
-        $config = AnalyticsConfig::create(
-            $appId,
-            $apiKey,
-            $region
-        );
-        $clusterHosts = AnalyticsClient::getClusterHosts($config);
-        $api = new ApiWrapper($this, $config, $clusterHosts);
-
-        return new AnalyticsClient($api, $config);
-    }
 
     public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
     {
@@ -52,13 +39,13 @@ class AnalyticsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct user agent
-    */
+     * Test case : calls api with correct user agent.
+     */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertTrue(
@@ -70,13 +57,13 @@ class AnalyticsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default read timeouts
-    */
+     * Test case : calls api with default read timeouts.
+     */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->get(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -91,13 +78,13 @@ class AnalyticsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default write timeouts
-    */
+     * Test case : calls api with default write timeouts.
+     */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -112,20 +99,20 @@ class AnalyticsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : fallbacks to the alias when region is not given
-    */
+     * Test case : fallbacks to the alias when region is not given.
+     */
     public function test0parameters()
     {
         $client = $this->createClient(
-            "my-app-id",
-            "my-api-key",
+            'my-app-id',
+            'my-api-key',
             null
         );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
         $client->getAverageClickPosition(
-            "my-index",
+            'my-index',
         );
 
         $this->assertEquals(
@@ -135,20 +122,20 @@ class AnalyticsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : uses the correct region
-    */
+     * Test case : uses the correct region.
+     */
     public function test1parameters()
     {
         $client = $this->createClient(
-            "my-app-id",
-            "my-api-key",
-            "de"
+            'my-app-id',
+            'my-api-key',
+            'de'
         );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -158,36 +145,54 @@ class AnalyticsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : throws when incorrect region is given
-    */
+     * Test case : throws when incorrect region is given.
+     */
     public function test2parameters()
     {
         try {
             $client = $this->createClient(
-                "my-app-id",
-                "my-api-key",
-                "not_a_region"
+                'my-app-id',
+                'my-api-key',
+                'not_a_region'
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), '`region` must be one of the following: de, us');
         }
     }
 
     /**
-    * Test case : getAverageClickPosition throws without index
-    */
+     * Test case : getAverageClickPosition throws without index.
+     */
     public function test3parameters()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
+
         try {
             $client->getClickPositions(
                 null,
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), 'Parameter `index` is required when calling `getClickPositions`.');
         }
     }
 
+    /**
+     * @param mixed $appId
+     * @param mixed $apiKey
+     * @param mixed $region
+     *
+     * @return AnalyticsClient
+     */
+    private function createClient($appId, $apiKey, $region = 'us')
+    {
+        $config = AnalyticsConfig::create(
+            $appId,
+            $apiKey,
+            $region
+        );
+        $clusterHosts = AnalyticsClient::getClusterHosts($config);
+        $api = new ApiWrapper($this, $config, $clusterHosts);
+
+        return new AnalyticsClient($api, $config);
+    }
 }

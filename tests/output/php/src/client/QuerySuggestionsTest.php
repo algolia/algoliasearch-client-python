@@ -7,12 +7,15 @@ use Algolia\AlgoliaSearch\Configuration\QuerySuggestionsConfig;
 use Algolia\AlgoliaSearch\Http\HttpClientInterface;
 use Algolia\AlgoliaSearch\Http\Psr7\Response;
 use Algolia\AlgoliaSearch\RetryStrategy\ApiWrapper;
-use Algolia\AlgoliaSearch\RetryStrategy\ClusterHosts;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Client tests for QuerySuggestionsClient
+ * Client tests for QuerySuggestionsClient.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class QuerySuggestionsTest extends TestCase implements HttpClientInterface
 {
@@ -23,22 +26,6 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
      * @var RequestInterface
      */
     private $recordedRequest;
-
-    /**
-     * @return QuerySuggestionsClient
-     */
-    private function createClient($appId, $apiKey, $region = 'us')
-    {
-        $config = QuerySuggestionsConfig::create(
-            $appId,
-            $apiKey,
-            $region
-        );
-        $clusterHosts = QuerySuggestionsClient::getClusterHosts($config);
-        $api = new ApiWrapper($this, $config, $clusterHosts);
-
-        return new QuerySuggestionsClient($api, $config);
-    }
 
     public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
     {
@@ -52,13 +39,13 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct user agent
-    */
+     * Test case : calls api with correct user agent.
+     */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertTrue(
@@ -70,13 +57,13 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default read timeouts
-    */
+     * Test case : calls api with default read timeouts.
+     */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->get(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -91,13 +78,13 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default write timeouts
-    */
+     * Test case : calls api with default write timeouts.
+     */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -112,52 +99,69 @@ class QuerySuggestionsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : throws when region is not given
-    */
+     * Test case : throws when region is not given.
+     */
     public function test0parameters()
     {
         try {
             $client = $this->createClient(
-                "my-app-id",
-                "my-api-key",
-                ""
+                'my-app-id',
+                'my-api-key',
+                ''
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), '`region` is required and must be one of the following: eu, us');
         }
     }
 
     /**
-    * Test case : throws when incorrect region is given
-    */
+     * Test case : throws when incorrect region is given.
+     */
     public function test1parameters()
     {
         try {
             $client = $this->createClient(
-                "my-app-id",
-                "my-api-key",
-                "not_a_region"
+                'my-app-id',
+                'my-api-key',
+                'not_a_region'
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), '`region` is required and must be one of the following: eu, us');
         }
     }
 
     /**
-    * Test case : does not throw when region is given
-    */
+     * Test case : does not throw when region is given.
+     */
     public function test2parameters()
     {
         $client = $this->createClient(
-            "my-app-id",
-            "my-api-key",
-            "us"
+            'my-app-id',
+            'my-api-key',
+            'us'
         );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
     }
 
+    /**
+     * @param mixed $appId
+     * @param mixed $apiKey
+     * @param mixed $region
+     *
+     * @return QuerySuggestionsClient
+     */
+    private function createClient($appId, $apiKey, $region = 'us')
+    {
+        $config = QuerySuggestionsConfig::create(
+            $appId,
+            $apiKey,
+            $region
+        );
+        $clusterHosts = QuerySuggestionsClient::getClusterHosts($config);
+        $api = new ApiWrapper($this, $config, $clusterHosts);
+
+        return new QuerySuggestionsClient($api, $config);
+    }
 }

@@ -12,7 +12,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Client tests for SearchClient
+ * Client tests for SearchClient.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class SearchTest extends TestCase implements HttpClientInterface
 {
@@ -23,18 +27,6 @@ class SearchTest extends TestCase implements HttpClientInterface
      * @var RequestInterface
      */
     private $recordedRequest;
-
-    /**
-     * @return SearchClient
-     */
-    private function createClient($appId, $apiKey, $region = '')
-    {
-        $config = SearchConfig::create($appId, $apiKey);
-        $clusterHosts = ClusterHosts::createFromAppId($appId);
-        $api = new ApiWrapper($this, $config, $clusterHosts);
-
-        return new SearchClient($api, $config);
-    }
 
     public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
     {
@@ -48,20 +40,20 @@ class SearchTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct read host
-    */
+     * Test case : calls api with correct read host.
+     */
     public function test0api()
     {
         $client = $this->createClient(
-            "test-app-id",
-            "test-api-key",
+            'test-app-id',
+            'test-api-key',
             null
         );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
         $client->get(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -71,20 +63,20 @@ class SearchTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct write host
-    */
+     * Test case : calls api with correct write host.
+     */
     public function test1api()
     {
         $client = $this->createClient(
-            "test-app-id",
-            "test-api-key",
+            'test-app-id',
+            'test-api-key',
             null
         );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -94,13 +86,13 @@ class SearchTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct user agent
-    */
+     * Test case : calls api with correct user agent.
+     */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertTrue(
@@ -112,13 +104,13 @@ class SearchTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default read timeouts
-    */
+     * Test case : calls api with default read timeouts.
+     */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->get(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -133,13 +125,13 @@ class SearchTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default write timeouts
-    */
+     * Test case : calls api with default write timeouts.
+     */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -154,8 +146,8 @@ class SearchTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : client throws with invalid parameters
-    */
+     * Test case : client throws with invalid parameters.
+     */
     public function test0parameters()
     {
         try {
@@ -164,84 +156,98 @@ class SearchTest extends TestCase implements HttpClientInterface
                 null,
                 null
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), '`appId` is missing.');
         }
+
         try {
             $client = $this->createClient(
                 null,
-                "my-api-key",
+                'my-api-key',
                 null
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), '`appId` is missing.');
         }
+
         try {
             $client = $this->createClient(
-                "my-app-id",
+                'my-app-id',
                 null,
                 null
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), '`apiKey` is missing.');
         }
     }
 
     /**
-    * Test case : `addApiKey` throws with invalid parameters
-    */
+     * Test case : `addApiKey` throws with invalid parameters.
+     */
     public function test1parameters()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
+
         try {
             $client->addApiKey(
                 null,
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), 'Parameter `apiKey` is required when calling `addApiKey`.');
         }
     }
 
     /**
-    * Test case : `addOrUpdateObject` throws with invalid parameters
-    */
+     * Test case : `addOrUpdateObject` throws with invalid parameters.
+     */
     public function test2parameters()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
+
         try {
             $client->addOrUpdateObject(
                 null,
-                "my-object-id",
+                'my-object-id',
                 [],
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), 'Parameter `indexName` is required when calling `addOrUpdateObject`.');
         }
+
         try {
             $client->addOrUpdateObject(
-                "my-index-name",
+                'my-index-name',
                 null,
                 [],
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), 'Parameter `objectID` is required when calling `addOrUpdateObject`.');
         }
+
         try {
             $client->addOrUpdateObject(
-                "my-index-name",
-                "my-object-id",
+                'my-index-name',
+                'my-object-id',
                 null,
             );
-
         } catch (\Exception $e) {
             $this->assertEquals($e->getMessage(), 'Parameter `body` is required when calling `addOrUpdateObject`.');
         }
     }
 
+    /**
+     * @param mixed $appId
+     * @param mixed $apiKey
+     * @param mixed $region
+     *
+     * @return SearchClient
+     */
+    private function createClient($appId, $apiKey, $region = '')
+    {
+        $config = SearchConfig::create($appId, $apiKey);
+        $clusterHosts = ClusterHosts::createFromAppId($appId);
+        $api = new ApiWrapper($this, $config, $clusterHosts);
+
+        return new SearchClient($api, $config);
+    }
 }

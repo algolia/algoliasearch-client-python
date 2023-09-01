@@ -12,7 +12,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Client tests for RecommendClient
+ * Client tests for RecommendClient.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class RecommendTest extends TestCase implements HttpClientInterface
 {
@@ -23,18 +27,6 @@ class RecommendTest extends TestCase implements HttpClientInterface
      * @var RequestInterface
      */
     private $recordedRequest;
-
-    /**
-     * @return RecommendClient
-     */
-    private function createClient($appId, $apiKey, $region = '')
-    {
-        $config = RecommendConfig::create($appId, $apiKey);
-        $clusterHosts = ClusterHosts::createFromAppId($appId);
-        $api = new ApiWrapper($this, $config, $clusterHosts);
-
-        return new RecommendClient($api, $config);
-    }
 
     public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
     {
@@ -48,20 +40,20 @@ class RecommendTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct read host
-    */
+     * Test case : calls api with correct read host.
+     */
     public function test0api()
     {
         $client = $this->createClient(
-            "test-app-id",
-            "test-api-key",
+            'test-app-id',
+            'test-api-key',
             null
         );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
         $client->get(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -71,20 +63,20 @@ class RecommendTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct write host
-    */
+     * Test case : calls api with correct write host.
+     */
     public function test1api()
     {
         $client = $this->createClient(
-            "test-app-id",
-            "test-api-key",
+            'test-app-id',
+            'test-api-key',
             null
         );
 
         // Make sure everything went fine without errors
         $this->assertIsObject($client);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -94,13 +86,13 @@ class RecommendTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct user agent
-    */
+     * Test case : calls api with correct user agent.
+     */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertTrue(
@@ -112,13 +104,13 @@ class RecommendTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default read timeouts
-    */
+     * Test case : calls api with default read timeouts.
+     */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->get(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -133,13 +125,13 @@ class RecommendTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default write timeouts
-    */
+     * Test case : calls api with default write timeouts.
+     */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -153,4 +145,19 @@ class RecommendTest extends TestCase implements HttpClientInterface
         );
     }
 
+    /**
+     * @param mixed $appId
+     * @param mixed $apiKey
+     * @param mixed $region
+     *
+     * @return RecommendClient
+     */
+    private function createClient($appId, $apiKey, $region = '')
+    {
+        $config = RecommendConfig::create($appId, $apiKey);
+        $clusterHosts = ClusterHosts::createFromAppId($appId);
+        $api = new ApiWrapper($this, $config, $clusterHosts);
+
+        return new RecommendClient($api, $config);
+    }
 }

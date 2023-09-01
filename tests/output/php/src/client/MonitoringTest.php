@@ -12,7 +12,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Client tests for MonitoringClient
+ * Client tests for MonitoringClient.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class MonitoringTest extends TestCase implements HttpClientInterface
 {
@@ -23,18 +27,6 @@ class MonitoringTest extends TestCase implements HttpClientInterface
      * @var RequestInterface
      */
     private $recordedRequest;
-
-    /**
-     * @return MonitoringClient
-     */
-    private function createClient($appId, $apiKey, $region = '')
-    {
-        $config = MonitoringConfig::create($appId, $apiKey);
-        $clusterHosts = ClusterHosts::createFromAppId($appId);
-        $api = new ApiWrapper($this, $config, $clusterHosts);
-
-        return new MonitoringClient($api, $config);
-    }
 
     public function sendRequest(RequestInterface $request, $timeout, $connectTimeout)
     {
@@ -48,13 +40,13 @@ class MonitoringTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with correct user agent
-    */
+     * Test case : calls api with correct user agent.
+     */
     public function test0commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertTrue(
@@ -66,13 +58,13 @@ class MonitoringTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default read timeouts
-    */
+     * Test case : calls api with default read timeouts.
+     */
     public function test1commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->get(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -87,13 +79,13 @@ class MonitoringTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : calls api with default write timeouts
-    */
+     * Test case : calls api with default write timeouts.
+     */
     public function test2commonApi()
     {
         $client = $this->createClient(self::APP_ID, self::API_KEY);
         $client->post(
-            "/test",
+            '/test',
         );
 
         $this->assertEquals(
@@ -108,13 +100,13 @@ class MonitoringTest extends TestCase implements HttpClientInterface
     }
 
     /**
-    * Test case : uses the correct region
-    */
+     * Test case : uses the correct region.
+     */
     public function test0parameters()
     {
         $client = $this->createClient(
-            "my-app-id",
-            "my-api-key",
+            'my-app-id',
+            'my-api-key',
             null
         );
 
@@ -122,4 +114,19 @@ class MonitoringTest extends TestCase implements HttpClientInterface
         $this->assertIsObject($client);
     }
 
+    /**
+     * @param mixed $appId
+     * @param mixed $apiKey
+     * @param mixed $region
+     *
+     * @return MonitoringClient
+     */
+    private function createClient($appId, $apiKey, $region = '')
+    {
+        $config = MonitoringConfig::create($appId, $apiKey);
+        $clusterHosts = ClusterHosts::createFromAppId($appId);
+        $api = new ApiWrapper($this, $config, $clusterHosts);
+
+        return new MonitoringClient($api, $config);
+    }
 }
