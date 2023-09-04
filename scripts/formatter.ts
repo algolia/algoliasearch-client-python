@@ -25,7 +25,7 @@ export async function formatter(language: string, folder: string): Promise<void>
       cmd = `cd ${folder} && go fmt ./...`;
       break;
     case 'kotlin':
-      cmd = `${folder}/gradlew -p ${folder} spotlessApply`;
+      cmd = `./gradle/gradlew -p ${folder} spotlessApply`;
       break;
     case 'dart':
       if (folder.includes('tests')) {

@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.0"
-ktor = "2.3.3"
+ktor = "2.3.4"
 
 [libraries]
 # Kotlin
@@ -8,7 +8,7 @@ kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common" }
 kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.6.0" }
-kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.0" }
+kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.1" }
 
 # Ktor
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
@@ -30,4 +30,4 @@ kotlin-multiplaform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinx-binary-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 maven-publish = { id = "com.vanniktech.maven.publish", version = "0.25.3" }
-spotless = { id = "com.diffplug.gradle.spotless", version = "6.20.0" }
+spotless = { id = "com.diffplug.gradle.spotless", version = "6.21.0" }
