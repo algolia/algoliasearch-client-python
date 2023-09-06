@@ -124,6 +124,7 @@ acl:
     `deleteIndex`: required to delete indices.
     `deleteObject`: required to delete records.
     `editSettings`: required to change index settings.
+    `inference`: required to access the Inference API.
     `listIndexes`: required to list indices.
     `logs`: required to access logs of search and indexing operations.
     `recommendation`: required to access the Personalization and Recommend APIs.
@@ -138,6 +139,7 @@ acl:
     - deleteObject
     - deleteIndex
     - editSettings
+    - inference
     - listIndexes
     - logs
     - personalization
