@@ -64,6 +64,7 @@ const _$AclEnumMap = {
   Acl.deleteObject: 'deleteObject',
   Acl.deleteIndex: 'deleteIndex',
   Acl.editSettings: 'editSettings',
+  Acl.inference: 'inference',
   Acl.listIndexes: 'listIndexes',
   Acl.logs: 'logs',
   Acl.personalization: 'personalization',

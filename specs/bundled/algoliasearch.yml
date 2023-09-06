@@ -2181,6 +2181,8 @@ components:
 
         `editSettings`: required to change index settings.
 
+        `inference`: required to access the Inference API.
+
         `listIndexes`: required to list indices.
 
         `logs`: required to access logs of search and indexing operations.
@@ -2203,6 +2205,7 @@ components:
         - deleteObject
         - deleteIndex
         - editSettings
+        - inference
         - listIndexes
         - logs
         - personalization
