@@ -12,7 +12,6 @@ import kotlinx.serialization.json.*
  * @param imageType
  * @param configuration The configuration of the spec.
  * @param version The version of the image, defaults to `latest`.
- * @param outputFile The full name of the output file.
  */
 @Serializable
 public data class SourceDocker(
@@ -29,7 +28,4 @@ public data class SourceDocker(
 
   /** The version of the image, defaults to `latest`. */
   @SerialName(value = "version") val version: String? = null,
-
-  /** The full name of the output file. */
-  @SerialName(value = "outputFile") val outputFile: String? = null,
 ) : SourceUpdateInput, SourceInput

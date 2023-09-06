@@ -14,8 +14,6 @@ type SourceDocker struct {
 	// The version of the image, defaults to `latest`.
 	Version   *string         `json:"version,omitempty"`
 	ImageType DockerImageType `json:"imageType" validate:"required"`
-	// The full name of the output file.
-	OutputFile *string `json:"outputFile,omitempty"`
 	// The configuration of the spec.
 	Configuration map[string]interface{} `json:"configuration" validate:"required"`
 }
@@ -25,12 +23,6 @@ type SourceDockerOption func(f *SourceDocker)
 func WithSourceDockerVersion(val string) SourceDockerOption {
 	return func(f *SourceDocker) {
 		f.Version = &val
-	}
-}
-
-func WithSourceDockerOutputFile(val string) SourceDockerOption {
-	return func(f *SourceDocker) {
-		f.OutputFile = &val
 	}
 }
 
@@ -162,38 +154,6 @@ func (o *SourceDocker) SetImageType(v DockerImageType) {
 	o.ImageType = v
 }
 
-// GetOutputFile returns the OutputFile field value if set, zero value otherwise.
-func (o *SourceDocker) GetOutputFile() string {
-	if o == nil || o.OutputFile == nil {
-		var ret string
-		return ret
-	}
-	return *o.OutputFile
-}
-
-// GetOutputFileOk returns a tuple with the OutputFile field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *SourceDocker) GetOutputFileOk() (*string, bool) {
-	if o == nil || o.OutputFile == nil {
-		return nil, false
-	}
-	return o.OutputFile, true
-}
-
-// HasOutputFile returns a boolean if a field has been set.
-func (o *SourceDocker) HasOutputFile() bool {
-	if o != nil && o.OutputFile != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetOutputFile gets a reference to the given string and assigns it to the OutputFile field.
-func (o *SourceDocker) SetOutputFile(v string) {
-	o.OutputFile = &v
-}
-
 // GetConfiguration returns the Configuration field value
 func (o *SourceDocker) GetConfiguration() map[string]interface{} {
 	if o == nil {
@@ -232,9 +192,6 @@ func (o SourceDocker) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["imageType"] = o.ImageType
 	}
-	if o.OutputFile != nil {
-		toSerialize["outputFile"] = o.OutputFile
-	}
 	if true {
 		toSerialize["configuration"] = o.Configuration
 	}
@@ -247,7 +204,6 @@ func (o SourceDocker) String() string {
 	out += fmt.Sprintf("  image=%v\n", o.Image)
 	out += fmt.Sprintf("  version=%v\n", o.Version)
 	out += fmt.Sprintf("  imageType=%v\n", o.ImageType)
-	out += fmt.Sprintf("  outputFile=%v\n", o.OutputFile)
 	out += fmt.Sprintf("  configuration=%v\n", o.Configuration)
 	return fmt.Sprintf("SourceDocker {\n%s}", out)
 }

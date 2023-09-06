@@ -77,7 +77,6 @@ public sealed interface SourceUpdateInput {
      * @param imageType
      * @param configuration The configuration of the spec.
      * @param version The version of the image, defaults to `latest`.
-     * @param outputFile The full name of the output file.
      */
     public fun SourceDocker(
       registry: DockerRegistry,
@@ -85,14 +84,12 @@ public sealed interface SourceUpdateInput {
       imageType: DockerImageType,
       configuration: JsonObject,
       version: String? = null,
-      outputFile: String? = null,
     ): SourceDocker = com.algolia.client.model.ingestion.SourceDocker(
       registry = registry,
       image = image,
       imageType = imageType,
       configuration = configuration,
       version = version,
-      outputFile = outputFile,
     )
 
     /**
