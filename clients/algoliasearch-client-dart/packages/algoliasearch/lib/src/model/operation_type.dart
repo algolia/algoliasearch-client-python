@@ -5,10 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 /// Operation to perform (_move_ or _copy_).
 @JsonEnum(valueField: 'raw')
 enum OperationType {
-  /// Operation to perform (_move_ or _copy_).
   move(r'move'),
-
-  /// Operation to perform (_move_ or _copy_).
   copy(r'copy');
 
   const OperationType(this.raw);

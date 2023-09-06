@@ -5,7 +5,6 @@ import 'package:json_annotation/json_annotation.dart';
 /// - `default`: perform a search query - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
 @JsonEnum(valueField: 'raw')
 enum SearchTypeDefault {
-  /// - `default`: perform a search query - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
   default_(r'default');
 
   const SearchTypeDefault(this.raw);

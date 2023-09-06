@@ -5,10 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 /// _published_ if the task has been processed, _notPublished_ otherwise.
 @JsonEnum(valueField: 'raw')
 enum TaskStatus {
-  /// _published_ if the task has been processed, _notPublished_ otherwise.
   published(r'published'),
-
-  /// _published_ if the task has been processed, _notPublished_ otherwise.
   notPublished(r'notPublished');
 
   const TaskStatus(this.raw);

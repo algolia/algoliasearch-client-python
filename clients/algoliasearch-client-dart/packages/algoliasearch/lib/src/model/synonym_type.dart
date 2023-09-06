@@ -5,19 +5,10 @@ import 'package:json_annotation/json_annotation.dart';
 /// Synonym type.
 @JsonEnum(valueField: 'raw')
 enum SynonymType {
-  /// Synonym type.
   synonym(r'synonym'),
-
-  /// Synonym type.
   onewaysynonym(r'onewaysynonym'),
-
-  /// Synonym type.
   altcorrection1(r'altcorrection1'),
-
-  /// Synonym type.
   altcorrection2(r'altcorrection2'),
-
-  /// Synonym type.
   placeholder(r'placeholder');
 
   const SynonymType(this.raw);

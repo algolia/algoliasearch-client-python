@@ -5,16 +5,9 @@ import 'package:json_annotation/json_annotation.dart';
 /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
 @JsonEnum(valueField: 'raw')
 enum RemoveWordsIfNoResults {
-  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   none(r'none'),
-
-  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   lastWords(r'lastWords'),
-
-  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   firstWords(r'firstWords'),
-
-  /// Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
   allOptional(r'allOptional');
 
   const RemoveWordsIfNoResults(this.raw);

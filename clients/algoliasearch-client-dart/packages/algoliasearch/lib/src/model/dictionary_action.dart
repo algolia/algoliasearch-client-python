@@ -5,10 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 /// Actions to perform.
 @JsonEnum(valueField: 'raw')
 enum DictionaryAction {
-  /// Actions to perform.
   addEntry(r'addEntry'),
-
-  /// Actions to perform.
   deleteEntry(r'deleteEntry');
 
   const DictionaryAction(this.raw);

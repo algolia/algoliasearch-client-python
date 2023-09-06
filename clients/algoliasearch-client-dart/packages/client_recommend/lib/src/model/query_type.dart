@@ -5,13 +5,8 @@ import 'package:json_annotation/json_annotation.dart';
 /// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
 @JsonEnum(valueField: 'raw')
 enum QueryType {
-  /// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
   prefixLast(r'prefixLast'),
-
-  /// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
   prefixAll(r'prefixAll'),
-
-  /// Determines how query words are [interpreted as prefixes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/prefix-searching/).
   prefixNone(r'prefixNone');
 
   const QueryType(this.raw);

@@ -5,25 +5,12 @@ import 'package:json_annotation/json_annotation.dart';
 /// Type of batch operation.
 @JsonEnum(valueField: 'raw')
 enum Action {
-  /// Type of batch operation.
   addObject(r'addObject'),
-
-  /// Type of batch operation.
   updateObject(r'updateObject'),
-
-  /// Type of batch operation.
   partialUpdateObject(r'partialUpdateObject'),
-
-  /// Type of batch operation.
   partialUpdateObjectNoCreate(r'partialUpdateObjectNoCreate'),
-
-  /// Type of batch operation.
   deleteObject(r'deleteObject'),
-
-  /// Type of batch operation.
   delete(r'delete'),
-
-  /// Type of batch operation.
   clear(r'clear');
 
   const Action(this.raw);

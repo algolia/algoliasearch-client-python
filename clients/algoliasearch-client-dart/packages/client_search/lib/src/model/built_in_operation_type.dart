@@ -5,25 +5,12 @@ import 'package:json_annotation/json_annotation.dart';
 /// Operation to apply to the attribute.
 @JsonEnum(valueField: 'raw')
 enum BuiltInOperationType {
-  /// Operation to apply to the attribute.
   increment(r'Increment'),
-
-  /// Operation to apply to the attribute.
   decrement(r'Decrement'),
-
-  /// Operation to apply to the attribute.
   add(r'Add'),
-
-  /// Operation to apply to the attribute.
   remove(r'Remove'),
-
-  /// Operation to apply to the attribute.
   addUnique(r'AddUnique'),
-
-  /// Operation to apply to the attribute.
   incrementFrom(r'IncrementFrom'),
-
-  /// Operation to apply to the attribute.
   incrementSet(r'IncrementSet');
 
   const BuiltInOperationType(this.raw);

@@ -5,10 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 /// Type of edit.
 @JsonEnum(valueField: 'raw')
 enum EditType {
-  /// Type of edit.
   remove(r'remove'),
-
-  /// Type of edit.
   replace(r'replace');
 
   const EditType(this.raw);

@@ -5,16 +5,9 @@ import 'package:json_annotation/json_annotation.dart';
 /// Whether the pattern parameter matches the beginning (`startsWith`) or end (`endsWith`) of the query string, is an exact match (`is`), or a partial match (`contains`).
 @JsonEnum(valueField: 'raw')
 enum Anchoring {
-  /// Whether the pattern parameter matches the beginning (`startsWith`) or end (`endsWith`) of the query string, is an exact match (`is`), or a partial match (`contains`).
   is_(r'is'),
-
-  /// Whether the pattern parameter matches the beginning (`startsWith`) or end (`endsWith`) of the query string, is an exact match (`is`), or a partial match (`contains`).
   startsWith(r'startsWith'),
-
-  /// Whether the pattern parameter matches the beginning (`startsWith`) or end (`endsWith`) of the query string, is an exact match (`is`), or a partial match (`contains`).
   endsWith(r'endsWith'),
-
-  /// Whether the pattern parameter matches the beginning (`startsWith`) or end (`endsWith`) of the query string, is an exact match (`is`), or a partial match (`contains`).
   contains(r'contains');
 
   const Anchoring(this.raw);

@@ -5,7 +5,6 @@ import 'package:json_annotation/json_annotation.dart';
 /// Trending facets model.
 @JsonEnum(valueField: 'raw')
 enum TrendingFacetsModel {
-  /// Trending facets model.
   trendingFacets(r'trending-facets');
 
   const TrendingFacetsModel(this.raw);

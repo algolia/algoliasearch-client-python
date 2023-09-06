@@ -5,10 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 /// Recommendation model.
 @JsonEnum(valueField: 'raw')
 enum RecommendationModels {
-  /// Recommendation model.
   relatedProducts(r'related-products'),
-
-  /// Recommendation model.
   boughtTogether(r'bought-together');
 
   const RecommendationModels(this.raw);
