@@ -8,9 +8,6 @@ import 'package:json_annotation/json_annotation.dart';
 enum {{{classname}}} {
 {{#allowableValues}}
 {{#enumVars}}
-  {{#description}}
-  /// {{{.}}}
-  {{/description}}
   {{#lambda.camelcase}}{{&name}}}{{/lambda.camelcase}}({{#isString}}r{{/isString}}{{{value}}}){{^-last}},{{/-last}}{{#-last}};{{/-last}}
 {{/enumVars}}
 {{/allowableValues}}
