@@ -273,10 +273,6 @@ SourceDocker:
       example: v2.1.0
     imageType:
       $ref: '#/DockerImageType'
-    outputFile:
-      type: string
-      description: The full name of the output file.
-      example: output.json
     configuration:
       type: object
       description: The configuration of the spec.
