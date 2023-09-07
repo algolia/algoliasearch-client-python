@@ -1,3 +1,11 @@
+## [4.0.0-beta.4](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.3...4.0.0-beta.4)
+
+- [24affb264](https://github.com/algolia/api-clients-automation/commit/24affb264) feat(specs): add `recordType` and `fallbackIsInStockValue` in inputs ([#1988](https://github.com/algolia/api-clients-automation/pull/1988)) by [@damcou](https://github.com/damcou/)
+- [1381b70ff](https://github.com/algolia/api-clients-automation/commit/1381b70ff) feat(specs): add inference ACL to API key object ([#1985](https://github.com/algolia/api-clients-automation/pull/1985)) by [@helenamariano](https://github.com/helenamariano/)
+- [f3d3b28c3](https://github.com/algolia/api-clients-automation/commit/f3d3b28c3) refactor(java): improve client performance and DX ([#1959](https://github.com/algolia/api-clients-automation/pull/1959)) by [@aallam](https://github.com/aallam/)
+- [028bf073b](https://github.com/algolia/api-clients-automation/commit/028bf073b) feat(specs): add `failureThreshold` to Ingestion API ([#1962](https://github.com/algolia/api-clients-automation/pull/1962)) by [@shortcuts](https://github.com/shortcuts/)
+- [b19273392](https://github.com/algolia/api-clients-automation/commit/b19273392) feat(specs): update ingestion specs for BigCommerce ([#1961](https://github.com/algolia/api-clients-automation/pull/1961)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0-beta.3](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.2...4.0.0-beta.3)
 
 - [f89612fe](https://github.com/algolia/api-clients-automation/commit/f89612fe) chore(clients): dependency upgrade ([#1940](https://github.com/algolia/api-clients-automation/pull/1940)) by [@shortcuts](https://github.com/shortcuts/)

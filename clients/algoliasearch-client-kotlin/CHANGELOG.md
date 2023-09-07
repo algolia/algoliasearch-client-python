@@ -1,5 +1,12 @@
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
 
+- [24affb264](https://github.com/algolia/api-clients-automation/commit/24affb264) feat(specs): add `recordType` and `fallbackIsInStockValue` in inputs ([#1988](https://github.com/algolia/api-clients-automation/pull/1988)) by [@damcou](https://github.com/damcou/)
+- [1381b70ff](https://github.com/algolia/api-clients-automation/commit/1381b70ff) feat(specs): add inference ACL to API key object ([#1985](https://github.com/algolia/api-clients-automation/pull/1985)) by [@helenamariano](https://github.com/helenamariano/)
+- [028bf073b](https://github.com/algolia/api-clients-automation/commit/028bf073b) feat(specs): add `failureThreshold` to Ingestion API ([#1962](https://github.com/algolia/api-clients-automation/pull/1962)) by [@shortcuts](https://github.com/shortcuts/)
+- [b19273392](https://github.com/algolia/api-clients-automation/commit/b19273392) feat(specs): update ingestion specs for BigCommerce ([#1961](https://github.com/algolia/api-clients-automation/pull/1961)) by [@shortcuts](https://github.com/shortcuts/)
+
+## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
+
 - [693631cc7](https://github.com/algolia/api-clients-automation/commit/693631cc7) fix(specs): remove some parameters from trending requests ([#1915](https://github.com/algolia/api-clients-automation/pull/1915)) by [@shortcuts](https://github.com/shortcuts/)
 
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
