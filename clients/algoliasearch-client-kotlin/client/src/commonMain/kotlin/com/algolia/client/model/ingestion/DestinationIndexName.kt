@@ -8,10 +8,13 @@ import kotlinx.serialization.json.*
  * DestinationIndexName
  *
  * @param indexName The index name to store data in.
+ * @param recordType
  */
 @Serializable
 public data class DestinationIndexName(
 
   /** The index name to store data in. */
   @SerialName(value = "indexName") val indexName: String,
+
+  @SerialName(value = "recordType") val recordType: RecordType? = null,
 ) : DestinationInput

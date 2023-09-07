@@ -99,17 +99,20 @@ public sealed interface SourceInput {
      * @param projectKey
      * @param storeKeys
      * @param locales Array of locales that must match the following pattern: ^[a-z]{2}(-[A-Z]{2})?$. For example [\"fr-FR\", \"en\"].
+     * @param fallbackIsInStockValue Determines the value that will be stored in the Algolia record if there's no inventory information on the product.
      */
     public fun SourceCommercetools(
       url: String,
       projectKey: String,
       storeKeys: List<String>? = null,
       locales: List<String>? = null,
+      fallbackIsInStockValue: Boolean? = null,
     ): SourceCommercetools = com.algolia.client.model.ingestion.SourceCommercetools(
       url = url,
       projectKey = projectKey,
       storeKeys = storeKeys,
       locales = locales,
+      fallbackIsInStockValue = fallbackIsInStockValue,
     )
 
     /**

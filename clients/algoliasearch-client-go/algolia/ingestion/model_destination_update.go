@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// DestinationUpdate Payload to partialy update a Destination.
+// DestinationUpdate Payload to partially update a Destination.
 type DestinationUpdate struct {
 	Type *DestinationType `json:"type,omitempty"`
 	// An human readable name describing the object.

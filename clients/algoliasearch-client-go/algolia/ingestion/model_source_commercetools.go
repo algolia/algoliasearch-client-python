@@ -13,6 +13,8 @@ type SourceCommercetools struct {
 	Locales    []string `json:"locales,omitempty"`
 	Url        string   `json:"url" validate:"required"`
 	ProjectKey string   `json:"projectKey" validate:"required"`
+	// Determines the value that will be stored in the Algolia record if there's no inventory information on the product.
+	FallbackIsInStockValue *bool `json:"fallbackIsInStockValue,omitempty"`
 }
 
 type SourceCommercetoolsOption func(f *SourceCommercetools)
@@ -26,6 +28,12 @@ func WithSourceCommercetoolsStoreKeys(val []string) SourceCommercetoolsOption {
 func WithSourceCommercetoolsLocales(val []string) SourceCommercetoolsOption {
 	return func(f *SourceCommercetools) {
 		f.Locales = val
+	}
+}
+
+func WithSourceCommercetoolsFallbackIsInStockValue(val bool) SourceCommercetoolsOption {
+	return func(f *SourceCommercetools) {
+		f.FallbackIsInStockValue = &val
 	}
 }
 
@@ -48,6 +56,8 @@ func NewSourceCommercetools(url string, projectKey string, opts ...SourceCommerc
 // but it doesn't guarantee that properties required by API are set
 func NewSourceCommercetoolsWithDefaults() *SourceCommercetools {
 	this := &SourceCommercetools{}
+	var fallbackIsInStockValue bool = true
+	this.FallbackIsInStockValue = &fallbackIsInStockValue
 	return this
 }
 
@@ -163,6 +173,38 @@ func (o *SourceCommercetools) SetProjectKey(v string) {
 	o.ProjectKey = v
 }
 
+// GetFallbackIsInStockValue returns the FallbackIsInStockValue field value if set, zero value otherwise.
+func (o *SourceCommercetools) GetFallbackIsInStockValue() bool {
+	if o == nil || o.FallbackIsInStockValue == nil {
+		var ret bool
+		return ret
+	}
+	return *o.FallbackIsInStockValue
+}
+
+// GetFallbackIsInStockValueOk returns a tuple with the FallbackIsInStockValue field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SourceCommercetools) GetFallbackIsInStockValueOk() (*bool, bool) {
+	if o == nil || o.FallbackIsInStockValue == nil {
+		return nil, false
+	}
+	return o.FallbackIsInStockValue, true
+}
+
+// HasFallbackIsInStockValue returns a boolean if a field has been set.
+func (o *SourceCommercetools) HasFallbackIsInStockValue() bool {
+	if o != nil && o.FallbackIsInStockValue != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFallbackIsInStockValue gets a reference to the given bool and assigns it to the FallbackIsInStockValue field.
+func (o *SourceCommercetools) SetFallbackIsInStockValue(v bool) {
+	o.FallbackIsInStockValue = &v
+}
+
 func (o SourceCommercetools) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.StoreKeys != nil {
@@ -177,6 +219,9 @@ func (o SourceCommercetools) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["projectKey"] = o.ProjectKey
 	}
+	if o.FallbackIsInStockValue != nil {
+		toSerialize["fallbackIsInStockValue"] = o.FallbackIsInStockValue
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -186,6 +231,7 @@ func (o SourceCommercetools) String() string {
 	out += fmt.Sprintf("  locales=%v\n", o.Locales)
 	out += fmt.Sprintf("  url=%v\n", o.Url)
 	out += fmt.Sprintf("  projectKey=%v\n", o.ProjectKey)
+	out += fmt.Sprintf("  fallbackIsInStockValue=%v\n", o.FallbackIsInStockValue)
 	return fmt.Sprintf("SourceCommercetools {\n%s}", out)
 }
 

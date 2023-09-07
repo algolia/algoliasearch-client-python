@@ -9,16 +9,28 @@ import (
 // DestinationIndexName struct for DestinationIndexName
 type DestinationIndexName struct {
 	// The index name to store data in.
-	IndexName string `json:"indexName" validate:"required"`
+	IndexName  string      `json:"indexName" validate:"required"`
+	RecordType *RecordType `json:"recordType,omitempty"`
+}
+
+type DestinationIndexNameOption func(f *DestinationIndexName)
+
+func WithDestinationIndexNameRecordType(val RecordType) DestinationIndexNameOption {
+	return func(f *DestinationIndexName) {
+		f.RecordType = &val
+	}
 }
 
 // NewDestinationIndexName instantiates a new DestinationIndexName object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDestinationIndexName(indexName string) *DestinationIndexName {
+func NewDestinationIndexName(indexName string, opts ...DestinationIndexNameOption) *DestinationIndexName {
 	this := &DestinationIndexName{}
 	this.IndexName = indexName
+	for _, opt := range opts {
+		opt(this)
+	}
 	return this
 }
 
@@ -54,10 +66,45 @@ func (o *DestinationIndexName) SetIndexName(v string) {
 	o.IndexName = v
 }
 
+// GetRecordType returns the RecordType field value if set, zero value otherwise.
+func (o *DestinationIndexName) GetRecordType() RecordType {
+	if o == nil || o.RecordType == nil {
+		var ret RecordType
+		return ret
+	}
+	return *o.RecordType
+}
+
+// GetRecordTypeOk returns a tuple with the RecordType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DestinationIndexName) GetRecordTypeOk() (*RecordType, bool) {
+	if o == nil || o.RecordType == nil {
+		return nil, false
+	}
+	return o.RecordType, true
+}
+
+// HasRecordType returns a boolean if a field has been set.
+func (o *DestinationIndexName) HasRecordType() bool {
+	if o != nil && o.RecordType != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRecordType gets a reference to the given RecordType and assigns it to the RecordType field.
+func (o *DestinationIndexName) SetRecordType(v RecordType) {
+	o.RecordType = &v
+}
+
 func (o DestinationIndexName) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
 		toSerialize["indexName"] = o.IndexName
+	}
+	if o.RecordType != nil {
+		toSerialize["recordType"] = o.RecordType
 	}
 	return json.Marshal(toSerialize)
 }
@@ -65,6 +112,7 @@ func (o DestinationIndexName) MarshalJSON() ([]byte, error) {
 func (o DestinationIndexName) String() string {
 	out := ""
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
+	out += fmt.Sprintf("  recordType=%v\n", o.RecordType)
 	return fmt.Sprintf("DestinationIndexName {\n%s}", out)
 }
 

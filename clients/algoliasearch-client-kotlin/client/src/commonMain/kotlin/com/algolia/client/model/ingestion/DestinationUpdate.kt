@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * Payload to partialy update a Destination.
+ * Payload to partially update a Destination.
  *
  * @param type
  * @param name An human readable name describing the object.

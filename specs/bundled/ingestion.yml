@@ -664,6 +664,12 @@ components:
           description: The prefix of the final index name.
       required:
         - indexPrefix
+    RecordType:
+      type: string
+      description: Determines the indexing strategy to use for a given e-commerce source.
+      enum:
+        - product
+        - variant
     DestinationIndexName:
       type: object
       additionalProperties: false
@@ -671,6 +677,8 @@ components:
         indexName:
           type: string
           description: The index name to store data in.
+        recordType:
+          $ref: '#/components/schemas/RecordType'
       required:
         - indexName
     DestinationInput:
@@ -750,7 +758,7 @@ components:
     DestinationUpdate:
       type: object
       additionalProperties: false
-      description: Payload to partialy update a Destination.
+      description: Payload to partially update a Destination.
       properties:
         type:
           $ref: '#/components/schemas/DestinationType'
@@ -816,6 +824,12 @@ components:
           type: string
         projectKey:
           type: string
+        fallbackIsInStockValue:
+          type: boolean
+          default: true
+          description: >
+            Determines the value that will be stored in the Algolia record if
+            there's no inventory information on the product.
       required:
         - url
         - projectKey

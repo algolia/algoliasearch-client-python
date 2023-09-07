@@ -21,11 +21,14 @@ public sealed interface DestinationInput {
      * DestinationIndexName
      *
      * @param indexName The index name to store data in.
+     * @param recordType
      */
     public fun DestinationIndexName(
       indexName: String,
+      recordType: RecordType? = null,
     ): DestinationIndexName = com.algolia.client.model.ingestion.DestinationIndexName(
       indexName = indexName,
+      recordType = recordType,
     )
 
     /**
