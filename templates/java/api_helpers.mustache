@@ -2,7 +2,6 @@
 /**
   * Helper: Wait for a task to complete with `indexName` and `taskID`.
   *
-  * @summary Wait for a task to complete.
   * @param indexName The `indexName` where the operation was performed.
   * @param taskID The `taskID` returned in the method response.
   * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -10,17 +9,17 @@
   * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions. (optional)
   */
 public void waitForTask(String indexName, Long taskID, int maxRetries, IntUnaryOperator timeout, RequestOptions requestOptions) {
-  TaskUtils.retryUntil(() -> {
-    return this.getTask(indexName, taskID, requestOptions);
-  }, (GetTaskResponse task) -> {
-    return task.getStatus() == TaskStatus.PUBLISHED;
-  }, maxRetries, timeout);
+  TaskUtils.retryUntil(
+    () -> this.getTask(indexName, taskID, requestOptions),
+    (GetTaskResponse task) -> task.getStatus() == TaskStatus.PUBLISHED,
+    maxRetries, 
+    timeout
+  );
 }
 
 /**
   * Helper: Wait for a task to complete with `indexName` and `taskID`.
   *
-  * @summary Wait for a task to complete.
   * @param indexName The `indexName` where the operation was performed.
   * @param taskID The `taskID` returned in the method response.
   * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions. (optional)
@@ -32,7 +31,6 @@ public void waitForTask(String indexName, Long taskID, RequestOptions requestOpt
 /**
   * Helper: Wait for a task to complete with `indexName` and `taskID`.
   *
-  * @summary Wait for a task to complete.
   * @param indexName The `indexName` where the operation was performed.
   * @param taskID The `taskID` returned in the method response.
   * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -45,7 +43,6 @@ public void waitForTask(String indexName, Long taskID, int maxRetries, IntUnaryO
 /**
   * Helper: Wait for a task to complete with `indexName` and `taskID`.
   *
-  * @summary Wait for a task to complete.
   * @param indexName The `indexName` where the operation was performed.
   * @param taskID The `taskID` returned in the method response.
   */
@@ -56,7 +53,6 @@ public void waitForTask(String indexName, Long taskID) {
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`.
   * @param key The `key` that has been added, deleted or updated.
   * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of the response with it.
@@ -79,9 +75,7 @@ public GetApiKeyResponse waitForApiKey(
 
     // when updating an api key, we poll the api until we receive a different key
     return TaskUtils.retryUntil(
-      () -> {
-        return this.getApiKey(key, requestOptions);
-      },
+      () -> this.getApiKey(key, requestOptions),
       (GetApiKeyResponse respKey) -> {
         // we need to convert to an ApiKey object to use the `equals` method
         ApiKey sameType = new ApiKey()
@@ -138,7 +132,6 @@ public GetApiKeyResponse waitForApiKey(
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
   * @param key The `key` that has been added, deleted or updated.
   * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -152,7 +145,6 @@ public GetApiKeyResponse waitForApiKey(ApiKeyOperation operation, String key, in
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`.
   * @param key The `key` that has been added, deleted or updated.
   * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of the response with it.
@@ -165,7 +157,6 @@ public GetApiKeyResponse waitForApiKey(ApiKeyOperation operation, String key, Ap
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
   * @param key The `key` that has been added, deleted or updated.
   * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions. (optional)
@@ -177,7 +168,6 @@ public GetApiKeyResponse waitForApiKey(ApiKeyOperation operation, String key, Re
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`.
   * @param key The `key` that has been added, deleted or updated.
   * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of the response with it.
@@ -191,7 +181,6 @@ public GetApiKeyResponse waitForApiKey(ApiKeyOperation operation, String key, Ap
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
   * @param key The `key` that has been added, deleted or updated.
   * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -204,7 +193,6 @@ public GetApiKeyResponse waitForApiKey(ApiKeyOperation operation, String key, in
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`.
   * @param key The `key` that has been added, deleted or updated.
   * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of the response with it.
@@ -216,7 +204,6 @@ public GetApiKeyResponse waitForApiKey(ApiKeyOperation operation, String key, Ap
 /**
   * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
   *
-  * @summary Wait for an API key task to be processed.
   * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
   * @param key The `key` that has been added, deleted or updated.
   */
@@ -227,7 +214,6 @@ public GetApiKeyResponse waitForApiKey(ApiKeyOperation operation, String key) {
 /**
   * Helper: Returns an iterator on top of the `browse` method.
   *
-  * @summary Returns an iterator on `browse`.
   * @param indexName The index in which to perform the request.
   * @param params The `browse` parameters.
   * @param innerType The class held by the index, could be your custom class or {@link Object}.
@@ -238,21 +224,18 @@ public <T> Iterable<T> browseObjects(String indexName, BrowseParamsObject params
 
   return AlgoliaIterableHelper.createIterable(
     () -> {
-      BrowseResponse<T> response = this.browse(indexName, BrowseParams.of(params), innerType, requestOptions);
+      BrowseResponse<T> response = this.browse(indexName, params, innerType, requestOptions);
       params.setCursor(response.getCursor());
       currentCursor.value = response.getCursor();
       return response.getHits().iterator();
     },
-    () -> {
-      return currentCursor.value != null;
-    }
+    () -> currentCursor.value != null
   );
 }
 
 /**
   * Helper: Returns an iterator on top of the `browse` method.
   *
-  * @summary Returns an iterator on `browse`.
   * @param indexName The index in which to perform the request.
   * @param params The `browse` parameters.
   * @param innerType The class held by the index, could be your custom class or {@link Object}.
@@ -264,7 +247,6 @@ public <T> Iterable<T> browseObjects(String indexName, BrowseParamsObject params
 /**
   * Helper: Returns an iterator on top of the `searchSynonyms` method.
   *
-  * @summary Returns an iterator on `searchSynonyms`.
   * @param indexName The index in which to perform the request.
   * @param type The synonym type. (optional)
   * @param params The `searchSynonyms` parameters. (optional)
@@ -280,16 +262,13 @@ public Iterable<SynonymHit> browseSynonyms(String indexName, SynonymType type, S
       currentPage.value = response.getNbHits() < hitsPerPage ? null : currentPage.value + 1;
       return response.getHits().iterator();
     },
-    () -> {
-      return currentPage.value != null;
-    }
+    () -> currentPage.value != null
   );
 }
 
 /**
   * Helper: Returns an iterator on top of the `searchSynonyms` method.
   *
-  * @summary Returns an iterator on `searchSynonyms`.
   * @param indexName The index in which to perform the request.
   * @param type The synonym type. (optional)
   * @param params The `searchSynonyms` parameters .(optional)
@@ -302,7 +281,6 @@ public Iterable<SynonymHit> browseSynonyms(String indexName, SynonymType type, S
 /**
   * Helper: Returns an iterator on top of the `searchSynonyms` method.
   *
-  * @summary Returns an iterator on `searchSynonyms`.
   * @param indexName The index in which to perform the request.
   */
 public Iterable<SynonymHit> browseSynonyms(String indexName) {
@@ -312,7 +290,6 @@ public Iterable<SynonymHit> browseSynonyms(String indexName) {
 /**
   * Helper: Returns an iterator on top of the `searchRules` method.
   *
-  * @summary Returns an iterator on `searchRules`.
   * @param indexName The index in which to perform the request.
   * @param params The `searchRules` parameters. (optional)
   * @param requestOptions The requestOptions to send along with the query, they will be merged with the transporter requestOptions. (optional)
@@ -328,16 +305,13 @@ public Iterable<Rule> browseRules(String indexName, SearchRulesParams params, Re
       currentPage.value = response.getNbHits() < hitsPerPage ? null : currentPage.value + 1;
       return response.getHits().iterator();
     },
-    () -> {
-      return currentPage.value != null;
-    }
+    () -> currentPage.value != null
   );
 }
 
 /**
   * Helper: Returns an iterator on top of the `searchRules` method.
   *
-  * @summary Returns an iterator on `searchRules`.
   * @param indexName The index in which to perform the request.
   * @param params The `searchRules` parameters. (optional)
   */
@@ -348,60 +322,9 @@ public Iterable<Rule> browseRules(String indexName, SearchRulesParams params) {
 /**
   * Helper: Returns an iterator on top of the `searchRules` method.
   *
-  * @summary Returns an iterator on `searchRules`.
   * @param indexName The index in which to perform the request.
   */
 public Iterable<Rule> browseRules(String indexName) {
-  return browseRules(indexName, null, null);
-}
-
-/**
-  * (asynchronously) Send multiple search queries to one or more indices.
-  *
-  * @param searchMethodParams Query requests and strategies. Results will be received in the same
-  *     order as the queries. (required)
-  * @throws AlgoliaRuntimeException If it fails to process the API call
-  */
-public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
-        throws AlgoliaRuntimeException {
-  return this.searchAsync(searchMethodParams, Object.class, requestOptions);
-}
-
-/**
-  * (asynchronously) Send multiple search queries to one or more indices.
-  *
-  * @param searchMethodParams Query requests and strategies. Results will be received in the same
-  *     order as the queries. (required)
-  * @throws AlgoliaRuntimeException If it fails to process the API call
-  */
-public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams)
-        throws AlgoliaRuntimeException {
-  return this.searchAsync(searchMethodParams, Object.class, null);
-}
-
-/**
-  * Send multiple search queries to one or more indices.
-  *
-  * @param searchMethodParams Query requests and strategies. Results will be received in the same
-  *     order as the queries. (required)
-  * @param requestOptions The requestOptions to send along with the query, they will be merged with
-  *     the transporter requestOptions.
-  * @throws AlgoliaRuntimeException If it fails to process the API call
-  */
-public SearchResponses<Object> search(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
-        throws AlgoliaRuntimeException {
-  return this.search(searchMethodParams, Object.class, requestOptions);
-}
-
-/**
-  * Send multiple search queries to one or more indices.
-  *
-  * @param searchMethodParams Query requests and strategies. Results will be received in the same
-  *     order as the queries. (required)
-  * @throws AlgoliaRuntimeException If it fails to process the API call
-  */
-public SearchResponses<Object> search(SearchMethodParams searchMethodParams)
-        throws AlgoliaRuntimeException {
-  return this.search(searchMethodParams, Object.class, null);
+  return browseRules(indexName, new SearchRulesParams(), null);
 }
 {{/isSearchClient}}

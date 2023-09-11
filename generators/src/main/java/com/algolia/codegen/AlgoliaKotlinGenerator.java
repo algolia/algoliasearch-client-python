@@ -1,13 +1,13 @@
 package com.algolia.codegen;
 
 import com.algolia.codegen.exceptions.GeneratorException;
+import com.algolia.codegen.utils.OneOfUtils;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.servers.Server;
 import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.KotlinClientCodegen;
@@ -163,7 +163,7 @@ public class AlgoliaKotlinGenerator extends KotlinClientCodegen {
   @Override
   public Map<String, ModelsMap> postProcessAllModels(Map<String, ModelsMap> objs) {
     Map<String, ModelsMap> models = super.postProcessAllModels(objs);
-    modelsOneOf(models);
+    OneOfUtils.updateModelsOneOf(models, modelPackage);
     GenericPropagator.propagateGenericsToModels(models);
     jsonParent(models);
     typealias(models);
@@ -189,92 +189,6 @@ public class AlgoliaKotlinGenerator extends KotlinClientCodegen {
         model.vendorExtensions.put("x-map-parent", true);
       }
     }
-  }
-
-  private void modelsOneOf(Map<String, ModelsMap> models) {
-    for (ModelsMap modelContainer : models.values()) {
-      // modelContainers always have 1 and only 1 model in our specs
-      CodegenModel model = modelContainer.getModels().get(0).getModel();
-      if (model.oneOf.isEmpty()) continue;
-
-      List<Map<String, Object>> oneOfList = new ArrayList<>();
-      for (String oneOf : model.oneOf) {
-        Map<String, Object> oneOfModel = new HashMap<>();
-        oneOfModel.put("type", oneOf);
-        oneOfModel.put("name", oneOf.replace("<", "Of").replace(">", ""));
-        oneOfModel.put("listElementType", oneOf.replace("List<", "").replace(">", ""));
-        oneOfModel.put("isList", oneOf.contains("List"));
-
-        // Mark compounds
-        // 1. Find child model
-        ModelsMap modelsMap = models.get(oneOf);
-        if (modelsMap != null) {
-          oneOfModel.put("isObject", true);
-          // 2. add the child to parent model
-          CodegenModel compoundModel = modelsMap.getModels().get(0).getModel();
-          oneOfModel.put("child", compoundModel.classname);
-
-          // 3. mark the child and add its parent (may have many)
-          compoundModel.vendorExtensions.put("x-one-of-element", true);
-          HashMap<String, String> parentInfo = new HashMap<>();
-          parentInfo.put("parent_classname", model.classname);
-          compoundParent(compoundModel).add(parentInfo);
-          List<String> values = (List<String>) compoundModel.vendorExtensions.get("x-discriminator-fields");
-          if (values != null) {
-            List<Map<String, String>> newValues = values
-              .stream()
-              .map(value -> Collections.singletonMap("field", value))
-              .collect(Collectors.toList());
-            oneOfModel.put("discriminators", newValues);
-          }
-        }
-        oneOfList.add(oneOfModel);
-      }
-
-      List<CodegenModel> sealedChilds = new ArrayList<>();
-      for (String oneOf : model.oneOf) {
-        ModelsMap modelsMap = models.get(oneOf);
-        if (modelsMap != null) {
-          CodegenModel compoundModel = modelsMap.getModels().get(0).getModel();
-          compoundModel.vendorExtensions.put("x-one-of-explicit-name", compoundModel.classname);
-          compoundModel.vendorExtensions.put("x-fully-qualified-classname", modelPackage + "." + compoundModel.classname);
-          compoundModel.vendorExtensions.put("x-classname-or-alias", compoundModel.classname + "Impl");
-          sealedChilds.add(compoundModel);
-        } else {
-          CodegenModel newModel = new CodegenModel();
-          String name = oneOf.replace("<", "Of").replace(">", "");
-          newModel.setClassname(name + "Wrapper");
-          newModel.setDescription(model.classname + " as " + oneOf);
-          CodegenProperty property = new CodegenProperty();
-          property.setName("value");
-          property.setRequired(true);
-          property.setDatatypeWithEnum(oneOf);
-          newModel.setVars(Collections.singletonList(property));
-          newModel.vendorExtensions.put("x-is-number", newModel.isNumber);
-          newModel.vendorExtensions.put("x-one-of-explicit-name", isNumberType(oneOf) ? "Number" : name);
-          newModel.vendorExtensions.put("x-fully-qualified-classname", newModel.classname);
-          sealedChilds.add(newModel);
-        }
-      }
-
-      model.vendorExtensions.put("x-sealed-childs", sealedChilds);
-
-      model.vendorExtensions.put("x-is-one-of-interface", true);
-      model.vendorExtensions.put("x-one-of-list", oneOfList);
-      model.vendorExtensions.put("x-one-of-explicit-name", Utils.shouldUseExplicitOneOfName(model.oneOf));
-    }
-  }
-
-  private boolean isNumberType(String typeName) {
-    return typeName.equals("Int") || typeName.equals("Double") || typeName.equals("Long");
-  }
-
-  private Set<Map<String, String>> compoundParent(CodegenModel model) {
-    Set<Map<String, String>> parents = (Set<Map<String, String>>) model.vendorExtensions.get("x-one-of-element-parents");
-    if (parents != null) return parents;
-    parents = new HashSet<>();
-    model.vendorExtensions.put("x-one-of-element-parents", parents);
-    return parents;
   }
 
   @Override

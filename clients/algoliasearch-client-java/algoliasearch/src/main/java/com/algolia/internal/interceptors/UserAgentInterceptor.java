@@ -2,9 +2,9 @@ package com.algolia.internal.interceptors;
 
 import com.algolia.config.AlgoliaAgent;
 import java.io.IOException;
+import javax.annotation.Nonnull;
 import okhttp3.Interceptor;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 
 public final class UserAgentInterceptor implements Interceptor {
 
@@ -14,7 +14,7 @@ public final class UserAgentInterceptor implements Interceptor {
     this.agent = agent;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Response intercept(Chain chain) throws IOException {
     okhttp3.Request originalRequest = chain.request();

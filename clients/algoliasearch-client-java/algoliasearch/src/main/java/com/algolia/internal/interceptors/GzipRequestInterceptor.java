@@ -1,16 +1,16 @@
 package com.algolia.internal.interceptors;
 
 import java.io.IOException;
+import javax.annotation.Nonnull;
 import okhttp3.*;
 import okio.BufferedSink;
 import okio.GzipSink;
 import okio.Okio;
-import org.jetbrains.annotations.NotNull;
 
 /** This interceptor compresses the HTTP request body. */
 public final class GzipRequestInterceptor implements Interceptor {
 
-  @NotNull
+  @Nonnull
   @Override
   public Response intercept(Interceptor.Chain chain) throws IOException {
     Request originalRequest = chain.request();
@@ -39,7 +39,7 @@ public final class GzipRequestInterceptor implements Interceptor {
       }
 
       @Override
-      public void writeTo(@NotNull BufferedSink sink) throws IOException {
+      public void writeTo(@Nonnull BufferedSink sink) throws IOException {
         BufferedSink gzipSink = Okio.buffer(new GzipSink(sink));
         body.writeTo(gzipSink);
         gzipSink.close();

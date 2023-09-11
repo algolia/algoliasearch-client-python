@@ -3,7 +3,7 @@ package com.algolia.config;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public final class AlgoliaAgent {
 
@@ -17,7 +17,7 @@ public final class AlgoliaAgent {
     this.addSegment(new Segment("JVM", System.getProperty("java.version")));
   }
 
-  public AlgoliaAgent addSegment(@NotNull Segment seg) {
+  public AlgoliaAgent addSegment(@Nonnull Segment seg) {
     String segment = seg.toString();
     if (!segments.contains(segment)) {
       segments.add(segment);
@@ -26,14 +26,14 @@ public final class AlgoliaAgent {
     return this;
   }
 
-  public AlgoliaAgent addSegments(@NotNull List<Segment> segments) {
+  public AlgoliaAgent addSegments(@Nonnull List<Segment> segments) {
     for (Segment segment : segments) {
       addSegment(segment);
     }
     return this;
   }
 
-  public AlgoliaAgent removeSegment(@NotNull Segment seg) {
+  public AlgoliaAgent removeSegment(@Nonnull Segment seg) {
     segments.remove(seg.toString());
     return this;
   }

@@ -14,11 +14,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
 import okio.BufferedSink;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * HttpRequester is responsible for making HTTP requests using the OkHttp client. It provides a
@@ -62,7 +61,7 @@ public final class HttpRequester implements Requester {
   }
 
   /** Core method to execute an HTTP request and handle the response. */
-  private <T> T execute(@NotNull HttpRequest httpRequest, RequestOptions requestOptions, JavaType returnType) {
+  private <T> T execute(@Nonnull HttpRequest httpRequest, RequestOptions requestOptions, JavaType returnType) {
     if (isClosed.get()) {
       throw new IllegalStateException("HttpRequester is closed");
     }
@@ -99,8 +98,8 @@ public final class HttpRequester implements Requester {
   }
 
   /** Constructs the URL for the HTTP request. */
-  @NotNull
-  private static HttpUrl createHttpUrl(@NotNull HttpRequest request, RequestOptions requestOptions) {
+  @Nonnull
+  private static HttpUrl createHttpUrl(@Nonnull HttpRequest request, RequestOptions requestOptions) {
     HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
       .scheme("https")
       .host("algolia.com") // will be overridden by the retry strategy
@@ -126,25 +125,24 @@ public final class HttpRequester implements Requester {
   }
 
   /** Serializes the request body into JSON format. */
-  @NotNull
+  @Nonnull
   private RequestBody buildRequestBody(Object requestBody) {
     return new RequestBody() {
-      @Nullable
       @Override
       public MediaType contentType() {
         return JSON_MEDIA_TYPE;
       }
 
       @Override
-      public void writeTo(@NotNull BufferedSink bufferedSink) {
+      public void writeTo(@Nonnull BufferedSink bufferedSink) {
         serializer.serialize(bufferedSink.outputStream(), requestBody);
       }
     };
   }
 
   /** Constructs the headers for the HTTP request. */
-  @NotNull
-  private Headers createHeaders(@NotNull HttpRequest request, RequestOptions requestOptions) {
+  @Nonnull
+  private Headers createHeaders(@Nonnull HttpRequest request, RequestOptions requestOptions) {
     Headers.Builder builder = new Headers.Builder();
     request.getHeaders().forEach(builder::add);
     if (requestOptions != null) {
@@ -154,7 +152,7 @@ public final class HttpRequester implements Requester {
   }
 
   /** Returns a suitable OkHttpClient instance based on the provided request options. */
-  @NotNull
+  @Nonnull
   private OkHttpClient getOkHttpClient(RequestOptions requestOptions) {
     // Return the default client if no request options are provided.
     if (requestOptions == null) return httpClient;

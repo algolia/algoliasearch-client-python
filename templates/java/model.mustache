@@ -10,9 +10,10 @@ import {{import}};
 import java.io.Serializable;
 {{/serializableModel}}
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 
 {{#models}}
 {{#model}}
-{{#isEnum}}{{>modelEnum}}{{/isEnum}}{{^isEnum}}{{#vendorExtensions.x-is-one-of-interface}}{{>oneof_interface}}{{/vendorExtensions.x-is-one-of-interface}}{{^vendorExtensions.x-is-one-of-interface}}{{>pojo}}{{/vendorExtensions.x-is-one-of-interface}}{{/isEnum}}
+{{#isEnum}}{{>modelEnum}}{{/isEnum}}{{^isEnum}}{{#vendorExtensions.x-is-one-of}}{{>oneof_interface}}{{/vendorExtensions.x-is-one-of}}{{^vendorExtensions.x-is-one-of}}{{>pojo}}{{/vendorExtensions.x-is-one-of}}{{/isEnum}}
 {{/model}}
 {{/models}}

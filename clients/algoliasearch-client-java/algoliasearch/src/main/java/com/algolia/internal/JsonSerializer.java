@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.function.Consumer;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Utility class for JSON serialization and deserialization using Jackson. It provides functionality
@@ -29,7 +29,7 @@ public final class JsonSerializer {
    *
    * @param mapper The Jackson ObjectMapper to be used for JSON operations.
    */
-  JsonSerializer(@NotNull ObjectMapper mapper) {
+  JsonSerializer(@Nonnull ObjectMapper mapper) {
     this.mapper = mapper;
   }
 
@@ -39,7 +39,7 @@ public final class JsonSerializer {
    * @param stream output steam.
    * @param object The Java object to serialize.
    */
-  public void serialize(OutputStream stream, @NotNull Object object) {
+  public void serialize(OutputStream stream, @Nonnull Object object) {
     try {
       mapper.writeValue(stream, object);
     } catch (IOException e) {
@@ -63,7 +63,7 @@ public final class JsonSerializer {
    * @param innerType The parameterized type.
    * @return A JavaType representation of the parameterized class.
    */
-  public JavaType getJavaType(@NotNull Class<?> returnType, @NotNull Class<?> innerType) {
+  public JavaType getJavaType(@Nonnull Class<?> returnType, @Nonnull Class<?> innerType) {
     return mapper.getTypeFactory().constructParametricType(returnType, innerType);
   }
 
@@ -73,7 +73,7 @@ public final class JsonSerializer {
    * @param returnType The main class type.
    * @return A JavaType representation of the parameterized class.
    */
-  public JavaType getJavaType(@NotNull TypeReference<?> returnType) {
+  public JavaType getJavaType(@Nonnull TypeReference<?> returnType) {
     return mapper.getTypeFactory().constructType(returnType);
   }
 

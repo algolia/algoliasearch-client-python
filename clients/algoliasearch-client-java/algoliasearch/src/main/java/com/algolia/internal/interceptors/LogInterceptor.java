@@ -3,10 +3,10 @@ package com.algolia.internal.interceptors;
 import com.algolia.config.LogLevel;
 import com.algolia.config.Logger;
 import java.io.IOException;
+import javax.annotation.Nonnull;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * An interceptor that facilitates HTTP logging based on the provided logging level. This class
@@ -28,11 +28,11 @@ public final class LogInterceptor implements Interceptor {
     this.logger = new HttpLoggingInterceptor(logr).setLevel(level);
   }
 
-  public HttpLoggingInterceptor.Logger toLogger(@NotNull Logger logger) {
+  public HttpLoggingInterceptor.Logger toLogger(@Nonnull Logger logger) {
     return logger::log;
   }
 
-  public HttpLoggingInterceptor.Level toLevel(@NotNull LogLevel logLevel) {
+  public HttpLoggingInterceptor.Level toLevel(@Nonnull LogLevel logLevel) {
     switch (logLevel) {
       case NONE:
         return HttpLoggingInterceptor.Level.NONE;
@@ -47,9 +47,9 @@ public final class LogInterceptor implements Interceptor {
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public Response intercept(@NotNull Chain chain) throws IOException {
+  public Response intercept(@Nonnull Chain chain) throws IOException {
     return logger.intercept(chain);
   }
 }

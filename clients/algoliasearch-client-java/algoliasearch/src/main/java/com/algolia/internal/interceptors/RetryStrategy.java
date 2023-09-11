@@ -17,11 +17,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A retry strategy that implements {@link Interceptor}, responsible for routing requests to hosts
@@ -42,9 +42,9 @@ public final class RetryStrategy implements Interceptor {
     this.hosts = Collections.unmodifiableList(hosts);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public Response intercept(@NotNull Chain chain) {
+  public Response intercept(@Nonnull Chain chain) {
     Request request = chain.request();
     UseReadTransporter useReadTransporter = (UseReadTransporter) request.tag();
     CallType callType = (useReadTransporter != null || request.method().equals("GET")) ? CallType.READ : CallType.WRITE;
@@ -61,8 +61,8 @@ public final class RetryStrategy implements Interceptor {
   }
 
   /** Processes the request for a given host. */
-  @NotNull
-  private Response processRequest(@NotNull Chain chain, @NotNull Request request, StatefulHost host) throws IOException {
+  @Nonnull
+  private Response processRequest(@Nonnull Chain chain, @Nonnull Request request, StatefulHost host) throws IOException {
     HttpUrl newUrl = request.url().newBuilder().scheme(host.getScheme()).host(host.getHost()).build();
     Request newRequest = request.newBuilder().url(newUrl).build();
     chain.withConnectTimeout(chain.connectTimeoutMillis() * (host.getRetryCount() + 1), TimeUnit.MILLISECONDS);
@@ -71,8 +71,8 @@ public final class RetryStrategy implements Interceptor {
   }
 
   /** Handles the response from the host. */
-  @NotNull
-  private Response handleResponse(StatefulHost host, @NotNull Response response) throws IOException {
+  @Nonnull
+  private Response handleResponse(StatefulHost host, @Nonnull Response response) throws IOException {
     if (response.isSuccessful()) {
       host.reset();
       return response;
@@ -89,7 +89,7 @@ public final class RetryStrategy implements Interceptor {
   }
 
   /** Determines if a response should be retried. */
-  private boolean isRetryable(@NotNull Response response) {
+  private boolean isRetryable(@Nonnull Response response) {
     int statusCode = response.code();
     return (statusCode < 200 || statusCode >= 300) && (statusCode < 400 || statusCode >= 500);
   }

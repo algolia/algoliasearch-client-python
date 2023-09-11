@@ -1,13 +1,11 @@
-import com.algolia.utils.CompoundType;
-import com.algolia.utils.JSON;
+import com.algolia.exceptions.AlgoliaRuntimeException;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.algolia.exceptions.AlgoliaRuntimeException;
+import com.algolia.utils.CompoundType;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -18,54 +16,69 @@ import java.util.logging.Logger;
  */{{#isDeprecated}}
 @Deprecated{{/isDeprecated}}
 @JsonDeserialize(using = {{classname}}.Deserializer.class)
-@JsonSerialize(using = {{classname}}.Serializer.class)
 {{>additionalModelTypeAnnotations}}
-public interface {{classname}}<T> extends CompoundType<T> {
+public interface {{classname}} {
 
-    {{#vendorExtensions.x-one-of-list}}
-    static {{classname}}<{{{type}}}> of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}({{{type}}} inside) {
-        return new {{classname}}{{name}}(inside);
+    {{#vendorExtensions}}
+    {{#x-one-of-list}}
+    {{^child}}
+    /** {{classname}} as {{{type}}} wrapper. */
+    static {{classname}} of{{#x-one-of-explicit-name}}{{name}}{{/x-one-of-explicit-name}}({{{type}}} value) {
+        return new {{name}}Wrapper(value);
     }
+    {{/child}}    
+    {{/x-one-of-list}}
 
-    {{/vendorExtensions.x-one-of-list}}
+    {{#x-one-of-list}}
+    {{^child}}
 
-    class Serializer extends StdSerializer<{{classname}}> {
-        public Serializer(Class<{{classname}}> t) {
-            super(t);
+    /** {{classname}} as {{{type}}} wrapper. */
+    @JsonSerialize(using = {{name}}Wrapper.Serializer.class)
+    class {{name}}Wrapper implements {{classname}}{
+        private final {{{type}}} value;
+
+        {{name}}Wrapper({{{type}}} value) {
+            this.value = value;
         }
 
-        public Serializer() {
-            this(null);
+        public {{{type}}} getValue() {
+            return value;
         }
 
-        @Override
-        public void serialize({{classname}} value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-            jgen.writeObject(value.get());
+        static class Serializer extends JsonSerializer<{{name}}Wrapper> {
+
+            @Override
+            public void serialize({{name}}Wrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+                gen.writeObject(value.getValue());
+            }
         }
     }
+    {{/child}}    
+    {{/x-one-of-list}}
+    {{/vendorExtensions}}
 
-    class Deserializer extends StdDeserializer<{{classname}}> {
+    class Deserializer extends JsonDeserializer<{{classname}}> {
 
         private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
 
-        public Deserializer() {
-            this({{classname}}.class);
-        }
-
-        public Deserializer(Class<?> vc) {
-            super(vc);
-        }
-
-         @Override
+        @Override
         public {{classname}} deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
             JsonNode tree = jp.readValueAsTree();
             {{#vendorExtensions.x-one-of-list}}
 
             // deserialize {{{type}}}
             if (tree.{{#isObject}}isObject(){{/isObject}}{{#isList}}isArray(){{/isList}}{{^isObject}}{{^isList}}isValueNode(){{/isList}}{{/isObject}}{{#discriminators}} && tree.has("{{field}}"){{/discriminators}}) {
-                try(JsonParser parser = tree.traverse(jp.getCodec())) {   
-                    {{{type}}} value = parser.readValueAs(new TypeReference<{{{type}}}>() {});
+                try(JsonParser parser = tree.traverse(jp.getCodec())) {  
+                    {{#isObject}}
+                    return parser.readValueAs({{{type}}}.class);
+                    {{/isObject}}
+                    {{#isList}}
+                    return parser.readValueAs(new TypeReference<{{{type}}}>(){});
+                    {{/isList}}
+                    {{^isObject}}{{^isList}}
+                    {{{type}}} value = parser.readValueAs({{{type}}}.class);
                     return {{{classname}}}.of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}(value);
+                    {{/isList}}{{/isObject}}
                 } catch (Exception e) {
                     // deserialization failed, continue
                     LOGGER.finest("Failed to deserialize oneOf {{{type}}} (error: " + e.getMessage() + ") (type: {{{type}}})");
@@ -90,17 +103,3 @@ public interface {{classname}}<T> extends CompoundType<T> {
     }
 }
 
-{{#vendorExtensions.x-one-of-list}}
-class {{classname}}{{name}} implements {{classname}}<{{{type}}}> {
-    private final {{{type}}} value;
-
-    {{classname}}{{name}}({{{type}}} value) {
-        this.value = value;
-    }
-
-    @Override
-    public {{{type}}} get() {
-        return value;
-    }
-}
-{{/vendorExtensions.x-one-of-list}}

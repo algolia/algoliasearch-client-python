@@ -1,7 +1,7 @@
 package com.algolia.config;
 
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public final class Host {
 
@@ -11,7 +11,7 @@ public final class Host {
 
   private final String scheme;
 
-  public Host(@NotNull String url, @NotNull Set<CallType> callType) {
+  public Host(@Nonnull String url, @Nonnull Set<CallType> callType) {
     this(url, callType, "https");
   }
 
@@ -21,17 +21,17 @@ public final class Host {
     this.scheme = scheme;
   }
 
-  @NotNull
+  @Nonnull
   public String getUrl() {
     return url;
   }
 
-  @NotNull
+  @Nonnull
   public Set<CallType> getCallTypes() {
     return callTypes;
   }
 
-  @NotNull
+  @Nonnull
   public String getScheme() {
     return scheme;
   }

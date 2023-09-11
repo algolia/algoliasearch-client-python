@@ -33,6 +33,7 @@ public class Search {
 
         var options = new ClientOptions.Builder()
                 .addAlgoliaAgentSegment("Playground", "1.0.0")
+                .setLogLevel(LogLevel.BODY)
                 .build();
 
         var client = new SearchClient(appId, apiKey, options);
@@ -49,7 +50,11 @@ public class Search {
     }
 
     private static void singleSearch(SearchClient client, String indexName, String query) {
-        SearchResponse<Actor> actorSearchResponse = client.searchSingleIndex(indexName, SearchParams.of(new SearchParamsObject().setQuery(query)), Actor.class);
+        SearchParamsObject params = new SearchParamsObject()
+                .setQuery(query)
+                .setAroundPrecision(AroundPrecision.of(1000))
+                .setAroundRadius(AroundRadiusAll.ALL);
+        SearchResponse<Actor> actorSearchResponse = client.searchSingleIndex(indexName, params, Actor.class);
         System.out.println("-> Single Index Search:");
         for (var hit : actorSearchResponse.getHits()) {
             System.out.println("> " + hit.name);
@@ -63,14 +68,14 @@ public class Search {
                 .setQuery(query)
                 .addAttributesToSnippet("title")
                 .addAttributesToSnippet("alternative_titles");
-        List<SearchQuery> requests = List.of(SearchQuery.of(searchQuery));
+        List<SearchQuery> requests = List.of(searchQuery);
         searchMethodParams.setRequests(requests);
 
         var responses = client.search(searchMethodParams);
         var results = responses.getResults();
         System.out.println("-> Multi Index Search:");
         for (var result : results) {
-            var response = (SearchResponse) result.get();
+            var response = (SearchResponse) result;
             for (var hit : response.getHits()) {
                 var record = (Map) hit;
                 System.out.println("> " + record.get("name"));

@@ -1,9 +1,10 @@
 package com.algolia.codegen;
 
-import com.algolia.codegen.exceptions.*;
 import java.util.*;
 import org.openapitools.codegen.*;
-import org.openapitools.codegen.model.*;
+import org.openapitools.codegen.model.ModelMap;
+import org.openapitools.codegen.model.ModelsMap;
+import org.openapitools.codegen.model.OperationsMap;
 
 public class GenericPropagator {
 
@@ -13,10 +14,10 @@ public class GenericPropagator {
   private GenericPropagator() {}
 
   private static void setVendorExtension(IJsonSchemaValidationProperties property, String key, Object value) {
-    if (property instanceof CodegenModel) {
-      ((CodegenModel) property).vendorExtensions.put(key, value);
-    } else if (property instanceof CodegenProperty) {
-      ((CodegenProperty) property).vendorExtensions.put(key, value);
+    if (property instanceof CodegenModel model) {
+      model.vendorExtensions.put(key, value);
+    } else if (property instanceof CodegenProperty prop) {
+      prop.vendorExtensions.put(key, value);
     }
   }
 
@@ -66,15 +67,19 @@ public class GenericPropagator {
 
   private static boolean markPropagatedGeneric(IJsonSchemaValidationProperties model) {
     CodegenProperty items = model.getItems();
+    // Skip one-of types
+    if (model instanceof CodegenModel codegenModel && !codegenModel.oneOf.isEmpty()) {
+      return false;
+    }
     // if items itself isn't generic, we recurse on its items and properties until we reach the
     // end or find a generic property
     if (items != null && ((boolean) items.vendorExtensions.getOrDefault("x-is-generic", false) || markPropagatedGeneric(items))) {
       setPropagatedGeneric(model);
       return true;
     }
-    for (CodegenProperty var : model.getVars()) {
-      // same thing for the var, if it's not a generic, we recurse on it until we find one
-      if ((boolean) var.vendorExtensions.getOrDefault("x-is-generic", false) || markPropagatedGeneric(var)) {
+    for (CodegenProperty variable : model.getVars()) {
+      // same thing for the variable, if it's not a generic, we recurse on it until we find one
+      if ((boolean) variable.vendorExtensions.getOrDefault("x-is-generic", false) || markPropagatedGeneric(variable)) {
         setPropagatedGeneric(model);
         return true;
       }
@@ -92,9 +97,9 @@ public class GenericPropagator {
       setHasChildGeneric(property);
       return true;
     }
-    for (CodegenProperty var : property.getVars()) {
-      // same thing for the var
-      if (hasGeneric(var) || propagateGenericRecursive(models, var) || hasGeneric(propertyToModel(models, var))) {
+    for (CodegenProperty variable : property.getVars()) {
+      // same thing for the variable
+      if (hasGeneric(variable) || propagateGenericRecursive(models, variable) || hasGeneric(propertyToModel(models, variable))) {
         setHasChildGeneric(property);
         return true;
       }
@@ -177,7 +182,7 @@ public class GenericPropagator {
         ope.vendorExtensions.put("x-is-generic", true);
         // we use {{#optionalParams.0}} to check for optionalParams, so we loose the
         // vendorExtensions at the operation level
-        if (ope.optionalParams.size() > 0) {
+        if (!ope.optionalParams.isEmpty()) {
           ope.optionalParams.get(0).vendorExtensions.put("x-is-generic", true);
         }
       }

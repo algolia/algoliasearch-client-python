@@ -284,13 +284,15 @@ public class ParametersWithDataType {
       IJsonSchemaValidationProperties current = match;
       String typeName = getTypeName(current);
       StringBuilder capitalizedTypeName = new StringBuilder(typeName);
+      boolean isList = false;
       while (current.getItems() != null) {
         current = current.getItems();
         typeName += "Of" + getTypeName(current);
         capitalizedTypeName.append("Of").append(StringUtils.capitalize(getTypeName(current)));
+        isList = true;
       }
 
-      boolean useExplicitName = false;
+      boolean useExplicitName;
       CodegenComposedSchemas composedSchemas = model.getComposedSchemas();
       if (composedSchemas != null && composedSchemas.getOneOf() != null && composedSchemas.getOneOf().size() > 0) {
         useExplicitName =
@@ -303,6 +305,7 @@ public class ParametersWithDataType {
       oneOfModel.put("type", typeName);
       oneOfModel.put("type-capitalized", capitalizedTypeName.toString());
       oneOfModel.put("x-one-of-explicit-name", useExplicitName);
+      oneOfModel.put("hasWrapper", isList || isString(current) || isNumber(current) || isBoolean(current));
       testOutput.put("oneOfModel", oneOfModel);
       return;
     }
@@ -412,53 +415,83 @@ public class ParametersWithDataType {
   }
 
   private String getTypeName(IJsonSchemaValidationProperties param) {
-    if (param instanceof CodegenParameter) {
-      return ((CodegenParameter) param).dataType;
+    if (param instanceof CodegenParameter parameter) {
+      return parameter.dataType;
     }
-    if (param instanceof CodegenProperty) {
-      return ((CodegenProperty) param).dataType;
+    if (param instanceof CodegenProperty parameter) {
+      return parameter.dataType;
     }
-    if (param instanceof CodegenModel) {
-      return ((CodegenModel) param).classname;
+    if (param instanceof CodegenModel parameter) {
+      return parameter.classname;
     }
-    if (param instanceof CodegenResponse) {
-      return ((CodegenResponse) param).dataType;
+    if (param instanceof CodegenResponse parameter) {
+      return parameter.dataType;
     }
     return null;
   }
 
   private boolean isAnyType(IJsonSchemaValidationProperties param) {
-    if (param instanceof CodegenParameter) {
-      return ((CodegenParameter) param).isAnyType;
+    if (param instanceof CodegenParameter parameter) {
+      return parameter.isAnyType;
     }
-    if (param instanceof CodegenProperty) {
-      return ((CodegenProperty) param).isAnyType;
+    if (param instanceof CodegenProperty parameter) {
+      return parameter.isAnyType;
     }
-    if (param instanceof CodegenResponse) {
-      return ((CodegenResponse) param).isAnyType;
+    if (param instanceof CodegenResponse parameter) {
+      return parameter.isAnyType;
     }
     return false;
   }
 
   private boolean isEnum(IJsonSchemaValidationProperties param) {
-    if (param instanceof CodegenParameter) {
-      return ((CodegenParameter) param).isEnum;
+    if (param instanceof CodegenParameter parameter) {
+      return parameter.isEnum;
     }
-    if (param instanceof CodegenProperty) {
-      return ((CodegenProperty) param).isEnum;
+    if (param instanceof CodegenProperty parameter) {
+      return parameter.isEnum;
     }
-    if (param instanceof CodegenModel) {
-      return ((CodegenModel) param).isEnum;
+    if (param instanceof CodegenModel parameter) {
+      return parameter.isEnum;
     }
     return false;
   }
 
   private boolean isPrimitiveType(IJsonSchemaValidationProperties param) {
-    if (param instanceof CodegenParameter) {
-      return ((CodegenParameter) param).isPrimitiveType;
+    if (param instanceof CodegenParameter parameter) {
+      return parameter.isPrimitiveType;
     }
-    if (param instanceof CodegenProperty) {
-      return ((CodegenProperty) param).isPrimitiveType;
+    if (param instanceof CodegenProperty parameter) {
+      return parameter.isPrimitiveType;
+    }
+    return false;
+  }
+
+  private boolean isNumber(IJsonSchemaValidationProperties param) {
+    if (param instanceof CodegenParameter parameter) {
+      return parameter.isNumber;
+    }
+    if (param instanceof CodegenProperty parameter) {
+      return parameter.isNumber;
+    }
+    return false;
+  }
+
+  private boolean isString(IJsonSchemaValidationProperties param) {
+    if (param instanceof CodegenParameter parameter) {
+      return parameter.isString;
+    }
+    if (param instanceof CodegenProperty parameter) {
+      return parameter.isString;
+    }
+    return false;
+  }
+
+  private boolean isBoolean(IJsonSchemaValidationProperties param) {
+    if (param instanceof CodegenParameter parameter) {
+      return parameter.isBoolean;
+    }
+    if (param instanceof CodegenProperty parameter) {
+      return parameter.isBoolean;
     }
     return false;
   }

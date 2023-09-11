@@ -3,10 +3,10 @@ package com.algolia.internal.interceptors;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 
 public final class HeaderInterceptor implements Interceptor {
 
@@ -16,7 +16,7 @@ public final class HeaderInterceptor implements Interceptor {
     this.headers = Collections.unmodifiableMap(headers);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Response intercept(Chain chain) throws IOException {
     okhttp3.Request request = chain.request();

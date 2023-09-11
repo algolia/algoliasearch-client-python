@@ -1,1 +1,1 @@
-{{#oneOfModel}}{{{parentClassName}}}.of{{#x-one-of-explicit-name}}{{{type}}}{{/x-one-of-explicit-name}}({{{key}}}{{suffix}}){{/oneOfModel}}{{^oneOfModel}}{{{key}}}{{suffix}}{{/oneOfModel}}
+{{#oneOfModel}}{{^hasWrapper}}{{{key}}}{{suffix}}{{/hasWrapper}}{{#hasWrapper}}{{{parentClassName}}}.of{{#x-one-of-explicit-name}}{{{type}}}{{/x-one-of-explicit-name}}({{{key}}}{{suffix}}){{/hasWrapper}}{{/oneOfModel}}{{^oneOfModel}}{{{key}}}{{suffix}}{{/oneOfModel}}

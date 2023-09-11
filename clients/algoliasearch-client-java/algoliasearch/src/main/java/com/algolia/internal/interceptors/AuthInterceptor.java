@@ -1,10 +1,10 @@
 package com.algolia.internal.interceptors;
 
 import java.io.IOException;
+import javax.annotation.Nonnull;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 
 public final class AuthInterceptor implements Interceptor {
 
@@ -19,7 +19,7 @@ public final class AuthInterceptor implements Interceptor {
     this.apiKey = apiKey;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Response intercept(Chain chain) throws IOException {
     okhttp3.Request originalRequest = chain.request();

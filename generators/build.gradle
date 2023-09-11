@@ -6,11 +6,6 @@ group = 'org.openapitools'
 version = '1.0.0'
 description = 'algolia-java-openapi-generator'
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 repositories {
     mavenCentral()
 }

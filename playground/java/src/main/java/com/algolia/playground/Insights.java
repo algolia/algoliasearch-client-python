@@ -26,12 +26,12 @@ public class Insights {
 
         var client = new InsightsClient(appId, apiKey, options);
         var params = new InsightsEvents();
-        var event = EventsItems.of(new ClickedObjectIDs()
+        var event = new ClickedObjectIDs()
                 .setEventType(ClickEvent.CLICK)
                 .setUserToken("user")
                 .setIndex(indexName)
                 .setObjectIDs(List.of("id123"))
-                .setEventName("click"));
+                .setEventName("click");
         params.addEvents(event);
         var result = client.pushEvents(params);
         System.out.println(result);

@@ -1,11 +1,11 @@
 package com.algolia.codegen;
 
 import com.algolia.codegen.exceptions.*;
+import com.algolia.codegen.utils.OneOfUtils;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.JavaClientCodegen;
 import org.openapitools.codegen.model.ModelMap;
@@ -72,44 +72,8 @@ public class AlgoliaJavaGenerator extends JavaClientCodegen {
   @Override
   public Map<String, ModelsMap> postProcessAllModels(Map<String, ModelsMap> objs) {
     Map<String, ModelsMap> models = super.postProcessAllModels(objs);
-
-    for (ModelsMap modelContainer : models.values()) {
-      // modelContainers always have 1 and only 1 model in our specs
-      CodegenModel model = modelContainer.getModels().get(0).getModel();
-
-      if (!model.oneOf.isEmpty()) {
-        List<HashMap<String, Object>> oneOfList = new ArrayList();
-
-        for (String oneOf : model.oneOf) {
-          HashMap<String, Object> oneOfModel = new HashMap();
-          oneOfModel.put("type", oneOf);
-          oneOfModel.put("name", oneOf.replace("<", "Of").replace(">", ""));
-          oneOfModel.put("isList", oneOf.contains("List"));
-          ModelsMap modelsMap = models.get(oneOf);
-          if (modelsMap != null) {
-            oneOfModel.put("isObject", true);
-            CodegenModel compoundModel = modelsMap.getModels().get(0).getModel();
-            List<String> values = (List<String>) compoundModel.vendorExtensions.get("x-discriminator-fields");
-            if (values != null) {
-              List<Map<String, String>> newValues = values
-                .stream()
-                .map(value -> Collections.singletonMap("field", value))
-                .collect(Collectors.toList());
-              oneOfModel.put("discriminators", newValues);
-            }
-          }
-          oneOfList.add(oneOfModel);
-        }
-
-        model.vendorExtensions.put("x-is-one-of-interface", true);
-        model.vendorExtensions.put("x-one-of-list", oneOfList);
-
-        model.vendorExtensions.put("x-one-of-explicit-name", Utils.shouldUseExplicitOneOfName(model.oneOf));
-      }
-    }
-
+    OneOfUtils.updateModelsOneOf(models, modelPackage);
     GenericPropagator.propagateGenericsToModels(models);
-
     return models;
   }
 

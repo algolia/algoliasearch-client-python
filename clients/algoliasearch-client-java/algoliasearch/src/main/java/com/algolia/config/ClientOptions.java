@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public final class ClientOptions implements ClientConfig {
 
@@ -53,7 +53,7 @@ public final class ClientOptions implements ClientConfig {
     this.executor = builder.executor != null ? builder.executor : ExecutorUtils.newThreadPool();
   }
 
-  @NotNull
+  @Nonnull
   public List<AlgoliaAgent.Segment> getAlgoliaAgentSegments() {
     return algoliaAgentSegments;
   }
@@ -62,32 +62,32 @@ public final class ClientOptions implements ClientConfig {
     return hosts;
   }
 
-  @NotNull
+  @Nonnull
   public LogLevel getLogLevel() {
     return logLevel;
   }
 
-  @NotNull
+  @Nonnull
   public Duration getConnectTimeout() {
     return connectTimeout;
   }
 
-  @NotNull
+  @Nonnull
   public Duration getWriteTimeout() {
     return writeTimeout;
   }
 
-  @NotNull
+  @Nonnull
   public Duration getReadTimeout() {
     return readTimeout;
   }
 
-  @NotNull
+  @Nonnull
   public Map<String, String> getDefaultHeaders() {
     return defaultHeaders;
   }
 
-  @NotNull
+  @Nonnull
   public CompressionType getCompressionType() {
     return compressionType;
   }
@@ -96,7 +96,7 @@ public final class ClientOptions implements ClientConfig {
     return customRequester;
   }
 
-  @NotNull
+  @Nonnull
   public Logger getLogger() {
     return logger;
   }

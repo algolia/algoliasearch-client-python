@@ -197,6 +197,8 @@ baseSearchParamsWithoutQuery:
 searchParamsString:
   type: object
   additionalProperties: false
+  x-discriminator-fields:
+    - params
   properties:
     params:
       $ref: '#/paramsAsString'
