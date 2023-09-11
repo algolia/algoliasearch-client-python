@@ -27,7 +27,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -81,7 +81,7 @@ jobs:
     needs: setup
     if: ${{ needs.setup.outputs.RUN_SCRIPTS == 'true' }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -102,7 +102,7 @@ jobs:
     timeout-minutes: 10
     needs: setup
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache bundled specs
         id: cache
@@ -141,7 +141,7 @@ jobs:
           - requester-node-http
           - requester-fetch
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache '${{ matrix.client }}' client folder
         if: ${{ github.ref != 'refs/heads/main' }}
@@ -190,7 +190,7 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.setup.outputs.GEN_MATRIX) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache clients folder
         if: ${{ github.ref != 'refs/heads/main' }}
@@ -303,7 +303,7 @@ jobs:
       !contains(needs.*.result, 'cancelled') &&
       !contains(needs.*.result, 'failure')
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
