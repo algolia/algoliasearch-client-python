@@ -4,6 +4,7 @@
 package com.algolia.model.insights;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,8 @@ import java.util.Objects;
  * item to their shopping cart. If you're building your category pages with Algolia, you'll also use
  * this event.
  */
-public class ConvertedObjectIDsAfterSearch {
+@JsonDeserialize(as = ConvertedObjectIDsAfterSearch.class)
+public class ConvertedObjectIDsAfterSearch implements EventsItems {
 
   @JsonProperty("eventName")
   private String eventName;

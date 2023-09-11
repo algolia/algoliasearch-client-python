@@ -4,6 +4,7 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /** SearchResponse */
-public class SearchResponse<T> {
+@JsonDeserialize(as = SearchResponse.class)
+public class SearchResponse<T> implements SearchResult {
 
   @JsonProperty("abTestID")
   private Integer abTestID;

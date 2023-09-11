@@ -4,29 +4,30 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /** SearchResponses */
-public class SearchResponses<T> {
+public class SearchResponses {
 
   @JsonProperty("results")
-  private List<SearchResult<T>> results = new ArrayList<>();
+  private List<SearchResult> results = new ArrayList<>();
 
-  public SearchResponses setResults(List<SearchResult<T>> results) {
+  public SearchResponses setResults(List<SearchResult> results) {
     this.results = results;
     return this;
   }
 
-  public SearchResponses addResults(SearchResult<T> resultsItem) {
+  public SearchResponses addResults(SearchResult resultsItem) {
     this.results.add(resultsItem);
     return this;
   }
 
   /** Get results */
   @javax.annotation.Nonnull
-  public List<SearchResult<T>> getResults() {
+  public List<SearchResult> getResults() {
     return results;
   }
 

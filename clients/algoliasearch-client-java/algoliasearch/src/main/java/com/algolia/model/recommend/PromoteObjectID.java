@@ -4,10 +4,12 @@
 package com.algolia.model.recommend;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
 /** Record to promote. */
-public class PromoteObjectID {
+@JsonDeserialize(as = PromoteObjectID.class)
+public class PromoteObjectID implements Promote {
 
   @JsonProperty("objectID")
   private String objectID;

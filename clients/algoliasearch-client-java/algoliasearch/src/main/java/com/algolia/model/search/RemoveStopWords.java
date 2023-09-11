@@ -4,15 +4,11 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -28,43 +24,66 @@ import java.util.logging.Logger;
  * feature, allowing stop words to be taken into account in a search.
  */
 @JsonDeserialize(using = RemoveStopWords.Deserializer.class)
-@JsonSerialize(using = RemoveStopWords.Serializer.class)
-public interface RemoveStopWords<T> extends CompoundType<T> {
-  static RemoveStopWords<Boolean> of(Boolean inside) {
-    return new RemoveStopWordsBoolean(inside);
+public interface RemoveStopWords {
+  /** RemoveStopWords as Boolean wrapper. */
+  static RemoveStopWords of(Boolean value) {
+    return new BooleanWrapper(value);
   }
 
-  static RemoveStopWords<List<String>> of(List<String> inside) {
-    return new RemoveStopWordsListOfString(inside);
+  /** RemoveStopWords as List<String> wrapper. */
+  static RemoveStopWords of(List<String> value) {
+    return new ListOfStringWrapper(value);
   }
 
-  class Serializer extends StdSerializer<RemoveStopWords> {
+  /** RemoveStopWords as Boolean wrapper. */
+  @JsonSerialize(using = BooleanWrapper.Serializer.class)
+  class BooleanWrapper implements RemoveStopWords {
 
-    public Serializer(Class<RemoveStopWords> t) {
-      super(t);
+    private final Boolean value;
+
+    BooleanWrapper(Boolean value) {
+      this.value = value;
     }
 
-    public Serializer() {
-      this(null);
+    public Boolean getValue() {
+      return value;
     }
 
-    @Override
-    public void serialize(RemoveStopWords value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
+    static class Serializer extends JsonSerializer<BooleanWrapper> {
+
+      @Override
+      public void serialize(BooleanWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
     }
   }
 
-  class Deserializer extends StdDeserializer<RemoveStopWords> {
+  /** RemoveStopWords as List<String> wrapper. */
+  @JsonSerialize(using = ListOfStringWrapper.Serializer.class)
+  class ListOfStringWrapper implements RemoveStopWords {
+
+    private final List<String> value;
+
+    ListOfStringWrapper(List<String> value) {
+      this.value = value;
+    }
+
+    public List<String> getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<ListOfStringWrapper> {
+
+      @Override
+      public void serialize(ListOfStringWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
+  }
+
+  class Deserializer extends JsonDeserializer<RemoveStopWords> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(RemoveStopWords.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public RemoveStopWords deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -73,7 +92,7 @@ public interface RemoveStopWords<T> extends CompoundType<T> {
       // deserialize Boolean
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          Boolean value = parser.readValueAs(new TypeReference<Boolean>() {});
+          Boolean value = parser.readValueAs(Boolean.class);
           return RemoveStopWords.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -84,8 +103,7 @@ public interface RemoveStopWords<T> extends CompoundType<T> {
       // deserialize List<String>
       if (tree.isArray()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          List<String> value = parser.readValueAs(new TypeReference<List<String>>() {});
-          return RemoveStopWords.of(value);
+          return parser.readValueAs(new TypeReference<List<String>>() {});
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf List<String> (error: " + e.getMessage() + ") (type: List<String>)");
@@ -99,33 +117,5 @@ public interface RemoveStopWords<T> extends CompoundType<T> {
     public RemoveStopWords getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "RemoveStopWords cannot be null");
     }
-  }
-}
-
-class RemoveStopWordsBoolean implements RemoveStopWords<Boolean> {
-
-  private final Boolean value;
-
-  RemoveStopWordsBoolean(Boolean value) {
-    this.value = value;
-  }
-
-  @Override
-  public Boolean get() {
-    return value;
-  }
-}
-
-class RemoveStopWordsListOfString implements RemoveStopWords<List<String>> {
-
-  private final List<String> value;
-
-  RemoveStopWordsListOfString(List<String> value) {
-    this.value = value;
-  }
-
-  @Override
-  public List<String> get() {
-    return value;
   }
 }

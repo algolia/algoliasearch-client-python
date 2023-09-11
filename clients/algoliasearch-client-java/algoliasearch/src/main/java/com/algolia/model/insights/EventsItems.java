@@ -4,81 +4,19 @@
 package com.algolia.model.insights;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** EventsItems */
 @JsonDeserialize(using = EventsItems.Deserializer.class)
-@JsonSerialize(using = EventsItems.Serializer.class)
-public interface EventsItems<T> extends CompoundType<T> {
-  static EventsItems<ClickedFilters> of(ClickedFilters inside) {
-    return new EventsItemsClickedFilters(inside);
-  }
-
-  static EventsItems<ClickedObjectIDs> of(ClickedObjectIDs inside) {
-    return new EventsItemsClickedObjectIDs(inside);
-  }
-
-  static EventsItems<ClickedObjectIDsAfterSearch> of(ClickedObjectIDsAfterSearch inside) {
-    return new EventsItemsClickedObjectIDsAfterSearch(inside);
-  }
-
-  static EventsItems<ConvertedFilters> of(ConvertedFilters inside) {
-    return new EventsItemsConvertedFilters(inside);
-  }
-
-  static EventsItems<ConvertedObjectIDs> of(ConvertedObjectIDs inside) {
-    return new EventsItemsConvertedObjectIDs(inside);
-  }
-
-  static EventsItems<ConvertedObjectIDsAfterSearch> of(ConvertedObjectIDsAfterSearch inside) {
-    return new EventsItemsConvertedObjectIDsAfterSearch(inside);
-  }
-
-  static EventsItems<ViewedFilters> of(ViewedFilters inside) {
-    return new EventsItemsViewedFilters(inside);
-  }
-
-  static EventsItems<ViewedObjectIDs> of(ViewedObjectIDs inside) {
-    return new EventsItemsViewedObjectIDs(inside);
-  }
-
-  class Serializer extends StdSerializer<EventsItems> {
-
-    public Serializer(Class<EventsItems> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(EventsItems value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<EventsItems> {
+public interface EventsItems {
+  class Deserializer extends JsonDeserializer<EventsItems> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(EventsItems.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public EventsItems deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -87,8 +25,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ClickedFilters
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ClickedFilters value = parser.readValueAs(new TypeReference<ClickedFilters>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ClickedFilters.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf ClickedFilters (error: " + e.getMessage() + ") (type: ClickedFilters)");
@@ -98,8 +35,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ClickedObjectIDs
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ClickedObjectIDs value = parser.readValueAs(new TypeReference<ClickedObjectIDs>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ClickedObjectIDs.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf ClickedObjectIDs (error: " + e.getMessage() + ") (type: ClickedObjectIDs)");
@@ -109,8 +45,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ClickedObjectIDsAfterSearch
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ClickedObjectIDsAfterSearch value = parser.readValueAs(new TypeReference<ClickedObjectIDsAfterSearch>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ClickedObjectIDsAfterSearch.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -122,8 +57,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ConvertedFilters
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ConvertedFilters value = parser.readValueAs(new TypeReference<ConvertedFilters>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ConvertedFilters.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf ConvertedFilters (error: " + e.getMessage() + ") (type: ConvertedFilters)");
@@ -133,8 +67,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ConvertedObjectIDs
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ConvertedObjectIDs value = parser.readValueAs(new TypeReference<ConvertedObjectIDs>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ConvertedObjectIDs.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf ConvertedObjectIDs (error: " + e.getMessage() + ") (type: ConvertedObjectIDs)");
@@ -144,8 +77,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ConvertedObjectIDsAfterSearch
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ConvertedObjectIDsAfterSearch value = parser.readValueAs(new TypeReference<ConvertedObjectIDsAfterSearch>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ConvertedObjectIDsAfterSearch.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -159,8 +91,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ViewedFilters
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ViewedFilters value = parser.readValueAs(new TypeReference<ViewedFilters>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ViewedFilters.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf ViewedFilters (error: " + e.getMessage() + ") (type: ViewedFilters)");
@@ -170,8 +101,7 @@ public interface EventsItems<T> extends CompoundType<T> {
       // deserialize ViewedObjectIDs
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          ViewedObjectIDs value = parser.readValueAs(new TypeReference<ViewedObjectIDs>() {});
-          return EventsItems.of(value);
+          return parser.readValueAs(ViewedObjectIDs.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf ViewedObjectIDs (error: " + e.getMessage() + ") (type: ViewedObjectIDs)");
@@ -185,117 +115,5 @@ public interface EventsItems<T> extends CompoundType<T> {
     public EventsItems getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "EventsItems cannot be null");
     }
-  }
-}
-
-class EventsItemsClickedFilters implements EventsItems<ClickedFilters> {
-
-  private final ClickedFilters value;
-
-  EventsItemsClickedFilters(ClickedFilters value) {
-    this.value = value;
-  }
-
-  @Override
-  public ClickedFilters get() {
-    return value;
-  }
-}
-
-class EventsItemsClickedObjectIDs implements EventsItems<ClickedObjectIDs> {
-
-  private final ClickedObjectIDs value;
-
-  EventsItemsClickedObjectIDs(ClickedObjectIDs value) {
-    this.value = value;
-  }
-
-  @Override
-  public ClickedObjectIDs get() {
-    return value;
-  }
-}
-
-class EventsItemsClickedObjectIDsAfterSearch implements EventsItems<ClickedObjectIDsAfterSearch> {
-
-  private final ClickedObjectIDsAfterSearch value;
-
-  EventsItemsClickedObjectIDsAfterSearch(ClickedObjectIDsAfterSearch value) {
-    this.value = value;
-  }
-
-  @Override
-  public ClickedObjectIDsAfterSearch get() {
-    return value;
-  }
-}
-
-class EventsItemsConvertedFilters implements EventsItems<ConvertedFilters> {
-
-  private final ConvertedFilters value;
-
-  EventsItemsConvertedFilters(ConvertedFilters value) {
-    this.value = value;
-  }
-
-  @Override
-  public ConvertedFilters get() {
-    return value;
-  }
-}
-
-class EventsItemsConvertedObjectIDs implements EventsItems<ConvertedObjectIDs> {
-
-  private final ConvertedObjectIDs value;
-
-  EventsItemsConvertedObjectIDs(ConvertedObjectIDs value) {
-    this.value = value;
-  }
-
-  @Override
-  public ConvertedObjectIDs get() {
-    return value;
-  }
-}
-
-class EventsItemsConvertedObjectIDsAfterSearch implements EventsItems<ConvertedObjectIDsAfterSearch> {
-
-  private final ConvertedObjectIDsAfterSearch value;
-
-  EventsItemsConvertedObjectIDsAfterSearch(ConvertedObjectIDsAfterSearch value) {
-    this.value = value;
-  }
-
-  @Override
-  public ConvertedObjectIDsAfterSearch get() {
-    return value;
-  }
-}
-
-class EventsItemsViewedFilters implements EventsItems<ViewedFilters> {
-
-  private final ViewedFilters value;
-
-  EventsItemsViewedFilters(ViewedFilters value) {
-    this.value = value;
-  }
-
-  @Override
-  public ViewedFilters get() {
-    return value;
-  }
-}
-
-class EventsItemsViewedObjectIDs implements EventsItems<ViewedObjectIDs> {
-
-  private final ViewedObjectIDs value;
-
-  EventsItemsViewedObjectIDs(ViewedObjectIDs value) {
-    this.value = value;
-  }
-
-  @Override
-  public ViewedObjectIDs get() {
-    return value;
   }
 }

@@ -4,15 +4,10 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -22,43 +17,38 @@ import java.util.logging.Logger;
  * is enabled and how it is applied.
  */
 @JsonDeserialize(using = TypoTolerance.Deserializer.class)
-@JsonSerialize(using = TypoTolerance.Serializer.class)
-public interface TypoTolerance<T> extends CompoundType<T> {
-  static TypoTolerance<Boolean> of(Boolean inside) {
-    return new TypoToleranceBoolean(inside);
+public interface TypoTolerance {
+  /** TypoTolerance as Boolean wrapper. */
+  static TypoTolerance of(Boolean value) {
+    return new BooleanWrapper(value);
   }
 
-  static TypoTolerance<TypoToleranceEnum> of(TypoToleranceEnum inside) {
-    return new TypoToleranceTypoToleranceEnum(inside);
+  /** TypoTolerance as Boolean wrapper. */
+  @JsonSerialize(using = BooleanWrapper.Serializer.class)
+  class BooleanWrapper implements TypoTolerance {
+
+    private final Boolean value;
+
+    BooleanWrapper(Boolean value) {
+      this.value = value;
+    }
+
+    public Boolean getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<BooleanWrapper> {
+
+      @Override
+      public void serialize(BooleanWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
   }
 
-  class Serializer extends StdSerializer<TypoTolerance> {
-
-    public Serializer(Class<TypoTolerance> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(TypoTolerance value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<TypoTolerance> {
+  class Deserializer extends JsonDeserializer<TypoTolerance> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(TypoTolerance.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public TypoTolerance deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -67,7 +57,7 @@ public interface TypoTolerance<T> extends CompoundType<T> {
       // deserialize Boolean
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          Boolean value = parser.readValueAs(new TypeReference<Boolean>() {});
+          Boolean value = parser.readValueAs(Boolean.class);
           return TypoTolerance.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -78,8 +68,7 @@ public interface TypoTolerance<T> extends CompoundType<T> {
       // deserialize TypoToleranceEnum
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          TypoToleranceEnum value = parser.readValueAs(new TypeReference<TypoToleranceEnum>() {});
-          return TypoTolerance.of(value);
+          return parser.readValueAs(TypoToleranceEnum.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf TypoToleranceEnum (error: " + e.getMessage() + ") (type: TypoToleranceEnum)");
@@ -93,33 +82,5 @@ public interface TypoTolerance<T> extends CompoundType<T> {
     public TypoTolerance getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "TypoTolerance cannot be null");
     }
-  }
-}
-
-class TypoToleranceBoolean implements TypoTolerance<Boolean> {
-
-  private final Boolean value;
-
-  TypoToleranceBoolean(Boolean value) {
-    this.value = value;
-  }
-
-  @Override
-  public Boolean get() {
-    return value;
-  }
-}
-
-class TypoToleranceTypoToleranceEnum implements TypoTolerance<TypoToleranceEnum> {
-
-  private final TypoToleranceEnum value;
-
-  TypoToleranceTypoToleranceEnum(TypoToleranceEnum value) {
-    this.value = value;
-  }
-
-  @Override
-  public TypoToleranceEnum get() {
-    return value;
   }
 }

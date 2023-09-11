@@ -4,6 +4,7 @@
 package com.algolia.model.insights;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +14,8 @@ import java.util.Objects;
  * example, if you don't use Algolia to build your category pages, use this event. To track click
  * events related to Algolia requests, use the \"Clicked object IDs after search\" event.
  */
-public class ClickedObjectIDs {
+@JsonDeserialize(as = ClickedObjectIDs.class)
+public class ClickedObjectIDs implements EventsItems {
 
   @JsonProperty("eventName")
   private String eventName;

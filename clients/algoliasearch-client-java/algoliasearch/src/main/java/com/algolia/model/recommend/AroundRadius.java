@@ -4,15 +4,10 @@
 package com.algolia.model.recommend;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -22,43 +17,38 @@ import java.util.logging.Logger;
  * for a geographical search (in meters).
  */
 @JsonDeserialize(using = AroundRadius.Deserializer.class)
-@JsonSerialize(using = AroundRadius.Serializer.class)
-public interface AroundRadius<T> extends CompoundType<T> {
-  static AroundRadius<AroundRadiusAll> of(AroundRadiusAll inside) {
-    return new AroundRadiusAroundRadiusAll(inside);
+public interface AroundRadius {
+  /** AroundRadius as Integer wrapper. */
+  static AroundRadius of(Integer value) {
+    return new IntegerWrapper(value);
   }
 
-  static AroundRadius<Integer> of(Integer inside) {
-    return new AroundRadiusInteger(inside);
+  /** AroundRadius as Integer wrapper. */
+  @JsonSerialize(using = IntegerWrapper.Serializer.class)
+  class IntegerWrapper implements AroundRadius {
+
+    private final Integer value;
+
+    IntegerWrapper(Integer value) {
+      this.value = value;
+    }
+
+    public Integer getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<IntegerWrapper> {
+
+      @Override
+      public void serialize(IntegerWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
   }
 
-  class Serializer extends StdSerializer<AroundRadius> {
-
-    public Serializer(Class<AroundRadius> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(AroundRadius value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<AroundRadius> {
+  class Deserializer extends JsonDeserializer<AroundRadius> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(AroundRadius.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public AroundRadius deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -67,8 +57,7 @@ public interface AroundRadius<T> extends CompoundType<T> {
       // deserialize AroundRadiusAll
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          AroundRadiusAll value = parser.readValueAs(new TypeReference<AroundRadiusAll>() {});
-          return AroundRadius.of(value);
+          return parser.readValueAs(AroundRadiusAll.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf AroundRadiusAll (error: " + e.getMessage() + ") (type: AroundRadiusAll)");
@@ -78,7 +67,7 @@ public interface AroundRadius<T> extends CompoundType<T> {
       // deserialize Integer
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          Integer value = parser.readValueAs(new TypeReference<Integer>() {});
+          Integer value = parser.readValueAs(Integer.class);
           return AroundRadius.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -93,33 +82,5 @@ public interface AroundRadius<T> extends CompoundType<T> {
     public AroundRadius getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "AroundRadius cannot be null");
     }
-  }
-}
-
-class AroundRadiusAroundRadiusAll implements AroundRadius<AroundRadiusAll> {
-
-  private final AroundRadiusAll value;
-
-  AroundRadiusAroundRadiusAll(AroundRadiusAll value) {
-    this.value = value;
-  }
-
-  @Override
-  public AroundRadiusAll get() {
-    return value;
-  }
-}
-
-class AroundRadiusInteger implements AroundRadius<Integer> {
-
-  private final Integer value;
-
-  AroundRadiusInteger(Integer value) {
-    this.value = value;
-  }
-
-  @Override
-  public Integer get() {
-    return value;
   }
 }

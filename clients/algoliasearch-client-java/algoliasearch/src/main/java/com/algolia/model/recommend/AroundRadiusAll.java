@@ -4,11 +4,11 @@
 package com.algolia.model.recommend;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.*;
 
 /** Gets or Sets aroundRadiusAll */
-public enum AroundRadiusAll {
+@JsonDeserialize(as = AroundRadiusAll.class)
+public enum AroundRadiusAll implements AroundRadius {
   ALL("all");
 
   private final String value;

@@ -4,58 +4,49 @@
 package com.algolia.model.recommend;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
 /** SnippetResult */
 @JsonDeserialize(using = SnippetResult.Deserializer.class)
-@JsonSerialize(using = SnippetResult.Serializer.class)
-public interface SnippetResult<T> extends CompoundType<T> {
-  static SnippetResult<List<SnippetResultOption>> of(List<SnippetResultOption> inside) {
-    return new SnippetResultListOfSnippetResultOption(inside);
+public interface SnippetResult {
+  /** SnippetResult as List<SnippetResultOption> wrapper. */
+  static SnippetResult of(List<SnippetResultOption> value) {
+    return new ListOfSnippetResultOptionWrapper(value);
   }
 
-  static SnippetResult<SnippetResultOption> of(SnippetResultOption inside) {
-    return new SnippetResultSnippetResultOption(inside);
+  /** SnippetResult as List<SnippetResultOption> wrapper. */
+  @JsonSerialize(using = ListOfSnippetResultOptionWrapper.Serializer.class)
+  class ListOfSnippetResultOptionWrapper implements SnippetResult {
+
+    private final List<SnippetResultOption> value;
+
+    ListOfSnippetResultOptionWrapper(List<SnippetResultOption> value) {
+      this.value = value;
+    }
+
+    public List<SnippetResultOption> getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<ListOfSnippetResultOptionWrapper> {
+
+      @Override
+      public void serialize(ListOfSnippetResultOptionWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
   }
 
-  class Serializer extends StdSerializer<SnippetResult> {
-
-    public Serializer(Class<SnippetResult> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(SnippetResult value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<SnippetResult> {
+  class Deserializer extends JsonDeserializer<SnippetResult> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(SnippetResult.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public SnippetResult deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -64,8 +55,7 @@ public interface SnippetResult<T> extends CompoundType<T> {
       // deserialize List<SnippetResultOption>
       if (tree.isArray()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          List<SnippetResultOption> value = parser.readValueAs(new TypeReference<List<SnippetResultOption>>() {});
-          return SnippetResult.of(value);
+          return parser.readValueAs(new TypeReference<List<SnippetResultOption>>() {});
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -77,8 +67,7 @@ public interface SnippetResult<T> extends CompoundType<T> {
       // deserialize SnippetResultOption
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SnippetResultOption value = parser.readValueAs(new TypeReference<SnippetResultOption>() {});
-          return SnippetResult.of(value);
+          return parser.readValueAs(SnippetResultOption.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf SnippetResultOption (error: " + e.getMessage() + ") (type: SnippetResultOption)");
@@ -92,33 +81,5 @@ public interface SnippetResult<T> extends CompoundType<T> {
     public SnippetResult getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "SnippetResult cannot be null");
     }
-  }
-}
-
-class SnippetResultListOfSnippetResultOption implements SnippetResult<List<SnippetResultOption>> {
-
-  private final List<SnippetResultOption> value;
-
-  SnippetResultListOfSnippetResultOption(List<SnippetResultOption> value) {
-    this.value = value;
-  }
-
-  @Override
-  public List<SnippetResultOption> get() {
-    return value;
-  }
-}
-
-class SnippetResultSnippetResultOption implements SnippetResult<SnippetResultOption> {
-
-  private final SnippetResultOption value;
-
-  SnippetResultSnippetResultOption(SnippetResultOption value) {
-    this.value = value;
-  }
-
-  @Override
-  public SnippetResultOption get() {
-    return value;
   }
 }

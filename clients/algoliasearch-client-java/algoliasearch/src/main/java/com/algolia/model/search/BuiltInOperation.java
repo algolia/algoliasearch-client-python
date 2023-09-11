@@ -4,12 +4,14 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
 /**
  * To update an attribute without pushing the entire record, you can use these built-in operations.
  */
-public class BuiltInOperation {
+@JsonDeserialize(as = BuiltInOperation.class)
+public class BuiltInOperation implements AttributeToUpdate {
 
   @JsonProperty("_operation")
   private BuiltInOperationType operation;

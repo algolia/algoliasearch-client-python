@@ -4,81 +4,41 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** SearchParams */
 @JsonDeserialize(using = SearchParams.Deserializer.class)
-@JsonSerialize(using = SearchParams.Serializer.class)
-public interface SearchParams<T> extends CompoundType<T> {
-  static SearchParams<SearchParamsObject> of(SearchParamsObject inside) {
-    return new SearchParamsSearchParamsObject(inside);
-  }
-
-  static SearchParams<SearchParamsString> of(SearchParamsString inside) {
-    return new SearchParamsSearchParamsString(inside);
-  }
-
-  class Serializer extends StdSerializer<SearchParams> {
-
-    public Serializer(Class<SearchParams> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(SearchParams value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<SearchParams> {
+public interface SearchParams {
+  class Deserializer extends JsonDeserializer<SearchParams> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(SearchParams.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public SearchParams deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
 
-      // deserialize SearchParamsObject
-      if (tree.isObject()) {
-        try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SearchParamsObject value = parser.readValueAs(new TypeReference<SearchParamsObject>() {});
-          return SearchParams.of(value);
-        } catch (Exception e) {
-          // deserialization failed, continue
-          LOGGER.finest("Failed to deserialize oneOf SearchParamsObject (error: " + e.getMessage() + ") (type: SearchParamsObject)");
-        }
-      }
-
       // deserialize SearchParamsString
-      if (tree.isObject()) {
+      if (tree.isObject() && tree.has("params")) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SearchParamsString value = parser.readValueAs(new TypeReference<SearchParamsString>() {});
-          return SearchParams.of(value);
+          return parser.readValueAs(SearchParamsString.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf SearchParamsString (error: " + e.getMessage() + ") (type: SearchParamsString)");
+        }
+      }
+
+      // deserialize SearchParamsObject
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          return parser.readValueAs(SearchParamsObject.class);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf SearchParamsObject (error: " + e.getMessage() + ") (type: SearchParamsObject)");
         }
       }
       throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
@@ -89,33 +49,5 @@ public interface SearchParams<T> extends CompoundType<T> {
     public SearchParams getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "SearchParams cannot be null");
     }
-  }
-}
-
-class SearchParamsSearchParamsObject implements SearchParams<SearchParamsObject> {
-
-  private final SearchParamsObject value;
-
-  SearchParamsSearchParamsObject(SearchParamsObject value) {
-    this.value = value;
-  }
-
-  @Override
-  public SearchParamsObject get() {
-    return value;
-  }
-}
-
-class SearchParamsSearchParamsString implements SearchParams<SearchParamsString> {
-
-  private final SearchParamsString value;
-
-  SearchParamsSearchParamsString(SearchParamsString value) {
-    this.value = value;
-  }
-
-  @Override
-  public SearchParamsString get() {
-    return value;
   }
 }

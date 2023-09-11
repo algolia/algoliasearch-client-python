@@ -4,6 +4,7 @@
 package com.algolia.model.insights;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,8 @@ import java.util.Objects;
  * conversion events related to Algolia requests, use the \"Converted object IDs after search\"
  * event.
  */
-public class ConvertedObjectIDs {
+@JsonDeserialize(as = ConvertedObjectIDs.class)
+public class ConvertedObjectIDs implements EventsItems {
 
   @JsonProperty("eventName")
   private String eventName;

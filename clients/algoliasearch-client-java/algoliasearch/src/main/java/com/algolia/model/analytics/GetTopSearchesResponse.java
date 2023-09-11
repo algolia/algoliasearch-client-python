@@ -4,57 +4,19 @@
 package com.algolia.model.analytics;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** GetTopSearchesResponse */
 @JsonDeserialize(using = GetTopSearchesResponse.Deserializer.class)
-@JsonSerialize(using = GetTopSearchesResponse.Serializer.class)
-public interface GetTopSearchesResponse<T> extends CompoundType<T> {
-  static GetTopSearchesResponse<TopSearchesResponse> of(TopSearchesResponse inside) {
-    return new GetTopSearchesResponseTopSearchesResponse(inside);
-  }
-
-  static GetTopSearchesResponse<TopSearchesResponseWithAnalytics> of(TopSearchesResponseWithAnalytics inside) {
-    return new GetTopSearchesResponseTopSearchesResponseWithAnalytics(inside);
-  }
-
-  class Serializer extends StdSerializer<GetTopSearchesResponse> {
-
-    public Serializer(Class<GetTopSearchesResponse> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(GetTopSearchesResponse value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<GetTopSearchesResponse> {
+public interface GetTopSearchesResponse {
+  class Deserializer extends JsonDeserializer<GetTopSearchesResponse> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(GetTopSearchesResponse.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public GetTopSearchesResponse deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -63,8 +25,7 @@ public interface GetTopSearchesResponse<T> extends CompoundType<T> {
       // deserialize TopSearchesResponse
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          TopSearchesResponse value = parser.readValueAs(new TypeReference<TopSearchesResponse>() {});
-          return GetTopSearchesResponse.of(value);
+          return parser.readValueAs(TopSearchesResponse.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf TopSearchesResponse (error: " + e.getMessage() + ") (type: TopSearchesResponse)");
@@ -74,8 +35,7 @@ public interface GetTopSearchesResponse<T> extends CompoundType<T> {
       // deserialize TopSearchesResponseWithAnalytics
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          TopSearchesResponseWithAnalytics value = parser.readValueAs(new TypeReference<TopSearchesResponseWithAnalytics>() {});
-          return GetTopSearchesResponse.of(value);
+          return parser.readValueAs(TopSearchesResponseWithAnalytics.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -93,33 +53,5 @@ public interface GetTopSearchesResponse<T> extends CompoundType<T> {
     public GetTopSearchesResponse getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "GetTopSearchesResponse cannot be null");
     }
-  }
-}
-
-class GetTopSearchesResponseTopSearchesResponse implements GetTopSearchesResponse<TopSearchesResponse> {
-
-  private final TopSearchesResponse value;
-
-  GetTopSearchesResponseTopSearchesResponse(TopSearchesResponse value) {
-    this.value = value;
-  }
-
-  @Override
-  public TopSearchesResponse get() {
-    return value;
-  }
-}
-
-class GetTopSearchesResponseTopSearchesResponseWithAnalytics implements GetTopSearchesResponse<TopSearchesResponseWithAnalytics> {
-
-  private final TopSearchesResponseWithAnalytics value;
-
-  GetTopSearchesResponseTopSearchesResponseWithAnalytics(TopSearchesResponseWithAnalytics value) {
-    this.value = value;
-  }
-
-  @Override
-  public TopSearchesResponseWithAnalytics get() {
-    return value;
   }
 }

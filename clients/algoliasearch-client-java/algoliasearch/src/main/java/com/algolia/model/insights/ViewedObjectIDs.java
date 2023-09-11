@@ -4,12 +4,14 @@
 package com.algolia.model.insights;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /** Use this event to track when users viewed items in the search results. */
-public class ViewedObjectIDs {
+@JsonDeserialize(as = ViewedObjectIDs.class)
+public class ViewedObjectIDs implements EventsItems {
 
   @JsonProperty("eventName")
   private String eventName;

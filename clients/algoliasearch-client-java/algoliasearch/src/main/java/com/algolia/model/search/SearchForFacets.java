@@ -4,12 +4,14 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /** SearchForFacets */
-public class SearchForFacets {
+@JsonDeserialize(as = SearchForFacets.class)
+public class SearchForFacets implements SearchQuery {
 
   @JsonProperty("params")
   private String params;

@@ -4,12 +4,14 @@
 package com.algolia.model.insights;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /** Use this event to track when users click facet filters in your user interface. */
-public class ClickedFilters {
+@JsonDeserialize(as = ClickedFilters.class)
+public class ClickedFilters implements EventsItems {
 
   @JsonProperty("eventName")
   private String eventName;

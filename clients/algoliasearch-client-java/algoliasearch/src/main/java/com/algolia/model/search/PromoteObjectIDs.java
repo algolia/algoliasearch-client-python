@@ -4,12 +4,14 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /** Records to promote. */
-public class PromoteObjectIDs {
+@JsonDeserialize(as = PromoteObjectIDs.class)
+public class PromoteObjectIDs implements Promote {
 
   @JsonProperty("objectIDs")
   private List<String> objectIDs = new ArrayList<>();

@@ -4,57 +4,19 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** SearchResult */
 @JsonDeserialize(using = SearchResult.Deserializer.class)
-@JsonSerialize(using = SearchResult.Serializer.class)
-public interface SearchResult<T> extends CompoundType<T> {
-  static SearchResult<SearchForFacetValuesResponse> of(SearchForFacetValuesResponse inside) {
-    return new SearchResultSearchForFacetValuesResponse(inside);
-  }
-
-  static SearchResult<SearchResponse> of(SearchResponse inside) {
-    return new SearchResultSearchResponse(inside);
-  }
-
-  class Serializer extends StdSerializer<SearchResult> {
-
-    public Serializer(Class<SearchResult> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(SearchResult value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<SearchResult> {
+public interface SearchResult {
+  class Deserializer extends JsonDeserializer<SearchResult> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(SearchResult.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public SearchResult deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -63,8 +25,7 @@ public interface SearchResult<T> extends CompoundType<T> {
       // deserialize SearchForFacetValuesResponse
       if (tree.isObject() && tree.has("facetHits")) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SearchForFacetValuesResponse value = parser.readValueAs(new TypeReference<SearchForFacetValuesResponse>() {});
-          return SearchResult.of(value);
+          return parser.readValueAs(SearchForFacetValuesResponse.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -76,8 +37,7 @@ public interface SearchResult<T> extends CompoundType<T> {
       // deserialize SearchResponse
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SearchResponse value = parser.readValueAs(new TypeReference<SearchResponse>() {});
-          return SearchResult.of(value);
+          return parser.readValueAs(SearchResponse.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf SearchResponse (error: " + e.getMessage() + ") (type: SearchResponse)");
@@ -91,33 +51,5 @@ public interface SearchResult<T> extends CompoundType<T> {
     public SearchResult getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "SearchResult cannot be null");
     }
-  }
-}
-
-class SearchResultSearchForFacetValuesResponse implements SearchResult<SearchForFacetValuesResponse> {
-
-  private final SearchForFacetValuesResponse value;
-
-  SearchResultSearchForFacetValuesResponse(SearchForFacetValuesResponse value) {
-    this.value = value;
-  }
-
-  @Override
-  public SearchForFacetValuesResponse get() {
-    return value;
-  }
-}
-
-class SearchResultSearchResponse implements SearchResult<SearchResponse> {
-
-  private final SearchResponse value;
-
-  SearchResultSearchResponse(SearchResponse value) {
-    this.value = value;
-  }
-
-  @Override
-  public SearchResponse get() {
-    return value;
   }
 }

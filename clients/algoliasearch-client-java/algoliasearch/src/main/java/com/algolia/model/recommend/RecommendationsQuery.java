@@ -4,10 +4,12 @@
 package com.algolia.model.recommend;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
 /** RecommendationsQuery */
-public class RecommendationsQuery {
+@JsonDeserialize(as = RecommendationsQuery.class)
+public class RecommendationsQuery implements RecommendationsRequest {
 
   @JsonProperty("model")
   private RecommendationModels model;

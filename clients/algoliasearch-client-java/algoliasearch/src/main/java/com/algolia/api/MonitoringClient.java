@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
 public class MonitoringClient extends ApiClient {
 
@@ -54,7 +55,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(delAsync(path, parameters, requestOptions));
   }
 
@@ -65,7 +66,7 @@ public class MonitoringClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.del(path, parameters, null);
   }
 
@@ -77,7 +78,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.del(path, null, requestOptions);
   }
 
@@ -87,7 +88,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.del(path, null, null);
   }
 
@@ -100,11 +101,9 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
+  public CompletableFuture<Object> delAsync(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `del`.");
-    }
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `del`.");
 
     HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("DELETE").addQueryParameters(parameters).build();
     return executeAsync(request, requestOptions, new TypeReference<Object>() {});
@@ -117,7 +116,7 @@ public class MonitoringClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.delAsync(path, parameters, null);
   }
 
@@ -129,7 +128,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.delAsync(path, null, requestOptions);
   }
 
@@ -139,7 +138,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.delAsync(path, null, null);
   }
 
@@ -152,7 +151,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getAsync(path, parameters, requestOptions));
   }
 
@@ -163,7 +162,7 @@ public class MonitoringClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.get(path, parameters, null);
   }
 
@@ -175,7 +174,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.get(path, null, requestOptions);
   }
 
@@ -185,7 +184,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.get(path, null, null);
   }
 
@@ -198,11 +197,9 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
+  public CompletableFuture<Object> getAsync(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `get`.");
-    }
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `get`.");
 
     HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("GET").addQueryParameters(parameters).build();
     return executeAsync(request, requestOptions, new TypeReference<Object>() {});
@@ -215,7 +212,7 @@ public class MonitoringClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.getAsync(path, parameters, null);
   }
 
@@ -227,7 +224,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.getAsync(path, null, requestOptions);
   }
 
@@ -237,7 +234,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.getAsync(path, null, null);
   }
 
@@ -249,7 +246,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public IncidentsResponse getClusterIncidents(String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public IncidentsResponse getClusterIncidents(@Nonnull String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getClusterIncidentsAsync(clusters, requestOptions));
   }
 
@@ -259,7 +256,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public IncidentsResponse getClusterIncidents(String clusters) throws AlgoliaRuntimeException {
+  public IncidentsResponse getClusterIncidents(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getClusterIncidents(clusters, null);
   }
 
@@ -271,11 +268,9 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<IncidentsResponse> getClusterIncidentsAsync(String clusters, RequestOptions requestOptions)
+  public CompletableFuture<IncidentsResponse> getClusterIncidentsAsync(@Nonnull String clusters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (clusters == null) {
-      throw new AlgoliaRuntimeException("Parameter `clusters` is required when calling `getClusterIncidents`.");
-    }
+    Parameters.requireNonNull(clusters, "Parameter `clusters` is required when calling `getClusterIncidents`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/incidents/{clusters}", clusters).setMethod("GET").build();
 
@@ -288,7 +283,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<IncidentsResponse> getClusterIncidentsAsync(String clusters) throws AlgoliaRuntimeException {
+  public CompletableFuture<IncidentsResponse> getClusterIncidentsAsync(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getClusterIncidentsAsync(clusters, null);
   }
 
@@ -300,7 +295,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public StatusResponse getClusterStatus(String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public StatusResponse getClusterStatus(@Nonnull String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getClusterStatusAsync(clusters, requestOptions));
   }
 
@@ -310,7 +305,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public StatusResponse getClusterStatus(String clusters) throws AlgoliaRuntimeException {
+  public StatusResponse getClusterStatus(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getClusterStatus(clusters, null);
   }
 
@@ -322,11 +317,9 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<StatusResponse> getClusterStatusAsync(String clusters, RequestOptions requestOptions)
+  public CompletableFuture<StatusResponse> getClusterStatusAsync(@Nonnull String clusters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (clusters == null) {
-      throw new AlgoliaRuntimeException("Parameter `clusters` is required when calling `getClusterStatus`.");
-    }
+    Parameters.requireNonNull(clusters, "Parameter `clusters` is required when calling `getClusterStatus`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/status/{clusters}", clusters).setMethod("GET").build();
 
@@ -339,7 +332,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<StatusResponse> getClusterStatusAsync(String clusters) throws AlgoliaRuntimeException {
+  public CompletableFuture<StatusResponse> getClusterStatusAsync(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getClusterStatusAsync(clusters, null);
   }
 
@@ -393,7 +386,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public IndexingTimeResponse getIndexingTime(String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public IndexingTimeResponse getIndexingTime(@Nonnull String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getIndexingTimeAsync(clusters, requestOptions));
   }
 
@@ -403,7 +396,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public IndexingTimeResponse getIndexingTime(String clusters) throws AlgoliaRuntimeException {
+  public IndexingTimeResponse getIndexingTime(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getIndexingTime(clusters, null);
   }
 
@@ -415,11 +408,9 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<IndexingTimeResponse> getIndexingTimeAsync(String clusters, RequestOptions requestOptions)
+  public CompletableFuture<IndexingTimeResponse> getIndexingTimeAsync(@Nonnull String clusters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (clusters == null) {
-      throw new AlgoliaRuntimeException("Parameter `clusters` is required when calling `getIndexingTime`.");
-    }
+    Parameters.requireNonNull(clusters, "Parameter `clusters` is required when calling `getIndexingTime`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/indexing/{clusters}", clusters).setMethod("GET").build();
 
@@ -432,7 +423,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<IndexingTimeResponse> getIndexingTimeAsync(String clusters) throws AlgoliaRuntimeException {
+  public CompletableFuture<IndexingTimeResponse> getIndexingTimeAsync(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getIndexingTimeAsync(clusters, null);
   }
 
@@ -498,7 +489,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public LatencyResponse getLatency(String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public LatencyResponse getLatency(@Nonnull String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getLatencyAsync(clusters, requestOptions));
   }
 
@@ -508,7 +499,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public LatencyResponse getLatency(String clusters) throws AlgoliaRuntimeException {
+  public LatencyResponse getLatency(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getLatency(clusters, null);
   }
 
@@ -520,10 +511,9 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<LatencyResponse> getLatencyAsync(String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    if (clusters == null) {
-      throw new AlgoliaRuntimeException("Parameter `clusters` is required when calling `getLatency`.");
-    }
+  public CompletableFuture<LatencyResponse> getLatencyAsync(@Nonnull String clusters, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(clusters, "Parameter `clusters` is required when calling `getLatency`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/latency/{clusters}", clusters).setMethod("GET").build();
 
@@ -536,7 +526,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<LatencyResponse> getLatencyAsync(String clusters) throws AlgoliaRuntimeException {
+  public CompletableFuture<LatencyResponse> getLatencyAsync(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getLatencyAsync(clusters, null);
   }
 
@@ -554,7 +544,8 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public InfrastructureResponse getMetrics(Metric metric, Period period, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public InfrastructureResponse getMetrics(@Nonnull Metric metric, @Nonnull Period period, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getMetricsAsync(metric, period, requestOptions));
   }
 
@@ -570,7 +561,7 @@ public class MonitoringClient extends ApiClient {
    *     day. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public InfrastructureResponse getMetrics(Metric metric, Period period) throws AlgoliaRuntimeException {
+  public InfrastructureResponse getMetrics(@Nonnull Metric metric, @Nonnull Period period) throws AlgoliaRuntimeException {
     return this.getMetrics(metric, period, null);
   }
 
@@ -588,15 +579,14 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<InfrastructureResponse> getMetricsAsync(Metric metric, Period period, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (metric == null) {
-      throw new AlgoliaRuntimeException("Parameter `metric` is required when calling `getMetrics`.");
-    }
+  public CompletableFuture<InfrastructureResponse> getMetricsAsync(
+    @Nonnull Metric metric,
+    @Nonnull Period period,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(metric, "Parameter `metric` is required when calling `getMetrics`.");
 
-    if (period == null) {
-      throw new AlgoliaRuntimeException("Parameter `period` is required when calling `getMetrics`.");
-    }
+    Parameters.requireNonNull(period, "Parameter `period` is required when calling `getMetrics`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -618,7 +608,8 @@ public class MonitoringClient extends ApiClient {
    *     day. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<InfrastructureResponse> getMetricsAsync(Metric metric, Period period) throws AlgoliaRuntimeException {
+  public CompletableFuture<InfrastructureResponse> getMetricsAsync(@Nonnull Metric metric, @Nonnull Period period)
+    throws AlgoliaRuntimeException {
     return this.getMetricsAsync(metric, period, null);
   }
 
@@ -630,7 +621,8 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Map<String, Map<String, Boolean>> getReachability(String clusters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Map<String, Map<String, Boolean>> getReachability(@Nonnull String clusters, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getReachabilityAsync(clusters, requestOptions));
   }
 
@@ -640,7 +632,7 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Map<String, Map<String, Boolean>> getReachability(String clusters) throws AlgoliaRuntimeException {
+  public Map<String, Map<String, Boolean>> getReachability(@Nonnull String clusters) throws AlgoliaRuntimeException {
     return this.getReachability(clusters, null);
   }
 
@@ -652,11 +644,9 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Map<String, Map<String, Boolean>>> getReachabilityAsync(String clusters, RequestOptions requestOptions)
+  public CompletableFuture<Map<String, Map<String, Boolean>>> getReachabilityAsync(@Nonnull String clusters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (clusters == null) {
-      throw new AlgoliaRuntimeException("Parameter `clusters` is required when calling `getReachability`.");
-    }
+    Parameters.requireNonNull(clusters, "Parameter `clusters` is required when calling `getReachability`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/reachability/{clusters}/probes", clusters).setMethod("GET").build();
     return executeAsync(request, requestOptions, new TypeReference<Map<String, Map<String, Boolean>>>() {});
@@ -668,7 +658,8 @@ public class MonitoringClient extends ApiClient {
    * @param clusters Subset of clusters, separated by comma. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Map<String, Map<String, Boolean>>> getReachabilityAsync(String clusters) throws AlgoliaRuntimeException {
+  public CompletableFuture<Map<String, Map<String, Boolean>>> getReachabilityAsync(@Nonnull String clusters)
+    throws AlgoliaRuntimeException {
     return this.getReachabilityAsync(clusters, null);
   }
 
@@ -736,7 +727,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
+  public Object post(@Nonnull String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(postAsync(path, parameters, body, requestOptions));
   }
@@ -749,7 +740,7 @@ public class MonitoringClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
     return this.post(path, parameters, body, null);
   }
 
@@ -761,7 +752,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.post(path, null, null, requestOptions);
   }
 
@@ -771,7 +762,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.post(path, null, null, null);
   }
 
@@ -785,11 +776,13 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `post`.");
-    }
+  public CompletableFuture<Object> postAsync(
+    @Nonnull String path,
+    Map<String, Object> parameters,
+    Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `post`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -809,7 +802,8 @@ public class MonitoringClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path, Map<String, Object> parameters, Object body)
+    throws AlgoliaRuntimeException {
     return this.postAsync(path, parameters, body, null);
   }
 
@@ -821,7 +815,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.postAsync(path, null, null, requestOptions);
   }
 
@@ -831,7 +825,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.postAsync(path, null, null, null);
   }
 
@@ -845,7 +839,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
+  public Object put(@Nonnull String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(putAsync(path, parameters, body, requestOptions));
   }
@@ -858,7 +852,7 @@ public class MonitoringClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
     return this.put(path, parameters, body, null);
   }
 
@@ -870,7 +864,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.put(path, null, null, requestOptions);
   }
 
@@ -880,7 +874,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.put(path, null, null, null);
   }
 
@@ -894,11 +888,13 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `put`.");
-    }
+  public CompletableFuture<Object> putAsync(
+    @Nonnull String path,
+    Map<String, Object> parameters,
+    Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `put`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -918,7 +914,8 @@ public class MonitoringClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path, Map<String, Object> parameters, Object body)
+    throws AlgoliaRuntimeException {
     return this.putAsync(path, parameters, body, null);
   }
 
@@ -930,7 +927,7 @@ public class MonitoringClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.putAsync(path, null, null, requestOptions);
   }
 
@@ -940,7 +937,7 @@ public class MonitoringClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.putAsync(path, null, null, null);
   }
 }

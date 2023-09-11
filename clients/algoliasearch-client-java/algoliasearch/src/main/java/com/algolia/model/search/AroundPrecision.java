@@ -4,15 +4,11 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -23,43 +19,67 @@ import java.util.logging.Logger;
  * point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
  */
 @JsonDeserialize(using = AroundPrecision.Deserializer.class)
-@JsonSerialize(using = AroundPrecision.Serializer.class)
-public interface AroundPrecision<T> extends CompoundType<T> {
-  static AroundPrecision<Integer> of(Integer inside) {
-    return new AroundPrecisionInteger(inside);
+public interface AroundPrecision {
+  /** AroundPrecision as Integer wrapper. */
+  static AroundPrecision of(Integer value) {
+    return new IntegerWrapper(value);
   }
 
-  static AroundPrecision<List<AroundPrecisionFromValueInner>> of(List<AroundPrecisionFromValueInner> inside) {
-    return new AroundPrecisionListOfAroundPrecisionFromValueInner(inside);
+  /** AroundPrecision as List<AroundPrecisionFromValueInner> wrapper. */
+  static AroundPrecision of(List<AroundPrecisionFromValueInner> value) {
+    return new ListOfAroundPrecisionFromValueInnerWrapper(value);
   }
 
-  class Serializer extends StdSerializer<AroundPrecision> {
+  /** AroundPrecision as Integer wrapper. */
+  @JsonSerialize(using = IntegerWrapper.Serializer.class)
+  class IntegerWrapper implements AroundPrecision {
 
-    public Serializer(Class<AroundPrecision> t) {
-      super(t);
+    private final Integer value;
+
+    IntegerWrapper(Integer value) {
+      this.value = value;
     }
 
-    public Serializer() {
-      this(null);
+    public Integer getValue() {
+      return value;
     }
 
-    @Override
-    public void serialize(AroundPrecision value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
+    static class Serializer extends JsonSerializer<IntegerWrapper> {
+
+      @Override
+      public void serialize(IntegerWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
     }
   }
 
-  class Deserializer extends StdDeserializer<AroundPrecision> {
+  /** AroundPrecision as List<AroundPrecisionFromValueInner> wrapper. */
+  @JsonSerialize(using = ListOfAroundPrecisionFromValueInnerWrapper.Serializer.class)
+  class ListOfAroundPrecisionFromValueInnerWrapper implements AroundPrecision {
+
+    private final List<AroundPrecisionFromValueInner> value;
+
+    ListOfAroundPrecisionFromValueInnerWrapper(List<AroundPrecisionFromValueInner> value) {
+      this.value = value;
+    }
+
+    public List<AroundPrecisionFromValueInner> getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<ListOfAroundPrecisionFromValueInnerWrapper> {
+
+      @Override
+      public void serialize(ListOfAroundPrecisionFromValueInnerWrapper value, JsonGenerator gen, SerializerProvider provider)
+        throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
+  }
+
+  class Deserializer extends JsonDeserializer<AroundPrecision> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(AroundPrecision.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public AroundPrecision deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -68,7 +88,7 @@ public interface AroundPrecision<T> extends CompoundType<T> {
       // deserialize Integer
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          Integer value = parser.readValueAs(new TypeReference<Integer>() {});
+          Integer value = parser.readValueAs(Integer.class);
           return AroundPrecision.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -79,8 +99,7 @@ public interface AroundPrecision<T> extends CompoundType<T> {
       // deserialize List<AroundPrecisionFromValueInner>
       if (tree.isArray()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          List<AroundPrecisionFromValueInner> value = parser.readValueAs(new TypeReference<List<AroundPrecisionFromValueInner>>() {});
-          return AroundPrecision.of(value);
+          return parser.readValueAs(new TypeReference<List<AroundPrecisionFromValueInner>>() {});
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -98,33 +117,5 @@ public interface AroundPrecision<T> extends CompoundType<T> {
     public AroundPrecision getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "AroundPrecision cannot be null");
     }
-  }
-}
-
-class AroundPrecisionInteger implements AroundPrecision<Integer> {
-
-  private final Integer value;
-
-  AroundPrecisionInteger(Integer value) {
-    this.value = value;
-  }
-
-  @Override
-  public Integer get() {
-    return value;
-  }
-}
-
-class AroundPrecisionListOfAroundPrecisionFromValueInner implements AroundPrecision<List<AroundPrecisionFromValueInner>> {
-
-  private final List<AroundPrecisionFromValueInner> value;
-
-  AroundPrecisionListOfAroundPrecisionFromValueInner(List<AroundPrecisionFromValueInner> value) {
-    this.value = value;
-  }
-
-  @Override
-  public List<AroundPrecisionFromValueInner> get() {
-    return value;
   }
 }

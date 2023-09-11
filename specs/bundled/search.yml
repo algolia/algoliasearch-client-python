@@ -185,6 +185,8 @@ components:
     searchParamsString:
       type: object
       additionalProperties: false
+      x-discriminator-fields:
+        - params
       properties:
         params:
           $ref: '#/components/schemas/paramsAsString'

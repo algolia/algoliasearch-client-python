@@ -684,7 +684,7 @@ class SearchClientRequestsTests {
     }
 
     assertDoesNotThrow(() -> {
-      client.browse(indexName0, BrowseParams.of(browseParams0), Object.class);
+      client.browse(indexName0, browseParams0, Object.class);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/indexName/browse", req.path);
@@ -705,7 +705,7 @@ class SearchClientRequestsTests {
     }
 
     assertDoesNotThrow(() -> {
-      client.browse(indexName0, BrowseParams.of(browseParams0), Object.class);
+      client.browse(indexName0, browseParams0, Object.class);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/indexName/browse", req.path);
@@ -1446,7 +1446,7 @@ class SearchClientRequestsTests {
         String value2 = "test2";
         id21.setValue(value2);
       }
-      attributesToUpdate0.put("id2", AttributeToUpdate.of(id21));
+      attributesToUpdate0.put("id2", id21);
     }
     boolean createIfNotExists0 = true;
 
@@ -2157,7 +2157,7 @@ class SearchClientRequestsTests {
             }
             query3.setEdits(edits4);
           }
-          params2.setQuery(ConsequenceQuery.of(query3));
+          params2.setQuery(query3);
         }
         consequence1.setParams(params2);
         List<ConsequenceHide> hide2 = new ArrayList<>();
@@ -2187,7 +2187,7 @@ class SearchClientRequestsTests {
             int position4 = 3;
             promote_03.setPosition(position4);
           }
-          promote2.add(Promote.of(promote_03));
+          promote2.add(promote_03);
           PromoteObjectIDs promote_13 = new PromoteObjectIDs();
           {
             List<String> objectIDs4 = new ArrayList<>();
@@ -2201,7 +2201,7 @@ class SearchClientRequestsTests {
             int position4 = 1;
             promote_13.setPosition(position4);
           }
-          promote2.add(Promote.of(promote_13));
+          promote2.add(promote_13);
         }
         consequence1.setPromote(promote2);
       }
@@ -2379,7 +2379,7 @@ class SearchClientRequestsTests {
               }
               query4.setEdits(edits5);
             }
-            params3.setQuery(ConsequenceQuery.of(query4));
+            params3.setQuery(query4);
           }
           consequence2.setParams(params3);
           List<ConsequenceHide> hide3 = new ArrayList<>();
@@ -2409,7 +2409,7 @@ class SearchClientRequestsTests {
               int position5 = 3;
               promote_04.setPosition(position5);
             }
-            promote3.add(Promote.of(promote_04));
+            promote3.add(promote_04);
             PromoteObjectIDs promote_14 = new PromoteObjectIDs();
             {
               List<String> objectIDs5 = new ArrayList<>();
@@ -2423,7 +2423,7 @@ class SearchClientRequestsTests {
               int position5 = 1;
               promote_14.setPosition(position5);
             }
-            promote3.add(Promote.of(promote_14));
+            promote3.add(promote_14);
           }
           consequence2.setPromote(promote3);
         }
@@ -2624,13 +2624,13 @@ class SearchClientRequestsTests {
           String indexName3 = "theIndexName";
           requests_02.setIndexName(indexName3);
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
       }
       searchMethodParams0.setRequests(requests1);
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -2655,7 +2655,7 @@ class SearchClientRequestsTests {
           String facet3 = "theFacet";
           requests_02.setFacet(facet3);
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
       }
       searchMethodParams0.setRequests(requests1);
       SearchStrategy strategy1 = SearchStrategy.fromValue("stopIfEnoughMatches");
@@ -2663,7 +2663,7 @@ class SearchClientRequestsTests {
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -2695,13 +2695,13 @@ class SearchClientRequestsTests {
           SearchTypeDefault type3 = SearchTypeDefault.fromValue("default");
           requests_02.setType(type3);
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
       }
       searchMethodParams0.setRequests(requests1);
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -2737,7 +2737,7 @@ class SearchClientRequestsTests {
           int maxFacetHits3 = 50;
           requests_02.setMaxFacetHits(maxFacetHits3);
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
       }
       searchMethodParams0.setRequests(requests1);
       SearchStrategy strategy1 = SearchStrategy.fromValue("stopIfEnoughMatches");
@@ -2745,7 +2745,7 @@ class SearchClientRequestsTests {
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -2771,7 +2771,7 @@ class SearchClientRequestsTests {
           String indexName3 = "theIndexName";
           requests_02.setIndexName(indexName3);
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
         SearchForFacets requests_12 = new SearchForFacets();
         {
           String indexName3 = "theIndexName2";
@@ -2781,7 +2781,7 @@ class SearchClientRequestsTests {
           String facet3 = "theFacet";
           requests_12.setFacet(facet3);
         }
-        requests1.add(SearchQuery.of(requests_12));
+        requests1.add(requests_12);
         SearchForHits requests_22 = new SearchForHits();
         {
           String indexName3 = "theIndexName";
@@ -2789,7 +2789,7 @@ class SearchClientRequestsTests {
           SearchTypeDefault type3 = SearchTypeDefault.fromValue("default");
           requests_22.setType(type3);
         }
-        requests1.add(SearchQuery.of(requests_22));
+        requests1.add(requests_22);
       }
       searchMethodParams0.setRequests(requests1);
       SearchStrategy strategy1 = SearchStrategy.fromValue("stopIfEnoughMatches");
@@ -2797,7 +2797,7 @@ class SearchClientRequestsTests {
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -2833,7 +2833,7 @@ class SearchClientRequestsTests {
           int maxFacetHits3 = 50;
           requests_02.setMaxFacetHits(maxFacetHits3);
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
         SearchForHits requests_12 = new SearchForHits();
         {
           String indexName3 = "theIndexName";
@@ -2845,7 +2845,7 @@ class SearchClientRequestsTests {
           SearchTypeDefault type3 = SearchTypeDefault.fromValue("default");
           requests_12.setType(type3);
         }
-        requests1.add(SearchQuery.of(requests_12));
+        requests1.add(requests_12);
       }
       searchMethodParams0.setRequests(requests1);
       SearchStrategy strategy1 = SearchStrategy.fromValue("stopIfEnoughMatches");
@@ -2853,7 +2853,7 @@ class SearchClientRequestsTests {
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -2889,7 +2889,7 @@ class SearchClientRequestsTests {
           String optionalFilters3 = "mySearch:filters";
           requests_02.setOptionalFilters(OptionalFilters.of(optionalFilters3));
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
         SearchForHits requests_12 = new SearchForHits();
         {
           String indexName3 = "theIndexName";
@@ -2955,13 +2955,13 @@ class SearchClientRequestsTests {
           }
           requests_12.setOptionalFilters(OptionalFilters.of(optionalFilters3));
         }
-        requests1.add(SearchQuery.of(requests_12));
+        requests1.add(requests_12);
       }
       searchMethodParams0.setRequests(requests1);
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -3015,7 +3015,7 @@ class SearchClientRequestsTests {
           int aroundPrecision3 = 0;
           requests_02.setAroundPrecision(AroundPrecision.of(aroundPrecision3));
           AroundRadiusAll aroundRadius3 = AroundRadiusAll.fromValue("all");
-          requests_02.setAroundRadius(AroundRadius.of(aroundRadius3));
+          requests_02.setAroundRadius(aroundRadius3);
           boolean attributeCriteriaComputedByMinProximity3 = true;
           requests_02.setAttributeCriteriaComputedByMinProximity(attributeCriteriaComputedByMinProximity3);
           List<String> attributesForFaceting3 = new ArrayList<>();
@@ -3279,17 +3279,17 @@ class SearchClientRequestsTests {
           SearchTypeDefault type3 = SearchTypeDefault.fromValue("default");
           requests_02.setType(type3);
           TypoToleranceEnum typoTolerance3 = TypoToleranceEnum.fromValue("min");
-          requests_02.setTypoTolerance(TypoTolerance.of(typoTolerance3));
+          requests_02.setTypoTolerance(typoTolerance3);
           String userToken3 = "";
           requests_02.setUserToken(userToken3);
         }
-        requests1.add(SearchQuery.of(requests_02));
+        requests1.add(requests_02);
       }
       searchMethodParams0.setRequests(requests1);
     }
 
     assertDoesNotThrow(() -> {
-      client.search(searchMethodParams0, Object.class);
+      client.search(searchMethodParams0);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/*/queries", req.path);
@@ -3444,7 +3444,7 @@ class SearchClientRequestsTests {
     }
 
     assertDoesNotThrow(() -> {
-      client.searchSingleIndex(indexName0, SearchParams.of(searchParams0), Object.class);
+      client.searchSingleIndex(indexName0, searchParams0, Object.class);
     });
     EchoResponse req = echo.getLastResponse();
     assertEquals("/1/indexes/indexName/query", req.path);
@@ -3696,7 +3696,7 @@ class SearchClientRequestsTests {
     IndexSettings indexSettings0 = new IndexSettings();
     {
       TypoToleranceEnum typoTolerance1 = TypoToleranceEnum.fromValue("min");
-      indexSettings0.setTypoTolerance(TypoTolerance.of(typoTolerance1));
+      indexSettings0.setTypoTolerance(typoTolerance1);
     }
     boolean forwardToReplicas0 = true;
 

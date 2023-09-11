@@ -281,14 +281,24 @@ internal class SearchParamsSerializer : KSerializer<SearchParams> {
 
   override fun serialize(encoder: Encoder, value: SearchParams) {
     when (value) {
-      is SearchParamsObject -> SearchParamsObject.serializer().serialize(encoder, value)
       is SearchParamsString -> SearchParamsString.serializer().serialize(encoder, value)
+      is SearchParamsObject -> SearchParamsObject.serializer().serialize(encoder, value)
     }
   }
 
   override fun deserialize(decoder: Decoder): SearchParams {
     val codec = decoder.asJsonDecoder()
     val tree = codec.decodeJsonElement()
+
+    // deserialize SearchParamsString
+    if (tree is JsonObject && tree.containsKey("params")) {
+      try {
+        return codec.json.decodeFromJsonElement<SearchParamsString>(tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize SearchParamsString (error: ${e.message})")
+      }
+    }
 
     // deserialize SearchParamsObject
     if (tree is JsonObject) {
@@ -297,16 +307,6 @@ internal class SearchParamsSerializer : KSerializer<SearchParams> {
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SearchParamsObject (error: ${e.message})")
-      }
-    }
-
-    // deserialize SearchParamsString
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement<SearchParamsString>(tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize SearchParamsString (error: ${e.message})")
       }
     }
 

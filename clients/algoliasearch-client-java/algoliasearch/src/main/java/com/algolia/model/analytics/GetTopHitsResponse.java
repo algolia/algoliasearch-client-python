@@ -4,57 +4,19 @@
 package com.algolia.model.analytics;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** GetTopHitsResponse */
 @JsonDeserialize(using = GetTopHitsResponse.Deserializer.class)
-@JsonSerialize(using = GetTopHitsResponse.Serializer.class)
-public interface GetTopHitsResponse<T> extends CompoundType<T> {
-  static GetTopHitsResponse<TopHitsResponse> of(TopHitsResponse inside) {
-    return new GetTopHitsResponseTopHitsResponse(inside);
-  }
-
-  static GetTopHitsResponse<TopHitsResponseWithAnalytics> of(TopHitsResponseWithAnalytics inside) {
-    return new GetTopHitsResponseTopHitsResponseWithAnalytics(inside);
-  }
-
-  class Serializer extends StdSerializer<GetTopHitsResponse> {
-
-    public Serializer(Class<GetTopHitsResponse> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(GetTopHitsResponse value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<GetTopHitsResponse> {
+public interface GetTopHitsResponse {
+  class Deserializer extends JsonDeserializer<GetTopHitsResponse> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(GetTopHitsResponse.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public GetTopHitsResponse deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -63,8 +25,7 @@ public interface GetTopHitsResponse<T> extends CompoundType<T> {
       // deserialize TopHitsResponse
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          TopHitsResponse value = parser.readValueAs(new TypeReference<TopHitsResponse>() {});
-          return GetTopHitsResponse.of(value);
+          return parser.readValueAs(TopHitsResponse.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf TopHitsResponse (error: " + e.getMessage() + ") (type: TopHitsResponse)");
@@ -74,8 +35,7 @@ public interface GetTopHitsResponse<T> extends CompoundType<T> {
       // deserialize TopHitsResponseWithAnalytics
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          TopHitsResponseWithAnalytics value = parser.readValueAs(new TypeReference<TopHitsResponseWithAnalytics>() {});
-          return GetTopHitsResponse.of(value);
+          return parser.readValueAs(TopHitsResponseWithAnalytics.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -91,33 +51,5 @@ public interface GetTopHitsResponse<T> extends CompoundType<T> {
     public GetTopHitsResponse getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "GetTopHitsResponse cannot be null");
     }
-  }
-}
-
-class GetTopHitsResponseTopHitsResponse implements GetTopHitsResponse<TopHitsResponse> {
-
-  private final TopHitsResponse value;
-
-  GetTopHitsResponseTopHitsResponse(TopHitsResponse value) {
-    this.value = value;
-  }
-
-  @Override
-  public TopHitsResponse get() {
-    return value;
-  }
-}
-
-class GetTopHitsResponseTopHitsResponseWithAnalytics implements GetTopHitsResponse<TopHitsResponseWithAnalytics> {
-
-  private final TopHitsResponseWithAnalytics value;
-
-  GetTopHitsResponseTopHitsResponseWithAnalytics(TopHitsResponseWithAnalytics value) {
-    this.value = value;
-  }
-
-  @Override
-  public TopHitsResponseWithAnalytics get() {
-    return value;
   }
 }

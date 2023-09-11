@@ -4,10 +4,12 @@
 package com.algolia.model.recommend;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
 /** TrendingItemsQuery */
-public class TrendingItemsQuery {
+@JsonDeserialize(as = TrendingItemsQuery.class)
+public class TrendingItemsQuery implements RecommendationsRequest {
 
   @JsonProperty("facetName")
   private String facetName;

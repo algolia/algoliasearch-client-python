@@ -4,61 +4,19 @@
 package com.algolia.model.recommend;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** RecommendationsRequest */
 @JsonDeserialize(using = RecommendationsRequest.Deserializer.class)
-@JsonSerialize(using = RecommendationsRequest.Serializer.class)
-public interface RecommendationsRequest<T> extends CompoundType<T> {
-  static RecommendationsRequest<RecommendationsQuery> of(RecommendationsQuery inside) {
-    return new RecommendationsRequestRecommendationsQuery(inside);
-  }
-
-  static RecommendationsRequest<TrendingFacetsQuery> of(TrendingFacetsQuery inside) {
-    return new RecommendationsRequestTrendingFacetsQuery(inside);
-  }
-
-  static RecommendationsRequest<TrendingItemsQuery> of(TrendingItemsQuery inside) {
-    return new RecommendationsRequestTrendingItemsQuery(inside);
-  }
-
-  class Serializer extends StdSerializer<RecommendationsRequest> {
-
-    public Serializer(Class<RecommendationsRequest> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(RecommendationsRequest value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<RecommendationsRequest> {
+public interface RecommendationsRequest {
+  class Deserializer extends JsonDeserializer<RecommendationsRequest> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(RecommendationsRequest.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public RecommendationsRequest deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -67,8 +25,7 @@ public interface RecommendationsRequest<T> extends CompoundType<T> {
       // deserialize RecommendationsQuery
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          RecommendationsQuery value = parser.readValueAs(new TypeReference<RecommendationsQuery>() {});
-          return RecommendationsRequest.of(value);
+          return parser.readValueAs(RecommendationsQuery.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf RecommendationsQuery (error: " + e.getMessage() + ") (type: RecommendationsQuery)");
@@ -78,8 +35,7 @@ public interface RecommendationsRequest<T> extends CompoundType<T> {
       // deserialize TrendingFacetsQuery
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          TrendingFacetsQuery value = parser.readValueAs(new TypeReference<TrendingFacetsQuery>() {});
-          return RecommendationsRequest.of(value);
+          return parser.readValueAs(TrendingFacetsQuery.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf TrendingFacetsQuery (error: " + e.getMessage() + ") (type: TrendingFacetsQuery)");
@@ -89,8 +45,7 @@ public interface RecommendationsRequest<T> extends CompoundType<T> {
       // deserialize TrendingItemsQuery
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          TrendingItemsQuery value = parser.readValueAs(new TypeReference<TrendingItemsQuery>() {});
-          return RecommendationsRequest.of(value);
+          return parser.readValueAs(TrendingItemsQuery.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf TrendingItemsQuery (error: " + e.getMessage() + ") (type: TrendingItemsQuery)");
@@ -104,47 +59,5 @@ public interface RecommendationsRequest<T> extends CompoundType<T> {
     public RecommendationsRequest getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "RecommendationsRequest cannot be null");
     }
-  }
-}
-
-class RecommendationsRequestRecommendationsQuery implements RecommendationsRequest<RecommendationsQuery> {
-
-  private final RecommendationsQuery value;
-
-  RecommendationsRequestRecommendationsQuery(RecommendationsQuery value) {
-    this.value = value;
-  }
-
-  @Override
-  public RecommendationsQuery get() {
-    return value;
-  }
-}
-
-class RecommendationsRequestTrendingFacetsQuery implements RecommendationsRequest<TrendingFacetsQuery> {
-
-  private final TrendingFacetsQuery value;
-
-  RecommendationsRequestTrendingFacetsQuery(TrendingFacetsQuery value) {
-    this.value = value;
-  }
-
-  @Override
-  public TrendingFacetsQuery get() {
-    return value;
-  }
-}
-
-class RecommendationsRequestTrendingItemsQuery implements RecommendationsRequest<TrendingItemsQuery> {
-
-  private final TrendingItemsQuery value;
-
-  RecommendationsRequestTrendingItemsQuery(TrendingItemsQuery value) {
-    this.value = value;
-  }
-
-  @Override
-  public TrendingItemsQuery get() {
-    return value;
   }
 }

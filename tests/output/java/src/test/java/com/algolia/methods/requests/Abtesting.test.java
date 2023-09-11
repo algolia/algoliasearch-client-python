@@ -58,7 +58,7 @@ class AbtestingClientRequestsTests {
           int trafficPercentage3 = 30;
           variants_02.setTrafficPercentage(trafficPercentage3);
         }
-        variants1.add(AddABTestsVariant.of(variants_02));
+        variants1.add(variants_02);
         AbTestsVariant variants_12 = new AbTestsVariant();
         {
           String index3 = "AB_TEST_2";
@@ -66,7 +66,7 @@ class AbtestingClientRequestsTests {
           int trafficPercentage3 = 50;
           variants_12.setTrafficPercentage(trafficPercentage3);
         }
-        variants1.add(AddABTestsVariant.of(variants_12));
+        variants1.add(variants_12);
       }
       addABTestsRequest0.setVariants(variants1);
     }

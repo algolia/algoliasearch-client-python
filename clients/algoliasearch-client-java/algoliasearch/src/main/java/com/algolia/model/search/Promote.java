@@ -4,57 +4,19 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** Promote */
 @JsonDeserialize(using = Promote.Deserializer.class)
-@JsonSerialize(using = Promote.Serializer.class)
-public interface Promote<T> extends CompoundType<T> {
-  static Promote<PromoteObjectID> of(PromoteObjectID inside) {
-    return new PromotePromoteObjectID(inside);
-  }
-
-  static Promote<PromoteObjectIDs> of(PromoteObjectIDs inside) {
-    return new PromotePromoteObjectIDs(inside);
-  }
-
-  class Serializer extends StdSerializer<Promote> {
-
-    public Serializer(Class<Promote> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(Promote value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<Promote> {
+public interface Promote {
+  class Deserializer extends JsonDeserializer<Promote> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(Promote.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public Promote deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -63,8 +25,7 @@ public interface Promote<T> extends CompoundType<T> {
       // deserialize PromoteObjectID
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          PromoteObjectID value = parser.readValueAs(new TypeReference<PromoteObjectID>() {});
-          return Promote.of(value);
+          return parser.readValueAs(PromoteObjectID.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf PromoteObjectID (error: " + e.getMessage() + ") (type: PromoteObjectID)");
@@ -74,8 +35,7 @@ public interface Promote<T> extends CompoundType<T> {
       // deserialize PromoteObjectIDs
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          PromoteObjectIDs value = parser.readValueAs(new TypeReference<PromoteObjectIDs>() {});
-          return Promote.of(value);
+          return parser.readValueAs(PromoteObjectIDs.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf PromoteObjectIDs (error: " + e.getMessage() + ") (type: PromoteObjectIDs)");
@@ -89,33 +49,5 @@ public interface Promote<T> extends CompoundType<T> {
     public Promote getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "Promote cannot be null");
     }
-  }
-}
-
-class PromotePromoteObjectID implements Promote<PromoteObjectID> {
-
-  private final PromoteObjectID value;
-
-  PromotePromoteObjectID(PromoteObjectID value) {
-    this.value = value;
-  }
-
-  @Override
-  public PromoteObjectID get() {
-    return value;
-  }
-}
-
-class PromotePromoteObjectIDs implements Promote<PromoteObjectIDs> {
-
-  private final PromoteObjectIDs value;
-
-  PromotePromoteObjectIDs(PromoteObjectIDs value) {
-    this.value = value;
-  }
-
-  @Override
-  public PromoteObjectIDs get() {
-    return value;
   }
 }

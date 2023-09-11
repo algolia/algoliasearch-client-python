@@ -618,7 +618,7 @@ class InsightsClientRequestsTests {
           }
           events_02.setPositions(positions3);
         }
-        events1.add(EventsItems.of(events_02));
+        events1.add(events_02);
       }
       insightsEvents0.setEvents(events1);
     }
@@ -669,7 +669,7 @@ class InsightsClientRequestsTests {
           String queryID3 = "43b15df305339e827f0ac0bdc5ebcaa7";
           events_02.setQueryID(queryID3);
         }
-        events1.add(EventsItems.of(events_02));
+        events1.add(events_02);
         ViewedObjectIDs events_12 = new ViewedObjectIDs();
         {
           ViewEvent eventType3 = ViewEvent.fromValue("view");
@@ -691,7 +691,7 @@ class InsightsClientRequestsTests {
           }
           events_12.setObjectIDs(objectIDs3);
         }
-        events1.add(EventsItems.of(events_12));
+        events1.add(events_12);
       }
       insightsEvents0.setEvents(events1);
     }
@@ -744,7 +744,7 @@ class InsightsClientRequestsTests {
           String queryID3 = "43b15df305339e827f0ac0bdc5ebcaa7";
           events_02.setQueryID(queryID3);
         }
-        events1.add(EventsItems.of(events_02));
+        events1.add(events_02);
       }
       insightsEvents0.setEvents(events1);
     }
@@ -793,7 +793,7 @@ class InsightsClientRequestsTests {
           }
           events_02.setObjectIDs(objectIDs3);
         }
-        events1.add(EventsItems.of(events_02));
+        events1.add(events_02);
       }
       insightsEvents0.setEvents(events1);
     }

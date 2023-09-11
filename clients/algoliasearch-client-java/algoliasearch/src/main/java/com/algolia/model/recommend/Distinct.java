@@ -4,15 +4,10 @@
 package com.algolia.model.recommend;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -21,43 +16,66 @@ import java.util.logging.Logger;
  * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
  */
 @JsonDeserialize(using = Distinct.Deserializer.class)
-@JsonSerialize(using = Distinct.Serializer.class)
-public interface Distinct<T> extends CompoundType<T> {
-  static Distinct<Boolean> of(Boolean inside) {
-    return new DistinctBoolean(inside);
+public interface Distinct {
+  /** Distinct as Boolean wrapper. */
+  static Distinct of(Boolean value) {
+    return new BooleanWrapper(value);
   }
 
-  static Distinct<Integer> of(Integer inside) {
-    return new DistinctInteger(inside);
+  /** Distinct as Integer wrapper. */
+  static Distinct of(Integer value) {
+    return new IntegerWrapper(value);
   }
 
-  class Serializer extends StdSerializer<Distinct> {
+  /** Distinct as Boolean wrapper. */
+  @JsonSerialize(using = BooleanWrapper.Serializer.class)
+  class BooleanWrapper implements Distinct {
 
-    public Serializer(Class<Distinct> t) {
-      super(t);
+    private final Boolean value;
+
+    BooleanWrapper(Boolean value) {
+      this.value = value;
     }
 
-    public Serializer() {
-      this(null);
+    public Boolean getValue() {
+      return value;
     }
 
-    @Override
-    public void serialize(Distinct value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
+    static class Serializer extends JsonSerializer<BooleanWrapper> {
+
+      @Override
+      public void serialize(BooleanWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
     }
   }
 
-  class Deserializer extends StdDeserializer<Distinct> {
+  /** Distinct as Integer wrapper. */
+  @JsonSerialize(using = IntegerWrapper.Serializer.class)
+  class IntegerWrapper implements Distinct {
+
+    private final Integer value;
+
+    IntegerWrapper(Integer value) {
+      this.value = value;
+    }
+
+    public Integer getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<IntegerWrapper> {
+
+      @Override
+      public void serialize(IntegerWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
+  }
+
+  class Deserializer extends JsonDeserializer<Distinct> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(Distinct.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public Distinct deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -66,7 +84,7 @@ public interface Distinct<T> extends CompoundType<T> {
       // deserialize Boolean
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          Boolean value = parser.readValueAs(new TypeReference<Boolean>() {});
+          Boolean value = parser.readValueAs(Boolean.class);
           return Distinct.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -77,7 +95,7 @@ public interface Distinct<T> extends CompoundType<T> {
       // deserialize Integer
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          Integer value = parser.readValueAs(new TypeReference<Integer>() {});
+          Integer value = parser.readValueAs(Integer.class);
           return Distinct.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -92,33 +110,5 @@ public interface Distinct<T> extends CompoundType<T> {
     public Distinct getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "Distinct cannot be null");
     }
-  }
-}
-
-class DistinctBoolean implements Distinct<Boolean> {
-
-  private final Boolean value;
-
-  DistinctBoolean(Boolean value) {
-    this.value = value;
-  }
-
-  @Override
-  public Boolean get() {
-    return value;
-  }
-}
-
-class DistinctInteger implements Distinct<Integer> {
-
-  private final Integer value;
-
-  DistinctInteger(Integer value) {
-    this.value = value;
-  }
-
-  @Override
-  public Integer get() {
-    return value;
   }
 }

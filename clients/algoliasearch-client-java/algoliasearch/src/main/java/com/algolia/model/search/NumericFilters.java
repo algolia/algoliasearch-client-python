@@ -4,15 +4,11 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -22,43 +18,66 @@ import java.util.logging.Logger;
  * attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
  */
 @JsonDeserialize(using = NumericFilters.Deserializer.class)
-@JsonSerialize(using = NumericFilters.Serializer.class)
-public interface NumericFilters<T> extends CompoundType<T> {
-  static NumericFilters<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
-    return new NumericFiltersListOfMixedSearchFilters(inside);
+public interface NumericFilters {
+  /** NumericFilters as List<MixedSearchFilters> wrapper. */
+  static NumericFilters of(List<MixedSearchFilters> value) {
+    return new ListOfMixedSearchFiltersWrapper(value);
   }
 
-  static NumericFilters<String> of(String inside) {
-    return new NumericFiltersString(inside);
+  /** NumericFilters as String wrapper. */
+  static NumericFilters of(String value) {
+    return new StringWrapper(value);
   }
 
-  class Serializer extends StdSerializer<NumericFilters> {
+  /** NumericFilters as List<MixedSearchFilters> wrapper. */
+  @JsonSerialize(using = ListOfMixedSearchFiltersWrapper.Serializer.class)
+  class ListOfMixedSearchFiltersWrapper implements NumericFilters {
 
-    public Serializer(Class<NumericFilters> t) {
-      super(t);
+    private final List<MixedSearchFilters> value;
+
+    ListOfMixedSearchFiltersWrapper(List<MixedSearchFilters> value) {
+      this.value = value;
     }
 
-    public Serializer() {
-      this(null);
+    public List<MixedSearchFilters> getValue() {
+      return value;
     }
 
-    @Override
-    public void serialize(NumericFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
+    static class Serializer extends JsonSerializer<ListOfMixedSearchFiltersWrapper> {
+
+      @Override
+      public void serialize(ListOfMixedSearchFiltersWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
     }
   }
 
-  class Deserializer extends StdDeserializer<NumericFilters> {
+  /** NumericFilters as String wrapper. */
+  @JsonSerialize(using = StringWrapper.Serializer.class)
+  class StringWrapper implements NumericFilters {
+
+    private final String value;
+
+    StringWrapper(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<StringWrapper> {
+
+      @Override
+      public void serialize(StringWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
+  }
+
+  class Deserializer extends JsonDeserializer<NumericFilters> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(NumericFilters.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public NumericFilters deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -67,8 +86,7 @@ public interface NumericFilters<T> extends CompoundType<T> {
       // deserialize List<MixedSearchFilters>
       if (tree.isArray()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          List<MixedSearchFilters> value = parser.readValueAs(new TypeReference<List<MixedSearchFilters>>() {});
-          return NumericFilters.of(value);
+          return parser.readValueAs(new TypeReference<List<MixedSearchFilters>>() {});
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -80,7 +98,7 @@ public interface NumericFilters<T> extends CompoundType<T> {
       // deserialize String
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          String value = parser.readValueAs(new TypeReference<String>() {});
+          String value = parser.readValueAs(String.class);
           return NumericFilters.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -95,33 +113,5 @@ public interface NumericFilters<T> extends CompoundType<T> {
     public NumericFilters getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "NumericFilters cannot be null");
     }
-  }
-}
-
-class NumericFiltersListOfMixedSearchFilters implements NumericFilters<List<MixedSearchFilters>> {
-
-  private final List<MixedSearchFilters> value;
-
-  NumericFiltersListOfMixedSearchFilters(List<MixedSearchFilters> value) {
-    this.value = value;
-  }
-
-  @Override
-  public List<MixedSearchFilters> get() {
-    return value;
-  }
-}
-
-class NumericFiltersString implements NumericFilters<String> {
-
-  private final String value;
-
-  NumericFiltersString(String value) {
-    this.value = value;
-  }
-
-  @Override
-  public String get() {
-    return value;
   }
 }

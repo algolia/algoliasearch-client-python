@@ -4,12 +4,14 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /** Show highlighted section and words matched on a query. */
-public class HighlightResultOption {
+@JsonDeserialize(as = HighlightResultOption.class)
+public class HighlightResultOption implements HighlightResult {
 
   @JsonProperty("value")
   private String value;

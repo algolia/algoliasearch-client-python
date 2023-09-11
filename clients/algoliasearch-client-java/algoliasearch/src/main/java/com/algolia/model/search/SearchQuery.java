@@ -4,57 +4,19 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** SearchQuery */
 @JsonDeserialize(using = SearchQuery.Deserializer.class)
-@JsonSerialize(using = SearchQuery.Serializer.class)
-public interface SearchQuery<T> extends CompoundType<T> {
-  static SearchQuery<SearchForFacets> of(SearchForFacets inside) {
-    return new SearchQuerySearchForFacets(inside);
-  }
-
-  static SearchQuery<SearchForHits> of(SearchForHits inside) {
-    return new SearchQuerySearchForHits(inside);
-  }
-
-  class Serializer extends StdSerializer<SearchQuery> {
-
-    public Serializer(Class<SearchQuery> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(SearchQuery value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<SearchQuery> {
+public interface SearchQuery {
+  class Deserializer extends JsonDeserializer<SearchQuery> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(SearchQuery.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public SearchQuery deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -63,8 +25,7 @@ public interface SearchQuery<T> extends CompoundType<T> {
       // deserialize SearchForFacets
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SearchForFacets value = parser.readValueAs(new TypeReference<SearchForFacets>() {});
-          return SearchQuery.of(value);
+          return parser.readValueAs(SearchForFacets.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf SearchForFacets (error: " + e.getMessage() + ") (type: SearchForFacets)");
@@ -74,8 +35,7 @@ public interface SearchQuery<T> extends CompoundType<T> {
       // deserialize SearchForHits
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SearchForHits value = parser.readValueAs(new TypeReference<SearchForHits>() {});
-          return SearchQuery.of(value);
+          return parser.readValueAs(SearchForHits.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf SearchForHits (error: " + e.getMessage() + ") (type: SearchForHits)");
@@ -89,33 +49,5 @@ public interface SearchQuery<T> extends CompoundType<T> {
     public SearchQuery getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "SearchQuery cannot be null");
     }
-  }
-}
-
-class SearchQuerySearchForFacets implements SearchQuery<SearchForFacets> {
-
-  private final SearchForFacets value;
-
-  SearchQuerySearchForFacets(SearchForFacets value) {
-    this.value = value;
-  }
-
-  @Override
-  public SearchForFacets get() {
-    return value;
-  }
-}
-
-class SearchQuerySearchForHits implements SearchQuery<SearchForHits> {
-
-  private final SearchForHits value;
-
-  SearchQuerySearchForHits(SearchForHits value) {
-    this.value = value;
-  }
-
-  @Override
-  public SearchForHits get() {
-    return value;
   }
 }

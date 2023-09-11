@@ -15,6 +15,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import javax.annotation.Nonnull;
 
 public class QuerySuggestionsClient extends ApiClient {
 
@@ -61,7 +62,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public BaseResponse createConfig(
-    QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex,
+    @Nonnull QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(createConfigAsync(querySuggestionsConfigurationWithIndex, requestOptions));
@@ -74,7 +75,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param querySuggestionsConfigurationWithIndex (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public BaseResponse createConfig(QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex)
+  public BaseResponse createConfig(@Nonnull QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex)
     throws AlgoliaRuntimeException {
     return this.createConfig(querySuggestionsConfigurationWithIndex, null);
   }
@@ -89,12 +90,13 @@ public class QuerySuggestionsClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<BaseResponse> createConfigAsync(
-    QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex,
+    @Nonnull QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (querySuggestionsConfigurationWithIndex == null) {
-      throw new AlgoliaRuntimeException("Parameter `querySuggestionsConfigurationWithIndex` is required when calling" + " `createConfig`.");
-    }
+    Parameters.requireNonNull(
+      querySuggestionsConfigurationWithIndex,
+      "Parameter `querySuggestionsConfigurationWithIndex` is required when calling" + " `createConfig`."
+    );
 
     HttpRequest request = HttpRequest
       .builder()
@@ -112,8 +114,9 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param querySuggestionsConfigurationWithIndex (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<BaseResponse> createConfigAsync(QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<BaseResponse> createConfigAsync(
+    @Nonnull QuerySuggestionsConfigurationWithIndex querySuggestionsConfigurationWithIndex
+  ) throws AlgoliaRuntimeException {
     return this.createConfigAsync(querySuggestionsConfigurationWithIndex, null);
   }
 
@@ -126,7 +129,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(delAsync(path, parameters, requestOptions));
   }
 
@@ -137,7 +140,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.del(path, parameters, null);
   }
 
@@ -149,7 +152,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.del(path, null, requestOptions);
   }
 
@@ -159,7 +162,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.del(path, null, null);
   }
 
@@ -172,11 +175,9 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
+  public CompletableFuture<Object> delAsync(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `del`.");
-    }
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `del`.");
 
     HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("DELETE").addQueryParameters(parameters).build();
     return executeAsync(request, requestOptions, new TypeReference<Object>() {});
@@ -189,7 +190,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.delAsync(path, parameters, null);
   }
 
@@ -201,7 +202,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.delAsync(path, null, requestOptions);
   }
 
@@ -211,7 +212,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.delAsync(path, null, null);
   }
 
@@ -224,7 +225,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public BaseResponse deleteConfig(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public BaseResponse deleteConfig(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteConfigAsync(indexName, requestOptions));
   }
 
@@ -235,7 +236,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public BaseResponse deleteConfig(String indexName) throws AlgoliaRuntimeException {
+  public BaseResponse deleteConfig(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.deleteConfig(indexName, null);
   }
 
@@ -249,10 +250,9 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<BaseResponse> deleteConfigAsync(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `deleteConfig`.");
-    }
+  public CompletableFuture<BaseResponse> deleteConfigAsync(@Nonnull String indexName, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `deleteConfig`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/configs/{indexName}", indexName).setMethod("DELETE").build();
     return executeAsync(request, requestOptions, new TypeReference<BaseResponse>() {});
@@ -266,7 +266,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<BaseResponse> deleteConfigAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<BaseResponse> deleteConfigAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.deleteConfigAsync(indexName, null);
   }
 
@@ -279,7 +279,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getAsync(path, parameters, requestOptions));
   }
 
@@ -290,7 +290,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.get(path, parameters, null);
   }
 
@@ -302,7 +302,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.get(path, null, requestOptions);
   }
 
@@ -312,7 +312,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.get(path, null, null);
   }
 
@@ -325,11 +325,9 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
+  public CompletableFuture<Object> getAsync(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `get`.");
-    }
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `get`.");
 
     HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("GET").addQueryParameters(parameters).build();
     return executeAsync(request, requestOptions, new TypeReference<Object>() {});
@@ -342,7 +340,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.getAsync(path, parameters, null);
   }
 
@@ -354,7 +352,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.getAsync(path, null, requestOptions);
   }
 
@@ -364,7 +362,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.getAsync(path, null, null);
   }
 
@@ -419,7 +417,8 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public QuerySuggestionsConfigurationResponse getConfig(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public QuerySuggestionsConfigurationResponse getConfig(@Nonnull String indexName, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getConfigAsync(indexName, requestOptions));
   }
 
@@ -429,7 +428,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public QuerySuggestionsConfigurationResponse getConfig(String indexName) throws AlgoliaRuntimeException {
+  public QuerySuggestionsConfigurationResponse getConfig(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getConfig(indexName, null);
   }
 
@@ -441,11 +440,9 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<QuerySuggestionsConfigurationResponse> getConfigAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<QuerySuggestionsConfigurationResponse> getConfigAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getConfig`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getConfig`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/configs/{indexName}", indexName).setMethod("GET").build();
 
@@ -458,7 +455,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<QuerySuggestionsConfigurationResponse> getConfigAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<QuerySuggestionsConfigurationResponse> getConfigAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getConfigAsync(indexName, null);
   }
 
@@ -470,7 +467,8 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetConfigStatus200Response getConfigStatus(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public GetConfigStatus200Response getConfigStatus(@Nonnull String indexName, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getConfigStatusAsync(indexName, requestOptions));
   }
 
@@ -480,7 +478,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetConfigStatus200Response getConfigStatus(String indexName) throws AlgoliaRuntimeException {
+  public GetConfigStatus200Response getConfigStatus(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getConfigStatus(indexName, null);
   }
 
@@ -492,11 +490,9 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetConfigStatus200Response> getConfigStatusAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<GetConfigStatus200Response> getConfigStatusAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getConfigStatus`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getConfigStatus`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/configs/{indexName}/status", indexName).setMethod("GET").build();
     return executeAsync(request, requestOptions, new TypeReference<GetConfigStatus200Response>() {});
@@ -508,7 +504,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetConfigStatus200Response> getConfigStatusAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetConfigStatus200Response> getConfigStatusAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getConfigStatusAsync(indexName, null);
   }
 
@@ -520,7 +516,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetLogFile200Response getLogFile(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public GetLogFile200Response getLogFile(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getLogFileAsync(indexName, requestOptions));
   }
 
@@ -530,7 +526,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetLogFile200Response getLogFile(String indexName) throws AlgoliaRuntimeException {
+  public GetLogFile200Response getLogFile(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getLogFile(indexName, null);
   }
 
@@ -542,11 +538,9 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetLogFile200Response> getLogFileAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<GetLogFile200Response> getLogFileAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getLogFile`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getLogFile`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/logs/{indexName}", indexName).setMethod("GET").build();
 
@@ -559,7 +553,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param indexName Query Suggestions index name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetLogFile200Response> getLogFileAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetLogFile200Response> getLogFileAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getLogFileAsync(indexName, null);
   }
 
@@ -573,7 +567,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
+  public Object post(@Nonnull String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(postAsync(path, parameters, body, requestOptions));
   }
@@ -586,7 +580,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
     return this.post(path, parameters, body, null);
   }
 
@@ -598,7 +592,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.post(path, null, null, requestOptions);
   }
 
@@ -608,7 +602,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.post(path, null, null, null);
   }
 
@@ -622,11 +616,13 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `post`.");
-    }
+  public CompletableFuture<Object> postAsync(
+    @Nonnull String path,
+    Map<String, Object> parameters,
+    Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `post`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -646,7 +642,8 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path, Map<String, Object> parameters, Object body)
+    throws AlgoliaRuntimeException {
     return this.postAsync(path, parameters, body, null);
   }
 
@@ -658,7 +655,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.postAsync(path, null, null, requestOptions);
   }
 
@@ -668,7 +665,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.postAsync(path, null, null, null);
   }
 
@@ -682,7 +679,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
+  public Object put(@Nonnull String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(putAsync(path, parameters, body, requestOptions));
   }
@@ -695,7 +692,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
     return this.put(path, parameters, body, null);
   }
 
@@ -707,7 +704,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.put(path, null, null, requestOptions);
   }
 
@@ -717,7 +714,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.put(path, null, null, null);
   }
 
@@ -731,11 +728,13 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `put`.");
-    }
+  public CompletableFuture<Object> putAsync(
+    @Nonnull String path,
+    Map<String, Object> parameters,
+    Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `put`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -755,7 +754,8 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path, Map<String, Object> parameters, Object body)
+    throws AlgoliaRuntimeException {
     return this.putAsync(path, parameters, body, null);
   }
 
@@ -767,7 +767,7 @@ public class QuerySuggestionsClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.putAsync(path, null, null, requestOptions);
   }
 
@@ -777,7 +777,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.putAsync(path, null, null, null);
   }
 
@@ -791,8 +791,8 @@ public class QuerySuggestionsClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public BaseResponse updateConfig(
-    String indexName,
-    QuerySuggestionsConfiguration querySuggestionsConfiguration,
+    @Nonnull String indexName,
+    @Nonnull QuerySuggestionsConfiguration querySuggestionsConfiguration,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(updateConfigAsync(indexName, querySuggestionsConfiguration, requestOptions));
@@ -805,7 +805,7 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param querySuggestionsConfiguration (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public BaseResponse updateConfig(String indexName, QuerySuggestionsConfiguration querySuggestionsConfiguration)
+  public BaseResponse updateConfig(@Nonnull String indexName, @Nonnull QuerySuggestionsConfiguration querySuggestionsConfiguration)
     throws AlgoliaRuntimeException {
     return this.updateConfig(indexName, querySuggestionsConfiguration, null);
   }
@@ -820,17 +820,16 @@ public class QuerySuggestionsClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<BaseResponse> updateConfigAsync(
-    String indexName,
-    QuerySuggestionsConfiguration querySuggestionsConfiguration,
+    @Nonnull String indexName,
+    @Nonnull QuerySuggestionsConfiguration querySuggestionsConfiguration,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `updateConfig`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `updateConfig`.");
 
-    if (querySuggestionsConfiguration == null) {
-      throw new AlgoliaRuntimeException("Parameter `querySuggestionsConfiguration` is required when calling `updateConfig`.");
-    }
+    Parameters.requireNonNull(
+      querySuggestionsConfiguration,
+      "Parameter `querySuggestionsConfiguration` is required when calling `updateConfig`."
+    );
 
     HttpRequest request = HttpRequest
       .builder()
@@ -848,8 +847,10 @@ public class QuerySuggestionsClient extends ApiClient {
    * @param querySuggestionsConfiguration (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<BaseResponse> updateConfigAsync(String indexName, QuerySuggestionsConfiguration querySuggestionsConfiguration)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<BaseResponse> updateConfigAsync(
+    @Nonnull String indexName,
+    @Nonnull QuerySuggestionsConfiguration querySuggestionsConfiguration
+  ) throws AlgoliaRuntimeException {
     return this.updateConfigAsync(indexName, querySuggestionsConfiguration, null);
   }
 }

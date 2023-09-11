@@ -4,8 +4,7 @@
 package com.algolia.model.querysuggestions;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.*;
 
 /**
  * The type of log entry. - `SKIP`. A query is skipped because it doesn't match the conditions for

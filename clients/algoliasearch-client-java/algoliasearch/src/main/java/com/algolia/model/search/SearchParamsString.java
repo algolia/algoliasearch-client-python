@@ -4,10 +4,12 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
 /** SearchParamsString */
-public class SearchParamsString {
+@JsonDeserialize(as = SearchParamsString.class)
+public class SearchParamsString implements SearchParams, BrowseParams {
 
   @JsonProperty("params")
   private String params;

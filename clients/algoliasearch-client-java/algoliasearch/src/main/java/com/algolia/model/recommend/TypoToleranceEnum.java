@@ -4,11 +4,11 @@
 package com.algolia.model.recommend;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.*;
 
 /** Gets or Sets typoToleranceEnum */
-public enum TypoToleranceEnum {
+@JsonDeserialize(as = TypoToleranceEnum.class)
+public enum TypoToleranceEnum implements TypoTolerance {
   MIN("min"),
 
   STRICT("strict");

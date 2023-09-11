@@ -4,57 +4,47 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** AttributeToUpdate */
 @JsonDeserialize(using = AttributeToUpdate.Deserializer.class)
-@JsonSerialize(using = AttributeToUpdate.Serializer.class)
-public interface AttributeToUpdate<T> extends CompoundType<T> {
-  static AttributeToUpdate<BuiltInOperation> of(BuiltInOperation inside) {
-    return new AttributeToUpdateBuiltInOperation(inside);
+public interface AttributeToUpdate {
+  /** AttributeToUpdate as String wrapper. */
+  static AttributeToUpdate of(String value) {
+    return new StringWrapper(value);
   }
 
-  static AttributeToUpdate<String> of(String inside) {
-    return new AttributeToUpdateString(inside);
+  /** AttributeToUpdate as String wrapper. */
+  @JsonSerialize(using = StringWrapper.Serializer.class)
+  class StringWrapper implements AttributeToUpdate {
+
+    private final String value;
+
+    StringWrapper(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<StringWrapper> {
+
+      @Override
+      public void serialize(StringWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
   }
 
-  class Serializer extends StdSerializer<AttributeToUpdate> {
-
-    public Serializer(Class<AttributeToUpdate> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(AttributeToUpdate value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<AttributeToUpdate> {
+  class Deserializer extends JsonDeserializer<AttributeToUpdate> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(AttributeToUpdate.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public AttributeToUpdate deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -63,8 +53,7 @@ public interface AttributeToUpdate<T> extends CompoundType<T> {
       // deserialize BuiltInOperation
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          BuiltInOperation value = parser.readValueAs(new TypeReference<BuiltInOperation>() {});
-          return AttributeToUpdate.of(value);
+          return parser.readValueAs(BuiltInOperation.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf BuiltInOperation (error: " + e.getMessage() + ") (type: BuiltInOperation)");
@@ -74,7 +63,7 @@ public interface AttributeToUpdate<T> extends CompoundType<T> {
       // deserialize String
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          String value = parser.readValueAs(new TypeReference<String>() {});
+          String value = parser.readValueAs(String.class);
           return AttributeToUpdate.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -89,33 +78,5 @@ public interface AttributeToUpdate<T> extends CompoundType<T> {
     public AttributeToUpdate getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "AttributeToUpdate cannot be null");
     }
-  }
-}
-
-class AttributeToUpdateBuiltInOperation implements AttributeToUpdate<BuiltInOperation> {
-
-  private final BuiltInOperation value;
-
-  AttributeToUpdateBuiltInOperation(BuiltInOperation value) {
-    this.value = value;
-  }
-
-  @Override
-  public BuiltInOperation get() {
-    return value;
-  }
-}
-
-class AttributeToUpdateString implements AttributeToUpdate<String> {
-
-  private final String value;
-
-  AttributeToUpdateString(String value) {
-    this.value = value;
-  }
-
-  @Override
-  public String get() {
-    return value;
   }
 }

@@ -4,10 +4,12 @@
 package com.algolia.model.abtesting;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
 /** AbTestsVariant */
-public class AbTestsVariant {
+@JsonDeserialize(as = AbTestsVariant.class)
+public class AbTestsVariant implements AddABTestsVariant {
 
   @JsonProperty("index")
   private String index;

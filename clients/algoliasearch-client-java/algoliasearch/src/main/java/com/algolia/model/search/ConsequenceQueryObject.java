@@ -4,12 +4,14 @@
 package com.algolia.model.search;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /** ConsequenceQueryObject */
-public class ConsequenceQueryObject {
+@JsonDeserialize(as = ConsequenceQueryObject.class)
+public class ConsequenceQueryObject implements ConsequenceQuery {
 
   @JsonProperty("remove")
   private List<String> remove;

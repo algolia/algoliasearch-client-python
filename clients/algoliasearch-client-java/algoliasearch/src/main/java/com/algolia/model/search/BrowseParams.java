@@ -4,81 +4,41 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /** BrowseParams */
 @JsonDeserialize(using = BrowseParams.Deserializer.class)
-@JsonSerialize(using = BrowseParams.Serializer.class)
-public interface BrowseParams<T> extends CompoundType<T> {
-  static BrowseParams<BrowseParamsObject> of(BrowseParamsObject inside) {
-    return new BrowseParamsBrowseParamsObject(inside);
-  }
-
-  static BrowseParams<SearchParamsString> of(SearchParamsString inside) {
-    return new BrowseParamsSearchParamsString(inside);
-  }
-
-  class Serializer extends StdSerializer<BrowseParams> {
-
-    public Serializer(Class<BrowseParams> t) {
-      super(t);
-    }
-
-    public Serializer() {
-      this(null);
-    }
-
-    @Override
-    public void serialize(BrowseParams value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
-    }
-  }
-
-  class Deserializer extends StdDeserializer<BrowseParams> {
+public interface BrowseParams {
+  class Deserializer extends JsonDeserializer<BrowseParams> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(BrowseParams.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public BrowseParams deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
 
-      // deserialize BrowseParamsObject
-      if (tree.isObject()) {
-        try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          BrowseParamsObject value = parser.readValueAs(new TypeReference<BrowseParamsObject>() {});
-          return BrowseParams.of(value);
-        } catch (Exception e) {
-          // deserialization failed, continue
-          LOGGER.finest("Failed to deserialize oneOf BrowseParamsObject (error: " + e.getMessage() + ") (type: BrowseParamsObject)");
-        }
-      }
-
       // deserialize SearchParamsString
-      if (tree.isObject()) {
+      if (tree.isObject() && tree.has("params")) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          SearchParamsString value = parser.readValueAs(new TypeReference<SearchParamsString>() {});
-          return BrowseParams.of(value);
+          return parser.readValueAs(SearchParamsString.class);
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest("Failed to deserialize oneOf SearchParamsString (error: " + e.getMessage() + ") (type: SearchParamsString)");
+        }
+      }
+
+      // deserialize BrowseParamsObject
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          return parser.readValueAs(BrowseParamsObject.class);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf BrowseParamsObject (error: " + e.getMessage() + ") (type: BrowseParamsObject)");
         }
       }
       throw new AlgoliaRuntimeException(String.format("Failed to deserialize json element: %s", tree));
@@ -89,33 +49,5 @@ public interface BrowseParams<T> extends CompoundType<T> {
     public BrowseParams getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "BrowseParams cannot be null");
     }
-  }
-}
-
-class BrowseParamsBrowseParamsObject implements BrowseParams<BrowseParamsObject> {
-
-  private final BrowseParamsObject value;
-
-  BrowseParamsBrowseParamsObject(BrowseParamsObject value) {
-    this.value = value;
-  }
-
-  @Override
-  public BrowseParamsObject get() {
-    return value;
-  }
-}
-
-class BrowseParamsSearchParamsString implements BrowseParams<SearchParamsString> {
-
-  private final SearchParamsString value;
-
-  BrowseParamsSearchParamsString(SearchParamsString value) {
-    this.value = value;
-  }
-
-  @Override
-  public SearchParamsString get() {
-    return value;
   }
 }

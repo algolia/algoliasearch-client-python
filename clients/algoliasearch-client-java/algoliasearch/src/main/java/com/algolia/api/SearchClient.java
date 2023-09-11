@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
 public class SearchClient extends ApiClient {
 
@@ -55,7 +56,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public AddApiKeyResponse addApiKey(ApiKey apiKey, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public AddApiKeyResponse addApiKey(@Nonnull ApiKey apiKey, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(addApiKeyAsync(apiKey, requestOptions));
   }
 
@@ -66,7 +67,7 @@ public class SearchClient extends ApiClient {
    * @param apiKey (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public AddApiKeyResponse addApiKey(ApiKey apiKey) throws AlgoliaRuntimeException {
+  public AddApiKeyResponse addApiKey(@Nonnull ApiKey apiKey) throws AlgoliaRuntimeException {
     return this.addApiKey(apiKey, null);
   }
 
@@ -79,10 +80,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<AddApiKeyResponse> addApiKeyAsync(ApiKey apiKey, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    if (apiKey == null) {
-      throw new AlgoliaRuntimeException("Parameter `apiKey` is required when calling `addApiKey`.");
-    }
+  public CompletableFuture<AddApiKeyResponse> addApiKeyAsync(@Nonnull ApiKey apiKey, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(apiKey, "Parameter `apiKey` is required when calling `addApiKey`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/keys").setMethod("POST").setBody(apiKey).build();
 
@@ -96,7 +96,7 @@ public class SearchClient extends ApiClient {
    * @param apiKey (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<AddApiKeyResponse> addApiKeyAsync(ApiKey apiKey) throws AlgoliaRuntimeException {
+  public CompletableFuture<AddApiKeyResponse> addApiKeyAsync(@Nonnull ApiKey apiKey) throws AlgoliaRuntimeException {
     return this.addApiKeyAsync(apiKey, null);
   }
 
@@ -113,8 +113,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtWithObjectIdResponse addOrUpdateObject(String indexName, String objectID, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public UpdatedAtWithObjectIdResponse addOrUpdateObject(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(addOrUpdateObjectAsync(indexName, objectID, body, requestOptions));
   }
 
@@ -129,7 +133,8 @@ public class SearchClient extends ApiClient {
    * @param body Algolia record. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtWithObjectIdResponse addOrUpdateObject(String indexName, String objectID, Object body) throws AlgoliaRuntimeException {
+  public UpdatedAtWithObjectIdResponse addOrUpdateObject(@Nonnull String indexName, @Nonnull String objectID, @Nonnull Object body)
+    throws AlgoliaRuntimeException {
     return this.addOrUpdateObject(indexName, objectID, body, null);
   }
 
@@ -148,22 +153,16 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtWithObjectIdResponse> addOrUpdateObjectAsync(
-    String indexName,
-    String objectID,
-    Object body,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Object body,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `addOrUpdateObject`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `addOrUpdateObject`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `addOrUpdateObject`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `addOrUpdateObject`.");
 
-    if (body == null) {
-      throw new AlgoliaRuntimeException("Parameter `body` is required when calling `addOrUpdateObject`.");
-    }
+    Parameters.requireNonNull(body, "Parameter `body` is required when calling `addOrUpdateObject`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -186,8 +185,11 @@ public class SearchClient extends ApiClient {
    * @param body Algolia record. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtWithObjectIdResponse> addOrUpdateObjectAsync(String indexName, String objectID, Object body)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtWithObjectIdResponse> addOrUpdateObjectAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Object body
+  ) throws AlgoliaRuntimeException {
     return this.addOrUpdateObjectAsync(indexName, objectID, body, null);
   }
 
@@ -199,7 +201,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CreatedAtResponse appendSource(Source source, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CreatedAtResponse appendSource(@Nonnull Source source, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(appendSourceAsync(source, requestOptions));
   }
 
@@ -209,7 +211,7 @@ public class SearchClient extends ApiClient {
    * @param source Source to add. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CreatedAtResponse appendSource(Source source) throws AlgoliaRuntimeException {
+  public CreatedAtResponse appendSource(@Nonnull Source source) throws AlgoliaRuntimeException {
     return this.appendSource(source, null);
   }
 
@@ -221,11 +223,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<CreatedAtResponse> appendSourceAsync(Source source, RequestOptions requestOptions)
+  public CompletableFuture<CreatedAtResponse> appendSourceAsync(@Nonnull Source source, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (source == null) {
-      throw new AlgoliaRuntimeException("Parameter `source` is required when calling `appendSource`.");
-    }
+    Parameters.requireNonNull(source, "Parameter `source` is required when calling `appendSource`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/security/sources/append").setMethod("POST").setBody(source).build();
     return executeAsync(request, requestOptions, new TypeReference<CreatedAtResponse>() {});
@@ -237,7 +237,7 @@ public class SearchClient extends ApiClient {
    * @param source Source to add. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<CreatedAtResponse> appendSourceAsync(Source source) throws AlgoliaRuntimeException {
+  public CompletableFuture<CreatedAtResponse> appendSourceAsync(@Nonnull Source source) throws AlgoliaRuntimeException {
     return this.appendSourceAsync(source, null);
   }
 
@@ -251,8 +251,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CreatedAtResponse assignUserId(String xAlgoliaUserID, AssignUserIdParams assignUserIdParams, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CreatedAtResponse assignUserId(
+    @Nonnull String xAlgoliaUserID,
+    @Nonnull AssignUserIdParams assignUserIdParams,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(assignUserIdAsync(xAlgoliaUserID, assignUserIdParams, requestOptions));
   }
 
@@ -264,7 +267,8 @@ public class SearchClient extends ApiClient {
    * @param assignUserIdParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CreatedAtResponse assignUserId(String xAlgoliaUserID, AssignUserIdParams assignUserIdParams) throws AlgoliaRuntimeException {
+  public CreatedAtResponse assignUserId(@Nonnull String xAlgoliaUserID, @Nonnull AssignUserIdParams assignUserIdParams)
+    throws AlgoliaRuntimeException {
     return this.assignUserId(xAlgoliaUserID, assignUserIdParams, null);
   }
 
@@ -279,17 +283,13 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<CreatedAtResponse> assignUserIdAsync(
-    String xAlgoliaUserID,
-    AssignUserIdParams assignUserIdParams,
+    @Nonnull String xAlgoliaUserID,
+    @Nonnull AssignUserIdParams assignUserIdParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (xAlgoliaUserID == null) {
-      throw new AlgoliaRuntimeException("Parameter `xAlgoliaUserID` is required when calling `assignUserId`.");
-    }
+    Parameters.requireNonNull(xAlgoliaUserID, "Parameter `xAlgoliaUserID` is required when calling `assignUserId`.");
 
-    if (assignUserIdParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `assignUserIdParams` is required when calling `assignUserId`.");
-    }
+    Parameters.requireNonNull(assignUserIdParams, "Parameter `assignUserIdParams` is required when calling `assignUserId`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -309,8 +309,10 @@ public class SearchClient extends ApiClient {
    * @param assignUserIdParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<CreatedAtResponse> assignUserIdAsync(String xAlgoliaUserID, AssignUserIdParams assignUserIdParams)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<CreatedAtResponse> assignUserIdAsync(
+    @Nonnull String xAlgoliaUserID,
+    @Nonnull AssignUserIdParams assignUserIdParams
+  ) throws AlgoliaRuntimeException {
     return this.assignUserIdAsync(xAlgoliaUserID, assignUserIdParams, null);
   }
 
@@ -325,7 +327,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public BatchResponse batch(String indexName, BatchWriteParams batchWriteParams, RequestOptions requestOptions)
+  public BatchResponse batch(@Nonnull String indexName, @Nonnull BatchWriteParams batchWriteParams, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(batchAsync(indexName, batchWriteParams, requestOptions));
   }
@@ -339,7 +341,7 @@ public class SearchClient extends ApiClient {
    * @param batchWriteParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public BatchResponse batch(String indexName, BatchWriteParams batchWriteParams) throws AlgoliaRuntimeException {
+  public BatchResponse batch(@Nonnull String indexName, @Nonnull BatchWriteParams batchWriteParams) throws AlgoliaRuntimeException {
     return this.batch(indexName, batchWriteParams, null);
   }
 
@@ -354,15 +356,14 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<BatchResponse> batchAsync(String indexName, BatchWriteParams batchWriteParams, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `batch`.");
-    }
+  public CompletableFuture<BatchResponse> batchAsync(
+    @Nonnull String indexName,
+    @Nonnull BatchWriteParams batchWriteParams,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `batch`.");
 
-    if (batchWriteParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `batchWriteParams` is required when calling `batch`.");
-    }
+    Parameters.requireNonNull(batchWriteParams, "Parameter `batchWriteParams` is required when calling `batch`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -382,7 +383,8 @@ public class SearchClient extends ApiClient {
    * @param batchWriteParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<BatchResponse> batchAsync(String indexName, BatchWriteParams batchWriteParams) throws AlgoliaRuntimeException {
+  public CompletableFuture<BatchResponse> batchAsync(@Nonnull String indexName, @Nonnull BatchWriteParams batchWriteParams)
+    throws AlgoliaRuntimeException {
     return this.batchAsync(indexName, batchWriteParams, null);
   }
 
@@ -396,8 +398,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CreatedAtResponse batchAssignUserIds(
-    String xAlgoliaUserID,
-    BatchAssignUserIdsParams batchAssignUserIdsParams,
+    @Nonnull String xAlgoliaUserID,
+    @Nonnull BatchAssignUserIdsParams batchAssignUserIdsParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(batchAssignUserIdsAsync(xAlgoliaUserID, batchAssignUserIdsParams, requestOptions));
@@ -410,7 +412,7 @@ public class SearchClient extends ApiClient {
    * @param batchAssignUserIdsParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CreatedAtResponse batchAssignUserIds(String xAlgoliaUserID, BatchAssignUserIdsParams batchAssignUserIdsParams)
+  public CreatedAtResponse batchAssignUserIds(@Nonnull String xAlgoliaUserID, @Nonnull BatchAssignUserIdsParams batchAssignUserIdsParams)
     throws AlgoliaRuntimeException {
     return this.batchAssignUserIds(xAlgoliaUserID, batchAssignUserIdsParams, null);
   }
@@ -426,17 +428,16 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<CreatedAtResponse> batchAssignUserIdsAsync(
-    String xAlgoliaUserID,
-    BatchAssignUserIdsParams batchAssignUserIdsParams,
+    @Nonnull String xAlgoliaUserID,
+    @Nonnull BatchAssignUserIdsParams batchAssignUserIdsParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (xAlgoliaUserID == null) {
-      throw new AlgoliaRuntimeException("Parameter `xAlgoliaUserID` is required when calling `batchAssignUserIds`.");
-    }
+    Parameters.requireNonNull(xAlgoliaUserID, "Parameter `xAlgoliaUserID` is required when calling `batchAssignUserIds`.");
 
-    if (batchAssignUserIdsParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `batchAssignUserIdsParams` is required when calling `batchAssignUserIds`.");
-    }
+    Parameters.requireNonNull(
+      batchAssignUserIdsParams,
+      "Parameter `batchAssignUserIdsParams` is required when calling `batchAssignUserIds`."
+    );
 
     HttpRequest request = HttpRequest
       .builder()
@@ -457,8 +458,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<CreatedAtResponse> batchAssignUserIdsAsync(
-    String xAlgoliaUserID,
-    BatchAssignUserIdsParams batchAssignUserIdsParams
+    @Nonnull String xAlgoliaUserID,
+    @Nonnull BatchAssignUserIdsParams batchAssignUserIdsParams
   ) throws AlgoliaRuntimeException {
     return this.batchAssignUserIdsAsync(xAlgoliaUserID, batchAssignUserIdsParams, null);
   }
@@ -473,8 +474,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtResponse batchDictionaryEntries(
-    DictionaryType dictionaryName,
-    BatchDictionaryEntriesParams batchDictionaryEntriesParams,
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull BatchDictionaryEntriesParams batchDictionaryEntriesParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(batchDictionaryEntriesAsync(dictionaryName, batchDictionaryEntriesParams, requestOptions));
@@ -487,8 +488,10 @@ public class SearchClient extends ApiClient {
    * @param batchDictionaryEntriesParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse batchDictionaryEntries(DictionaryType dictionaryName, BatchDictionaryEntriesParams batchDictionaryEntriesParams)
-    throws AlgoliaRuntimeException {
+  public UpdatedAtResponse batchDictionaryEntries(
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull BatchDictionaryEntriesParams batchDictionaryEntriesParams
+  ) throws AlgoliaRuntimeException {
     return this.batchDictionaryEntries(dictionaryName, batchDictionaryEntriesParams, null);
   }
 
@@ -502,17 +505,16 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> batchDictionaryEntriesAsync(
-    DictionaryType dictionaryName,
-    BatchDictionaryEntriesParams batchDictionaryEntriesParams,
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull BatchDictionaryEntriesParams batchDictionaryEntriesParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (dictionaryName == null) {
-      throw new AlgoliaRuntimeException("Parameter `dictionaryName` is required when calling `batchDictionaryEntries`.");
-    }
+    Parameters.requireNonNull(dictionaryName, "Parameter `dictionaryName` is required when calling `batchDictionaryEntries`.");
 
-    if (batchDictionaryEntriesParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `batchDictionaryEntriesParams` is required when calling" + " `batchDictionaryEntries`.");
-    }
+    Parameters.requireNonNull(
+      batchDictionaryEntriesParams,
+      "Parameter `batchDictionaryEntriesParams` is required when calling" + " `batchDictionaryEntries`."
+    );
 
     HttpRequest request = HttpRequest
       .builder()
@@ -531,8 +533,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> batchDictionaryEntriesAsync(
-    DictionaryType dictionaryName,
-    BatchDictionaryEntriesParams batchDictionaryEntriesParams
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull BatchDictionaryEntriesParams batchDictionaryEntriesParams
   ) throws AlgoliaRuntimeException {
     return this.batchDictionaryEntriesAsync(dictionaryName, batchDictionaryEntriesParams, null);
   }
@@ -549,8 +551,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> BrowseResponse<T> browse(String indexName, BrowseParams browseParams, Class<T> innerType, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public <T> BrowseResponse<T> browse(
+    @Nonnull String indexName,
+    BrowseParams browseParams,
+    Class<T> innerType,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(browseAsync(indexName, browseParams, innerType, requestOptions));
   }
 
@@ -564,7 +570,8 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> BrowseResponse<T> browse(String indexName, BrowseParams browseParams, Class<T> innerType) throws AlgoliaRuntimeException {
+  public <T> BrowseResponse<T> browse(@Nonnull String indexName, BrowseParams browseParams, Class<T> innerType)
+    throws AlgoliaRuntimeException {
     return this.browse(indexName, browseParams, innerType, null);
   }
 
@@ -579,7 +586,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> BrowseResponse<T> browse(String indexName, Class<T> innerType, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public <T> BrowseResponse<T> browse(@Nonnull String indexName, Class<T> innerType, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return this.browse(indexName, null, innerType, requestOptions);
   }
 
@@ -592,7 +600,7 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> BrowseResponse<T> browse(String indexName, Class<T> innerType) throws AlgoliaRuntimeException {
+  public <T> BrowseResponse<T> browse(@Nonnull String indexName, Class<T> innerType) throws AlgoliaRuntimeException {
     return this.browse(indexName, null, innerType, null);
   }
 
@@ -609,14 +617,12 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public <T> CompletableFuture<BrowseResponse<T>> browseAsync(
-    String indexName,
+    @Nonnull String indexName,
     BrowseParams browseParams,
     Class<T> innerType,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `browse`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `browse`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -637,7 +643,7 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<BrowseResponse<T>> browseAsync(String indexName, BrowseParams browseParams, Class<T> innerType)
+  public <T> CompletableFuture<BrowseResponse<T>> browseAsync(@Nonnull String indexName, BrowseParams browseParams, Class<T> innerType)
     throws AlgoliaRuntimeException {
     return this.browseAsync(indexName, browseParams, innerType, null);
   }
@@ -653,7 +659,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<BrowseResponse<T>> browseAsync(String indexName, Class<T> innerType, RequestOptions requestOptions)
+  public <T> CompletableFuture<BrowseResponse<T>> browseAsync(@Nonnull String indexName, Class<T> innerType, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.browseAsync(indexName, null, innerType, requestOptions);
   }
@@ -667,7 +673,8 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<BrowseResponse<T>> browseAsync(String indexName, Class<T> innerType) throws AlgoliaRuntimeException {
+  public <T> CompletableFuture<BrowseResponse<T>> browseAsync(@Nonnull String indexName, Class<T> innerType)
+    throws AlgoliaRuntimeException {
     return this.browseAsync(indexName, null, innerType, null);
   }
 
@@ -681,7 +688,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearAllSynonyms(String indexName, Boolean forwardToReplicas, RequestOptions requestOptions)
+  public UpdatedAtResponse clearAllSynonyms(@Nonnull String indexName, Boolean forwardToReplicas, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(clearAllSynonymsAsync(indexName, forwardToReplicas, requestOptions));
   }
@@ -694,7 +701,7 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearAllSynonyms(String indexName, Boolean forwardToReplicas) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearAllSynonyms(@Nonnull String indexName, Boolean forwardToReplicas) throws AlgoliaRuntimeException {
     return this.clearAllSynonyms(indexName, forwardToReplicas, null);
   }
 
@@ -706,7 +713,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearAllSynonyms(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearAllSynonyms(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.clearAllSynonyms(indexName, null, requestOptions);
   }
 
@@ -716,7 +723,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearAllSynonyms(String indexName) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearAllSynonyms(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.clearAllSynonyms(indexName, null, null);
   }
 
@@ -731,13 +738,11 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> clearAllSynonymsAsync(
-    String indexName,
+    @Nonnull String indexName,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `clearAllSynonyms`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `clearAllSynonyms`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -756,7 +761,7 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearAllSynonymsAsync(String indexName, Boolean forwardToReplicas)
+  public CompletableFuture<UpdatedAtResponse> clearAllSynonymsAsync(@Nonnull String indexName, Boolean forwardToReplicas)
     throws AlgoliaRuntimeException {
     return this.clearAllSynonymsAsync(indexName, forwardToReplicas, null);
   }
@@ -769,7 +774,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearAllSynonymsAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<UpdatedAtResponse> clearAllSynonymsAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.clearAllSynonymsAsync(indexName, null, requestOptions);
   }
@@ -780,7 +785,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearAllSynonymsAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> clearAllSynonymsAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.clearAllSynonymsAsync(indexName, null, null);
   }
 
@@ -792,7 +797,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearObjects(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearObjects(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(clearObjectsAsync(indexName, requestOptions));
   }
 
@@ -802,7 +807,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearObjects(String indexName) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearObjects(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.clearObjects(indexName, null);
   }
 
@@ -814,11 +819,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearObjectsAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<UpdatedAtResponse> clearObjectsAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `clearObjects`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `clearObjects`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/indexes/{indexName}/clear", indexName).setMethod("POST").build();
     return executeAsync(request, requestOptions, new TypeReference<UpdatedAtResponse>() {});
@@ -830,7 +833,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearObjectsAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> clearObjectsAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.clearObjectsAsync(indexName, null);
   }
 
@@ -844,7 +847,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearRules(String indexName, Boolean forwardToReplicas, RequestOptions requestOptions)
+  public UpdatedAtResponse clearRules(@Nonnull String indexName, Boolean forwardToReplicas, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(clearRulesAsync(indexName, forwardToReplicas, requestOptions));
   }
@@ -857,7 +860,7 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearRules(String indexName, Boolean forwardToReplicas) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearRules(@Nonnull String indexName, Boolean forwardToReplicas) throws AlgoliaRuntimeException {
     return this.clearRules(indexName, forwardToReplicas, null);
   }
 
@@ -869,7 +872,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearRules(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearRules(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.clearRules(indexName, null, requestOptions);
   }
 
@@ -879,7 +882,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse clearRules(String indexName) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse clearRules(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.clearRules(indexName, null, null);
   }
 
@@ -893,11 +896,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(String indexName, Boolean forwardToReplicas, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `clearRules`.");
-    }
+  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(
+    @Nonnull String indexName,
+    Boolean forwardToReplicas,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `clearRules`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -916,7 +920,8 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(String indexName, Boolean forwardToReplicas) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(@Nonnull String indexName, Boolean forwardToReplicas)
+    throws AlgoliaRuntimeException {
     return this.clearRulesAsync(indexName, forwardToReplicas, null);
   }
 
@@ -928,7 +933,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.clearRulesAsync(indexName, null, requestOptions);
   }
@@ -939,7 +944,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> clearRulesAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.clearRulesAsync(indexName, null, null);
   }
 
@@ -952,7 +957,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(delAsync(path, parameters, requestOptions));
   }
 
@@ -963,7 +968,7 @@ public class SearchClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.del(path, parameters, null);
   }
 
@@ -975,7 +980,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.del(path, null, requestOptions);
   }
 
@@ -985,7 +990,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object del(String path) throws AlgoliaRuntimeException {
+  public Object del(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.del(path, null, null);
   }
 
@@ -998,11 +1003,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
+  public CompletableFuture<Object> delAsync(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `del`.");
-    }
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `del`.");
 
     HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("DELETE").addQueryParameters(parameters).build();
     return executeAsync(request, requestOptions, new TypeReference<Object>() {});
@@ -1015,7 +1018,7 @@ public class SearchClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.delAsync(path, parameters, null);
   }
 
@@ -1027,7 +1030,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.delAsync(path, null, requestOptions);
   }
 
@@ -1037,7 +1040,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> delAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> delAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.delAsync(path, null, null);
   }
 
@@ -1049,7 +1052,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeleteApiKeyResponse deleteApiKey(String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public DeleteApiKeyResponse deleteApiKey(@Nonnull String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteApiKeyAsync(key, requestOptions));
   }
 
@@ -1059,7 +1062,7 @@ public class SearchClient extends ApiClient {
    * @param key API key. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeleteApiKeyResponse deleteApiKey(String key) throws AlgoliaRuntimeException {
+  public DeleteApiKeyResponse deleteApiKey(@Nonnull String key) throws AlgoliaRuntimeException {
     return this.deleteApiKey(key, null);
   }
 
@@ -1072,11 +1075,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeleteApiKeyResponse> deleteApiKeyAsync(String key, RequestOptions requestOptions)
+  public CompletableFuture<DeleteApiKeyResponse> deleteApiKeyAsync(@Nonnull String key, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (key == null) {
-      throw new AlgoliaRuntimeException("Parameter `key` is required when calling `deleteApiKey`.");
-    }
+    Parameters.requireNonNull(key, "Parameter `key` is required when calling `deleteApiKey`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/keys/{key}", key).setMethod("DELETE").build();
 
@@ -1090,7 +1091,7 @@ public class SearchClient extends ApiClient {
    * @param key API key. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeleteApiKeyResponse> deleteApiKeyAsync(String key) throws AlgoliaRuntimeException {
+  public CompletableFuture<DeleteApiKeyResponse> deleteApiKeyAsync(@Nonnull String key) throws AlgoliaRuntimeException {
     return this.deleteApiKeyAsync(key, null);
   }
 
@@ -1104,7 +1105,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteBy(String indexName, DeleteByParams deleteByParams, RequestOptions requestOptions)
+  public DeletedAtResponse deleteBy(@Nonnull String indexName, @Nonnull DeleteByParams deleteByParams, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteByAsync(indexName, deleteByParams, requestOptions));
   }
@@ -1117,7 +1118,7 @@ public class SearchClient extends ApiClient {
    * @param deleteByParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteBy(String indexName, DeleteByParams deleteByParams) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteBy(@Nonnull String indexName, @Nonnull DeleteByParams deleteByParams) throws AlgoliaRuntimeException {
     return this.deleteBy(indexName, deleteByParams, null);
   }
 
@@ -1131,15 +1132,14 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteByAsync(String indexName, DeleteByParams deleteByParams, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `deleteBy`.");
-    }
+  public CompletableFuture<DeletedAtResponse> deleteByAsync(
+    @Nonnull String indexName,
+    @Nonnull DeleteByParams deleteByParams,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `deleteBy`.");
 
-    if (deleteByParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `deleteByParams` is required when calling `deleteBy`.");
-    }
+    Parameters.requireNonNull(deleteByParams, "Parameter `deleteByParams` is required when calling `deleteBy`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -1158,7 +1158,7 @@ public class SearchClient extends ApiClient {
    * @param deleteByParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteByAsync(String indexName, DeleteByParams deleteByParams)
+  public CompletableFuture<DeletedAtResponse> deleteByAsync(@Nonnull String indexName, @Nonnull DeleteByParams deleteByParams)
     throws AlgoliaRuntimeException {
     return this.deleteByAsync(indexName, deleteByParams, null);
   }
@@ -1171,7 +1171,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteIndex(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteIndex(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteIndexAsync(indexName, requestOptions));
   }
 
@@ -1181,7 +1181,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteIndex(String indexName) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteIndex(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.deleteIndex(indexName, null);
   }
 
@@ -1193,11 +1193,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteIndexAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<DeletedAtResponse> deleteIndexAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `deleteIndex`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `deleteIndex`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/indexes/{indexName}", indexName).setMethod("DELETE").build();
     return executeAsync(request, requestOptions, new TypeReference<DeletedAtResponse>() {});
@@ -1209,7 +1207,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteIndexAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<DeletedAtResponse> deleteIndexAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.deleteIndexAsync(indexName, null);
   }
 
@@ -1223,7 +1221,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteObject(String indexName, String objectID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteObject(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteObjectAsync(indexName, objectID, requestOptions));
   }
 
@@ -1235,7 +1234,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteObject(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteObject(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.deleteObject(indexName, objectID, null);
   }
 
@@ -1249,15 +1248,14 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteObjectAsync(String indexName, String objectID, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `deleteObject`.");
-    }
+  public CompletableFuture<DeletedAtResponse> deleteObjectAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `deleteObject`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `deleteObject`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `deleteObject`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -1275,7 +1273,8 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteObjectAsync(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public CompletableFuture<DeletedAtResponse> deleteObjectAsync(@Nonnull String indexName, @Nonnull String objectID)
+    throws AlgoliaRuntimeException {
     return this.deleteObjectAsync(indexName, objectID, null);
   }
 
@@ -1291,8 +1290,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse deleteRule(String indexName, String objectID, Boolean forwardToReplicas, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public UpdatedAtResponse deleteRule(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    Boolean forwardToReplicas,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteRuleAsync(indexName, objectID, forwardToReplicas, requestOptions));
   }
 
@@ -1306,7 +1309,8 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse deleteRule(String indexName, String objectID, Boolean forwardToReplicas) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse deleteRule(@Nonnull String indexName, @Nonnull String objectID, Boolean forwardToReplicas)
+    throws AlgoliaRuntimeException {
     return this.deleteRule(indexName, objectID, forwardToReplicas, null);
   }
 
@@ -1320,7 +1324,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse deleteRule(String indexName, String objectID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse deleteRule(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return this.deleteRule(indexName, objectID, null, requestOptions);
   }
 
@@ -1332,7 +1337,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a rule object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse deleteRule(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse deleteRule(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.deleteRule(indexName, objectID, null, null);
   }
 
@@ -1349,18 +1354,14 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> deleteRuleAsync(
-    String indexName,
-    String objectID,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `deleteRule`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `deleteRule`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `deleteRule`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `deleteRule`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -1381,8 +1382,11 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> deleteRuleAsync(String indexName, String objectID, Boolean forwardToReplicas)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> deleteRuleAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    Boolean forwardToReplicas
+  ) throws AlgoliaRuntimeException {
     return this.deleteRuleAsync(indexName, objectID, forwardToReplicas, null);
   }
 
@@ -1396,8 +1400,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> deleteRuleAsync(String indexName, String objectID, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> deleteRuleAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.deleteRuleAsync(indexName, objectID, null, requestOptions);
   }
 
@@ -1409,7 +1416,8 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a rule object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> deleteRuleAsync(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> deleteRuleAsync(@Nonnull String indexName, @Nonnull String objectID)
+    throws AlgoliaRuntimeException {
     return this.deleteRuleAsync(indexName, objectID, null, null);
   }
 
@@ -1421,7 +1429,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeleteSourceResponse deleteSource(String source, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public DeleteSourceResponse deleteSource(@Nonnull String source, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteSourceAsync(source, requestOptions));
   }
 
@@ -1431,7 +1439,7 @@ public class SearchClient extends ApiClient {
    * @param source IP address range of the source. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeleteSourceResponse deleteSource(String source) throws AlgoliaRuntimeException {
+  public DeleteSourceResponse deleteSource(@Nonnull String source) throws AlgoliaRuntimeException {
     return this.deleteSource(source, null);
   }
 
@@ -1443,11 +1451,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeleteSourceResponse> deleteSourceAsync(String source, RequestOptions requestOptions)
+  public CompletableFuture<DeleteSourceResponse> deleteSourceAsync(@Nonnull String source, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (source == null) {
-      throw new AlgoliaRuntimeException("Parameter `source` is required when calling `deleteSource`.");
-    }
+    Parameters.requireNonNull(source, "Parameter `source` is required when calling `deleteSource`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/security/sources/{source}", source).setMethod("DELETE").build();
     return executeAsync(request, requestOptions, new TypeReference<DeleteSourceResponse>() {});
@@ -1459,7 +1465,7 @@ public class SearchClient extends ApiClient {
    * @param source IP address range of the source. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeleteSourceResponse> deleteSourceAsync(String source) throws AlgoliaRuntimeException {
+  public CompletableFuture<DeleteSourceResponse> deleteSourceAsync(@Nonnull String source) throws AlgoliaRuntimeException {
     return this.deleteSourceAsync(source, null);
   }
 
@@ -1475,8 +1481,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteSynonym(String indexName, String objectID, Boolean forwardToReplicas, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteSynonym(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    Boolean forwardToReplicas,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(deleteSynonymAsync(indexName, objectID, forwardToReplicas, requestOptions));
   }
 
@@ -1490,7 +1500,8 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteSynonym(String indexName, String objectID, Boolean forwardToReplicas) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteSynonym(@Nonnull String indexName, @Nonnull String objectID, Boolean forwardToReplicas)
+    throws AlgoliaRuntimeException {
     return this.deleteSynonym(indexName, objectID, forwardToReplicas, null);
   }
 
@@ -1504,7 +1515,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteSynonym(String indexName, String objectID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteSynonym(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return this.deleteSynonym(indexName, objectID, null, requestOptions);
   }
 
@@ -1516,7 +1528,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a synonym object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public DeletedAtResponse deleteSynonym(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public DeletedAtResponse deleteSynonym(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.deleteSynonym(indexName, objectID, null, null);
   }
 
@@ -1533,18 +1545,14 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<DeletedAtResponse> deleteSynonymAsync(
-    String indexName,
-    String objectID,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `deleteSynonym`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `deleteSynonym`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `deleteSynonym`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `deleteSynonym`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -1565,8 +1573,11 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteSynonymAsync(String indexName, String objectID, Boolean forwardToReplicas)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<DeletedAtResponse> deleteSynonymAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    Boolean forwardToReplicas
+  ) throws AlgoliaRuntimeException {
     return this.deleteSynonymAsync(indexName, objectID, forwardToReplicas, null);
   }
 
@@ -1580,8 +1591,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteSynonymAsync(String indexName, String objectID, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<DeletedAtResponse> deleteSynonymAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.deleteSynonymAsync(indexName, objectID, null, requestOptions);
   }
 
@@ -1593,7 +1607,8 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a synonym object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<DeletedAtResponse> deleteSynonymAsync(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public CompletableFuture<DeletedAtResponse> deleteSynonymAsync(@Nonnull String indexName, @Nonnull String objectID)
+    throws AlgoliaRuntimeException {
     return this.deleteSynonymAsync(indexName, objectID, null, null);
   }
 
@@ -1606,7 +1621,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getAsync(path, parameters, requestOptions));
   }
 
@@ -1617,7 +1632,7 @@ public class SearchClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.get(path, parameters, null);
   }
 
@@ -1629,7 +1644,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.get(path, null, requestOptions);
   }
 
@@ -1639,7 +1654,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object get(String path) throws AlgoliaRuntimeException {
+  public Object get(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.get(path, null, null);
   }
 
@@ -1652,11 +1667,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters, RequestOptions requestOptions)
+  public CompletableFuture<Object> getAsync(@Nonnull String path, Map<String, Object> parameters, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `get`.");
-    }
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `get`.");
 
     HttpRequest request = HttpRequest.builder().setPathEncoded("/1{path}", path).setMethod("GET").addQueryParameters(parameters).build();
     return executeAsync(request, requestOptions, new TypeReference<Object>() {});
@@ -1669,7 +1682,7 @@ public class SearchClient extends ApiClient {
    * @param parameters Query parameters to apply to the current query. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path, Map<String, Object> parameters) throws AlgoliaRuntimeException {
     return this.getAsync(path, parameters, null);
   }
 
@@ -1681,7 +1694,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.getAsync(path, null, requestOptions);
   }
 
@@ -1691,7 +1704,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> getAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> getAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.getAsync(path, null, null);
   }
 
@@ -1705,7 +1718,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetApiKeyResponse getApiKey(String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public GetApiKeyResponse getApiKey(@Nonnull String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getApiKeyAsync(key, requestOptions));
   }
 
@@ -1717,7 +1730,7 @@ public class SearchClient extends ApiClient {
    * @param key API key. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetApiKeyResponse getApiKey(String key) throws AlgoliaRuntimeException {
+  public GetApiKeyResponse getApiKey(@Nonnull String key) throws AlgoliaRuntimeException {
     return this.getApiKey(key, null);
   }
 
@@ -1732,10 +1745,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetApiKeyResponse> getApiKeyAsync(String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    if (key == null) {
-      throw new AlgoliaRuntimeException("Parameter `key` is required when calling `getApiKey`.");
-    }
+  public CompletableFuture<GetApiKeyResponse> getApiKeyAsync(@Nonnull String key, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(key, "Parameter `key` is required when calling `getApiKey`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/keys/{key}", key).setMethod("GET").build();
 
@@ -1751,7 +1763,7 @@ public class SearchClient extends ApiClient {
    * @param key API key. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetApiKeyResponse> getApiKeyAsync(String key) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetApiKeyResponse> getApiKeyAsync(@Nonnull String key) throws AlgoliaRuntimeException {
     return this.getApiKeyAsync(key, null);
   }
 
@@ -2068,8 +2080,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Map<String, String> getObject(String indexName, String objectID, List<String> attributesToRetrieve, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public Map<String, String> getObject(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    List<String> attributesToRetrieve,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getObjectAsync(indexName, objectID, attributesToRetrieve, requestOptions));
   }
 
@@ -2085,7 +2101,7 @@ public class SearchClient extends ApiClient {
    *     won't be retrieved unless the request is authenticated with the admin API key. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Map<String, String> getObject(String indexName, String objectID, List<String> attributesToRetrieve)
+  public Map<String, String> getObject(@Nonnull String indexName, @Nonnull String objectID, List<String> attributesToRetrieve)
     throws AlgoliaRuntimeException {
     return this.getObject(indexName, objectID, attributesToRetrieve, null);
   }
@@ -2099,7 +2115,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Map<String, String> getObject(String indexName, String objectID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Map<String, String> getObject(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return this.getObject(indexName, objectID, null, requestOptions);
   }
 
@@ -2110,7 +2127,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Map<String, String> getObject(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public Map<String, String> getObject(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.getObject(indexName, objectID, null, null);
   }
 
@@ -2130,18 +2147,14 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<Map<String, String>> getObjectAsync(
-    String indexName,
-    String objectID,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
     List<String> attributesToRetrieve,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getObject`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getObject`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `getObject`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `getObject`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -2165,8 +2178,11 @@ public class SearchClient extends ApiClient {
    *     won't be retrieved unless the request is authenticated with the admin API key. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Map<String, String>> getObjectAsync(String indexName, String objectID, List<String> attributesToRetrieve)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<Map<String, String>> getObjectAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    List<String> attributesToRetrieve
+  ) throws AlgoliaRuntimeException {
     return this.getObjectAsync(indexName, objectID, attributesToRetrieve, null);
   }
 
@@ -2180,8 +2196,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Map<String, String>> getObjectAsync(String indexName, String objectID, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<Map<String, String>> getObjectAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.getObjectAsync(indexName, objectID, null, requestOptions);
   }
 
@@ -2193,7 +2212,8 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique record (object) identifier. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Map<String, String>> getObjectAsync(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public CompletableFuture<Map<String, String>> getObjectAsync(@Nonnull String indexName, @Nonnull String objectID)
+    throws AlgoliaRuntimeException {
     return this.getObjectAsync(indexName, objectID, null, null);
   }
 
@@ -2207,8 +2227,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> GetObjectsResponse<T> getObjects(GetObjectsParams getObjectsParams, Class<T> innerType, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public <T> GetObjectsResponse<T> getObjects(
+    @Nonnull GetObjectsParams getObjectsParams,
+    Class<T> innerType,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getObjectsAsync(getObjectsParams, innerType, requestOptions));
   }
 
@@ -2220,7 +2243,8 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> GetObjectsResponse<T> getObjects(GetObjectsParams getObjectsParams, Class<T> innerType) throws AlgoliaRuntimeException {
+  public <T> GetObjectsResponse<T> getObjects(@Nonnull GetObjectsParams getObjectsParams, Class<T> innerType)
+    throws AlgoliaRuntimeException {
     return this.getObjects(getObjectsParams, innerType, null);
   }
 
@@ -2235,13 +2259,11 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public <T> CompletableFuture<GetObjectsResponse<T>> getObjectsAsync(
-    GetObjectsParams getObjectsParams,
+    @Nonnull GetObjectsParams getObjectsParams,
     Class<T> innerType,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (getObjectsParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `getObjectsParams` is required when calling `getObjects`.");
-    }
+    Parameters.requireNonNull(getObjectsParams, "Parameter `getObjectsParams` is required when calling `getObjects`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -2261,7 +2283,7 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<GetObjectsResponse<T>> getObjectsAsync(GetObjectsParams getObjectsParams, Class<T> innerType)
+  public <T> CompletableFuture<GetObjectsResponse<T>> getObjectsAsync(@Nonnull GetObjectsParams getObjectsParams, Class<T> innerType)
     throws AlgoliaRuntimeException {
     return this.getObjectsAsync(getObjectsParams, innerType, null);
   }
@@ -2276,7 +2298,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Rule getRule(String indexName, String objectID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Rule getRule(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getRuleAsync(indexName, objectID, requestOptions));
   }
 
@@ -2288,7 +2310,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a rule object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Rule getRule(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public Rule getRule(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.getRule(indexName, objectID, null);
   }
 
@@ -2302,15 +2324,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Rule> getRuleAsync(String indexName, String objectID, RequestOptions requestOptions)
+  public CompletableFuture<Rule> getRuleAsync(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getRule`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getRule`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `getRule`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `getRule`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -2328,7 +2346,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a rule object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Rule> getRuleAsync(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public CompletableFuture<Rule> getRuleAsync(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.getRuleAsync(indexName, objectID, null);
   }
 
@@ -2341,7 +2359,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public IndexSettings getSettings(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public IndexSettings getSettings(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getSettingsAsync(indexName, requestOptions));
   }
 
@@ -2352,7 +2370,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public IndexSettings getSettings(String indexName) throws AlgoliaRuntimeException {
+  public IndexSettings getSettings(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getSettings(indexName, null);
   }
 
@@ -2365,10 +2383,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<IndexSettings> getSettingsAsync(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getSettings`.");
-    }
+  public CompletableFuture<IndexSettings> getSettingsAsync(@Nonnull String indexName, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getSettings`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/indexes/{indexName}/settings", indexName).setMethod("GET").build();
     return executeAsync(request, requestOptions, new TypeReference<IndexSettings>() {});
@@ -2381,7 +2398,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<IndexSettings> getSettingsAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<IndexSettings> getSettingsAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.getSettingsAsync(indexName, null);
   }
 
@@ -2437,7 +2454,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SynonymHit getSynonym(String indexName, String objectID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public SynonymHit getSynonym(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getSynonymAsync(indexName, objectID, requestOptions));
   }
 
@@ -2449,7 +2467,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a synonym object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SynonymHit getSynonym(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public SynonymHit getSynonym(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.getSynonym(indexName, objectID, null);
   }
 
@@ -2463,15 +2481,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SynonymHit> getSynonymAsync(String indexName, String objectID, RequestOptions requestOptions)
+  public CompletableFuture<SynonymHit> getSynonymAsync(@Nonnull String indexName, @Nonnull String objectID, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getSynonym`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getSynonym`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `getSynonym`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `getSynonym`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -2489,7 +2503,7 @@ public class SearchClient extends ApiClient {
    * @param objectID Unique identifier of a synonym object. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SynonymHit> getSynonymAsync(String indexName, String objectID) throws AlgoliaRuntimeException {
+  public CompletableFuture<SynonymHit> getSynonymAsync(@Nonnull String indexName, @Nonnull String objectID) throws AlgoliaRuntimeException {
     return this.getSynonymAsync(indexName, objectID, null);
   }
 
@@ -2503,7 +2517,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetTaskResponse getTask(String indexName, Long taskID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public GetTaskResponse getTask(@Nonnull String indexName, @Nonnull Long taskID, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getTaskAsync(indexName, taskID, requestOptions));
   }
 
@@ -2515,7 +2530,7 @@ public class SearchClient extends ApiClient {
    * @param taskID Unique task identifier. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public GetTaskResponse getTask(String indexName, Long taskID) throws AlgoliaRuntimeException {
+  public GetTaskResponse getTask(@Nonnull String indexName, @Nonnull Long taskID) throws AlgoliaRuntimeException {
     return this.getTask(indexName, taskID, null);
   }
 
@@ -2529,15 +2544,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetTaskResponse> getTaskAsync(String indexName, Long taskID, RequestOptions requestOptions)
+  public CompletableFuture<GetTaskResponse> getTaskAsync(@Nonnull String indexName, @Nonnull Long taskID, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `getTask`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `getTask`.");
 
-    if (taskID == null) {
-      throw new AlgoliaRuntimeException("Parameter `taskID` is required when calling `getTask`.");
-    }
+    Parameters.requireNonNull(taskID, "Parameter `taskID` is required when calling `getTask`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/indexes/{indexName}/task/{taskID}", indexName, taskID).setMethod("GET").build();
     return executeAsync(request, requestOptions, new TypeReference<GetTaskResponse>() {});
@@ -2551,7 +2562,7 @@ public class SearchClient extends ApiClient {
    * @param taskID Unique task identifier. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<GetTaskResponse> getTaskAsync(String indexName, Long taskID) throws AlgoliaRuntimeException {
+  public CompletableFuture<GetTaskResponse> getTaskAsync(@Nonnull String indexName, @Nonnull Long taskID) throws AlgoliaRuntimeException {
     return this.getTaskAsync(indexName, taskID, null);
   }
 
@@ -2612,7 +2623,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UserId getUserId(String userID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public UserId getUserId(@Nonnull String userID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(getUserIdAsync(userID, requestOptions));
   }
 
@@ -2623,7 +2634,7 @@ public class SearchClient extends ApiClient {
    * @param userID userID to assign. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UserId getUserId(String userID) throws AlgoliaRuntimeException {
+  public UserId getUserId(@Nonnull String userID) throws AlgoliaRuntimeException {
     return this.getUserId(userID, null);
   }
 
@@ -2636,10 +2647,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UserId> getUserIdAsync(String userID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    if (userID == null) {
-      throw new AlgoliaRuntimeException("Parameter `userID` is required when calling `getUserId`.");
-    }
+  public CompletableFuture<UserId> getUserIdAsync(@Nonnull String userID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(userID, "Parameter `userID` is required when calling `getUserId`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/clusters/mapping/{userID}", userID).setMethod("GET").build();
     return executeAsync(request, requestOptions, new TypeReference<UserId>() {});
@@ -2652,7 +2661,7 @@ public class SearchClient extends ApiClient {
    * @param userID userID to assign. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UserId> getUserIdAsync(String userID) throws AlgoliaRuntimeException {
+  public CompletableFuture<UserId> getUserIdAsync(@Nonnull String userID) throws AlgoliaRuntimeException {
     return this.getUserIdAsync(userID, null);
   }
 
@@ -3083,7 +3092,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public MultipleBatchResponse multipleBatch(BatchParams batchParams, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public MultipleBatchResponse multipleBatch(@Nonnull BatchParams batchParams, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(multipleBatchAsync(batchParams, requestOptions));
   }
 
@@ -3096,7 +3106,7 @@ public class SearchClient extends ApiClient {
    * @param batchParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public MultipleBatchResponse multipleBatch(BatchParams batchParams) throws AlgoliaRuntimeException {
+  public MultipleBatchResponse multipleBatch(@Nonnull BatchParams batchParams) throws AlgoliaRuntimeException {
     return this.multipleBatch(batchParams, null);
   }
 
@@ -3111,11 +3121,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<MultipleBatchResponse> multipleBatchAsync(BatchParams batchParams, RequestOptions requestOptions)
+  public CompletableFuture<MultipleBatchResponse> multipleBatchAsync(@Nonnull BatchParams batchParams, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (batchParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `batchParams` is required when calling `multipleBatch`.");
-    }
+    Parameters.requireNonNull(batchParams, "Parameter `batchParams` is required when calling `multipleBatch`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/indexes/*/batch").setMethod("POST").setBody(batchParams).build();
     return executeAsync(request, requestOptions, new TypeReference<MultipleBatchResponse>() {});
@@ -3130,7 +3138,7 @@ public class SearchClient extends ApiClient {
    * @param batchParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<MultipleBatchResponse> multipleBatchAsync(BatchParams batchParams) throws AlgoliaRuntimeException {
+  public CompletableFuture<MultipleBatchResponse> multipleBatchAsync(@Nonnull BatchParams batchParams) throws AlgoliaRuntimeException {
     return this.multipleBatchAsync(batchParams, null);
   }
 
@@ -3152,8 +3160,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse operationIndex(String indexName, OperationIndexParams operationIndexParams, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public UpdatedAtResponse operationIndex(
+    @Nonnull String indexName,
+    @Nonnull OperationIndexParams operationIndexParams,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(operationIndexAsync(indexName, operationIndexParams, requestOptions));
   }
 
@@ -3173,7 +3184,8 @@ public class SearchClient extends ApiClient {
    * @param operationIndexParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse operationIndex(String indexName, OperationIndexParams operationIndexParams) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse operationIndex(@Nonnull String indexName, @Nonnull OperationIndexParams operationIndexParams)
+    throws AlgoliaRuntimeException {
     return this.operationIndex(indexName, operationIndexParams, null);
   }
 
@@ -3197,17 +3209,13 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> operationIndexAsync(
-    String indexName,
-    OperationIndexParams operationIndexParams,
+    @Nonnull String indexName,
+    @Nonnull OperationIndexParams operationIndexParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `operationIndex`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `operationIndex`.");
 
-    if (operationIndexParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `operationIndexParams` is required when calling `operationIndex`.");
-    }
+    Parameters.requireNonNull(operationIndexParams, "Parameter `operationIndexParams` is required when calling `operationIndex`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -3235,8 +3243,10 @@ public class SearchClient extends ApiClient {
    * @param operationIndexParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> operationIndexAsync(String indexName, OperationIndexParams operationIndexParams)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> operationIndexAsync(
+    @Nonnull String indexName,
+    @Nonnull OperationIndexParams operationIndexParams
+  ) throws AlgoliaRuntimeException {
     return this.operationIndexAsync(indexName, operationIndexParams, null);
   }
 
@@ -3256,9 +3266,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtWithObjectIdResponse partialUpdateObject(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate,
     Boolean createIfNotExists,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
@@ -3279,9 +3289,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtWithObjectIdResponse partialUpdateObject(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate,
     Boolean createIfNotExists
   ) throws AlgoliaRuntimeException {
     return this.partialUpdateObject(indexName, objectID, attributesToUpdate, createIfNotExists, null);
@@ -3301,9 +3311,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtWithObjectIdResponse partialUpdateObject(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return this.partialUpdateObject(indexName, objectID, attributesToUpdate, null, requestOptions);
@@ -3321,9 +3331,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtWithObjectIdResponse partialUpdateObject(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate
   ) throws AlgoliaRuntimeException {
     return this.partialUpdateObject(indexName, objectID, attributesToUpdate, null, null);
   }
@@ -3344,23 +3354,17 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtWithObjectIdResponse> partialUpdateObjectAsync(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate,
     Boolean createIfNotExists,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `partialUpdateObject`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `partialUpdateObject`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `partialUpdateObject`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `partialUpdateObject`.");
 
-    if (attributesToUpdate == null) {
-      throw new AlgoliaRuntimeException("Parameter `attributesToUpdate` is required when calling `partialUpdateObject`.");
-    }
+    Parameters.requireNonNull(attributesToUpdate, "Parameter `attributesToUpdate` is required when calling `partialUpdateObject`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -3386,9 +3390,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtWithObjectIdResponse> partialUpdateObjectAsync(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate,
     Boolean createIfNotExists
   ) throws AlgoliaRuntimeException {
     return this.partialUpdateObjectAsync(indexName, objectID, attributesToUpdate, createIfNotExists, null);
@@ -3408,9 +3412,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtWithObjectIdResponse> partialUpdateObjectAsync(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return this.partialUpdateObjectAsync(indexName, objectID, attributesToUpdate, null, requestOptions);
@@ -3428,9 +3432,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtWithObjectIdResponse> partialUpdateObjectAsync(
-    String indexName,
-    String objectID,
-    Map<String, AttributeToUpdate> attributesToUpdate
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Map<String, AttributeToUpdate> attributesToUpdate
   ) throws AlgoliaRuntimeException {
     return this.partialUpdateObjectAsync(indexName, objectID, attributesToUpdate, null, null);
   }
@@ -3445,7 +3449,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
+  public Object post(@Nonnull String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(postAsync(path, parameters, body, requestOptions));
   }
@@ -3458,7 +3462,7 @@ public class SearchClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
     return this.post(path, parameters, body, null);
   }
 
@@ -3470,7 +3474,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.post(path, null, null, requestOptions);
   }
 
@@ -3480,7 +3484,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object post(String path) throws AlgoliaRuntimeException {
+  public Object post(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.post(path, null, null, null);
   }
 
@@ -3494,11 +3498,13 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `post`.");
-    }
+  public CompletableFuture<Object> postAsync(
+    @Nonnull String path,
+    Map<String, Object> parameters,
+    Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `post`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -3518,7 +3524,8 @@ public class SearchClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path, Map<String, Object> parameters, Object body)
+    throws AlgoliaRuntimeException {
     return this.postAsync(path, parameters, body, null);
   }
 
@@ -3530,7 +3537,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.postAsync(path, null, null, requestOptions);
   }
 
@@ -3540,7 +3547,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> postAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> postAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.postAsync(path, null, null, null);
   }
 
@@ -3554,7 +3561,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
+  public Object put(@Nonnull String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(putAsync(path, parameters, body, requestOptions));
   }
@@ -3567,7 +3574,7 @@ public class SearchClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
     return this.put(path, parameters, body, null);
   }
 
@@ -3579,7 +3586,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.put(path, null, null, requestOptions);
   }
 
@@ -3589,7 +3596,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public Object put(String path) throws AlgoliaRuntimeException {
+  public Object put(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.put(path, null, null, null);
   }
 
@@ -3603,11 +3610,13 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (path == null) {
-      throw new AlgoliaRuntimeException("Parameter `path` is required when calling `put`.");
-    }
+  public CompletableFuture<Object> putAsync(
+    @Nonnull String path,
+    Map<String, Object> parameters,
+    Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(path, "Parameter `path` is required when calling `put`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -3627,7 +3636,8 @@ public class SearchClient extends ApiClient {
    * @param body Parameters to send with the custom request. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, Map<String, Object> parameters, Object body) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path, Map<String, Object> parameters, Object body)
+    throws AlgoliaRuntimeException {
     return this.putAsync(path, parameters, body, null);
   }
 
@@ -3639,7 +3649,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.putAsync(path, null, null, requestOptions);
   }
 
@@ -3649,7 +3659,7 @@ public class SearchClient extends ApiClient {
    * @param path Path of the endpoint, anything after \"/1\" must be specified. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<Object> putAsync(String path) throws AlgoliaRuntimeException {
+  public CompletableFuture<Object> putAsync(@Nonnull String path) throws AlgoliaRuntimeException {
     return this.putAsync(path, null, null, null);
   }
 
@@ -3661,7 +3671,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public RemoveUserIdResponse removeUserId(String userID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public RemoveUserIdResponse removeUserId(@Nonnull String userID, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(removeUserIdAsync(userID, requestOptions));
   }
 
@@ -3671,7 +3681,7 @@ public class SearchClient extends ApiClient {
    * @param userID userID to assign. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public RemoveUserIdResponse removeUserId(String userID) throws AlgoliaRuntimeException {
+  public RemoveUserIdResponse removeUserId(@Nonnull String userID) throws AlgoliaRuntimeException {
     return this.removeUserId(userID, null);
   }
 
@@ -3683,11 +3693,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<RemoveUserIdResponse> removeUserIdAsync(String userID, RequestOptions requestOptions)
+  public CompletableFuture<RemoveUserIdResponse> removeUserIdAsync(@Nonnull String userID, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (userID == null) {
-      throw new AlgoliaRuntimeException("Parameter `userID` is required when calling `removeUserId`.");
-    }
+    Parameters.requireNonNull(userID, "Parameter `userID` is required when calling `removeUserId`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/clusters/mapping/{userID}", userID).setMethod("DELETE").build();
     return executeAsync(request, requestOptions, new TypeReference<RemoveUserIdResponse>() {});
@@ -3699,7 +3707,7 @@ public class SearchClient extends ApiClient {
    * @param userID userID to assign. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<RemoveUserIdResponse> removeUserIdAsync(String userID) throws AlgoliaRuntimeException {
+  public CompletableFuture<RemoveUserIdResponse> removeUserIdAsync(@Nonnull String userID) throws AlgoliaRuntimeException {
     return this.removeUserIdAsync(userID, null);
   }
 
@@ -3711,7 +3719,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public ReplaceSourceResponse replaceSources(List<Source> source, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public ReplaceSourceResponse replaceSources(@Nonnull List<Source> source, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(replaceSourcesAsync(source, requestOptions));
   }
 
@@ -3721,7 +3729,7 @@ public class SearchClient extends ApiClient {
    * @param source Allowed sources. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public ReplaceSourceResponse replaceSources(List<Source> source) throws AlgoliaRuntimeException {
+  public ReplaceSourceResponse replaceSources(@Nonnull List<Source> source) throws AlgoliaRuntimeException {
     return this.replaceSources(source, null);
   }
 
@@ -3733,11 +3741,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<ReplaceSourceResponse> replaceSourcesAsync(List<Source> source, RequestOptions requestOptions)
+  public CompletableFuture<ReplaceSourceResponse> replaceSourcesAsync(@Nonnull List<Source> source, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    if (source == null) {
-      throw new AlgoliaRuntimeException("Parameter `source` is required when calling `replaceSources`.");
-    }
+    Parameters.requireNonNull(source, "Parameter `source` is required when calling `replaceSources`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/security/sources").setMethod("PUT").setBody(source).build();
     return executeAsync(request, requestOptions, new TypeReference<ReplaceSourceResponse>() {});
@@ -3749,7 +3755,7 @@ public class SearchClient extends ApiClient {
    * @param source Allowed sources. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<ReplaceSourceResponse> replaceSourcesAsync(List<Source> source) throws AlgoliaRuntimeException {
+  public CompletableFuture<ReplaceSourceResponse> replaceSourcesAsync(@Nonnull List<Source> source) throws AlgoliaRuntimeException {
     return this.replaceSourcesAsync(source, null);
   }
 
@@ -3762,7 +3768,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public AddApiKeyResponse restoreApiKey(String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public AddApiKeyResponse restoreApiKey(@Nonnull String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(restoreApiKeyAsync(key, requestOptions));
   }
 
@@ -3773,7 +3779,7 @@ public class SearchClient extends ApiClient {
    * @param key API key. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public AddApiKeyResponse restoreApiKey(String key) throws AlgoliaRuntimeException {
+  public AddApiKeyResponse restoreApiKey(@Nonnull String key) throws AlgoliaRuntimeException {
     return this.restoreApiKey(key, null);
   }
 
@@ -3786,10 +3792,9 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<AddApiKeyResponse> restoreApiKeyAsync(String key, RequestOptions requestOptions) throws AlgoliaRuntimeException {
-    if (key == null) {
-      throw new AlgoliaRuntimeException("Parameter `key` is required when calling `restoreApiKey`.");
-    }
+  public CompletableFuture<AddApiKeyResponse> restoreApiKeyAsync(@Nonnull String key, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(key, "Parameter `key` is required when calling `restoreApiKey`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/keys/{key}/restore", key).setMethod("POST").build();
 
@@ -3803,7 +3808,7 @@ public class SearchClient extends ApiClient {
    * @param key API key. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<AddApiKeyResponse> restoreApiKeyAsync(String key) throws AlgoliaRuntimeException {
+  public CompletableFuture<AddApiKeyResponse> restoreApiKeyAsync(@Nonnull String key) throws AlgoliaRuntimeException {
     return this.restoreApiKeyAsync(key, null);
   }
 
@@ -3819,7 +3824,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SaveObjectResponse saveObject(String indexName, Object body, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public SaveObjectResponse saveObject(@Nonnull String indexName, @Nonnull Object body, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(saveObjectAsync(indexName, body, requestOptions));
   }
 
@@ -3833,7 +3839,7 @@ public class SearchClient extends ApiClient {
    * @param body The Algolia record. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SaveObjectResponse saveObject(String indexName, Object body) throws AlgoliaRuntimeException {
+  public SaveObjectResponse saveObject(@Nonnull String indexName, @Nonnull Object body) throws AlgoliaRuntimeException {
     return this.saveObject(indexName, body, null);
   }
 
@@ -3850,15 +3856,14 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SaveObjectResponse> saveObjectAsync(String indexName, Object body, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `saveObject`.");
-    }
+  public CompletableFuture<SaveObjectResponse> saveObjectAsync(
+    @Nonnull String indexName,
+    @Nonnull Object body,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `saveObject`.");
 
-    if (body == null) {
-      throw new AlgoliaRuntimeException("Parameter `body` is required when calling `saveObject`.");
-    }
+    Parameters.requireNonNull(body, "Parameter `body` is required when calling `saveObject`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/indexes/{indexName}", indexName).setMethod("POST").setBody(body).build();
     return executeAsync(request, requestOptions, new TypeReference<SaveObjectResponse>() {});
@@ -3875,7 +3880,8 @@ public class SearchClient extends ApiClient {
    * @param body The Algolia record. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SaveObjectResponse> saveObjectAsync(String indexName, Object body) throws AlgoliaRuntimeException {
+  public CompletableFuture<SaveObjectResponse> saveObjectAsync(@Nonnull String indexName, @Nonnull Object body)
+    throws AlgoliaRuntimeException {
     return this.saveObjectAsync(indexName, body, null);
   }
 
@@ -3893,9 +3899,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedRuleResponse saveRule(
-    String indexName,
-    String objectID,
-    Rule rule,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Rule rule,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
@@ -3913,7 +3919,7 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedRuleResponse saveRule(String indexName, String objectID, Rule rule, Boolean forwardToReplicas)
+  public UpdatedRuleResponse saveRule(@Nonnull String indexName, @Nonnull String objectID, @Nonnull Rule rule, Boolean forwardToReplicas)
     throws AlgoliaRuntimeException {
     return this.saveRule(indexName, objectID, rule, forwardToReplicas, null);
   }
@@ -3929,8 +3935,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedRuleResponse saveRule(String indexName, String objectID, Rule rule, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public UpdatedRuleResponse saveRule(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Rule rule,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.saveRule(indexName, objectID, rule, null, requestOptions);
   }
 
@@ -3943,7 +3953,8 @@ public class SearchClient extends ApiClient {
    * @param rule (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedRuleResponse saveRule(String indexName, String objectID, Rule rule) throws AlgoliaRuntimeException {
+  public UpdatedRuleResponse saveRule(@Nonnull String indexName, @Nonnull String objectID, @Nonnull Rule rule)
+    throws AlgoliaRuntimeException {
     return this.saveRule(indexName, objectID, rule, null, null);
   }
 
@@ -3961,23 +3972,17 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedRuleResponse> saveRuleAsync(
-    String indexName,
-    String objectID,
-    Rule rule,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Rule rule,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `saveRule`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `saveRule`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `saveRule`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `saveRule`.");
 
-    if (rule == null) {
-      throw new AlgoliaRuntimeException("Parameter `rule` is required when calling `saveRule`.");
-    }
+    Parameters.requireNonNull(rule, "Parameter `rule` is required when calling `saveRule`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4000,8 +4005,12 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedRuleResponse> saveRuleAsync(String indexName, String objectID, Rule rule, Boolean forwardToReplicas)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedRuleResponse> saveRuleAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Rule rule,
+    Boolean forwardToReplicas
+  ) throws AlgoliaRuntimeException {
     return this.saveRuleAsync(indexName, objectID, rule, forwardToReplicas, null);
   }
 
@@ -4016,8 +4025,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedRuleResponse> saveRuleAsync(String indexName, String objectID, Rule rule, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedRuleResponse> saveRuleAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull Rule rule,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.saveRuleAsync(indexName, objectID, rule, null, requestOptions);
   }
 
@@ -4030,7 +4043,8 @@ public class SearchClient extends ApiClient {
    * @param rule (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedRuleResponse> saveRuleAsync(String indexName, String objectID, Rule rule) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedRuleResponse> saveRuleAsync(@Nonnull String indexName, @Nonnull String objectID, @Nonnull Rule rule)
+    throws AlgoliaRuntimeException {
     return this.saveRuleAsync(indexName, objectID, rule, null, null);
   }
 
@@ -4048,8 +4062,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtResponse saveRules(
-    String indexName,
-    List<Rule> rules,
+    @Nonnull String indexName,
+    @Nonnull List<Rule> rules,
     Boolean forwardToReplicas,
     Boolean clearExistingRules,
     RequestOptions requestOptions
@@ -4068,8 +4082,12 @@ public class SearchClient extends ApiClient {
    *     batch. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse saveRules(String indexName, List<Rule> rules, Boolean forwardToReplicas, Boolean clearExistingRules)
-    throws AlgoliaRuntimeException {
+  public UpdatedAtResponse saveRules(
+    @Nonnull String indexName,
+    @Nonnull List<Rule> rules,
+    Boolean forwardToReplicas,
+    Boolean clearExistingRules
+  ) throws AlgoliaRuntimeException {
     return this.saveRules(indexName, rules, forwardToReplicas, clearExistingRules, null);
   }
 
@@ -4082,7 +4100,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse saveRules(String indexName, List<Rule> rules, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse saveRules(@Nonnull String indexName, @Nonnull List<Rule> rules, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return this.saveRules(indexName, rules, null, null, requestOptions);
   }
 
@@ -4093,7 +4112,7 @@ public class SearchClient extends ApiClient {
    * @param rules (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse saveRules(String indexName, List<Rule> rules) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse saveRules(@Nonnull String indexName, @Nonnull List<Rule> rules) throws AlgoliaRuntimeException {
     return this.saveRules(indexName, rules, null, null, null);
   }
 
@@ -4111,19 +4130,15 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> saveRulesAsync(
-    String indexName,
-    List<Rule> rules,
+    @Nonnull String indexName,
+    @Nonnull List<Rule> rules,
     Boolean forwardToReplicas,
     Boolean clearExistingRules,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `saveRules`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `saveRules`.");
 
-    if (rules == null) {
-      throw new AlgoliaRuntimeException("Parameter `rules` is required when calling `saveRules`.");
-    }
+    Parameters.requireNonNull(rules, "Parameter `rules` is required when calling `saveRules`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4148,8 +4163,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> saveRulesAsync(
-    String indexName,
-    List<Rule> rules,
+    @Nonnull String indexName,
+    @Nonnull List<Rule> rules,
     Boolean forwardToReplicas,
     Boolean clearExistingRules
   ) throws AlgoliaRuntimeException {
@@ -4165,8 +4180,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> saveRulesAsync(String indexName, List<Rule> rules, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> saveRulesAsync(
+    @Nonnull String indexName,
+    @Nonnull List<Rule> rules,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.saveRulesAsync(indexName, rules, null, null, requestOptions);
   }
 
@@ -4177,7 +4195,8 @@ public class SearchClient extends ApiClient {
    * @param rules (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> saveRulesAsync(String indexName, List<Rule> rules) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> saveRulesAsync(@Nonnull String indexName, @Nonnull List<Rule> rules)
+    throws AlgoliaRuntimeException {
     return this.saveRulesAsync(indexName, rules, null, null, null);
   }
 
@@ -4199,9 +4218,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SaveSynonymResponse saveSynonym(
-    String indexName,
-    String objectID,
-    SynonymHit synonymHit,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull SynonymHit synonymHit,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
@@ -4223,8 +4242,12 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SaveSynonymResponse saveSynonym(String indexName, String objectID, SynonymHit synonymHit, Boolean forwardToReplicas)
-    throws AlgoliaRuntimeException {
+  public SaveSynonymResponse saveSynonym(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull SynonymHit synonymHit,
+    Boolean forwardToReplicas
+  ) throws AlgoliaRuntimeException {
     return this.saveSynonym(indexName, objectID, synonymHit, forwardToReplicas, null);
   }
 
@@ -4243,8 +4266,12 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SaveSynonymResponse saveSynonym(String indexName, String objectID, SynonymHit synonymHit, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public SaveSynonymResponse saveSynonym(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull SynonymHit synonymHit,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.saveSynonym(indexName, objectID, synonymHit, null, requestOptions);
   }
 
@@ -4261,7 +4288,8 @@ public class SearchClient extends ApiClient {
    * @param synonymHit (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SaveSynonymResponse saveSynonym(String indexName, String objectID, SynonymHit synonymHit) throws AlgoliaRuntimeException {
+  public SaveSynonymResponse saveSynonym(@Nonnull String indexName, @Nonnull String objectID, @Nonnull SynonymHit synonymHit)
+    throws AlgoliaRuntimeException {
     return this.saveSynonym(indexName, objectID, synonymHit, null, null);
   }
 
@@ -4283,23 +4311,17 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SaveSynonymResponse> saveSynonymAsync(
-    String indexName,
-    String objectID,
-    SynonymHit synonymHit,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull SynonymHit synonymHit,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `saveSynonym`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `saveSynonym`.");
 
-    if (objectID == null) {
-      throw new AlgoliaRuntimeException("Parameter `objectID` is required when calling `saveSynonym`.");
-    }
+    Parameters.requireNonNull(objectID, "Parameter `objectID` is required when calling `saveSynonym`.");
 
-    if (synonymHit == null) {
-      throw new AlgoliaRuntimeException("Parameter `synonymHit` is required when calling `saveSynonym`.");
-    }
+    Parameters.requireNonNull(synonymHit, "Parameter `synonymHit` is required when calling `saveSynonym`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4327,9 +4349,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SaveSynonymResponse> saveSynonymAsync(
-    String indexName,
-    String objectID,
-    SynonymHit synonymHit,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull SynonymHit synonymHit,
     Boolean forwardToReplicas
   ) throws AlgoliaRuntimeException {
     return this.saveSynonymAsync(indexName, objectID, synonymHit, forwardToReplicas, null);
@@ -4351,9 +4373,9 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SaveSynonymResponse> saveSynonymAsync(
-    String indexName,
-    String objectID,
-    SynonymHit synonymHit,
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull SynonymHit synonymHit,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return this.saveSynonymAsync(indexName, objectID, synonymHit, null, requestOptions);
@@ -4372,8 +4394,11 @@ public class SearchClient extends ApiClient {
    * @param synonymHit (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SaveSynonymResponse> saveSynonymAsync(String indexName, String objectID, SynonymHit synonymHit)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<SaveSynonymResponse> saveSynonymAsync(
+    @Nonnull String indexName,
+    @Nonnull String objectID,
+    @Nonnull SynonymHit synonymHit
+  ) throws AlgoliaRuntimeException {
     return this.saveSynonymAsync(indexName, objectID, synonymHit, null, null);
   }
 
@@ -4391,8 +4416,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtResponse saveSynonyms(
-    String indexName,
-    List<SynonymHit> synonymHit,
+    @Nonnull String indexName,
+    @Nonnull List<SynonymHit> synonymHit,
     Boolean forwardToReplicas,
     Boolean replaceExistingSynonyms,
     RequestOptions requestOptions
@@ -4412,8 +4437,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtResponse saveSynonyms(
-    String indexName,
-    List<SynonymHit> synonymHit,
+    @Nonnull String indexName,
+    @Nonnull List<SynonymHit> synonymHit,
     Boolean forwardToReplicas,
     Boolean replaceExistingSynonyms
   ) throws AlgoliaRuntimeException {
@@ -4429,7 +4454,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse saveSynonyms(String indexName, List<SynonymHit> synonymHit, RequestOptions requestOptions)
+  public UpdatedAtResponse saveSynonyms(@Nonnull String indexName, @Nonnull List<SynonymHit> synonymHit, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.saveSynonyms(indexName, synonymHit, null, null, requestOptions);
   }
@@ -4441,7 +4466,7 @@ public class SearchClient extends ApiClient {
    * @param synonymHit (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse saveSynonyms(String indexName, List<SynonymHit> synonymHit) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse saveSynonyms(@Nonnull String indexName, @Nonnull List<SynonymHit> synonymHit) throws AlgoliaRuntimeException {
     return this.saveSynonyms(indexName, synonymHit, null, null, null);
   }
 
@@ -4459,19 +4484,15 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> saveSynonymsAsync(
-    String indexName,
-    List<SynonymHit> synonymHit,
+    @Nonnull String indexName,
+    @Nonnull List<SynonymHit> synonymHit,
     Boolean forwardToReplicas,
     Boolean replaceExistingSynonyms,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `saveSynonyms`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `saveSynonyms`.");
 
-    if (synonymHit == null) {
-      throw new AlgoliaRuntimeException("Parameter `synonymHit` is required when calling `saveSynonyms`.");
-    }
+    Parameters.requireNonNull(synonymHit, "Parameter `synonymHit` is required when calling `saveSynonyms`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4496,8 +4517,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> saveSynonymsAsync(
-    String indexName,
-    List<SynonymHit> synonymHit,
+    @Nonnull String indexName,
+    @Nonnull List<SynonymHit> synonymHit,
     Boolean forwardToReplicas,
     Boolean replaceExistingSynonyms
   ) throws AlgoliaRuntimeException {
@@ -4514,8 +4535,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> saveSynonymsAsync(
-    String indexName,
-    List<SynonymHit> synonymHit,
+    @Nonnull String indexName,
+    @Nonnull List<SynonymHit> synonymHit,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return this.saveSynonymsAsync(indexName, synonymHit, null, null, requestOptions);
@@ -4528,7 +4549,7 @@ public class SearchClient extends ApiClient {
    * @param synonymHit (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> saveSynonymsAsync(String indexName, List<SynonymHit> synonymHit)
+  public CompletableFuture<UpdatedAtResponse> saveSynonymsAsync(@Nonnull String indexName, @Nonnull List<SynonymHit> synonymHit)
     throws AlgoliaRuntimeException {
     return this.saveSynonymsAsync(indexName, synonymHit, null, null, null);
   }
@@ -4538,14 +4559,13 @@ public class SearchClient extends ApiClient {
    *
    * @param searchMethodParams Query requests and strategies. Results will be received in the same
    *     order as the queries. (required)
-   * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> SearchResponses<T> search(SearchMethodParams searchMethodParams, Class<T> innerType, RequestOptions requestOptions)
+  public SearchResponses search(@Nonnull SearchMethodParams searchMethodParams, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
-    return LaunderThrowable.await(searchAsync(searchMethodParams, innerType, requestOptions));
+    return LaunderThrowable.await(searchAsync(searchMethodParams, requestOptions));
   }
 
   /**
@@ -4553,11 +4573,10 @@ public class SearchClient extends ApiClient {
    *
    * @param searchMethodParams Query requests and strategies. Results will be received in the same
    *     order as the queries. (required)
-   * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> SearchResponses<T> search(SearchMethodParams searchMethodParams, Class<T> innerType) throws AlgoliaRuntimeException {
-    return this.search(searchMethodParams, innerType, null);
+  public SearchResponses search(@Nonnull SearchMethodParams searchMethodParams) throws AlgoliaRuntimeException {
+    return this.search(searchMethodParams, null);
   }
 
   /**
@@ -4565,19 +4584,13 @@ public class SearchClient extends ApiClient {
    *
    * @param searchMethodParams Query requests and strategies. Results will be received in the same
    *     order as the queries. (required)
-   * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<SearchResponses<T>> searchAsync(
-    SearchMethodParams searchMethodParams,
-    Class<T> innerType,
-    RequestOptions requestOptions
-  ) throws AlgoliaRuntimeException {
-    if (searchMethodParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `searchMethodParams` is required when calling `search`.");
-    }
+  public CompletableFuture<SearchResponses> searchAsync(@Nonnull SearchMethodParams searchMethodParams, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(searchMethodParams, "Parameter `searchMethodParams` is required when calling `search`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4586,7 +4599,7 @@ public class SearchClient extends ApiClient {
       .setBody(searchMethodParams)
       .setRead(true)
       .build();
-    return executeAsync(request, requestOptions, SearchResponses.class, innerType);
+    return executeAsync(request, requestOptions, new TypeReference<SearchResponses>() {});
   }
 
   /**
@@ -4594,12 +4607,10 @@ public class SearchClient extends ApiClient {
    *
    * @param searchMethodParams Query requests and strategies. Results will be received in the same
    *     order as the queries. (required)
-   * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<SearchResponses<T>> searchAsync(SearchMethodParams searchMethodParams, Class<T> innerType)
-    throws AlgoliaRuntimeException {
-    return this.searchAsync(searchMethodParams, innerType, null);
+  public CompletableFuture<SearchResponses> searchAsync(@Nonnull SearchMethodParams searchMethodParams) throws AlgoliaRuntimeException {
+    return this.searchAsync(searchMethodParams, null);
   }
 
   /**
@@ -4619,8 +4630,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtResponse searchDictionaryEntries(
-    DictionaryType dictionaryName,
-    SearchDictionaryEntriesParams searchDictionaryEntriesParams,
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull SearchDictionaryEntriesParams searchDictionaryEntriesParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return LaunderThrowable.await(searchDictionaryEntriesAsync(dictionaryName, searchDictionaryEntriesParams, requestOptions));
@@ -4641,8 +4652,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtResponse searchDictionaryEntries(
-    DictionaryType dictionaryName,
-    SearchDictionaryEntriesParams searchDictionaryEntriesParams
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull SearchDictionaryEntriesParams searchDictionaryEntriesParams
   ) throws AlgoliaRuntimeException {
     return this.searchDictionaryEntries(dictionaryName, searchDictionaryEntriesParams, null);
   }
@@ -4664,19 +4675,16 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> searchDictionaryEntriesAsync(
-    DictionaryType dictionaryName,
-    SearchDictionaryEntriesParams searchDictionaryEntriesParams,
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull SearchDictionaryEntriesParams searchDictionaryEntriesParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (dictionaryName == null) {
-      throw new AlgoliaRuntimeException("Parameter `dictionaryName` is required when calling `searchDictionaryEntries`.");
-    }
+    Parameters.requireNonNull(dictionaryName, "Parameter `dictionaryName` is required when calling `searchDictionaryEntries`.");
 
-    if (searchDictionaryEntriesParams == null) {
-      throw new AlgoliaRuntimeException(
-        "Parameter `searchDictionaryEntriesParams` is required when calling" + " `searchDictionaryEntries`."
-      );
-    }
+    Parameters.requireNonNull(
+      searchDictionaryEntriesParams,
+      "Parameter `searchDictionaryEntriesParams` is required when calling" + " `searchDictionaryEntries`."
+    );
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4703,8 +4711,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> searchDictionaryEntriesAsync(
-    DictionaryType dictionaryName,
-    SearchDictionaryEntriesParams searchDictionaryEntriesParams
+    @Nonnull DictionaryType dictionaryName,
+    @Nonnull SearchDictionaryEntriesParams searchDictionaryEntriesParams
   ) throws AlgoliaRuntimeException {
     return this.searchDictionaryEntriesAsync(dictionaryName, searchDictionaryEntriesParams, null);
   }
@@ -4724,8 +4732,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchForFacetValuesResponse searchForFacetValues(
-    String indexName,
-    String facetName,
+    @Nonnull String indexName,
+    @Nonnull String facetName,
     SearchForFacetValuesRequest searchForFacetValuesRequest,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
@@ -4745,8 +4753,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchForFacetValuesResponse searchForFacetValues(
-    String indexName,
-    String facetName,
+    @Nonnull String indexName,
+    @Nonnull String facetName,
     SearchForFacetValuesRequest searchForFacetValuesRequest
   ) throws AlgoliaRuntimeException {
     return this.searchForFacetValues(indexName, facetName, searchForFacetValuesRequest, null);
@@ -4765,8 +4773,11 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchForFacetValuesResponse searchForFacetValues(String indexName, String facetName, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
+  public SearchForFacetValuesResponse searchForFacetValues(
+    @Nonnull String indexName,
+    @Nonnull String facetName,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
     return this.searchForFacetValues(indexName, facetName, null, requestOptions);
   }
 
@@ -4781,7 +4792,8 @@ public class SearchClient extends ApiClient {
    * @param facetName Facet name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchForFacetValuesResponse searchForFacetValues(String indexName, String facetName) throws AlgoliaRuntimeException {
+  public SearchForFacetValuesResponse searchForFacetValues(@Nonnull String indexName, @Nonnull String facetName)
+    throws AlgoliaRuntimeException {
     return this.searchForFacetValues(indexName, facetName, null, null);
   }
 
@@ -4801,18 +4813,14 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchForFacetValuesResponse> searchForFacetValuesAsync(
-    String indexName,
-    String facetName,
+    @Nonnull String indexName,
+    @Nonnull String facetName,
     SearchForFacetValuesRequest searchForFacetValuesRequest,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `searchForFacetValues`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `searchForFacetValues`.");
 
-    if (facetName == null) {
-      throw new AlgoliaRuntimeException("Parameter `facetName` is required when calling `searchForFacetValues`.");
-    }
+    Parameters.requireNonNull(facetName, "Parameter `facetName` is required when calling `searchForFacetValues`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4838,8 +4846,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchForFacetValuesResponse> searchForFacetValuesAsync(
-    String indexName,
-    String facetName,
+    @Nonnull String indexName,
+    @Nonnull String facetName,
     SearchForFacetValuesRequest searchForFacetValuesRequest
   ) throws AlgoliaRuntimeException {
     return this.searchForFacetValuesAsync(indexName, facetName, searchForFacetValuesRequest, null);
@@ -4860,8 +4868,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchForFacetValuesResponse> searchForFacetValuesAsync(
-    String indexName,
-    String facetName,
+    @Nonnull String indexName,
+    @Nonnull String facetName,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return this.searchForFacetValuesAsync(indexName, facetName, null, requestOptions);
@@ -4879,7 +4887,7 @@ public class SearchClient extends ApiClient {
    * @param facetName Facet name. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SearchForFacetValuesResponse> searchForFacetValuesAsync(String indexName, String facetName)
+  public CompletableFuture<SearchForFacetValuesResponse> searchForFacetValuesAsync(@Nonnull String indexName, @Nonnull String facetName)
     throws AlgoliaRuntimeException {
     return this.searchForFacetValuesAsync(indexName, facetName, null, null);
   }
@@ -4894,7 +4902,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchRulesResponse searchRules(String indexName, SearchRulesParams searchRulesParams, RequestOptions requestOptions)
+  public SearchRulesResponse searchRules(@Nonnull String indexName, SearchRulesParams searchRulesParams, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(searchRulesAsync(indexName, searchRulesParams, requestOptions));
   }
@@ -4907,7 +4915,7 @@ public class SearchClient extends ApiClient {
    * @param searchRulesParams (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchRulesResponse searchRules(String indexName, SearchRulesParams searchRulesParams) throws AlgoliaRuntimeException {
+  public SearchRulesResponse searchRules(@Nonnull String indexName, SearchRulesParams searchRulesParams) throws AlgoliaRuntimeException {
     return this.searchRules(indexName, searchRulesParams, null);
   }
 
@@ -4920,7 +4928,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchRulesResponse searchRules(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public SearchRulesResponse searchRules(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.searchRules(indexName, null, requestOptions);
   }
 
@@ -4931,7 +4939,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchRulesResponse searchRules(String indexName) throws AlgoliaRuntimeException {
+  public SearchRulesResponse searchRules(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.searchRules(indexName, null, null);
   }
 
@@ -4946,13 +4954,11 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchRulesResponse> searchRulesAsync(
-    String indexName,
+    @Nonnull String indexName,
     SearchRulesParams searchRulesParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `searchRules`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `searchRules`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -4972,7 +4978,7 @@ public class SearchClient extends ApiClient {
    * @param searchRulesParams (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SearchRulesResponse> searchRulesAsync(String indexName, SearchRulesParams searchRulesParams)
+  public CompletableFuture<SearchRulesResponse> searchRulesAsync(@Nonnull String indexName, SearchRulesParams searchRulesParams)
     throws AlgoliaRuntimeException {
     return this.searchRulesAsync(indexName, searchRulesParams, null);
   }
@@ -4986,7 +4992,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SearchRulesResponse> searchRulesAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<SearchRulesResponse> searchRulesAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.searchRulesAsync(indexName, null, requestOptions);
   }
@@ -4998,7 +5004,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SearchRulesResponse> searchRulesAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<SearchRulesResponse> searchRulesAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.searchRulesAsync(indexName, null, null);
   }
 
@@ -5013,7 +5019,7 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public <T> SearchResponse<T> searchSingleIndex(
-    String indexName,
+    @Nonnull String indexName,
     SearchParams searchParams,
     Class<T> innerType,
     RequestOptions requestOptions
@@ -5029,7 +5035,7 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> SearchResponse<T> searchSingleIndex(String indexName, SearchParams searchParams, Class<T> innerType)
+  public <T> SearchResponse<T> searchSingleIndex(@Nonnull String indexName, SearchParams searchParams, Class<T> innerType)
     throws AlgoliaRuntimeException {
     return this.searchSingleIndex(indexName, searchParams, innerType, null);
   }
@@ -5043,7 +5049,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> SearchResponse<T> searchSingleIndex(String indexName, Class<T> innerType, RequestOptions requestOptions)
+  public <T> SearchResponse<T> searchSingleIndex(@Nonnull String indexName, Class<T> innerType, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.searchSingleIndex(indexName, null, innerType, requestOptions);
   }
@@ -5055,7 +5061,7 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> SearchResponse<T> searchSingleIndex(String indexName, Class<T> innerType) throws AlgoliaRuntimeException {
+  public <T> SearchResponse<T> searchSingleIndex(@Nonnull String indexName, Class<T> innerType) throws AlgoliaRuntimeException {
     return this.searchSingleIndex(indexName, null, innerType, null);
   }
 
@@ -5070,14 +5076,12 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public <T> CompletableFuture<SearchResponse<T>> searchSingleIndexAsync(
-    String indexName,
+    @Nonnull String indexName,
     SearchParams searchParams,
     Class<T> innerType,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `searchSingleIndex`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `searchSingleIndex`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -5097,8 +5101,11 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<SearchResponse<T>> searchSingleIndexAsync(String indexName, SearchParams searchParams, Class<T> innerType)
-    throws AlgoliaRuntimeException {
+  public <T> CompletableFuture<SearchResponse<T>> searchSingleIndexAsync(
+    @Nonnull String indexName,
+    SearchParams searchParams,
+    Class<T> innerType
+  ) throws AlgoliaRuntimeException {
     return this.searchSingleIndexAsync(indexName, searchParams, innerType, null);
   }
 
@@ -5112,7 +5119,7 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public <T> CompletableFuture<SearchResponse<T>> searchSingleIndexAsync(
-    String indexName,
+    @Nonnull String indexName,
     Class<T> innerType,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
@@ -5126,7 +5133,7 @@ public class SearchClient extends ApiClient {
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public <T> CompletableFuture<SearchResponse<T>> searchSingleIndexAsync(String indexName, Class<T> innerType)
+  public <T> CompletableFuture<SearchResponse<T>> searchSingleIndexAsync(@Nonnull String indexName, Class<T> innerType)
     throws AlgoliaRuntimeException {
     return this.searchSingleIndexAsync(indexName, null, innerType, null);
   }
@@ -5148,7 +5155,7 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchSynonymsResponse searchSynonyms(
-    String indexName,
+    @Nonnull String indexName,
     SynonymType type,
     Integer page,
     Integer hitsPerPage,
@@ -5173,7 +5180,7 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public SearchSynonymsResponse searchSynonyms(
-    String indexName,
+    @Nonnull String indexName,
     SynonymType type,
     Integer page,
     Integer hitsPerPage,
@@ -5191,7 +5198,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchSynonymsResponse searchSynonyms(String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public SearchSynonymsResponse searchSynonyms(@Nonnull String indexName, RequestOptions requestOptions) throws AlgoliaRuntimeException {
     return this.searchSynonyms(indexName, null, null, null, null, requestOptions);
   }
 
@@ -5202,7 +5209,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchSynonymsResponse searchSynonyms(String indexName) throws AlgoliaRuntimeException {
+  public SearchSynonymsResponse searchSynonyms(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.searchSynonyms(indexName, null, null, null, null, null);
   }
 
@@ -5223,16 +5230,14 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchSynonymsResponse> searchSynonymsAsync(
-    String indexName,
+    @Nonnull String indexName,
     SynonymType type,
     Integer page,
     Integer hitsPerPage,
     SearchSynonymsParams searchSynonymsParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `searchSynonyms`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `searchSynonyms`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -5262,7 +5267,7 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchSynonymsResponse> searchSynonymsAsync(
-    String indexName,
+    @Nonnull String indexName,
     SynonymType type,
     Integer page,
     Integer hitsPerPage,
@@ -5280,7 +5285,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SearchSynonymsResponse> searchSynonymsAsync(String indexName, RequestOptions requestOptions)
+  public CompletableFuture<SearchSynonymsResponse> searchSynonymsAsync(@Nonnull String indexName, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.searchSynonymsAsync(indexName, null, null, null, null, requestOptions);
   }
@@ -5292,7 +5297,7 @@ public class SearchClient extends ApiClient {
    * @param indexName Index on which to perform the request. (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SearchSynonymsResponse> searchSynonymsAsync(String indexName) throws AlgoliaRuntimeException {
+  public CompletableFuture<SearchSynonymsResponse> searchSynonymsAsync(@Nonnull String indexName) throws AlgoliaRuntimeException {
     return this.searchSynonymsAsync(indexName, null, null, null, null, null);
   }
 
@@ -5308,7 +5313,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchUserIdsResponse searchUserIds(SearchUserIdsParams searchUserIdsParams, RequestOptions requestOptions)
+  public SearchUserIdsResponse searchUserIds(@Nonnull SearchUserIdsParams searchUserIdsParams, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(searchUserIdsAsync(searchUserIdsParams, requestOptions));
   }
@@ -5323,7 +5328,7 @@ public class SearchClient extends ApiClient {
    * @param searchUserIdsParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public SearchUserIdsResponse searchUserIds(SearchUserIdsParams searchUserIdsParams) throws AlgoliaRuntimeException {
+  public SearchUserIdsResponse searchUserIds(@Nonnull SearchUserIdsParams searchUserIdsParams) throws AlgoliaRuntimeException {
     return this.searchUserIds(searchUserIdsParams, null);
   }
 
@@ -5340,12 +5345,10 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<SearchUserIdsResponse> searchUserIdsAsync(
-    SearchUserIdsParams searchUserIdsParams,
+    @Nonnull SearchUserIdsParams searchUserIdsParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (searchUserIdsParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `searchUserIdsParams` is required when calling `searchUserIds`.");
-    }
+    Parameters.requireNonNull(searchUserIdsParams, "Parameter `searchUserIdsParams` is required when calling `searchUserIds`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -5367,7 +5370,7 @@ public class SearchClient extends ApiClient {
    * @param searchUserIdsParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<SearchUserIdsResponse> searchUserIdsAsync(SearchUserIdsParams searchUserIdsParams)
+  public CompletableFuture<SearchUserIdsResponse> searchUserIdsAsync(@Nonnull SearchUserIdsParams searchUserIdsParams)
     throws AlgoliaRuntimeException {
     return this.searchUserIdsAsync(searchUserIdsParams, null);
   }
@@ -5380,7 +5383,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse setDictionarySettings(DictionarySettingsParams dictionarySettingsParams, RequestOptions requestOptions)
+  public UpdatedAtResponse setDictionarySettings(@Nonnull DictionarySettingsParams dictionarySettingsParams, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return LaunderThrowable.await(setDictionarySettingsAsync(dictionarySettingsParams, requestOptions));
   }
@@ -5391,7 +5394,8 @@ public class SearchClient extends ApiClient {
    * @param dictionarySettingsParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse setDictionarySettings(DictionarySettingsParams dictionarySettingsParams) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse setDictionarySettings(@Nonnull DictionarySettingsParams dictionarySettingsParams)
+    throws AlgoliaRuntimeException {
     return this.setDictionarySettings(dictionarySettingsParams, null);
   }
 
@@ -5404,12 +5408,13 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> setDictionarySettingsAsync(
-    DictionarySettingsParams dictionarySettingsParams,
+    @Nonnull DictionarySettingsParams dictionarySettingsParams,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (dictionarySettingsParams == null) {
-      throw new AlgoliaRuntimeException("Parameter `dictionarySettingsParams` is required when calling `setDictionarySettings`.");
-    }
+    Parameters.requireNonNull(
+      dictionarySettingsParams,
+      "Parameter `dictionarySettingsParams` is required when calling `setDictionarySettings`."
+    );
 
     HttpRequest request = HttpRequest
       .builder()
@@ -5426,7 +5431,7 @@ public class SearchClient extends ApiClient {
    * @param dictionarySettingsParams (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> setDictionarySettingsAsync(DictionarySettingsParams dictionarySettingsParams)
+  public CompletableFuture<UpdatedAtResponse> setDictionarySettingsAsync(@Nonnull DictionarySettingsParams dictionarySettingsParams)
     throws AlgoliaRuntimeException {
     return this.setDictionarySettingsAsync(dictionarySettingsParams, null);
   }
@@ -5445,8 +5450,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public UpdatedAtResponse setSettings(
-    String indexName,
-    IndexSettings indexSettings,
+    @Nonnull String indexName,
+    @Nonnull IndexSettings indexSettings,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
@@ -5464,7 +5469,7 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse setSettings(String indexName, IndexSettings indexSettings, Boolean forwardToReplicas)
+  public UpdatedAtResponse setSettings(@Nonnull String indexName, @Nonnull IndexSettings indexSettings, Boolean forwardToReplicas)
     throws AlgoliaRuntimeException {
     return this.setSettings(indexName, indexSettings, forwardToReplicas, null);
   }
@@ -5480,7 +5485,7 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse setSettings(String indexName, IndexSettings indexSettings, RequestOptions requestOptions)
+  public UpdatedAtResponse setSettings(@Nonnull String indexName, @Nonnull IndexSettings indexSettings, RequestOptions requestOptions)
     throws AlgoliaRuntimeException {
     return this.setSettings(indexName, indexSettings, null, requestOptions);
   }
@@ -5494,7 +5499,7 @@ public class SearchClient extends ApiClient {
    * @param indexSettings (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdatedAtResponse setSettings(String indexName, IndexSettings indexSettings) throws AlgoliaRuntimeException {
+  public UpdatedAtResponse setSettings(@Nonnull String indexName, @Nonnull IndexSettings indexSettings) throws AlgoliaRuntimeException {
     return this.setSettings(indexName, indexSettings, null, null);
   }
 
@@ -5512,18 +5517,14 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> setSettingsAsync(
-    String indexName,
-    IndexSettings indexSettings,
+    @Nonnull String indexName,
+    @Nonnull IndexSettings indexSettings,
     Boolean forwardToReplicas,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
-    if (indexName == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexName` is required when calling `setSettings`.");
-    }
+    Parameters.requireNonNull(indexName, "Parameter `indexName` is required when calling `setSettings`.");
 
-    if (indexSettings == null) {
-      throw new AlgoliaRuntimeException("Parameter `indexSettings` is required when calling `setSettings`.");
-    }
+    Parameters.requireNonNull(indexSettings, "Parameter `indexSettings` is required when calling `setSettings`.");
 
     HttpRequest request = HttpRequest
       .builder()
@@ -5546,8 +5547,11 @@ public class SearchClient extends ApiClient {
    *     indices. (optional)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> setSettingsAsync(String indexName, IndexSettings indexSettings, Boolean forwardToReplicas)
-    throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdatedAtResponse> setSettingsAsync(
+    @Nonnull String indexName,
+    @Nonnull IndexSettings indexSettings,
+    Boolean forwardToReplicas
+  ) throws AlgoliaRuntimeException {
     return this.setSettingsAsync(indexName, indexSettings, forwardToReplicas, null);
   }
 
@@ -5563,8 +5567,8 @@ public class SearchClient extends ApiClient {
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
   public CompletableFuture<UpdatedAtResponse> setSettingsAsync(
-    String indexName,
-    IndexSettings indexSettings,
+    @Nonnull String indexName,
+    @Nonnull IndexSettings indexSettings,
     RequestOptions requestOptions
   ) throws AlgoliaRuntimeException {
     return this.setSettingsAsync(indexName, indexSettings, null, requestOptions);
@@ -5579,7 +5583,7 @@ public class SearchClient extends ApiClient {
    * @param indexSettings (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdatedAtResponse> setSettingsAsync(String indexName, IndexSettings indexSettings)
+  public CompletableFuture<UpdatedAtResponse> setSettingsAsync(@Nonnull String indexName, @Nonnull IndexSettings indexSettings)
     throws AlgoliaRuntimeException {
     return this.setSettingsAsync(indexName, indexSettings, null, null);
   }
@@ -5594,7 +5598,8 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdateApiKeyResponse updateApiKey(String key, ApiKey apiKey, RequestOptions requestOptions) throws AlgoliaRuntimeException {
+  public UpdateApiKeyResponse updateApiKey(@Nonnull String key, @Nonnull ApiKey apiKey, RequestOptions requestOptions)
+    throws AlgoliaRuntimeException {
     return LaunderThrowable.await(updateApiKeyAsync(key, apiKey, requestOptions));
   }
 
@@ -5606,7 +5611,7 @@ public class SearchClient extends ApiClient {
    * @param apiKey (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public UpdateApiKeyResponse updateApiKey(String key, ApiKey apiKey) throws AlgoliaRuntimeException {
+  public UpdateApiKeyResponse updateApiKey(@Nonnull String key, @Nonnull ApiKey apiKey) throws AlgoliaRuntimeException {
     return this.updateApiKey(key, apiKey, null);
   }
 
@@ -5621,15 +5626,14 @@ public class SearchClient extends ApiClient {
    *     the transporter requestOptions.
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdateApiKeyResponse> updateApiKeyAsync(String key, ApiKey apiKey, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    if (key == null) {
-      throw new AlgoliaRuntimeException("Parameter `key` is required when calling `updateApiKey`.");
-    }
+  public CompletableFuture<UpdateApiKeyResponse> updateApiKeyAsync(
+    @Nonnull String key,
+    @Nonnull ApiKey apiKey,
+    RequestOptions requestOptions
+  ) throws AlgoliaRuntimeException {
+    Parameters.requireNonNull(key, "Parameter `key` is required when calling `updateApiKey`.");
 
-    if (apiKey == null) {
-      throw new AlgoliaRuntimeException("Parameter `apiKey` is required when calling `updateApiKey`.");
-    }
+    Parameters.requireNonNull(apiKey, "Parameter `apiKey` is required when calling `updateApiKey`.");
 
     HttpRequest request = HttpRequest.builder().setPath("/1/keys/{key}", key).setMethod("PUT").setBody(apiKey).build();
     return executeAsync(request, requestOptions, new TypeReference<UpdateApiKeyResponse>() {});
@@ -5644,14 +5648,14 @@ public class SearchClient extends ApiClient {
    * @param apiKey (required)
    * @throws AlgoliaRuntimeException If it fails to process the API call
    */
-  public CompletableFuture<UpdateApiKeyResponse> updateApiKeyAsync(String key, ApiKey apiKey) throws AlgoliaRuntimeException {
+  public CompletableFuture<UpdateApiKeyResponse> updateApiKeyAsync(@Nonnull String key, @Nonnull ApiKey apiKey)
+    throws AlgoliaRuntimeException {
     return this.updateApiKeyAsync(key, apiKey, null);
   }
 
   /**
    * Helper: Wait for a task to complete with `indexName` and `taskID`.
    *
-   * @summary Wait for a task to complete.
    * @param indexName The `indexName` where the operation was performed.
    * @param taskID The `taskID` returned in the method response.
    * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -5662,12 +5666,8 @@ public class SearchClient extends ApiClient {
    */
   public void waitForTask(String indexName, Long taskID, int maxRetries, IntUnaryOperator timeout, RequestOptions requestOptions) {
     TaskUtils.retryUntil(
-      () -> {
-        return this.getTask(indexName, taskID, requestOptions);
-      },
-      (GetTaskResponse task) -> {
-        return task.getStatus() == TaskStatus.PUBLISHED;
-      },
+      () -> this.getTask(indexName, taskID, requestOptions),
+      (GetTaskResponse task) -> task.getStatus() == TaskStatus.PUBLISHED,
       maxRetries,
       timeout
     );
@@ -5676,7 +5676,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for a task to complete with `indexName` and `taskID`.
    *
-   * @summary Wait for a task to complete.
    * @param indexName The `indexName` where the operation was performed.
    * @param taskID The `taskID` returned in the method response.
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
@@ -5689,7 +5688,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for a task to complete with `indexName` and `taskID`.
    *
-   * @summary Wait for a task to complete.
    * @param indexName The `indexName` where the operation was performed.
    * @param taskID The `taskID` returned in the method response.
    * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -5703,7 +5701,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for a task to complete with `indexName` and `taskID`.
    *
-   * @summary Wait for a task to complete.
    * @param indexName The `indexName` where the operation was performed.
    * @param taskID The `taskID` returned in the method response.
    */
@@ -5714,7 +5711,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`.
    * @param key The `key` that has been added, deleted or updated.
    * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of
@@ -5740,9 +5736,7 @@ public class SearchClient extends ApiClient {
 
       // when updating an api key, we poll the api until we receive a different key
       return TaskUtils.retryUntil(
-        () -> {
-          return this.getApiKey(key, requestOptions);
-        },
+        () -> this.getApiKey(key, requestOptions),
         (GetApiKeyResponse respKey) -> {
           // we need to convert to an ApiKey object to use the `equals` method
           ApiKey sameType = new ApiKey()
@@ -5799,7 +5793,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
    * @param key The `key` that has been added, deleted or updated.
    * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -5821,7 +5814,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`.
    * @param key The `key` that has been added, deleted or updated.
    * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of
@@ -5836,7 +5828,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
    * @param key The `key` that has been added, deleted or updated.
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
@@ -5849,7 +5840,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`.
    * @param key The `key` that has been added, deleted or updated.
    * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of
@@ -5865,7 +5855,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
    * @param key The `key` that has been added, deleted or updated.
    * @param maxRetries The maximum number of retry. 50 by default. (optional)
@@ -5879,7 +5868,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`.
    * @param key The `key` that has been added, deleted or updated.
    * @param apiKey Necessary to know if an `update` operation has been processed, compare fields of
@@ -5892,7 +5880,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
    *
-   * @summary Wait for an API key task to be processed.
    * @param operation The `operation` that was done on a `key`. (ADD or DELETE only)
    * @param key The `key` that has been added, deleted or updated.
    */
@@ -5903,7 +5890,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Returns an iterator on top of the `browse` method.
    *
-   * @summary Returns an iterator on `browse`.
    * @param indexName The index in which to perform the request.
    * @param params The `browse` parameters.
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
@@ -5915,21 +5901,18 @@ public class SearchClient extends ApiClient {
 
     return AlgoliaIterableHelper.createIterable(
       () -> {
-        BrowseResponse<T> response = this.browse(indexName, BrowseParams.of(params), innerType, requestOptions);
+        BrowseResponse<T> response = this.browse(indexName, params, innerType, requestOptions);
         params.setCursor(response.getCursor());
         currentCursor.value = response.getCursor();
         return response.getHits().iterator();
       },
-      () -> {
-        return currentCursor.value != null;
-      }
+      () -> currentCursor.value != null
     );
   }
 
   /**
    * Helper: Returns an iterator on top of the `browse` method.
    *
-   * @summary Returns an iterator on `browse`.
    * @param indexName The index in which to perform the request.
    * @param params The `browse` parameters.
    * @param innerType The class held by the index, could be your custom class or {@link Object}.
@@ -5941,7 +5924,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Returns an iterator on top of the `searchSynonyms` method.
    *
-   * @summary Returns an iterator on `searchSynonyms`.
    * @param indexName The index in which to perform the request.
    * @param type The synonym type. (optional)
    * @param params The `searchSynonyms` parameters. (optional)
@@ -5963,16 +5945,13 @@ public class SearchClient extends ApiClient {
         currentPage.value = response.getNbHits() < hitsPerPage ? null : currentPage.value + 1;
         return response.getHits().iterator();
       },
-      () -> {
-        return currentPage.value != null;
-      }
+      () -> currentPage.value != null
     );
   }
 
   /**
    * Helper: Returns an iterator on top of the `searchSynonyms` method.
    *
-   * @summary Returns an iterator on `searchSynonyms`.
    * @param indexName The index in which to perform the request.
    * @param type The synonym type. (optional)
    * @param params The `searchSynonyms` parameters .(optional)
@@ -5984,7 +5963,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Returns an iterator on top of the `searchSynonyms` method.
    *
-   * @summary Returns an iterator on `searchSynonyms`.
    * @param indexName The index in which to perform the request.
    */
   public Iterable<SynonymHit> browseSynonyms(String indexName) {
@@ -5994,7 +5972,6 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Returns an iterator on top of the `searchRules` method.
    *
-   * @summary Returns an iterator on `searchRules`.
    * @param indexName The index in which to perform the request.
    * @param params The `searchRules` parameters. (optional)
    * @param requestOptions The requestOptions to send along with the query, they will be merged with
@@ -6011,16 +5988,13 @@ public class SearchClient extends ApiClient {
         currentPage.value = response.getNbHits() < hitsPerPage ? null : currentPage.value + 1;
         return response.getHits().iterator();
       },
-      () -> {
-        return currentPage.value != null;
-      }
+      () -> currentPage.value != null
     );
   }
 
   /**
    * Helper: Returns an iterator on top of the `searchRules` method.
    *
-   * @summary Returns an iterator on `searchRules`.
    * @param indexName The index in which to perform the request.
    * @param params The `searchRules` parameters. (optional)
    */
@@ -6031,58 +6005,9 @@ public class SearchClient extends ApiClient {
   /**
    * Helper: Returns an iterator on top of the `searchRules` method.
    *
-   * @summary Returns an iterator on `searchRules`.
    * @param indexName The index in which to perform the request.
    */
   public Iterable<Rule> browseRules(String indexName) {
-    return browseRules(indexName, null, null);
-  }
-
-  /**
-   * (asynchronously) Send multiple search queries to one or more indices.
-   *
-   * @param searchMethodParams Query requests and strategies. Results will be received in the same
-   *     order as the queries. (required)
-   * @throws AlgoliaRuntimeException If it fails to process the API call
-   */
-  public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    return this.searchAsync(searchMethodParams, Object.class, requestOptions);
-  }
-
-  /**
-   * (asynchronously) Send multiple search queries to one or more indices.
-   *
-   * @param searchMethodParams Query requests and strategies. Results will be received in the same
-   *     order as the queries. (required)
-   * @throws AlgoliaRuntimeException If it fails to process the API call
-   */
-  public CompletableFuture<SearchResponses<Object>> searchAsync(SearchMethodParams searchMethodParams) throws AlgoliaRuntimeException {
-    return this.searchAsync(searchMethodParams, Object.class, null);
-  }
-
-  /**
-   * Send multiple search queries to one or more indices.
-   *
-   * @param searchMethodParams Query requests and strategies. Results will be received in the same
-   *     order as the queries. (required)
-   * @param requestOptions The requestOptions to send along with the query, they will be merged with
-   *     the transporter requestOptions.
-   * @throws AlgoliaRuntimeException If it fails to process the API call
-   */
-  public SearchResponses<Object> search(SearchMethodParams searchMethodParams, RequestOptions requestOptions)
-    throws AlgoliaRuntimeException {
-    return this.search(searchMethodParams, Object.class, requestOptions);
-  }
-
-  /**
-   * Send multiple search queries to one or more indices.
-   *
-   * @param searchMethodParams Query requests and strategies. Results will be received in the same
-   *     order as the queries. (required)
-   * @throws AlgoliaRuntimeException If it fails to process the API call
-   */
-  public SearchResponses<Object> search(SearchMethodParams searchMethodParams) throws AlgoliaRuntimeException {
-    return this.search(searchMethodParams, Object.class, null);
+    return browseRules(indexName, new SearchRulesParams(), null);
   }
 }

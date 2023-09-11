@@ -196,7 +196,7 @@ class RecommendClientRequestsTests {
           int threshold3 = 42;
           requests_02.setThreshold(threshold3);
         }
-        requests1.add(RecommendationsRequest.of(requests_02));
+        requests1.add(requests_02);
       }
       getRecommendationsParams0.setRequests(requests1);
     }
@@ -260,7 +260,7 @@ class RecommendClientRequestsTests {
           }
           requests_02.setFallbackParameters(fallbackParameters3);
         }
-        requests1.add(RecommendationsRequest.of(requests_02));
+        requests1.add(requests_02);
       }
       getRecommendationsParams0.setRequests(requests1);
     }
@@ -296,7 +296,7 @@ class RecommendClientRequestsTests {
           int threshold3 = 42;
           requests_02.setThreshold(threshold3);
         }
-        requests1.add(RecommendationsRequest.of(requests_02));
+        requests1.add(requests_02);
       }
       getRecommendationsParams0.setRequests(requests1);
     }
@@ -362,7 +362,7 @@ class RecommendClientRequestsTests {
           }
           requests_02.setFallbackParameters(fallbackParameters3);
         }
-        requests1.add(RecommendationsRequest.of(requests_02));
+        requests1.add(requests_02);
       }
       getRecommendationsParams0.setRequests(requests1);
     }
@@ -400,7 +400,7 @@ class RecommendClientRequestsTests {
           int threshold3 = 21;
           requests_02.setThreshold(threshold3);
         }
-        requests1.add(RecommendationsRequest.of(requests_02));
+        requests1.add(requests_02);
         RecommendationsQuery requests_12 = new RecommendationsQuery();
         {
           String indexName3 = "indexName2";
@@ -412,7 +412,7 @@ class RecommendClientRequestsTests {
           int threshold3 = 21;
           requests_12.setThreshold(threshold3);
         }
-        requests1.add(RecommendationsRequest.of(requests_12));
+        requests1.add(requests_12);
       }
       getRecommendationsParams0.setRequests(requests1);
     }
@@ -476,7 +476,7 @@ class RecommendClientRequestsTests {
           }
           requests_02.setFallbackParameters(fallbackParameters3);
         }
-        requests1.add(RecommendationsRequest.of(requests_02));
+        requests1.add(requests_02);
         RecommendationsQuery requests_12 = new RecommendationsQuery();
         {
           String indexName3 = "indexName2";
@@ -514,7 +514,7 @@ class RecommendClientRequestsTests {
           }
           requests_12.setFallbackParameters(fallbackParameters3);
         }
-        requests1.add(RecommendationsRequest.of(requests_12));
+        requests1.add(requests_12);
       }
       getRecommendationsParams0.setRequests(requests1);
     }
@@ -552,7 +552,7 @@ class RecommendClientRequestsTests {
           int threshold3 = 42;
           requests_02.setThreshold(threshold3);
         }
-        requests1.add(RecommendationsRequest.of(requests_02));
+        requests1.add(requests_02);
       }
       getRecommendationsParams0.setRequests(requests1);
     }

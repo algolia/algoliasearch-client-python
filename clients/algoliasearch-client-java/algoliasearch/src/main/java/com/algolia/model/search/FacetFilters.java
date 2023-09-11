@@ -4,15 +4,11 @@
 package com.algolia.model.search;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -22,43 +18,66 @@ import java.util.logging.Logger;
  * value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
  */
 @JsonDeserialize(using = FacetFilters.Deserializer.class)
-@JsonSerialize(using = FacetFilters.Serializer.class)
-public interface FacetFilters<T> extends CompoundType<T> {
-  static FacetFilters<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
-    return new FacetFiltersListOfMixedSearchFilters(inside);
+public interface FacetFilters {
+  /** FacetFilters as List<MixedSearchFilters> wrapper. */
+  static FacetFilters of(List<MixedSearchFilters> value) {
+    return new ListOfMixedSearchFiltersWrapper(value);
   }
 
-  static FacetFilters<String> of(String inside) {
-    return new FacetFiltersString(inside);
+  /** FacetFilters as String wrapper. */
+  static FacetFilters of(String value) {
+    return new StringWrapper(value);
   }
 
-  class Serializer extends StdSerializer<FacetFilters> {
+  /** FacetFilters as List<MixedSearchFilters> wrapper. */
+  @JsonSerialize(using = ListOfMixedSearchFiltersWrapper.Serializer.class)
+  class ListOfMixedSearchFiltersWrapper implements FacetFilters {
 
-    public Serializer(Class<FacetFilters> t) {
-      super(t);
+    private final List<MixedSearchFilters> value;
+
+    ListOfMixedSearchFiltersWrapper(List<MixedSearchFilters> value) {
+      this.value = value;
     }
 
-    public Serializer() {
-      this(null);
+    public List<MixedSearchFilters> getValue() {
+      return value;
     }
 
-    @Override
-    public void serialize(FacetFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
+    static class Serializer extends JsonSerializer<ListOfMixedSearchFiltersWrapper> {
+
+      @Override
+      public void serialize(ListOfMixedSearchFiltersWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
     }
   }
 
-  class Deserializer extends StdDeserializer<FacetFilters> {
+  /** FacetFilters as String wrapper. */
+  @JsonSerialize(using = StringWrapper.Serializer.class)
+  class StringWrapper implements FacetFilters {
+
+    private final String value;
+
+    StringWrapper(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<StringWrapper> {
+
+      @Override
+      public void serialize(StringWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
+  }
+
+  class Deserializer extends JsonDeserializer<FacetFilters> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(FacetFilters.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public FacetFilters deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -67,8 +86,7 @@ public interface FacetFilters<T> extends CompoundType<T> {
       // deserialize List<MixedSearchFilters>
       if (tree.isArray()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          List<MixedSearchFilters> value = parser.readValueAs(new TypeReference<List<MixedSearchFilters>>() {});
-          return FacetFilters.of(value);
+          return parser.readValueAs(new TypeReference<List<MixedSearchFilters>>() {});
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -80,7 +98,7 @@ public interface FacetFilters<T> extends CompoundType<T> {
       // deserialize String
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          String value = parser.readValueAs(new TypeReference<String>() {});
+          String value = parser.readValueAs(String.class);
           return FacetFilters.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -95,33 +113,5 @@ public interface FacetFilters<T> extends CompoundType<T> {
     public FacetFilters getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "FacetFilters cannot be null");
     }
-  }
-}
-
-class FacetFiltersListOfMixedSearchFilters implements FacetFilters<List<MixedSearchFilters>> {
-
-  private final List<MixedSearchFilters> value;
-
-  FacetFiltersListOfMixedSearchFilters(List<MixedSearchFilters> value) {
-    this.value = value;
-  }
-
-  @Override
-  public List<MixedSearchFilters> get() {
-    return value;
-  }
-}
-
-class FacetFiltersString implements FacetFilters<String> {
-
-  private final String value;
-
-  FacetFiltersString(String value) {
-    this.value = value;
-  }
-
-  @Override
-  public String get() {
-    return value;
   }
 }

@@ -4,6 +4,7 @@
 package com.algolia.model.insights;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +13,8 @@ import java.util.Objects;
  * Use this method to capture active filters. For example, when browsing a category page, users see
  * content filtered on that specific category.
  */
-public class ViewedFilters {
+@JsonDeserialize(as = ViewedFilters.class)
+public class ViewedFilters implements EventsItems {
 
   @JsonProperty("eventName")
   private String eventName;

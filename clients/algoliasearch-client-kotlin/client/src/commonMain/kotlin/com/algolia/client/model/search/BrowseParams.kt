@@ -284,14 +284,24 @@ internal class BrowseParamsSerializer : KSerializer<BrowseParams> {
 
   override fun serialize(encoder: Encoder, value: BrowseParams) {
     when (value) {
-      is BrowseParamsObject -> BrowseParamsObject.serializer().serialize(encoder, value)
       is SearchParamsString -> SearchParamsString.serializer().serialize(encoder, value)
+      is BrowseParamsObject -> BrowseParamsObject.serializer().serialize(encoder, value)
     }
   }
 
   override fun deserialize(decoder: Decoder): BrowseParams {
     val codec = decoder.asJsonDecoder()
     val tree = codec.decodeJsonElement()
+
+    // deserialize SearchParamsString
+    if (tree is JsonObject && tree.containsKey("params")) {
+      try {
+        return codec.json.decodeFromJsonElement<SearchParamsString>(tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize SearchParamsString (error: ${e.message})")
+      }
+    }
 
     // deserialize BrowseParamsObject
     if (tree is JsonObject) {
@@ -300,16 +310,6 @@ internal class BrowseParamsSerializer : KSerializer<BrowseParams> {
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize BrowseParamsObject (error: ${e.message})")
-      }
-    }
-
-    // deserialize SearchParamsString
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement<SearchParamsString>(tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize SearchParamsString (error: ${e.message})")
       }
     }
 

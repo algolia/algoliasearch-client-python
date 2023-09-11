@@ -4,58 +4,77 @@
 package com.algolia.model.recommend;
 
 import com.algolia.exceptions.AlgoliaRuntimeException;
-import com.algolia.utils.CompoundType;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.databind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
 /** [Filter hits by tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/). */
 @JsonDeserialize(using = TagFilters.Deserializer.class)
-@JsonSerialize(using = TagFilters.Serializer.class)
-public interface TagFilters<T> extends CompoundType<T> {
-  static TagFilters<List<MixedSearchFilters>> of(List<MixedSearchFilters> inside) {
-    return new TagFiltersListOfMixedSearchFilters(inside);
+public interface TagFilters {
+  /** TagFilters as List<MixedSearchFilters> wrapper. */
+  static TagFilters of(List<MixedSearchFilters> value) {
+    return new ListOfMixedSearchFiltersWrapper(value);
   }
 
-  static TagFilters<String> of(String inside) {
-    return new TagFiltersString(inside);
+  /** TagFilters as String wrapper. */
+  static TagFilters of(String value) {
+    return new StringWrapper(value);
   }
 
-  class Serializer extends StdSerializer<TagFilters> {
+  /** TagFilters as List<MixedSearchFilters> wrapper. */
+  @JsonSerialize(using = ListOfMixedSearchFiltersWrapper.Serializer.class)
+  class ListOfMixedSearchFiltersWrapper implements TagFilters {
 
-    public Serializer(Class<TagFilters> t) {
-      super(t);
+    private final List<MixedSearchFilters> value;
+
+    ListOfMixedSearchFiltersWrapper(List<MixedSearchFilters> value) {
+      this.value = value;
     }
 
-    public Serializer() {
-      this(null);
+    public List<MixedSearchFilters> getValue() {
+      return value;
     }
 
-    @Override
-    public void serialize(TagFilters value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-      jgen.writeObject(value.get());
+    static class Serializer extends JsonSerializer<ListOfMixedSearchFiltersWrapper> {
+
+      @Override
+      public void serialize(ListOfMixedSearchFiltersWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
     }
   }
 
-  class Deserializer extends StdDeserializer<TagFilters> {
+  /** TagFilters as String wrapper. */
+  @JsonSerialize(using = StringWrapper.Serializer.class)
+  class StringWrapper implements TagFilters {
+
+    private final String value;
+
+    StringWrapper(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    static class Serializer extends JsonSerializer<StringWrapper> {
+
+      @Override
+      public void serialize(StringWrapper value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeObject(value.getValue());
+      }
+    }
+  }
+
+  class Deserializer extends JsonDeserializer<TagFilters> {
 
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class.getName());
-
-    public Deserializer() {
-      this(TagFilters.class);
-    }
-
-    public Deserializer(Class<?> vc) {
-      super(vc);
-    }
 
     @Override
     public TagFilters deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -64,8 +83,7 @@ public interface TagFilters<T> extends CompoundType<T> {
       // deserialize List<MixedSearchFilters>
       if (tree.isArray()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          List<MixedSearchFilters> value = parser.readValueAs(new TypeReference<List<MixedSearchFilters>>() {});
-          return TagFilters.of(value);
+          return parser.readValueAs(new TypeReference<List<MixedSearchFilters>>() {});
         } catch (Exception e) {
           // deserialization failed, continue
           LOGGER.finest(
@@ -77,7 +95,7 @@ public interface TagFilters<T> extends CompoundType<T> {
       // deserialize String
       if (tree.isValueNode()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
-          String value = parser.readValueAs(new TypeReference<String>() {});
+          String value = parser.readValueAs(String.class);
           return TagFilters.of(value);
         } catch (Exception e) {
           // deserialization failed, continue
@@ -92,33 +110,5 @@ public interface TagFilters<T> extends CompoundType<T> {
     public TagFilters getNullValue(DeserializationContext ctxt) throws JsonMappingException {
       throw new JsonMappingException(ctxt.getParser(), "TagFilters cannot be null");
     }
-  }
-}
-
-class TagFiltersListOfMixedSearchFilters implements TagFilters<List<MixedSearchFilters>> {
-
-  private final List<MixedSearchFilters> value;
-
-  TagFiltersListOfMixedSearchFilters(List<MixedSearchFilters> value) {
-    this.value = value;
-  }
-
-  @Override
-  public List<MixedSearchFilters> get() {
-    return value;
-  }
-}
-
-class TagFiltersString implements TagFilters<String> {
-
-  private final String value;
-
-  TagFiltersString(String value) {
-    this.value = value;
-  }
-
-  @Override
-  public String get() {
-    return value;
   }
 }
