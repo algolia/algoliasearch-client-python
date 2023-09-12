@@ -8,12 +8,12 @@ import (
 
 // SourceDocker struct for SourceDocker
 type SourceDocker struct {
-	Registry DockerRegistry `json:"registry" validate:"required"`
+	ImageType DockerImageType `json:"imageType" validate:"required"`
+	Registry  DockerRegistry  `json:"registry" validate:"required"`
 	// The name of the image to pull.
 	Image string `json:"image" validate:"required"`
 	// The version of the image, defaults to `latest`.
-	Version   *string         `json:"version,omitempty"`
-	ImageType DockerImageType `json:"imageType" validate:"required"`
+	Version *string `json:"version,omitempty"`
 	// The configuration of the spec.
 	Configuration map[string]interface{} `json:"configuration" validate:"required"`
 }
@@ -30,11 +30,11 @@ func WithSourceDockerVersion(val string) SourceDockerOption {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSourceDocker(registry DockerRegistry, image string, imageType DockerImageType, configuration map[string]interface{}, opts ...SourceDockerOption) *SourceDocker {
+func NewSourceDocker(imageType DockerImageType, registry DockerRegistry, image string, configuration map[string]interface{}, opts ...SourceDockerOption) *SourceDocker {
 	this := &SourceDocker{}
+	this.ImageType = imageType
 	this.Registry = registry
 	this.Image = image
-	this.ImageType = imageType
 	this.Configuration = configuration
 	for _, opt := range opts {
 		opt(this)
@@ -48,6 +48,30 @@ func NewSourceDocker(registry DockerRegistry, image string, imageType DockerImag
 func NewSourceDockerWithDefaults() *SourceDocker {
 	this := &SourceDocker{}
 	return this
+}
+
+// GetImageType returns the ImageType field value
+func (o *SourceDocker) GetImageType() DockerImageType {
+	if o == nil {
+		var ret DockerImageType
+		return ret
+	}
+
+	return o.ImageType
+}
+
+// GetImageTypeOk returns a tuple with the ImageType field value
+// and a boolean to check if the value has been set.
+func (o *SourceDocker) GetImageTypeOk() (*DockerImageType, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ImageType, true
+}
+
+// SetImageType sets field value
+func (o *SourceDocker) SetImageType(v DockerImageType) {
+	o.ImageType = v
 }
 
 // GetRegistry returns the Registry field value
@@ -130,30 +154,6 @@ func (o *SourceDocker) SetVersion(v string) {
 	o.Version = &v
 }
 
-// GetImageType returns the ImageType field value
-func (o *SourceDocker) GetImageType() DockerImageType {
-	if o == nil {
-		var ret DockerImageType
-		return ret
-	}
-
-	return o.ImageType
-}
-
-// GetImageTypeOk returns a tuple with the ImageType field value
-// and a boolean to check if the value has been set.
-func (o *SourceDocker) GetImageTypeOk() (*DockerImageType, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ImageType, true
-}
-
-// SetImageType sets field value
-func (o *SourceDocker) SetImageType(v DockerImageType) {
-	o.ImageType = v
-}
-
 // GetConfiguration returns the Configuration field value
 func (o *SourceDocker) GetConfiguration() map[string]interface{} {
 	if o == nil {
@@ -181,6 +181,9 @@ func (o *SourceDocker) SetConfiguration(v map[string]interface{}) {
 func (o SourceDocker) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
+		toSerialize["imageType"] = o.ImageType
+	}
+	if true {
 		toSerialize["registry"] = o.Registry
 	}
 	if true {
@@ -190,9 +193,6 @@ func (o SourceDocker) MarshalJSON() ([]byte, error) {
 		toSerialize["version"] = o.Version
 	}
 	if true {
-		toSerialize["imageType"] = o.ImageType
-	}
-	if true {
 		toSerialize["configuration"] = o.Configuration
 	}
 	return json.Marshal(toSerialize)
@@ -200,10 +200,10 @@ func (o SourceDocker) MarshalJSON() ([]byte, error) {
 
 func (o SourceDocker) String() string {
 	out := ""
+	out += fmt.Sprintf("  imageType=%v\n", o.ImageType)
 	out += fmt.Sprintf("  registry=%v\n", o.Registry)
 	out += fmt.Sprintf("  image=%v\n", o.Image)
 	out += fmt.Sprintf("  version=%v\n", o.Version)
-	out += fmt.Sprintf("  imageType=%v\n", o.ImageType)
 	out += fmt.Sprintf("  configuration=%v\n", o.Configuration)
 	return fmt.Sprintf("SourceDocker {\n%s}", out)
 }

@@ -979,12 +979,6 @@ components:
       required:
         - projectID
         - datasetID
-    DockerRegistry:
-      type: string
-      enum:
-        - dockerhub
-        - ghcr
-      description: The registry where the image is stored.
     DockerImageType:
       type: string
       enum:
@@ -992,10 +986,18 @@ components:
         - custom
         - airbyte
       description: The type of the image.
+    DockerRegistry:
+      type: string
+      enum:
+        - dockerhub
+        - ghcr
+      description: The registry where the image is stored.
     SourceDocker:
       type: object
       additionalProperties: false
       properties:
+        imageType:
+          $ref: '#/components/schemas/DockerImageType'
         registry:
           $ref: '#/components/schemas/DockerRegistry'
         image:
@@ -1006,8 +1008,6 @@ components:
           type: string
           description: The version of the image, defaults to `latest`.
           example: v2.1.0
-        imageType:
-          $ref: '#/components/schemas/DockerImageType'
         configuration:
           type: object
           description: The configuration of the spec.
@@ -1104,13 +1104,32 @@ components:
             ^[a-z]{2}(-[A-Z]{2})?$. For example ["fr-FR", "en"].
           items:
             type: string
+    SourceUpdateDocker:
+      type: object
+      additionalProperties: false
+      properties:
+        registry:
+          $ref: '#/components/schemas/DockerRegistry'
+        image:
+          type: string
+          description: The name of the image to pull.
+          example: algolia/zendesk
+        version:
+          type: string
+          description: The version of the image, defaults to `latest`.
+          example: v2.1.0
+        configuration:
+          type: object
+          description: The configuration of the spec.
+      required:
+        - configuration
     SourceUpdateInput:
       oneOf:
         - $ref: '#/components/schemas/SourceUpdateCommercetools'
         - $ref: '#/components/schemas/SourceJSON'
         - $ref: '#/components/schemas/SourceCSV'
         - $ref: '#/components/schemas/SourceBigQuery'
-        - $ref: '#/components/schemas/SourceDocker'
+        - $ref: '#/components/schemas/SourceUpdateDocker'
     SourceUpdate:
       type: object
       additionalProperties: false

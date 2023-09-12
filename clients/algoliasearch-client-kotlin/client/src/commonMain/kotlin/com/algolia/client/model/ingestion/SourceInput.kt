@@ -118,22 +118,22 @@ public sealed interface SourceInput {
     /**
      * SourceDocker
      *
+     * @param imageType
      * @param registry
      * @param image The name of the image to pull.
-     * @param imageType
      * @param configuration The configuration of the spec.
      * @param version The version of the image, defaults to `latest`.
      */
     public fun SourceDocker(
+      imageType: DockerImageType,
       registry: DockerRegistry,
       image: String,
-      imageType: DockerImageType,
       configuration: JsonObject,
       version: String? = null,
     ): SourceDocker = com.algolia.client.model.ingestion.SourceDocker(
+      imageType = imageType,
       registry = registry,
       image = image,
-      imageType = imageType,
       configuration = configuration,
       version = version,
     )

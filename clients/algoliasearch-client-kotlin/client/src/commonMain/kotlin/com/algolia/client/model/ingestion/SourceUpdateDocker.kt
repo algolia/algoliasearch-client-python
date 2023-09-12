@@ -5,27 +5,24 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * SourceDocker
+ * SourceUpdateDocker
  *
- * @param imageType
+ * @param configuration The configuration of the spec.
  * @param registry
  * @param image The name of the image to pull.
- * @param configuration The configuration of the spec.
  * @param version The version of the image, defaults to `latest`.
  */
 @Serializable
-public data class SourceDocker(
-
-  @SerialName(value = "imageType") val imageType: DockerImageType,
-
-  @SerialName(value = "registry") val registry: DockerRegistry,
-
-  /** The name of the image to pull. */
-  @SerialName(value = "image") val image: String,
+public data class SourceUpdateDocker(
 
   /** The configuration of the spec. */
   @SerialName(value = "configuration") val configuration: JsonObject,
 
+  @SerialName(value = "registry") val registry: DockerRegistry? = null,
+
+  /** The name of the image to pull. */
+  @SerialName(value = "image") val image: String? = null,
+
   /** The version of the image, defaults to `latest`. */
   @SerialName(value = "version") val version: String? = null,
-) : SourceInput
+) : SourceUpdateInput

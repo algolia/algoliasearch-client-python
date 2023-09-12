@@ -70,29 +70,6 @@ public sealed interface SourceUpdateInput {
     )
 
     /**
-     * SourceDocker
-     *
-     * @param registry
-     * @param image The name of the image to pull.
-     * @param imageType
-     * @param configuration The configuration of the spec.
-     * @param version The version of the image, defaults to `latest`.
-     */
-    public fun SourceDocker(
-      registry: DockerRegistry,
-      image: String,
-      imageType: DockerImageType,
-      configuration: JsonObject,
-      version: String? = null,
-    ): SourceDocker = com.algolia.client.model.ingestion.SourceDocker(
-      registry = registry,
-      image = image,
-      imageType = imageType,
-      configuration = configuration,
-      version = version,
-    )
-
-    /**
      * SourceJSON
      *
      * @param url The URL of the file.
@@ -122,6 +99,26 @@ public sealed interface SourceUpdateInput {
       storeKeys = storeKeys,
       locales = locales,
     )
+
+    /**
+     * SourceUpdateDocker
+     *
+     * @param configuration The configuration of the spec.
+     * @param registry
+     * @param image The name of the image to pull.
+     * @param version The version of the image, defaults to `latest`.
+     */
+    public fun SourceUpdateDocker(
+      configuration: JsonObject,
+      registry: DockerRegistry? = null,
+      image: String? = null,
+      version: String? = null,
+    ): SourceUpdateDocker = com.algolia.client.model.ingestion.SourceUpdateDocker(
+      configuration = configuration,
+      registry = registry,
+      image = image,
+      version = version,
+    )
   }
 }
 
@@ -133,9 +130,9 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
     when (value) {
       is SourceBigQuery -> SourceBigQuery.serializer().serialize(encoder, value)
       is SourceCSV -> SourceCSV.serializer().serialize(encoder, value)
-      is SourceDocker -> SourceDocker.serializer().serialize(encoder, value)
       is SourceJSON -> SourceJSON.serializer().serialize(encoder, value)
       is SourceUpdateCommercetools -> SourceUpdateCommercetools.serializer().serialize(encoder, value)
+      is SourceUpdateDocker -> SourceUpdateDocker.serializer().serialize(encoder, value)
     }
   }
 
@@ -163,16 +160,6 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
       }
     }
 
-    // deserialize SourceDocker
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement<SourceDocker>(tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize SourceDocker (error: ${e.message})")
-      }
-    }
-
     // deserialize SourceJSON
     if (tree is JsonObject) {
       try {
@@ -190,6 +177,16 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceUpdateCommercetools (error: ${e.message})")
+      }
+    }
+
+    // deserialize SourceUpdateDocker
+    if (tree is JsonObject) {
+      try {
+        return codec.json.decodeFromJsonElement<SourceUpdateDocker>(tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize SourceUpdateDocker (error: ${e.message})")
       }
     }
 
