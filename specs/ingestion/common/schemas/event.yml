@@ -29,7 +29,7 @@ Event:
 
 EventStatus:
   type: string
-  enum: ['created', 'started', 'retried', 'failed', 'succeeded']
+  enum: ['created', 'started', 'retried', 'failed', 'succeeded', 'critical']
 
 EventType:
   type: string
