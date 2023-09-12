@@ -1539,6 +1539,7 @@ components:
         - retried
         - failed
         - succeeded
+        - critical
     EventType:
       type: string
       enum:

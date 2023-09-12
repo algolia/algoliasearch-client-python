@@ -19,7 +19,10 @@ public enum class EventStatus(public val value: kotlin.String) {
   Failed("failed"),
 
   @SerialName(value = "succeeded")
-  Succeeded("succeeded");
+  Succeeded("succeeded"),
+
+  @SerialName(value = "critical")
+  Critical("critical");
 
   override fun toString(): kotlin.String = value
 }

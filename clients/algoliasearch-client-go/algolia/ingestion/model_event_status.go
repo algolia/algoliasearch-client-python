@@ -16,6 +16,7 @@ const (
 	EVENTSTATUS_RETRIED   EventStatus = "retried"
 	EVENTSTATUS_FAILED    EventStatus = "failed"
 	EVENTSTATUS_SUCCEEDED EventStatus = "succeeded"
+	EVENTSTATUS_CRITICAL  EventStatus = "critical"
 )
 
 // All allowed values of EventStatus enum
@@ -25,6 +26,7 @@ var AllowedEventStatusEnumValues = []EventStatus{
 	"retried",
 	"failed",
 	"succeeded",
+	"critical",
 }
 
 func (v *EventStatus) UnmarshalJSON(src []byte) error {
