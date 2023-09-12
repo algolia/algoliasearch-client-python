@@ -130,7 +130,7 @@ DestinationIndexName:
 RecordType:
   type: string
   description: Determines the indexing strategy to use for a given e-commerce source.
-  enum: [ 'product', 'variant' ]
+  enum: ['product', 'variant']
 
 DestinationInput:
   oneOf:

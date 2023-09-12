@@ -266,6 +266,8 @@ SourceDocker:
   type: object
   additionalProperties: false
   properties:
+    imageType:
+      $ref: '#/DockerImageType'
     registry:
       $ref: '#/DockerRegistry'
     image:
@@ -276,8 +278,6 @@ SourceDocker:
       type: string
       description: The version of the image, defaults to `latest`.
       example: v2.1.0
-    imageType:
-      $ref: '#/DockerImageType'
     configuration:
       type: object
       description: The configuration of the spec.
@@ -285,6 +285,26 @@ SourceDocker:
     - registry
     - image
     - imageType
+    - configuration
+
+SourceUpdateDocker:
+  type: object
+  additionalProperties: false
+  properties:
+    registry:
+      $ref: '#/DockerRegistry'
+    image:
+      type: string
+      description: The name of the image to pull.
+      example: algolia/zendesk
+    version:
+      type: string
+      description: The version of the image, defaults to `latest`.
+      example: v2.1.0
+    configuration:
+      type: object
+      description: The configuration of the spec.
+  required:
     - configuration
 
 DockerRegistry:
@@ -328,4 +348,4 @@ SourceUpdateInput:
     - $ref: '#/SourceJSON'
     - $ref: '#/SourceCSV'
     - $ref: '#/SourceBigQuery'
-    - $ref: '#/SourceDocker'
+    - $ref: '#/SourceUpdateDocker'
