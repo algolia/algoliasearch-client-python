@@ -113,7 +113,7 @@ components:
       type: string
       minLength: 1
       maxLength: 128
-      pattern: '[a-zA-Z0-9_=/+-]{1,128}'
+      pattern: '[a-zA-Z0-9_=/+-]{1,129}'
       description: >
         Anonymous or pseudonymous user identifier. 
 
