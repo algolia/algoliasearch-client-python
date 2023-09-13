@@ -7,7 +7,6 @@ import kotlinx.serialization.json.*
 /**
  * SearchResponse
  *
- * @param exhaustiveNbHits Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
  * @param hitsPerPage Number of hits per page.
  * @param nbHits Number of hits the search query matched.
  * @param nbPages Number of pages of results for the current query.
@@ -21,6 +20,7 @@ import kotlinx.serialization.json.*
  * @param aroundLatLng Computed geographical location.
  * @param automaticRadius Automatically-computed radius.
  * @param exhaustiveFacetsCount Indicates whether the facet count is exhaustive (exact) or approximate.
+ * @param exhaustiveNbHits Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
  * @param exhaustiveTypo Indicates whether the search for typos was exhaustive (exact) or approximate.
  * @param facets Mapping of each facet name to the corresponding facet counts.
  * @param facetsStats Statistics for numerical facets.
@@ -37,9 +37,6 @@ import kotlinx.serialization.json.*
  */
 @Serializable
 public data class SearchResponse(
-
-  /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
-  @SerialName(value = "exhaustiveNbHits") val exhaustiveNbHits: Boolean,
 
   /** Number of hits per page. */
   @SerialName(value = "hitsPerPage") val hitsPerPage: Int,
@@ -78,6 +75,9 @@ public data class SearchResponse(
 
   /** Indicates whether the facet count is exhaustive (exact) or approximate. */
   @SerialName(value = "exhaustiveFacetsCount") val exhaustiveFacetsCount: Boolean? = null,
+
+  /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
+  @SerialName(value = "exhaustiveNbHits") val exhaustiveNbHits: Boolean? = null,
 
   /** Indicates whether the search for typos was exhaustive (exact) or approximate. */
   @SerialName(value = "exhaustiveTypo") val exhaustiveTypo: Boolean? = null,

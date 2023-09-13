@@ -19,7 +19,7 @@ type BrowseResponse struct {
 	// Indicates whether the facet count is exhaustive (exact) or approximate.
 	ExhaustiveFacetsCount *bool `json:"exhaustiveFacetsCount,omitempty"`
 	// Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
-	ExhaustiveNbHits bool `json:"exhaustiveNbHits" validate:"required"`
+	ExhaustiveNbHits *bool `json:"exhaustiveNbHits,omitempty"`
 	// Indicates whether the search for typos was exhaustive (exact) or approximate.
 	ExhaustiveTypo *bool `json:"exhaustiveTypo,omitempty"`
 	// Mapping of each facet name to the corresponding facet counts.
@@ -92,6 +92,12 @@ func WithBrowseResponseAutomaticRadius(val string) BrowseResponseOption {
 func WithBrowseResponseExhaustiveFacetsCount(val bool) BrowseResponseOption {
 	return func(f *BrowseResponse) {
 		f.ExhaustiveFacetsCount = &val
+	}
+}
+
+func WithBrowseResponseExhaustiveNbHits(val bool) BrowseResponseOption {
+	return func(f *BrowseResponse) {
+		f.ExhaustiveNbHits = &val
 	}
 }
 
@@ -183,9 +189,8 @@ func WithBrowseResponseCursor(val string) BrowseResponseOption {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewBrowseResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, processingTimeMS int32, hits []Hit, query string, params string, opts ...BrowseResponseOption) *BrowseResponse {
+func NewBrowseResponse(hitsPerPage int32, nbHits int32, nbPages int32, page int32, processingTimeMS int32, hits []Hit, query string, params string, opts ...BrowseResponseOption) *BrowseResponse {
 	this := &BrowseResponse{}
-	this.ExhaustiveNbHits = exhaustiveNbHits
 	this.HitsPerPage = hitsPerPage
 	this.NbHits = nbHits
 	this.NbPages = nbPages
@@ -374,28 +379,36 @@ func (o *BrowseResponse) SetExhaustiveFacetsCount(v bool) {
 	o.ExhaustiveFacetsCount = &v
 }
 
-// GetExhaustiveNbHits returns the ExhaustiveNbHits field value
+// GetExhaustiveNbHits returns the ExhaustiveNbHits field value if set, zero value otherwise.
 func (o *BrowseResponse) GetExhaustiveNbHits() bool {
-	if o == nil {
+	if o == nil || o.ExhaustiveNbHits == nil {
 		var ret bool
 		return ret
 	}
-
-	return o.ExhaustiveNbHits
+	return *o.ExhaustiveNbHits
 }
 
-// GetExhaustiveNbHitsOk returns a tuple with the ExhaustiveNbHits field value
+// GetExhaustiveNbHitsOk returns a tuple with the ExhaustiveNbHits field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *BrowseResponse) GetExhaustiveNbHitsOk() (*bool, bool) {
-	if o == nil {
+	if o == nil || o.ExhaustiveNbHits == nil {
 		return nil, false
 	}
-	return &o.ExhaustiveNbHits, true
+	return o.ExhaustiveNbHits, true
 }
 
-// SetExhaustiveNbHits sets field value
+// HasExhaustiveNbHits returns a boolean if a field has been set.
+func (o *BrowseResponse) HasExhaustiveNbHits() bool {
+	if o != nil && o.ExhaustiveNbHits != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExhaustiveNbHits gets a reference to the given bool and assigns it to the ExhaustiveNbHits field.
 func (o *BrowseResponse) SetExhaustiveNbHits(v bool) {
-	o.ExhaustiveNbHits = v
+	o.ExhaustiveNbHits = &v
 }
 
 // GetExhaustiveTypo returns the ExhaustiveTypo field value if set, zero value otherwise.
@@ -1055,7 +1068,7 @@ func (o BrowseResponse) MarshalJSON() ([]byte, error) {
 	if o.ExhaustiveFacetsCount != nil {
 		toSerialize["exhaustiveFacetsCount"] = o.ExhaustiveFacetsCount
 	}
-	if true {
+	if o.ExhaustiveNbHits != nil {
 		toSerialize["exhaustiveNbHits"] = o.ExhaustiveNbHits
 	}
 	if o.ExhaustiveTypo != nil {

@@ -31,7 +31,6 @@ public sealed interface SearchResult {
     /**
      * SearchResponse
      *
-     * @param exhaustiveNbHits Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
      * @param hitsPerPage Number of hits per page.
      * @param nbHits Number of hits the search query matched.
      * @param nbPages Number of pages of results for the current query.
@@ -45,6 +44,7 @@ public sealed interface SearchResult {
      * @param aroundLatLng Computed geographical location.
      * @param automaticRadius Automatically-computed radius.
      * @param exhaustiveFacetsCount Indicates whether the facet count is exhaustive (exact) or approximate.
+     * @param exhaustiveNbHits Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
      * @param exhaustiveTypo Indicates whether the search for typos was exhaustive (exact) or approximate.
      * @param facets Mapping of each facet name to the corresponding facet counts.
      * @param facetsStats Statistics for numerical facets.
@@ -60,7 +60,6 @@ public sealed interface SearchResult {
      * @param renderingContent
      */
     public fun SearchResponse(
-      exhaustiveNbHits: Boolean,
       hitsPerPage: Int,
       nbHits: Int,
       nbPages: Int,
@@ -74,6 +73,7 @@ public sealed interface SearchResult {
       aroundLatLng: String? = null,
       automaticRadius: String? = null,
       exhaustiveFacetsCount: Boolean? = null,
+      exhaustiveNbHits: Boolean? = null,
       exhaustiveTypo: Boolean? = null,
       facets: Map<kotlin.String, Map<kotlin.String, Int>>? = null,
       facetsStats: Map<kotlin.String, FacetsStats>? = null,
@@ -88,7 +88,6 @@ public sealed interface SearchResult {
       userData: JsonObject? = null,
       renderingContent: RenderingContent? = null,
     ): SearchResponse = com.algolia.client.model.search.SearchResponse(
-      exhaustiveNbHits = exhaustiveNbHits,
       hitsPerPage = hitsPerPage,
       nbHits = nbHits,
       nbPages = nbPages,
@@ -102,6 +101,7 @@ public sealed interface SearchResult {
       aroundLatLng = aroundLatLng,
       automaticRadius = automaticRadius,
       exhaustiveFacetsCount = exhaustiveFacetsCount,
+      exhaustiveNbHits = exhaustiveNbHits,
       exhaustiveTypo = exhaustiveTypo,
       facets = facets,
       facetsStats = facetsStats,

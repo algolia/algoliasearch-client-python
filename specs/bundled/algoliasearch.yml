@@ -1302,7 +1302,6 @@ components:
         - nbPages
         - hitsPerPage
         - processingTimeMS
-        - exhaustiveNbHits
       properties:
         abTestID:
           type: integer
