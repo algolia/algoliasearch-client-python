@@ -161,7 +161,7 @@ public class RecommendationsResponse {
   }
 
   /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
-  @javax.annotation.Nonnull
+  @javax.annotation.Nullable
   public Boolean getExhaustiveNbHits() {
     return exhaustiveNbHits;
   }

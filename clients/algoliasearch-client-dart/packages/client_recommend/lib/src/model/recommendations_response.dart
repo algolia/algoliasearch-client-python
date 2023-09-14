@@ -18,7 +18,7 @@ final class RecommendationsResponse {
     this.aroundLatLng,
     this.automaticRadius,
     this.exhaustiveFacetsCount,
-    required this.exhaustiveNbHits,
+    this.exhaustiveNbHits,
     this.exhaustiveTypo,
     this.facets,
     this.facetsStats,
@@ -65,7 +65,7 @@ final class RecommendationsResponse {
 
   /// Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
   @JsonKey(name: r'exhaustiveNbHits')
-  final bool exhaustiveNbHits;
+  final bool? exhaustiveNbHits;
 
   /// Indicates whether the search for typos was exhaustive (exact) or approximate.
   @JsonKey(name: r'exhaustiveTypo')

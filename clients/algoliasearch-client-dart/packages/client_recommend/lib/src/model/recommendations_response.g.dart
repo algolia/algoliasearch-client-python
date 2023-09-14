@@ -21,7 +21,7 @@ RecommendationsResponse _$RecommendationsResponseFromJson(
           exhaustiveFacetsCount:
               $checkedConvert('exhaustiveFacetsCount', (v) => v as bool?),
           exhaustiveNbHits:
-              $checkedConvert('exhaustiveNbHits', (v) => v as bool),
+              $checkedConvert('exhaustiveNbHits', (v) => v as bool?),
           exhaustiveTypo: $checkedConvert('exhaustiveTypo', (v) => v as bool?),
           facets: $checkedConvert(
               'facets',
@@ -88,7 +88,7 @@ Map<String, dynamic> _$RecommendationsResponseToJson(
   writeNotNull('aroundLatLng', instance.aroundLatLng);
   writeNotNull('automaticRadius', instance.automaticRadius);
   writeNotNull('exhaustiveFacetsCount', instance.exhaustiveFacetsCount);
-  val['exhaustiveNbHits'] = instance.exhaustiveNbHits;
+  writeNotNull('exhaustiveNbHits', instance.exhaustiveNbHits);
   writeNotNull('exhaustiveTypo', instance.exhaustiveTypo);
   writeNotNull('facets', instance.facets);
   writeNotNull('facets_stats',

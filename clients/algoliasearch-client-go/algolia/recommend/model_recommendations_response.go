@@ -19,7 +19,7 @@ type RecommendationsResponse struct {
 	// Indicates whether the facet count is exhaustive (exact) or approximate.
 	ExhaustiveFacetsCount *bool `json:"exhaustiveFacetsCount,omitempty"`
 	// Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
-	ExhaustiveNbHits bool `json:"exhaustiveNbHits" validate:"required"`
+	ExhaustiveNbHits *bool `json:"exhaustiveNbHits,omitempty"`
 	// Indicates whether the search for typos was exhaustive (exact) or approximate.
 	ExhaustiveTypo *bool `json:"exhaustiveTypo,omitempty"`
 	// Mapping of each facet name to the corresponding facet counts.
@@ -90,6 +90,12 @@ func WithRecommendationsResponseAutomaticRadius(val string) RecommendationsRespo
 func WithRecommendationsResponseExhaustiveFacetsCount(val bool) RecommendationsResponseOption {
 	return func(f *RecommendationsResponse) {
 		f.ExhaustiveFacetsCount = &val
+	}
+}
+
+func WithRecommendationsResponseExhaustiveNbHits(val bool) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.ExhaustiveNbHits = &val
 	}
 }
 
@@ -187,9 +193,8 @@ func WithRecommendationsResponseParams(val string) RecommendationsResponseOption
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRecommendationsResponse(exhaustiveNbHits bool, hitsPerPage int32, nbHits int32, nbPages int32, page int32, processingTimeMS int32, hits []RecommendHit, opts ...RecommendationsResponseOption) *RecommendationsResponse {
+func NewRecommendationsResponse(hitsPerPage int32, nbHits int32, nbPages int32, page int32, processingTimeMS int32, hits []RecommendHit, opts ...RecommendationsResponseOption) *RecommendationsResponse {
 	this := &RecommendationsResponse{}
-	this.ExhaustiveNbHits = exhaustiveNbHits
 	this.HitsPerPage = hitsPerPage
 	this.NbHits = nbHits
 	this.NbPages = nbPages
@@ -376,28 +381,36 @@ func (o *RecommendationsResponse) SetExhaustiveFacetsCount(v bool) {
 	o.ExhaustiveFacetsCount = &v
 }
 
-// GetExhaustiveNbHits returns the ExhaustiveNbHits field value
+// GetExhaustiveNbHits returns the ExhaustiveNbHits field value if set, zero value otherwise.
 func (o *RecommendationsResponse) GetExhaustiveNbHits() bool {
-	if o == nil {
+	if o == nil || o.ExhaustiveNbHits == nil {
 		var ret bool
 		return ret
 	}
-
-	return o.ExhaustiveNbHits
+	return *o.ExhaustiveNbHits
 }
 
-// GetExhaustiveNbHitsOk returns a tuple with the ExhaustiveNbHits field value
+// GetExhaustiveNbHitsOk returns a tuple with the ExhaustiveNbHits field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RecommendationsResponse) GetExhaustiveNbHitsOk() (*bool, bool) {
-	if o == nil {
+	if o == nil || o.ExhaustiveNbHits == nil {
 		return nil, false
 	}
-	return &o.ExhaustiveNbHits, true
+	return o.ExhaustiveNbHits, true
 }
 
-// SetExhaustiveNbHits sets field value
+// HasExhaustiveNbHits returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasExhaustiveNbHits() bool {
+	if o != nil && o.ExhaustiveNbHits != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExhaustiveNbHits gets a reference to the given bool and assigns it to the ExhaustiveNbHits field.
 func (o *RecommendationsResponse) SetExhaustiveNbHits(v bool) {
-	o.ExhaustiveNbHits = v
+	o.ExhaustiveNbHits = &v
 }
 
 // GetExhaustiveTypo returns the ExhaustiveTypo field value if set, zero value otherwise.
@@ -1041,7 +1054,7 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	if o.ExhaustiveFacetsCount != nil {
 		toSerialize["exhaustiveFacetsCount"] = o.ExhaustiveFacetsCount
 	}
-	if true {
+	if o.ExhaustiveNbHits != nil {
 		toSerialize["exhaustiveNbHits"] = o.ExhaustiveNbHits
 	}
 	if o.ExhaustiveTypo != nil {
