@@ -58,7 +58,7 @@ dart pub add algoliasearch
 #### For Flutter projects:
 
 ```shell
-flutter pub add algolisearch
+flutter pub add algoliasearch
 ```
 
 ### Step 2: Import the Package
@@ -66,13 +66,13 @@ flutter pub add algolisearch
 Now, you can import the `algoliasearch` package in your Dart code for all operations, including indexing, search, and personalization:
 
 ```dart
-import 'package:algolisearch/algolisearch.dart';
+import 'package:algoliasearch/algoliasearch.dart';
 ```
 
 Alternatively, you can import `algoliasearch_lite`, a **search-only** version of the library, if you do not need the full feature set:
 
 ```dart
-import 'package:algolisearch/algolisearch_lite.dart';
+import 'package:algoliasearch/algoliasearch_lite.dart';
 ```
 
 ## 📄 License
