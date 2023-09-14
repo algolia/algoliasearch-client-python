@@ -21,19 +21,37 @@ jobs:
       - name: Check versions
         run: melos test
 
-  publish:
+  publish_core:
     needs: check
+    permissions:
+      id-token: write
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      working-directory: packages/client_core
+
+  publish_clients:
+    needs: 
+      - check
+      - publish_core
     strategy:
       matrix:
-        package: [
-          packages/client_core,
-          packages/client_search,
-          packages/client_insights,
-          packages/client_recommend,
-          packages/algoliasearch,
-        ]
+        package:
+          - packages/client_search,
+          - packages/client_insights,
+          - packages/client_recommend,
     permissions:
       id-token: write
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
     with:
       working-directory: ${{ matrix.package }}
+
+  publish_algoliasearch:
+    needs: 
+      - check
+      - publish_core
+      - publish_clients
+    permissions:
+      id-token: write
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      working-directory: packages/algoliasearch

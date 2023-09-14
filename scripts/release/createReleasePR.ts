@@ -316,24 +316,25 @@ async function getCommits(): Promise<{
 
 /**
  * Ensure the release environment is correct before triggering.
+ *
+ * You can bypass blocking checks by setting LOCAL_TEST_DEV to true.
  */
 async function prepareGitEnvironment(): Promise<void> {
   ensureGitHubToken();
-
-  // We allow bypassing those requirements for local tests
-  if (process.env.LOCAL_TEST_DEV) {
-    return;
-  }
 
   if (CI) {
     await configureGitHubAuthor();
   }
 
-  if ((await run('git rev-parse --abbrev-ref HEAD')) !== MAIN_BRANCH) {
+  if (
+    !process.env.LOCAL_TEST_DEV &&
+    (await run('git rev-parse --abbrev-ref HEAD')) !== MAIN_BRANCH
+  ) {
     throw new Error(`You can run this script only from \`${MAIN_BRANCH}\` branch.`);
   }
 
   if (
+    !process.env.LOCAL_TEST_DEV &&
     (await getNbGitDiff({
       head: null,
     })) !== 0

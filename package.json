@@ -17,7 +17,6 @@
     "docker:clean": "docker stop api-clients-automation; docker rm -f api-clients-automation; docker image rm -f api-clients-automation",
     "docker:exec": "docker exec -it api-clients-automation bash -lc \"$*\"",
     "docker:mount": "./scripts/docker/mount.sh",
-    "docker:release": "docker exec --env-file=.env -it api-clients-automation bash -lc \"yarn release\"",
     "docker:setup": "yarn docker:clean && yarn docker:build && yarn docker:mount",
     "fix:json": "eslint --ext=json . --fix",
     "github-actions:lint": "eslint --ext=yml .github/",
