@@ -1,5 +1,13 @@
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
 
+- [265518125](https://github.com/algolia/api-clients-automation/commit/265518125) fix(specs): `exhaustiveNbHits` as optional ([#2007](https://github.com/algolia/api-clients-automation/pull/2007)) by [@aallam](https://github.com/aallam/)
+- [e73b9cf52](https://github.com/algolia/api-clients-automation/commit/e73b9cf52) fix(specs): introduced SourceUpdateDocker ([#2005](https://github.com/algolia/api-clients-automation/pull/2005)) by [@Fluf22](https://github.com/Fluf22/)
+- [02ca9f694](https://github.com/algolia/api-clients-automation/commit/02ca9f694) fix(specs): add 'critical' event status to enum ([#2006](https://github.com/algolia/api-clients-automation/pull/2006)) by [@Fluf22](https://github.com/Fluf22/)
+- [48b23af07](https://github.com/algolia/api-clients-automation/commit/48b23af07) fix(clients): userToken max length ([#2004](https://github.com/algolia/api-clients-automation/pull/2004)) by [@kai687](https://github.com/kai687/)
+- [964962605](https://github.com/algolia/api-clients-automation/commit/964962605) fix(clients): user token character limit ([#2003](https://github.com/algolia/api-clients-automation/pull/2003)) by [@kai687](https://github.com/kai687/)
+
+## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
+
 - [24affb264](https://github.com/algolia/api-clients-automation/commit/24affb264) feat(specs): add `recordType` and `fallbackIsInStockValue` in inputs ([#1988](https://github.com/algolia/api-clients-automation/pull/1988)) by [@damcou](https://github.com/damcou/)
 - [1381b70ff](https://github.com/algolia/api-clients-automation/commit/1381b70ff) feat(specs): add inference ACL to API key object ([#1985](https://github.com/algolia/api-clients-automation/pull/1985)) by [@helenamariano](https://github.com/helenamariano/)
 - [028bf073b](https://github.com/algolia/api-clients-automation/commit/028bf073b) feat(specs): add `failureThreshold` to Ingestion API ([#1962](https://github.com/algolia/api-clients-automation/pull/1962)) by [@shortcuts](https://github.com/shortcuts/)
