@@ -58,7 +58,7 @@ dart pub add algoliasearch
 #### For Flutter projects:
 
 ```shell
-flutter pub add algolisearch
+flutter pub add algoliasearch
 ```
 
 ### Step 2: Import the Package
