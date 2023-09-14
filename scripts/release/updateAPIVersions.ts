@@ -152,11 +152,26 @@ async function updateDartPackages(changelog: string, nextVersion: string): Promi
   // update `clients.config.json` file for the utils version.
   await writeJsonFile(toAbsolutePath('config/clients.config.json'), clientsConfig);
 
-  // we've bumped generated clients but still need to do the manual ones.
-  await bumpPubspecVersion(
-    toAbsolutePath('clients/algoliasearch-client-dart/packages/client_core/pubspec.yaml'),
-    nextVersion
+  // Core client package path
+  const corePackagePath = 'clients/algoliasearch-client-dart/packages/client_core';
+
+  // fetch the version from the pubspec file of the core package
+  let currentCoreVersion = await getPubspecField(corePackagePath, 'version');
+  if (!currentCoreVersion) {
+    currentCoreVersion = '0.0.1';
+  }
+
+  // update the changelog for core package
+  await updateChangelog(
+    'dart',
+    changelog,
+    currentCoreVersion,
+    nextVersion,
+    toAbsolutePath(`${corePackagePath}/CHANGELOG.md`)
   );
+
+  // we've bumped generated clients but still need to do the manual ones.
+  await bumpPubspecVersion(toAbsolutePath(`${corePackagePath}/pubspec.yaml`), nextVersion);
 }
 
 /**
