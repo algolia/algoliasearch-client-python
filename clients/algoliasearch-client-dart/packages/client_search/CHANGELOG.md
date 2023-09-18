@@ -1,3 +1,10 @@
+## [0.2.3](https://github.com/algolia/algoliasearch-client-dart/compare/0.2.2...0.2.3)
+
+- [6911ec0b5](https://github.com/algolia/api-clients-automation/commit/6911ec0b5) fix(dart): reset only hosts w/ call type ([#2018](https://github.com/algolia/api-clients-automation/pull/2018)) by [@aallam](https://github.com/aallam/)
+- [966744949](https://github.com/algolia/api-clients-automation/commit/966744949) fix(dart): correct multiple additional typos in READMEs ([#2016](https://github.com/algolia/api-clients-automation/pull/2016)) by [@chuckmeyer](https://github.com/chuckmeyer/)
+- [3622fdb83](https://github.com/algolia/api-clients-automation/commit/3622fdb83) fix(dart): correct typo in readme ([#2015](https://github.com/algolia/api-clients-automation/pull/2015)) by [@chuckmeyer](https://github.com/chuckmeyer/)
+- [40ac5c702](https://github.com/algolia/api-clients-automation/commit/40ac5c702) chore(dart): update changelog generation ([#2014](https://github.com/algolia/api-clients-automation/pull/2014)) by [@aallam](https://github.com/aallam/)
+
 ## [0.2.2](https://github.com/algolia/algoliasearch-client-dart/compare/0.2.1...0.2.2)
 
 - [265518125](https://github.com/algolia/api-clients-automation/commit/265518125) fix(specs): `exhaustiveNbHits` as optional ([#2007](https://github.com/algolia/api-clients-automation/pull/2007)) by [@aallam](https://github.com/aallam/)
