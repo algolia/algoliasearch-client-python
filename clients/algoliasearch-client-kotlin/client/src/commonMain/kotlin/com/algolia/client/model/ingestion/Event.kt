@@ -11,6 +11,7 @@ import kotlinx.serialization.json.*
  * @param runID The run UUID.
  * @param status
  * @param type
+ * @param batchSize The extracted record batch size.
  * @param publishedAt Date of publish (RFC3339 format).
  * @param parentID The parent event, the cause of this event.
  * @param `data`
@@ -27,6 +28,9 @@ public data class Event(
   @SerialName(value = "status") val status: EventStatus,
 
   @SerialName(value = "type") val type: EventType,
+
+  /** The extracted record batch size. */
+  @SerialName(value = "batchSize") val batchSize: Int,
 
   /** Date of publish (RFC3339 format). */
   @SerialName(value = "publishedAt") val publishedAt: String,

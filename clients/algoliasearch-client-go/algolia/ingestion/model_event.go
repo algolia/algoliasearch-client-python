@@ -13,10 +13,12 @@ type Event struct {
 	// The run UUID.
 	RunID string `json:"runID" validate:"required"`
 	// The parent event, the cause of this event.
-	ParentID *string                `json:"parentID,omitempty"`
-	Status   EventStatus            `json:"status" validate:"required"`
-	Type     EventType              `json:"type" validate:"required"`
-	Data     map[string]interface{} `json:"data,omitempty"`
+	ParentID *string     `json:"parentID,omitempty"`
+	Status   EventStatus `json:"status" validate:"required"`
+	Type     EventType   `json:"type" validate:"required"`
+	// The extracted record batch size.
+	BatchSize int32                  `json:"batchSize" validate:"required"`
+	Data      map[string]interface{} `json:"data,omitempty"`
 	// Date of publish (RFC3339 format).
 	PublishedAt string `json:"publishedAt" validate:"required"`
 }
@@ -39,12 +41,13 @@ func WithEventData(val map[string]interface{}) EventOption {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEvent(eventID string, runID string, status EventStatus, type_ EventType, publishedAt string, opts ...EventOption) *Event {
+func NewEvent(eventID string, runID string, status EventStatus, type_ EventType, batchSize int32, publishedAt string, opts ...EventOption) *Event {
 	this := &Event{}
 	this.EventID = eventID
 	this.RunID = runID
 	this.Status = status
 	this.Type = type_
+	this.BatchSize = batchSize
 	this.PublishedAt = publishedAt
 	for _, opt := range opts {
 		opt(this)
@@ -188,6 +191,30 @@ func (o *Event) SetType(v EventType) {
 	o.Type = v
 }
 
+// GetBatchSize returns the BatchSize field value
+func (o *Event) GetBatchSize() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.BatchSize
+}
+
+// GetBatchSizeOk returns a tuple with the BatchSize field value
+// and a boolean to check if the value has been set.
+func (o *Event) GetBatchSizeOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.BatchSize, true
+}
+
+// SetBatchSize sets field value
+func (o *Event) SetBatchSize(v int32) {
+	o.BatchSize = v
+}
+
 // GetData returns the Data field value if set, zero value otherwise.
 func (o *Event) GetData() map[string]interface{} {
 	if o == nil || o.Data == nil {
@@ -261,6 +288,9 @@ func (o Event) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["type"] = o.Type
 	}
+	if true {
+		toSerialize["batchSize"] = o.BatchSize
+	}
 	if o.Data != nil {
 		toSerialize["data"] = o.Data
 	}
@@ -277,6 +307,7 @@ func (o Event) String() string {
 	out += fmt.Sprintf("  parentID=%v\n", o.ParentID)
 	out += fmt.Sprintf("  status=%v\n", o.Status)
 	out += fmt.Sprintf("  type=%v\n", o.Type)
+	out += fmt.Sprintf("  batchSize=%v\n", o.BatchSize)
 	out += fmt.Sprintf("  data=%v\n", o.Data)
 	out += fmt.Sprintf("  publishedAt=%v\n", o.PublishedAt)
 	return fmt.Sprintf("Event {\n%s}", out)

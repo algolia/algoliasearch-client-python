@@ -1597,6 +1597,12 @@ components:
           $ref: '#/components/schemas/EventStatus'
         type:
           $ref: '#/components/schemas/EventType'
+        batchSize:
+          type: integer
+          description: The extracted record batch size.
+          example: 10
+          minimum: 0
+          multipleOf: 1
         data:
           type: object
           additionalProperties: true
@@ -1607,6 +1613,7 @@ components:
         - runID
         - status
         - type
+        - batchSize
         - publishedAt
   responses:
     BadRequest:
