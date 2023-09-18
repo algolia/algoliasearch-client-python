@@ -78,7 +78,7 @@ final class RetryStrategy {
         .where((e) => e.host.callType == callType || e.host.callType == null);
     final upHosts = hostsCallType.where((host) => host.isUp);
     if (upHosts.isNotEmpty) return upHosts;
-    return _hosts..forEach((host) => host.reset());
+    return hostsCallType..forEach((host) => host.reset());
   }
 
   /// Checks if any hosts have been inactive for more than 5 minutes and resets
