@@ -48,6 +48,8 @@ export const patterns = [
   '!clients/algoliasearch-client-go/algolia/compression/*',
   '!clients/algoliasearch-client-go/algolia/debug/*',
 
+  'tests/output/go/go.sum',
+
   // Kotlin
   '!clients/algoliasearch-client-kotlin/**',
   'clients/algoliasearch-client-kotlin/gradle.properties',

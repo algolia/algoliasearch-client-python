@@ -44,6 +44,12 @@ export async function ctsGenerateMany(generators: Generator[]): Promise<void> {
       });
     }
 
+    if (lang === 'go') {
+      await run('go mod tidy', {
+        cwd: 'tests/output/go',
+      });
+    }
+
     await formatter(lang, toAbsolutePath(`tests/output/${lang}`));
   }
 }
