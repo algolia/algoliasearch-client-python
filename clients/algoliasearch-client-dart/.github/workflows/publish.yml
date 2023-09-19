@@ -36,9 +36,9 @@ jobs:
     strategy:
       matrix:
         package:
-          - packages/client_search,
-          - packages/client_insights,
-          - packages/client_recommend,
+          - packages/client_search
+          - packages/client_insights
+          - packages/client_recommend
     permissions:
       id-token: write
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
