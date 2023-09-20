@@ -130,7 +130,7 @@ TaskSearch:
 ActionType:
   type: string
   description: The action to perform on the Algolia index.
-  enum: ['replace', 'save']
+  enum: ['replace', 'save', 'partial']
 
 TaskInput:
   oneOf:
