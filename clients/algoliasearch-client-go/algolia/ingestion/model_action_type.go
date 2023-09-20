@@ -13,12 +13,14 @@ type ActionType string
 const (
 	ACTIONTYPE_REPLACE ActionType = "replace"
 	ACTIONTYPE_SAVE    ActionType = "save"
+	ACTIONTYPE_PARTIAL ActionType = "partial"
 )
 
 // All allowed values of ActionType enum
 var AllowedActionTypeEnumValues = []ActionType{
 	"replace",
 	"save",
+	"partial",
 }
 
 func (v *ActionType) UnmarshalJSON(src []byte) error {

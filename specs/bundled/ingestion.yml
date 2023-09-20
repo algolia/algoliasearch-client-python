@@ -1160,6 +1160,7 @@ components:
       enum:
         - replace
         - save
+        - partial
     TriggerType:
       type: string
       description: |
