@@ -60,7 +60,7 @@ public data class {{classname}}(
 
         override fun deserialize(decoder: Decoder): {{nameInCamelCase}} {
             val value = decoder.decodeSerializableValue({{{dataType}}}.serializer())
-            return {{nameInCamelCase}}.values().firstOrNull { it.value == value }
+            return {{nameInCamelCase}}.entries.firstOrNull { it.value == value }
                 ?: {{nameInCamelCase}}.{{#allowableValues}}{{#enumVars}}{{#-last}}{{&name}}{{/-last}}{{/enumVars}}{{/allowableValues}}
         }
 

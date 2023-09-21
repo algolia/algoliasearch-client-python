@@ -435,7 +435,6 @@ hitsPerPage:
     - Pagination
 
 userData:
-  type: object
   example: {'settingID': 'f2a7b51e3503acc6a39b3784ffb84300','pluginVersion': '1.6.0'}
   description: Lets you store custom data in your indices.
   default: {}

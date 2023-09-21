@@ -27,5 +27,10 @@
   [{{#value}}{{> generateParams}}{{/value}}],
 {{/isObject}}
 {{#isFreeFormObject}}
+  {{#isAnyType}}
+  [{{#value}}{{#entrySet}}'{{{key}}}' => '{{{value}}}'{{^-last}},{{/-last}}{{/entrySet}}{{/value}}],
+  {{/isAnyType}}
+  {{^isAnyType}}
   [{{#value}}{{> generateParams}}{{/value}}],
+  {{/isAnyType}}
 {{/isFreeFormObject}}

@@ -1,1 +1,1 @@
-{{#isFreeFormObject}}JsonObject{{/isFreeFormObject}}{{^isFreeFormObject}}{{{datatypeWithEnum}}}{{/isFreeFormObject}}
+{{#isFreeFormObject}}JsonObject{{/isFreeFormObject}}{{#isAnyType}}JsonElement{{/isAnyType}}{{^isFreeFormObject}}{{^isAnyType}}{{{datatypeWithEnum}}}{{/isAnyType}}{{/isFreeFormObject}}

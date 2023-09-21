@@ -29,8 +29,13 @@
   }
 {{/isObject}}
 {{#isFreeFormObject}}
+  {{#isAnyType}}
+  Map {{{key}}}{{suffix}} = Map.of({{#value}}{{#entrySet}}"{{{key}}}", "{{{value}}}"{{^-last}},{{/-last}}{{/entrySet}}{{/value}});
+  {{/isAnyType}}
+  {{^isAnyType}}
   Map{{> forceMapGenerics}} {{{key}}}{{suffix}} = new HashMap<>();
   {
     {{#value}}{{> generateParams}}{{parent}}{{parentSuffix}}.put("{{{key}}}", {{> maybeConvertOneOf}});{{/value}}
   }
+  {{/isAnyType}}
 {{/isFreeFormObject}}
