@@ -56,7 +56,7 @@ final class Consequence {
       promote.hashCode +
       filterPromotes.hashCode +
       hide.hashCode +
-      userData.hashCode;
+      (userData == null ? 0 : userData.hashCode);
 
   factory Consequence.fromJson(Map<String, dynamic> json) =>
       _$ConsequenceFromJson(json);

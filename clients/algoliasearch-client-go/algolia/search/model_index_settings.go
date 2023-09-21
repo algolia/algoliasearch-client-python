@@ -35,7 +35,7 @@ type IndexSettings struct {
 	// [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
 	SearchableAttributes []string `json:"searchableAttributes,omitempty"`
 	// Lets you store custom data in your indices.
-	UserData map[string]interface{} `json:"userData,omitempty"`
+	UserData interface{} `json:"userData,omitempty"`
 	// A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
 	CustomNormalization *map[string]map[string]string `json:"customNormalization,omitempty"`
 	// Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
@@ -201,7 +201,7 @@ func WithIndexSettingsSearchableAttributes(val []string) IndexSettingsOption {
 	}
 }
 
-func WithIndexSettingsUserData(val map[string]interface{}) IndexSettingsOption {
+func WithIndexSettingsUserData(val interface{}) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.UserData = val
 	}
@@ -981,10 +981,10 @@ func (o *IndexSettings) SetSearchableAttributes(v []string) {
 	o.SearchableAttributes = v
 }
 
-// GetUserData returns the UserData field value if set, zero value otherwise.
-func (o *IndexSettings) GetUserData() map[string]interface{} {
-	if o == nil || o.UserData == nil {
-		var ret map[string]interface{}
+// GetUserData returns the UserData field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *IndexSettings) GetUserData() interface{} {
+	if o == nil {
+		var ret interface{}
 		return ret
 	}
 	return o.UserData
@@ -992,11 +992,12 @@ func (o *IndexSettings) GetUserData() map[string]interface{} {
 
 // GetUserDataOk returns a tuple with the UserData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *IndexSettings) GetUserDataOk() (map[string]interface{}, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *IndexSettings) GetUserDataOk() (*interface{}, bool) {
 	if o == nil || o.UserData == nil {
 		return nil, false
 	}
-	return o.UserData, true
+	return &o.UserData, true
 }
 
 // HasUserData returns a boolean if a field has been set.
@@ -1008,8 +1009,8 @@ func (o *IndexSettings) HasUserData() bool {
 	return false
 }
 
-// SetUserData gets a reference to the given map[string]interface{} and assigns it to the UserData field.
-func (o *IndexSettings) SetUserData(v map[string]interface{}) {
+// SetUserData gets a reference to the given interface{} and assigns it to the UserData field.
+func (o *IndexSettings) SetUserData(v interface{}) {
 	o.UserData = v
 }
 

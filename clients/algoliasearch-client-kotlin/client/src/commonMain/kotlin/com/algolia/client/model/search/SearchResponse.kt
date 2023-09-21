@@ -112,7 +112,7 @@ public data class SearchResponse(
   @SerialName(value = "serverUsed") val serverUsed: String? = null,
 
   /** Lets you store custom data in your indices. */
-  @SerialName(value = "userData") val userData: JsonObject? = null,
+  @SerialName(value = "userData") val userData: JsonElement? = null,
 
   @SerialName(value = "renderingContent") val renderingContent: RenderingContent? = null,
 ) : SearchResult

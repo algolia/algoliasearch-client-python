@@ -26,7 +26,7 @@ class IngestionTest {
       call = {
         createAuthentication(
           authenticationCreate = AuthenticationCreate(
-            type = AuthenticationType.values().first { it.value == "oauth" },
+            type = AuthenticationType.entries.first { it.value == "oauth" },
             name = "authName",
             input = AuthOAuth(
               url = "http://test.oauth",
@@ -50,7 +50,7 @@ class IngestionTest {
       call = {
         createAuthentication(
           authenticationCreate = AuthenticationCreate(
-            type = AuthenticationType.values().first { it.value == "algolia" },
+            type = AuthenticationType.entries.first { it.value == "algolia" },
             name = "authName",
             input = AuthAlgolia(
               appID = "myappID",
@@ -75,7 +75,7 @@ class IngestionTest {
       call = {
         createDestination(
           destinationCreate = DestinationCreate(
-            type = DestinationType.values().first { it.value == "search" },
+            type = DestinationType.entries.first { it.value == "search" },
             name = "destinationName",
             input = DestinationIndexPrefix(
               indexPrefix = "prefix_",
@@ -100,7 +100,7 @@ class IngestionTest {
       call = {
         createSource(
           sourceCreate = SourceCreate(
-            type = SourceType.values().first { it.value == "commercetools" },
+            type = SourceType.entries.first { it.value == "commercetools" },
             name = "sourceName",
             input = SourceCommercetools(
               storeKeys = listOf("myStore"),
@@ -131,9 +131,9 @@ class IngestionTest {
             sourceID = "search",
             destinationID = "destinationName",
             trigger = OnDemandTriggerInput(
-              type = OnDemandTriggerType.values().first { it.value == "onDemand" },
+              type = OnDemandTriggerType.entries.first { it.value == "onDemand" },
             ),
-            action = ActionType.values().first { it.value == "replace" },
+            action = ActionType.entries.first { it.value == "replace" },
           ),
         )
       },
@@ -154,10 +154,10 @@ class IngestionTest {
             sourceID = "search",
             destinationID = "destinationName",
             trigger = ScheduleTriggerInput(
-              type = ScheduleTriggerType.values().first { it.value == "schedule" },
+              type = ScheduleTriggerType.entries.first { it.value == "schedule" },
               cron = "* * * * *",
             ),
-            action = ActionType.values().first { it.value == "replace" },
+            action = ActionType.entries.first { it.value == "replace" },
           ),
         )
       },
@@ -178,9 +178,9 @@ class IngestionTest {
             sourceID = "search",
             destinationID = "destinationName",
             trigger = OnDemandTriggerInput(
-              type = OnDemandTriggerType.values().first { it.value == "onDemand" },
+              type = OnDemandTriggerType.entries.first { it.value == "onDemand" },
             ),
-            action = ActionType.values().first { it.value == "replace" },
+            action = ActionType.entries.first { it.value == "replace" },
           ),
         )
       },

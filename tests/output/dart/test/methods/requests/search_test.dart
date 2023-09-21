@@ -1965,7 +1965,7 @@ void main() {
             ],
             filterPromotes: false,
             userData: {
-              'algolia': "aloglia",
+              'algolia': 'aloglia',
             },
             promote: [
               PromoteObjectID(
@@ -2094,7 +2094,7 @@ void main() {
               ],
               filterPromotes: false,
               userData: {
-                'algolia': "aloglia",
+                'algolia': 'aloglia',
               },
               promote: [
                 PromoteObjectID(
@@ -3340,7 +3340,7 @@ void main() {
             "foo",
           ],
           userData: {
-            'user': "data",
+            'user': 'data',
           },
         ),
       ),

@@ -61,7 +61,7 @@ class RecommendTest {
       call = {
         deleteRecommendRule(
           indexName = "indexName",
-          model = RecommendModels.values().first { it.value == "related-products" },
+          model = RecommendModels.entries.first { it.value == "related-products" },
           objectID = "objectID",
         )
       },
@@ -117,7 +117,7 @@ class RecommendTest {
       call = {
         getRecommendRule(
           indexName = "indexName",
-          model = RecommendModels.values().first { it.value == "related-products" },
+          model = RecommendModels.entries.first { it.value == "related-products" },
           objectID = "objectID",
         )
       },
@@ -137,7 +137,7 @@ class RecommendTest {
       call = {
         getRecommendStatus(
           indexName = "indexName",
-          model = RecommendModels.values().first { it.value == "related-products" },
+          model = RecommendModels.entries.first { it.value == "related-products" },
           taskID = 12345L,
         )
       },
@@ -161,7 +161,7 @@ class RecommendTest {
               RecommendationsQuery(
                 indexName = "indexName",
                 objectID = "objectID",
-                model = RecommendationModels.values().first { it.value == "related-products" },
+                model = RecommendationModels.entries.first { it.value == "related-products" },
                 threshold = 42,
               ),
             ),
@@ -186,7 +186,7 @@ class RecommendTest {
               RecommendationsQuery(
                 indexName = "indexName",
                 objectID = "objectID",
-                model = RecommendationModels.values().first { it.value == "related-products" },
+                model = RecommendationModels.entries.first { it.value == "related-products" },
                 threshold = 42,
                 maxRecommendations = 10,
                 queryParameters = SearchParamsObject(
@@ -219,7 +219,7 @@ class RecommendTest {
             requests = listOf(
               TrendingItemsQuery(
                 indexName = "indexName",
-                model = TrendingItemsModel.values().first { it.value == "trending-items" },
+                model = TrendingItemsModel.entries.first { it.value == "trending-items" },
                 threshold = 42,
               ),
             ),
@@ -243,7 +243,7 @@ class RecommendTest {
             requests = listOf(
               TrendingItemsQuery(
                 indexName = "indexName",
-                model = TrendingItemsModel.values().first { it.value == "trending-items" },
+                model = TrendingItemsModel.entries.first { it.value == "trending-items" },
                 threshold = 42,
                 maxRecommendations = 10,
                 facetName = "myFacetName",
@@ -279,13 +279,13 @@ class RecommendTest {
               RecommendationsQuery(
                 indexName = "indexName1",
                 objectID = "objectID1",
-                model = RecommendationModels.values().first { it.value == "related-products" },
+                model = RecommendationModels.entries.first { it.value == "related-products" },
                 threshold = 21,
               ),
               RecommendationsQuery(
                 indexName = "indexName2",
                 objectID = "objectID2",
-                model = RecommendationModels.values().first { it.value == "related-products" },
+                model = RecommendationModels.entries.first { it.value == "related-products" },
                 threshold = 21,
               ),
             ),
@@ -310,7 +310,7 @@ class RecommendTest {
               RecommendationsQuery(
                 indexName = "indexName1",
                 objectID = "objectID1",
-                model = RecommendationModels.values().first { it.value == "related-products" },
+                model = RecommendationModels.entries.first { it.value == "related-products" },
                 threshold = 21,
                 maxRecommendations = 10,
                 queryParameters = SearchParamsObject(
@@ -325,7 +325,7 @@ class RecommendTest {
               RecommendationsQuery(
                 indexName = "indexName2",
                 objectID = "objectID2",
-                model = RecommendationModels.values().first { it.value == "related-products" },
+                model = RecommendationModels.entries.first { it.value == "related-products" },
                 threshold = 21,
                 maxRecommendations = 10,
                 queryParameters = SearchParamsObject(
@@ -359,7 +359,7 @@ class RecommendTest {
               RecommendationsQuery(
                 indexName = "indexName1",
                 objectID = "objectID1",
-                model = RecommendationModels.values().first { it.value == "bought-together" },
+                model = RecommendationModels.entries.first { it.value == "bought-together" },
                 threshold = 42,
               ),
             ),
@@ -729,7 +729,7 @@ class RecommendTest {
       call = {
         searchRecommendRules(
           indexName = "indexName",
-          model = RecommendModels.values().first { it.value == "related-products" },
+          model = RecommendModels.entries.first { it.value == "related-products" },
         )
       },
       intercept = {

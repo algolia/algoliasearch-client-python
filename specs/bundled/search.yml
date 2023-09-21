@@ -1285,7 +1285,6 @@ components:
         - dest
         - source
     userData:
-      type: object
       example:
         settingID: f2a7b51e3503acc6a39b3784ffb84300
         pluginVersion: 1.6.0
@@ -2551,7 +2550,6 @@ components:
             required:
               - objectID
         userData:
-          type: object
           description: >-
             Custom JSON object that will be appended to the userData array in
             the response. This object isn't interpreted by the API. It's limited

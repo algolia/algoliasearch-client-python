@@ -52,8 +52,8 @@ type BaseSearchResponse struct {
 	// Host name of the server that processed the request.
 	ServerUsed *string `json:"serverUsed,omitempty"`
 	// Lets you store custom data in your indices.
-	UserData         map[string]interface{} `json:"userData,omitempty"`
-	RenderingContent *RenderingContent      `json:"renderingContent,omitempty"`
+	UserData         interface{}       `json:"userData,omitempty"`
+	RenderingContent *RenderingContent `json:"renderingContent,omitempty"`
 }
 
 type BaseSearchResponseOption func(f *BaseSearchResponse)
@@ -160,7 +160,7 @@ func WithBaseSearchResponseServerUsed(val string) BaseSearchResponseOption {
 	}
 }
 
-func WithBaseSearchResponseUserData(val map[string]interface{}) BaseSearchResponseOption {
+func WithBaseSearchResponseUserData(val interface{}) BaseSearchResponseOption {
 	return func(f *BaseSearchResponse) {
 		f.UserData = val
 	}
@@ -865,10 +865,10 @@ func (o *BaseSearchResponse) SetServerUsed(v string) {
 	o.ServerUsed = &v
 }
 
-// GetUserData returns the UserData field value if set, zero value otherwise.
-func (o *BaseSearchResponse) GetUserData() map[string]interface{} {
-	if o == nil || o.UserData == nil {
-		var ret map[string]interface{}
+// GetUserData returns the UserData field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *BaseSearchResponse) GetUserData() interface{} {
+	if o == nil {
+		var ret interface{}
 		return ret
 	}
 	return o.UserData
@@ -876,11 +876,12 @@ func (o *BaseSearchResponse) GetUserData() map[string]interface{} {
 
 // GetUserDataOk returns a tuple with the UserData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *BaseSearchResponse) GetUserDataOk() (map[string]interface{}, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *BaseSearchResponse) GetUserDataOk() (*interface{}, bool) {
 	if o == nil || o.UserData == nil {
 		return nil, false
 	}
-	return o.UserData, true
+	return &o.UserData, true
 }
 
 // HasUserData returns a boolean if a field has been set.
@@ -892,8 +893,8 @@ func (o *BaseSearchResponse) HasUserData() bool {
 	return false
 }
 
-// SetUserData gets a reference to the given map[string]interface{} and assigns it to the UserData field.
-func (o *BaseSearchResponse) SetUserData(v map[string]interface{}) {
+// SetUserData gets a reference to the given interface{} and assigns it to the UserData field.
+func (o *BaseSearchResponse) SetUserData(v interface{}) {
 	o.UserData = v
 }
 

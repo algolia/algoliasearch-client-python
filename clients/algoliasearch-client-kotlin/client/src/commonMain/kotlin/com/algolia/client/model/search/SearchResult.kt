@@ -85,7 +85,7 @@ public sealed interface SearchResult {
       parsedQuery: String? = null,
       queryAfterRemoval: String? = null,
       serverUsed: String? = null,
-      userData: JsonObject? = null,
+      userData: JsonElement? = null,
       renderingContent: RenderingContent? = null,
     ): SearchResponse = com.algolia.client.model.search.SearchResponse(
       hitsPerPage = hitsPerPage,

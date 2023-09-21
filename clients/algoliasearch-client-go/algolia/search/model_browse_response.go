@@ -52,9 +52,9 @@ type BrowseResponse struct {
 	// Host name of the server that processed the request.
 	ServerUsed *string `json:"serverUsed,omitempty"`
 	// Lets you store custom data in your indices.
-	UserData         map[string]interface{} `json:"userData,omitempty"`
-	RenderingContent *RenderingContent      `json:"renderingContent,omitempty"`
-	Hits             []Hit                  `json:"hits" validate:"required"`
+	UserData         interface{}       `json:"userData,omitempty"`
+	RenderingContent *RenderingContent `json:"renderingContent,omitempty"`
+	Hits             []Hit             `json:"hits" validate:"required"`
 	// Text to search for in an index.
 	Query string `json:"query" validate:"required"`
 	// URL-encoded string of all search parameters.
@@ -167,7 +167,7 @@ func WithBrowseResponseServerUsed(val string) BrowseResponseOption {
 	}
 }
 
-func WithBrowseResponseUserData(val map[string]interface{}) BrowseResponseOption {
+func WithBrowseResponseUserData(val interface{}) BrowseResponseOption {
 	return func(f *BrowseResponse) {
 		f.UserData = val
 	}
@@ -883,10 +883,10 @@ func (o *BrowseResponse) SetServerUsed(v string) {
 	o.ServerUsed = &v
 }
 
-// GetUserData returns the UserData field value if set, zero value otherwise.
-func (o *BrowseResponse) GetUserData() map[string]interface{} {
-	if o == nil || o.UserData == nil {
-		var ret map[string]interface{}
+// GetUserData returns the UserData field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *BrowseResponse) GetUserData() interface{} {
+	if o == nil {
+		var ret interface{}
 		return ret
 	}
 	return o.UserData
@@ -894,11 +894,12 @@ func (o *BrowseResponse) GetUserData() map[string]interface{} {
 
 // GetUserDataOk returns a tuple with the UserData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *BrowseResponse) GetUserDataOk() (map[string]interface{}, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *BrowseResponse) GetUserDataOk() (*interface{}, bool) {
 	if o == nil || o.UserData == nil {
 		return nil, false
 	}
-	return o.UserData, true
+	return &o.UserData, true
 }
 
 // HasUserData returns a boolean if a field has been set.
@@ -910,8 +911,8 @@ func (o *BrowseResponse) HasUserData() bool {
 	return false
 }
 
-// SetUserData gets a reference to the given map[string]interface{} and assigns it to the UserData field.
-func (o *BrowseResponse) SetUserData(v map[string]interface{}) {
+// SetUserData gets a reference to the given interface{} and assigns it to the UserData field.
+func (o *BrowseResponse) SetUserData(v interface{}) {
 	o.UserData = v
 }
 

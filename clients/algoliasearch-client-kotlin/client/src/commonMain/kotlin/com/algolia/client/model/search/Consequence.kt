@@ -28,5 +28,5 @@ public data class Consequence(
   @SerialName(value = "hide") val hide: List<ConsequenceHide>? = null,
 
   /** Custom JSON object that will be appended to the userData array in the response. This object isn't interpreted by the API. It's limited to 1kB of minified JSON. */
-  @SerialName(value = "userData") val userData: JsonObject? = null,
+  @SerialName(value = "userData") val userData: JsonElement? = null,
 )

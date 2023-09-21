@@ -16,7 +16,7 @@ type Consequence struct {
 	// Records to hide. By default, you can hide up to 50 records per rule.
 	Hide []ConsequenceHide `json:"hide,omitempty"`
 	// Custom JSON object that will be appended to the userData array in the response. This object isn't interpreted by the API. It's limited to 1kB of minified JSON.
-	UserData map[string]interface{} `json:"userData,omitempty"`
+	UserData interface{} `json:"userData,omitempty"`
 }
 
 type ConsequenceOption func(f *Consequence)
@@ -45,7 +45,7 @@ func WithConsequenceHide(val []ConsequenceHide) ConsequenceOption {
 	}
 }
 
-func WithConsequenceUserData(val map[string]interface{}) ConsequenceOption {
+func WithConsequenceUserData(val interface{}) ConsequenceOption {
 	return func(f *Consequence) {
 		f.UserData = val
 	}
@@ -201,10 +201,10 @@ func (o *Consequence) SetHide(v []ConsequenceHide) {
 	o.Hide = v
 }
 
-// GetUserData returns the UserData field value if set, zero value otherwise.
-func (o *Consequence) GetUserData() map[string]interface{} {
-	if o == nil || o.UserData == nil {
-		var ret map[string]interface{}
+// GetUserData returns the UserData field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Consequence) GetUserData() interface{} {
+	if o == nil {
+		var ret interface{}
 		return ret
 	}
 	return o.UserData
@@ -212,11 +212,12 @@ func (o *Consequence) GetUserData() map[string]interface{} {
 
 // GetUserDataOk returns a tuple with the UserData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Consequence) GetUserDataOk() (map[string]interface{}, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Consequence) GetUserDataOk() (*interface{}, bool) {
 	if o == nil || o.UserData == nil {
 		return nil, false
 	}
-	return o.UserData, true
+	return &o.UserData, true
 }
 
 // HasUserData returns a boolean if a field has been set.
@@ -228,8 +229,8 @@ func (o *Consequence) HasUserData() bool {
 	return false
 }
 
-// SetUserData gets a reference to the given map[string]interface{} and assigns it to the UserData field.
-func (o *Consequence) SetUserData(v map[string]interface{}) {
+// SetUserData gets a reference to the given interface{} and assigns it to the UserData field.
+func (o *Consequence) SetUserData(v interface{}) {
 	o.UserData = v
 }
 

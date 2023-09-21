@@ -25,7 +25,7 @@ class SearchTest {
       call = {
         addApiKey(
           apiKey = ApiKey(
-            acl = listOf(Acl.values().first { it.value == "search" }, Acl.values().first { it.value == "addObject" }),
+            acl = listOf(Acl.entries.first { it.value == "search" }, Acl.entries.first { it.value == "addObject" }),
             description = "my new api key",
             validity = 300,
             maxQueriesPerIPPerHour = 100,
@@ -120,7 +120,7 @@ class SearchTest {
           batchWriteParams = BatchWriteParams(
             requests = listOf(
               BatchRequest(
-                action = Action.values().first { it.value == "addObject" },
+                action = Action.entries.first { it.value == "addObject" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -149,7 +149,7 @@ class SearchTest {
           batchWriteParams = BatchWriteParams(
             requests = listOf(
               BatchRequest(
-                action = Action.values().first { it.value == "clear" },
+                action = Action.entries.first { it.value == "clear" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -178,7 +178,7 @@ class SearchTest {
           batchWriteParams = BatchWriteParams(
             requests = listOf(
               BatchRequest(
-                action = Action.values().first { it.value == "delete" },
+                action = Action.entries.first { it.value == "delete" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -207,7 +207,7 @@ class SearchTest {
           batchWriteParams = BatchWriteParams(
             requests = listOf(
               BatchRequest(
-                action = Action.values().first { it.value == "deleteObject" },
+                action = Action.entries.first { it.value == "deleteObject" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -236,7 +236,7 @@ class SearchTest {
           batchWriteParams = BatchWriteParams(
             requests = listOf(
               BatchRequest(
-                action = Action.values().first { it.value == "partialUpdateObject" },
+                action = Action.entries.first { it.value == "partialUpdateObject" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -265,7 +265,7 @@ class SearchTest {
           batchWriteParams = BatchWriteParams(
             requests = listOf(
               BatchRequest(
-                action = Action.values().first { it.value == "partialUpdateObjectNoCreate" },
+                action = Action.entries.first { it.value == "partialUpdateObjectNoCreate" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -294,7 +294,7 @@ class SearchTest {
           batchWriteParams = BatchWriteParams(
             requests = listOf(
               BatchRequest(
-                action = Action.values().first { it.value == "updateObject" },
+                action = Action.entries.first { it.value == "updateObject" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -344,18 +344,18 @@ class SearchTest {
     client.runTest(
       call = {
         batchDictionaryEntries(
-          dictionaryName = DictionaryType.values().first { it.value == "compounds" },
+          dictionaryName = DictionaryType.entries.first { it.value == "compounds" },
           batchDictionaryEntriesParams = BatchDictionaryEntriesParams(
             requests = listOf(
               BatchDictionaryEntriesRequest(
-                action = DictionaryAction.values().first { it.value == "addEntry" },
+                action = DictionaryAction.entries.first { it.value == "addEntry" },
                 body = DictionaryEntry(
                   objectID = "1",
                   language = "en",
                 ),
               ),
               BatchDictionaryEntriesRequest(
-                action = DictionaryAction.values().first { it.value == "deleteEntry" },
+                action = DictionaryAction.entries.first { it.value == "deleteEntry" },
                 body = DictionaryEntry(
                   objectID = "2",
                   language = "fr",
@@ -378,30 +378,30 @@ class SearchTest {
     client.runTest(
       call = {
         batchDictionaryEntries(
-          dictionaryName = DictionaryType.values().first { it.value == "compounds" },
+          dictionaryName = DictionaryType.entries.first { it.value == "compounds" },
           batchDictionaryEntriesParams = BatchDictionaryEntriesParams(
             clearExistingDictionaryEntries = false,
             requests = listOf(
               BatchDictionaryEntriesRequest(
-                action = DictionaryAction.values().first { it.value == "addEntry" },
+                action = DictionaryAction.entries.first { it.value == "addEntry" },
                 body = DictionaryEntry(
                   objectID = "1",
                   language = "en",
                   word = "fancy",
                   words = listOf("believe", "algolia"),
                   decomposition = listOf("trust", "algolia"),
-                  state = DictionaryEntryState.values().first { it.value == "enabled" },
+                  state = DictionaryEntryState.entries.first { it.value == "enabled" },
                 ),
               ),
               BatchDictionaryEntriesRequest(
-                action = DictionaryAction.values().first { it.value == "deleteEntry" },
+                action = DictionaryAction.entries.first { it.value == "deleteEntry" },
                 body = DictionaryEntry(
                   objectID = "2",
                   language = "fr",
                   word = "humility",
                   words = listOf("candor", "algolia"),
                   decomposition = listOf("grit", "algolia"),
-                  state = DictionaryEntryState.values().first { it.value == "enabled" },
+                  state = DictionaryEntryState.entries.first { it.value == "enabled" },
                 ),
               ),
             ),
@@ -421,11 +421,11 @@ class SearchTest {
     client.runTest(
       call = {
         batchDictionaryEntries(
-          dictionaryName = DictionaryType.values().first { it.value == "compounds" },
+          dictionaryName = DictionaryType.entries.first { it.value == "compounds" },
           batchDictionaryEntriesParams = BatchDictionaryEntriesParams(
             requests = listOf(
               BatchDictionaryEntriesRequest(
-                action = DictionaryAction.values().first { it.value == "addEntry" },
+                action = DictionaryAction.entries.first { it.value == "addEntry" },
                 body = DictionaryEntry(
                   objectID = "1",
                   language = "en",
@@ -835,7 +835,7 @@ class SearchTest {
           offset = 5,
           length = 10,
           indexName = "theIndexName",
-          type = LogType.values().first { it.value == "all" },
+          type = LogType.entries.first { it.value == "all" },
         )
       },
       intercept = {
@@ -1162,7 +1162,7 @@ class SearchTest {
           batchParams = BatchParams(
             requests = listOf(
               MultipleBatchRequest(
-                action = Action.values().first { it.value == "addObject" },
+                action = Action.entries.first { it.value == "addObject" },
                 body = buildJsonObject {
                   put(
                     "key",
@@ -1192,9 +1192,9 @@ class SearchTest {
         operationIndex(
           indexName = "theIndexName",
           operationIndexParams = OperationIndexParams(
-            operation = OperationType.values().first { it.value == "copy" },
+            operation = OperationType.entries.first { it.value == "copy" },
             destination = "dest",
-            scope = listOf(ScopeType.values().first { it.value == "rules" }, ScopeType.values().first { it.value == "settings" }),
+            scope = listOf(ScopeType.entries.first { it.value == "rules" }, ScopeType.entries.first { it.value == "settings" }),
           ),
         )
       },
@@ -1218,7 +1218,7 @@ class SearchTest {
           attributesToUpdate = mapOf(
             "id1" to AttributeToUpdate.String("test"),
             "id2" to BuiltInOperation(
-              operation = BuiltInOperationType.values().first { it.value == "AddUnique" },
+              operation = BuiltInOperationType.entries.first { it.value == "AddUnique" },
               value = "test2",
             ),
           ),
@@ -1682,7 +1682,7 @@ class SearchTest {
             conditions = listOf(
               Condition(
                 pattern = "apple",
-                anchoring = Anchoring.values().first { it.value == "contains" },
+                anchoring = Anchoring.entries.first { it.value == "contains" },
               ),
             ),
           ),
@@ -1708,7 +1708,7 @@ class SearchTest {
             conditions = listOf(
               Condition(
                 pattern = "apple",
-                anchoring = Anchoring.values().first { it.value == "contains" },
+                anchoring = Anchoring.entries.first { it.value == "contains" },
                 alternatives = false,
                 context = "search",
               ),
@@ -1720,12 +1720,12 @@ class SearchTest {
                   remove = listOf("algolia"),
                   edits = listOf(
                     Edit(
-                      type = EditType.values().first { it.value == "remove" },
+                      type = EditType.entries.first { it.value == "remove" },
                       delete = "abc",
                       insert = "cde",
                     ),
                     Edit(
-                      type = EditType.values().first { it.value == "replace" },
+                      type = EditType.entries.first { it.value == "replace" },
                       delete = "abc",
                       insert = "cde",
                     ),
@@ -1739,10 +1739,7 @@ class SearchTest {
               ),
               filterPromotes = false,
               userData = buildJsonObject {
-                put(
-                  "algolia",
-                  JsonPrimitive("aloglia"),
-                )
+                put("algolia", "aloglia")
               },
               promote = listOf(
                 PromoteObjectID(
@@ -1790,7 +1787,7 @@ class SearchTest {
               conditions = listOf(
                 Condition(
                   pattern = "smartphone",
-                  anchoring = Anchoring.values().first { it.value == "contains" },
+                  anchoring = Anchoring.entries.first { it.value == "contains" },
                 ),
               ),
             ),
@@ -1799,7 +1796,7 @@ class SearchTest {
               conditions = listOf(
                 Condition(
                   pattern = "apple",
-                  anchoring = Anchoring.values().first { it.value == "contains" },
+                  anchoring = Anchoring.entries.first { it.value == "contains" },
                 ),
               ),
             ),
@@ -1826,7 +1823,7 @@ class SearchTest {
               conditions = listOf(
                 Condition(
                   pattern = "apple",
-                  anchoring = Anchoring.values().first { it.value == "contains" },
+                  anchoring = Anchoring.entries.first { it.value == "contains" },
                   alternatives = false,
                   context = "search",
                 ),
@@ -1838,12 +1835,12 @@ class SearchTest {
                     remove = listOf("algolia"),
                     edits = listOf(
                       Edit(
-                        type = EditType.values().first { it.value == "remove" },
+                        type = EditType.entries.first { it.value == "remove" },
                         delete = "abc",
                         insert = "cde",
                       ),
                       Edit(
-                        type = EditType.values().first { it.value == "replace" },
+                        type = EditType.entries.first { it.value == "replace" },
                         delete = "abc",
                         insert = "cde",
                       ),
@@ -1857,10 +1854,7 @@ class SearchTest {
                 ),
                 filterPromotes = false,
                 userData = buildJsonObject {
-                  put(
-                    "algolia",
-                    JsonPrimitive("aloglia"),
-                  )
+                  put("algolia", "aloglia")
                 },
                 promote = listOf(
                   PromoteObjectID(
@@ -1907,7 +1901,7 @@ class SearchTest {
           objectID = "id1",
           synonymHit = SynonymHit(
             objectID = "id1",
-            type = SynonymType.values().first { it.value == "synonym" },
+            type = SynonymType.entries.first { it.value == "synonym" },
             synonyms = listOf("car", "vehicule", "auto"),
           ),
           forwardToReplicas = true,
@@ -1933,12 +1927,12 @@ class SearchTest {
           synonymHit = listOf(
             SynonymHit(
               objectID = "id1",
-              type = SynonymType.values().first { it.value == "synonym" },
+              type = SynonymType.entries.first { it.value == "synonym" },
               synonyms = listOf("car", "vehicule", "auto"),
             ),
             SynonymHit(
               objectID = "id2",
-              type = SynonymType.values().first { it.value == "onewaysynonym" },
+              type = SynonymType.entries.first { it.value == "onewaysynonym" },
               input = "iphone",
               synonyms = listOf("ephone", "aphone", "yphone"),
             ),
@@ -1989,11 +1983,11 @@ class SearchTest {
             requests = listOf(
               SearchForFacets(
                 indexName = "theIndexName",
-                type = SearchTypeFacet.values().first { it.value == "facet" },
+                type = SearchTypeFacet.entries.first { it.value == "facet" },
                 facet = "theFacet",
               ),
             ),
-            strategy = SearchStrategy.values().first { it.value == "stopIfEnoughMatches" },
+            strategy = SearchStrategy.entries.first { it.value == "stopIfEnoughMatches" },
           ),
         )
       },
@@ -2016,7 +2010,7 @@ class SearchTest {
                 indexName = "theIndexName",
                 query = "myQuery",
                 hitsPerPage = 50,
-                type = SearchTypeDefault.values().first { it.value == "default" },
+                type = SearchTypeDefault.entries.first { it.value == "default" },
               ),
             ),
           ),
@@ -2039,14 +2033,14 @@ class SearchTest {
             requests = listOf(
               SearchForFacets(
                 indexName = "theIndexName",
-                type = SearchTypeFacet.values().first { it.value == "facet" },
+                type = SearchTypeFacet.entries.first { it.value == "facet" },
                 facet = "theFacet",
                 facetQuery = "theFacetQuery",
                 query = "theQuery",
                 maxFacetHits = 50,
               ),
             ),
-            strategy = SearchStrategy.values().first { it.value == "stopIfEnoughMatches" },
+            strategy = SearchStrategy.entries.first { it.value == "stopIfEnoughMatches" },
           ),
         )
       },
@@ -2070,15 +2064,15 @@ class SearchTest {
               ),
               SearchForFacets(
                 indexName = "theIndexName2",
-                type = SearchTypeFacet.values().first { it.value == "facet" },
+                type = SearchTypeFacet.entries.first { it.value == "facet" },
                 facet = "theFacet",
               ),
               SearchForHits(
                 indexName = "theIndexName",
-                type = SearchTypeDefault.values().first { it.value == "default" },
+                type = SearchTypeDefault.entries.first { it.value == "default" },
               ),
             ),
-            strategy = SearchStrategy.values().first { it.value == "stopIfEnoughMatches" },
+            strategy = SearchStrategy.entries.first { it.value == "stopIfEnoughMatches" },
           ),
         )
       },
@@ -2099,7 +2093,7 @@ class SearchTest {
             requests = listOf(
               SearchForFacets(
                 indexName = "theIndexName",
-                type = SearchTypeFacet.values().first { it.value == "facet" },
+                type = SearchTypeFacet.entries.first { it.value == "facet" },
                 facet = "theFacet",
                 facetQuery = "theFacetQuery",
                 query = "theQuery",
@@ -2109,10 +2103,10 @@ class SearchTest {
                 indexName = "theIndexName",
                 query = "myQuery",
                 hitsPerPage = 50,
-                type = SearchTypeDefault.values().first { it.value == "default" },
+                type = SearchTypeDefault.entries.first { it.value == "default" },
               ),
             ),
-            strategy = SearchStrategy.values().first { it.value == "stopIfEnoughMatches" },
+            strategy = SearchStrategy.entries.first { it.value == "stopIfEnoughMatches" },
           ),
         )
       },
@@ -2168,15 +2162,15 @@ class SearchTest {
             requests = listOf(
               SearchForHits(
                 advancedSyntax = true,
-                advancedSyntaxFeatures = listOf(AdvancedSyntaxFeatures.values().first { it.value == "exactPhrase" }),
+                advancedSyntaxFeatures = listOf(AdvancedSyntaxFeatures.entries.first { it.value == "exactPhrase" }),
                 allowTyposOnNumericTokens = true,
-                alternativesAsExact = listOf(AlternativesAsExact.values().first { it.value == "multiWordsSynonym" }),
+                alternativesAsExact = listOf(AlternativesAsExact.entries.first { it.value == "multiWordsSynonym" }),
                 analytics = true,
                 analyticsTags = listOf(""),
                 aroundLatLng = "",
                 aroundLatLngViaIP = true,
                 aroundPrecision = AroundPrecision.Number(0.toNumberType()),
-                aroundRadius = AroundRadiusAll.values().first { it.value == "all" },
+                aroundRadius = AroundRadiusAll.entries.first { it.value == "all" },
                 attributeCriteriaComputedByMinProximity = true,
                 attributesForFaceting = listOf(""),
                 attributesToHighlight = listOf(""),
@@ -2192,7 +2186,7 @@ class SearchTest {
                 enablePersonalization = true,
                 enableReRanking = true,
                 enableRules = true,
-                exactOnSingleWordQuery = ExactOnSingleWordQuery.values().first { it.value == "attribute" },
+                exactOnSingleWordQuery = ExactOnSingleWordQuery.entries.first { it.value == "attribute" },
                 explain = listOf("foo", "bar"),
                 facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
                 facetingAfterDistinct = true,
@@ -2223,12 +2217,12 @@ class SearchTest {
                 personalizationImpact = 0,
                 query = "",
                 queryLanguages = listOf(""),
-                queryType = QueryType.values().first { it.value == "prefixAll" },
+                queryType = QueryType.entries.first { it.value == "prefixAll" },
                 ranking = listOf(""),
                 reRankingApplyFilter = ReRankingApplyFilter.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
                 relevancyStrictness = 0,
                 removeStopWords = RemoveStopWords.Boolean(true),
-                removeWordsIfNoResults = RemoveWordsIfNoResults.values().first { it.value == "allOptional" },
+                removeWordsIfNoResults = RemoveWordsIfNoResults.entries.first { it.value == "allOptional" },
                 renderingContent = RenderingContent(
                   facetOrdering = FacetOrdering(
                     facets = Facets(
@@ -2237,7 +2231,7 @@ class SearchTest {
                     values = mapOf(
                       "a" to Value(
                         order = listOf("b"),
-                        sortRemainingBy = SortRemainingBy.values().first { it.value == "count" },
+                        sortRemainingBy = SortRemainingBy.entries.first { it.value == "count" },
                       ),
                     ),
                   ),
@@ -2253,8 +2247,8 @@ class SearchTest {
                 sumOrFiltersScores = true,
                 synonyms = true,
                 tagFilters = TagFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
-                type = SearchTypeDefault.values().first { it.value == "default" },
-                typoTolerance = TypoToleranceEnum.values().first { it.value == "min" },
+                type = SearchTypeDefault.entries.first { it.value == "default" },
+                typoTolerance = TypoToleranceEnum.entries.first { it.value == "min" },
                 userToken = "",
               ),
             ),
@@ -2276,7 +2270,7 @@ class SearchTest {
     client.runTest(
       call = {
         searchDictionaryEntries(
-          dictionaryName = DictionaryType.values().first { it.value == "compounds" },
+          dictionaryName = DictionaryType.entries.first { it.value == "compounds" },
           searchDictionaryEntriesParams = SearchDictionaryEntriesParams(
             query = "foo",
           ),
@@ -2295,7 +2289,7 @@ class SearchTest {
     client.runTest(
       call = {
         searchDictionaryEntries(
-          dictionaryName = DictionaryType.values().first { it.value == "compounds" },
+          dictionaryName = DictionaryType.entries.first { it.value == "compounds" },
           searchDictionaryEntriesParams = SearchDictionaryEntriesParams(
             query = "foo",
             page = 4,
@@ -2436,7 +2430,7 @@ class SearchTest {
       call = {
         searchSynonyms(
           indexName = "indexName",
-          type = SynonymType.values().first { it.value == "altcorrection1" },
+          type = SynonymType.entries.first { it.value == "altcorrection1" },
           page = 10,
           hitsPerPage = 10,
           searchSynonymsParams = SearchSynonymsParams(
@@ -2571,7 +2565,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            typoTolerance = TypoToleranceEnum.values().first { it.value == "min" },
+            typoTolerance = TypoToleranceEnum.entries.first { it.value == "min" },
           ),
           forwardToReplicas = true,
         )
@@ -2719,10 +2713,10 @@ class SearchTest {
           indexName = "theIndexName",
           indexSettings = IndexSettings(
             advancedSyntax = true,
-            advancedSyntaxFeatures = listOf(AdvancedSyntaxFeatures.values().first { it.value == "exactPhrase" }),
+            advancedSyntaxFeatures = listOf(AdvancedSyntaxFeatures.entries.first { it.value == "exactPhrase" }),
             allowCompressionOfIntegerArray = true,
             allowTyposOnNumericTokens = true,
-            alternativesAsExact = listOf(AlternativesAsExact.values().first { it.value == "singleWordSynonym" }),
+            alternativesAsExact = listOf(AlternativesAsExact.entries.first { it.value == "singleWordSynonym" }),
             attributeCriteriaComputedByMinProximity = true,
             attributeForDistinct = "test",
             attributesForFaceting = listOf("algolia"),
@@ -2748,7 +2742,7 @@ class SearchTest {
             enablePersonalization = true,
             enableReRanking = false,
             enableRules = true,
-            exactOnSingleWordQuery = ExactOnSingleWordQuery.values().first { it.value == "attribute" },
+            exactOnSingleWordQuery = ExactOnSingleWordQuery.entries.first { it.value == "attribute" },
             highlightPreTag = "<span>",
             highlightPostTag = "</span>",
             hitsPerPage = 10,
@@ -2760,17 +2754,17 @@ class SearchTest {
             minProximity = 6,
             minWordSizefor1Typo = 5,
             minWordSizefor2Typos = 11,
-            mode = Mode.values().first { it.value == "neuralSearch" },
+            mode = Mode.entries.first { it.value == "neuralSearch" },
             numericAttributesForFiltering = listOf("algolia"),
             optionalWords = listOf("myspace"),
             paginationLimitedTo = 0,
             queryLanguages = listOf("algolia"),
-            queryType = QueryType.values().first { it.value == "prefixLast" },
+            queryType = QueryType.entries.first { it.value == "prefixLast" },
             ranking = listOf("geo"),
             reRankingApplyFilter = ReRankingApplyFilter.String("mySearch:filters"),
             relevancyStrictness = 10,
             removeStopWords = RemoveStopWords.Boolean(false),
-            removeWordsIfNoResults = RemoveWordsIfNoResults.values().first { it.value == "lastWords" },
+            removeWordsIfNoResults = RemoveWordsIfNoResults.entries.first { it.value == "lastWords" },
             renderingContent = RenderingContent(
               facetOrdering = FacetOrdering(
                 facets = Facets(
@@ -2779,7 +2773,7 @@ class SearchTest {
                 values = mapOf(
                   "a" to Value(
                     order = listOf("b"),
-                    sortRemainingBy = SortRemainingBy.values().first { it.value == "count" },
+                    sortRemainingBy = SortRemainingBy.entries.first { it.value == "count" },
                   ),
                 ),
               ),
@@ -2798,10 +2792,7 @@ class SearchTest {
             typoTolerance = TypoTolerance.Boolean(false),
             unretrievableAttributes = listOf("foo"),
             userData = buildJsonObject {
-              put(
-                "user",
-                JsonPrimitive("data"),
-              )
+              put("user", "data")
             },
           ),
         )
@@ -2823,7 +2814,7 @@ class SearchTest {
         updateApiKey(
           key = "myApiKey",
           apiKey = ApiKey(
-            acl = listOf(Acl.values().first { it.value == "search" }, Acl.values().first { it.value == "addObject" }),
+            acl = listOf(Acl.entries.first { it.value == "search" }, Acl.entries.first { it.value == "addObject" }),
             validity = 300,
             maxQueriesPerIPPerHour = 100,
             maxHitsPerQuery = 20,

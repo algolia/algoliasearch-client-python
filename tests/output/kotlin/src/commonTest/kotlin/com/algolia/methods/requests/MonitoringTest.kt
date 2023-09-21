@@ -200,8 +200,8 @@ class MonitoringTest {
     client.runTest(
       call = {
         getMetrics(
-          metric = Metric.values().first { it.value == "avg_build_time" },
-          period = Period.values().first { it.value == "minute" },
+          metric = Metric.entries.first { it.value == "avg_build_time" },
+          period = Period.entries.first { it.value == "minute" },
         )
       },
       intercept = {

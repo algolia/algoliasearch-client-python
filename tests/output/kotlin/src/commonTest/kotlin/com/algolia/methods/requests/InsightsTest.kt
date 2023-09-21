@@ -405,7 +405,7 @@ class InsightsTest {
           insightsEvents = InsightsEvents(
             events = listOf(
               ClickedObjectIDsAfterSearch(
-                eventType = ClickEvent.values().first { it.value == "click" },
+                eventType = ClickEvent.entries.first { it.value == "click" },
                 eventName = "Product Clicked",
                 index = "products",
                 userToken = "user-123456",
@@ -434,7 +434,7 @@ class InsightsTest {
           insightsEvents = InsightsEvents(
             events = listOf(
               ConvertedObjectIDsAfterSearch(
-                eventType = ConversionEvent.values().first { it.value == "conversion" },
+                eventType = ConversionEvent.entries.first { it.value == "conversion" },
                 eventName = "Product Purchased",
                 index = "products",
                 userToken = "user-123456",
@@ -443,7 +443,7 @@ class InsightsTest {
                 queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
               ),
               ViewedObjectIDs(
-                eventType = ViewEvent.values().first { it.value == "view" },
+                eventType = ViewEvent.entries.first { it.value == "view" },
                 eventName = "Product Detail Page Viewed",
                 index = "products",
                 userToken = "user-123456",
@@ -470,7 +470,7 @@ class InsightsTest {
           insightsEvents = InsightsEvents(
             events = listOf(
               ConvertedObjectIDsAfterSearch(
-                eventType = ConversionEvent.values().first { it.value == "conversion" },
+                eventType = ConversionEvent.entries.first { it.value == "conversion" },
                 eventName = "Product Purchased",
                 index = "products",
                 userToken = "user-123456",
@@ -498,7 +498,7 @@ class InsightsTest {
           insightsEvents = InsightsEvents(
             events = listOf(
               ViewedObjectIDs(
-                eventType = ViewEvent.values().first { it.value == "view" },
+                eventType = ViewEvent.entries.first { it.value == "view" },
                 eventName = "Product Detail Page Viewed",
                 index = "products",
                 userToken = "user-123456",

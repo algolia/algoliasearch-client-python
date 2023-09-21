@@ -2172,11 +2172,7 @@ class SearchClientRequestsTests {
         consequence1.setHide(hide2);
         boolean filterPromotes2 = false;
         consequence1.setFilterPromotes(filterPromotes2);
-        Map<String, String> userData2 = new HashMap<>();
-        {
-          String algolia3 = "aloglia";
-          userData2.put("algolia", algolia3);
-        }
+        Map userData2 = Map.of("algolia", "aloglia");
         consequence1.setUserData(userData2);
         List<Promote> promote2 = new ArrayList<>();
         {
@@ -2394,11 +2390,7 @@ class SearchClientRequestsTests {
           consequence2.setHide(hide3);
           boolean filterPromotes3 = false;
           consequence2.setFilterPromotes(filterPromotes3);
-          Map<String, String> userData3 = new HashMap<>();
-          {
-            String algolia4 = "aloglia";
-            userData3.put("algolia", algolia4);
-          }
+          Map userData3 = Map.of("algolia", "aloglia");
           consequence2.setUserData(userData3);
           List<Promote> promote3 = new ArrayList<>();
           {
@@ -4210,11 +4202,7 @@ class SearchClientRequestsTests {
         unretrievableAttributes1.add(unretrievableAttributes_02);
       }
       indexSettings0.setUnretrievableAttributes(unretrievableAttributes1);
-      Map<String, String> userData1 = new HashMap<>();
-      {
-        String user2 = "data";
-        userData1.put("user", user2);
-      }
+      Map userData1 = Map.of("user", "data");
       indexSettings0.setUserData(userData1);
     }
 

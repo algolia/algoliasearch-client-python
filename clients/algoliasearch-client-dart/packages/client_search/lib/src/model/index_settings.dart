@@ -420,7 +420,7 @@ final class IndexSettings {
       numericAttributesForFiltering.hashCode +
       separatorsToIndex.hashCode +
       searchableAttributes.hashCode +
-      userData.hashCode +
+      (userData == null ? 0 : userData.hashCode) +
       customNormalization.hashCode +
       attributesForFaceting.hashCode +
       attributesToRetrieve.hashCode +

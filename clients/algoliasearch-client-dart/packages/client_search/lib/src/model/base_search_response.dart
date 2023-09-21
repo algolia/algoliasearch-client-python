@@ -188,7 +188,7 @@ final class BaseSearchResponse {
       processingTimeMS.hashCode +
       queryAfterRemoval.hashCode +
       serverUsed.hashCode +
-      userData.hashCode +
+      (userData == null ? 0 : userData.hashCode) +
       renderingContent.hashCode;
 
   factory BaseSearchResponse.fromJson(Map<String, dynamic> json) =>

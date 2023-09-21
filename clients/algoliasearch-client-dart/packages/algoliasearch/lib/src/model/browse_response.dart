@@ -212,7 +212,7 @@ final class BrowseResponse {
       processingTimeMS.hashCode +
       queryAfterRemoval.hashCode +
       serverUsed.hashCode +
-      userData.hashCode +
+      (userData == null ? 0 : userData.hashCode) +
       renderingContent.hashCode +
       hits.hashCode +
       query.hashCode +

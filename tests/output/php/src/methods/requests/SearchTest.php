@@ -1908,8 +1908,7 @@ class SearchTest extends TestCase implements HttpClientInterface
                         ],
                     ],
                     'filterPromotes' => false,
-                    'userData' => ['algolia' => 'aloglia',
-                    ],
+                    'userData' => ['algolia' => 'aloglia'],
                     'promote' => [
                         ['objectID' => 'abc',
                             'position' => 3,
@@ -2022,8 +2021,7 @@ class SearchTest extends TestCase implements HttpClientInterface
                             ],
                         ],
                         'filterPromotes' => false,
-                        'userData' => ['algolia' => 'aloglia',
-                        ],
+                        'userData' => ['algolia' => 'aloglia'],
                         'promote' => [
                             ['objectID' => 'abc',
                                 'position' => 3,
@@ -3193,8 +3191,7 @@ class SearchTest extends TestCase implements HttpClientInterface
                 'unretrievableAttributes' => [
                     'foo',
                 ],
-                'userData' => ['user' => 'data',
-                ],
+                'userData' => ['user' => 'data'],
             ],
         );
 

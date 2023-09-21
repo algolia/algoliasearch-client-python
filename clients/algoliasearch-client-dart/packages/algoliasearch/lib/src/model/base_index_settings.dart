@@ -123,7 +123,7 @@ final class BaseIndexSettings {
       numericAttributesForFiltering.hashCode +
       separatorsToIndex.hashCode +
       searchableAttributes.hashCode +
-      userData.hashCode +
+      (userData == null ? 0 : userData.hashCode) +
       customNormalization.hashCode;
 
   factory BaseIndexSettings.fromJson(Map<String, dynamic> json) =>
