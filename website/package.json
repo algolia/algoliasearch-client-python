@@ -21,15 +21,15 @@
   },
   "dependencies": {
     "@algolia/ui-library": "6.4.0",
-    "@docusaurus/core": "2.4.1",
-    "@docusaurus/preset-classic": "2.4.1",
-    "@docusaurus/types": "2.4.1",
+    "@docusaurus/core": "2.4.3",
+    "@docusaurus/preset-classic": "2.4.3",
+    "@docusaurus/types": "2.4.3",
     "@mdx-js/react": "1.6.22",
     "clsx": "2.0.0",
     "docusaurus-preset-shiki-twoslash": "1.1.41",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "redocusaurus": "1.6.3"
+    "redocusaurus": "1.6.4"
   },
   "packageManager": "yarn@3.6.3"
 }
