@@ -64,7 +64,7 @@ extension WaitTask on SearchClient {
         }
       },
       until: (result) =>
-      result is AlgoliaApiException ? result.statusCode == 404 : false,
+          result is AlgoliaApiException ? result.statusCode == 404 : false,
     );
   }
 
@@ -102,31 +102,30 @@ class WaitParams {
 /// Checks if [response] contains the expected updates in [apiKey].
 bool _isExpectedApiKey(ApiKey apiKey, GetApiKeyResponse response) {
   return const DeepCollectionEquality.unordered()
-            .equals(apiKey.acl, response.acl) &&
-        (apiKey.description == null ||
-            (apiKey.description != null &&
-                apiKey.description == response.description)) &&
-        (apiKey.indexes == null ||
-            (apiKey.indexes != null &&
-                const DeepCollectionEquality.unordered()
-                    .equals(apiKey.indexes, response.indexes))) &&
-        (apiKey.maxHitsPerQuery == null ||
-            (apiKey.maxHitsPerQuery != null &&
-                apiKey.maxHitsPerQuery == response.maxHitsPerQuery)) &&
-        (apiKey.maxQueriesPerIPPerHour == null ||
-            (apiKey.maxQueriesPerIPPerHour != null &&
-                apiKey.maxQueriesPerIPPerHour ==
-                    response.maxQueriesPerIPPerHour)) &&
-        (apiKey.queryParameters == null ||
-            (apiKey.queryParameters != null &&
-                apiKey.queryParameters == response.queryParameters)) &&
-        (apiKey.referers == null ||
-            (apiKey.referers != null &&
-                const DeepCollectionEquality.unordered()
-                    .equals(apiKey.referers, response.referers))) &&
-        (apiKey.validity == null ||
-            (apiKey.validity != null &&
-                apiKey.validity == response.validity));
+          .equals(apiKey.acl, response.acl) &&
+      (apiKey.description == null ||
+          (apiKey.description != null &&
+              apiKey.description == response.description)) &&
+      (apiKey.indexes == null ||
+          (apiKey.indexes != null &&
+              const DeepCollectionEquality.unordered()
+                  .equals(apiKey.indexes, response.indexes))) &&
+      (apiKey.maxHitsPerQuery == null ||
+          (apiKey.maxHitsPerQuery != null &&
+              apiKey.maxHitsPerQuery == response.maxHitsPerQuery)) &&
+      (apiKey.maxQueriesPerIPPerHour == null ||
+          (apiKey.maxQueriesPerIPPerHour != null &&
+              apiKey.maxQueriesPerIPPerHour ==
+                  response.maxQueriesPerIPPerHour)) &&
+      (apiKey.queryParameters == null ||
+          (apiKey.queryParameters != null &&
+              apiKey.queryParameters == response.queryParameters)) &&
+      (apiKey.referers == null ||
+          (apiKey.referers != null &&
+              const DeepCollectionEquality.unordered()
+                  .equals(apiKey.referers, response.referers))) &&
+      (apiKey.validity == null ||
+          (apiKey.validity != null && apiKey.validity == response.validity));
 }
 
 /// Retries the given [retry] function until the [until] condition is satisfied or the maximum number
