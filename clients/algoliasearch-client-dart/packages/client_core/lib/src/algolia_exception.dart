@@ -52,6 +52,21 @@ final class AlgoliaIOException implements AlgoliaException {
   }
 }
 
+/// Exception thrown when an error occurs during the wait strategy.
+/// For example: maximum number of retry exceeded.
+final class AlgoliaWaitException implements AlgoliaException {
+  /// The error message.
+  final dynamic error;
+
+  /// Constructs an [AlgoliaWaitException] with the provided error message.
+  const AlgoliaWaitException(this.error);
+
+  @override
+  String toString() {
+    return 'AlgoliaWaitException{error: $error}';
+  }
+}
+
 /// Exception thrown when all hosts for the Algolia API are unreachable.
 ///
 /// Contains a list of the errors associated with each unreachable host.
