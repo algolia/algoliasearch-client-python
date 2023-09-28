@@ -9,6 +9,7 @@ import kotlinx.serialization.json.*
  *
  * @param indexName The index name to store data in.
  * @param recordType
+ * @param attributesToExclude Determines the attributes to exclude from an Algolia record. To remove nested element, you can separate the path to the element with dots (`.`):   - \"foo.bar\": will remove `bar` from `foo`. To remove elements from an array, you can use the following:   - \"foo.[0].bar\": will only remove `bar` from the first element of `foo`.   - \"foo.[*].bar\": will remove `bar` from every elements of `foo`.
  */
 @Serializable
 public data class DestinationIndexName(
@@ -17,4 +18,7 @@ public data class DestinationIndexName(
   @SerialName(value = "indexName") val indexName: String,
 
   @SerialName(value = "recordType") val recordType: RecordType? = null,
+
+  /** Determines the attributes to exclude from an Algolia record. To remove nested element, you can separate the path to the element with dots (`.`):   - \"foo.bar\": will remove `bar` from `foo`. To remove elements from an array, you can use the following:   - \"foo.[0].bar\": will only remove `bar` from the first element of `foo`.   - \"foo.[*].bar\": will remove `bar` from every elements of `foo`.  */
+  @SerialName(value = "attributesToExclude") val attributesToExclude: List<String>? = null,
 ) : DestinationInput

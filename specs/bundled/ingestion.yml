@@ -670,6 +670,19 @@ components:
       enum:
         - product
         - variant
+    AttributesToExclude:
+      type: array
+      description: >
+        Determines the attributes to exclude from an Algolia record.
+
+        To remove nested element, you can separate the path to the element with
+        dots (`.`):
+          - "foo.bar": will remove `bar` from `foo`.
+        To remove elements from an array, you can use the following:
+          - "foo.[0].bar": will only remove `bar` from the first element of `foo`.
+          - "foo.[*].bar": will remove `bar` from every elements of `foo`.
+      items:
+        type: string
     DestinationIndexName:
       type: object
       additionalProperties: false
@@ -679,6 +692,8 @@ components:
           description: The index name to store data in.
         recordType:
           $ref: '#/components/schemas/RecordType'
+        attributesToExclude:
+          $ref: '#/components/schemas/AttributesToExclude'
       required:
         - indexName
     DestinationInput:

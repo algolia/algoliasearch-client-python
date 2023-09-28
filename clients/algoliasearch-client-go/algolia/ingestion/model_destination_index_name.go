@@ -11,6 +11,8 @@ type DestinationIndexName struct {
 	// The index name to store data in.
 	IndexName  string      `json:"indexName" validate:"required"`
 	RecordType *RecordType `json:"recordType,omitempty"`
+	// Determines the attributes to exclude from an Algolia record. To remove nested element, you can separate the path to the element with dots (`.`):   - \"foo.bar\": will remove `bar` from `foo`. To remove elements from an array, you can use the following:   - \"foo.[0].bar\": will only remove `bar` from the first element of `foo`.   - \"foo.[*].bar\": will remove `bar` from every elements of `foo`.
+	AttributesToExclude []string `json:"attributesToExclude,omitempty"`
 }
 
 type DestinationIndexNameOption func(f *DestinationIndexName)
@@ -18,6 +20,12 @@ type DestinationIndexNameOption func(f *DestinationIndexName)
 func WithDestinationIndexNameRecordType(val RecordType) DestinationIndexNameOption {
 	return func(f *DestinationIndexName) {
 		f.RecordType = &val
+	}
+}
+
+func WithDestinationIndexNameAttributesToExclude(val []string) DestinationIndexNameOption {
+	return func(f *DestinationIndexName) {
+		f.AttributesToExclude = val
 	}
 }
 
@@ -98,6 +106,38 @@ func (o *DestinationIndexName) SetRecordType(v RecordType) {
 	o.RecordType = &v
 }
 
+// GetAttributesToExclude returns the AttributesToExclude field value if set, zero value otherwise.
+func (o *DestinationIndexName) GetAttributesToExclude() []string {
+	if o == nil || o.AttributesToExclude == nil {
+		var ret []string
+		return ret
+	}
+	return o.AttributesToExclude
+}
+
+// GetAttributesToExcludeOk returns a tuple with the AttributesToExclude field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DestinationIndexName) GetAttributesToExcludeOk() ([]string, bool) {
+	if o == nil || o.AttributesToExclude == nil {
+		return nil, false
+	}
+	return o.AttributesToExclude, true
+}
+
+// HasAttributesToExclude returns a boolean if a field has been set.
+func (o *DestinationIndexName) HasAttributesToExclude() bool {
+	if o != nil && o.AttributesToExclude != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAttributesToExclude gets a reference to the given []string and assigns it to the AttributesToExclude field.
+func (o *DestinationIndexName) SetAttributesToExclude(v []string) {
+	o.AttributesToExclude = v
+}
+
 func (o DestinationIndexName) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -106,6 +146,9 @@ func (o DestinationIndexName) MarshalJSON() ([]byte, error) {
 	if o.RecordType != nil {
 		toSerialize["recordType"] = o.RecordType
 	}
+	if o.AttributesToExclude != nil {
+		toSerialize["attributesToExclude"] = o.AttributesToExclude
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -113,6 +156,7 @@ func (o DestinationIndexName) String() string {
 	out := ""
 	out += fmt.Sprintf("  indexName=%v\n", o.IndexName)
 	out += fmt.Sprintf("  recordType=%v\n", o.RecordType)
+	out += fmt.Sprintf("  attributesToExclude=%v\n", o.AttributesToExclude)
 	return fmt.Sprintf("DestinationIndexName {\n%s}", out)
 }
 
