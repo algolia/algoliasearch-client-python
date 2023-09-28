@@ -1,3 +1,9 @@
+## [0.3.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.2.3...0.3.0)
+
+- [2260e903f](https://github.com/algolia/api-clients-automation/commit/2260e903f) feat(specs): add `attributesToExclude` for Ingestion ([#2053](https://github.com/algolia/api-clients-automation/pull/2053)) by [@shortcuts](https://github.com/shortcuts/)
+- [3f7276e92](https://github.com/algolia/api-clients-automation/commit/3f7276e92) feat(dart): add wait task methods ([#2037](https://github.com/algolia/api-clients-automation/pull/2037)) by [@aallam](https://github.com/aallam/)
+- [b7b6565ab](https://github.com/algolia/api-clients-automation/commit/b7b6565ab) fix(specs): `userData` type as 'any' ([#2033](https://github.com/algolia/api-clients-automation/pull/2033)) by [@aallam](https://github.com/aallam/)
+
 ## [0.2.3](https://github.com/algolia/algoliasearch-client-dart/compare/0.2.2...0.2.3)
 
 - [6911ec0b5](https://github.com/algolia/api-clients-automation/commit/6911ec0b5) fix(dart): reset only hosts w/ call type ([#2018](https://github.com/algolia/api-clients-automation/pull/2018)) by [@aallam](https://github.com/aallam/)
