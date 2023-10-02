@@ -130,6 +130,10 @@ baseIndexSettings:
           type: string
       x-categories:
         - Languages
+    attributeForDistinct:
+      description: Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+      example: 'url'
+      type: string
 
 indexSettingsAsSearchParams:
   type: object
@@ -351,10 +355,6 @@ indexSettingsAsSearchParams:
         - Query strategy
     distinct:
       $ref: '#/distinct'
-    attributeForDistinct:
-      description: Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-      example: 'url'
-      type: string
     replaceSynonymsInHighlight:
       type: boolean
       description: Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
