@@ -131,8 +131,6 @@ type SearchForHits struct {
 	// Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
 	AdvancedSyntaxFeatures []AdvancedSyntaxFeatures `json:"advancedSyntaxFeatures,omitempty"`
 	Distinct               *Distinct                `json:"distinct,omitempty"`
-	// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-	AttributeForDistinct *string `json:"attributeForDistinct,omitempty"`
 	// Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
 	ReplaceSynonymsInHighlight *bool `json:"replaceSynonymsInHighlight,omitempty"`
 	// Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
@@ -569,12 +567,6 @@ func WithSearchForHitsAdvancedSyntaxFeatures(val []AdvancedSyntaxFeatures) Searc
 func WithSearchForHitsDistinct(val Distinct) SearchForHitsOption {
 	return func(f *SearchForHits) {
 		f.Distinct = &val
-	}
-}
-
-func WithSearchForHitsAttributeForDistinct(val string) SearchForHitsOption {
-	return func(f *SearchForHits) {
-		f.AttributeForDistinct = &val
 	}
 }
 
@@ -2957,38 +2949,6 @@ func (o *SearchForHits) SetDistinct(v Distinct) {
 	o.Distinct = &v
 }
 
-// GetAttributeForDistinct returns the AttributeForDistinct field value if set, zero value otherwise.
-func (o *SearchForHits) GetAttributeForDistinct() string {
-	if o == nil || o.AttributeForDistinct == nil {
-		var ret string
-		return ret
-	}
-	return *o.AttributeForDistinct
-}
-
-// GetAttributeForDistinctOk returns a tuple with the AttributeForDistinct field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *SearchForHits) GetAttributeForDistinctOk() (*string, bool) {
-	if o == nil || o.AttributeForDistinct == nil {
-		return nil, false
-	}
-	return o.AttributeForDistinct, true
-}
-
-// HasAttributeForDistinct returns a boolean if a field has been set.
-func (o *SearchForHits) HasAttributeForDistinct() bool {
-	if o != nil && o.AttributeForDistinct != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetAttributeForDistinct gets a reference to the given string and assigns it to the AttributeForDistinct field.
-func (o *SearchForHits) SetAttributeForDistinct(v string) {
-	o.AttributeForDistinct = &v
-}
-
 // GetReplaceSynonymsInHighlight returns the ReplaceSynonymsInHighlight field value if set, zero value otherwise.
 func (o *SearchForHits) GetReplaceSynonymsInHighlight() bool {
 	if o == nil || o.ReplaceSynonymsInHighlight == nil {
@@ -3585,9 +3545,6 @@ func (o SearchForHits) MarshalJSON() ([]byte, error) {
 	if o.Distinct != nil {
 		toSerialize["distinct"] = o.Distinct
 	}
-	if o.AttributeForDistinct != nil {
-		toSerialize["attributeForDistinct"] = o.AttributeForDistinct
-	}
 	if o.ReplaceSynonymsInHighlight != nil {
 		toSerialize["replaceSynonymsInHighlight"] = o.ReplaceSynonymsInHighlight
 	}
@@ -3698,7 +3655,6 @@ func (o SearchForHits) String() string {
 	out += fmt.Sprintf("  alternativesAsExact=%v\n", o.AlternativesAsExact)
 	out += fmt.Sprintf("  advancedSyntaxFeatures=%v\n", o.AdvancedSyntaxFeatures)
 	out += fmt.Sprintf("  distinct=%v\n", o.Distinct)
-	out += fmt.Sprintf("  attributeForDistinct=%v\n", o.AttributeForDistinct)
 	out += fmt.Sprintf("  replaceSynonymsInHighlight=%v\n", o.ReplaceSynonymsInHighlight)
 	out += fmt.Sprintf("  minProximity=%v\n", o.MinProximity)
 	out += fmt.Sprintf("  responseFields=%v\n", o.ResponseFields)

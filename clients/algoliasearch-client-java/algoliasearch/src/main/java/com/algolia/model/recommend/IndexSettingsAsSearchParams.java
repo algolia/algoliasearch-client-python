@@ -117,9 +117,6 @@ public class IndexSettingsAsSearchParams {
   @JsonProperty("distinct")
   private Distinct distinct;
 
-  @JsonProperty("attributeForDistinct")
-  private String attributeForDistinct;
-
   @JsonProperty("replaceSynonymsInHighlight")
   private Boolean replaceSynonymsInHighlight;
 
@@ -700,20 +697,6 @@ public class IndexSettingsAsSearchParams {
     return distinct;
   }
 
-  public IndexSettingsAsSearchParams setAttributeForDistinct(String attributeForDistinct) {
-    this.attributeForDistinct = attributeForDistinct;
-    return this;
-  }
-
-  /**
-   * Name of the deduplication attribute to be used with Algolia's [_distinct_
-   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-   */
-  @javax.annotation.Nullable
-  public String getAttributeForDistinct() {
-    return attributeForDistinct;
-  }
-
   public IndexSettingsAsSearchParams setReplaceSynonymsInHighlight(Boolean replaceSynonymsInHighlight) {
     this.replaceSynonymsInHighlight = replaceSynonymsInHighlight;
     return this;
@@ -896,7 +879,6 @@ public class IndexSettingsAsSearchParams {
       Objects.equals(this.alternativesAsExact, indexSettingsAsSearchParams.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, indexSettingsAsSearchParams.advancedSyntaxFeatures) &&
       Objects.equals(this.distinct, indexSettingsAsSearchParams.distinct) &&
-      Objects.equals(this.attributeForDistinct, indexSettingsAsSearchParams.attributeForDistinct) &&
       Objects.equals(this.replaceSynonymsInHighlight, indexSettingsAsSearchParams.replaceSynonymsInHighlight) &&
       Objects.equals(this.minProximity, indexSettingsAsSearchParams.minProximity) &&
       Objects.equals(this.responseFields, indexSettingsAsSearchParams.responseFields) &&
@@ -948,7 +930,6 @@ public class IndexSettingsAsSearchParams {
       alternativesAsExact,
       advancedSyntaxFeatures,
       distinct,
-      attributeForDistinct,
       replaceSynonymsInHighlight,
       minProximity,
       responseFields,
@@ -1001,7 +982,6 @@ public class IndexSettingsAsSearchParams {
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
-    sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    replaceSynonymsInHighlight: ").append(toIndentedString(replaceSynonymsInHighlight)).append("\n");
     sb.append("    minProximity: ").append(toIndentedString(minProximity)).append("\n");
     sb.append("    responseFields: ").append(toIndentedString(responseFields)).append("\n");

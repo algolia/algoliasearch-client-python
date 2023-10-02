@@ -59,6 +59,9 @@ public class BaseIndexSettings {
   @JsonProperty("customNormalization")
   private Map<String, Map<String, String>> customNormalization;
 
+  @JsonProperty("attributeForDistinct")
+  private String attributeForDistinct;
+
   public BaseIndexSettings setReplicas(List<String> replicas) {
     this.replicas = replicas;
     return this;
@@ -346,6 +349,20 @@ public class BaseIndexSettings {
     return customNormalization;
   }
 
+  public BaseIndexSettings setAttributeForDistinct(String attributeForDistinct) {
+    this.attributeForDistinct = attributeForDistinct;
+    return this;
+  }
+
+  /**
+   * Name of the deduplication attribute to be used with Algolia's [_distinct_
+   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+   */
+  @javax.annotation.Nullable
+  public String getAttributeForDistinct() {
+    return attributeForDistinct;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -370,7 +387,8 @@ public class BaseIndexSettings {
       Objects.equals(this.separatorsToIndex, baseIndexSettings.separatorsToIndex) &&
       Objects.equals(this.searchableAttributes, baseIndexSettings.searchableAttributes) &&
       Objects.equals(this.userData, baseIndexSettings.userData) &&
-      Objects.equals(this.customNormalization, baseIndexSettings.customNormalization)
+      Objects.equals(this.customNormalization, baseIndexSettings.customNormalization) &&
+      Objects.equals(this.attributeForDistinct, baseIndexSettings.attributeForDistinct)
     );
   }
 
@@ -391,7 +409,8 @@ public class BaseIndexSettings {
       separatorsToIndex,
       searchableAttributes,
       userData,
-      customNormalization
+      customNormalization,
+      attributeForDistinct
     );
   }
 
@@ -414,6 +433,7 @@ public class BaseIndexSettings {
     sb.append("    searchableAttributes: ").append(toIndentedString(searchableAttributes)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");
     sb.append("    customNormalization: ").append(toIndentedString(customNormalization)).append("\n");
+    sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("}");
     return sb.toString();
   }

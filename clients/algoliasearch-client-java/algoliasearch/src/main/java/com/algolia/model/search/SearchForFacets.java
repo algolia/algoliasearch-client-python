@@ -220,9 +220,6 @@ public class SearchForFacets implements SearchQuery {
   @JsonProperty("distinct")
   private Distinct distinct;
 
-  @JsonProperty("attributeForDistinct")
-  private String attributeForDistinct;
-
   @JsonProperty("replaceSynonymsInHighlight")
   private Boolean replaceSynonymsInHighlight;
 
@@ -1333,20 +1330,6 @@ public class SearchForFacets implements SearchQuery {
     return distinct;
   }
 
-  public SearchForFacets setAttributeForDistinct(String attributeForDistinct) {
-    this.attributeForDistinct = attributeForDistinct;
-    return this;
-  }
-
-  /**
-   * Name of the deduplication attribute to be used with Algolia's [_distinct_
-   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-   */
-  @javax.annotation.Nullable
-  public String getAttributeForDistinct() {
-    return attributeForDistinct;
-  }
-
   public SearchForFacets setReplaceSynonymsInHighlight(Boolean replaceSynonymsInHighlight) {
     this.replaceSynonymsInHighlight = replaceSynonymsInHighlight;
     return this;
@@ -1607,7 +1590,6 @@ public class SearchForFacets implements SearchQuery {
       Objects.equals(this.alternativesAsExact, searchForFacets.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, searchForFacets.advancedSyntaxFeatures) &&
       Objects.equals(this.distinct, searchForFacets.distinct) &&
-      Objects.equals(this.attributeForDistinct, searchForFacets.attributeForDistinct) &&
       Objects.equals(this.replaceSynonymsInHighlight, searchForFacets.replaceSynonymsInHighlight) &&
       Objects.equals(this.minProximity, searchForFacets.minProximity) &&
       Objects.equals(this.responseFields, searchForFacets.responseFields) &&
@@ -1697,7 +1679,6 @@ public class SearchForFacets implements SearchQuery {
       alternativesAsExact,
       advancedSyntaxFeatures,
       distinct,
-      attributeForDistinct,
       replaceSynonymsInHighlight,
       minProximity,
       responseFields,
@@ -1788,7 +1769,6 @@ public class SearchForFacets implements SearchQuery {
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
-    sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    replaceSynonymsInHighlight: ").append(toIndentedString(replaceSynonymsInHighlight)).append("\n");
     sb.append("    minProximity: ").append(toIndentedString(minProximity)).append("\n");
     sb.append("    responseFields: ").append(toIndentedString(responseFields)).append("\n");

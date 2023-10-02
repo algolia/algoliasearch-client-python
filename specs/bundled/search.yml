@@ -1168,13 +1168,6 @@ components:
             - Query strategy
         distinct:
           $ref: '#/components/schemas/distinct'
-        attributeForDistinct:
-          description: >-
-            Name of the deduplication attribute to be used with Algolia's
-            [_distinct_
-            feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-          example: url
-          type: string
         replaceSynonymsInHighlight:
           type: boolean
           description: >-
@@ -2048,6 +2041,13 @@ components:
               type: string
           x-categories:
             - Languages
+        attributeForDistinct:
+          description: >-
+            Name of the deduplication attribute to be used with Algolia's
+            [_distinct_
+            feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+          example: url
+          type: string
     indexSettings:
       description: Algolia index settings.
       allOf:

@@ -48,6 +48,8 @@ IndexSettings _$IndexSettingsFromJson(Map<String, dynamic> json) =>
               (v) => (v as Map<String, dynamic>?)?.map(
                     (k, e) => MapEntry(k, Map<String, String>.from(e as Map)),
                   )),
+          attributeForDistinct:
+              $checkedConvert('attributeForDistinct', (v) => v as String?),
           attributesForFaceting: $checkedConvert('attributesForFaceting',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           attributesToRetrieve: $checkedConvert('attributesToRetrieve',
@@ -121,8 +123,6 @@ IndexSettings _$IndexSettingsFromJson(Map<String, dynamic> json) =>
                   ?.map((e) => $enumDecode(_$AdvancedSyntaxFeaturesEnumMap, e))
                   .toList()),
           distinct: $checkedConvert('distinct', (v) => v),
-          attributeForDistinct:
-              $checkedConvert('attributeForDistinct', (v) => v as String?),
           replaceSynonymsInHighlight:
               $checkedConvert('replaceSynonymsInHighlight', (v) => v as bool?),
           minProximity: $checkedConvert('minProximity', (v) => v as int?),
@@ -176,6 +176,7 @@ Map<String, dynamic> _$IndexSettingsToJson(IndexSettings instance) {
   writeNotNull('searchableAttributes', instance.searchableAttributes);
   writeNotNull('userData', instance.userData);
   writeNotNull('customNormalization', instance.customNormalization);
+  writeNotNull('attributeForDistinct', instance.attributeForDistinct);
   writeNotNull('attributesForFaceting', instance.attributesForFaceting);
   writeNotNull('attributesToRetrieve', instance.attributesToRetrieve);
   writeNotNull('ranking', instance.ranking);
@@ -218,7 +219,6 @@ Map<String, dynamic> _$IndexSettingsToJson(IndexSettings instance) {
   writeNotNull('advancedSyntaxFeatures',
       instance.advancedSyntaxFeatures?.map((e) => e.toJson()).toList());
   writeNotNull('distinct', instance.distinct);
-  writeNotNull('attributeForDistinct', instance.attributeForDistinct);
   writeNotNull(
       'replaceSynonymsInHighlight', instance.replaceSynonymsInHighlight);
   writeNotNull('minProximity', instance.minProximity);

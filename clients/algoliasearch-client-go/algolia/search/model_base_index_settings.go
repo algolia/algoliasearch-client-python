@@ -38,6 +38,8 @@ type BaseIndexSettings struct {
 	UserData interface{} `json:"userData,omitempty"`
 	// A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
 	CustomNormalization *map[string]map[string]string `json:"customNormalization,omitempty"`
+	// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+	AttributeForDistinct *string `json:"attributeForDistinct,omitempty"`
 }
 
 type BaseIndexSettingsOption func(f *BaseIndexSettings)
@@ -129,6 +131,12 @@ func WithBaseIndexSettingsUserData(val interface{}) BaseIndexSettingsOption {
 func WithBaseIndexSettingsCustomNormalization(val map[string]map[string]string) BaseIndexSettingsOption {
 	return func(f *BaseIndexSettings) {
 		f.CustomNormalization = &val
+	}
+}
+
+func WithBaseIndexSettingsAttributeForDistinct(val string) BaseIndexSettingsOption {
+	return func(f *BaseIndexSettings) {
+		f.AttributeForDistinct = &val
 	}
 }
 
@@ -639,6 +647,38 @@ func (o *BaseIndexSettings) SetCustomNormalization(v map[string]map[string]strin
 	o.CustomNormalization = &v
 }
 
+// GetAttributeForDistinct returns the AttributeForDistinct field value if set, zero value otherwise.
+func (o *BaseIndexSettings) GetAttributeForDistinct() string {
+	if o == nil || o.AttributeForDistinct == nil {
+		var ret string
+		return ret
+	}
+	return *o.AttributeForDistinct
+}
+
+// GetAttributeForDistinctOk returns a tuple with the AttributeForDistinct field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BaseIndexSettings) GetAttributeForDistinctOk() (*string, bool) {
+	if o == nil || o.AttributeForDistinct == nil {
+		return nil, false
+	}
+	return o.AttributeForDistinct, true
+}
+
+// HasAttributeForDistinct returns a boolean if a field has been set.
+func (o *BaseIndexSettings) HasAttributeForDistinct() bool {
+	if o != nil && o.AttributeForDistinct != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAttributeForDistinct gets a reference to the given string and assigns it to the AttributeForDistinct field.
+func (o *BaseIndexSettings) SetAttributeForDistinct(v string) {
+	o.AttributeForDistinct = &v
+}
+
 func (o BaseIndexSettings) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.Replicas != nil {
@@ -686,6 +726,9 @@ func (o BaseIndexSettings) MarshalJSON() ([]byte, error) {
 	if o.CustomNormalization != nil {
 		toSerialize["customNormalization"] = o.CustomNormalization
 	}
+	if o.AttributeForDistinct != nil {
+		toSerialize["attributeForDistinct"] = o.AttributeForDistinct
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -706,6 +749,7 @@ func (o BaseIndexSettings) String() string {
 	out += fmt.Sprintf("  searchableAttributes=%v\n", o.SearchableAttributes)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
 	out += fmt.Sprintf("  customNormalization=%v\n", o.CustomNormalization)
+	out += fmt.Sprintf("  attributeForDistinct=%v\n", o.AttributeForDistinct)
 	return fmt.Sprintf("BaseIndexSettings {\n%s}", out)
 }
 

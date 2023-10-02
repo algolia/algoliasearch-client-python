@@ -38,6 +38,8 @@ type IndexSettings struct {
 	UserData interface{} `json:"userData,omitempty"`
 	// A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
 	CustomNormalization *map[string]map[string]string `json:"customNormalization,omitempty"`
+	// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+	AttributeForDistinct *string `json:"attributeForDistinct,omitempty"`
 	// Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
 	AttributesForFaceting []string `json:"attributesForFaceting,omitempty"`
 	// Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.
@@ -99,8 +101,6 @@ type IndexSettings struct {
 	// Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.
 	AdvancedSyntaxFeatures []AdvancedSyntaxFeatures `json:"advancedSyntaxFeatures,omitempty"`
 	Distinct               *Distinct                `json:"distinct,omitempty"`
-	// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-	AttributeForDistinct *string `json:"attributeForDistinct,omitempty"`
 	// Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
 	ReplaceSynonymsInHighlight *bool `json:"replaceSynonymsInHighlight,omitempty"`
 	// Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).
@@ -210,6 +210,12 @@ func WithIndexSettingsUserData(val interface{}) IndexSettingsOption {
 func WithIndexSettingsCustomNormalization(val map[string]map[string]string) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.CustomNormalization = &val
+	}
+}
+
+func WithIndexSettingsAttributeForDistinct(val string) IndexSettingsOption {
+	return func(f *IndexSettings) {
+		f.AttributeForDistinct = &val
 	}
 }
 
@@ -420,12 +426,6 @@ func WithIndexSettingsAdvancedSyntaxFeatures(val []AdvancedSyntaxFeatures) Index
 func WithIndexSettingsDistinct(val Distinct) IndexSettingsOption {
 	return func(f *IndexSettings) {
 		f.Distinct = &val
-	}
-}
-
-func WithIndexSettingsAttributeForDistinct(val string) IndexSettingsOption {
-	return func(f *IndexSettings) {
-		f.AttributeForDistinct = &val
 	}
 }
 
@@ -1044,6 +1044,38 @@ func (o *IndexSettings) HasCustomNormalization() bool {
 // SetCustomNormalization gets a reference to the given map[string]map[string]string and assigns it to the CustomNormalization field.
 func (o *IndexSettings) SetCustomNormalization(v map[string]map[string]string) {
 	o.CustomNormalization = &v
+}
+
+// GetAttributeForDistinct returns the AttributeForDistinct field value if set, zero value otherwise.
+func (o *IndexSettings) GetAttributeForDistinct() string {
+	if o == nil || o.AttributeForDistinct == nil {
+		var ret string
+		return ret
+	}
+	return *o.AttributeForDistinct
+}
+
+// GetAttributeForDistinctOk returns a tuple with the AttributeForDistinct field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IndexSettings) GetAttributeForDistinctOk() (*string, bool) {
+	if o == nil || o.AttributeForDistinct == nil {
+		return nil, false
+	}
+	return o.AttributeForDistinct, true
+}
+
+// HasAttributeForDistinct returns a boolean if a field has been set.
+func (o *IndexSettings) HasAttributeForDistinct() bool {
+	if o != nil && o.AttributeForDistinct != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAttributeForDistinct gets a reference to the given string and assigns it to the AttributeForDistinct field.
+func (o *IndexSettings) SetAttributeForDistinct(v string) {
+	o.AttributeForDistinct = &v
 }
 
 // GetAttributesForFaceting returns the AttributesForFaceting field value if set, zero value otherwise.
@@ -2166,38 +2198,6 @@ func (o *IndexSettings) SetDistinct(v Distinct) {
 	o.Distinct = &v
 }
 
-// GetAttributeForDistinct returns the AttributeForDistinct field value if set, zero value otherwise.
-func (o *IndexSettings) GetAttributeForDistinct() string {
-	if o == nil || o.AttributeForDistinct == nil {
-		var ret string
-		return ret
-	}
-	return *o.AttributeForDistinct
-}
-
-// GetAttributeForDistinctOk returns a tuple with the AttributeForDistinct field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *IndexSettings) GetAttributeForDistinctOk() (*string, bool) {
-	if o == nil || o.AttributeForDistinct == nil {
-		return nil, false
-	}
-	return o.AttributeForDistinct, true
-}
-
-// HasAttributeForDistinct returns a boolean if a field has been set.
-func (o *IndexSettings) HasAttributeForDistinct() bool {
-	if o != nil && o.AttributeForDistinct != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetAttributeForDistinct gets a reference to the given string and assigns it to the AttributeForDistinct field.
-func (o *IndexSettings) SetAttributeForDistinct(v string) {
-	o.AttributeForDistinct = &v
-}
-
 // GetReplaceSynonymsInHighlight returns the ReplaceSynonymsInHighlight field value if set, zero value otherwise.
 func (o *IndexSettings) GetReplaceSynonymsInHighlight() bool {
 	if o == nil || o.ReplaceSynonymsInHighlight == nil {
@@ -2576,6 +2576,9 @@ func (o IndexSettings) MarshalJSON() ([]byte, error) {
 	if o.CustomNormalization != nil {
 		toSerialize["customNormalization"] = o.CustomNormalization
 	}
+	if o.AttributeForDistinct != nil {
+		toSerialize["attributeForDistinct"] = o.AttributeForDistinct
+	}
 	if o.AttributesForFaceting != nil {
 		toSerialize["attributesForFaceting"] = o.AttributesForFaceting
 	}
@@ -2681,9 +2684,6 @@ func (o IndexSettings) MarshalJSON() ([]byte, error) {
 	if o.Distinct != nil {
 		toSerialize["distinct"] = o.Distinct
 	}
-	if o.AttributeForDistinct != nil {
-		toSerialize["attributeForDistinct"] = o.AttributeForDistinct
-	}
 	if o.ReplaceSynonymsInHighlight != nil {
 		toSerialize["replaceSynonymsInHighlight"] = o.ReplaceSynonymsInHighlight
 	}
@@ -2734,6 +2734,7 @@ func (o IndexSettings) String() string {
 	out += fmt.Sprintf("  searchableAttributes=%v\n", o.SearchableAttributes)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
 	out += fmt.Sprintf("  customNormalization=%v\n", o.CustomNormalization)
+	out += fmt.Sprintf("  attributeForDistinct=%v\n", o.AttributeForDistinct)
 	out += fmt.Sprintf("  attributesForFaceting=%v\n", o.AttributesForFaceting)
 	out += fmt.Sprintf("  attributesToRetrieve=%v\n", o.AttributesToRetrieve)
 	out += fmt.Sprintf("  ranking=%v\n", o.Ranking)
@@ -2769,7 +2770,6 @@ func (o IndexSettings) String() string {
 	out += fmt.Sprintf("  alternativesAsExact=%v\n", o.AlternativesAsExact)
 	out += fmt.Sprintf("  advancedSyntaxFeatures=%v\n", o.AdvancedSyntaxFeatures)
 	out += fmt.Sprintf("  distinct=%v\n", o.Distinct)
-	out += fmt.Sprintf("  attributeForDistinct=%v\n", o.AttributeForDistinct)
 	out += fmt.Sprintf("  replaceSynonymsInHighlight=%v\n", o.ReplaceSynonymsInHighlight)
 	out += fmt.Sprintf("  minProximity=%v\n", o.MinProximity)
 	out += fmt.Sprintf("  responseFields=%v\n", o.ResponseFields)

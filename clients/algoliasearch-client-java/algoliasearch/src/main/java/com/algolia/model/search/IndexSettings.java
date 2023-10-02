@@ -59,6 +59,9 @@ public class IndexSettings {
   @JsonProperty("customNormalization")
   private Map<String, Map<String, String>> customNormalization;
 
+  @JsonProperty("attributeForDistinct")
+  private String attributeForDistinct;
+
   @JsonProperty("attributesForFaceting")
   private List<String> attributesForFaceting;
 
@@ -163,9 +166,6 @@ public class IndexSettings {
 
   @JsonProperty("distinct")
   private Distinct distinct;
-
-  @JsonProperty("attributeForDistinct")
-  private String attributeForDistinct;
 
   @JsonProperty("replaceSynonymsInHighlight")
   private Boolean replaceSynonymsInHighlight;
@@ -482,6 +482,20 @@ public class IndexSettings {
   @javax.annotation.Nullable
   public Map<String, Map<String, String>> getCustomNormalization() {
     return customNormalization;
+  }
+
+  public IndexSettings setAttributeForDistinct(String attributeForDistinct) {
+    this.attributeForDistinct = attributeForDistinct;
+    return this;
+  }
+
+  /**
+   * Name of the deduplication attribute to be used with Algolia's [_distinct_
+   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+   */
+  @javax.annotation.Nullable
+  public String getAttributeForDistinct() {
+    return attributeForDistinct;
   }
 
   public IndexSettings setAttributesForFaceting(List<String> attributesForFaceting) {
@@ -1034,20 +1048,6 @@ public class IndexSettings {
     return distinct;
   }
 
-  public IndexSettings setAttributeForDistinct(String attributeForDistinct) {
-    this.attributeForDistinct = attributeForDistinct;
-    return this;
-  }
-
-  /**
-   * Name of the deduplication attribute to be used with Algolia's [_distinct_
-   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-   */
-  @javax.annotation.Nullable
-  public String getAttributeForDistinct() {
-    return attributeForDistinct;
-  }
-
   public IndexSettings setReplaceSynonymsInHighlight(Boolean replaceSynonymsInHighlight) {
     this.replaceSynonymsInHighlight = replaceSynonymsInHighlight;
     return this;
@@ -1210,6 +1210,7 @@ public class IndexSettings {
       Objects.equals(this.searchableAttributes, indexSettings.searchableAttributes) &&
       Objects.equals(this.userData, indexSettings.userData) &&
       Objects.equals(this.customNormalization, indexSettings.customNormalization) &&
+      Objects.equals(this.attributeForDistinct, indexSettings.attributeForDistinct) &&
       Objects.equals(this.attributesForFaceting, indexSettings.attributesForFaceting) &&
       Objects.equals(this.attributesToRetrieve, indexSettings.attributesToRetrieve) &&
       Objects.equals(this.ranking, indexSettings.ranking) &&
@@ -1245,7 +1246,6 @@ public class IndexSettings {
       Objects.equals(this.alternativesAsExact, indexSettings.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, indexSettings.advancedSyntaxFeatures) &&
       Objects.equals(this.distinct, indexSettings.distinct) &&
-      Objects.equals(this.attributeForDistinct, indexSettings.attributeForDistinct) &&
       Objects.equals(this.replaceSynonymsInHighlight, indexSettings.replaceSynonymsInHighlight) &&
       Objects.equals(this.minProximity, indexSettings.minProximity) &&
       Objects.equals(this.responseFields, indexSettings.responseFields) &&
@@ -1277,6 +1277,7 @@ public class IndexSettings {
       searchableAttributes,
       userData,
       customNormalization,
+      attributeForDistinct,
       attributesForFaceting,
       attributesToRetrieve,
       ranking,
@@ -1312,7 +1313,6 @@ public class IndexSettings {
       alternativesAsExact,
       advancedSyntaxFeatures,
       distinct,
-      attributeForDistinct,
       replaceSynonymsInHighlight,
       minProximity,
       responseFields,
@@ -1345,6 +1345,7 @@ public class IndexSettings {
     sb.append("    searchableAttributes: ").append(toIndentedString(searchableAttributes)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");
     sb.append("    customNormalization: ").append(toIndentedString(customNormalization)).append("\n");
+    sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    attributesForFaceting: ").append(toIndentedString(attributesForFaceting)).append("\n");
     sb.append("    attributesToRetrieve: ").append(toIndentedString(attributesToRetrieve)).append("\n");
     sb.append("    ranking: ").append(toIndentedString(ranking)).append("\n");
@@ -1380,7 +1381,6 @@ public class IndexSettings {
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
-    sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    replaceSynonymsInHighlight: ").append(toIndentedString(replaceSynonymsInHighlight)).append("\n");
     sb.append("    minProximity: ").append(toIndentedString(minProximity)).append("\n");
     sb.append("    responseFields: ").append(toIndentedString(responseFields)).append("\n");

@@ -48,6 +48,8 @@ BaseIndexSettings _$BaseIndexSettingsFromJson(Map<String, dynamic> json) =>
               (v) => (v as Map<String, dynamic>?)?.map(
                     (k, e) => MapEntry(k, Map<String, String>.from(e as Map)),
                   )),
+          attributeForDistinct:
+              $checkedConvert('attributeForDistinct', (v) => v as String?),
         );
         return val;
       },
@@ -80,5 +82,6 @@ Map<String, dynamic> _$BaseIndexSettingsToJson(BaseIndexSettings instance) {
   writeNotNull('searchableAttributes', instance.searchableAttributes);
   writeNotNull('userData', instance.userData);
   writeNotNull('customNormalization', instance.customNormalization);
+  writeNotNull('attributeForDistinct', instance.attributeForDistinct);
   return val;
 }

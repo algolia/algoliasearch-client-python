@@ -85,7 +85,6 @@ final class BrowseParamsObject {
     this.alternativesAsExact,
     this.advancedSyntaxFeatures,
     this.distinct,
-    this.attributeForDistinct,
     this.replaceSynonymsInHighlight,
     this.minProximity,
     this.responseFields,
@@ -395,10 +394,6 @@ final class BrowseParamsObject {
   @JsonKey(name: r'distinct')
   final dynamic distinct;
 
-  /// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-  @JsonKey(name: r'attributeForDistinct')
-  final String? attributeForDistinct;
-
   /// Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
   @JsonKey(name: r'replaceSynonymsInHighlight')
   final bool? replaceSynonymsInHighlight;
@@ -522,7 +517,6 @@ final class BrowseParamsObject {
           other.alternativesAsExact == alternativesAsExact &&
           other.advancedSyntaxFeatures == advancedSyntaxFeatures &&
           other.distinct == distinct &&
-          other.attributeForDistinct == attributeForDistinct &&
           other.replaceSynonymsInHighlight == replaceSynonymsInHighlight &&
           other.minProximity == minProximity &&
           other.responseFields == responseFields &&
@@ -606,7 +600,6 @@ final class BrowseParamsObject {
       alternativesAsExact.hashCode +
       advancedSyntaxFeatures.hashCode +
       distinct.hashCode +
-      attributeForDistinct.hashCode +
       replaceSynonymsInHighlight.hashCode +
       minProximity.hashCode +
       responseFields.hashCode +

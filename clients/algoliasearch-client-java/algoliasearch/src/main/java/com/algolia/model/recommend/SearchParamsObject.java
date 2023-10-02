@@ -216,9 +216,6 @@ public class SearchParamsObject {
   @JsonProperty("distinct")
   private Distinct distinct;
 
-  @JsonProperty("attributeForDistinct")
-  private String attributeForDistinct;
-
   @JsonProperty("replaceSynonymsInHighlight")
   private Boolean replaceSynonymsInHighlight;
 
@@ -1306,20 +1303,6 @@ public class SearchParamsObject {
     return distinct;
   }
 
-  public SearchParamsObject setAttributeForDistinct(String attributeForDistinct) {
-    this.attributeForDistinct = attributeForDistinct;
-    return this;
-  }
-
-  /**
-   * Name of the deduplication attribute to be used with Algolia's [_distinct_
-   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-   */
-  @javax.annotation.Nullable
-  public String getAttributeForDistinct() {
-    return attributeForDistinct;
-  }
-
   public SearchParamsObject setReplaceSynonymsInHighlight(Boolean replaceSynonymsInHighlight) {
     this.replaceSynonymsInHighlight = replaceSynonymsInHighlight;
     return this;
@@ -1535,7 +1518,6 @@ public class SearchParamsObject {
       Objects.equals(this.alternativesAsExact, searchParamsObject.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, searchParamsObject.advancedSyntaxFeatures) &&
       Objects.equals(this.distinct, searchParamsObject.distinct) &&
-      Objects.equals(this.attributeForDistinct, searchParamsObject.attributeForDistinct) &&
       Objects.equals(this.replaceSynonymsInHighlight, searchParamsObject.replaceSynonymsInHighlight) &&
       Objects.equals(this.minProximity, searchParamsObject.minProximity) &&
       Objects.equals(this.responseFields, searchParamsObject.responseFields) &&
@@ -1620,7 +1602,6 @@ public class SearchParamsObject {
       alternativesAsExact,
       advancedSyntaxFeatures,
       distinct,
-      attributeForDistinct,
       replaceSynonymsInHighlight,
       minProximity,
       responseFields,
@@ -1706,7 +1687,6 @@ public class SearchParamsObject {
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
-    sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    replaceSynonymsInHighlight: ").append(toIndentedString(replaceSynonymsInHighlight)).append("\n");
     sb.append("    minProximity: ").append(toIndentedString(minProximity)).append("\n");
     sb.append("    responseFields: ").append(toIndentedString(responseFields)).append("\n");

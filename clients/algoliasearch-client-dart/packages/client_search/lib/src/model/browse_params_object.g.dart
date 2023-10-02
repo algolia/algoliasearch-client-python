@@ -139,8 +139,6 @@ BrowseParamsObject _$BrowseParamsObjectFromJson(Map<String, dynamic> json) =>
                   ?.map((e) => $enumDecode(_$AdvancedSyntaxFeaturesEnumMap, e))
                   .toList()),
           distinct: $checkedConvert('distinct', (v) => v),
-          attributeForDistinct:
-              $checkedConvert('attributeForDistinct', (v) => v as String?),
           replaceSynonymsInHighlight:
               $checkedConvert('replaceSynonymsInHighlight', (v) => v as bool?),
           minProximity: $checkedConvert('minProximity', (v) => v as int?),
@@ -253,7 +251,6 @@ Map<String, dynamic> _$BrowseParamsObjectToJson(BrowseParamsObject instance) {
   writeNotNull('advancedSyntaxFeatures',
       instance.advancedSyntaxFeatures?.map((e) => e.toJson()).toList());
   writeNotNull('distinct', instance.distinct);
-  writeNotNull('attributeForDistinct', instance.attributeForDistinct);
   writeNotNull(
       'replaceSynonymsInHighlight', instance.replaceSynonymsInHighlight);
   writeNotNull('minProximity', instance.minProximity);

@@ -22,6 +22,7 @@ import kotlinx.serialization.json.*
  * @param searchableAttributes [Attributes used for searching](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/), including determining [if matches at the beginning of a word are important (ordered) or not (unordered)](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/how-to/configuring-searchable-attributes-the-right-way/#understanding-word-position).
  * @param userData Lets you store custom data in your indices.
  * @param customNormalization A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
+ * @param attributeForDistinct Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
  */
 @Serializable
 public data class BaseIndexSettings(
@@ -70,4 +71,7 @@ public data class BaseIndexSettings(
 
   /** A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/). */
   @SerialName(value = "customNormalization") val customNormalization: Map<kotlin.String, Map<kotlin.String, String>>? = null,
+
+  /** Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature). */
+  @SerialName(value = "attributeForDistinct") val attributeForDistinct: String? = null,
 )

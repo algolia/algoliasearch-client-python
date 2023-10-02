@@ -24,6 +24,7 @@ final class BaseIndexSettings {
     this.searchableAttributes,
     this.userData,
     this.customNormalization,
+    this.attributeForDistinct,
   });
 
   /// Creates [replicas](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/), which are copies of a primary index with the same records but different settings.
@@ -86,6 +87,10 @@ final class BaseIndexSettings {
   @JsonKey(name: r'customNormalization')
   final Map<String, Map<String, String>>? customNormalization;
 
+  /// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+  @JsonKey(name: r'attributeForDistinct')
+  final String? attributeForDistinct;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -106,7 +111,8 @@ final class BaseIndexSettings {
           other.separatorsToIndex == separatorsToIndex &&
           other.searchableAttributes == searchableAttributes &&
           other.userData == userData &&
-          other.customNormalization == customNormalization;
+          other.customNormalization == customNormalization &&
+          other.attributeForDistinct == attributeForDistinct;
 
   @override
   int get hashCode =>
@@ -124,7 +130,8 @@ final class BaseIndexSettings {
       separatorsToIndex.hashCode +
       searchableAttributes.hashCode +
       (userData == null ? 0 : userData.hashCode) +
-      customNormalization.hashCode;
+      customNormalization.hashCode +
+      attributeForDistinct.hashCode;
 
   factory BaseIndexSettings.fromJson(Map<String, dynamic> json) =>
       _$BaseIndexSettingsFromJson(json);

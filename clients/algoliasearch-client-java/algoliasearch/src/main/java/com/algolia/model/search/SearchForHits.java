@@ -220,9 +220,6 @@ public class SearchForHits implements SearchQuery {
   @JsonProperty("distinct")
   private Distinct distinct;
 
-  @JsonProperty("attributeForDistinct")
-  private String attributeForDistinct;
-
   @JsonProperty("replaceSynonymsInHighlight")
   private Boolean replaceSynonymsInHighlight;
 
@@ -1327,20 +1324,6 @@ public class SearchForHits implements SearchQuery {
     return distinct;
   }
 
-  public SearchForHits setAttributeForDistinct(String attributeForDistinct) {
-    this.attributeForDistinct = attributeForDistinct;
-    return this;
-  }
-
-  /**
-   * Name of the deduplication attribute to be used with Algolia's [_distinct_
-   * feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-   */
-  @javax.annotation.Nullable
-  public String getAttributeForDistinct() {
-    return attributeForDistinct;
-  }
-
   public SearchForHits setReplaceSynonymsInHighlight(Boolean replaceSynonymsInHighlight) {
     this.replaceSynonymsInHighlight = replaceSynonymsInHighlight;
     return this;
@@ -1579,7 +1562,6 @@ public class SearchForHits implements SearchQuery {
       Objects.equals(this.alternativesAsExact, searchForHits.alternativesAsExact) &&
       Objects.equals(this.advancedSyntaxFeatures, searchForHits.advancedSyntaxFeatures) &&
       Objects.equals(this.distinct, searchForHits.distinct) &&
-      Objects.equals(this.attributeForDistinct, searchForHits.attributeForDistinct) &&
       Objects.equals(this.replaceSynonymsInHighlight, searchForHits.replaceSynonymsInHighlight) &&
       Objects.equals(this.minProximity, searchForHits.minProximity) &&
       Objects.equals(this.responseFields, searchForHits.responseFields) &&
@@ -1667,7 +1649,6 @@ public class SearchForHits implements SearchQuery {
       alternativesAsExact,
       advancedSyntaxFeatures,
       distinct,
-      attributeForDistinct,
       replaceSynonymsInHighlight,
       minProximity,
       responseFields,
@@ -1756,7 +1737,6 @@ public class SearchForHits implements SearchQuery {
     sb.append("    alternativesAsExact: ").append(toIndentedString(alternativesAsExact)).append("\n");
     sb.append("    advancedSyntaxFeatures: ").append(toIndentedString(advancedSyntaxFeatures)).append("\n");
     sb.append("    distinct: ").append(toIndentedString(distinct)).append("\n");
-    sb.append("    attributeForDistinct: ").append(toIndentedString(attributeForDistinct)).append("\n");
     sb.append("    replaceSynonymsInHighlight: ").append(toIndentedString(replaceSynonymsInHighlight)).append("\n");
     sb.append("    minProximity: ").append(toIndentedString(minProximity)).append("\n");
     sb.append("    responseFields: ").append(toIndentedString(responseFields)).append("\n");

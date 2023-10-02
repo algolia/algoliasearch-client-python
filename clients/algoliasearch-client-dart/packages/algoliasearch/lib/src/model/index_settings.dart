@@ -32,6 +32,7 @@ final class IndexSettings {
     this.searchableAttributes,
     this.userData,
     this.customNormalization,
+    this.attributeForDistinct,
     this.attributesForFaceting,
     this.attributesToRetrieve,
     this.ranking,
@@ -67,7 +68,6 @@ final class IndexSettings {
     this.alternativesAsExact,
     this.advancedSyntaxFeatures,
     this.distinct,
-    this.attributeForDistinct,
     this.replaceSynonymsInHighlight,
     this.minProximity,
     this.responseFields,
@@ -139,6 +139,10 @@ final class IndexSettings {
   /// A list of characters and their normalized replacements to override Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).
   @JsonKey(name: r'customNormalization')
   final Map<String, Map<String, String>>? customNormalization;
+
+  /// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
+  @JsonKey(name: r'attributeForDistinct')
+  final String? attributeForDistinct;
 
   /// Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`.
   @JsonKey(name: r'attributesForFaceting')
@@ -285,10 +289,6 @@ final class IndexSettings {
   @JsonKey(name: r'distinct')
   final dynamic distinct;
 
-  /// Name of the deduplication attribute to be used with Algolia's [_distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).
-  @JsonKey(name: r'attributeForDistinct')
-  final String? attributeForDistinct;
-
   /// Whether to highlight and snippet the original word that matches the synonym or the synonym itself.
   @JsonKey(name: r'replaceSynonymsInHighlight')
   final bool? replaceSynonymsInHighlight;
@@ -355,6 +355,7 @@ final class IndexSettings {
           other.searchableAttributes == searchableAttributes &&
           other.userData == userData &&
           other.customNormalization == customNormalization &&
+          other.attributeForDistinct == attributeForDistinct &&
           other.attributesForFaceting == attributesForFaceting &&
           other.attributesToRetrieve == attributesToRetrieve &&
           other.ranking == ranking &&
@@ -392,7 +393,6 @@ final class IndexSettings {
           other.alternativesAsExact == alternativesAsExact &&
           other.advancedSyntaxFeatures == advancedSyntaxFeatures &&
           other.distinct == distinct &&
-          other.attributeForDistinct == attributeForDistinct &&
           other.replaceSynonymsInHighlight == replaceSynonymsInHighlight &&
           other.minProximity == minProximity &&
           other.responseFields == responseFields &&
@@ -422,6 +422,7 @@ final class IndexSettings {
       searchableAttributes.hashCode +
       (userData == null ? 0 : userData.hashCode) +
       customNormalization.hashCode +
+      attributeForDistinct.hashCode +
       attributesForFaceting.hashCode +
       attributesToRetrieve.hashCode +
       ranking.hashCode +
@@ -457,7 +458,6 @@ final class IndexSettings {
       alternativesAsExact.hashCode +
       advancedSyntaxFeatures.hashCode +
       distinct.hashCode +
-      attributeForDistinct.hashCode +
       replaceSynonymsInHighlight.hashCode +
       minProximity.hashCode +
       responseFields.hashCode +
