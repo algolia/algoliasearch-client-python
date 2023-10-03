@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.9.0"
+kotlin = "1.9.10"
 coroutines = "1.7.3"
 serialization = "1.5.0"
 ktor = "2.3.4"
@@ -13,4 +13,4 @@ ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.r
 [plugins]
 kotlin-multiplaform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-spotless = { id = "com.diffplug.spotless", version = "6.21.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.22.0" }

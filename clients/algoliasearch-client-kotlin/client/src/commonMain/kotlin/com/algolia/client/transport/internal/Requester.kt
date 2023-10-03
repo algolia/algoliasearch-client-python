@@ -47,9 +47,9 @@ internal fun requesterOf(
     appId = appId,
     apiKey = apiKey,
     options = options,
-    agent = AlgoliaAgent(BuildConfig.version).apply {
+    agent = AlgoliaAgent(BuildConfig.VERSION).apply {
       add(platformAgentSegment())
-      add(AgentSegment(clientName, BuildConfig.version))
+      add(AgentSegment(clientName, BuildConfig.VERSION))
     },
   ),
   connectTimeout = options.connectTimeout,
