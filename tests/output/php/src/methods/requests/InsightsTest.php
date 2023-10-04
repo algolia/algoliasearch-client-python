@@ -621,6 +621,53 @@ class InsightsTest extends TestCase implements HttpClientInterface
     }
 
     /**
+     * Test case for PushEvents
+     * AddedToCartObjectIDs.
+     */
+    public function testPushEvents4()
+    {
+        $client = $this->getClient();
+        $client->pushEvents(
+            ['events' => [
+                ['eventType' => 'conversion',
+                    'eventSubtype' => 'addToCart',
+                    'eventName' => 'Product Added To Cart',
+                    'index' => 'products',
+                    'queryID' => '43b15df305339e827f0ac0bdc5ebcaa7',
+                    'userToken' => 'user-123456',
+                    'timestamp' => 1641290601962,
+                    'objectIDs' => [
+                        '9780545139700',
+
+                        '9780439784542',
+                    ],
+                    'objectData' => [
+                        ['price' => 19.99,
+                            'quantity' => 10,
+                            'discount' => 2.5,
+                        ],
+
+                        ['price' => '8$',
+                            'quantity' => 7,
+                            'discount' => '30%',
+                        ],
+                    ],
+                    'currency' => 'USD',
+                ],
+            ],
+            ],
+        );
+
+        $this->assertRequests([
+            [
+                'path' => '/1/events',
+                'method' => 'POST',
+                'body' => json_decode('{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}'),
+            ],
+        ]);
+    }
+
+    /**
      * Test case for Put
      * allow put method for a custom path with minimal parameters.
      */

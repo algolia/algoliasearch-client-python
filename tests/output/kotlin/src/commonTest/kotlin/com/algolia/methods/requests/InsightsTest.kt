@@ -517,6 +517,48 @@ class InsightsTest {
     )
   }
 
+  @Test
+  fun `AddedToCartObjectIDs`() = runTest {
+    client.runTest(
+      call = {
+        pushEvents(
+          insightsEvents = InsightsEvents(
+            events = listOf(
+              AddedToCartObjectIDsAfterSearch(
+                eventType = ConversionEvent.entries.first { it.value == "conversion" },
+                eventSubtype = AddToCartEvent.entries.first { it.value == "addToCart" },
+                eventName = "Product Added To Cart",
+                index = "products",
+                queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
+                userToken = "user-123456",
+                timestamp = 1641290601962L,
+                objectIDs = listOf("9780545139700", "9780439784542"),
+                objectData = listOf(
+                  ObjectDataAfterSearch(
+                    price = Price.Number(19.99),
+                    quantity = 10,
+                    discount = Discount.Number(2.5),
+                  ),
+                  ObjectDataAfterSearch(
+                    price = Price.String("8$"),
+                    quantity = 7,
+                    discount = Discount.String("30%"),
+                  ),
+                ),
+                currency = "USD",
+              ),
+            ),
+          ),
+        )
+      },
+      intercept = {
+        assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("POST"), it.method)
+        assertJsonBody("""{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}""", it.body)
+      },
+    )
+  }
+
   // put
 
   @Test

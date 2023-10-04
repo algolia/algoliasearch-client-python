@@ -815,6 +815,86 @@ class InsightsClientRequestsTests {
   }
 
   @Test
+  @DisplayName("AddedToCartObjectIDs")
+  void pushEventsTest4() {
+    InsightsEvents insightsEvents0 = new InsightsEvents();
+    {
+      List<EventsItems> events1 = new ArrayList<>();
+      {
+        AddedToCartObjectIDsAfterSearch events_02 = new AddedToCartObjectIDsAfterSearch();
+        {
+          ConversionEvent eventType3 = ConversionEvent.fromValue("conversion");
+          events_02.setEventType(eventType3);
+          AddToCartEvent eventSubtype3 = AddToCartEvent.fromValue("addToCart");
+          events_02.setEventSubtype(eventSubtype3);
+          String eventName3 = "Product Added To Cart";
+          events_02.setEventName(eventName3);
+          String index3 = "products";
+          events_02.setIndex(index3);
+          String queryID3 = "43b15df305339e827f0ac0bdc5ebcaa7";
+          events_02.setQueryID(queryID3);
+          String userToken3 = "user-123456";
+          events_02.setUserToken(userToken3);
+          long timestamp3 = 1641290601962L;
+          events_02.setTimestamp(timestamp3);
+          List<String> objectIDs3 = new ArrayList<>();
+          {
+            String objectIDs_04 = "9780545139700";
+            objectIDs3.add(objectIDs_04);
+            String objectIDs_14 = "9780439784542";
+            objectIDs3.add(objectIDs_14);
+          }
+          events_02.setObjectIDs(objectIDs3);
+          List<ObjectDataAfterSearch> objectData3 = new ArrayList<>();
+          {
+            ObjectDataAfterSearch objectData_04 = new ObjectDataAfterSearch();
+            {
+              double price5 = 19.99;
+              objectData_04.setPrice(Price.of(price5));
+              int quantity5 = 10;
+              objectData_04.setQuantity(quantity5);
+              double discount5 = 2.5;
+              objectData_04.setDiscount(Discount.of(discount5));
+            }
+            objectData3.add(objectData_04);
+            ObjectDataAfterSearch objectData_14 = new ObjectDataAfterSearch();
+            {
+              String price5 = "8$";
+              objectData_14.setPrice(Price.of(price5));
+              int quantity5 = 7;
+              objectData_14.setQuantity(quantity5);
+              String discount5 = "30%";
+              objectData_14.setDiscount(Discount.of(discount5));
+            }
+            objectData3.add(objectData_14);
+          }
+          events_02.setObjectData(objectData3);
+          String currency3 = "USD";
+          events_02.setCurrency(currency3);
+        }
+        events1.add(events_02);
+      }
+      insightsEvents0.setEvents(events1);
+    }
+
+    assertDoesNotThrow(() -> {
+      client.pushEvents(insightsEvents0);
+    });
+    EchoResponse req = echo.getLastResponse();
+    assertEquals("/1/events", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
+      JSONAssert.assertEquals(
+        "{\"events\":[{\"eventType\":\"conversion\",\"eventSubtype\":\"addToCart\",\"eventName\":\"Product" +
+        " Added To" +
+        " Cart\",\"index\":\"products\",\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"objectData\":[{\"price\":19.99,\"quantity\":10,\"discount\":2.5},{\"price\":\"8$\",\"quantity\":7,\"discount\":\"30%\"}],\"currency\":\"USD\"}]}",
+        req.body,
+        JSONCompareMode.STRICT
+      )
+    );
+  }
+
+  @Test
   @DisplayName("allow put method for a custom path with minimal parameters")
   void putTest0() {
     String path0 = "/test/minimal";

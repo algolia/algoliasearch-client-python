@@ -22,6 +22,30 @@ public interface EventsItems {
     public EventsItems deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
       JsonNode tree = jp.readValueAsTree();
 
+      // deserialize AddedToCartObjectIDs
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          return parser.readValueAs(AddedToCartObjectIDs.class);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf AddedToCartObjectIDs (error: " + e.getMessage() + ") (type: AddedToCartObjectIDs)");
+        }
+      }
+
+      // deserialize AddedToCartObjectIDsAfterSearch
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          return parser.readValueAs(AddedToCartObjectIDsAfterSearch.class);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest(
+            "Failed to deserialize oneOf AddedToCartObjectIDsAfterSearch (error: " +
+            e.getMessage() +
+            ") (type: AddedToCartObjectIDsAfterSearch)"
+          );
+        }
+      }
+
       // deserialize ClickedFilters
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
@@ -84,6 +108,30 @@ public interface EventsItems {
             "Failed to deserialize oneOf ConvertedObjectIDsAfterSearch (error: " +
             e.getMessage() +
             ") (type: ConvertedObjectIDsAfterSearch)"
+          );
+        }
+      }
+
+      // deserialize PurchasedObjectIDs
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          return parser.readValueAs(PurchasedObjectIDs.class);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf PurchasedObjectIDs (error: " + e.getMessage() + ") (type: PurchasedObjectIDs)");
+        }
+      }
+
+      // deserialize PurchasedObjectIDsAfterSearch
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          return parser.readValueAs(PurchasedObjectIDsAfterSearch.class);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest(
+            "Failed to deserialize oneOf PurchasedObjectIDsAfterSearch (error: " +
+            e.getMessage() +
+            ") (type: PurchasedObjectIDsAfterSearch)"
           );
         }
       }

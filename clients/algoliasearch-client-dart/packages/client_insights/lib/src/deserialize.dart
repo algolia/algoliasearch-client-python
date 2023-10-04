@@ -1,3 +1,6 @@
+import 'package:algolia_client_insights/src/model/add_to_cart_event.dart';
+import 'package:algolia_client_insights/src/model/added_to_cart_object_ids.dart';
+import 'package:algolia_client_insights/src/model/added_to_cart_object_ids_after_search.dart';
 import 'package:algolia_client_insights/src/model/click_event.dart';
 import 'package:algolia_client_insights/src/model/clicked_filters.dart';
 import 'package:algolia_client_insights/src/model/clicked_object_ids.dart';
@@ -9,6 +12,11 @@ import 'package:algolia_client_insights/src/model/converted_object_ids_after_sea
 import 'package:algolia_client_insights/src/model/error_base.dart';
 import 'package:algolia_client_insights/src/model/events_response.dart';
 import 'package:algolia_client_insights/src/model/insights_events.dart';
+import 'package:algolia_client_insights/src/model/object_data.dart';
+import 'package:algolia_client_insights/src/model/object_data_after_search.dart';
+import 'package:algolia_client_insights/src/model/purchase_event.dart';
+import 'package:algolia_client_insights/src/model/purchased_object_ids.dart';
+import 'package:algolia_client_insights/src/model/purchased_object_ids_after_search.dart';
 import 'package:algolia_client_insights/src/model/view_event.dart';
 import 'package:algolia_client_insights/src/model/viewed_filters.dart';
 import 'package:algolia_client_insights/src/model/viewed_object_ids.dart';
@@ -32,6 +40,14 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return (valueString == 'true' || valueString == '1') as ReturnType;
     case 'double':
       return (value is double ? value : double.parse('$value')) as ReturnType;
+    case 'AddToCartEvent':
+      return AddToCartEvent.fromJson(value) as ReturnType;
+    case 'AddedToCartObjectIDs':
+      return AddedToCartObjectIDs.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'AddedToCartObjectIDsAfterSearch':
+      return AddedToCartObjectIDsAfterSearch.fromJson(
+          value as Map<String, dynamic>) as ReturnType;
     case 'ClickEvent':
       return ClickEvent.fromJson(value) as ReturnType;
     case 'ClickedFilters':
@@ -62,6 +78,19 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'InsightsEvents':
       return InsightsEvents.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'ObjectData':
+      return ObjectData.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'ObjectDataAfterSearch':
+      return ObjectDataAfterSearch.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PurchaseEvent':
+      return PurchaseEvent.fromJson(value) as ReturnType;
+    case 'PurchasedObjectIDs':
+      return PurchasedObjectIDs.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PurchasedObjectIDsAfterSearch':
+      return PurchasedObjectIDsAfterSearch.fromJson(
+          value as Map<String, dynamic>) as ReturnType;
     case 'ViewEvent':
       return ViewEvent.fromJson(value) as ReturnType;
     case 'ViewedFilters':

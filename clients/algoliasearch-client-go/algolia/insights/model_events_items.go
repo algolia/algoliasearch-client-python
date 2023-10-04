@@ -8,14 +8,32 @@ import (
 
 // EventsItems - struct for EventsItems
 type EventsItems struct {
-	ClickedFilters                *ClickedFilters
-	ClickedObjectIDs              *ClickedObjectIDs
-	ClickedObjectIDsAfterSearch   *ClickedObjectIDsAfterSearch
-	ConvertedFilters              *ConvertedFilters
-	ConvertedObjectIDs            *ConvertedObjectIDs
-	ConvertedObjectIDsAfterSearch *ConvertedObjectIDsAfterSearch
-	ViewedFilters                 *ViewedFilters
-	ViewedObjectIDs               *ViewedObjectIDs
+	AddedToCartObjectIDs            *AddedToCartObjectIDs
+	AddedToCartObjectIDsAfterSearch *AddedToCartObjectIDsAfterSearch
+	ClickedFilters                  *ClickedFilters
+	ClickedObjectIDs                *ClickedObjectIDs
+	ClickedObjectIDsAfterSearch     *ClickedObjectIDsAfterSearch
+	ConvertedFilters                *ConvertedFilters
+	ConvertedObjectIDs              *ConvertedObjectIDs
+	ConvertedObjectIDsAfterSearch   *ConvertedObjectIDsAfterSearch
+	PurchasedObjectIDs              *PurchasedObjectIDs
+	PurchasedObjectIDsAfterSearch   *PurchasedObjectIDsAfterSearch
+	ViewedFilters                   *ViewedFilters
+	ViewedObjectIDs                 *ViewedObjectIDs
+}
+
+// AddedToCartObjectIDsAsEventsItems is a convenience function that returns AddedToCartObjectIDs wrapped in EventsItems
+func AddedToCartObjectIDsAsEventsItems(v *AddedToCartObjectIDs) EventsItems {
+	return EventsItems{
+		AddedToCartObjectIDs: v,
+	}
+}
+
+// AddedToCartObjectIDsAfterSearchAsEventsItems is a convenience function that returns AddedToCartObjectIDsAfterSearch wrapped in EventsItems
+func AddedToCartObjectIDsAfterSearchAsEventsItems(v *AddedToCartObjectIDsAfterSearch) EventsItems {
+	return EventsItems{
+		AddedToCartObjectIDsAfterSearch: v,
+	}
 }
 
 // ClickedFiltersAsEventsItems is a convenience function that returns ClickedFilters wrapped in EventsItems
@@ -60,6 +78,20 @@ func ConvertedObjectIDsAfterSearchAsEventsItems(v *ConvertedObjectIDsAfterSearch
 	}
 }
 
+// PurchasedObjectIDsAsEventsItems is a convenience function that returns PurchasedObjectIDs wrapped in EventsItems
+func PurchasedObjectIDsAsEventsItems(v *PurchasedObjectIDs) EventsItems {
+	return EventsItems{
+		PurchasedObjectIDs: v,
+	}
+}
+
+// PurchasedObjectIDsAfterSearchAsEventsItems is a convenience function that returns PurchasedObjectIDsAfterSearch wrapped in EventsItems
+func PurchasedObjectIDsAfterSearchAsEventsItems(v *PurchasedObjectIDsAfterSearch) EventsItems {
+	return EventsItems{
+		PurchasedObjectIDsAfterSearch: v,
+	}
+}
+
 // ViewedFiltersAsEventsItems is a convenience function that returns ViewedFilters wrapped in EventsItems
 func ViewedFiltersAsEventsItems(v *ViewedFilters) EventsItems {
 	return EventsItems{
@@ -77,6 +109,32 @@ func ViewedObjectIDsAsEventsItems(v *ViewedObjectIDs) EventsItems {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *EventsItems) UnmarshalJSON(data []byte) error {
 	var err error
+	// try to unmarshal data into AddedToCartObjectIDs
+	err = newStrictDecoder(data).Decode(&dst.AddedToCartObjectIDs)
+	if err == nil && validateStruct(dst.AddedToCartObjectIDs) == nil {
+		jsonAddedToCartObjectIDs, _ := json.Marshal(dst.AddedToCartObjectIDs)
+		if string(jsonAddedToCartObjectIDs) == "{}" { // empty struct
+			dst.AddedToCartObjectIDs = nil
+		} else {
+			return nil
+		}
+	} else {
+		dst.AddedToCartObjectIDs = nil
+	}
+
+	// try to unmarshal data into AddedToCartObjectIDsAfterSearch
+	err = newStrictDecoder(data).Decode(&dst.AddedToCartObjectIDsAfterSearch)
+	if err == nil && validateStruct(dst.AddedToCartObjectIDsAfterSearch) == nil {
+		jsonAddedToCartObjectIDsAfterSearch, _ := json.Marshal(dst.AddedToCartObjectIDsAfterSearch)
+		if string(jsonAddedToCartObjectIDsAfterSearch) == "{}" { // empty struct
+			dst.AddedToCartObjectIDsAfterSearch = nil
+		} else {
+			return nil
+		}
+	} else {
+		dst.AddedToCartObjectIDsAfterSearch = nil
+	}
+
 	// try to unmarshal data into ClickedFilters
 	err = newStrictDecoder(data).Decode(&dst.ClickedFilters)
 	if err == nil && validateStruct(dst.ClickedFilters) == nil {
@@ -155,6 +213,32 @@ func (dst *EventsItems) UnmarshalJSON(data []byte) error {
 		dst.ConvertedObjectIDsAfterSearch = nil
 	}
 
+	// try to unmarshal data into PurchasedObjectIDs
+	err = newStrictDecoder(data).Decode(&dst.PurchasedObjectIDs)
+	if err == nil && validateStruct(dst.PurchasedObjectIDs) == nil {
+		jsonPurchasedObjectIDs, _ := json.Marshal(dst.PurchasedObjectIDs)
+		if string(jsonPurchasedObjectIDs) == "{}" { // empty struct
+			dst.PurchasedObjectIDs = nil
+		} else {
+			return nil
+		}
+	} else {
+		dst.PurchasedObjectIDs = nil
+	}
+
+	// try to unmarshal data into PurchasedObjectIDsAfterSearch
+	err = newStrictDecoder(data).Decode(&dst.PurchasedObjectIDsAfterSearch)
+	if err == nil && validateStruct(dst.PurchasedObjectIDsAfterSearch) == nil {
+		jsonPurchasedObjectIDsAfterSearch, _ := json.Marshal(dst.PurchasedObjectIDsAfterSearch)
+		if string(jsonPurchasedObjectIDsAfterSearch) == "{}" { // empty struct
+			dst.PurchasedObjectIDsAfterSearch = nil
+		} else {
+			return nil
+		}
+	} else {
+		dst.PurchasedObjectIDsAfterSearch = nil
+	}
+
 	// try to unmarshal data into ViewedFilters
 	err = newStrictDecoder(data).Decode(&dst.ViewedFilters)
 	if err == nil && validateStruct(dst.ViewedFilters) == nil {
@@ -186,6 +270,14 @@ func (dst *EventsItems) UnmarshalJSON(data []byte) error {
 
 // Marshal data from the first non-nil pointers in the struct to JSON
 func (src EventsItems) MarshalJSON() ([]byte, error) {
+	if src.AddedToCartObjectIDs != nil {
+		return json.Marshal(&src.AddedToCartObjectIDs)
+	}
+
+	if src.AddedToCartObjectIDsAfterSearch != nil {
+		return json.Marshal(&src.AddedToCartObjectIDsAfterSearch)
+	}
+
 	if src.ClickedFilters != nil {
 		return json.Marshal(&src.ClickedFilters)
 	}
@@ -210,6 +302,14 @@ func (src EventsItems) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.ConvertedObjectIDsAfterSearch)
 	}
 
+	if src.PurchasedObjectIDs != nil {
+		return json.Marshal(&src.PurchasedObjectIDs)
+	}
+
+	if src.PurchasedObjectIDsAfterSearch != nil {
+		return json.Marshal(&src.PurchasedObjectIDsAfterSearch)
+	}
+
 	if src.ViewedFilters != nil {
 		return json.Marshal(&src.ViewedFilters)
 	}
@@ -226,6 +326,14 @@ func (obj *EventsItems) GetActualInstance() any {
 	if obj == nil {
 		return nil
 	}
+	if obj.AddedToCartObjectIDs != nil {
+		return obj.AddedToCartObjectIDs
+	}
+
+	if obj.AddedToCartObjectIDsAfterSearch != nil {
+		return obj.AddedToCartObjectIDsAfterSearch
+	}
+
 	if obj.ClickedFilters != nil {
 		return obj.ClickedFilters
 	}
@@ -248,6 +356,14 @@ func (obj *EventsItems) GetActualInstance() any {
 
 	if obj.ConvertedObjectIDsAfterSearch != nil {
 		return obj.ConvertedObjectIDsAfterSearch
+	}
+
+	if obj.PurchasedObjectIDs != nil {
+		return obj.PurchasedObjectIDs
+	}
+
+	if obj.PurchasedObjectIDsAfterSearch != nil {
+		return obj.PurchasedObjectIDsAfterSearch
 	}
 
 	if obj.ViewedFilters != nil {

@@ -622,6 +622,57 @@ void main() {
     ),
   );
 
+  // pushEvents
+  test(
+    'AddedToCartObjectIDs',
+    () => runTest(
+      builder: (requester) => InsightsClient(
+        appId: 'appId',
+        apiKey: 'apiKey',
+        region: 'us',
+        options: ClientOptions(requester: requester),
+      ),
+      call: (client) => client.pushEvents(
+        insightsEvents: InsightsEvents(
+          events: [
+            AddedToCartObjectIDsAfterSearch(
+              eventType: ConversionEvent.fromJson("conversion"),
+              eventSubtype: AddToCartEvent.fromJson("addToCart"),
+              eventName: "Product Added To Cart",
+              index: "products",
+              queryID: "43b15df305339e827f0ac0bdc5ebcaa7",
+              userToken: "user-123456",
+              timestamp: 1641290601962,
+              objectIDs: [
+                "9780545139700",
+                "9780439784542",
+              ],
+              objectData: [
+                ObjectDataAfterSearch(
+                  price: 19.99,
+                  quantity: 10,
+                  discount: 2.5,
+                ),
+                ObjectDataAfterSearch(
+                  price: "8\$",
+                  quantity: 7,
+                  discount: "30%",
+                ),
+              ],
+              currency: "USD",
+            ),
+          ],
+        ),
+      ),
+      intercept: (request) {
+        expectPath(request.path, '/1/events');
+        expect(request.method, 'post');
+        expectBody(request.body,
+            """{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8\$","quantity":7,"discount":"30%"}],"currency":"USD"}]}""");
+      },
+    ),
+  );
+
   // put
   test(
     'allow put method for a custom path with minimal parameters',

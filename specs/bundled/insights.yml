@@ -47,6 +47,7 @@ components:
       type: string
       minLength: 1
       maxLength: 64
+      pattern: '[\x20-\x7E]{1,64}'
       description: >
         Can contain up to 64 ASCII characters. 
 
@@ -391,6 +392,246 @@ components:
         - index
         - filters
         - userToken
+    AddToCartEvent:
+      type: string
+      enum:
+        - addToCart
+    price:
+      description: >-
+        The price of the item. This should be the final price, inclusive of any
+        discounts in effect.
+      oneOf:
+        - type: number
+          format: double
+        - type: string
+    discount:
+      description: >-
+        Absolute value of the discount in effect for this object, measured in
+        `currency`.
+      oneOf:
+        - type: number
+          format: double
+        - type: string
+    objectDataAfterSearch:
+      type: object
+      additionalProperties: false
+      properties:
+        queryID:
+          type: string
+          description: >-
+            ID of the query that this specific record is attributable to. Used
+            to track purchase events with multiple items originating from
+            different searches.
+        price:
+          $ref: '#/components/schemas/price'
+        quantity:
+          type: integer
+          format: int32
+          description: >-
+            The quantity of the purchased or added-to-cart item. The total value
+            of a purchase is the sum of `quantity` multiplied with the `price`
+            for each purchased item.
+        discount:
+          $ref: '#/components/schemas/discount'
+    objectDataAfterSearchList:
+      type: array
+      description: >
+        Extra information about the records involved in the event—for example,
+        to add price and quantities of purchased products.
+
+
+        If provided, must be the same length as `objectIDs`.
+      items:
+        $ref: '#/components/schemas/objectDataAfterSearch'
+    currency:
+      type: string
+      description: >-
+        If you include pricing information in the `objectData` parameter, you
+        must also specify the currency as ISO-4217 currency code, such as USD or
+        EUR.
+    AddedToCartObjectIDsAfterSearch:
+      type: object
+      title: Added to cart object IDs after search
+      description: >
+        Use this event to track when users add items to their shopping cart
+        after a previous Algolia request.
+
+        If you're building your category pages with Algolia, you'll also use
+        this event.
+      additionalProperties: false
+      properties:
+        eventName:
+          $ref: '#/components/schemas/eventName'
+        eventType:
+          $ref: '#/components/schemas/ConversionEvent'
+        eventSubtype:
+          $ref: '#/components/schemas/AddToCartEvent'
+        index:
+          $ref: '#/components/schemas/index'
+        queryID:
+          $ref: '#/components/schemas/queryID'
+        objectIDs:
+          $ref: '#/components/schemas/objectIDs'
+        objectData:
+          $ref: '#/components/schemas/objectDataAfterSearchList'
+        currency:
+          $ref: '#/components/schemas/currency'
+        userToken:
+          $ref: '#/components/schemas/userToken'
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+      required:
+        - eventName
+        - eventType
+        - eventSubtype
+        - queryID
+        - index
+        - objectIDs
+        - userToken
+    objectData:
+      type: object
+      additionalProperties: false
+      properties:
+        price:
+          $ref: '#/components/schemas/price'
+        quantity:
+          type: integer
+          format: int32
+          description: >-
+            The quantity of the purchased or added-to-cart item. The total value
+            of a purchase is the sum of `quantity` multiplied with the `price`
+            for each purchased item.
+        discount:
+          $ref: '#/components/schemas/discount'
+    objectDataList:
+      type: array
+      description: >
+        Extra information about the records involved in the event—for example,
+        to add price and quantities of purchased products.
+
+
+        If provided, must be the same length as `objectIDs`.
+      items:
+        $ref: '#/components/schemas/objectData'
+    AddedToCartObjectIDs:
+      type: object
+      title: Added to cart object IDs
+      description: >
+        Use this event to track when users add items to their shopping cart
+        unrelated to a previous Algolia request. For example, if you don't use
+        Algolia to build your category pages, use this event.
+
+
+        To track add-to-cart events related to Algolia requests, use the "Added
+        to cart object IDs after search" event.
+      additionalProperties: false
+      properties:
+        eventName:
+          $ref: '#/components/schemas/eventName'
+        eventType:
+          $ref: '#/components/schemas/ConversionEvent'
+        eventSubtype:
+          $ref: '#/components/schemas/AddToCartEvent'
+        index:
+          $ref: '#/components/schemas/index'
+        objectIDs:
+          $ref: '#/components/schemas/objectIDs'
+        objectData:
+          $ref: '#/components/schemas/objectDataList'
+        currency:
+          $ref: '#/components/schemas/currency'
+        userToken:
+          $ref: '#/components/schemas/userToken'
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+      required:
+        - eventName
+        - eventType
+        - eventSubtype
+        - index
+        - objectIDs
+        - userToken
+    PurchaseEvent:
+      type: string
+      enum:
+        - purchase
+    PurchasedObjectIDs:
+      type: object
+      title: Purchased object IDs
+      description: >
+        Use this event to track when users make a purchase unrelated to a
+        previous Algolia request. For example, if you don't use Algolia to build
+        your category pages, use this event.
+
+
+        To track purchase events related to Algolia requests, use the "Purchased
+        object IDs after search" event.
+      additionalProperties: false
+      properties:
+        eventName:
+          $ref: '#/components/schemas/eventName'
+        eventType:
+          $ref: '#/components/schemas/ConversionEvent'
+        eventSubtype:
+          $ref: '#/components/schemas/PurchaseEvent'
+        index:
+          $ref: '#/components/schemas/index'
+        objectIDs:
+          $ref: '#/components/schemas/objectIDs'
+        objectData:
+          $ref: '#/components/schemas/objectDataList'
+        currency:
+          $ref: '#/components/schemas/currency'
+        userToken:
+          $ref: '#/components/schemas/userToken'
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+      required:
+        - eventName
+        - eventType
+        - eventSubtype
+        - index
+        - objectIDs
+        - userToken
+    PurchasedObjectIDsAfterSearch:
+      type: object
+      title: Purchased object IDs after search
+      description: >
+        Use this event to track when users make a purchase after a previous
+        Algolia request.
+
+        If you're building your category pages with Algolia, you'll also use
+        this event.
+      additionalProperties: false
+      properties:
+        eventName:
+          $ref: '#/components/schemas/eventName'
+        eventType:
+          $ref: '#/components/schemas/ConversionEvent'
+        eventSubtype:
+          $ref: '#/components/schemas/PurchaseEvent'
+        index:
+          $ref: '#/components/schemas/index'
+        queryID:
+          $ref: '#/components/schemas/queryID'
+        objectIDs:
+          $ref: '#/components/schemas/objectIDs'
+        objectData:
+          $ref: '#/components/schemas/objectDataAfterSearchList'
+        currency:
+          $ref: '#/components/schemas/currency'
+        userToken:
+          $ref: '#/components/schemas/userToken'
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+      required:
+        - eventName
+        - eventType
+        - eventSubtype
+        - queryID
+        - index
+        - objectIDs
+        - userToken
     EventsItems:
       oneOf:
         - $ref: '#/components/schemas/ClickedObjectIDsAfterSearch'
@@ -401,6 +642,10 @@ components:
         - $ref: '#/components/schemas/ConvertedFilters'
         - $ref: '#/components/schemas/ViewedObjectIDs'
         - $ref: '#/components/schemas/ViewedFilters'
+        - $ref: '#/components/schemas/AddedToCartObjectIDsAfterSearch'
+        - $ref: '#/components/schemas/AddedToCartObjectIDs'
+        - $ref: '#/components/schemas/PurchasedObjectIDs'
+        - $ref: '#/components/schemas/PurchasedObjectIDsAfterSearch'
     EventsResponse:
       type: object
       description: The response of the Insights API.
