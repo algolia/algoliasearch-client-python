@@ -7,3 +7,7 @@ oneOf:
   - $ref: './ConvertedFilters.yml'
   - $ref: './ViewedObjectIDs.yml'
   - $ref: './ViewedFilters.yml'
+  - $ref: './AddedToCartObjectIDsAfterSearch.yml'
+  - $ref: './AddedToCartObjectIDs.yml'
+  - $ref: './PurchasedObjectIDs.yml'
+  - $ref: './PurchasedObjectIDsAfterSearch.yml'

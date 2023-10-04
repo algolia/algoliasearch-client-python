@@ -88,6 +88,16 @@ public class TestsRequest extends TestsGenerator {
             req.request.body = "{}";
           }
 
+          // For golang, jsonassert expect % to be formatted, we need to escape them
+          if (language.equals("go") && req.request.body != null) {
+            req.request.body = req.request.body.replace("%", "%%");
+          }
+
+          // For dart, same thing but for $
+          if (language.equals("dart") && req.request.body != null) {
+            req.request.body = req.request.body.replace("$", "\\$");
+          }
+
           // In a case of a `GET` or `DELETE` request, we want to assert if the body
           // is correctly parsed (absent from the payload)
           if (req.request.method.equals("GET") || req.request.method.equals("DELETE")) {

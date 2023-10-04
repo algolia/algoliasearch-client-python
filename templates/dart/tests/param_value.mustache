@@ -1,5 +1,5 @@
 {{#isNull}}empty(){{/isNull}}
-{{#isString}}"{{{value}}}"{{/isString}}
+{{#isString}}"{{#lambda.escapeDollar}}{{{value}}}{{/lambda.escapeDollar}}"{{/isString}}
 {{#isNumber}}{{{value}}}{{/isNumber}}
 {{#isBoolean}}{{{value}}}{{/isBoolean}}
 {{#isEnum}}{{{objectName}}}.fromJson("{{value}}"){{/isEnum}}

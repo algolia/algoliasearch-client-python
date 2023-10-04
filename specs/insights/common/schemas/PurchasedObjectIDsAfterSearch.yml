@@ -1,0 +1,35 @@
+type: object
+title: Purchased object IDs after search
+description: |
+  Use this event to track when users make a purchase after a previous Algolia request.
+  If you're building your category pages with Algolia, you'll also use this event.
+additionalProperties: false
+properties:
+  eventName:
+    $ref: './EventAttributes.yml#/eventName'
+  eventType:
+    $ref: './ConversionEvent.yml'
+  eventSubtype:
+    $ref: './PurchaseEvent.yml'
+  index:
+    $ref: './EventAttributes.yml#/index'
+  queryID:
+    $ref: './EventAttributes.yml#/queryID'
+  objectIDs:
+    $ref: './EventAttributes.yml#/objectIDs'
+  objectData:
+    $ref: './EventAttributes.yml#/objectDataAfterSearchList'
+  currency:
+    $ref: './EventAttributes.yml#/currency'
+  userToken:
+    $ref: './EventAttributes.yml#/userToken'
+  timestamp:
+    $ref: './EventAttributes.yml#/timestamp'
+required:
+  - eventName
+  - eventType
+  - eventSubtype
+  - queryID
+  - index
+  - objectIDs
+  - userToken

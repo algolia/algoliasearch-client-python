@@ -1,0 +1,33 @@
+type: object
+title: Added to cart object IDs
+description: |
+  Use this event to track when users add items to their shopping cart unrelated to a previous Algolia request. For example, if you don't use Algolia to build your category pages, use this event.
+
+  To track add-to-cart events related to Algolia requests, use the "Added to cart object IDs after search" event.
+additionalProperties: false
+properties:
+  eventName:
+    $ref: './EventAttributes.yml#/eventName'
+  eventType:
+    $ref: './ConversionEvent.yml'
+  eventSubtype:
+    $ref: './AddToCartEvent.yml'
+  index:
+    $ref: './EventAttributes.yml#/index'
+  objectIDs:
+    $ref: './EventAttributes.yml#/objectIDs'
+  objectData:
+    $ref: './EventAttributes.yml#/objectDataList'
+  currency:
+    $ref: './EventAttributes.yml#/currency'
+  userToken:
+    $ref: './EventAttributes.yml#/userToken'
+  timestamp:
+    $ref: './EventAttributes.yml#/timestamp'
+required:
+  - eventName
+  - eventType
+  - eventSubtype
+  - index
+  - objectIDs
+  - userToken

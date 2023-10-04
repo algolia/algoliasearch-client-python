@@ -2,6 +2,7 @@ eventName:
   type: string
   minLength: 1
   maxLength: 64
+  pattern: '[\x20-\x7E]{1,64}'
   description: |
     Can contain up to 64 ASCII characters. 
 
@@ -81,3 +82,68 @@ positions:
     The first search result has a position of 1 (not 0).
     You must provide 1 `position` for each `objectID`.
   example: [1, 2, 5]
+
+price:
+  description: The price of the item. This should be the final price, inclusive of any discounts in effect.
+  oneOf:
+    - type: number
+      format: double
+    - type: string
+
+discount:
+  description: Absolute value of the discount in effect for this object, measured in `currency`.
+  oneOf:
+    - type: number
+      format: double
+    - type: string
+
+objectData:
+  type: object
+  additionalProperties: false
+  properties:
+    price:
+      $ref: '#/price'
+    quantity:
+      type: integer
+      format: int32
+      description: The quantity of the purchased or added-to-cart item. The total value of a purchase is the sum of `quantity` multiplied with the `price` for each purchased item.
+    discount:
+      $ref: '#/discount'
+
+objectDataList:
+  type: array
+  description: |
+    Extra information about the records involved in the event—for example, to add price and quantities of purchased products.
+
+    If provided, must be the same length as `objectIDs`.
+  items:
+    $ref: '#/objectData'
+
+objectDataAfterSearch:
+  type: object
+  additionalProperties: false
+  properties:
+    queryID:
+      type: string
+      description: ID of the query that this specific record is attributable to. Used to track purchase events with multiple items originating from different searches.
+    price:
+      $ref: '#/price'
+    quantity:
+      type: integer
+      format: int32
+      description: The quantity of the purchased or added-to-cart item. The total value of a purchase is the sum of `quantity` multiplied with the `price` for each purchased item.
+    discount:
+      $ref: '#/discount'
+
+objectDataAfterSearchList:
+  type: array
+  description: |
+    Extra information about the records involved in the event—for example, to add price and quantities of purchased products.
+
+    If provided, must be the same length as `objectIDs`.
+  items:
+    $ref: '#/objectDataAfterSearch'
+
+currency:
+  type: string
+  description: If you include pricing information in the `objectData` parameter, you must also specify the currency as ISO-4217 currency code, such as USD or EUR.

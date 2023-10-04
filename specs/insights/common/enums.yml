@@ -1,3 +1,0 @@
-eventType:
-  type: string
-  enum: [click, conversion, view]
