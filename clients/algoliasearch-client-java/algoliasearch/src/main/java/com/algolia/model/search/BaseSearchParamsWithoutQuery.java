@@ -67,10 +67,10 @@ public class BaseSearchParamsWithoutQuery {
   private Integer minimumAroundRadius;
 
   @JsonProperty("insideBoundingBox")
-  private List<Double> insideBoundingBox;
+  private List<List<Double>> insideBoundingBox;
 
   @JsonProperty("insidePolygon")
-  private List<Double> insidePolygon;
+  private List<List<Double>> insidePolygon;
 
   @JsonProperty("naturalLanguages")
   private List<String> naturalLanguages;
@@ -365,12 +365,12 @@ public class BaseSearchParamsWithoutQuery {
     return minimumAroundRadius;
   }
 
-  public BaseSearchParamsWithoutQuery setInsideBoundingBox(List<Double> insideBoundingBox) {
+  public BaseSearchParamsWithoutQuery setInsideBoundingBox(List<List<Double>> insideBoundingBox) {
     this.insideBoundingBox = insideBoundingBox;
     return this;
   }
 
-  public BaseSearchParamsWithoutQuery addInsideBoundingBox(Double insideBoundingBoxItem) {
+  public BaseSearchParamsWithoutQuery addInsideBoundingBox(List<Double> insideBoundingBoxItem) {
     if (this.insideBoundingBox == null) {
       this.insideBoundingBox = new ArrayList<>();
     }
@@ -384,16 +384,16 @@ public class BaseSearchParamsWithoutQuery {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsideBoundingBox() {
+  public List<List<Double>> getInsideBoundingBox() {
     return insideBoundingBox;
   }
 
-  public BaseSearchParamsWithoutQuery setInsidePolygon(List<Double> insidePolygon) {
+  public BaseSearchParamsWithoutQuery setInsidePolygon(List<List<Double>> insidePolygon) {
     this.insidePolygon = insidePolygon;
     return this;
   }
 
-  public BaseSearchParamsWithoutQuery addInsidePolygon(Double insidePolygonItem) {
+  public BaseSearchParamsWithoutQuery addInsidePolygon(List<Double> insidePolygonItem) {
     if (this.insidePolygon == null) {
       this.insidePolygon = new ArrayList<>();
     }
@@ -407,7 +407,7 @@ public class BaseSearchParamsWithoutQuery {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsidePolygon() {
+  public List<List<Double>> getInsidePolygon() {
     return insidePolygon;
   }
 

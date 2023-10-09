@@ -67,10 +67,10 @@ public class ConsequenceParams {
   private Integer minimumAroundRadius;
 
   @JsonProperty("insideBoundingBox")
-  private List<Double> insideBoundingBox;
+  private List<List<Double>> insideBoundingBox;
 
   @JsonProperty("insidePolygon")
-  private List<Double> insidePolygon;
+  private List<List<Double>> insidePolygon;
 
   @JsonProperty("naturalLanguages")
   private List<String> naturalLanguages;
@@ -509,12 +509,12 @@ public class ConsequenceParams {
     return minimumAroundRadius;
   }
 
-  public ConsequenceParams setInsideBoundingBox(List<Double> insideBoundingBox) {
+  public ConsequenceParams setInsideBoundingBox(List<List<Double>> insideBoundingBox) {
     this.insideBoundingBox = insideBoundingBox;
     return this;
   }
 
-  public ConsequenceParams addInsideBoundingBox(Double insideBoundingBoxItem) {
+  public ConsequenceParams addInsideBoundingBox(List<Double> insideBoundingBoxItem) {
     if (this.insideBoundingBox == null) {
       this.insideBoundingBox = new ArrayList<>();
     }
@@ -528,16 +528,16 @@ public class ConsequenceParams {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsideBoundingBox() {
+  public List<List<Double>> getInsideBoundingBox() {
     return insideBoundingBox;
   }
 
-  public ConsequenceParams setInsidePolygon(List<Double> insidePolygon) {
+  public ConsequenceParams setInsidePolygon(List<List<Double>> insidePolygon) {
     this.insidePolygon = insidePolygon;
     return this;
   }
 
-  public ConsequenceParams addInsidePolygon(Double insidePolygonItem) {
+  public ConsequenceParams addInsidePolygon(List<Double> insidePolygonItem) {
     if (this.insidePolygon == null) {
       this.insidePolygon = new ArrayList<>();
     }
@@ -551,7 +551,7 @@ public class ConsequenceParams {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsidePolygon() {
+  public List<List<Double>> getInsidePolygon() {
     return insidePolygon;
   }
 

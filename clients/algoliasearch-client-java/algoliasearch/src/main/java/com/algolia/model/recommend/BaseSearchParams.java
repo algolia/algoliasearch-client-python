@@ -70,10 +70,10 @@ public class BaseSearchParams {
   private Integer minimumAroundRadius;
 
   @JsonProperty("insideBoundingBox")
-  private List<Double> insideBoundingBox;
+  private List<List<Double>> insideBoundingBox;
 
   @JsonProperty("insidePolygon")
-  private List<Double> insidePolygon;
+  private List<List<Double>> insidePolygon;
 
   @JsonProperty("naturalLanguages")
   private List<String> naturalLanguages;
@@ -379,12 +379,12 @@ public class BaseSearchParams {
     return minimumAroundRadius;
   }
 
-  public BaseSearchParams setInsideBoundingBox(List<Double> insideBoundingBox) {
+  public BaseSearchParams setInsideBoundingBox(List<List<Double>> insideBoundingBox) {
     this.insideBoundingBox = insideBoundingBox;
     return this;
   }
 
-  public BaseSearchParams addInsideBoundingBox(Double insideBoundingBoxItem) {
+  public BaseSearchParams addInsideBoundingBox(List<Double> insideBoundingBoxItem) {
     if (this.insideBoundingBox == null) {
       this.insideBoundingBox = new ArrayList<>();
     }
@@ -398,16 +398,16 @@ public class BaseSearchParams {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsideBoundingBox() {
+  public List<List<Double>> getInsideBoundingBox() {
     return insideBoundingBox;
   }
 
-  public BaseSearchParams setInsidePolygon(List<Double> insidePolygon) {
+  public BaseSearchParams setInsidePolygon(List<List<Double>> insidePolygon) {
     this.insidePolygon = insidePolygon;
     return this;
   }
 
-  public BaseSearchParams addInsidePolygon(Double insidePolygonItem) {
+  public BaseSearchParams addInsidePolygon(List<Double> insidePolygonItem) {
     if (this.insidePolygon == null) {
       this.insidePolygon = new ArrayList<>();
     }
@@ -421,7 +421,7 @@ public class BaseSearchParams {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsidePolygon() {
+  public List<List<Double>> getInsidePolygon() {
     return insidePolygon;
   }
 

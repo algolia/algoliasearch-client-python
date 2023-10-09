@@ -56,11 +56,11 @@ final class DeleteByParams {
 
   /// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insideBoundingBox')
-  final List<double>? insideBoundingBox;
+  final List<List<double>>? insideBoundingBox;
 
   /// Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insidePolygon')
-  final List<double>? insidePolygon;
+  final List<List<double>>? insidePolygon;
 
   @override
   bool operator ==(Object other) =>

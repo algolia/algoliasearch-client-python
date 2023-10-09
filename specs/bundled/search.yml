@@ -346,35 +346,53 @@ components:
     insideBoundingBox:
       type: array
       items:
-        type: number
-        format: double
+        type: array
+        items:
+          type: number
+          format: double
       description: >-
         Search inside a [rectangular
         area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
         (in geographical coordinates).
       example:
-        - 46.650828100116044
-        - 7.123046875
-        - 45.17210966999772
-        - 1.009765625
+        -
+          - 47.3165
+          - 4.9665
+          - 47.3424
+          - 5.0201
+        -
+          - 40.9234
+          - 2.1185
+          - 38.643
+          - 1.9916
       x-categories:
         - Geo-Search
     insidePolygon:
       type: array
       items:
-        type: number
-        format: double
+        type: array
+        items:
+          type: number
+          format: double
       description: >-
         Search inside a
         [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas)
         (in geographical coordinates).
       example:
-        - 46.650828100116044
-        - 7.123046875
-        - 45.17210966999772
-        - 1.009765625
-        - 49.62625916704081
-        - 4.6181640625
+        -
+          - 47.3165
+          - 4.9665
+          - 47.3424
+          - 5.0201
+          - 47.32
+          - 4.9
+        -
+          - 40.9234
+          - 2.1185
+          - 38.643
+          - 1.9916
+          - 39.2587
+          - 2.0104
       x-categories:
         - Geo-Search
     baseSearchParamsWithoutQuery:

@@ -96,10 +96,10 @@ public data class BaseSearchParams(
   @SerialName(value = "minimumAroundRadius") val minimumAroundRadius: Int? = null,
 
   /** Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates). */
-  @SerialName(value = "insideBoundingBox") val insideBoundingBox: List<Double>? = null,
+  @SerialName(value = "insideBoundingBox") val insideBoundingBox: List<List<Double>>? = null,
 
   /** Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates). */
-  @SerialName(value = "insidePolygon") val insidePolygon: List<Double>? = null,
+  @SerialName(value = "insidePolygon") val insidePolygon: List<List<Double>>? = null,
 
   /** Changes the default values of parameters that work best for a natural language query, such as `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and `ruleContexts`. These parameters work well together when the query consists of fuller natural language strings instead of keywords, for example when processing voice search queries. */
   @SerialName(value = "naturalLanguages") val naturalLanguages: List<String>? = null,

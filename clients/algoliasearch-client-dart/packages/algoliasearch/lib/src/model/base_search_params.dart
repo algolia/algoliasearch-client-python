@@ -141,11 +141,11 @@ final class BaseSearchParams {
 
   /// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insideBoundingBox')
-  final List<double>? insideBoundingBox;
+  final List<List<double>>? insideBoundingBox;
 
   /// Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
   @JsonKey(name: r'insidePolygon')
-  final List<double>? insidePolygon;
+  final List<List<double>>? insidePolygon;
 
   /// Changes the default values of parameters that work best for a natural language query, such as `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and `ruleContexts`. These parameters work well together when the query consists of fuller natural language strings instead of keywords, for example when processing voice search queries.
   @JsonKey(name: r'naturalLanguages')

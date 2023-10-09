@@ -17,9 +17,9 @@ type DeleteByParams struct {
 	AroundLatLng *string       `json:"aroundLatLng,omitempty"`
 	AroundRadius *AroundRadius `json:"aroundRadius,omitempty"`
 	// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
-	InsideBoundingBox []float64 `json:"insideBoundingBox,omitempty"`
+	InsideBoundingBox [][]float64 `json:"insideBoundingBox,omitempty"`
 	// Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
-	InsidePolygon []float64 `json:"insidePolygon,omitempty"`
+	InsidePolygon [][]float64 `json:"insidePolygon,omitempty"`
 }
 
 type DeleteByParamsOption func(f *DeleteByParams)
@@ -60,13 +60,13 @@ func WithDeleteByParamsAroundRadius(val AroundRadius) DeleteByParamsOption {
 	}
 }
 
-func WithDeleteByParamsInsideBoundingBox(val []float64) DeleteByParamsOption {
+func WithDeleteByParamsInsideBoundingBox(val [][]float64) DeleteByParamsOption {
 	return func(f *DeleteByParams) {
 		f.InsideBoundingBox = val
 	}
 }
 
-func WithDeleteByParamsInsidePolygon(val []float64) DeleteByParamsOption {
+func WithDeleteByParamsInsidePolygon(val [][]float64) DeleteByParamsOption {
 	return func(f *DeleteByParams) {
 		f.InsidePolygon = val
 	}
@@ -289,9 +289,9 @@ func (o *DeleteByParams) SetAroundRadius(v AroundRadius) {
 }
 
 // GetInsideBoundingBox returns the InsideBoundingBox field value if set, zero value otherwise.
-func (o *DeleteByParams) GetInsideBoundingBox() []float64 {
+func (o *DeleteByParams) GetInsideBoundingBox() [][]float64 {
 	if o == nil || o.InsideBoundingBox == nil {
-		var ret []float64
+		var ret [][]float64
 		return ret
 	}
 	return o.InsideBoundingBox
@@ -299,7 +299,7 @@ func (o *DeleteByParams) GetInsideBoundingBox() []float64 {
 
 // GetInsideBoundingBoxOk returns a tuple with the InsideBoundingBox field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DeleteByParams) GetInsideBoundingBoxOk() ([]float64, bool) {
+func (o *DeleteByParams) GetInsideBoundingBoxOk() ([][]float64, bool) {
 	if o == nil || o.InsideBoundingBox == nil {
 		return nil, false
 	}
@@ -315,15 +315,15 @@ func (o *DeleteByParams) HasInsideBoundingBox() bool {
 	return false
 }
 
-// SetInsideBoundingBox gets a reference to the given []float64 and assigns it to the InsideBoundingBox field.
-func (o *DeleteByParams) SetInsideBoundingBox(v []float64) {
+// SetInsideBoundingBox gets a reference to the given [][]float64 and assigns it to the InsideBoundingBox field.
+func (o *DeleteByParams) SetInsideBoundingBox(v [][]float64) {
 	o.InsideBoundingBox = v
 }
 
 // GetInsidePolygon returns the InsidePolygon field value if set, zero value otherwise.
-func (o *DeleteByParams) GetInsidePolygon() []float64 {
+func (o *DeleteByParams) GetInsidePolygon() [][]float64 {
 	if o == nil || o.InsidePolygon == nil {
-		var ret []float64
+		var ret [][]float64
 		return ret
 	}
 	return o.InsidePolygon
@@ -331,7 +331,7 @@ func (o *DeleteByParams) GetInsidePolygon() []float64 {
 
 // GetInsidePolygonOk returns a tuple with the InsidePolygon field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DeleteByParams) GetInsidePolygonOk() ([]float64, bool) {
+func (o *DeleteByParams) GetInsidePolygonOk() ([][]float64, bool) {
 	if o == nil || o.InsidePolygon == nil {
 		return nil, false
 	}
@@ -347,8 +347,8 @@ func (o *DeleteByParams) HasInsidePolygon() bool {
 	return false
 }
 
-// SetInsidePolygon gets a reference to the given []float64 and assigns it to the InsidePolygon field.
-func (o *DeleteByParams) SetInsidePolygon(v []float64) {
+// SetInsidePolygon gets a reference to the given [][]float64 and assigns it to the InsidePolygon field.
+func (o *DeleteByParams) SetInsidePolygon(v [][]float64) {
 	o.InsidePolygon = v
 }
 

@@ -31,10 +31,10 @@ public class DeleteByParams {
   private AroundRadius aroundRadius;
 
   @JsonProperty("insideBoundingBox")
-  private List<Double> insideBoundingBox;
+  private List<List<Double>> insideBoundingBox;
 
   @JsonProperty("insidePolygon")
-  private List<Double> insidePolygon;
+  private List<List<Double>> insidePolygon;
 
   public DeleteByParams setFacetFilters(FacetFilters facetFilters) {
     this.facetFilters = facetFilters;
@@ -109,12 +109,12 @@ public class DeleteByParams {
     return aroundRadius;
   }
 
-  public DeleteByParams setInsideBoundingBox(List<Double> insideBoundingBox) {
+  public DeleteByParams setInsideBoundingBox(List<List<Double>> insideBoundingBox) {
     this.insideBoundingBox = insideBoundingBox;
     return this;
   }
 
-  public DeleteByParams addInsideBoundingBox(Double insideBoundingBoxItem) {
+  public DeleteByParams addInsideBoundingBox(List<Double> insideBoundingBoxItem) {
     if (this.insideBoundingBox == null) {
       this.insideBoundingBox = new ArrayList<>();
     }
@@ -128,16 +128,16 @@ public class DeleteByParams {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsideBoundingBox() {
+  public List<List<Double>> getInsideBoundingBox() {
     return insideBoundingBox;
   }
 
-  public DeleteByParams setInsidePolygon(List<Double> insidePolygon) {
+  public DeleteByParams setInsidePolygon(List<List<Double>> insidePolygon) {
     this.insidePolygon = insidePolygon;
     return this;
   }
 
-  public DeleteByParams addInsidePolygon(Double insidePolygonItem) {
+  public DeleteByParams addInsidePolygon(List<Double> insidePolygonItem) {
     if (this.insidePolygon == null) {
       this.insidePolygon = new ArrayList<>();
     }
@@ -151,7 +151,7 @@ public class DeleteByParams {
    * (in geographical coordinates).
    */
   @javax.annotation.Nullable
-  public List<Double> getInsidePolygon() {
+  public List<List<Double>> getInsidePolygon() {
     return insidePolygon;
   }
 

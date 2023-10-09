@@ -484,8 +484,14 @@ describe('search', () => {
           hitsPerPage: 0,
           ignorePlurals: false,
           indexName: 'theIndexName',
-          insideBoundingBox: [47.3165, 4.9665],
-          insidePolygon: [47.3165, 4.9665],
+          insideBoundingBox: [
+            [47.3165, 4.9665, 47.3424, 5.0201],
+            [40.9234, 2.1185, 38.643, 1.9916],
+          ],
+          insidePolygon: [
+            [47.3165, 4.9665, 47.3424, 5.0201, 47.32, 4.9],
+            [40.9234, 2.1185, 38.643, 1.9916, 39.2587, 2.0104],
+          ],
           keepDiacriticsOnCharacters: '',
           length: 0,
           maxValuesPerFacet: 0,
@@ -575,8 +581,14 @@ describe('search', () => {
           hitsPerPage: 0,
           ignorePlurals: false,
           indexName: 'theIndexName',
-          insideBoundingBox: [47.3165, 4.9665],
-          insidePolygon: [47.3165, 4.9665],
+          insideBoundingBox: [
+            [47.3165, 4.9665, 47.3424, 5.0201],
+            [40.9234, 2.1185, 38.643, 1.9916],
+          ],
+          insidePolygon: [
+            [47.3165, 4.9665, 47.3424, 5.0201, 47.32, 4.9],
+            [40.9234, 2.1185, 38.643, 1.9916, 39.2587, 2.0104],
+          ],
           keepDiacriticsOnCharacters: '',
           length: 0,
           maxValuesPerFacet: 0,

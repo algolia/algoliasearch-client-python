@@ -34,8 +34,8 @@ public data class DeleteByParams(
   @SerialName(value = "aroundRadius") val aroundRadius: AroundRadius? = null,
 
   /** Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates). */
-  @SerialName(value = "insideBoundingBox") val insideBoundingBox: List<Double>? = null,
+  @SerialName(value = "insideBoundingBox") val insideBoundingBox: List<List<Double>>? = null,
 
   /** Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates). */
-  @SerialName(value = "insidePolygon") val insidePolygon: List<Double>? = null,
+  @SerialName(value = "insidePolygon") val insidePolygon: List<List<Double>>? = null,
 )

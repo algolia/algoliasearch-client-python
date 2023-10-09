@@ -3104,19 +3104,67 @@ class SearchClientRequestsTests {
           requests_02.setIgnorePlurals(IgnorePlurals.of(ignorePlurals3));
           String indexName3 = "theIndexName";
           requests_02.setIndexName(indexName3);
-          List<Double> insideBoundingBox3 = new ArrayList<>();
+          List<List<Double>> insideBoundingBox3 = new ArrayList<>();
           {
-            double insideBoundingBox_04 = 47.3165;
+            List<Double> insideBoundingBox_04 = new ArrayList<>();
+            {
+              double insideBoundingBox_0_05 = 47.3165;
+              insideBoundingBox_04.add(insideBoundingBox_0_05);
+              double insideBoundingBox_0_15 = 4.9665;
+              insideBoundingBox_04.add(insideBoundingBox_0_15);
+              double insideBoundingBox_0_25 = 47.3424;
+              insideBoundingBox_04.add(insideBoundingBox_0_25);
+              double insideBoundingBox_0_35 = 5.0201;
+              insideBoundingBox_04.add(insideBoundingBox_0_35);
+            }
             insideBoundingBox3.add(insideBoundingBox_04);
-            double insideBoundingBox_14 = 4.9665;
+            List<Double> insideBoundingBox_14 = new ArrayList<>();
+            {
+              double insideBoundingBox_1_05 = 40.9234;
+              insideBoundingBox_14.add(insideBoundingBox_1_05);
+              double insideBoundingBox_1_15 = 2.1185;
+              insideBoundingBox_14.add(insideBoundingBox_1_15);
+              double insideBoundingBox_1_25 = 38.643;
+              insideBoundingBox_14.add(insideBoundingBox_1_25);
+              double insideBoundingBox_1_35 = 1.9916;
+              insideBoundingBox_14.add(insideBoundingBox_1_35);
+            }
             insideBoundingBox3.add(insideBoundingBox_14);
           }
           requests_02.setInsideBoundingBox(insideBoundingBox3);
-          List<Double> insidePolygon3 = new ArrayList<>();
+          List<List<Double>> insidePolygon3 = new ArrayList<>();
           {
-            double insidePolygon_04 = 47.3165;
+            List<Double> insidePolygon_04 = new ArrayList<>();
+            {
+              double insidePolygon_0_05 = 47.3165;
+              insidePolygon_04.add(insidePolygon_0_05);
+              double insidePolygon_0_15 = 4.9665;
+              insidePolygon_04.add(insidePolygon_0_15);
+              double insidePolygon_0_25 = 47.3424;
+              insidePolygon_04.add(insidePolygon_0_25);
+              double insidePolygon_0_35 = 5.0201;
+              insidePolygon_04.add(insidePolygon_0_35);
+              double insidePolygon_0_45 = 47.32;
+              insidePolygon_04.add(insidePolygon_0_45);
+              double insidePolygon_0_55 = 4.9;
+              insidePolygon_04.add(insidePolygon_0_55);
+            }
             insidePolygon3.add(insidePolygon_04);
-            double insidePolygon_14 = 4.9665;
+            List<Double> insidePolygon_14 = new ArrayList<>();
+            {
+              double insidePolygon_1_05 = 40.9234;
+              insidePolygon_14.add(insidePolygon_1_05);
+              double insidePolygon_1_15 = 2.1185;
+              insidePolygon_14.add(insidePolygon_1_15);
+              double insidePolygon_1_25 = 38.643;
+              insidePolygon_14.add(insidePolygon_1_25);
+              double insidePolygon_1_35 = 1.9916;
+              insidePolygon_14.add(insidePolygon_1_35);
+              double insidePolygon_1_45 = 39.2587;
+              insidePolygon_14.add(insidePolygon_1_45);
+              double insidePolygon_1_55 = 2.0104;
+              insidePolygon_14.add(insidePolygon_1_55);
+            }
             insidePolygon3.add(insidePolygon_14);
           }
           requests_02.setInsidePolygon(insidePolygon3);
@@ -3288,7 +3336,7 @@ class SearchClientRequestsTests {
     assertEquals("POST", req.method);
     assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
-        "{\"requests\":[{\"advancedSyntax\":true,\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"allowTyposOnNumericTokens\":true,\"alternativesAsExact\":[\"multiWordsSynonym\"],\"analytics\":true,\"analyticsTags\":[\"\"],\"aroundLatLng\":\"\",\"aroundLatLngViaIP\":true,\"aroundPrecision\":0,\"aroundRadius\":\"all\",\"attributeCriteriaComputedByMinProximity\":true,\"attributesForFaceting\":[\"\"],\"attributesToHighlight\":[\"\"],\"attributesToRetrieve\":[\"\"],\"attributesToSnippet\":[\"\"],\"clickAnalytics\":true,\"customRanking\":[\"\"],\"decompoundQuery\":true,\"disableExactOnAttributes\":[\"\"],\"disableTypoToleranceOnAttributes\":[\"\"],\"distinct\":0,\"enableABTest\":true,\"enablePersonalization\":true,\"enableReRanking\":true,\"enableRules\":true,\"exactOnSingleWordQuery\":\"attribute\",\"explain\":[\"foo\",\"bar\"],\"facetFilters\":[\"\"],\"facetingAfterDistinct\":true,\"facets\":[\"\"],\"filters\":\"\",\"getRankingInfo\":true,\"highlightPostTag\":\"\",\"highlightPreTag\":\"\",\"hitsPerPage\":0,\"ignorePlurals\":false,\"indexName\":\"theIndexName\",\"insideBoundingBox\":[47.3165,4.9665],\"insidePolygon\":[47.3165,4.9665],\"keepDiacriticsOnCharacters\":\"\",\"length\":0,\"maxValuesPerFacet\":0,\"minProximity\":0,\"minWordSizefor1Typo\":0,\"minWordSizefor2Typos\":0,\"minimumAroundRadius\":0,\"naturalLanguages\":[\"\"],\"numericFilters\":[\"\"],\"offset\":0,\"optionalFilters\":[\"\"],\"optionalWords\":[\"\"],\"page\":0,\"percentileComputation\":true,\"personalizationImpact\":0,\"query\":\"\",\"queryLanguages\":[\"\"],\"queryType\":\"prefixAll\",\"ranking\":[\"\"],\"reRankingApplyFilter\":[\"\"],\"relevancyStrictness\":0,\"removeStopWords\":true,\"removeWordsIfNoResults\":\"allOptional\",\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}},\"replaceSynonymsInHighlight\":true,\"responseFields\":[\"\"],\"restrictHighlightAndSnippetArrays\":true,\"restrictSearchableAttributes\":[\"\"],\"ruleContexts\":[\"\"],\"similarQuery\":\"\",\"snippetEllipsisText\":\"\",\"sortFacetValuesBy\":\"\",\"sumOrFiltersScores\":true,\"synonyms\":true,\"tagFilters\":[\"\"],\"type\":\"default\",\"typoTolerance\":\"min\",\"userToken\":\"\"}]}",
+        "{\"requests\":[{\"advancedSyntax\":true,\"advancedSyntaxFeatures\":[\"exactPhrase\"],\"allowTyposOnNumericTokens\":true,\"alternativesAsExact\":[\"multiWordsSynonym\"],\"analytics\":true,\"analyticsTags\":[\"\"],\"aroundLatLng\":\"\",\"aroundLatLngViaIP\":true,\"aroundPrecision\":0,\"aroundRadius\":\"all\",\"attributeCriteriaComputedByMinProximity\":true,\"attributesForFaceting\":[\"\"],\"attributesToHighlight\":[\"\"],\"attributesToRetrieve\":[\"\"],\"attributesToSnippet\":[\"\"],\"clickAnalytics\":true,\"customRanking\":[\"\"],\"decompoundQuery\":true,\"disableExactOnAttributes\":[\"\"],\"disableTypoToleranceOnAttributes\":[\"\"],\"distinct\":0,\"enableABTest\":true,\"enablePersonalization\":true,\"enableReRanking\":true,\"enableRules\":true,\"exactOnSingleWordQuery\":\"attribute\",\"explain\":[\"foo\",\"bar\"],\"facetFilters\":[\"\"],\"facetingAfterDistinct\":true,\"facets\":[\"\"],\"filters\":\"\",\"getRankingInfo\":true,\"highlightPostTag\":\"\",\"highlightPreTag\":\"\",\"hitsPerPage\":0,\"ignorePlurals\":false,\"indexName\":\"theIndexName\",\"insideBoundingBox\":[[47.3165,4.9665,47.3424,5.0201],[40.9234,2.1185,38.643,1.9916]],\"insidePolygon\":[[47.3165,4.9665,47.3424,5.0201,47.32,4.9],[40.9234,2.1185,38.643,1.9916,39.2587,2.0104]],\"keepDiacriticsOnCharacters\":\"\",\"length\":0,\"maxValuesPerFacet\":0,\"minProximity\":0,\"minWordSizefor1Typo\":0,\"minWordSizefor2Typos\":0,\"minimumAroundRadius\":0,\"naturalLanguages\":[\"\"],\"numericFilters\":[\"\"],\"offset\":0,\"optionalFilters\":[\"\"],\"optionalWords\":[\"\"],\"page\":0,\"percentileComputation\":true,\"personalizationImpact\":0,\"query\":\"\",\"queryLanguages\":[\"\"],\"queryType\":\"prefixAll\",\"ranking\":[\"\"],\"reRankingApplyFilter\":[\"\"],\"relevancyStrictness\":0,\"removeStopWords\":true,\"removeWordsIfNoResults\":\"allOptional\",\"renderingContent\":{\"facetOrdering\":{\"facets\":{\"order\":[\"a\",\"b\"]},\"values\":{\"a\":{\"order\":[\"b\"],\"sortRemainingBy\":\"count\"}}}},\"replaceSynonymsInHighlight\":true,\"responseFields\":[\"\"],\"restrictHighlightAndSnippetArrays\":true,\"restrictSearchableAttributes\":[\"\"],\"ruleContexts\":[\"\"],\"similarQuery\":\"\",\"snippetEllipsisText\":\"\",\"sortFacetValuesBy\":\"\",\"sumOrFiltersScores\":true,\"synonyms\":true,\"tagFilters\":[\"\"],\"type\":\"default\",\"typoTolerance\":\"min\",\"userToken\":\"\"}]}",
         req.body,
         JSONCompareMode.STRICT
       )

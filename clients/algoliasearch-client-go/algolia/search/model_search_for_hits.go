@@ -43,9 +43,9 @@ type SearchForHits struct {
 	// Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.
 	MinimumAroundRadius *int32 `json:"minimumAroundRadius,omitempty"`
 	// Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
-	InsideBoundingBox []float64 `json:"insideBoundingBox,omitempty"`
+	InsideBoundingBox [][]float64 `json:"insideBoundingBox,omitempty"`
 	// Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).
-	InsidePolygon []float64 `json:"insidePolygon,omitempty"`
+	InsidePolygon [][]float64 `json:"insidePolygon,omitempty"`
 	// Changes the default values of parameters that work best for a natural language query, such as `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and `ruleContexts`. These parameters work well together when the query consists of fuller natural language strings instead of keywords, for example when processing voice search queries.
 	NaturalLanguages []string `json:"naturalLanguages,omitempty"`
 	// Assigns [rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context) to search queries.
@@ -276,13 +276,13 @@ func WithSearchForHitsMinimumAroundRadius(val int32) SearchForHitsOption {
 	}
 }
 
-func WithSearchForHitsInsideBoundingBox(val []float64) SearchForHitsOption {
+func WithSearchForHitsInsideBoundingBox(val [][]float64) SearchForHitsOption {
 	return func(f *SearchForHits) {
 		f.InsideBoundingBox = val
 	}
 }
 
-func WithSearchForHitsInsidePolygon(val []float64) SearchForHitsOption {
+func WithSearchForHitsInsidePolygon(val [][]float64) SearchForHitsOption {
 	return func(f *SearchForHits) {
 		f.InsidePolygon = val
 	}
@@ -1382,9 +1382,9 @@ func (o *SearchForHits) SetMinimumAroundRadius(v int32) {
 }
 
 // GetInsideBoundingBox returns the InsideBoundingBox field value if set, zero value otherwise.
-func (o *SearchForHits) GetInsideBoundingBox() []float64 {
+func (o *SearchForHits) GetInsideBoundingBox() [][]float64 {
 	if o == nil || o.InsideBoundingBox == nil {
-		var ret []float64
+		var ret [][]float64
 		return ret
 	}
 	return o.InsideBoundingBox
@@ -1392,7 +1392,7 @@ func (o *SearchForHits) GetInsideBoundingBox() []float64 {
 
 // GetInsideBoundingBoxOk returns a tuple with the InsideBoundingBox field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *SearchForHits) GetInsideBoundingBoxOk() ([]float64, bool) {
+func (o *SearchForHits) GetInsideBoundingBoxOk() ([][]float64, bool) {
 	if o == nil || o.InsideBoundingBox == nil {
 		return nil, false
 	}
@@ -1408,15 +1408,15 @@ func (o *SearchForHits) HasInsideBoundingBox() bool {
 	return false
 }
 
-// SetInsideBoundingBox gets a reference to the given []float64 and assigns it to the InsideBoundingBox field.
-func (o *SearchForHits) SetInsideBoundingBox(v []float64) {
+// SetInsideBoundingBox gets a reference to the given [][]float64 and assigns it to the InsideBoundingBox field.
+func (o *SearchForHits) SetInsideBoundingBox(v [][]float64) {
 	o.InsideBoundingBox = v
 }
 
 // GetInsidePolygon returns the InsidePolygon field value if set, zero value otherwise.
-func (o *SearchForHits) GetInsidePolygon() []float64 {
+func (o *SearchForHits) GetInsidePolygon() [][]float64 {
 	if o == nil || o.InsidePolygon == nil {
-		var ret []float64
+		var ret [][]float64
 		return ret
 	}
 	return o.InsidePolygon
@@ -1424,7 +1424,7 @@ func (o *SearchForHits) GetInsidePolygon() []float64 {
 
 // GetInsidePolygonOk returns a tuple with the InsidePolygon field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *SearchForHits) GetInsidePolygonOk() ([]float64, bool) {
+func (o *SearchForHits) GetInsidePolygonOk() ([][]float64, bool) {
 	if o == nil || o.InsidePolygon == nil {
 		return nil, false
 	}
@@ -1440,8 +1440,8 @@ func (o *SearchForHits) HasInsidePolygon() bool {
 	return false
 }
 
-// SetInsidePolygon gets a reference to the given []float64 and assigns it to the InsidePolygon field.
-func (o *SearchForHits) SetInsidePolygon(v []float64) {
+// SetInsidePolygon gets a reference to the given [][]float64 and assigns it to the InsidePolygon field.
+func (o *SearchForHits) SetInsidePolygon(v [][]float64) {
 	o.InsidePolygon = v
 }
 
