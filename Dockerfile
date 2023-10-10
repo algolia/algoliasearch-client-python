@@ -41,7 +41,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 # Java
 COPY --from=java-builder /usr/local/openjdk-17 /usr/local/openjdk-17
 RUN echo "export PATH=$PATH:/usr/local/openjdk-17/bin" >> ~/.profile && source ~/.profile
-ADD https://github.com/google/google-java-format/releases/download/v1.17.0/google-java-format-1.17.0-all-deps.jar /tmp/java-formatter.jar
+ADD https://github.com/google/google-java-format/releases/download/v1.18.1/google-java-format-1.18.1-all-deps.jar /tmp/java-formatter.jar
 
 WORKDIR /app
 

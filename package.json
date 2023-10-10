@@ -35,8 +35,8 @@
     "@babel/eslint-parser": "7.22.15",
     "@openapitools/openapi-generator-cli": "2.7.0",
     "@redocly/cli": "1.0.0-beta.112",
-    "@typescript-eslint/eslint-plugin": "6.7.3",
-    "@typescript-eslint/parser": "6.7.3",
+    "@typescript-eslint/eslint-plugin": "6.7.4",
+    "@typescript-eslint/parser": "6.7.4",
     "eslint": "8.50.0",
     "eslint-config-algolia": "22.0.0",
     "eslint-config-prettier": "9.0.0",
@@ -59,7 +59,7 @@
     "renovate-config-algolia": "2.1.10",
     "typescript": "5.2.2"
   },
-  "packageManager": "yarn@3.6.3",
+  "packageManager": "yarn@3.6.4",
   "engines": {
     "node": "^18.0.0",
     "yarn": "^3.0.0"
