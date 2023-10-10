@@ -349,3 +349,7 @@ SourceUpdateInput:
     - $ref: '#/SourceCSV'
     - $ref: '#/SourceBigQuery'
     - $ref: '#/SourceUpdateDocker'
+
+DockerSourceStream:
+  type: object
+  description: A stream definition (see Singer specification for details).

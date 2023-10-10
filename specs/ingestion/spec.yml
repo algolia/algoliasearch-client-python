@@ -66,6 +66,8 @@ paths:
     $ref: 'paths/sources/searchSources.yml'
   /1/sources/{sourceID}:
     $ref: 'paths/sources/sourceID.yml'
+  /1/sources/{sourceID}/discover:
+    $ref: 'paths/sources/discover.yml'
 
   # tasks API.
   /1/tasks:
