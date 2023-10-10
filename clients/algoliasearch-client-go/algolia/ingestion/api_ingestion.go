@@ -2333,6 +2333,127 @@ func (c *APIClient) GetDestinationsWithContext(ctx context.Context, r ApiGetDest
 	return returnValue, nil
 }
 
+func (r *ApiGetDockerSourceStreamsRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["sourceID"]; ok {
+		err = json.Unmarshal(v, &r.sourceID)
+		if err != nil {
+			err = json.Unmarshal(b, &r.sourceID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ApiGetDockerSourceStreamsRequest represents the request with all the parameters for the API call.
+type ApiGetDockerSourceStreamsRequest struct {
+	sourceID string
+}
+
+// NewApiGetDockerSourceStreamsRequest creates an instance of the ApiGetDockerSourceStreamsRequest to be used for the API call.
+func (c *APIClient) NewApiGetDockerSourceStreamsRequest(sourceID string) ApiGetDockerSourceStreamsRequest {
+	return ApiGetDockerSourceStreamsRequest{
+		sourceID: sourceID,
+	}
+}
+
+/*
+GetDockerSourceStreams Retrieve a stream listing. Wraps GetDockerSourceStreamsWithContext using context.Background.
+
+Retrieve a stream listing for a given Singer specification compatible docker type source ID.
+
+Request can be constructed by NewApiGetDockerSourceStreamsRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return DockerSourceStreams
+*/
+func (c *APIClient) GetDockerSourceStreams(r ApiGetDockerSourceStreamsRequest, opts ...Option) (*DockerSourceStreams, error) {
+	return c.GetDockerSourceStreamsWithContext(context.Background(), r, opts...)
+}
+
+/*
+GetDockerSourceStreams Retrieve a stream listing.
+
+Retrieve a stream listing for a given Singer specification compatible docker type source ID.
+
+Request can be constructed by NewApiGetDockerSourceStreamsRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return DockerSourceStreams
+*/
+func (c *APIClient) GetDockerSourceStreamsWithContext(ctx context.Context, r ApiGetDockerSourceStreamsRequest, opts ...Option) (*DockerSourceStreams, error) {
+	var (
+		postBody    any
+		returnValue *DockerSourceStreams
+	)
+
+	requestPath := "/1/sources/{sourceID}/discover"
+	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(r.sourceID)), -1)
+
+	headers := make(map[string]string)
+	queryParams := url.Values{}
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Set(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodGet, postBody, headers, queryParams)
+	if err != nil {
+		return returnValue, err
+	}
+
+	res, err := c.callAPI(req, call.Write)
+	if err != nil {
+		return returnValue, err
+	}
+	if res == nil {
+		return returnValue, reportError("res is nil")
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
+	if err != nil {
+		return returnValue, err
+	}
+
+	if res.StatusCode >= 300 {
+		newErr := &APIError{
+			Message: string(resBody),
+			Status:  res.StatusCode,
+		}
+		if res.StatusCode == 400 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+		}
+		return returnValue, newErr
+	}
+
+	err = c.decode(&returnValue, resBody, res.Header.Get("Content-Type"))
+	if err != nil {
+		return returnValue, reportError("cannot decode result: %w", err)
+	}
+
+	return returnValue, nil
+}
+
 func (r *ApiGetEventRequest) UnmarshalJSON(b []byte) error {
 	req := map[string]json.RawMessage{}
 	err := json.Unmarshal(b, &req)
@@ -4872,6 +4993,127 @@ func (c *APIClient) SearchTasksWithContext(ctx context.Context, r ApiSearchTasks
 
 	// body params
 	postBody = r.taskSearch
+	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
+	if err != nil {
+		return returnValue, err
+	}
+
+	res, err := c.callAPI(req, call.Write)
+	if err != nil {
+		return returnValue, err
+	}
+	if res == nil {
+		return returnValue, reportError("res is nil")
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
+	if err != nil {
+		return returnValue, err
+	}
+
+	if res.StatusCode >= 300 {
+		newErr := &APIError{
+			Message: string(resBody),
+			Status:  res.StatusCode,
+		}
+		if res.StatusCode == 400 {
+			var v ErrorBase
+			err = c.decode(&v, resBody, res.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.Message = err.Error()
+				return returnValue, newErr
+			}
+		}
+		return returnValue, newErr
+	}
+
+	err = c.decode(&returnValue, resBody, res.Header.Get("Content-Type"))
+	if err != nil {
+		return returnValue, reportError("cannot decode result: %w", err)
+	}
+
+	return returnValue, nil
+}
+
+func (r *ApiTriggerDockerSourceDiscoverRequest) UnmarshalJSON(b []byte) error {
+	req := map[string]json.RawMessage{}
+	err := json.Unmarshal(b, &req)
+	if err != nil {
+		return err
+	}
+	if v, ok := req["sourceID"]; ok {
+		err = json.Unmarshal(v, &r.sourceID)
+		if err != nil {
+			err = json.Unmarshal(b, &r.sourceID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ApiTriggerDockerSourceDiscoverRequest represents the request with all the parameters for the API call.
+type ApiTriggerDockerSourceDiscoverRequest struct {
+	sourceID string
+}
+
+// NewApiTriggerDockerSourceDiscoverRequest creates an instance of the ApiTriggerDockerSourceDiscoverRequest to be used for the API call.
+func (c *APIClient) NewApiTriggerDockerSourceDiscoverRequest(sourceID string) ApiTriggerDockerSourceDiscoverRequest {
+	return ApiTriggerDockerSourceDiscoverRequest{
+		sourceID: sourceID,
+	}
+}
+
+/*
+TriggerDockerSourceDiscover Trigger a stream listing request. Wraps TriggerDockerSourceDiscoverWithContext using context.Background.
+
+Trigger a stream listing request for a Singer specification compatible docker type source.
+
+Request can be constructed by NewApiTriggerDockerSourceDiscoverRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return DockerSourceDiscover
+*/
+func (c *APIClient) TriggerDockerSourceDiscover(r ApiTriggerDockerSourceDiscoverRequest, opts ...Option) (*DockerSourceDiscover, error) {
+	return c.TriggerDockerSourceDiscoverWithContext(context.Background(), r, opts...)
+}
+
+/*
+TriggerDockerSourceDiscover Trigger a stream listing request.
+
+Trigger a stream listing request for a Singer specification compatible docker type source.
+
+Request can be constructed by NewApiTriggerDockerSourceDiscoverRequest with parameters below.
+
+	@param sourceID string - The source UUID.
+	@return DockerSourceDiscover
+*/
+func (c *APIClient) TriggerDockerSourceDiscoverWithContext(ctx context.Context, r ApiTriggerDockerSourceDiscoverRequest, opts ...Option) (*DockerSourceDiscover, error) {
+	var (
+		postBody    any
+		returnValue *DockerSourceDiscover
+	)
+
+	requestPath := "/1/sources/{sourceID}/discover"
+	requestPath = strings.Replace(requestPath, "{"+"sourceID"+"}", url.PathEscape(parameterToString(r.sourceID)), -1)
+
+	headers := make(map[string]string)
+	queryParams := url.Values{}
+
+	// optional params if any
+	for _, opt := range opts {
+		switch opt.optionType {
+		case "query":
+			queryParams.Set(opt.name, opt.value)
+		case "header":
+			headers[opt.name] = opt.value
+		}
+	}
+
 	req, err := c.prepareRequest(ctx, requestPath, http.MethodPost, postBody, headers, queryParams)
 	if err != nil {
 		return returnValue, err

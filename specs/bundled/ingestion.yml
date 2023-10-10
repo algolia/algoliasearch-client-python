@@ -1169,6 +1169,13 @@ components:
         - sourceID
         - name
         - updatedAt
+    DockerSourceStream:
+      type: object
+      description: A stream definition (see Singer specification for details).
+    runID:
+      type: string
+      description: The run UUID.
+      example: 6c02aeb1-775e-418e-870b-1faccd4b2c0f
     ActionType:
       type: string
       description: The action to perform on the Algolia index.
@@ -1448,10 +1455,6 @@ components:
       required:
         - taskID
         - updatedAt
-    runID:
-      type: string
-      description: The run UUID.
-      example: 6c02aeb1-775e-418e-870b-1faccd4b2c0f
     RunResponse:
       type: object
       additionalProperties: false
@@ -2224,6 +2227,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /1/sources/{sourceID}/discover:
+    get:
+      tags:
+        - ingestion
+      summary: Retrieve a stream listing.
+      description: >-
+        Retrieve a stream listing for a given Singer specification compatible
+        docker type source ID.
+      operationId: getDockerSourceStreams
+      parameters:
+        - $ref: '#/components/parameters/pathSourceID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: dockerSourceStreams
+                type: object
+                additionalProperties: false
+                properties:
+                  streams:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DockerSourceStream'
+                required:
+                  - streams
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    post:
+      tags:
+        - ingestion
+      summary: Trigger a stream listing request.
+      description: >-
+        Trigger a stream listing request for a Singer specification compatible
+        docker type source.
+      operationId: triggerDockerSourceDiscover
+      parameters:
+        - $ref: '#/components/parameters/pathSourceID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: dockerSourceDiscover
+                type: object
+                additionalProperties: false
+                properties:
+                  runID:
+                    $ref: '#/components/schemas/runID'
+                  createdAt:
+                    $ref: '#/components/schemas/createdAt'
+                required:
+                  - runID
+                  - createdAt
         '400':
           $ref: '#/components/responses/BadRequest'
   /1/tasks:

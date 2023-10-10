@@ -657,6 +657,39 @@ func TestIngestion_GetDestinations(t *testing.T) {
 	}
 }
 
+func TestIngestion_GetDockerSourceStreams(t *testing.T) {
+	client, echo := createIngestionClient()
+
+	tests := []struct {
+		name     string
+		testFunc func(t *testing.T)
+	}{
+		{
+			name: "getDockerSourceStreams",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"sourceID":"6c02aeb1-775e-418e-870b-1faccd4b2c0f"}`
+				req := ingestion.ApiGetDockerSourceStreamsRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.GetDockerSourceStreams(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f/discover")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "GET", echo.method)
+
+				require.Nil(t, echo.body)
+			},
+		},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			test.testFunc(t)
+		})
+	}
+}
+
 func TestIngestion_GetEvent(t *testing.T) {
 	client, echo := createIngestionClient()
 
@@ -1464,6 +1497,39 @@ func TestIngestion_SearchTasks(t *testing.T) {
 
 				ja := jsonassert.New(t)
 				ja.Assertf(*echo.body, `{"taskIDs":["6c02aeb1-775e-418e-870b-1faccd4b2c0f","947ac9c4-7e58-4c87-b1e7-14a68e99699a"]}`)
+			},
+		},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			test.testFunc(t)
+		})
+	}
+}
+
+func TestIngestion_TriggerDockerSourceDiscover(t *testing.T) {
+	client, echo := createIngestionClient()
+
+	tests := []struct {
+		name     string
+		testFunc func(t *testing.T)
+	}{
+		{
+			name: "triggerDockerSourceDiscover",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"sourceID":"6c02aeb1-775e-418e-870b-1faccd4b2c0f"}`
+				req := ingestion.ApiTriggerDockerSourceDiscoverRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.TriggerDockerSourceDiscover(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f/discover")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "POST", echo.method)
+
+				require.Empty(t, echo.body)
 			},
 		},
 	}

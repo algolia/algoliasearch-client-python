@@ -352,6 +352,21 @@ describe('getDestinations', () => {
   });
 });
 
+describe('getDockerSourceStreams', () => {
+  test('getDockerSourceStreams', async () => {
+    const req = (await client.getDockerSourceStreams({
+      sourceID: '6c02aeb1-775e-418e-870b-1faccd4b2c0f',
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual(
+      '/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f/discover'
+    );
+    expect(req.method).toEqual('GET');
+    expect(req.data).toEqual(undefined);
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
+});
+
 describe('getEvent', () => {
   test('getEvent', async () => {
     const req = (await client.getEvent({
@@ -806,6 +821,21 @@ describe('searchTasks', () => {
         '947ac9c4-7e58-4c87-b1e7-14a68e99699a',
       ],
     });
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
+});
+
+describe('triggerDockerSourceDiscover', () => {
+  test('triggerDockerSourceDiscover', async () => {
+    const req = (await client.triggerDockerSourceDiscover({
+      sourceID: '6c02aeb1-775e-418e-870b-1faccd4b2c0f',
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual(
+      '/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f/discover'
+    );
+    expect(req.method).toEqual('POST');
+    expect(req.data).toEqual(undefined);
     expect(req.searchParams).toStrictEqual(undefined);
   });
 });

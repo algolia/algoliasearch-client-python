@@ -440,6 +440,24 @@ class IngestionTest {
     )
   }
 
+  // getDockerSourceStreams
+
+  @Test
+  fun `getDockerSourceStreams`() = runTest {
+    client.runTest(
+      call = {
+        getDockerSourceStreams(
+          sourceID = "6c02aeb1-775e-418e-870b-1faccd4b2c0f",
+        )
+      },
+      intercept = {
+        assertEquals("/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f/discover".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("GET"), it.method)
+        assertNoBody(it.body)
+      },
+    )
+  }
+
   // getEvent
 
   @Test
@@ -1020,6 +1038,24 @@ class IngestionTest {
         assertEquals("/1/tasks/search".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
         assertJsonBody("""{"taskIDs":["6c02aeb1-775e-418e-870b-1faccd4b2c0f","947ac9c4-7e58-4c87-b1e7-14a68e99699a"]}""", it.body)
+      },
+    )
+  }
+
+  // triggerDockerSourceDiscover
+
+  @Test
+  fun `triggerDockerSourceDiscover`() = runTest {
+    client.runTest(
+      call = {
+        triggerDockerSourceDiscover(
+          sourceID = "6c02aeb1-775e-418e-870b-1faccd4b2c0f",
+        )
+      },
+      intercept = {
+        assertEquals("/1/sources/6c02aeb1-775e-418e-870b-1faccd4b2c0f/discover".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("POST"), it.method)
+        assertEmptyBody(it.body)
       },
     )
   }

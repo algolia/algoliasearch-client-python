@@ -349,6 +349,24 @@ public class IngestionClient(
   }
 
   /**
+   * Retrieve a stream listing.
+   * Retrieve a stream listing for a given Singer specification compatible docker type source ID.
+   * @param sourceID The source UUID.
+   * @param requestOptions additional request configuration.
+   */
+  public suspend fun getDockerSourceStreams(sourceID: String, requestOptions: RequestOptions? = null): DockerSourceStreams {
+    require(sourceID.isNotBlank()) { "Parameter `sourceID` is required when calling `getDockerSourceStreams`." }
+    val requestConfig = RequestConfig(
+      method = RequestMethod.GET,
+      path = listOf("1", "sources", "$sourceID", "discover"),
+    )
+    return requester.execute(
+      requestConfig = requestConfig,
+      requestOptions = requestOptions,
+    )
+  }
+
+  /**
    * Get an event.
    * Get a single event for a specific runID.
    * @param runID The run UUID.
@@ -685,6 +703,24 @@ public class IngestionClient(
       method = RequestMethod.POST,
       path = listOf("1", "tasks", "search"),
       body = taskSearch,
+    )
+    return requester.execute(
+      requestConfig = requestConfig,
+      requestOptions = requestOptions,
+    )
+  }
+
+  /**
+   * Trigger a stream listing request.
+   * Trigger a stream listing request for a Singer specification compatible docker type source.
+   * @param sourceID The source UUID.
+   * @param requestOptions additional request configuration.
+   */
+  public suspend fun triggerDockerSourceDiscover(sourceID: String, requestOptions: RequestOptions? = null): DockerSourceDiscover {
+    require(sourceID.isNotBlank()) { "Parameter `sourceID` is required when calling `triggerDockerSourceDiscover`." }
+    val requestConfig = RequestConfig(
+      method = RequestMethod.POST,
+      path = listOf("1", "sources", "$sourceID", "discover"),
     )
     return requester.execute(
       requestConfig = requestConfig,
