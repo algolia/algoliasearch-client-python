@@ -80,7 +80,7 @@ RunOutcome:
 
 RunType:
   type: string
-  enum: ['reindex', 'update']
+  enum: ['reindex', 'update', 'discover']
 
 RunReasonCode:
   type: string
