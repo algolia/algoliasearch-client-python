@@ -1,5 +1,12 @@
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
 
+- [e3b7e2ab6](https://github.com/algolia/api-clients-automation/commit/e3b7e2ab6) feat(specs): synchronize specs for all client ([#2103](https://github.com/algolia/api-clients-automation/pull/2103)) by [@Fluf22](https://github.com/Fluf22/)
+- [f8e79a1e2](https://github.com/algolia/api-clients-automation/commit/f8e79a1e2) fix(specs): search `insideBoundingBox` type ([#2098](https://github.com/algolia/api-clients-automation/pull/2098)) by [@aallam](https://github.com/aallam/)
+- [d38619103](https://github.com/algolia/api-clients-automation/commit/d38619103) feat(specs): add new events type for insights ([#2080](https://github.com/algolia/api-clients-automation/pull/2080)) by [@millotp](https://github.com/millotp/)
+- [756f19ab7](https://github.com/algolia/api-clients-automation/commit/756f19ab7) feat(specs): Remove attributeForDistinct from the indexSettingsAsSearc… ([#2078](https://github.com/algolia/api-clients-automation/pull/2078)) by [@clemfromspace](https://github.com/clemfromspace/)
+
+## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
+
 - [2260e903f](https://github.com/algolia/api-clients-automation/commit/2260e903f) feat(specs): add `attributesToExclude` for Ingestion ([#2053](https://github.com/algolia/api-clients-automation/pull/2053)) by [@shortcuts](https://github.com/shortcuts/)
 - [b7b6565ab](https://github.com/algolia/api-clients-automation/commit/b7b6565ab) fix(specs): `userData` type as 'any' ([#2033](https://github.com/algolia/api-clients-automation/pull/2033)) by [@aallam](https://github.com/aallam/)
 
