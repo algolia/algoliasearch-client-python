@@ -1503,6 +1503,7 @@ components:
       enum:
         - reindex
         - update
+        - discover
     startedAt:
       type: string
       description: Date of start (RFC3339 format).

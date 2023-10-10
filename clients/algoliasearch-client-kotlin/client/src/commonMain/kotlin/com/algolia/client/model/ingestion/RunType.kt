@@ -10,7 +10,10 @@ public enum class RunType(public val value: kotlin.String) {
   Reindex("reindex"),
 
   @SerialName(value = "update")
-  Update("update");
+  Update("update"),
+
+  @SerialName(value = "discover")
+  Discover("discover");
 
   override fun toString(): kotlin.String = value
 }
