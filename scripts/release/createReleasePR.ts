@@ -349,7 +349,7 @@ async function prepareGitEnvironment(): Promise<void> {
   console.log('Pulling from origin...');
   await run('git fetch origin');
   await run('git fetch --tags --force');
-  await run('git pull');
+  await run('git pull origin $(git branch --show-current)');
 }
 
 async function createReleasePR(): Promise<void> {
@@ -415,7 +415,7 @@ async function createReleasePR(): Promise<void> {
   if (process.env.LOCAL_TEST_DEV) {
     await run(`git commit -m "${commitMessage} [skip ci]"`);
   } else {
-    await run(`CI=false git commit -m "${commitMessage}"`);
+    await run(`CI=false RELEASE=true git commit -m "${commitMessage}"`);
   }
 
   // cleanup all the changes to the generated files (the ones not commited because of the pre-commit hook)
