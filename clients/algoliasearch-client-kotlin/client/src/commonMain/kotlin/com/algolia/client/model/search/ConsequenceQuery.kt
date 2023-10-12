@@ -8,40 +8,27 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * When providing a string, it replaces the entire query string. When providing an object, it describes incremental edits to be made to the query string (but you can't do both).
+ *
+ * Implementations:
+ * - [ConsequenceQueryObject]
+ * - [String] - *[ConsequenceQuery.of]*
  */
 @Serializable(ConsequenceQuerySerializer::class)
 public sealed interface ConsequenceQuery {
 
-  public data class StringWrapper(val value: String) : ConsequenceQuery
+  @JvmInline
+  public value class StringValue(public val value: String) : ConsequenceQuery
 
   public companion object {
 
-    /**
-     * ConsequenceQueryObject
-     *
-     * @param remove Words to remove.
-     * @param edits Edits to apply.
-     */
-    public fun ConsequenceQueryObject(
-      remove: List<String>? = null,
-      edits: List<Edit>? = null,
-    ): ConsequenceQueryObject = com.algolia.client.model.search.ConsequenceQueryObject(
-      remove = remove,
-      edits = edits,
-    )
-
-    /**
-     * ConsequenceQuery as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [ConsequenceQuery] as [String] Value. */
+    public fun of(value: String): ConsequenceQuery {
+      return StringValue(value)
+    }
   }
 }
 
@@ -52,7 +39,7 @@ internal class ConsequenceQuerySerializer : KSerializer<ConsequenceQuery> {
   override fun serialize(encoder: Encoder, value: ConsequenceQuery) {
     when (value) {
       is ConsequenceQueryObject -> ConsequenceQueryObject.serializer().serialize(encoder, value)
-      is ConsequenceQuery.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is ConsequenceQuery.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -63,7 +50,7 @@ internal class ConsequenceQuerySerializer : KSerializer<ConsequenceQuery> {
     // deserialize ConsequenceQueryObject
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<ConsequenceQueryObject>(tree)
+        return codec.json.decodeFromJsonElement(ConsequenceQueryObject.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize ConsequenceQueryObject (error: ${e.message})")
@@ -73,7 +60,8 @@ internal class ConsequenceQuerySerializer : KSerializer<ConsequenceQuery> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<ConsequenceQuery.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return ConsequenceQuery.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

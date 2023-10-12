@@ -8,40 +8,27 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * AttributeToUpdate
+ *
+ * Implementations:
+ * - [BuiltInOperation]
+ * - [String] - *[AttributeToUpdate.of]*
  */
 @Serializable(AttributeToUpdateSerializer::class)
 public sealed interface AttributeToUpdate {
 
-  public data class StringWrapper(val value: String) : AttributeToUpdate
+  @JvmInline
+  public value class StringValue(public val value: String) : AttributeToUpdate
 
   public companion object {
 
-    /**
-     * To update an attribute without pushing the entire record, you can use these built-in operations.
-     *
-     * @param operation
-     * @param `value` Value that corresponds to the operation, for example an `Increment` or `Decrement` step, `Add` or `Remove` value.
-     */
-    public fun BuiltInOperation(
-      operation: BuiltInOperationType,
-      `value`: String,
-    ): BuiltInOperation = com.algolia.client.model.search.BuiltInOperation(
-      operation = operation,
-      `value` = `value`,
-    )
-
-    /**
-     * AttributeToUpdate as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [AttributeToUpdate] as [String] Value. */
+    public fun of(value: String): AttributeToUpdate {
+      return StringValue(value)
+    }
   }
 }
 
@@ -52,7 +39,7 @@ internal class AttributeToUpdateSerializer : KSerializer<AttributeToUpdate> {
   override fun serialize(encoder: Encoder, value: AttributeToUpdate) {
     when (value) {
       is BuiltInOperation -> BuiltInOperation.serializer().serialize(encoder, value)
-      is AttributeToUpdate.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is AttributeToUpdate.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -63,7 +50,7 @@ internal class AttributeToUpdateSerializer : KSerializer<AttributeToUpdate> {
     // deserialize BuiltInOperation
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<BuiltInOperation>(tree)
+        return codec.json.decodeFromJsonElement(BuiltInOperation.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize BuiltInOperation (error: ${e.message})")
@@ -73,7 +60,8 @@ internal class AttributeToUpdateSerializer : KSerializer<AttributeToUpdate> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<AttributeToUpdate.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return AttributeToUpdate.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

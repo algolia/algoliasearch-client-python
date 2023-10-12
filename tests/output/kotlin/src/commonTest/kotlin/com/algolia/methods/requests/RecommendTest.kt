@@ -191,11 +191,11 @@ class RecommendTest {
                 maxRecommendations = 10,
                 queryParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("query"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("query"))),
                 ),
                 fallbackParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("fallback"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("fallback"))),
                 ),
               ),
             ),
@@ -250,11 +250,11 @@ class RecommendTest {
                 facetValue = "myFacetValue",
                 queryParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("query"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("query"))),
                 ),
                 fallbackParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("fallback"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("fallback"))),
                 ),
               ),
             ),
@@ -315,11 +315,11 @@ class RecommendTest {
                 maxRecommendations = 10,
                 queryParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("query1"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("query1"))),
                 ),
                 fallbackParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("fallback1"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("fallback1"))),
                 ),
               ),
               RecommendationsQuery(
@@ -330,11 +330,11 @@ class RecommendTest {
                 maxRecommendations = 10,
                 queryParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("query2"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("query2"))),
                 ),
                 fallbackParameters = SearchParamsObject(
                   query = "myQuery",
-                  facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("fallback2"))),
+                  facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("fallback2"))),
                 ),
               ),
             ),

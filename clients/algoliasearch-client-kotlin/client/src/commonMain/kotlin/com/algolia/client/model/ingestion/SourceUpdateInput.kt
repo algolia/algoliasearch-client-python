@@ -11,114 +11,18 @@ import kotlinx.serialization.json.*
 
 /**
  * SourceUpdateInput
+ *
+ * Implementations:
+ * - [SourceBigQuery]
+ * - [SourceCSV]
+ * - [SourceJSON]
+ * - [SourceUpdateCommercetools]
+ * - [SourceUpdateDocker]
  */
 @Serializable(SourceUpdateInputSerializer::class)
 public sealed interface SourceUpdateInput {
 
   public companion object {
-
-    /**
-     * SourceBigQuery
-     *
-     * @param projectID Project ID of the BigQuery Source.
-     * @param datasetID Dataset ID of the BigQuery Source.
-     * @param dataType
-     * @param table Table name (for default BQ).
-     * @param tablePrefix Table prefix (for Google Analytics).
-     * @param customSQLRequest Custom SQL request to extract data from the BigQuery table.
-     * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
-     */
-    public fun SourceBigQuery(
-      projectID: String,
-      datasetID: String,
-      dataType: BigQueryDataType? = null,
-      table: String? = null,
-      tablePrefix: String? = null,
-      customSQLRequest: String? = null,
-      uniqueIDColumn: String? = null,
-    ): SourceBigQuery = com.algolia.client.model.ingestion.SourceBigQuery(
-      projectID = projectID,
-      datasetID = datasetID,
-      dataType = dataType,
-      table = table,
-      tablePrefix = tablePrefix,
-      customSQLRequest = customSQLRequest,
-      uniqueIDColumn = uniqueIDColumn,
-    )
-
-    /**
-     * SourceCSV
-     *
-     * @param url The URL of the file.
-     * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
-     * @param mapping Mapping of type for every column. For example {\"myColumn\": \"boolean\", \"myOtherColumn\": \"json\"}.
-     * @param method
-     * @param delimiter The character used to split the value on each line, default to a comma (\\r, \\n, 0xFFFD, and space are forbidden).
-     */
-    public fun SourceCSV(
-      url: String,
-      uniqueIDColumn: String? = null,
-      mapping: Map<kotlin.String, MappingTypeCSV>? = null,
-      method: MethodType? = null,
-      delimiter: String? = null,
-    ): SourceCSV = com.algolia.client.model.ingestion.SourceCSV(
-      url = url,
-      uniqueIDColumn = uniqueIDColumn,
-      mapping = mapping,
-      method = method,
-      delimiter = delimiter,
-    )
-
-    /**
-     * SourceJSON
-     *
-     * @param url The URL of the file.
-     * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
-     * @param method
-     */
-    public fun SourceJSON(
-      url: String,
-      uniqueIDColumn: String? = null,
-      method: MethodType? = null,
-    ): SourceJSON = com.algolia.client.model.ingestion.SourceJSON(
-      url = url,
-      uniqueIDColumn = uniqueIDColumn,
-      method = method,
-    )
-
-    /**
-     * SourceUpdateCommercetools
-     *
-     * @param storeKeys Unique and immutable key of the referenced Store.
-     * @param locales Array of locales that must match the following pattern: ^[a-z]{2}(-[A-Z]{2})?$. For example [\"fr-FR\", \"en\"].
-     */
-    public fun SourceUpdateCommercetools(
-      storeKeys: List<String>? = null,
-      locales: List<String>? = null,
-    ): SourceUpdateCommercetools = com.algolia.client.model.ingestion.SourceUpdateCommercetools(
-      storeKeys = storeKeys,
-      locales = locales,
-    )
-
-    /**
-     * SourceUpdateDocker
-     *
-     * @param configuration The configuration of the spec.
-     * @param registry
-     * @param image The name of the image to pull.
-     * @param version The version of the image, defaults to `latest`.
-     */
-    public fun SourceUpdateDocker(
-      configuration: JsonObject,
-      registry: DockerRegistry? = null,
-      image: String? = null,
-      version: String? = null,
-    ): SourceUpdateDocker = com.algolia.client.model.ingestion.SourceUpdateDocker(
-      configuration = configuration,
-      registry = registry,
-      image = image,
-      version = version,
-    )
   }
 }
 
@@ -143,7 +47,7 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
     // deserialize SourceBigQuery
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceBigQuery>(tree)
+        return codec.json.decodeFromJsonElement(SourceBigQuery.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceBigQuery (error: ${e.message})")
@@ -153,7 +57,7 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
     // deserialize SourceCSV
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceCSV>(tree)
+        return codec.json.decodeFromJsonElement(SourceCSV.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceCSV (error: ${e.message})")
@@ -163,7 +67,7 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
     // deserialize SourceJSON
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceJSON>(tree)
+        return codec.json.decodeFromJsonElement(SourceJSON.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceJSON (error: ${e.message})")
@@ -173,7 +77,7 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
     // deserialize SourceUpdateCommercetools
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceUpdateCommercetools>(tree)
+        return codec.json.decodeFromJsonElement(SourceUpdateCommercetools.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceUpdateCommercetools (error: ${e.message})")
@@ -183,7 +87,7 @@ internal class SourceUpdateInputSerializer : KSerializer<SourceUpdateInput> {
     // deserialize SourceUpdateDocker
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceUpdateDocker>(tree)
+        return codec.json.decodeFromJsonElement(SourceUpdateDocker.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceUpdateDocker (error: ${e.message})")

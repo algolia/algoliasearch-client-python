@@ -535,14 +535,14 @@ class InsightsTest {
                 objectIDs = listOf("9780545139700", "9780439784542"),
                 objectData = listOf(
                   ObjectDataAfterSearch(
-                    price = Price.Number(19.99),
+                    price = Price.of(19.99),
                     quantity = 10,
-                    discount = Discount.Number(2.5),
+                    discount = Discount.of(2.5),
                   ),
                   ObjectDataAfterSearch(
-                    price = Price.String("8$"),
+                    price = Price.of("8$"),
                     quantity = 7,
-                    discount = Discount.String("30%"),
+                    discount = Discount.of("30%"),
                   ),
                 ),
                 currency = "USD",

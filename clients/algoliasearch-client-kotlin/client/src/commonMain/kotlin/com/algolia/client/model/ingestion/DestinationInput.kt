@@ -11,39 +11,15 @@ import kotlinx.serialization.json.*
 
 /**
  * DestinationInput
+ *
+ * Implementations:
+ * - [DestinationIndexName]
+ * - [DestinationIndexPrefix]
  */
 @Serializable(DestinationInputSerializer::class)
 public sealed interface DestinationInput {
 
   public companion object {
-
-    /**
-     * DestinationIndexName
-     *
-     * @param indexName The index name to store data in.
-     * @param recordType
-     * @param attributesToExclude Determines the attributes to exclude from an Algolia record. To remove nested element, you can separate the path to the element with dots (`.`):   - \"foo.bar\": will remove `bar` from `foo`. To remove elements from an array, you can use the following:   - \"foo.[0].bar\": will only remove `bar` from the first element of `foo`.   - \"foo.[*].bar\": will remove `bar` from every elements of `foo`.
-     */
-    public fun DestinationIndexName(
-      indexName: String,
-      recordType: RecordType? = null,
-      attributesToExclude: List<String>? = null,
-    ): DestinationIndexName = com.algolia.client.model.ingestion.DestinationIndexName(
-      indexName = indexName,
-      recordType = recordType,
-      attributesToExclude = attributesToExclude,
-    )
-
-    /**
-     * DestinationIndexPrefix
-     *
-     * @param indexPrefix The prefix of the final index name.
-     */
-    public fun DestinationIndexPrefix(
-      indexPrefix: String,
-    ): DestinationIndexPrefix = com.algolia.client.model.ingestion.DestinationIndexPrefix(
-      indexPrefix = indexPrefix,
-    )
   }
 }
 
@@ -65,7 +41,7 @@ internal class DestinationInputSerializer : KSerializer<DestinationInput> {
     // deserialize DestinationIndexName
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<DestinationIndexName>(tree)
+        return codec.json.decodeFromJsonElement(DestinationIndexName.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize DestinationIndexName (error: ${e.message})")
@@ -75,7 +51,7 @@ internal class DestinationInputSerializer : KSerializer<DestinationInput> {
     // deserialize DestinationIndexPrefix
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<DestinationIndexPrefix>(tree)
+        return codec.json.decodeFromJsonElement(DestinationIndexPrefix.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize DestinationIndexPrefix (error: ${e.message})")

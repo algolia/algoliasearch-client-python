@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * [Filter hits by facet value](https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/).
+ *
+ * Implementations:
+ * - [List<MixedSearchFilters>] - *[FacetFilters.of]*
+ * - [String] - *[FacetFilters.of]*
  */
 @Serializable(FacetFiltersSerializer::class)
 public sealed interface FacetFilters {
 
-  public data class ListOfMixedSearchFiltersWrapper(val value: List<MixedSearchFilters>) : FacetFilters
+  @JvmInline
+  public value class ListOfMixedSearchFiltersValue(public val value: List<MixedSearchFilters>) : FacetFilters
 
-  public data class StringWrapper(val value: String) : FacetFilters
+  @JvmInline
+  public value class StringValue(public val value: String) : FacetFilters
 
   public companion object {
 
-    /**
-     * FacetFilters as List<MixedSearchFilters>
-     *
-     */
-    public fun ListOfMixedSearchFilters(
-      value: List<MixedSearchFilters>,
-    ): ListOfMixedSearchFiltersWrapper = ListOfMixedSearchFiltersWrapper(
-      value = value,
-    )
+    /** [FacetFilters] as [List<MixedSearchFilters>] Value. */
+    public fun of(value: List<MixedSearchFilters>): FacetFilters {
+      return ListOfMixedSearchFiltersValue(value)
+    }
 
-    /**
-     * FacetFilters as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [FacetFilters] as [String] Value. */
+    public fun of(value: String): FacetFilters {
+      return StringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class FacetFiltersSerializer : KSerializer<FacetFilters> {
 
   override fun serialize(encoder: Encoder, value: FacetFilters) {
     when (value) {
-      is FacetFilters.ListOfMixedSearchFiltersWrapper -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
-      is FacetFilters.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is FacetFilters.ListOfMixedSearchFiltersValue -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
+      is FacetFilters.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class FacetFiltersSerializer : KSerializer<FacetFilters> {
     // deserialize List<MixedSearchFilters>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<FacetFilters.ListOfMixedSearchFiltersWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(MixedSearchFilters.serializer()), tree)
+        return FacetFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<MixedSearchFilters> (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class FacetFiltersSerializer : KSerializer<FacetFilters> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<FacetFilters.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return FacetFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

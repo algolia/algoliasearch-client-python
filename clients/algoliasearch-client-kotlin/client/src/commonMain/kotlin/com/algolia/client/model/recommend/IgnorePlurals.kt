@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Treats singular, plurals, and other forms of declensions as matching terms. `ignorePlurals` is used in conjunction with the `queryLanguages` setting. _list_: language ISO codes for which ignoring plurals should be enabled. This list will override any values that you may have set in `queryLanguages`. _true_: enables the ignore plurals feature, where singulars and plurals are considered equivalent (\"foot\" = \"feet\"). The languages supported here are either [every language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) (this is the default) or those set by `queryLanguages`. _false_: turns off the ignore plurals feature, so that singulars and plurals aren't considered to be the same (\"foot\" will not find \"feet\").
+ *
+ * Implementations:
+ * - [Boolean] - *[IgnorePlurals.of]*
+ * - [List<String>] - *[IgnorePlurals.of]*
  */
 @Serializable(IgnorePluralsSerializer::class)
 public sealed interface IgnorePlurals {
 
-  public data class BooleanWrapper(val value: Boolean) : IgnorePlurals
+  @JvmInline
+  public value class BooleanValue(public val value: Boolean) : IgnorePlurals
 
-  public data class ListOfStringWrapper(val value: List<String>) : IgnorePlurals
+  @JvmInline
+  public value class ListOfStringValue(public val value: List<String>) : IgnorePlurals
 
   public companion object {
 
-    /**
-     * IgnorePlurals as Boolean
-     *
-     */
-    public fun Boolean(
-      value: Boolean,
-    ): BooleanWrapper = BooleanWrapper(
-      value = value,
-    )
+    /** [IgnorePlurals] as [Boolean] Value. */
+    public fun of(value: Boolean): IgnorePlurals {
+      return BooleanValue(value)
+    }
 
-    /**
-     * IgnorePlurals as List<String>
-     *
-     */
-    public fun ListOfString(
-      value: List<String>,
-    ): ListOfStringWrapper = ListOfStringWrapper(
-      value = value,
-    )
+    /** [IgnorePlurals] as [List<String>] Value. */
+    public fun of(value: List<String>): IgnorePlurals {
+      return ListOfStringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class IgnorePluralsSerializer : KSerializer<IgnorePlurals> {
 
   override fun serialize(encoder: Encoder, value: IgnorePlurals) {
     when (value) {
-      is IgnorePlurals.BooleanWrapper -> Boolean.serializer().serialize(encoder, value.value)
-      is IgnorePlurals.ListOfStringWrapper -> ListSerializer(String.serializer()).serialize(encoder, value.value)
+      is IgnorePlurals.BooleanValue -> Boolean.serializer().serialize(encoder, value.value)
+      is IgnorePlurals.ListOfStringValue -> ListSerializer(String.serializer()).serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class IgnorePluralsSerializer : KSerializer<IgnorePlurals> {
     // deserialize Boolean
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<IgnorePlurals.BooleanWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Boolean.serializer(), tree)
+        return IgnorePlurals.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Boolean (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class IgnorePluralsSerializer : KSerializer<IgnorePlurals> {
     // deserialize List<String>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<IgnorePlurals.ListOfStringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(String.serializer()), tree)
+        return IgnorePlurals.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<String> (error: ${e.message})")

@@ -11,33 +11,15 @@ import kotlinx.serialization.json.*
 
 /**
  * GetTopSearchesResponse
+ *
+ * Implementations:
+ * - [TopSearchesResponse]
+ * - [TopSearchesResponseWithAnalytics]
  */
 @Serializable(GetTopSearchesResponseSerializer::class)
 public sealed interface GetTopSearchesResponse {
 
   public companion object {
-
-    /**
-     * TopSearchesResponse
-     *
-     * @param searches Top searches with their hits count.
-     */
-    public fun TopSearchesResponse(
-      searches: List<TopSearch>,
-    ): TopSearchesResponse = com.algolia.client.model.analytics.TopSearchesResponse(
-      searches = searches,
-    )
-
-    /**
-     * TopSearchesResponseWithAnalytics
-     *
-     * @param searches Top searches with their hits count and analytics.
-     */
-    public fun TopSearchesResponseWithAnalytics(
-      searches: List<TopSearchWithAnalytics>,
-    ): TopSearchesResponseWithAnalytics = com.algolia.client.model.analytics.TopSearchesResponseWithAnalytics(
-      searches = searches,
-    )
   }
 }
 
@@ -59,7 +41,7 @@ internal class GetTopSearchesResponseSerializer : KSerializer<GetTopSearchesResp
     // deserialize TopSearchesResponse
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<TopSearchesResponse>(tree)
+        return codec.json.decodeFromJsonElement(TopSearchesResponse.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize TopSearchesResponse (error: ${e.message})")
@@ -69,7 +51,7 @@ internal class GetTopSearchesResponseSerializer : KSerializer<GetTopSearchesResp
     // deserialize TopSearchesResponseWithAnalytics
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<TopSearchesResponseWithAnalytics>(tree)
+        return codec.json.decodeFromJsonElement(TopSearchesResponseWithAnalytics.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize TopSearchesResponseWithAnalytics (error: ${e.message})")

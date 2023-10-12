@@ -11,36 +11,15 @@ import kotlinx.serialization.json.*
 
 /**
  * TaskInput
+ *
+ * Implementations:
+ * - [OnDemandDateUtilsInput]
+ * - [ScheduleDateUtilsInput]
  */
 @Serializable(TaskInputSerializer::class)
 public sealed interface TaskInput {
 
   public companion object {
-
-    /**
-     * The input for an `onDemand` task whose source is of type `bigquery` and for which extracted data spans a given time range.
-     *
-     * @param startDate The start date of the extraction (RFC3339 format).
-     * @param endDate The end date of the extraction (RFC3339 format).
-     */
-    public fun OnDemandDateUtilsInput(
-      startDate: String,
-      endDate: String,
-    ): OnDemandDateUtilsInput = com.algolia.client.model.ingestion.OnDemandDateUtilsInput(
-      startDate = startDate,
-      endDate = endDate,
-    )
-
-    /**
-     * The input for a `schedule` task whose source is of type `bigquery` and for which extracted data spans a fixed number of days.
-     *
-     * @param timeframe The timeframe of the extraction, in number of days from today.
-     */
-    public fun ScheduleDateUtilsInput(
-      timeframe: Int,
-    ): ScheduleDateUtilsInput = com.algolia.client.model.ingestion.ScheduleDateUtilsInput(
-      timeframe = timeframe,
-    )
   }
 }
 
@@ -62,7 +41,7 @@ internal class TaskInputSerializer : KSerializer<TaskInput> {
     // deserialize OnDemandDateUtilsInput
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<OnDemandDateUtilsInput>(tree)
+        return codec.json.decodeFromJsonElement(OnDemandDateUtilsInput.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize OnDemandDateUtilsInput (error: ${e.message})")
@@ -72,7 +51,7 @@ internal class TaskInputSerializer : KSerializer<TaskInput> {
     // deserialize ScheduleDateUtilsInput
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<ScheduleDateUtilsInput>(tree)
+        return codec.json.decodeFromJsonElement(ScheduleDateUtilsInput.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize ScheduleDateUtilsInput (error: ${e.message})")

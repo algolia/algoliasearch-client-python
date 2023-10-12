@@ -11,56 +11,16 @@ import kotlinx.serialization.json.*
 
 /**
  * Trigger
+ *
+ * Implementations:
+ * - [OnDemandTrigger]
+ * - [ScheduleTrigger]
+ * - [SubscriptionTrigger]
  */
 @Serializable(TriggerSerializer::class)
 public sealed interface Trigger {
 
   public companion object {
-
-    /**
-     * The trigger information of a task of type `onDemand`.
-     *
-     * @param type
-     * @param lastRun The last time the scheduled task ran (RFC3339 format).
-     */
-    public fun OnDemandTrigger(
-      type: OnDemandTriggerType,
-      lastRun: String? = null,
-    ): OnDemandTrigger = com.algolia.client.model.ingestion.OnDemandTrigger(
-      type = type,
-      lastRun = lastRun,
-    )
-
-    /**
-     * The trigger information for a task of type 'schedule'.
-     *
-     * @param type
-     * @param cron A cron expression that represent at which regularity the task should run.
-     * @param nextRun The next scheduled run of the task (RFC3339 format).
-     * @param lastRun The last time the scheduled task ran (RFC3339 format).
-     */
-    public fun ScheduleTrigger(
-      type: ScheduleTriggerType,
-      cron: String,
-      nextRun: String,
-      lastRun: String? = null,
-    ): ScheduleTrigger = com.algolia.client.model.ingestion.ScheduleTrigger(
-      type = type,
-      cron = cron,
-      nextRun = nextRun,
-      lastRun = lastRun,
-    )
-
-    /**
-     * The trigger input for a task of type 'subscription'.
-     *
-     * @param type
-     */
-    public fun SubscriptionTrigger(
-      type: SubscriptionTriggerType,
-    ): SubscriptionTrigger = com.algolia.client.model.ingestion.SubscriptionTrigger(
-      type = type,
-    )
   }
 }
 
@@ -83,7 +43,7 @@ internal class TriggerSerializer : KSerializer<Trigger> {
     // deserialize OnDemandTrigger
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<OnDemandTrigger>(tree)
+        return codec.json.decodeFromJsonElement(OnDemandTrigger.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize OnDemandTrigger (error: ${e.message})")
@@ -93,7 +53,7 @@ internal class TriggerSerializer : KSerializer<Trigger> {
     // deserialize ScheduleTrigger
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<ScheduleTrigger>(tree)
+        return codec.json.decodeFromJsonElement(ScheduleTrigger.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize ScheduleTrigger (error: ${e.message})")
@@ -103,7 +63,7 @@ internal class TriggerSerializer : KSerializer<Trigger> {
     // deserialize SubscriptionTrigger
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SubscriptionTrigger>(tree)
+        return codec.json.decodeFromJsonElement(SubscriptionTrigger.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SubscriptionTrigger (error: ${e.message})")

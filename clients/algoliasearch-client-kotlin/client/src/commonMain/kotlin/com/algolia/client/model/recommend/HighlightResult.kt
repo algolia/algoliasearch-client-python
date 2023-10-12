@@ -8,46 +8,27 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * HighlightResult
+ *
+ * Implementations:
+ * - [HighlightResultOption]
+ * - [List<HighlightResultOption>] - *[HighlightResult.of]*
  */
 @Serializable(HighlightResultSerializer::class)
 public sealed interface HighlightResult {
 
-  public data class ListOfHighlightResultOptionWrapper(val value: List<HighlightResultOption>) : HighlightResult
+  @JvmInline
+  public value class ListOfHighlightResultOptionValue(public val value: List<HighlightResultOption>) : HighlightResult
 
   public companion object {
 
-    /**
-     * Show highlighted section and words matched on a query.
-     *
-     * @param `value` Markup text with `facetQuery` matches highlighted.
-     * @param matchLevel
-     * @param matchedWords List of words from the query that matched the object.
-     * @param fullyHighlighted Whether the entire attribute value is highlighted.
-     */
-    public fun HighlightResultOption(
-      `value`: String,
-      matchLevel: MatchLevel,
-      matchedWords: List<String>,
-      fullyHighlighted: Boolean? = null,
-    ): HighlightResultOption = com.algolia.client.model.recommend.HighlightResultOption(
-      `value` = `value`,
-      matchLevel = matchLevel,
-      matchedWords = matchedWords,
-      fullyHighlighted = fullyHighlighted,
-    )
-
-    /**
-     * HighlightResult as List<HighlightResultOption>
-     *
-     */
-    public fun ListOfHighlightResultOption(
-      value: List<HighlightResultOption>,
-    ): ListOfHighlightResultOptionWrapper = ListOfHighlightResultOptionWrapper(
-      value = value,
-    )
+    /** [HighlightResult] as [List<HighlightResultOption>] Value. */
+    public fun of(value: List<HighlightResultOption>): HighlightResult {
+      return ListOfHighlightResultOptionValue(value)
+    }
   }
 }
 
@@ -58,7 +39,7 @@ internal class HighlightResultSerializer : KSerializer<HighlightResult> {
   override fun serialize(encoder: Encoder, value: HighlightResult) {
     when (value) {
       is HighlightResultOption -> HighlightResultOption.serializer().serialize(encoder, value)
-      is HighlightResult.ListOfHighlightResultOptionWrapper -> ListSerializer(HighlightResultOption.serializer()).serialize(encoder, value.value)
+      is HighlightResult.ListOfHighlightResultOptionValue -> ListSerializer(HighlightResultOption.serializer()).serialize(encoder, value.value)
     }
   }
 
@@ -69,7 +50,7 @@ internal class HighlightResultSerializer : KSerializer<HighlightResult> {
     // deserialize HighlightResultOption
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<HighlightResultOption>(tree)
+        return codec.json.decodeFromJsonElement(HighlightResultOption.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize HighlightResultOption (error: ${e.message})")
@@ -79,7 +60,8 @@ internal class HighlightResultSerializer : KSerializer<HighlightResult> {
     // deserialize List<HighlightResultOption>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<HighlightResult.ListOfHighlightResultOptionWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(HighlightResultOption.serializer()), tree)
+        return HighlightResult.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<HighlightResultOption> (error: ${e.message})")

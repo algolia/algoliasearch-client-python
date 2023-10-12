@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * [Filter hits by tags](https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/).
+ *
+ * Implementations:
+ * - [List<MixedSearchFilters>] - *[TagFilters.of]*
+ * - [String] - *[TagFilters.of]*
  */
 @Serializable(TagFiltersSerializer::class)
 public sealed interface TagFilters {
 
-  public data class ListOfMixedSearchFiltersWrapper(val value: List<MixedSearchFilters>) : TagFilters
+  @JvmInline
+  public value class ListOfMixedSearchFiltersValue(public val value: List<MixedSearchFilters>) : TagFilters
 
-  public data class StringWrapper(val value: String) : TagFilters
+  @JvmInline
+  public value class StringValue(public val value: String) : TagFilters
 
   public companion object {
 
-    /**
-     * TagFilters as List<MixedSearchFilters>
-     *
-     */
-    public fun ListOfMixedSearchFilters(
-      value: List<MixedSearchFilters>,
-    ): ListOfMixedSearchFiltersWrapper = ListOfMixedSearchFiltersWrapper(
-      value = value,
-    )
+    /** [TagFilters] as [List<MixedSearchFilters>] Value. */
+    public fun of(value: List<MixedSearchFilters>): TagFilters {
+      return ListOfMixedSearchFiltersValue(value)
+    }
 
-    /**
-     * TagFilters as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [TagFilters] as [String] Value. */
+    public fun of(value: String): TagFilters {
+      return StringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class TagFiltersSerializer : KSerializer<TagFilters> {
 
   override fun serialize(encoder: Encoder, value: TagFilters) {
     when (value) {
-      is TagFilters.ListOfMixedSearchFiltersWrapper -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
-      is TagFilters.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is TagFilters.ListOfMixedSearchFiltersValue -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
+      is TagFilters.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class TagFiltersSerializer : KSerializer<TagFilters> {
     // deserialize List<MixedSearchFilters>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<TagFilters.ListOfMixedSearchFiltersWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(MixedSearchFilters.serializer()), tree)
+        return TagFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<MixedSearchFilters> (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class TagFiltersSerializer : KSerializer<TagFilters> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<TagFilters.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return TagFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

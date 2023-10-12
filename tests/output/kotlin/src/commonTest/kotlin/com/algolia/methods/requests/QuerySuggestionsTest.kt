@@ -38,7 +38,7 @@ class QuerySuggestionsTest {
                 generate = listOf(listOf("facetA", "facetB"), listOf("facetC")),
               ),
             ),
-            languages = Languages.ListOfString(listOf("french")),
+            languages = Languages.of(listOf("french")),
             exclude = listOf("test"),
           ),
         )
@@ -578,7 +578,7 @@ class QuerySuggestionsTest {
                 generate = listOf(listOf("facetA", "facetB"), listOf("facetC")),
               ),
             ),
-            languages = Languages.ListOfString(listOf("french")),
+            languages = Languages.of(listOf("french")),
             exclude = listOf("test"),
           ),
         )

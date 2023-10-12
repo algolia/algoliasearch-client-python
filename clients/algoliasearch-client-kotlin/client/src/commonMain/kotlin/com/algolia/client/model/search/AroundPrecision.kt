@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
+ *
+ * Implementations:
+ * - [Int] - *[AroundPrecision.of]*
+ * - [List<AroundPrecisionFromValueInner>] - *[AroundPrecision.of]*
  */
 @Serializable(AroundPrecisionSerializer::class)
 public sealed interface AroundPrecision {
 
-  public data class IntWrapper(val value: Int) : AroundPrecision
+  @JvmInline
+  public value class IntValue(public val value: Int) : AroundPrecision
 
-  public data class ListOfAroundPrecisionFromValueInnerWrapper(val value: List<AroundPrecisionFromValueInner>) : AroundPrecision
+  @JvmInline
+  public value class ListOfAroundPrecisionFromValueInnerValue(public val value: List<AroundPrecisionFromValueInner>) : AroundPrecision
 
   public companion object {
 
-    /**
-     * AroundPrecision as Int
-     *
-     */
-    public fun Number(
-      value: Int,
-    ): IntWrapper = IntWrapper(
-      value = value,
-    )
+    /** [AroundPrecision] as [Int] Value. */
+    public fun of(value: Int): AroundPrecision {
+      return IntValue(value)
+    }
 
-    /**
-     * AroundPrecision as List<AroundPrecisionFromValueInner>
-     *
-     */
-    public fun ListOfAroundPrecisionFromValueInner(
-      value: List<AroundPrecisionFromValueInner>,
-    ): ListOfAroundPrecisionFromValueInnerWrapper = ListOfAroundPrecisionFromValueInnerWrapper(
-      value = value,
-    )
+    /** [AroundPrecision] as [List<AroundPrecisionFromValueInner>] Value. */
+    public fun of(value: List<AroundPrecisionFromValueInner>): AroundPrecision {
+      return ListOfAroundPrecisionFromValueInnerValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class AroundPrecisionSerializer : KSerializer<AroundPrecision> {
 
   override fun serialize(encoder: Encoder, value: AroundPrecision) {
     when (value) {
-      is AroundPrecision.IntWrapper -> Int.serializer().serialize(encoder, value.value)
-      is AroundPrecision.ListOfAroundPrecisionFromValueInnerWrapper -> ListSerializer(AroundPrecisionFromValueInner.serializer()).serialize(encoder, value.value)
+      is AroundPrecision.IntValue -> Int.serializer().serialize(encoder, value.value)
+      is AroundPrecision.ListOfAroundPrecisionFromValueInnerValue -> ListSerializer(AroundPrecisionFromValueInner.serializer()).serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class AroundPrecisionSerializer : KSerializer<AroundPrecision> {
     // deserialize Int
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<AroundPrecision.IntWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Int.serializer(), tree)
+        return AroundPrecision.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Int (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class AroundPrecisionSerializer : KSerializer<AroundPrecision> {
     // deserialize List<AroundPrecisionFromValueInner>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<AroundPrecision.ListOfAroundPrecisionFromValueInnerWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(AroundPrecisionFromValueInner.serializer()), tree)
+        return AroundPrecision.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<AroundPrecisionFromValueInner> (error: ${e.message})")

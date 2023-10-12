@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Set the language for deduplicating singular and plural suggestions. If specified, only the more popular form is included.
+ *
+ * Implementations:
+ * - [Boolean] - *[Languages.of]*
+ * - [List<String>] - *[Languages.of]*
  */
 @Serializable(LanguagesSerializer::class)
 public sealed interface Languages {
 
-  public data class BooleanWrapper(val value: Boolean) : Languages
+  @JvmInline
+  public value class BooleanValue(public val value: Boolean) : Languages
 
-  public data class ListOfStringWrapper(val value: List<String>) : Languages
+  @JvmInline
+  public value class ListOfStringValue(public val value: List<String>) : Languages
 
   public companion object {
 
-    /**
-     * Languages as Boolean
-     *
-     */
-    public fun Boolean(
-      value: Boolean,
-    ): BooleanWrapper = BooleanWrapper(
-      value = value,
-    )
+    /** [Languages] as [Boolean] Value. */
+    public fun of(value: Boolean): Languages {
+      return BooleanValue(value)
+    }
 
-    /**
-     * Languages as List<String>
-     *
-     */
-    public fun ListOfString(
-      value: List<String>,
-    ): ListOfStringWrapper = ListOfStringWrapper(
-      value = value,
-    )
+    /** [Languages] as [List<String>] Value. */
+    public fun of(value: List<String>): Languages {
+      return ListOfStringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class LanguagesSerializer : KSerializer<Languages> {
 
   override fun serialize(encoder: Encoder, value: Languages) {
     when (value) {
-      is Languages.BooleanWrapper -> Boolean.serializer().serialize(encoder, value.value)
-      is Languages.ListOfStringWrapper -> ListSerializer(String.serializer()).serialize(encoder, value.value)
+      is Languages.BooleanValue -> Boolean.serializer().serialize(encoder, value.value)
+      is Languages.ListOfStringValue -> ListSerializer(String.serializer()).serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class LanguagesSerializer : KSerializer<Languages> {
     // deserialize Boolean
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<Languages.BooleanWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Boolean.serializer(), tree)
+        return Languages.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Boolean (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class LanguagesSerializer : KSerializer<Languages> {
     // deserialize List<String>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<Languages.ListOfStringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(String.serializer()), tree)
+        return Languages.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<String> (error: ${e.message})")

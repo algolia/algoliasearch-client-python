@@ -11,48 +11,15 @@ import kotlinx.serialization.json.*
 
 /**
  * AddABTestsVariant
+ *
+ * Implementations:
+ * - [AbTestsVariant]
+ * - [AbTestsVariantSearchParams]
  */
 @Serializable(AddABTestsVariantSerializer::class)
 public sealed interface AddABTestsVariant {
 
   public companion object {
-
-    /**
-     * AbTestsVariant
-     *
-     * @param index A/B test index.
-     * @param trafficPercentage A/B test traffic percentage.
-     * @param description A/B test description.
-     */
-    public fun AbTestsVariant(
-      index: String,
-      trafficPercentage: Int,
-      description: String? = null,
-    ): AbTestsVariant = com.algolia.client.model.abtesting.AbTestsVariant(
-      index = index,
-      trafficPercentage = trafficPercentage,
-      description = description,
-    )
-
-    /**
-     * AbTestsVariantSearchParams
-     *
-     * @param index A/B test index.
-     * @param trafficPercentage A/B test traffic percentage.
-     * @param customSearchParameters
-     * @param description A/B test description.
-     */
-    public fun AbTestsVariantSearchParams(
-      index: String,
-      trafficPercentage: Int,
-      customSearchParameters: JsonObject,
-      description: String? = null,
-    ): AbTestsVariantSearchParams = com.algolia.client.model.abtesting.AbTestsVariantSearchParams(
-      index = index,
-      trafficPercentage = trafficPercentage,
-      customSearchParameters = customSearchParameters,
-      description = description,
-    )
   }
 }
 
@@ -74,7 +41,7 @@ internal class AddABTestsVariantSerializer : KSerializer<AddABTestsVariant> {
     // deserialize AbTestsVariant
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<AbTestsVariant>(tree)
+        return codec.json.decodeFromJsonElement(AbTestsVariant.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize AbTestsVariant (error: ${e.message})")
@@ -84,7 +51,7 @@ internal class AddABTestsVariantSerializer : KSerializer<AddABTestsVariant> {
     // deserialize AbTestsVariantSearchParams
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<AbTestsVariantSearchParams>(tree)
+        return codec.json.decodeFromJsonElement(AbTestsVariantSearchParams.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize AbTestsVariantSearchParams (error: ${e.message})")

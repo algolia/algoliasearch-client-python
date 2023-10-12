@@ -11,39 +11,15 @@ import kotlinx.serialization.json.*
 
 /**
  * Promote
+ *
+ * Implementations:
+ * - [PromoteObjectID]
+ * - [PromoteObjectIDs]
  */
 @Serializable(PromoteSerializer::class)
 public sealed interface Promote {
 
   public companion object {
-
-    /**
-     * Record to promote.
-     *
-     * @param objectID Unique identifier of the record to promote.
-     * @param position The position to promote the records to. If you pass objectIDs, the records are placed at this position as a group. For example, if you pronmote four objectIDs to position 0, the records take the first four positions.
-     */
-    public fun PromoteObjectID(
-      objectID: String,
-      position: Int,
-    ): PromoteObjectID = com.algolia.client.model.recommend.PromoteObjectID(
-      objectID = objectID,
-      position = position,
-    )
-
-    /**
-     * Records to promote.
-     *
-     * @param objectIDs Unique identifiers of the records to promote.
-     * @param position The position to promote the records to. If you pass objectIDs, the records are placed at this position as a group. For example, if you pronmote four objectIDs to position 0, the records take the first four positions.
-     */
-    public fun PromoteObjectIDs(
-      objectIDs: List<String>,
-      position: Int,
-    ): PromoteObjectIDs = com.algolia.client.model.recommend.PromoteObjectIDs(
-      objectIDs = objectIDs,
-      position = position,
-    )
   }
 }
 
@@ -65,7 +41,7 @@ internal class PromoteSerializer : KSerializer<Promote> {
     // deserialize PromoteObjectID
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<PromoteObjectID>(tree)
+        return codec.json.decodeFromJsonElement(PromoteObjectID.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize PromoteObjectID (error: ${e.message})")
@@ -75,7 +51,7 @@ internal class PromoteSerializer : KSerializer<Promote> {
     // deserialize PromoteObjectIDs
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<PromoteObjectIDs>(tree)
+        return codec.json.decodeFromJsonElement(PromoteObjectIDs.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize PromoteObjectIDs (error: ${e.message})")

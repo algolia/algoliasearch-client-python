@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * [Filter on numeric attributes](https://www.algolia.com/doc/api-reference/api-parameters/numericFilters/).
+ *
+ * Implementations:
+ * - [List<MixedSearchFilters>] - *[NumericFilters.of]*
+ * - [String] - *[NumericFilters.of]*
  */
 @Serializable(NumericFiltersSerializer::class)
 public sealed interface NumericFilters {
 
-  public data class ListOfMixedSearchFiltersWrapper(val value: List<MixedSearchFilters>) : NumericFilters
+  @JvmInline
+  public value class ListOfMixedSearchFiltersValue(public val value: List<MixedSearchFilters>) : NumericFilters
 
-  public data class StringWrapper(val value: String) : NumericFilters
+  @JvmInline
+  public value class StringValue(public val value: String) : NumericFilters
 
   public companion object {
 
-    /**
-     * NumericFilters as List<MixedSearchFilters>
-     *
-     */
-    public fun ListOfMixedSearchFilters(
-      value: List<MixedSearchFilters>,
-    ): ListOfMixedSearchFiltersWrapper = ListOfMixedSearchFiltersWrapper(
-      value = value,
-    )
+    /** [NumericFilters] as [List<MixedSearchFilters>] Value. */
+    public fun of(value: List<MixedSearchFilters>): NumericFilters {
+      return ListOfMixedSearchFiltersValue(value)
+    }
 
-    /**
-     * NumericFilters as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [NumericFilters] as [String] Value. */
+    public fun of(value: String): NumericFilters {
+      return StringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class NumericFiltersSerializer : KSerializer<NumericFilters> {
 
   override fun serialize(encoder: Encoder, value: NumericFilters) {
     when (value) {
-      is NumericFilters.ListOfMixedSearchFiltersWrapper -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
-      is NumericFilters.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is NumericFilters.ListOfMixedSearchFiltersValue -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
+      is NumericFilters.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class NumericFiltersSerializer : KSerializer<NumericFilters> {
     // deserialize List<MixedSearchFilters>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<NumericFilters.ListOfMixedSearchFiltersWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(MixedSearchFilters.serializer()), tree)
+        return NumericFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<MixedSearchFilters> (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class NumericFiltersSerializer : KSerializer<NumericFilters> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<NumericFilters.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return NumericFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

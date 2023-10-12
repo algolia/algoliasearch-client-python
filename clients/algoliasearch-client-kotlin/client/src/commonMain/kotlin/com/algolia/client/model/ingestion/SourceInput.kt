@@ -11,149 +11,19 @@ import kotlinx.serialization.json.*
 
 /**
  * SourceInput
+ *
+ * Implementations:
+ * - [SourceBigCommerce]
+ * - [SourceBigQuery]
+ * - [SourceCSV]
+ * - [SourceCommercetools]
+ * - [SourceDocker]
+ * - [SourceJSON]
  */
 @Serializable(SourceInputSerializer::class)
 public sealed interface SourceInput {
 
   public companion object {
-
-    /**
-     * SourceBigCommerce
-     *
-     * @param storeHash The store hash identifying the store the shopper is signing in to.
-     * @param channel
-     * @param customFields
-     * @param productMetafields
-     * @param variantMetafields
-     */
-    public fun SourceBigCommerce(
-      storeHash: String? = null,
-      channel: BigCommerceChannel? = null,
-      customFields: List<String>? = null,
-      productMetafields: List<BigCommerceMetafield>? = null,
-      variantMetafields: List<BigCommerceMetafield>? = null,
-    ): SourceBigCommerce = com.algolia.client.model.ingestion.SourceBigCommerce(
-      storeHash = storeHash,
-      channel = channel,
-      customFields = customFields,
-      productMetafields = productMetafields,
-      variantMetafields = variantMetafields,
-    )
-
-    /**
-     * SourceBigQuery
-     *
-     * @param projectID Project ID of the BigQuery Source.
-     * @param datasetID Dataset ID of the BigQuery Source.
-     * @param dataType
-     * @param table Table name (for default BQ).
-     * @param tablePrefix Table prefix (for Google Analytics).
-     * @param customSQLRequest Custom SQL request to extract data from the BigQuery table.
-     * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
-     */
-    public fun SourceBigQuery(
-      projectID: String,
-      datasetID: String,
-      dataType: BigQueryDataType? = null,
-      table: String? = null,
-      tablePrefix: String? = null,
-      customSQLRequest: String? = null,
-      uniqueIDColumn: String? = null,
-    ): SourceBigQuery = com.algolia.client.model.ingestion.SourceBigQuery(
-      projectID = projectID,
-      datasetID = datasetID,
-      dataType = dataType,
-      table = table,
-      tablePrefix = tablePrefix,
-      customSQLRequest = customSQLRequest,
-      uniqueIDColumn = uniqueIDColumn,
-    )
-
-    /**
-     * SourceCSV
-     *
-     * @param url The URL of the file.
-     * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
-     * @param mapping Mapping of type for every column. For example {\"myColumn\": \"boolean\", \"myOtherColumn\": \"json\"}.
-     * @param method
-     * @param delimiter The character used to split the value on each line, default to a comma (\\r, \\n, 0xFFFD, and space are forbidden).
-     */
-    public fun SourceCSV(
-      url: String,
-      uniqueIDColumn: String? = null,
-      mapping: Map<kotlin.String, MappingTypeCSV>? = null,
-      method: MethodType? = null,
-      delimiter: String? = null,
-    ): SourceCSV = com.algolia.client.model.ingestion.SourceCSV(
-      url = url,
-      uniqueIDColumn = uniqueIDColumn,
-      mapping = mapping,
-      method = method,
-      delimiter = delimiter,
-    )
-
-    /**
-     * SourceCommercetools
-     *
-     * @param url
-     * @param projectKey
-     * @param storeKeys
-     * @param locales Array of locales that must match the following pattern: ^[a-z]{2}(-[A-Z]{2})?$. For example [\"fr-FR\", \"en\"].
-     * @param fallbackIsInStockValue Determines the value that will be stored in the Algolia record if there's no inventory information on the product.
-     */
-    public fun SourceCommercetools(
-      url: String,
-      projectKey: String,
-      storeKeys: List<String>? = null,
-      locales: List<String>? = null,
-      fallbackIsInStockValue: Boolean? = null,
-    ): SourceCommercetools = com.algolia.client.model.ingestion.SourceCommercetools(
-      url = url,
-      projectKey = projectKey,
-      storeKeys = storeKeys,
-      locales = locales,
-      fallbackIsInStockValue = fallbackIsInStockValue,
-    )
-
-    /**
-     * SourceDocker
-     *
-     * @param imageType
-     * @param registry
-     * @param image The name of the image to pull.
-     * @param configuration The configuration of the spec.
-     * @param version The version of the image, defaults to `latest`.
-     */
-    public fun SourceDocker(
-      imageType: DockerImageType,
-      registry: DockerRegistry,
-      image: String,
-      configuration: JsonObject,
-      version: String? = null,
-    ): SourceDocker = com.algolia.client.model.ingestion.SourceDocker(
-      imageType = imageType,
-      registry = registry,
-      image = image,
-      configuration = configuration,
-      version = version,
-    )
-
-    /**
-     * SourceJSON
-     *
-     * @param url The URL of the file.
-     * @param uniqueIDColumn The name of the column that contains the unique ID, used as `objectID` in Algolia.
-     * @param method
-     */
-    public fun SourceJSON(
-      url: String,
-      uniqueIDColumn: String? = null,
-      method: MethodType? = null,
-    ): SourceJSON = com.algolia.client.model.ingestion.SourceJSON(
-      url = url,
-      uniqueIDColumn = uniqueIDColumn,
-      method = method,
-    )
   }
 }
 
@@ -179,7 +49,7 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
     // deserialize SourceBigCommerce
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceBigCommerce>(tree)
+        return codec.json.decodeFromJsonElement(SourceBigCommerce.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceBigCommerce (error: ${e.message})")
@@ -189,7 +59,7 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
     // deserialize SourceBigQuery
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceBigQuery>(tree)
+        return codec.json.decodeFromJsonElement(SourceBigQuery.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceBigQuery (error: ${e.message})")
@@ -199,7 +69,7 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
     // deserialize SourceCSV
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceCSV>(tree)
+        return codec.json.decodeFromJsonElement(SourceCSV.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceCSV (error: ${e.message})")
@@ -209,7 +79,7 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
     // deserialize SourceCommercetools
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceCommercetools>(tree)
+        return codec.json.decodeFromJsonElement(SourceCommercetools.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceCommercetools (error: ${e.message})")
@@ -219,7 +89,7 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
     // deserialize SourceDocker
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceDocker>(tree)
+        return codec.json.decodeFromJsonElement(SourceDocker.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceDocker (error: ${e.message})")
@@ -229,7 +99,7 @@ internal class SourceInputSerializer : KSerializer<SourceInput> {
     // deserialize SourceJSON
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SourceJSON>(tree)
+        return codec.json.decodeFromJsonElement(SourceJSON.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SourceJSON (error: ${e.message})")

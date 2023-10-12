@@ -11,21 +11,15 @@ import kotlinx.serialization.json.*
 
 /**
  * PlatformWithNone
+ *
+ * Implementations:
+ * - [Platform]
+ * - [PlatformNone]
  */
 @Serializable(PlatformWithNoneSerializer::class)
 public sealed interface PlatformWithNone {
 
   public companion object {
-
-    /**
-     * Describe which platform the Authentication is used for.
-     */
-    public fun of(value: Platform): Platform = value
-
-    /**
-     * Used to filter Authentication without platform property.
-     */
-    public fun of(value: PlatformNone): PlatformNone = value
   }
 }
 
@@ -47,7 +41,7 @@ internal class PlatformWithNoneSerializer : KSerializer<PlatformWithNone> {
     // deserialize Platform
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<Platform>(tree)
+        return codec.json.decodeFromJsonElement(Platform.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Platform (error: ${e.message})")
@@ -57,7 +51,7 @@ internal class PlatformWithNoneSerializer : KSerializer<PlatformWithNone> {
     // deserialize PlatformNone
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<PlatformNone>(tree)
+        return codec.json.decodeFromJsonElement(PlatformNone.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize PlatformNone (error: ${e.message})")

@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Enables [deduplication or grouping of results (Algolia's _distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
+ *
+ * Implementations:
+ * - [Boolean] - *[Distinct.of]*
+ * - [Int] - *[Distinct.of]*
  */
 @Serializable(DistinctSerializer::class)
 public sealed interface Distinct {
 
-  public data class BooleanWrapper(val value: Boolean) : Distinct
+  @JvmInline
+  public value class BooleanValue(public val value: Boolean) : Distinct
 
-  public data class IntWrapper(val value: Int) : Distinct
+  @JvmInline
+  public value class IntValue(public val value: Int) : Distinct
 
   public companion object {
 
-    /**
-     * Distinct as Boolean
-     *
-     */
-    public fun Boolean(
-      value: Boolean,
-    ): BooleanWrapper = BooleanWrapper(
-      value = value,
-    )
+    /** [Distinct] as [Boolean] Value. */
+    public fun of(value: Boolean): Distinct {
+      return BooleanValue(value)
+    }
 
-    /**
-     * Distinct as Int
-     *
-     */
-    public fun Number(
-      value: Int,
-    ): IntWrapper = IntWrapper(
-      value = value,
-    )
+    /** [Distinct] as [Int] Value. */
+    public fun of(value: Int): Distinct {
+      return IntValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class DistinctSerializer : KSerializer<Distinct> {
 
   override fun serialize(encoder: Encoder, value: Distinct) {
     when (value) {
-      is Distinct.BooleanWrapper -> Boolean.serializer().serialize(encoder, value.value)
-      is Distinct.IntWrapper -> Int.serializer().serialize(encoder, value.value)
+      is Distinct.BooleanValue -> Boolean.serializer().serialize(encoder, value.value)
+      is Distinct.IntValue -> Int.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class DistinctSerializer : KSerializer<Distinct> {
     // deserialize Boolean
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<Distinct.BooleanWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Boolean.serializer(), tree)
+        return Distinct.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Boolean (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class DistinctSerializer : KSerializer<Distinct> {
     // deserialize Int
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<Distinct.IntWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Int.serializer(), tree)
+        return Distinct.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Int (error: ${e.message})")

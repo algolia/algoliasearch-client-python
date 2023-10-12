@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * When [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) is enabled, only records that match these filters will be affected by Dynamic Re-Ranking.
+ *
+ * Implementations:
+ * - [List<MixedSearchFilters>] - *[ReRankingApplyFilter.of]*
+ * - [String] - *[ReRankingApplyFilter.of]*
  */
 @Serializable(ReRankingApplyFilterSerializer::class)
 public sealed interface ReRankingApplyFilter {
 
-  public data class ListOfMixedSearchFiltersWrapper(val value: List<MixedSearchFilters>) : ReRankingApplyFilter
+  @JvmInline
+  public value class ListOfMixedSearchFiltersValue(public val value: List<MixedSearchFilters>) : ReRankingApplyFilter
 
-  public data class StringWrapper(val value: String) : ReRankingApplyFilter
+  @JvmInline
+  public value class StringValue(public val value: String) : ReRankingApplyFilter
 
   public companion object {
 
-    /**
-     * ReRankingApplyFilter as List<MixedSearchFilters>
-     *
-     */
-    public fun ListOfMixedSearchFilters(
-      value: List<MixedSearchFilters>,
-    ): ListOfMixedSearchFiltersWrapper = ListOfMixedSearchFiltersWrapper(
-      value = value,
-    )
+    /** [ReRankingApplyFilter] as [List<MixedSearchFilters>] Value. */
+    public fun of(value: List<MixedSearchFilters>): ReRankingApplyFilter {
+      return ListOfMixedSearchFiltersValue(value)
+    }
 
-    /**
-     * ReRankingApplyFilter as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [ReRankingApplyFilter] as [String] Value. */
+    public fun of(value: String): ReRankingApplyFilter {
+      return StringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class ReRankingApplyFilterSerializer : KSerializer<ReRankingApplyFilter
 
   override fun serialize(encoder: Encoder, value: ReRankingApplyFilter) {
     when (value) {
-      is ReRankingApplyFilter.ListOfMixedSearchFiltersWrapper -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
-      is ReRankingApplyFilter.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is ReRankingApplyFilter.ListOfMixedSearchFiltersValue -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
+      is ReRankingApplyFilter.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class ReRankingApplyFilterSerializer : KSerializer<ReRankingApplyFilter
     // deserialize List<MixedSearchFilters>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<ReRankingApplyFilter.ListOfMixedSearchFiltersWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(MixedSearchFilters.serializer()), tree)
+        return ReRankingApplyFilter.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<MixedSearchFilters> (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class ReRankingApplyFilterSerializer : KSerializer<ReRankingApplyFilter
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<ReRankingApplyFilter.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return ReRankingApplyFilter.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

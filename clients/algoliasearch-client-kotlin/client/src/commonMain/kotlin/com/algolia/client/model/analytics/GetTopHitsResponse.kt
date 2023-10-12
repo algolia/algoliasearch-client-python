@@ -11,33 +11,15 @@ import kotlinx.serialization.json.*
 
 /**
  * GetTopHitsResponse
+ *
+ * Implementations:
+ * - [TopHitsResponse]
+ * - [TopHitsResponseWithAnalytics]
  */
 @Serializable(GetTopHitsResponseSerializer::class)
 public sealed interface GetTopHitsResponse {
 
   public companion object {
-
-    /**
-     * TopHitsResponse
-     *
-     * @param hits Top hits.
-     */
-    public fun TopHitsResponse(
-      hits: List<TopHit>,
-    ): TopHitsResponse = com.algolia.client.model.analytics.TopHitsResponse(
-      hits = hits,
-    )
-
-    /**
-     * TopHitsResponseWithAnalytics
-     *
-     * @param hits Top hits.
-     */
-    public fun TopHitsResponseWithAnalytics(
-      hits: List<TopHitWithAnalytics>,
-    ): TopHitsResponseWithAnalytics = com.algolia.client.model.analytics.TopHitsResponseWithAnalytics(
-      hits = hits,
-    )
   }
 }
 
@@ -59,7 +41,7 @@ internal class GetTopHitsResponseSerializer : KSerializer<GetTopHitsResponse> {
     // deserialize TopHitsResponse
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<TopHitsResponse>(tree)
+        return codec.json.decodeFromJsonElement(TopHitsResponse.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize TopHitsResponse (error: ${e.message})")
@@ -69,7 +51,7 @@ internal class GetTopHitsResponseSerializer : KSerializer<GetTopHitsResponse> {
     // deserialize TopHitsResponseWithAnalytics
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<TopHitsResponseWithAnalytics>(tree)
+        return codec.json.decodeFromJsonElement(TopHitsResponseWithAnalytics.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize TopHitsResponseWithAnalytics (error: ${e.message})")

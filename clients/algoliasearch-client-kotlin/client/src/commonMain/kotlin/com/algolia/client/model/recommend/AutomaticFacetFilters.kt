@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Names of facets to which automatic filtering must be applied; they must match the facet name of a facet value placeholder in the query pattern.
+ *
+ * Implementations:
+ * - [List<AutomaticFacetFilter>] - *[AutomaticFacetFilters.ofListOfAutomaticFacetFilter]*
+ * - [List<String>] - *[AutomaticFacetFilters.ofListOfString]*
  */
 @Serializable(AutomaticFacetFiltersSerializer::class)
 public sealed interface AutomaticFacetFilters {
 
-  public data class ListOfAutomaticFacetFilterWrapper(val value: List<AutomaticFacetFilter>) : AutomaticFacetFilters
+  @JvmInline
+  public value class ListOfAutomaticFacetFilterValue(public val value: List<AutomaticFacetFilter>) : AutomaticFacetFilters
 
-  public data class ListOfStringWrapper(val value: List<String>) : AutomaticFacetFilters
+  @JvmInline
+  public value class ListOfStringValue(public val value: List<String>) : AutomaticFacetFilters
 
   public companion object {
 
-    /**
-     * AutomaticFacetFilters as List<AutomaticFacetFilter>
-     *
-     */
-    public fun ListOfAutomaticFacetFilter(
-      value: List<AutomaticFacetFilter>,
-    ): ListOfAutomaticFacetFilterWrapper = ListOfAutomaticFacetFilterWrapper(
-      value = value,
-    )
+    /** [AutomaticFacetFilters] as [List<AutomaticFacetFilter>] Value. */
+    public fun ofListOfAutomaticFacetFilter(value: List<AutomaticFacetFilter>): AutomaticFacetFilters {
+      return ListOfAutomaticFacetFilterValue(value)
+    }
 
-    /**
-     * AutomaticFacetFilters as List<String>
-     *
-     */
-    public fun ListOfString(
-      value: List<String>,
-    ): ListOfStringWrapper = ListOfStringWrapper(
-      value = value,
-    )
+    /** [AutomaticFacetFilters] as [List<String>] Value. */
+    public fun ofListOfString(value: List<String>): AutomaticFacetFilters {
+      return ListOfStringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class AutomaticFacetFiltersSerializer : KSerializer<AutomaticFacetFilte
 
   override fun serialize(encoder: Encoder, value: AutomaticFacetFilters) {
     when (value) {
-      is AutomaticFacetFilters.ListOfAutomaticFacetFilterWrapper -> ListSerializer(AutomaticFacetFilter.serializer()).serialize(encoder, value.value)
-      is AutomaticFacetFilters.ListOfStringWrapper -> ListSerializer(String.serializer()).serialize(encoder, value.value)
+      is AutomaticFacetFilters.ListOfAutomaticFacetFilterValue -> ListSerializer(AutomaticFacetFilter.serializer()).serialize(encoder, value.value)
+      is AutomaticFacetFilters.ListOfStringValue -> ListSerializer(String.serializer()).serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class AutomaticFacetFiltersSerializer : KSerializer<AutomaticFacetFilte
     // deserialize List<AutomaticFacetFilter>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<AutomaticFacetFilters.ListOfAutomaticFacetFilterWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(AutomaticFacetFilter.serializer()), tree)
+        return AutomaticFacetFilters.ofListOfAutomaticFacetFilter(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<AutomaticFacetFilter> (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class AutomaticFacetFiltersSerializer : KSerializer<AutomaticFacetFilte
     // deserialize List<String>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<AutomaticFacetFilters.ListOfStringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(String.serializer()), tree)
+        return AutomaticFacetFilters.ofListOfString(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<String> (error: ${e.message})")

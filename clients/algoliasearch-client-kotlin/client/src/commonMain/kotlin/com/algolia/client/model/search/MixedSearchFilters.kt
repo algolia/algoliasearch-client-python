@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * MixedSearchFilters
+ *
+ * Implementations:
+ * - [List<String>] - *[MixedSearchFilters.of]*
+ * - [String] - *[MixedSearchFilters.of]*
  */
 @Serializable(MixedSearchFiltersSerializer::class)
 public sealed interface MixedSearchFilters {
 
-  public data class ListOfStringWrapper(val value: List<String>) : MixedSearchFilters
+  @JvmInline
+  public value class ListOfStringValue(public val value: List<String>) : MixedSearchFilters
 
-  public data class StringWrapper(val value: String) : MixedSearchFilters
+  @JvmInline
+  public value class StringValue(public val value: String) : MixedSearchFilters
 
   public companion object {
 
-    /**
-     * MixedSearchFilters as List<String>
-     *
-     */
-    public fun ListOfString(
-      value: List<String>,
-    ): ListOfStringWrapper = ListOfStringWrapper(
-      value = value,
-    )
+    /** [MixedSearchFilters] as [List<String>] Value. */
+    public fun of(value: List<String>): MixedSearchFilters {
+      return ListOfStringValue(value)
+    }
 
-    /**
-     * MixedSearchFilters as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [MixedSearchFilters] as [String] Value. */
+    public fun of(value: String): MixedSearchFilters {
+      return StringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class MixedSearchFiltersSerializer : KSerializer<MixedSearchFilters> {
 
   override fun serialize(encoder: Encoder, value: MixedSearchFilters) {
     when (value) {
-      is MixedSearchFilters.ListOfStringWrapper -> ListSerializer(String.serializer()).serialize(encoder, value.value)
-      is MixedSearchFilters.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is MixedSearchFilters.ListOfStringValue -> ListSerializer(String.serializer()).serialize(encoder, value.value)
+      is MixedSearchFilters.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class MixedSearchFiltersSerializer : KSerializer<MixedSearchFilters> {
     // deserialize List<String>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<MixedSearchFilters.ListOfStringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(String.serializer()), tree)
+        return MixedSearchFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<String> (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class MixedSearchFiltersSerializer : KSerializer<MixedSearchFilters> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<MixedSearchFilters.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return MixedSearchFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

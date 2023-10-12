@@ -11,47 +11,16 @@ import kotlinx.serialization.json.*
 
 /**
  * TaskCreateTrigger
+ *
+ * Implementations:
+ * - [OnDemandTriggerInput]
+ * - [ScheduleTriggerInput]
+ * - [SubscriptionTrigger]
  */
 @Serializable(TaskCreateTriggerSerializer::class)
 public sealed interface TaskCreateTrigger {
 
   public companion object {
-
-    /**
-     * The trigger information of a task of type `onDemand`.
-     *
-     * @param type
-     */
-    public fun OnDemandTriggerInput(
-      type: OnDemandTriggerType,
-    ): OnDemandTriggerInput = com.algolia.client.model.ingestion.OnDemandTriggerInput(
-      type = type,
-    )
-
-    /**
-     * The trigger input for a task of type 'schedule'.
-     *
-     * @param type
-     * @param cron A cron expression that represent at which regularity the task should run.
-     */
-    public fun ScheduleTriggerInput(
-      type: ScheduleTriggerType,
-      cron: String,
-    ): ScheduleTriggerInput = com.algolia.client.model.ingestion.ScheduleTriggerInput(
-      type = type,
-      cron = cron,
-    )
-
-    /**
-     * The trigger input for a task of type 'subscription'.
-     *
-     * @param type
-     */
-    public fun SubscriptionTrigger(
-      type: SubscriptionTriggerType,
-    ): SubscriptionTrigger = com.algolia.client.model.ingestion.SubscriptionTrigger(
-      type = type,
-    )
   }
 }
 
@@ -74,7 +43,7 @@ internal class TaskCreateTriggerSerializer : KSerializer<TaskCreateTrigger> {
     // deserialize OnDemandTriggerInput
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<OnDemandTriggerInput>(tree)
+        return codec.json.decodeFromJsonElement(OnDemandTriggerInput.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize OnDemandTriggerInput (error: ${e.message})")
@@ -84,7 +53,7 @@ internal class TaskCreateTriggerSerializer : KSerializer<TaskCreateTrigger> {
     // deserialize ScheduleTriggerInput
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<ScheduleTriggerInput>(tree)
+        return codec.json.decodeFromJsonElement(ScheduleTriggerInput.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize ScheduleTriggerInput (error: ${e.message})")
@@ -94,7 +63,7 @@ internal class TaskCreateTriggerSerializer : KSerializer<TaskCreateTrigger> {
     // deserialize SubscriptionTrigger
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SubscriptionTrigger>(tree)
+        return codec.json.decodeFromJsonElement(SubscriptionTrigger.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SubscriptionTrigger (error: ${e.message})")

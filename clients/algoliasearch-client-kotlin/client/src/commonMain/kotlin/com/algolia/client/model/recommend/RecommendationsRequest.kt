@@ -11,95 +11,16 @@ import kotlinx.serialization.json.*
 
 /**
  * RecommendationsRequest
+ *
+ * Implementations:
+ * - [RecommendationsQuery]
+ * - [TrendingFacetsQuery]
+ * - [TrendingItemsQuery]
  */
 @Serializable(RecommendationsRequestSerializer::class)
 public sealed interface RecommendationsRequest {
 
   public companion object {
-
-    /**
-     * RecommendationsQuery
-     *
-     * @param model
-     * @param objectID Unique object identifier.
-     * @param indexName Algolia index name.
-     * @param queryParameters
-     * @param fallbackParameters
-     * @param threshold Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
-     * @param maxRecommendations Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-     */
-    public fun RecommendationsQuery(
-      model: RecommendationModels,
-      objectID: String,
-      indexName: String,
-      queryParameters: SearchParamsObject? = null,
-      fallbackParameters: SearchParamsObject? = null,
-      threshold: Int? = null,
-      maxRecommendations: Int? = null,
-    ): RecommendationsQuery = com.algolia.client.model.recommend.RecommendationsQuery(
-      model = model,
-      objectID = objectID,
-      indexName = indexName,
-      queryParameters = queryParameters,
-      fallbackParameters = fallbackParameters,
-      threshold = threshold,
-      maxRecommendations = maxRecommendations,
-    )
-
-    /**
-     * TrendingFacetsQuery
-     *
-     * @param facetName Facet name for trending models.
-     * @param indexName Algolia index name.
-     * @param model
-     * @param threshold Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
-     * @param maxRecommendations Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-     */
-    public fun TrendingFacetsQuery(
-      facetName: String,
-      indexName: String,
-      model: TrendingFacetsModel? = null,
-      threshold: Int? = null,
-      maxRecommendations: Int? = null,
-    ): TrendingFacetsQuery = com.algolia.client.model.recommend.TrendingFacetsQuery(
-      facetName = facetName,
-      indexName = indexName,
-      model = model,
-      threshold = threshold,
-      maxRecommendations = maxRecommendations,
-    )
-
-    /**
-     * TrendingItemsQuery
-     *
-     * @param indexName Algolia index name.
-     * @param facetName Facet name for trending models.
-     * @param facetValue Facet value for trending models.
-     * @param model
-     * @param queryParameters
-     * @param fallbackParameters
-     * @param threshold Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
-     * @param maxRecommendations Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-     */
-    public fun TrendingItemsQuery(
-      indexName: String,
-      facetName: String? = null,
-      facetValue: String? = null,
-      model: TrendingItemsModel? = null,
-      queryParameters: SearchParamsObject? = null,
-      fallbackParameters: SearchParamsObject? = null,
-      threshold: Int? = null,
-      maxRecommendations: Int? = null,
-    ): TrendingItemsQuery = com.algolia.client.model.recommend.TrendingItemsQuery(
-      indexName = indexName,
-      facetName = facetName,
-      facetValue = facetValue,
-      model = model,
-      queryParameters = queryParameters,
-      fallbackParameters = fallbackParameters,
-      threshold = threshold,
-      maxRecommendations = maxRecommendations,
-    )
   }
 }
 
@@ -122,7 +43,7 @@ internal class RecommendationsRequestSerializer : KSerializer<RecommendationsReq
     // deserialize RecommendationsQuery
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<RecommendationsQuery>(tree)
+        return codec.json.decodeFromJsonElement(RecommendationsQuery.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize RecommendationsQuery (error: ${e.message})")
@@ -132,7 +53,7 @@ internal class RecommendationsRequestSerializer : KSerializer<RecommendationsReq
     // deserialize TrendingFacetsQuery
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<TrendingFacetsQuery>(tree)
+        return codec.json.decodeFromJsonElement(TrendingFacetsQuery.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize TrendingFacetsQuery (error: ${e.message})")
@@ -142,7 +63,7 @@ internal class RecommendationsRequestSerializer : KSerializer<RecommendationsReq
     // deserialize TrendingItemsQuery
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<TrendingItemsQuery>(tree)
+        return codec.json.decodeFromJsonElement(TrendingItemsQuery.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize TrendingItemsQuery (error: ${e.message})")

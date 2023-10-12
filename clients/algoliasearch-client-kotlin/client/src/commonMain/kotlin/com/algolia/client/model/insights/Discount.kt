@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Absolute value of the discount in effect for this object, measured in `currency`.
+ *
+ * Implementations:
+ * - [Double] - *[Discount.of]*
+ * - [String] - *[Discount.of]*
  */
 @Serializable(DiscountSerializer::class)
 public sealed interface Discount {
 
-  public data class DoubleWrapper(val value: Double) : Discount
+  @JvmInline
+  public value class DoubleValue(public val value: Double) : Discount
 
-  public data class StringWrapper(val value: String) : Discount
+  @JvmInline
+  public value class StringValue(public val value: String) : Discount
 
   public companion object {
 
-    /**
-     * Discount as Double
-     *
-     */
-    public fun Number(
-      value: Double,
-    ): DoubleWrapper = DoubleWrapper(
-      value = value,
-    )
+    /** [Discount] as [Double] Value. */
+    public fun of(value: Double): Discount {
+      return DoubleValue(value)
+    }
 
-    /**
-     * Discount as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [Discount] as [String] Value. */
+    public fun of(value: String): Discount {
+      return StringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class DiscountSerializer : KSerializer<Discount> {
 
   override fun serialize(encoder: Encoder, value: Discount) {
     when (value) {
-      is Discount.DoubleWrapper -> Double.serializer().serialize(encoder, value.value)
-      is Discount.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is Discount.DoubleValue -> Double.serializer().serialize(encoder, value.value)
+      is Discount.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class DiscountSerializer : KSerializer<Discount> {
     // deserialize Double
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<Discount.DoubleWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Double.serializer(), tree)
+        return Discount.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Double (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class DiscountSerializer : KSerializer<Discount> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<Discount.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return Discount.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

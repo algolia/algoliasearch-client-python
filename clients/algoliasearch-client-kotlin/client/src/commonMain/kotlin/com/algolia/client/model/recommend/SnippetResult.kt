@@ -8,40 +8,27 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * SnippetResult
+ *
+ * Implementations:
+ * - [List<SnippetResultOption>] - *[SnippetResult.of]*
+ * - [SnippetResultOption]
  */
 @Serializable(SnippetResultSerializer::class)
 public sealed interface SnippetResult {
 
-  public data class ListOfSnippetResultOptionWrapper(val value: List<SnippetResultOption>) : SnippetResult
+  @JvmInline
+  public value class ListOfSnippetResultOptionValue(public val value: List<SnippetResultOption>) : SnippetResult
 
   public companion object {
 
-    /**
-     * SnippetResult as List<SnippetResultOption>
-     *
-     */
-    public fun ListOfSnippetResultOption(
-      value: List<SnippetResultOption>,
-    ): ListOfSnippetResultOptionWrapper = ListOfSnippetResultOptionWrapper(
-      value = value,
-    )
-
-    /**
-     * Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
-     *
-     * @param `value` Markup text with `facetQuery` matches highlighted.
-     * @param matchLevel
-     */
-    public fun SnippetResultOption(
-      `value`: String,
-      matchLevel: MatchLevel,
-    ): SnippetResultOption = com.algolia.client.model.recommend.SnippetResultOption(
-      `value` = `value`,
-      matchLevel = matchLevel,
-    )
+    /** [SnippetResult] as [List<SnippetResultOption>] Value. */
+    public fun of(value: List<SnippetResultOption>): SnippetResult {
+      return ListOfSnippetResultOptionValue(value)
+    }
   }
 }
 
@@ -51,7 +38,7 @@ internal class SnippetResultSerializer : KSerializer<SnippetResult> {
 
   override fun serialize(encoder: Encoder, value: SnippetResult) {
     when (value) {
-      is SnippetResult.ListOfSnippetResultOptionWrapper -> ListSerializer(SnippetResultOption.serializer()).serialize(encoder, value.value)
+      is SnippetResult.ListOfSnippetResultOptionValue -> ListSerializer(SnippetResultOption.serializer()).serialize(encoder, value.value)
       is SnippetResultOption -> SnippetResultOption.serializer().serialize(encoder, value)
     }
   }
@@ -63,7 +50,8 @@ internal class SnippetResultSerializer : KSerializer<SnippetResult> {
     // deserialize List<SnippetResultOption>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<SnippetResult.ListOfSnippetResultOptionWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(SnippetResultOption.serializer()), tree)
+        return SnippetResult.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<SnippetResultOption> (error: ${e.message})")
@@ -73,7 +61,7 @@ internal class SnippetResultSerializer : KSerializer<SnippetResult> {
     // deserialize SnippetResultOption
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<SnippetResultOption>(tree)
+        return codec.json.decodeFromJsonElement(SnippetResultOption.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize SnippetResultOption (error: ${e.message})")

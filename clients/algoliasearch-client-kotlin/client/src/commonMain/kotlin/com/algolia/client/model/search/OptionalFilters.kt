@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Create filters to boost or demote records.   Records that match the filter are ranked higher for positive and lower for negative optional filters. In contrast to regular filters, records that don't match the optional filter are still included in the results, only their ranking is affected.
+ *
+ * Implementations:
+ * - [List<MixedSearchFilters>] - *[OptionalFilters.of]*
+ * - [String] - *[OptionalFilters.of]*
  */
 @Serializable(OptionalFiltersSerializer::class)
 public sealed interface OptionalFilters {
 
-  public data class ListOfMixedSearchFiltersWrapper(val value: List<MixedSearchFilters>) : OptionalFilters
+  @JvmInline
+  public value class ListOfMixedSearchFiltersValue(public val value: List<MixedSearchFilters>) : OptionalFilters
 
-  public data class StringWrapper(val value: String) : OptionalFilters
+  @JvmInline
+  public value class StringValue(public val value: String) : OptionalFilters
 
   public companion object {
 
-    /**
-     * OptionalFilters as List<MixedSearchFilters>
-     *
-     */
-    public fun ListOfMixedSearchFilters(
-      value: List<MixedSearchFilters>,
-    ): ListOfMixedSearchFiltersWrapper = ListOfMixedSearchFiltersWrapper(
-      value = value,
-    )
+    /** [OptionalFilters] as [List<MixedSearchFilters>] Value. */
+    public fun of(value: List<MixedSearchFilters>): OptionalFilters {
+      return ListOfMixedSearchFiltersValue(value)
+    }
 
-    /**
-     * OptionalFilters as String
-     *
-     */
-    public fun String(
-      value: String,
-    ): StringWrapper = StringWrapper(
-      value = value,
-    )
+    /** [OptionalFilters] as [String] Value. */
+    public fun of(value: String): OptionalFilters {
+      return StringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class OptionalFiltersSerializer : KSerializer<OptionalFilters> {
 
   override fun serialize(encoder: Encoder, value: OptionalFilters) {
     when (value) {
-      is OptionalFilters.ListOfMixedSearchFiltersWrapper -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
-      is OptionalFilters.StringWrapper -> String.serializer().serialize(encoder, value.value)
+      is OptionalFilters.ListOfMixedSearchFiltersValue -> ListSerializer(MixedSearchFilters.serializer()).serialize(encoder, value.value)
+      is OptionalFilters.StringValue -> String.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class OptionalFiltersSerializer : KSerializer<OptionalFilters> {
     // deserialize List<MixedSearchFilters>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<OptionalFilters.ListOfMixedSearchFiltersWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(MixedSearchFilters.serializer()), tree)
+        return OptionalFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<MixedSearchFilters> (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class OptionalFiltersSerializer : KSerializer<OptionalFilters> {
     // deserialize String
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<OptionalFilters.StringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(String.serializer(), tree)
+        return OptionalFilters.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize String (error: ${e.message})")

@@ -472,7 +472,7 @@ class SearchTest {
           indexName = "indexName",
           browseParams = BrowseParamsObject(
             query = "myQuery",
-            facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("tags:algolia"))),
+            facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("tags:algolia"))),
           ),
         )
       },
@@ -1216,7 +1216,7 @@ class SearchTest {
           indexName = "theIndexName",
           objectID = "uniqueID",
           attributesToUpdate = mapOf(
-            "id1" to AttributeToUpdate.String("test"),
+            "id1" to AttributeToUpdate.of("test"),
             "id2" to BuiltInOperation(
               operation = BuiltInOperationType.entries.first { it.value == "AddUnique" },
               value = "test2",
@@ -2127,19 +2127,19 @@ class SearchTest {
             requests = listOf(
               SearchForHits(
                 indexName = "theIndexName",
-                facetFilters = FacetFilters.String("mySearch:filters"),
-                reRankingApplyFilter = ReRankingApplyFilter.String("mySearch:filters"),
-                tagFilters = TagFilters.String("mySearch:filters"),
-                numericFilters = NumericFilters.String("mySearch:filters"),
-                optionalFilters = OptionalFilters.String("mySearch:filters"),
+                facetFilters = FacetFilters.of("mySearch:filters"),
+                reRankingApplyFilter = ReRankingApplyFilter.of("mySearch:filters"),
+                tagFilters = TagFilters.of("mySearch:filters"),
+                numericFilters = NumericFilters.of("mySearch:filters"),
+                optionalFilters = OptionalFilters.of("mySearch:filters"),
               ),
               SearchForHits(
                 indexName = "theIndexName",
-                facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("mySearch:filters"), MixedSearchFilters.ListOfString(listOf("mySearch:filters")))),
-                reRankingApplyFilter = ReRankingApplyFilter.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("mySearch:filters"), MixedSearchFilters.ListOfString(listOf("mySearch:filters")))),
-                tagFilters = TagFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("mySearch:filters"), MixedSearchFilters.ListOfString(listOf("mySearch:filters")))),
-                numericFilters = NumericFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("mySearch:filters"), MixedSearchFilters.ListOfString(listOf("mySearch:filters")))),
-                optionalFilters = OptionalFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("mySearch:filters"), MixedSearchFilters.ListOfString(listOf("mySearch:filters")))),
+                facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("mySearch:filters"), MixedSearchFilters.of(listOf("mySearch:filters")))),
+                reRankingApplyFilter = ReRankingApplyFilter.of(listOf(MixedSearchFilters.of("mySearch:filters"), MixedSearchFilters.of(listOf("mySearch:filters")))),
+                tagFilters = TagFilters.of(listOf(MixedSearchFilters.of("mySearch:filters"), MixedSearchFilters.of(listOf("mySearch:filters")))),
+                numericFilters = NumericFilters.of(listOf(MixedSearchFilters.of("mySearch:filters"), MixedSearchFilters.of(listOf("mySearch:filters")))),
+                optionalFilters = OptionalFilters.of(listOf(MixedSearchFilters.of("mySearch:filters"), MixedSearchFilters.of(listOf("mySearch:filters")))),
               ),
             ),
           ),
@@ -2169,7 +2169,7 @@ class SearchTest {
                 analyticsTags = listOf(""),
                 aroundLatLng = "",
                 aroundLatLngViaIP = true,
-                aroundPrecision = AroundPrecision.Number(0.toNumberType()),
+                aroundPrecision = AroundPrecision.of(0),
                 aroundRadius = AroundRadiusAll.entries.first { it.value == "all" },
                 attributeCriteriaComputedByMinProximity = true,
                 attributesForFaceting = listOf(""),
@@ -2181,14 +2181,14 @@ class SearchTest {
                 decompoundQuery = true,
                 disableExactOnAttributes = listOf(""),
                 disableTypoToleranceOnAttributes = listOf(""),
-                distinct = Distinct.Number(0.toNumberType()),
+                distinct = Distinct.of(0),
                 enableABTest = true,
                 enablePersonalization = true,
                 enableReRanking = true,
                 enableRules = true,
                 exactOnSingleWordQuery = ExactOnSingleWordQuery.entries.first { it.value == "attribute" },
                 explain = listOf("foo", "bar"),
-                facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
+                facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of(""))),
                 facetingAfterDistinct = true,
                 facets = listOf(""),
                 filters = "",
@@ -2196,7 +2196,7 @@ class SearchTest {
                 highlightPostTag = "",
                 highlightPreTag = "",
                 hitsPerPage = 0,
-                ignorePlurals = IgnorePlurals.Boolean(false),
+                ignorePlurals = IgnorePlurals.of(false),
                 indexName = "theIndexName",
                 insideBoundingBox = listOf(listOf(47.3165, 4.9665, 47.3424, 5.0201), listOf(40.9234, 2.1185, 38.643, 1.9916)),
                 insidePolygon = listOf(listOf(47.3165, 4.9665, 47.3424, 5.0201, 47.32, 4.9), listOf(40.9234, 2.1185, 38.643, 1.9916, 39.2587, 2.0104)),
@@ -2208,9 +2208,9 @@ class SearchTest {
                 minWordSizefor2Typos = 0,
                 minimumAroundRadius = 0,
                 naturalLanguages = listOf(""),
-                numericFilters = NumericFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
+                numericFilters = NumericFilters.of(listOf(MixedSearchFilters.of(""))),
                 offset = 0,
-                optionalFilters = OptionalFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
+                optionalFilters = OptionalFilters.of(listOf(MixedSearchFilters.of(""))),
                 optionalWords = listOf(""),
                 page = 0,
                 percentileComputation = true,
@@ -2219,9 +2219,9 @@ class SearchTest {
                 queryLanguages = listOf(""),
                 queryType = QueryType.entries.first { it.value == "prefixAll" },
                 ranking = listOf(""),
-                reRankingApplyFilter = ReRankingApplyFilter.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
+                reRankingApplyFilter = ReRankingApplyFilter.of(listOf(MixedSearchFilters.of(""))),
                 relevancyStrictness = 0,
-                removeStopWords = RemoveStopWords.Boolean(true),
+                removeStopWords = RemoveStopWords.of(true),
                 removeWordsIfNoResults = RemoveWordsIfNoResults.entries.first { it.value == "allOptional" },
                 renderingContent = RenderingContent(
                   facetOrdering = FacetOrdering(
@@ -2246,7 +2246,7 @@ class SearchTest {
                 sortFacetValuesBy = "",
                 sumOrFiltersScores = true,
                 synonyms = true,
-                tagFilters = TagFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String(""))),
+                tagFilters = TagFilters.of(listOf(MixedSearchFilters.of(""))),
                 type = SearchTypeDefault.entries.first { it.value == "default" },
                 typoTolerance = TypoToleranceEnum.entries.first { it.value == "min" },
                 userToken = "",
@@ -2394,7 +2394,7 @@ class SearchTest {
           indexName = "indexName",
           searchParams = SearchParamsObject(
             query = "myQuery",
-            facetFilters = FacetFilters.ListOfMixedSearchFilters(listOf(MixedSearchFilters.String("tags:algolia"))),
+            facetFilters = FacetFilters.of(listOf(MixedSearchFilters.of("tags:algolia"))),
           ),
         )
       },
@@ -2544,7 +2544,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            typoTolerance = TypoTolerance.Boolean(true),
+            typoTolerance = TypoTolerance.of(true),
           ),
           forwardToReplicas = true,
         )
@@ -2586,7 +2586,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            ignorePlurals = IgnorePlurals.Boolean(true),
+            ignorePlurals = IgnorePlurals.of(true),
           ),
           forwardToReplicas = true,
         )
@@ -2607,7 +2607,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            ignorePlurals = IgnorePlurals.ListOfString(listOf("algolia")),
+            ignorePlurals = IgnorePlurals.of(listOf("algolia")),
           ),
           forwardToReplicas = true,
         )
@@ -2628,7 +2628,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            removeStopWords = RemoveStopWords.Boolean(true),
+            removeStopWords = RemoveStopWords.of(true),
           ),
           forwardToReplicas = true,
         )
@@ -2649,7 +2649,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            removeStopWords = RemoveStopWords.ListOfString(listOf("algolia")),
+            removeStopWords = RemoveStopWords.of(listOf("algolia")),
           ),
           forwardToReplicas = true,
         )
@@ -2670,7 +2670,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            distinct = Distinct.Boolean(true),
+            distinct = Distinct.of(true),
           ),
           forwardToReplicas = true,
         )
@@ -2691,7 +2691,7 @@ class SearchTest {
         setSettings(
           indexName = "theIndexName",
           indexSettings = IndexSettings(
-            distinct = Distinct.Number(1.toNumberType()),
+            distinct = Distinct.of(1),
           ),
           forwardToReplicas = true,
         )
@@ -2738,7 +2738,7 @@ class SearchTest {
             disablePrefixOnAttributes = listOf("algolia"),
             disableTypoToleranceOnAttributes = listOf("algolia"),
             disableTypoToleranceOnWords = listOf("algolia"),
-            distinct = Distinct.Number(3.toNumberType()),
+            distinct = Distinct.of(3),
             enablePersonalization = true,
             enableReRanking = false,
             enableRules = true,
@@ -2746,7 +2746,7 @@ class SearchTest {
             highlightPreTag = "<span>",
             highlightPostTag = "</span>",
             hitsPerPage = 10,
-            ignorePlurals = IgnorePlurals.Boolean(false),
+            ignorePlurals = IgnorePlurals.of(false),
             indexLanguages = listOf("algolia"),
             keepDiacriticsOnCharacters = "abc",
             maxFacetHits = 20,
@@ -2761,9 +2761,9 @@ class SearchTest {
             queryLanguages = listOf("algolia"),
             queryType = QueryType.entries.first { it.value == "prefixLast" },
             ranking = listOf("geo"),
-            reRankingApplyFilter = ReRankingApplyFilter.String("mySearch:filters"),
+            reRankingApplyFilter = ReRankingApplyFilter.of("mySearch:filters"),
             relevancyStrictness = 10,
-            removeStopWords = RemoveStopWords.Boolean(false),
+            removeStopWords = RemoveStopWords.of(false),
             removeWordsIfNoResults = RemoveWordsIfNoResults.entries.first { it.value == "lastWords" },
             renderingContent = RenderingContent(
               facetOrdering = FacetOrdering(
@@ -2789,7 +2789,7 @@ class SearchTest {
             separatorsToIndex = "bar",
             snippetEllipsisText = "---",
             sortFacetValuesBy = "date",
-            typoTolerance = TypoTolerance.Boolean(false),
+            typoTolerance = TypoTolerance.of(false),
             unretrievableAttributes = listOf("foo"),
             userData = buildJsonObject {
               put("user", "data")

@@ -8,38 +8,35 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * Removes stop (common) words from the query before executing it. `removeStopWords` is used in conjunction with the `queryLanguages` setting. _list_: language ISO codes for which stop words should be enabled. This list will override any values that you may have set in `queryLanguages`. _true_: enables the stop words feature, ensuring that stop words are removed from consideration in a search. The languages supported here are either [every language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) (this is the default) or those set by `queryLanguages`. _false_: turns off the stop words feature, allowing stop words to be taken into account in a search.
+ *
+ * Implementations:
+ * - [Boolean] - *[RemoveStopWords.of]*
+ * - [List<String>] - *[RemoveStopWords.of]*
  */
 @Serializable(RemoveStopWordsSerializer::class)
 public sealed interface RemoveStopWords {
 
-  public data class BooleanWrapper(val value: Boolean) : RemoveStopWords
+  @JvmInline
+  public value class BooleanValue(public val value: Boolean) : RemoveStopWords
 
-  public data class ListOfStringWrapper(val value: List<String>) : RemoveStopWords
+  @JvmInline
+  public value class ListOfStringValue(public val value: List<String>) : RemoveStopWords
 
   public companion object {
 
-    /**
-     * RemoveStopWords as Boolean
-     *
-     */
-    public fun Boolean(
-      value: Boolean,
-    ): BooleanWrapper = BooleanWrapper(
-      value = value,
-    )
+    /** [RemoveStopWords] as [Boolean] Value. */
+    public fun of(value: Boolean): RemoveStopWords {
+      return BooleanValue(value)
+    }
 
-    /**
-     * RemoveStopWords as List<String>
-     *
-     */
-    public fun ListOfString(
-      value: List<String>,
-    ): ListOfStringWrapper = ListOfStringWrapper(
-      value = value,
-    )
+    /** [RemoveStopWords] as [List<String>] Value. */
+    public fun of(value: List<String>): RemoveStopWords {
+      return ListOfStringValue(value)
+    }
   }
 }
 
@@ -49,8 +46,8 @@ internal class RemoveStopWordsSerializer : KSerializer<RemoveStopWords> {
 
   override fun serialize(encoder: Encoder, value: RemoveStopWords) {
     when (value) {
-      is RemoveStopWords.BooleanWrapper -> Boolean.serializer().serialize(encoder, value.value)
-      is RemoveStopWords.ListOfStringWrapper -> ListSerializer(String.serializer()).serialize(encoder, value.value)
+      is RemoveStopWords.BooleanValue -> Boolean.serializer().serialize(encoder, value.value)
+      is RemoveStopWords.ListOfStringValue -> ListSerializer(String.serializer()).serialize(encoder, value.value)
     }
   }
 
@@ -61,7 +58,8 @@ internal class RemoveStopWordsSerializer : KSerializer<RemoveStopWords> {
     // deserialize Boolean
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<RemoveStopWords.BooleanWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Boolean.serializer(), tree)
+        return RemoveStopWords.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Boolean (error: ${e.message})")
@@ -71,7 +69,8 @@ internal class RemoveStopWordsSerializer : KSerializer<RemoveStopWords> {
     // deserialize List<String>
     if (tree is JsonArray) {
       try {
-        return codec.json.decodeFromJsonElement<RemoveStopWords.ListOfStringWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(ListSerializer(String.serializer()), tree)
+        return RemoveStopWords.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize List<String> (error: ${e.message})")

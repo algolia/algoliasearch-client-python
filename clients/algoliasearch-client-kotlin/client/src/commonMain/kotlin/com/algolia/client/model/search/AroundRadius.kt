@@ -8,31 +8,27 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * [Maximum radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius) for a geographical search (in meters).
+ *
+ * Implementations:
+ * - [AroundRadiusAll]
+ * - [Int] - *[AroundRadius.of]*
  */
 @Serializable(AroundRadiusSerializer::class)
 public sealed interface AroundRadius {
 
-  public data class IntWrapper(val value: Int) : AroundRadius
+  @JvmInline
+  public value class IntValue(public val value: Int) : AroundRadius
 
   public companion object {
 
-    /**
-     * AroundRadiusAll
-     */
-    public fun of(value: AroundRadiusAll): AroundRadiusAll = value
-
-    /**
-     * AroundRadius as Int
-     *
-     */
-    public fun Number(
-      value: Int,
-    ): IntWrapper = IntWrapper(
-      value = value,
-    )
+    /** [AroundRadius] as [Int] Value. */
+    public fun of(value: Int): AroundRadius {
+      return IntValue(value)
+    }
   }
 }
 
@@ -43,7 +39,7 @@ internal class AroundRadiusSerializer : KSerializer<AroundRadius> {
   override fun serialize(encoder: Encoder, value: AroundRadius) {
     when (value) {
       is AroundRadiusAll -> AroundRadiusAll.serializer().serialize(encoder, value)
-      is AroundRadius.IntWrapper -> Int.serializer().serialize(encoder, value.value)
+      is AroundRadius.IntValue -> Int.serializer().serialize(encoder, value.value)
     }
   }
 
@@ -54,7 +50,7 @@ internal class AroundRadiusSerializer : KSerializer<AroundRadius> {
     // deserialize AroundRadiusAll
     if (tree is JsonObject) {
       try {
-        return codec.json.decodeFromJsonElement<AroundRadiusAll>(tree)
+        return codec.json.decodeFromJsonElement(AroundRadiusAll.serializer(), tree)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize AroundRadiusAll (error: ${e.message})")
@@ -64,7 +60,8 @@ internal class AroundRadiusSerializer : KSerializer<AroundRadius> {
     // deserialize Int
     if (tree is JsonPrimitive) {
       try {
-        return codec.json.decodeFromJsonElement<AroundRadius.IntWrapper>(tree)
+        val value = codec.json.decodeFromJsonElement(Int.serializer(), tree)
+        return AroundRadius.of(value)
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize Int (error: ${e.message})")
