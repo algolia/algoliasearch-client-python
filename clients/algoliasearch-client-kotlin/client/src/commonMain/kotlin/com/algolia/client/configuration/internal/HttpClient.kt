@@ -10,7 +10,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 private const val HEADER_APPLICATION_ID = "x-algolia-application-id"
-private const val HEADER_API_KEY = "x-algolia-api-key"
+private const val HEADER_APIKEY = "x-algolia-api-key"
 
 internal fun algoliaHttpClient(
   appId: String,
@@ -26,7 +26,7 @@ internal fun HttpClientConfig<*>.configure(
   appId: String,
   apiKey: String,
   options: ClientOptions,
-  agent: AlgoliaAgent,
+  algoliaAgent: AlgoliaAgent,
 ) {
   // Custom configuration
   options.httpClientConfig?.invoke(this)
@@ -35,6 +35,7 @@ internal fun HttpClientConfig<*>.configure(
   install(ContentNegotiation) {
     json(
       Json {
+        options.jsonConfig?.invoke(this)
         isLenient = true
         ignoreUnknownKeys = true
         allowSpecialFloatingPointValues = true
@@ -44,30 +45,35 @@ internal fun HttpClientConfig<*>.configure(
   }
 
   // Logging
-  installLogging(options.logLevel, options.logger)
+  if (options.logLevel != LogLevel.NONE) {
+    install(Logging) {
+      level = options.logLevel
+      logger = options.logger
+    }
+  }
 
   // Algolia user agent
-  install(algoliaAgent(agent))
+  install(UserAgent) {
+    agent = algoliaAgent.toString()
+  }
 
   // Timeout
   install(HttpTimeout)
 
   // Defaults
   defaultRequest {
-    if (!headers.contains(HEADER_APPLICATION_ID)) header(HEADER_APPLICATION_ID, appId)
-    if (!headers.contains(HEADER_API_KEY)) header(HEADER_API_KEY, apiKey)
+    if (!headers.contains(HEADER_APPLICATION_ID)) {
+      header(HEADER_APPLICATION_ID, appId)
+    }
+    if (!headers.contains(HEADER_APIKEY)) {
+      header(HEADER_APIKEY, apiKey)
+    }
     options.defaultHeaders?.forEach { (key, value) -> header(key, value) }
   }
 
   // Enable default (2XX) validation
   expectSuccess = true
-}
 
-/** Installs [Logging] if logging level is superior to [LogLevel.NONE]. */
-private fun HttpClientConfig<*>.installLogging(logLevel: LogLevel, customLogger: Logger) {
-  if (LogLevel.NONE == logLevel) return
-  install(Logging) {
-    level = logLevel
-    logger = customLogger
-  }
+  // Platform specific configuration
+  platformConfig(options)
 }

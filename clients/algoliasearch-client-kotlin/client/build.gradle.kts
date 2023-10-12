@@ -20,6 +20,8 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+    macosArm64()
+    macosX64()
   }
 
   sourceSets {
@@ -27,7 +29,6 @@ kotlin {
       languageSettings {
         optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
         optIn("kotlinx.serialization.ExperimentalSerializationApi")
-        optIn("com.algolia.client.InternalAlgoliaClient")
       }
     }
     val commonMain by getting {

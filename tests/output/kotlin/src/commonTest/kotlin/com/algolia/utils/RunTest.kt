@@ -1,6 +1,5 @@
 package com.algolia.utils
 
-import com.algolia.client.InternalAlgoliaClient
 import com.algolia.client.api.ApiClient
 import com.algolia.client.exception.AlgoliaClientException
 import com.algolia.client.transport.internal.KtorRequester
@@ -36,7 +35,6 @@ suspend fun <T : ApiClient> T.runTest(
  * The interceptor will call the provided [block] function with the intercepted request.
  * Note: Make sure to use a [KtorRequester]-based ApiClient before using this function.
  */
-@OptIn(InternalAlgoliaClient::class)
 private fun ApiClient.intercept(block: (HttpRequestBuilder) -> Unit) {
   val ktorRequester = requester as? KtorRequester ?: error("`KtorRequester` requester is expected")
   ktorRequester.httpClient.plugin(HttpSend).intercept { request ->

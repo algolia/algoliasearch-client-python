@@ -1,11 +1,7 @@
 plugins {
-    application
     kotlin("jvm") version "1.9.10"
     kotlin("plugin.serialization") version "1.9.10"
 }
-
-group = "com.algolia"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -20,12 +16,4 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(11)
-}
-
-application {
-    mainClass.set(project.property("mainClass") as String?)
 }

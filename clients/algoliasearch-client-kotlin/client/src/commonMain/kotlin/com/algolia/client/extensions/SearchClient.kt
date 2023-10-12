@@ -7,6 +7,7 @@ import com.algolia.client.model.search.ApiKey
 import com.algolia.client.model.search.GetApiKeyResponse
 import com.algolia.client.model.search.TaskStatus
 import com.algolia.client.transport.RequestOptions
+import kotlin.time.Duration
 
 /**
  * Wait for a [taskID] to complete before executing the next line of code, to synchronize index
@@ -26,7 +27,7 @@ import com.algolia.client.transport.RequestOptions
 public suspend fun SearchClient.waitTask(
   indexName: String,
   taskID: Long,
-  timeout: Long? = null,
+  timeout: Duration? = null,
   maxRetries: Int? = null,
   requestOptions: RequestOptions? = null,
 ): TaskStatus {
@@ -53,7 +54,7 @@ public suspend fun SearchClient.waitTask(
 public suspend fun SearchClient.waitKeyUpdate(
   key: String,
   apiKey: ApiKey,
-  timeout: Long? = null,
+  timeout: Duration? = null,
   maxRetries: Int? = null,
   requestOptions: RequestOptions? = null,
 ): GetApiKeyResponse {
@@ -89,7 +90,7 @@ public suspend fun SearchClient.waitKeyUpdate(
 public suspend fun SearchClient.waitKeyCreation(
   key: String,
   maxRetries: Int? = null,
-  timeout: Long? = null,
+  timeout: Duration? = null,
   requestOptions: RequestOptions? = null,
 ): GetApiKeyResponse {
   return retryUntil(
@@ -120,7 +121,7 @@ public suspend fun SearchClient.waitKeyCreation(
 public suspend fun SearchClient.waitKeyDelete(
   key: String,
   maxRetries: Int? = null,
-  timeout: Long? = null,
+  timeout: Duration? = null,
   requestOptions: RequestOptions? = null,
 ): Boolean {
   retryUntil(

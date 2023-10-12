@@ -4,7 +4,8 @@ import com.algolia.client.api.RecommendClient
 import com.algolia.client.configuration.ClientOptions
 import com.algolia.client.model.recommend.GetRecommendationsParams
 import com.algolia.client.model.recommend.RecommendationModels
-import com.algolia.client.model.recommend.RecommendationRequest
+import com.algolia.client.model.recommend.RecommendationsQuery
+import com.algolia.client.model.recommend.RecommendationsRequest
 import io.github.cdimascio.dotenv.Dotenv
 import io.ktor.client.plugins.logging.*
 import kotlin.system.exitProcess
@@ -24,7 +25,7 @@ suspend fun main() {
     val recommendations = client.getRecommendations(
         getRecommendationsParams = GetRecommendationsParams(
             requests = listOf(
-                RecommendationRequest(
+                RecommendationsQuery(
                     indexName = searchIndex,
                     model = RecommendationModels.BoughtTogether,
                     objectID = "6445156",

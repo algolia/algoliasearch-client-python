@@ -3,6 +3,7 @@ package com.algolia.playground
 import com.algolia.client.api.InsightsClient
 import com.algolia.client.configuration.ClientOptions
 import com.algolia.client.model.insights.ClickEvent
+import com.algolia.client.model.insights.ClickedObjectIDs
 import com.algolia.client.model.insights.EventsItems
 import com.algolia.client.model.insights.InsightsEvents
 import io.github.cdimascio.dotenv.Dotenv
@@ -21,7 +22,7 @@ suspend fun main() {
 
     val events = InsightsEvents(
         events = listOf(
-            EventsItems.ClickedObjectIDs(
+            ClickedObjectIDs(
                 eventType = ClickEvent.Click,
                 eventName = "click",
                 index = indexName,

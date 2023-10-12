@@ -1,6 +1,5 @@
 package com.algolia.client.transport.internal
 
-import com.algolia.client.InternalAlgoliaClient
 import com.algolia.client.configuration.CallType
 import com.algolia.client.configuration.Host
 import com.algolia.client.exception.AlgoliaRetryException
@@ -27,7 +26,6 @@ import kotlinx.serialization.json.JsonObject
 import kotlin.time.Duration
 
 /** Default implementation of [Requester] using Ktor's [HttpClient]. */
-@InternalAlgoliaClient
 public class KtorRequester(
   public val httpClient: HttpClient,
   private val connectTimeout: Duration,

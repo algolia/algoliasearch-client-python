@@ -5,9 +5,17 @@ import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlin.jvm.JvmInline
 
 /**
  * {{{description}}}{{^description}}{{classname}}{{/description}}
+ * 
+ * Implementations:
+ {{#vendorExtensions}}
+ {{#x-one-of-list}}
+ * - [{{{type}}}]{{^child}} - *[{{classname}}.of{{#x-one-of-explicit-name}}{{name}}{{/x-one-of-explicit-name}}]*{{/child}}
+ {{/x-one-of-list}}
+{{/vendorExtensions}}
  */
 {{#isDeprecated}}
 @Deprecated(message = "This schema is deprecated.")
@@ -21,17 +29,23 @@ public sealed interface {{classname}} {
     {{#x-one-of-list}}
     {{^child}}
 
-    public data class {{name}}Wrapper(val value: {{{type}}}): {{classname}}
+    @JvmInline
+    public value class {{name}}Value(public val value: {{{type}}}): {{classname}}
     {{/child}}    
     {{/x-one-of-list}}
 
     public companion object {
-    {{#x-sealed-childs}}
+    {{#x-one-of-list}}
+    {{^child}}
 
-    {{> builder_function}}
-    {{/x-sealed-childs}}
+    /** [{{classname}}] as [{{{type}}}] Value. */
+    public fun of{{#x-one-of-explicit-name}}{{name}}{{/x-one-of-explicit-name}}(value: {{{type}}}): {{classname}} {
+        return {{name}}Value(value);
     }
+    {{/child}}    
+    {{/x-one-of-list}}
     {{/vendorExtensions}}
+    }
 }
 
 internal class {{classname}}Serializer : KSerializer<{{classname}}> {
@@ -46,7 +60,7 @@ internal class {{classname}}Serializer : KSerializer<{{classname}}> {
           is {{{type}}} -> {{{type}}}.serializer().serialize(encoder, value)
         {{/child}}
         {{^child}}
-          is {{classname}}.{{name}}Wrapper -> {{#isList}}ListSerializer({{{listElementType}}}.serializer()){{/isList}}{{^isList}}{{{type}}}.serializer(){{/isList}}.serialize(encoder, value.value)
+          is {{classname}}.{{name}}Value -> {{#isList}}ListSerializer({{{listElementType}}}.serializer()){{/isList}}{{^isList}}{{{type}}}.serializer(){{/isList}}.serialize(encoder, value.value)
         {{/child}}  
         {{/x-one-of-list}}
         {{/vendorExtensions}}
@@ -60,8 +74,18 @@ internal class {{classname}}Serializer : KSerializer<{{classname}}> {
 
         // deserialize {{{type}}}
         if (tree is {{#isObject}}JsonObject{{/isObject}}{{#isList}}JsonArray{{/isList}}{{^isObject}}{{^isList}}JsonPrimitive{{/isList}}{{/isObject}}{{#discriminators}} && tree.containsKey("{{field}}"){{/discriminators}}) {
-            try {    
-                return codec.json.decodeFromJsonElement<{{>oneof_compound}}>(tree)
+            try {   
+                {{#isObject}}
+                return codec.json.decodeFromJsonElement({{{type}}}.serializer(), tree)
+                {{/isObject}}
+                {{#isList}}
+                val value = codec.json.decodeFromJsonElement(ListSerializer({{{listElementType}}}.serializer()), tree)
+                return {{{classname}}}.of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}(value)
+                {{/isList}}
+                {{^isObject}}{{^isList}}
+                val value = codec.json.decodeFromJsonElement({{{type}}}.serializer(), tree)
+                return {{{classname}}}.of{{#vendorExtensions.x-one-of-explicit-name}}{{{name}}}{{/vendorExtensions.x-one-of-explicit-name}}(value)
+                {{/isList}}{{/isObject}}
             } catch (e: Exception) {
                 // deserialization failed, continue
                 println("Failed to deserialize {{{type}}} (error: ${e.message})")

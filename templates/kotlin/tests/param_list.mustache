@@ -1,1 +1,1 @@
-{{#oneOfModel}}{{parentClassName}}.{{type-capitalized}}(listOf({{#value}}{{> param_value}}{{/value}})){{/oneOfModel}}{{^oneOfModel}}listOf({{#value}}{{> param_value}}{{/value}}){{/oneOfModel}}
+{{#oneOfModel}}{{{parentClassName}}}.of{{#x-one-of-explicit-name}}{{{type}}}{{/x-one-of-explicit-name}}(listOf({{#value}}{{> param_value}}{{/value}})){{/oneOfModel}}{{^oneOfModel}}listOf({{#value}}{{> param_value}}{{/value}}){{/oneOfModel}}
