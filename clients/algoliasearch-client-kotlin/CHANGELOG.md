@@ -1,5 +1,9 @@
 ## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
 
+- [b5ec54151](https://github.com/algolia/api-clients-automation/commit/b5ec54151) feat(specs): revenue and filterEffects typing updates ([#2105](https://github.com/algolia/api-clients-automation/pull/2105)) by [@cdhawke](https://github.com/cdhawke/)
+
+## [3.0.0-SNAPSHOT](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-SNAPSHOT...3.0.0-SNAPSHOT)
+
 - [e3b7e2ab6](https://github.com/algolia/api-clients-automation/commit/e3b7e2ab6) feat(specs): synchronize specs for all client ([#2103](https://github.com/algolia/api-clients-automation/pull/2103)) by [@Fluf22](https://github.com/Fluf22/)
 - [f8e79a1e2](https://github.com/algolia/api-clients-automation/commit/f8e79a1e2) fix(specs): search `insideBoundingBox` type ([#2098](https://github.com/algolia/api-clients-automation/pull/2098)) by [@aallam](https://github.com/aallam/)
 - [d38619103](https://github.com/algolia/api-clients-automation/commit/d38619103) feat(specs): add new events type for insights ([#2080](https://github.com/algolia/api-clients-automation/pull/2080)) by [@millotp](https://github.com/millotp/)

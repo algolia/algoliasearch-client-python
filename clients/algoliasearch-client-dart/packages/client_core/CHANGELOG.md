@@ -1,3 +1,7 @@
+## [0.5.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.4.0...0.5.0)
+
+- [b5ec54151](https://github.com/algolia/api-clients-automation/commit/b5ec54151) feat(specs): revenue and filterEffects typing updates ([#2105](https://github.com/algolia/api-clients-automation/pull/2105)) by [@cdhawke](https://github.com/cdhawke/)
+
 ## [0.4.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.3.0...0.4.0)
 
 - [e3b7e2ab6](https://github.com/algolia/api-clients-automation/commit/e3b7e2ab6) feat(specs): synchronize specs for all client ([#2103](https://github.com/algolia/api-clients-automation/pull/2103)) by [@Fluf22](https://github.com/Fluf22/)
