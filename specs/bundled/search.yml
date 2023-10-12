@@ -115,7 +115,7 @@ components:
         type: string
         example: YourAPIKey
       description: API key.
-    parameters_ObjectID-2:
+    ObjectIDRule:
       in: path
       name: objectID
       description: Unique identifier of a rule object.
@@ -4416,7 +4416,7 @@ paths:
         [`search` operation](#tag/Rules/operation/searchRules).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/parameters_ObjectID-2'
+        - $ref: '#/components/parameters/ObjectIDRule'
       responses:
         '200':
           description: OK
@@ -4442,7 +4442,7 @@ paths:
         operation](#tag/Rules/operation/saveRules).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/parameters_ObjectID-2'
+        - $ref: '#/components/parameters/ObjectIDRule'
         - $ref: '#/components/parameters/ForwardToReplicas'
       requestBody:
         required: true
@@ -4475,7 +4475,7 @@ paths:
         the [`search` operation](#tag/Rules/operation/searchRules).
       parameters:
         - $ref: '#/components/parameters/IndexName'
-        - $ref: '#/components/parameters/parameters_ObjectID-2'
+        - $ref: '#/components/parameters/ObjectIDRule'
         - $ref: '#/components/parameters/ForwardToReplicas'
       responses:
         '200':

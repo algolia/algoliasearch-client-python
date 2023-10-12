@@ -115,7 +115,7 @@ components:
         type: string
         example: YourAPIKey
       description: API key.
-    parameters_ObjectID-2:
+    ObjectIDRule:
       in: path
       name: objectID
       description: Unique identifier of a rule object.
