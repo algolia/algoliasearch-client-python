@@ -6,7 +6,9 @@ package com.algolia.model.abtesting;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /** ABTest */
@@ -19,13 +21,25 @@ public class ABTest {
   private Double clickSignificance;
 
   @JsonProperty("conversionSignificance")
-  private String conversionSignificance;
+  private Double conversionSignificance;
+
+  @JsonProperty("addToCartSignificance")
+  private Double addToCartSignificance;
+
+  @JsonProperty("purchaseSignificance")
+  private Double purchaseSignificance;
+
+  @JsonProperty("revenueSignificance")
+  private Map<String, Double> revenueSignificance = new HashMap<>();
 
   @JsonProperty("updatedAt")
   private String updatedAt;
 
   @JsonProperty("createdAt")
   private String createdAt;
+
+  @JsonProperty("endAt")
+  private String endAt;
 
   @JsonProperty("name")
   private String name;
@@ -62,15 +76,69 @@ public class ABTest {
     return clickSignificance;
   }
 
-  public ABTest setConversionSignificance(String conversionSignificance) {
+  public ABTest setConversionSignificance(Double conversionSignificance) {
     this.conversionSignificance = conversionSignificance;
     return this;
   }
 
-  /** End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
+  /**
+   * [A/B test
+   * significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+   * based on conversion. A value of 0.95 or over is considered to be _significant_.
+   */
   @javax.annotation.Nonnull
-  public String getConversionSignificance() {
+  public Double getConversionSignificance() {
     return conversionSignificance;
+  }
+
+  public ABTest setAddToCartSignificance(Double addToCartSignificance) {
+    this.addToCartSignificance = addToCartSignificance;
+    return this;
+  }
+
+  /**
+   * [A/B test
+   * significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+   * based on add-to-cart data. A value of 0.95 or over is considered to be _significant_.
+   */
+  @javax.annotation.Nonnull
+  public Double getAddToCartSignificance() {
+    return addToCartSignificance;
+  }
+
+  public ABTest setPurchaseSignificance(Double purchaseSignificance) {
+    this.purchaseSignificance = purchaseSignificance;
+    return this;
+  }
+
+  /**
+   * [A/B test
+   * significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+   * based on purchase data. A value of 0.95 or over is considered to be _significant_.
+   */
+  @javax.annotation.Nonnull
+  public Double getPurchaseSignificance() {
+    return purchaseSignificance;
+  }
+
+  public ABTest setRevenueSignificance(Map<String, Double> revenueSignificance) {
+    this.revenueSignificance = revenueSignificance;
+    return this;
+  }
+
+  public ABTest putRevenueSignificance(String key, Double revenueSignificanceItem) {
+    this.revenueSignificance.put(key, revenueSignificanceItem);
+    return this;
+  }
+
+  /**
+   * [A/B test
+   * significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+   * based on revenue data. A value of 0.95 or over is considered to be _significant_.
+   */
+  @javax.annotation.Nonnull
+  public Map<String, Double> getRevenueSignificance() {
+    return revenueSignificance;
   }
 
   public ABTest setUpdatedAt(String updatedAt) {
@@ -93,6 +161,17 @@ public class ABTest {
   @javax.annotation.Nonnull
   public String getCreatedAt() {
     return createdAt;
+  }
+
+  public ABTest setEndAt(String endAt) {
+    this.endAt = endAt;
+    return this;
+  }
+
+  /** End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
+  @javax.annotation.Nonnull
+  public String getEndAt() {
+    return endAt;
   }
 
   public ABTest setName(String name) {
@@ -146,8 +225,12 @@ public class ABTest {
       Objects.equals(this.abTestID, abTest.abTestID) &&
       Objects.equals(this.clickSignificance, abTest.clickSignificance) &&
       Objects.equals(this.conversionSignificance, abTest.conversionSignificance) &&
+      Objects.equals(this.addToCartSignificance, abTest.addToCartSignificance) &&
+      Objects.equals(this.purchaseSignificance, abTest.purchaseSignificance) &&
+      Objects.equals(this.revenueSignificance, abTest.revenueSignificance) &&
       Objects.equals(this.updatedAt, abTest.updatedAt) &&
       Objects.equals(this.createdAt, abTest.createdAt) &&
+      Objects.equals(this.endAt, abTest.endAt) &&
       Objects.equals(this.name, abTest.name) &&
       Objects.equals(this.status, abTest.status) &&
       Objects.equals(this.variants, abTest.variants)
@@ -156,7 +239,20 @@ public class ABTest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(abTestID, clickSignificance, conversionSignificance, updatedAt, createdAt, name, status, variants);
+    return Objects.hash(
+      abTestID,
+      clickSignificance,
+      conversionSignificance,
+      addToCartSignificance,
+      purchaseSignificance,
+      revenueSignificance,
+      updatedAt,
+      createdAt,
+      endAt,
+      name,
+      status,
+      variants
+    );
   }
 
   @Override
@@ -166,8 +262,12 @@ public class ABTest {
     sb.append("    abTestID: ").append(toIndentedString(abTestID)).append("\n");
     sb.append("    clickSignificance: ").append(toIndentedString(clickSignificance)).append("\n");
     sb.append("    conversionSignificance: ").append(toIndentedString(conversionSignificance)).append("\n");
+    sb.append("    addToCartSignificance: ").append(toIndentedString(addToCartSignificance)).append("\n");
+    sb.append("    purchaseSignificance: ").append(toIndentedString(purchaseSignificance)).append("\n");
+    sb.append("    revenueSignificance: ").append(toIndentedString(revenueSignificance)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    endAt: ").append(toIndentedString(endAt)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    variants: ").append(toIndentedString(variants)).append("\n");

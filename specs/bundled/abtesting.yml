@@ -64,12 +64,6 @@ components:
       type: integer
       description: Unique A/B test ID.
       example: 224
-    endAt:
-      type: string
-      description: >-
-        End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601)
-        format.
-      example: '2023-06-17T00:00:00Z'
     updatedAt:
       type: string
       description: >-
@@ -82,14 +76,94 @@ components:
         Creation date timestamp in
         [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
       example: '2023-06-15T15:06:04.249906Z'
+    endAt:
+      type: string
+      description: >-
+        End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601)
+        format.
+      example: '2023-06-17T00:00:00Z'
     name:
       type: string
       description: A/B test name.
       example: Custom ranking sales rank test
+    currencies:
+      type: object
+      description: A/B test currencies.
+      example:
+        USD:
+          currency: USD
+          revenue: 120
+          mean: 53.7
+          standardDeviation: 12.3
+        EUR:
+          currency: EUR
+          revenue: 100
+          mean: 43.7
+          standardDeviation: 10.3
+      additionalProperties:
+        type: object
+        properties:
+          currency:
+            type: string
+            description: Currency code.
+            example: USD
+          revenue:
+            type: number
+            format: double
+            description: Revenue for this currency.
+            example: 120
+          mean:
+            type: number
+            format: double
+            description: Mean for this currency.
+            example: 53.7
+          standardDeviation:
+            type: number
+            format: double
+            description: Standard deviation for this currency.
+            example: 12.3
     description:
       type: string
       description: A/B test description.
       example: Current production index
+    filterEffects:
+      type: object
+      description: A/B test filter effects resulting from configuration settings.
+      properties:
+        outliers:
+          type: object
+          description: >-
+            Outliers removed from the A/B test as a result of configuration
+            settings.
+          example:
+            usersCount: 1
+            trackedSearchesCount: 237
+          properties:
+            usersCount:
+              type: integer
+              description: Number of users removed from the A/B test.
+              example: 1
+            trackedSearchesCount:
+              type: integer
+              description: Number of tracked searches removed from the A/B test.
+              example: 237
+        emptySearch:
+          type: object
+          description: >-
+            Empty searches removed from the A/B test as a result of
+            configuration settings.
+          example:
+            usersCount: 1
+            trackedSearchesCount: 237
+          properties:
+            usersCount:
+              type: integer
+              description: Number of users removed from the A/B test.
+              example: 1
+            trackedSearchesCount:
+              type: integer
+              description: Number of tracked searches removed from the A/B test.
+              example: 237
     index:
       type: string
       description: A/B test index.
@@ -108,6 +182,17 @@ components:
       type: object
       additionalProperties: false
       properties:
+        addToCartCount:
+          type: integer
+          description: Number of add-to-cart events for this variant.
+          example: 0
+        addToCartRate:
+          type: number
+          format: double
+          description: >-
+            Variant's [add-to-cart
+            rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#add-to-cart-rate).
+          example: 0
         averageClickPosition:
           type: integer
           description: >-
@@ -136,8 +221,12 @@ components:
             Variant's [conversion
             rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
           example: 0.14546725846658964
+        currencies:
+          $ref: '#/components/schemas/currencies'
         description:
           $ref: '#/components/schemas/description'
+        filterEffects:
+          $ref: '#/components/schemas/filterEffects'
         index:
           $ref: '#/components/schemas/index'
         noResultCount:
@@ -147,20 +236,16 @@ components:
             results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results)
             for that variant.
           example: 0
-        outlierTrackedSearchesCount:
+        purchaseCount:
           type: integer
-          description: >-
-            Number of tracked searches attributed to [outlier
-            traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
-            that were removed from the A/B test. A _tracked_ search is a search
-            request where the `clickAnalytics` parameter is `true`.
+          description: Number of purchase events for this variant.
           example: 0
-        outlierUsersCount:
-          type: integer
+        purchaseRate:
+          type: number
+          format: double
           description: >-
-            Number of users attributed to [outlier
-            traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
-            that were removed from the A/B test.
+            Variant's [purchase
+            rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#purchase-rate).
           example: 0
         searchCount:
           type: integer
@@ -187,8 +272,11 @@ components:
         - clickThroughRate
         - clickCount
         - averageClickPosition
-        - outlierUsersCount
-        - outlierTrackedSearchesCount
+        - currencies
+        - addToCartRate
+        - addToCartCount
+        - purchaseRate
+        - purchaseCount
     variants:
       type: array
       description: A/B test variants.
@@ -217,11 +305,44 @@ components:
             significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
             based on conversion. A value of 0.95 or over is considered to be
             _significant_.
-          $ref: '#/components/schemas/endAt'
+          example: 1
+        addToCartSignificance:
+          type: number
+          format: double
+          description: >
+            [A/B test
+            significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+            based on add-to-cart data. A value of 0.95 or over is considered to
+            be _significant_.
+          example: 1
+        purchaseSignificance:
+          type: number
+          format: double
+          description: >
+            [A/B test
+            significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+            based on purchase data. A value of 0.95 or over is considered to be
+            _significant_.
+          example: 1
+        revenueSignificance:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          description: >
+            [A/B test
+            significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance)
+            based on revenue data. A value of 0.95 or over is considered to be
+            _significant_.
+          example:
+            USD: 1
+            EUR: 0.87
         updatedAt:
           $ref: '#/components/schemas/updatedAt'
         createdAt:
           $ref: '#/components/schemas/createdAt'
+        endAt:
+          $ref: '#/components/schemas/endAt'
         name:
           $ref: '#/components/schemas/name'
         status:
@@ -238,6 +359,9 @@ components:
         - updatedAt
         - conversionSignificance
         - clickSignificance
+        - purchaseSignificance
+        - addToCartSignificance
+        - revenueSignificance
         - abTestID
         - variants
     ABTests:

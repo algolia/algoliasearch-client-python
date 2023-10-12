@@ -9,9 +9,13 @@ import kotlinx.serialization.json.*
  *
  * @param abTestID Unique A/B test ID.
  * @param clickSignificance [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on click data. A value of 0.95 or over is considered to be _significant_.
- * @param conversionSignificance End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+ * @param conversionSignificance [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on conversion. A value of 0.95 or over is considered to be _significant_.
+ * @param addToCartSignificance [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on add-to-cart data. A value of 0.95 or over is considered to be _significant_.
+ * @param purchaseSignificance [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on purchase data. A value of 0.95 or over is considered to be _significant_.
+ * @param revenueSignificance [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on revenue data. A value of 0.95 or over is considered to be _significant_.
  * @param updatedAt Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
  * @param createdAt Creation date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
+ * @param endAt End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
  * @param name A/B test name.
  * @param status A/B test status.
  * @param variants A/B test variants.
@@ -25,14 +29,26 @@ public data class ABTest(
   /** [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on click data. A value of 0.95 or over is considered to be _significant_.  */
   @SerialName(value = "clickSignificance") val clickSignificance: Double,
 
-  /** End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
-  @SerialName(value = "conversionSignificance") val conversionSignificance: String,
+  /** [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on conversion. A value of 0.95 or over is considered to be _significant_.  */
+  @SerialName(value = "conversionSignificance") val conversionSignificance: Double,
+
+  /** [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on add-to-cart data. A value of 0.95 or over is considered to be _significant_.  */
+  @SerialName(value = "addToCartSignificance") val addToCartSignificance: Double,
+
+  /** [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on purchase data. A value of 0.95 or over is considered to be _significant_.  */
+  @SerialName(value = "purchaseSignificance") val purchaseSignificance: Double,
+
+  /** [A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on revenue data. A value of 0.95 or over is considered to be _significant_.  */
+  @SerialName(value = "revenueSignificance") val revenueSignificance: Map<kotlin.String, Double>,
 
   /** Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "updatedAt") val updatedAt: String,
 
   /** Creation date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
   @SerialName(value = "createdAt") val createdAt: String,
+
+  /** End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format. */
+  @SerialName(value = "endAt") val endAt: String,
 
   /** A/B test name. */
   @SerialName(value = "name") val name: String,

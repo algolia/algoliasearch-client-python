@@ -5,10 +5,18 @@ package com.algolia.model.abtesting;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /** Variant */
 public class Variant {
+
+  @JsonProperty("addToCartCount")
+  private Integer addToCartCount;
+
+  @JsonProperty("addToCartRate")
+  private Double addToCartRate;
 
   @JsonProperty("averageClickPosition")
   private Integer averageClickPosition;
@@ -25,8 +33,14 @@ public class Variant {
   @JsonProperty("conversionRate")
   private Double conversionRate;
 
+  @JsonProperty("currencies")
+  private Map<String, CurrenciesValue> currencies = new HashMap<>();
+
   @JsonProperty("description")
   private String description;
+
+  @JsonProperty("filterEffects")
+  private FilterEffects filterEffects;
 
   @JsonProperty("index")
   private String index;
@@ -34,11 +48,11 @@ public class Variant {
   @JsonProperty("noResultCount")
   private Integer noResultCount;
 
-  @JsonProperty("outlierTrackedSearchesCount")
-  private Integer outlierTrackedSearchesCount;
+  @JsonProperty("purchaseCount")
+  private Integer purchaseCount;
 
-  @JsonProperty("outlierUsersCount")
-  private Integer outlierUsersCount;
+  @JsonProperty("purchaseRate")
+  private Double purchaseRate;
 
   @JsonProperty("searchCount")
   private Integer searchCount;
@@ -51,6 +65,31 @@ public class Variant {
 
   @JsonProperty("userCount")
   private Integer userCount;
+
+  public Variant setAddToCartCount(Integer addToCartCount) {
+    this.addToCartCount = addToCartCount;
+    return this;
+  }
+
+  /** Number of add-to-cart events for this variant. */
+  @javax.annotation.Nonnull
+  public Integer getAddToCartCount() {
+    return addToCartCount;
+  }
+
+  public Variant setAddToCartRate(Double addToCartRate) {
+    this.addToCartRate = addToCartRate;
+    return this;
+  }
+
+  /**
+   * Variant's [add-to-cart
+   * rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#add-to-cart-rate).
+   */
+  @javax.annotation.Nonnull
+  public Double getAddToCartRate() {
+    return addToCartRate;
+  }
 
   public Variant setAverageClickPosition(Integer averageClickPosition) {
     this.averageClickPosition = averageClickPosition;
@@ -116,6 +155,22 @@ public class Variant {
     return conversionRate;
   }
 
+  public Variant setCurrencies(Map<String, CurrenciesValue> currencies) {
+    this.currencies = currencies;
+    return this;
+  }
+
+  public Variant putCurrencies(String key, CurrenciesValue currenciesItem) {
+    this.currencies.put(key, currenciesItem);
+    return this;
+  }
+
+  /** A/B test currencies. */
+  @javax.annotation.Nonnull
+  public Map<String, CurrenciesValue> getCurrencies() {
+    return currencies;
+  }
+
   public Variant setDescription(String description) {
     this.description = description;
     return this;
@@ -125,6 +180,17 @@ public class Variant {
   @javax.annotation.Nonnull
   public String getDescription() {
     return description;
+  }
+
+  public Variant setFilterEffects(FilterEffects filterEffects) {
+    this.filterEffects = filterEffects;
+    return this;
+  }
+
+  /** Get filterEffects */
+  @javax.annotation.Nullable
+  public FilterEffects getFilterEffects() {
+    return filterEffects;
   }
 
   public Variant setIndex(String index) {
@@ -153,35 +219,29 @@ public class Variant {
     return noResultCount;
   }
 
-  public Variant setOutlierTrackedSearchesCount(Integer outlierTrackedSearchesCount) {
-    this.outlierTrackedSearchesCount = outlierTrackedSearchesCount;
+  public Variant setPurchaseCount(Integer purchaseCount) {
+    this.purchaseCount = purchaseCount;
+    return this;
+  }
+
+  /** Number of purchase events for this variant. */
+  @javax.annotation.Nonnull
+  public Integer getPurchaseCount() {
+    return purchaseCount;
+  }
+
+  public Variant setPurchaseRate(Double purchaseRate) {
+    this.purchaseRate = purchaseRate;
     return this;
   }
 
   /**
-   * Number of tracked searches attributed to [outlier
-   * traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
-   * that were removed from the A/B test. A _tracked_ search is a search request where the
-   * `clickAnalytics` parameter is `true`.
+   * Variant's [purchase
+   * rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#purchase-rate).
    */
   @javax.annotation.Nonnull
-  public Integer getOutlierTrackedSearchesCount() {
-    return outlierTrackedSearchesCount;
-  }
-
-  public Variant setOutlierUsersCount(Integer outlierUsersCount) {
-    this.outlierUsersCount = outlierUsersCount;
-    return this;
-  }
-
-  /**
-   * Number of users attributed to [outlier
-   * traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off)
-   * that were removed from the A/B test.
-   */
-  @javax.annotation.Nonnull
-  public Integer getOutlierUsersCount() {
-    return outlierUsersCount;
+  public Double getPurchaseRate() {
+    return purchaseRate;
   }
 
   public Variant setSearchCount(Integer searchCount) {
@@ -241,16 +301,20 @@ public class Variant {
     }
     Variant variant = (Variant) o;
     return (
+      Objects.equals(this.addToCartCount, variant.addToCartCount) &&
+      Objects.equals(this.addToCartRate, variant.addToCartRate) &&
       Objects.equals(this.averageClickPosition, variant.averageClickPosition) &&
       Objects.equals(this.clickCount, variant.clickCount) &&
       Objects.equals(this.clickThroughRate, variant.clickThroughRate) &&
       Objects.equals(this.conversionCount, variant.conversionCount) &&
       Objects.equals(this.conversionRate, variant.conversionRate) &&
+      Objects.equals(this.currencies, variant.currencies) &&
       Objects.equals(this.description, variant.description) &&
+      Objects.equals(this.filterEffects, variant.filterEffects) &&
       Objects.equals(this.index, variant.index) &&
       Objects.equals(this.noResultCount, variant.noResultCount) &&
-      Objects.equals(this.outlierTrackedSearchesCount, variant.outlierTrackedSearchesCount) &&
-      Objects.equals(this.outlierUsersCount, variant.outlierUsersCount) &&
+      Objects.equals(this.purchaseCount, variant.purchaseCount) &&
+      Objects.equals(this.purchaseRate, variant.purchaseRate) &&
       Objects.equals(this.searchCount, variant.searchCount) &&
       Objects.equals(this.trackedSearchCount, variant.trackedSearchCount) &&
       Objects.equals(this.trafficPercentage, variant.trafficPercentage) &&
@@ -261,16 +325,20 @@ public class Variant {
   @Override
   public int hashCode() {
     return Objects.hash(
+      addToCartCount,
+      addToCartRate,
       averageClickPosition,
       clickCount,
       clickThroughRate,
       conversionCount,
       conversionRate,
+      currencies,
       description,
+      filterEffects,
       index,
       noResultCount,
-      outlierTrackedSearchesCount,
-      outlierUsersCount,
+      purchaseCount,
+      purchaseRate,
       searchCount,
       trackedSearchCount,
       trafficPercentage,
@@ -282,16 +350,20 @@ public class Variant {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Variant {\n");
+    sb.append("    addToCartCount: ").append(toIndentedString(addToCartCount)).append("\n");
+    sb.append("    addToCartRate: ").append(toIndentedString(addToCartRate)).append("\n");
     sb.append("    averageClickPosition: ").append(toIndentedString(averageClickPosition)).append("\n");
     sb.append("    clickCount: ").append(toIndentedString(clickCount)).append("\n");
     sb.append("    clickThroughRate: ").append(toIndentedString(clickThroughRate)).append("\n");
     sb.append("    conversionCount: ").append(toIndentedString(conversionCount)).append("\n");
     sb.append("    conversionRate: ").append(toIndentedString(conversionRate)).append("\n");
+    sb.append("    currencies: ").append(toIndentedString(currencies)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    filterEffects: ").append(toIndentedString(filterEffects)).append("\n");
     sb.append("    index: ").append(toIndentedString(index)).append("\n");
     sb.append("    noResultCount: ").append(toIndentedString(noResultCount)).append("\n");
-    sb.append("    outlierTrackedSearchesCount: ").append(toIndentedString(outlierTrackedSearchesCount)).append("\n");
-    sb.append("    outlierUsersCount: ").append(toIndentedString(outlierUsersCount)).append("\n");
+    sb.append("    purchaseCount: ").append(toIndentedString(purchaseCount)).append("\n");
+    sb.append("    purchaseRate: ").append(toIndentedString(purchaseRate)).append("\n");
     sb.append("    searchCount: ").append(toIndentedString(searchCount)).append("\n");
     sb.append("    trackedSearchCount: ").append(toIndentedString(trackedSearchCount)).append("\n");
     sb.append("    trafficPercentage: ").append(toIndentedString(trafficPercentage)).append("\n");
