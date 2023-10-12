@@ -8,6 +8,15 @@ variant:
   type: object
   additionalProperties: false
   properties:
+    addToCartCount:
+      type: integer
+      description: Number of add-to-cart events for this variant.
+      example: 0
+    addToCartRate:
+      type: number
+      format: double
+      description: Variant's [add-to-cart rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#add-to-cart-rate).
+      example: 0.0
     averageClickPosition:
       type: integer
       description: Variant's [average click position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position).
@@ -30,22 +39,27 @@ variant:
       format: double
       description: Variant's [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
       example: 0.14546725846658964
+    currencies:
+      $ref: '../parameters.yml#/currencies'
     description:
       $ref: '../parameters.yml#/description'
+    filterEffects:
+      $ref: '../parameters.yml#/filterEffects'
     index:
       $ref: '../parameters.yml#/index'
     noResultCount:
       type: integer
       description: Number of [searches without results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results) for that variant.
       example: 0
-    outlierTrackedSearchesCount:
+    purchaseCount:
       type: integer
-      description: Number of tracked searches attributed to [outlier traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off) that were removed from the A/B test. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+      description: Number of purchase events for this variant.
       example: 0
-    outlierUsersCount:
-      type: integer
-      description: Number of users attributed to [outlier traffic](https://www.algolia.com/doc/guides/ab-testing/how-to-read-your-a-b-test-results/#is-the-split-off) that were removed from the A/B test.
-      example: 0
+    purchaseRate:
+      type: number
+      format: double
+      description: Variant's [purchase rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#purchase-rate).
+      example: 0.0
     searchCount:
       type: integer
       description: Number of searches carried out during the A/B test.
@@ -71,5 +85,8 @@ variant:
     - clickThroughRate
     - clickCount
     - averageClickPosition
-    - outlierUsersCount
-    - outlierTrackedSearchesCount
+    - currencies
+    - addToCartRate
+    - addToCartCount
+    - purchaseRate
+    - purchaseCount

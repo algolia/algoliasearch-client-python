@@ -48,3 +48,75 @@ trafficPercentage:
   type: integer
   description: A/B test traffic percentage.
   example: 60
+
+currencies:
+  type: object
+  description: A/B test currencies.
+  example:
+    USD:
+      currency: USD
+      revenue: 120.0
+      mean: 53.7
+      standardDeviation: 12.3
+    EUR:
+      currency: EUR
+      revenue: 100.0
+      mean: 43.7
+      standardDeviation: 10.3
+  additionalProperties:
+    type: object
+    properties:
+      currency:
+        type: string
+        description: Currency code.
+        example: 'USD'
+      revenue:
+        type: number
+        format: double
+        description: Revenue for this currency.
+        example: 120.0
+      mean:
+        type: number
+        format: double
+        description: Mean for this currency.
+        example: 53.7
+      standardDeviation:
+        type: number
+        format: double
+        description: Standard deviation for this currency.
+        example: 12.3
+    
+filterEffects:
+  type: object
+  description: A/B test filter effects resulting from configuration settings.
+  properties:
+    outliers:
+      type: object
+      description: Outliers removed from the A/B test as a result of configuration settings.
+      example:
+        usersCount: 1
+        trackedSearchesCount: 237
+      properties:
+        usersCount:
+          type: integer
+          description: Number of users removed from the A/B test.
+          example: 1
+        trackedSearchesCount:
+          type: integer
+          description: Number of tracked searches removed from the A/B test.
+          example: 237
+    emptySearch:
+      type: object
+      description: Empty searches removed from the A/B test as a result of configuration settings.
+      example:
+        usersCount: 1
+        trackedSearchesCount: 237
+      properties:
+        usersCount:
+          type: integer
+          description: Number of users removed from the A/B test.
+          example: 1
+        trackedSearchesCount:
+          type: integer
+          description: Number of tracked searches removed from the A/B test.
+          example: 237
