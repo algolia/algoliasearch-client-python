@@ -96,7 +96,7 @@ async function createClientMatrix(baseBranch: string): Promise<void> {
         testsToStore = `${testsToStore} ${testsRootFolder}/build.gradle`;
         break;
       case 'go':
-        testsToStore = `${testsToStore} ${testsOutputBase}/methods/requests/common.go`;
+        testsToStore = `${testsToStore} ${testsOutputBase}/methods/requests/common.go ${testsRootFolder}/go.sum ${testsRootFolder}/go.mod`;
         break;
       case 'javascript':
         const npmNamespace = getClientsConfigField('javascript', 'npmNamespace');
