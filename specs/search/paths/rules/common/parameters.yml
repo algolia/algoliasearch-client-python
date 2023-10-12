@@ -6,7 +6,7 @@ ClearExistingRules:
     type: boolean
   description: Indicates whether existing rules should be deleted before adding this batch.
 
-ObjectID:
+ObjectIDRule:
   in: path
   name: objectID
   description: Unique identifier of a rule object.

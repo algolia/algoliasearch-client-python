@@ -6,7 +6,7 @@ get:
   description: Get a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
-    - $ref: 'common/parameters.yml#/ObjectID'
+    - $ref: 'common/parameters.yml#/ObjectIDRule'
   responses:
     '200':
       description: OK
@@ -31,7 +31,7 @@ put:
   description: To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
-    - $ref: 'common/parameters.yml#/ObjectID'
+    - $ref: 'common/parameters.yml#/ObjectIDRule'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'
   requestBody:
     required: true
@@ -63,7 +63,7 @@ delete:
   description: Delete a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
   parameters:
     - $ref: '../../../common/parameters.yml#/IndexName'
-    - $ref: 'common/parameters.yml#/ObjectID'
+    - $ref: 'common/parameters.yml#/ObjectIDRule'
     - $ref: '../../../common/parameters.yml#/ForwardToReplicas'
   responses:
     '200':
