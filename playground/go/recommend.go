@@ -18,11 +18,11 @@ func testRecommend(appID, apiKey string) int {
 	params := &recommend.GetRecommendationsParams{
 		Requests: []recommend.RecommendationsRequest{
 			{
-				RecommendationRequest: &recommend.RecommendationRequest{
+				RecommendationsQuery: &recommend.RecommendationsQuery{
 					Model:     recommend.RECOMMENDATIONMODELS_BOUGHT_TOGETHER,
 					ObjectID:  "test_query",
 					IndexName: "test_index",
-					Threshold: 0,
+					Threshold: recommend.PtrInt32(0),
 				},
 			},
 		},
