@@ -55,6 +55,50 @@ client.batch(indexName, batchWriteParams);
 ```
 
 </TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+val objectIDs = listOf("1", "2", "3", "4", "5")
+client.batch(
+    indexName = "<YOUR_INDEX_NAME>",
+    batchWriteParams = BatchWriteParams(
+        requests = objectIDs.map { objectID ->
+            BatchRequest(
+                action = Action.Delete,
+                body = buildJsonObject {
+                    put("objectID", JsonPrimitive(objectID))
+                },
+            )
+        }
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+var objectIDs = ['1', '2', '3', '4', '5'];
+await client.batch(
+  indexName: '<YOUR_INDEX_NAME>',
+  batchWriteParams: BatchWriteParams(
+    requests: objectIDs
+        .map((id) => BatchRequest(
+              action: Action.delete,
+              body: {'objectID': id},
+            ))
+        .toList(),
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
+</TabItem>
 </TabsLanguage>
 
 By executing the above code, all the objects with the specified object IDs will be deleted from your index.

@@ -55,6 +55,41 @@ client.setSettings(
 ```
 
 </TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+client.setSettings(
+    indexName = "<YOUR_INDEX_NAME>",
+    indexSettings = IndexSettings(
+        attributesForFaceting = listOf("actor", "filterOnly(category)", "searchable(publisher)")
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+client.setSettings(
+  indexName: '<YOUR_INDEX_NAME>',
+  indexSettings: IndexSettings(
+    attributesForFaceting: [
+      'actor',
+      'filterOnly(category)',
+      'searchable(publisher)'
+    ],
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
+</TabItem>
+
 </TabsLanguage>
 
 ### 2. Filter by Attributes (at query time)
@@ -148,43 +183,132 @@ import com.algolia.model.search.*;
 // Only "Scarlett Johansson" actor
 client.search(
   new SearchMethodParams()
-    .addRequests(SearchQuery.of(
-      new SearchForFacets()
+    .addRequests(
+      new SearchForHits()
         .setIndexName("<YOUR_INDEX_NAME>")
         .setQuery("<YOUR_QUERY>")
         .setFilters("actor:Scarlett Johansson")
     )
-  ),
-  Actor.class
 );
 
 // Only "Tom Cruise" or "Scarlett Johansson" actor
 client.search(
   new SearchMethodParams()
-    .addRequests(SearchQuery.of(
-      new SearchForFacets()
+    .addRequests(
+      new SearchForHits()
         .setIndexName("<YOUR_INDEX_NAME>")
         .setQuery("<YOUR_QUERY>")
         .setFilters("actor:Tom Cruise OR actor:Scarlett Johansson")
     )
-  ),
-  Actor.class
 );
 
 // Everything but "Nicolas Cage" actor
 client.search(
   new SearchMethodParams()
-    .addRequests(SearchQuery.of(
-      new SearchForFacets()
+    .addRequests(
+      new SearchForHits()
         .setIndexName("<YOUR_INDEX_NAME>")
         .setQuery("<YOUR_QUERY>")
         .setFilters("NOT actor:Nicolas Cage")
     )
-  ),
-  Actor.class
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
+
+// Only "Scarlett Johansson" actor
+client.search(
+    searchMethodParams = SearchMethodParams(
+        requests = listOf(
+            SearchForHits(
+                indexName = "<YOUR_INDEX_NAME>",
+                query = "<YOUR_QUERY>",
+                filters = "actor:Scarlett Johansson"
+            )
+        )
+    )
+)
+
+// Only "Tom Cruise" or "Scarlett Johansson" actor
+client.search(
+    searchMethodParams = SearchMethodParams(
+        requests = listOf(
+            SearchForHits(
+                indexName = "<YOUR_INDEX_NAME>",
+                query = "<YOUR_QUERY>",
+                filters = "actor:Tom Cruise OR actor:Scarlett Johansson"
+            )
+        )
+    )
+)
+
+// Everything but "Nicolas Cage" actor
+client.search(
+    searchMethodParams = SearchMethodParams(
+        requests = listOf(
+            SearchForHits(
+                indexName = "<YOUR_INDEX_NAME>",
+                query = "<YOUR_QUERY>",
+                filters = "NOT actor:Nicolas Cage"
+            )
+        )
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+// Only 'Scarlett Johansson' actor
+await client.search(
+  searchMethodParams: SearchMethodParams(
+    requests: [
+      SearchForHits(
+        indexName: '<YOUR_INDEX_NAME>',
+        query: '<YOUR_QUERY>',
+        filters: 'actor:Scarlett Johansson',
+      ),
+    ],
+  ),
+);
+
+// Only 'Tom Cruise' or 'Scarlett Johansson' actor
+await client.search(
+  searchMethodParams: SearchMethodParams(requests: [
+    SearchForHits(
+      indexName: '<YOUR_INDEX_NAME>',
+      query: '<YOUR_QUERY>',
+      filters: 'actor:Tom Cruise OR actor:Scarlett Johansson',
+    ),
+  ]),
+);
+
+// Everything but 'Nicolas Cage' actor
+await client.search(
+  searchMethodParams: SearchMethodParams(
+    requests: [
+      SearchForHits(
+        indexName: '<YOUR_INDEX_NAME>',
+        query: '<YOUR_QUERY>',
+        filters: 'NOT actor:Nicolas Cage',
+      ),
+    ],
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>
 
@@ -248,35 +372,101 @@ $client->search([
 <TabItem value="java">
 
 ```java
+import com.algolia.api.SearchClient;
 import com.algolia.model.search.*;
 
 // Only "Scarlett Johansson" actor
 client.search(
-  new SearchMethodParams()
-    .addRequests(SearchQuery.of(
-      new SearchForFacets()
-        .setIndexName("<YOUR_INDEX_NAME>")
-        .setQuery("<YOUR_QUERY>")
-        .addFacetFilters("actor:Scarlett Johansson")
+    new SearchMethodParams()
+        .addRequests(
+            new SearchForFacets()
+                .setIndexName("<YOUR_INDEX_NAME>")
+                .setQuery("<YOUR_QUERY>")
+                .setFacetFilters(FacetFilters.of("actor:Scarlett Johansson"))
     )
-  ),
-  Actor.class
 );
-
 // Only "Tom Cruise" or "Scarlett Johansson" actor
 client.search(
-  new SearchMethodParams()
-    .addRequests(SearchQuery.of(
-      new SearchForFacets()
-        .setIndexName("<YOUR_INDEX_NAME>")
-        .setQuery("<YOUR_QUERY>")
-        .addFacetFilters("actor:Tom Cruise")
-        .addFacetFilters("actor:Scarlett Johansson")
-    )
-  ),
-  Actor.class
+    new SearchMethodParams()
+        .addRequests(
+            new SearchForHits()
+                .setIndexName("<YOUR_INDEX_NAME>")
+                .setQuery("<YOUR_QUERY>")
+                .setFacetFilters(FacetFilters.of("actor:Tom Cruise OR actor:Scarlett Johansson"))
+        )
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
+
+// Only "Scarlett Johansson" actor
+client.search(
+    searchMethodParams = SearchMethodParams(
+        requests = listOf(
+            SearchForHits(
+                indexName = "<YOUR_INDEX_NAME>",
+                query = "<YOUR_QUERY>",
+                facetFilters = FacetFilters.of("actor:Scarlett Johansson")
+            )
+        )
+    )
+)
+
+// Only "Tom Cruise" or "Scarlett Johansson" actor
+client.search(
+    searchMethodParams = SearchMethodParams(
+        requests = listOf(
+            SearchForHits(
+                indexName = "<YOUR_INDEX_NAME>",
+                query = "<YOUR_QUERY>",
+                facetFilters = FacetFilters.of("actor:Tom Cruise OR actor:Scarlett Johansson")
+            )
+        )
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+// Only 'Scarlett Johansson' actor
+client.search(
+    searchMethodParams: SearchMethodParams(
+  requests: [
+    SearchForHits(
+      indexName: '<YOUR_INDEX_NAME>',
+      query: '<YOUR_QUERY>',
+      facetFilters: 'actor:Scarlett Johansson',
+    ),
+  ],
+));
+
+// Only 'Tom Cruise' or 'Scarlett Johansson' actor
+client.search(
+  searchMethodParams: SearchMethodParams(
+    requests: [
+      SearchForHits(
+        indexName: '<YOUR_INDEX_NAME>',
+        query: '<YOUR_QUERY>',
+        facetFilters: 'actor:Tom Cruise OR actor:Scarlett Johansson',
+      ),
+    ],
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>

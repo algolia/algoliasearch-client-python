@@ -85,7 +85,7 @@ SearchClient client = new SearchClient(
 
 client.search(
   new SearchMethodParams()
-    .addRequests(SearchQuery.of(
+    .addRequests(
       new SearchForHits()
         .setIndexName("<YOUR_INDEX_NAME>")
         .setQuery("<YOUR_QUERY>")
@@ -93,8 +93,6 @@ client.search(
         .addAttributesToRetrieve("lastname")
         .setHitsPerPage(50)
     )
-  ),
-  MyObject.class
 );
 ```
 

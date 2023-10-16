@@ -73,6 +73,45 @@ dependencies {
 ```
 
 </TabItem>
+
+<TabItem value="kotlin">
+
+**JVM**
+
+1. Install the Kotlin client by adding the following dependency to your `gradle.build` file:
+
+```groovy
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation "com.algolia:algoliasearch-client-kotlin:$version"
+}
+```
+
+2. Choose and add to your dependencies one of [Ktor's engines](https://ktor.io/docs/http-client-engines.html).
+
+  - **BOM**
+
+    Alternatively, you can use `algoliasearch-client-kotlin-bom`  by adding the following dependency to your `build.gradle` file
+
+    ```groovy
+    dependencies {
+        // import Kotlin API client BOM
+        implementation platform("com.algolia:algoliasearch-client-kotlin-bom:$version")
+
+        // define dependencies without versions
+        implementation 'com.algolia:algoliasearch-client-kotlin'
+        runtimeOnly 'io.ktor:ktor-client-okhttp'
+    }
+    ```
+
+**Multiplaform**
+
+In multiplatform projects, add Algolia API client dependency to `commonMain`, and choose an [engine](https://ktor.io/docs/http-client-engines.html) for each target.
+
+</TabItem>
 </TabsLanguage>
 
 ## Using the client
@@ -144,6 +183,7 @@ var_dump(
 <TabItem value="java">
 
 ```java
+import com.algolia.api.SearchClient;
 import com.algolia.model.search.*;
 import java.util.*;
 
@@ -154,29 +194,95 @@ SearchClient client = new SearchClient("<YOUR_APP_ID>", "<YOUR_API_KEY>");
 Map<String, String> body = new HashMap<>();
 body.put("objectID", "id1");
 body.put("title", "My Algolia Object");
-
 client.saveObject("<YOUR_INDEX_NAME>", body);
 
 // Fetch search results
-SearchMethodParams searchMethodParams = new SearchMethodParams();
-SearchQueries requests = new SearchQueries();
-requests.setIndexName("<YOUR_INDEX_NAME>");
-// Typo tolerant search
-requests.setQuery("my aloglia ojbect");
-searchMethodParams.setRequests(requests);
+SearchForHits request = new SearchForHits()
+        .setIndexName("<YOUR_INDEX_NAME>")
+        .setQuery("my aloglia ojbect");
+SearchMethodParams params = new SearchMethodParams().addRequests(request);
+SearchResponses responses = client.search(params);
+System.out.println(responses);
+```
 
-try {
-  SearchResponse<MyObject> result = client.search(
-    searchMethodParams,
-    MyObject.class
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
+import kotlinx.serialization.json.*
+
+// Instantiate the client
+val client = SearchClient(appId = "<YOUR_APP_ID>", apiKey = "<YOUR_API_KEY>")
+
+// Add a new record to your Algolia index
+val record = buildJsonObject {
+    put("objectID", "id1")
+    put("title", "My Algolia Object")
+}
+client.saveObject(indexName = "<YOUR_INDEX_NAME>", body = record)
+
+// Fetch search results
+val response = client.search(
+    searchMethodParams = SearchMethodParams(
+        requests = listOf(
+            SearchForHits(
+                indexName = "<YOUR_INDEX_NAME>",
+                query = "<YOUR_QUERY>" // Typo tolerant search
+            ),
+        ),
+    )
+)
+
+println(response)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+import 'package:algolia_client_search/algolia_client_search.dart';
+
+void main() async {
+  // Instantiate the client
+  var client = SearchClient(appId: '<YOUR_APP_ID>', apiKey: '<YOUR_API_KEY>');
+
+  // Add a new record to your Algolia index.
+  // Can also be an instance of a class with a `toJson()` method.
+  var record = {
+    'objectID': 'id1',
+    'title': 'My Algolia Object',
+  };
+  await client.saveObject(indexName: '<YOUR_INDEX_NAME>', body: record);
+
+  // Fetch search results
+  var response = await client.search(
+    searchMethodParams: SearchMethodParams(
+      requests: [
+        SearchForHits(
+          indexName: '<YOUR_INDEX_NAME>',
+          query: '<YOUR_QUERY>', // Typo tolerant search
+          hitsPerPage: 50,
+        ),
+      ],
+    ),
   );
-  System.out.println(result);
-} catch (AlgoliaRuntimeException e) {
-  e.printStackTrace();
+  print(response);
+
+  // Close the client and dispose of all underlying resources.
+  client.dispose();
 }
 ```
 
 </TabItem>
+
+<TabItem value="go">
+// TBD
+</TabItem>
+
 </TabsLanguage>
 
 ## Advanced use cases

@@ -69,6 +69,65 @@ client.batchDictionaryEntriesAsync(
 ```
 
 </TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
+
+client.batchDictionaryEntries(
+    dictionaryName = DictionaryType.valueOf("<YOUR_DICTIONARY_NAME>"),
+    batchDictionaryEntriesParams = BatchDictionaryEntriesParams(
+        clearExistingDictionaryEntries = false,
+        requests = listOf(
+            BatchDictionaryEntriesRequest(
+                action = DictionaryAction.AddEntry,
+                body = DictionaryEntry(
+                    objectID = "1",
+                    language = "en",
+                    word = "fancy",
+                    words = listOf("believe", "algolia"),
+                    decomposition = listOf("trust", "algolia"),
+                    state = DictionaryEntryState.Enabled,
+                )
+            )
+        ),
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+await client.batchDictionaryEntries(
+  dictionaryName: DictionaryType.fromJson('<YOUR_DICTIONARY_NAME>'), // DictionaryType.plurals, DictionaryType.stopwords or DictionaryType.compounds
+  batchDictionaryEntriesParams: BatchDictionaryEntriesParams(
+    clearExistingDictionaryEntries: false,
+    requests: [
+      BatchDictionaryEntriesRequest(
+        action: DictionaryAction.addEntry,
+        body: DictionaryEntry(
+          objectID: '1',
+          language: 'en',
+          word: 'fancy',
+          words: ['believe', 'algolia'],
+          decomposition: ['trust', 'algolia'],
+          state: DictionaryEntryState.enabled,
+        ),
+      ),
+    ],
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
+</TabItem>
 </TabsLanguage>
 
 ## Replace dictionary entries
@@ -131,6 +190,65 @@ client.batchDictionaryEntriesAsync(
 ```
 
 </TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
+
+client.batchDictionaryEntries(
+    dictionaryName = DictionaryType.valueOf("<YOUR_DICTIONARY_NAME>"), // DictionaryType.Plurals, DictionaryType.Stopwords or DictionaryType.Compounds
+    batchDictionaryEntriesParams = BatchDictionaryEntriesParams(
+        clearExistingDictionaryEntries = true, // Since we replace, we will create a new dictionary from those entries
+        requests = listOf(
+            BatchDictionaryEntriesRequest(
+                action = DictionaryAction.AddEntry,
+                body = DictionaryEntry(
+                    objectID = "1",
+                    language = "en",
+                    word = "fancy",
+                    words = listOf("believe", "algolia"),
+                    decomposition = listOf("trust", "algolia"),
+                    state = DictionaryEntryState.Enabled,
+                )
+            )
+        ),
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+await client.batchDictionaryEntries(
+  dictionaryName: DictionaryType.fromJson('<YOUR_DICTIONARY_NAME>'), // DictionaryType.plurals, DictionaryType.stopwords or DictionaryType.compounds
+  batchDictionaryEntriesParams: BatchDictionaryEntriesParams(
+    clearExistingDictionaryEntries: true, // Since we replace, we will create a new dictionary from those entries
+    requests: [
+      BatchDictionaryEntriesRequest(
+          action: DictionaryAction.addEntry,
+          body: DictionaryEntry(
+            objectID: '1',
+            language: 'en',
+            word: 'fancy',
+            words: ['believe', 'algolia'],
+            decomposition: ['trust', 'algolia'],
+            state: DictionaryEntryState.enabled,
+          ),
+      )
+    ],
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
+</TabItem>
 </TabsLanguage>
 
 ## Clear dictionary
@@ -161,9 +279,49 @@ await client.batchDictionaryEntries({
 <TabItem value="java">
 
 ```java
-// TODO
+client.batchDictionaryEntriesAsync(
+        DictionaryType.fromValue("YOUR_DICTIONARY_NAME"), // DictionaryType.PLURALS, DictionaryType.STOPWORDS or DictionaryType.COMPOUNDS
+        new BatchDictionaryEntriesParams()
+                .setClearExistingDictionaryEntries(true)
+                .setRequests(Collections.emptyList()) // We don't push any new entries to it
+);
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
+
+client.batchDictionaryEntries(
+    dictionaryName = DictionaryType.valueOf("<YOUR_DICTIONARY_NAME>"), // DictionaryType.Plurals, DictionaryType.Stopwords or DictionaryType.Compounds
+    batchDictionaryEntriesParams = BatchDictionaryEntriesParams(
+        clearExistingDictionaryEntries = true,
+        requests = listOf(),  // We don't push any new entries to it
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+await client.batchDictionaryEntries(
+  dictionaryName: DictionaryType.fromJson('<YOUR_DICTIONARY_NAME>'), // DictionaryType.plurals, DictionaryType.stopwords or DictionaryType.compounds
+  batchDictionaryEntriesParams: BatchDictionaryEntriesParams(
+    clearExistingDictionaryEntries: true,
+    requests: [], // We don't push any new entries to it
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>
 
@@ -214,6 +372,51 @@ client.batchDictionaryEntriesAsync(
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
+
+client.batchDictionaryEntries(
+    dictionaryName = DictionaryType.valueOf("<YOUR_DICTIONARY_NAME>"), // DictionaryType.Plurals, DictionaryType.Stopwords or DictionaryType.Compounds
+    batchDictionaryEntriesParams = BatchDictionaryEntriesParams(
+        clearExistingDictionaryEntries = false, // we don't want to impact other entries.
+        requests = listOf(
+            BatchDictionaryEntriesRequest(
+                action = DictionaryAction.DeleteEntry,
+                body = DictionaryEntry(objectID = "1", language = "en")
+            )
+        ),
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+await client.batchDictionaryEntries(
+  dictionaryName: DictionaryType.fromJson('<YOUR_DICTIONARY_NAME>'), // DictionaryType.plurals, DictionaryType.stopwords or DictionaryType.compounds
+  batchDictionaryEntriesParams: BatchDictionaryEntriesParams(
+    clearExistingDictionaryEntries: false, // we don't want to impact other entries.
+    requests: [
+      BatchDictionaryEntriesRequest(
+        action: DictionaryAction.deleteEntry,
+        body: DictionaryEntry(objectID: '1', language: 'en'),
+      ),
+    ],
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>
 

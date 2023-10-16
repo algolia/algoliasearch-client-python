@@ -98,11 +98,63 @@ await client.waitForTask(
   // Number of maximum retries to do
   100,
   // The time to wait between retries
-  retryCount -> {
-    return Math.min(retryCount * 200, 5000);
-  }
+  retryCount -> Math.min(retryCount * 200, 5000);
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.extensions.waitTask
+import kotlinx.serialization.json.*
+
+val client = SearchClient("appId", "apiKey")
+val body = buildJsonObject {
+    put("title", "My Algolia Object")
+}
+val response = client.saveObject("<YOUR_INDEX_NAME>", body)
+
+// Poll the task status with defaults values
+client.waitTask("<YOUR_INDEX_NAME>", response.taskID)
+
+// Poll the task status with your options
+client.waitTask(
+    indexName = "<YOUR_INDEX_NAME>",
+    taskID = response.taskID,
+    maxRetries = 100,
+    timeout = 1.minutes,
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+var client = SearchClient(appId: '<YOUR_APP_ID>', apiKey: '<YOUR_API_KEY>');
+var body = {'title', 'My Algolia Object'};
+var response = await client.saveObject(indexName: '<YOUR_INDEX_NAME>', body: body);
+
+// Poll the task status with defaults values
+await client.waitTask('<YOUR_INDEX_NAME>', response.taskID);
+
+// Poll the task status with your options
+await client.waitTask(
+  indexName: '<YOUR_INDEX_NAME>',
+  taskID: response.taskID,
+  params: WaitParams(
+    maxRetries: 100,
+    timeout: Duration(minutes: 1),
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>

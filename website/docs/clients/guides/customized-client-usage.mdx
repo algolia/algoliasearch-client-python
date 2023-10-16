@@ -16,23 +16,56 @@ You can set a custom logger on the client to enable more or less debug output de
 
 ```java
 import com.algolia.api.SearchClient;
-import com.algolia.utils.LogLevel;
+import com.algolia.config.ClientOptions;
 
-SearchClient client = new SearchClient("<YOUR_INDEX_NAME>", "<YOUR_API_KEY>");
-
-// No logs.
-client.setLogLevel(LogLevel.NONE);
-
-// Logs request and response lines.
-client.setLogLevel(LogLevel.BASIC);
-
-// Logs request and response lines and their respective headers.
-client.setLogLevel(LogLevel.HEADERS);
-
-// Logs request and response lines and their respective headers and bodies (if present).
-client.setLogLevel(LogLevel.BODY);
+  ClientOptions options = ClientOptions.builder()
+          .setLogger(message -> System.out.println(message))
+          .build();
+  SearchClient client = new SearchClient(
+          "<YOUR_INDEX_NAME>",
+          "<YOUR_API_KEY>",
+          options
+  );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.configuration.ClientOptions
+import io.ktor.client.plugins.logging.Logger
+
+val client = SearchClient(
+    appId = "<YOUR_INDEX_NAME>",
+    apiKey = "<YOUR_API_KEY>",
+    options = ClientOptions(
+        logger = object : Logger {
+            override fun log(message: String) {
+                println(message)
+            }
+        },
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+var client = SearchClient(
+  appId: '<YOUR_INDEX_NAME>',
+  apiKey: '<YOUR_API_KEY>',
+  options: ClientOptions(logger: print),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>
 
@@ -101,14 +134,12 @@ import com.algolia.utils.RequestOptions;
 
 client.search(
   new SearchMethodParams()
-    .addRequests(SearchQuery.of(
+    .addRequests(
       new SearchForHits()
         .setIndexName("<YOUR_INDEX_NAME>")
         .setQuery("<YOUR_QUERY>")
         .setHitsPerPage(50)
-    )
   ),
-  MyObject.class,
   new RequestOptions()
     // This header is added to the request
     .addExtraHeader("additional-header", "hello")
@@ -117,6 +148,58 @@ client.search(
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+client.search(
+    searchMethodParams = SearchMethodParams(
+        requests = listOf(
+            SearchForHits(
+                indexName = "<YOUR_INDEX_NAME>",
+                query = "<YOUR_QUERY>",
+                hitsPerPage = 50,
+            )
+        )
+    ),
+    requestOptions = RequestOptions(
+        // This header is added to the request
+        headers = mapOf("additional-header" to "hello"),
+        // As we re-define `hitsPerPage`, it will override the value defined in the method's parameters.
+        urlParameters = mapOf("hitsPerPage" to 100)
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+await client.search(
+  searchMethodParams: SearchMethodParams(
+    requests: [
+      SearchForHits(
+        indexName: '<YOUR_INDEX_NAME>',
+        query: '<YOUR_QUERY>',
+        hitsPerPage: 50,
+      )
+    ],
+  ),
+  requestOptions: RequestOptions(
+    // This header is added to the request
+    headers: {'additional-header': 'hello'},
+    // As we re-define `hitsPerPage`, it will override the value defined in the method's parameters.
+    urlParameters: {'hitsPerPage': 100},
+  ),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>
 
@@ -159,17 +242,60 @@ Algolia\AlgoliaSearch\Support\AlgoliaAgent::addAlgoliaAgent(
 <TabItem value="java">
 
 ```java
-import com.algolia.utils.ClientOptions;
 import com.algolia.api.SearchClient;
+import com.algolia.config.ClientOptions;
 
 // This will append `; my user agent (optional version)` to the current value of `x-algolia-agent` for every requests
+ClientOptions options = ClientOptions.builder()
+        .addAlgoliaAgentSegment("my user agent", "optional version")
+        .build();
 SearchClient client = new SearchClient(
-  "<YOUR_APP_ID>",
-  "<YOUR_API_KEY>",
-  new ClientOptions().addAlgoliaAgentSegments("my user agent", "optional version")
+        "<YOUR_INDEX_NAME>",
+        "<YOUR_API_KEY>",
+        options
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+val client = SearchClient(
+    "<YOUR_APP_ID>",
+    "<YOUR_API_KEY>",
+    ClientOptions(
+        algoliaAgentSegments = listOf(
+            AgentSegment(
+                value = "my user agent",
+                version = "optional version",
+            )
+        )
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+var client = SearchClient(
+  appId: 'YOUR_APP_ID>',
+  apiKey: '<YOUR_API_KEY>',
+  options: ClientOptions(agentSegments: [
+    AgentSegment(
+      value: 'my user agent',
+      version: 'optional version',
+    )
+  ]),
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>
 
@@ -226,11 +352,41 @@ $client = new SearchClient($apiWrapper, $config);
 import com.algolia.api.SearchClient;
 
 SearchClient client = new SearchClient(
-  "<YOUR_APP_ID>",
-  "<YOUR_API_KEY>",
-  new ClientOptions().setRequester(new MyOwnRequester())
+        "<YOUR_APP_ID>",
+        "<YOUR_API_KEY>",
+        ClientOptions.builder().setRequester(new MyOwnRequester()).build()
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+val client = SearchClient(
+    "<YOUR_APP_ID>",
+    "<YOUR_API_KEY>",
+    ClientOptions(
+        requester = MyOwnRequester()
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+var client = SearchClient(
+    appId: "<YOUR_APP_ID>",
+    apiKey: "<YOUR_API_KEY>",
+    options: ClientOptions(requester : MyOwnRequester())
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>

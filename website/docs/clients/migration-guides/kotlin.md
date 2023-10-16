@@ -1,5 +1,5 @@
 ---
-title: Java
+title: Kotlin
 ---
 
 ### Methods targeting an `indexName`
@@ -8,22 +8,14 @@ Prior to the `initIndex` removal stated in the [common breaking changes](/docs/c
 
 That also mean you need to explicit the type you want to be returned from your queries, when it applies.
 
-```java
-import com.algolia.api.SearchClient;
-import com.algolia.model.search.*;
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.model.search.*
 
-SearchClient client = new SearchClient("<YOUR_APP_ID>", "<YOUR_API_KEY>");
-
-client.search(
-  new SearchMethodParams()
-    .addRequests(
-      new SearchForHits()
-        .setIndexName("<YOUR_INDEX_NAME>")
-        .setQuery("<YOUR_QUERY>")
+val client = SearchClient("<YOUR_APP_ID>", "<YOUR_API_KEY>")
+val response = client.search(
+    SearchMethodParams(
+        requests = listOf(SearchForHits(indexName = "<YOUR_INDEX_NAME>", query = "<YOUR_QUERY>"))
     )
-);
+)
 ```
-
-
-
-

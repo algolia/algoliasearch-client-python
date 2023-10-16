@@ -51,6 +51,26 @@ SearchClient client = new SearchClient("<YOUR_APP_ID>", "<YOUR_API_KEY>");
 ```
 
 </TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+val client = SearchClient(appId = "<YOUR_APP_ID>", apiKey = "<YOUR_API_KEY>")
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+var client = SearchClient(appId: '<YOUR_APP_ID>', apiKey: '<YOUR_API_KEY>');
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
+</TabItem>
 </TabsLanguage>
 
 ## Sending your data
@@ -155,5 +175,71 @@ BatchResponse response = client.batch("<YOUR_INDEX_NAME>", new BatchWriteParams(
 client.waitForTask("<YOUR_INDEX_NAME>", response.getTaskID());
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+import com.algolia.client.api.SearchClient
+import com.algolia.client.extensions.waitTask
+import com.algolia.client.model.search.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.*
+
+@Serializable
+data class Actor(val name: String)
+
+// The records retrieved by any of your data sources
+val records = listOf(Actor("Tom Cruise"), Actor("Scarlett Johansson"))
+
+// Here we construct the request to be sent to Algolia with the `batch` method
+val response = client.batch(
+    indexName = "<YOUR_INDEX_NAME>",
+    batchWriteParams = BatchWriteParams(
+        requests = records.map { actor ->
+            BatchRequest(
+                action = Action.AddObject,
+                body = Json.encodeToJsonElement(Actor.serializer(), actor).jsonObject,
+            )
+        },
+    )
+)
+
+// Wait for indexing to be finished
+client.waitTask("<YOUR_INDEX_NAME>", response.taskID)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+class Actor {
+  final String name;
+
+  Actor(this.name);
+
+  Map<String, Object> toJson() => { "name": name };
+}
+
+// The records retrieved by any of your data sources
+var records = [Actor('Tom Cruise'), Actor('Scarlett Johansson')];
+
+// Here we construct the request to be sent to Algolia with the `batch` method
+var response = await client.batch(
+    indexName : '<YOUR_INDEX_NAME>',
+    batchWriteParams : BatchWriteParams(
+      requests: records.map((record) => BatchRequest(action: Action.addObject, body: record)).toList(),
+    )
+);
+
+// Wait for indexing to be finished
+await client.waitTask('<YOUR_INDEX_NAME>', response.taskID);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>

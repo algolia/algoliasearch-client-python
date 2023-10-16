@@ -42,6 +42,36 @@ client.saveRulesAsync(
 ```
 
 </TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+client.saveRules(
+    indexName = indexName,
+    rules = rules,
+    forwardToReplicas = false,
+    clearExistingRules = true
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+await client.saveRules(
+  indexName: indexName,
+  rules: rules,
+  forwardToReplicas: false,
+  clearExistingRules: true,
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
+</TabItem>
 </TabsLanguage>
 
 The rules parameter should contain the array of rules you want to save.
@@ -81,6 +111,36 @@ client.saveSynonymsAsync(
 );
 ```
 
+</TabItem>
+
+<TabItem value="kotlin">
+
+```kotlin
+client.saveSynonyms(
+    indexName = indexName,
+    synonymHit = synonymHits,
+    forwardToReplicas = false,
+    replaceExistingSynonyms = true
+)
+```
+
+</TabItem>
+
+<TabItem value="dart">
+
+```dart
+await client.saveSynonyms(
+  indexName: indexName,
+  synonymHit: synonymHits,
+  forwardToReplicas: false,
+  replaceExistingSynonyms: true,
+);
+```
+
+</TabItem>
+
+<TabItem value="go">
+// TBD
 </TabItem>
 </TabsLanguage>
 

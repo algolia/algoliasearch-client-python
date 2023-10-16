@@ -5,7 +5,6 @@ import com.algolia.client.configuration.ClientOptions
 import com.algolia.client.model.recommend.GetRecommendationsParams
 import com.algolia.client.model.recommend.RecommendationModels
 import com.algolia.client.model.recommend.RecommendationsQuery
-import com.algolia.client.model.recommend.RecommendationsRequest
 import io.github.cdimascio.dotenv.Dotenv
 import io.ktor.client.plugins.logging.*
 import kotlin.system.exitProcess
