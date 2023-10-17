@@ -1,6 +1,6 @@
 module playground
 
-go 1.19
+go 1.21
 
 replace github.com/algolia/algoliasearch-client-go/v4 v4.0.0 => ../../clients/algoliasearch-client-go
 
