@@ -15,6 +15,7 @@ import kotlinx.serialization.json.*
  * @param action
  * @param createdAt Date of creation (RFC3339 format).
  * @param input
+ * @param failureThreshold A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
  * @param updatedAt Date of last update (RFC3339 format).
  */
 @Serializable
@@ -40,6 +41,9 @@ public data class Task(
   @SerialName(value = "createdAt") val createdAt: String,
 
   @SerialName(value = "input") val input: TaskInput? = null,
+
+  /** A percentage representing the accepted failure threshold to determine if a `run` succeeded or not. */
+  @SerialName(value = "failureThreshold") val failureThreshold: Int? = null,
 
   /** Date of last update (RFC3339 format). */
   @SerialName(value = "updatedAt") val updatedAt: String? = null,

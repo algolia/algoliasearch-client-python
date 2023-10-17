@@ -15,7 +15,7 @@ import kotlinx.serialization.json.*
  * @param createdAt Date of creation (RFC3339 format).
  * @param progress
  * @param outcome
- * @param failureThrehsold A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
+ * @param failureThreshold A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
  * @param reason Explains the result of outcome.
  * @param reasonCode
  * @param startedAt Date of start (RFC3339 format).
@@ -44,7 +44,7 @@ public data class Run(
   @SerialName(value = "outcome") val outcome: RunOutcome? = null,
 
   /** A percentage representing the accepted failure threshold to determine if a `run` succeeded or not. */
-  @SerialName(value = "failureThrehsold") val failureThrehsold: Int? = null,
+  @SerialName(value = "failureThreshold") val failureThreshold: Int? = null,
 
   /** Explains the result of outcome. */
   @SerialName(value = "reason") val reason: String? = null,

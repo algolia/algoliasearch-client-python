@@ -1308,6 +1308,13 @@ components:
       oneOf:
         - $ref: '#/components/schemas/OnDemandDateUtilsInput'
         - $ref: '#/components/schemas/ScheduleDateUtilsInput'
+    failureThreshold:
+      type: integer
+      minimum: 0
+      maximum: 100
+      description: >-
+        A percentage representing the accepted failure threshold to determine if
+        a `run` succeeded or not.
     Task:
       type: object
       additionalProperties: false
@@ -1326,6 +1333,8 @@ components:
           type: boolean
           default: true
           description: Whether the task is enabled or not.
+        failureThreshold:
+          $ref: '#/components/schemas/failureThreshold'
         action:
           $ref: '#/components/schemas/ActionType'
         createdAt:
@@ -1366,13 +1375,6 @@ components:
         - $ref: '#/components/schemas/OnDemandTriggerInput'
         - $ref: '#/components/schemas/ScheduleTriggerInput'
         - $ref: '#/components/schemas/SubscriptionTrigger'
-    failureThreshold:
-      type: integer
-      minimum: 0
-      maximum: 100
-      description: >-
-        A percentage representing the accepted failure threshold to determine if
-        a `run` succeeded or not.
     TaskCreate:
       type: object
       additionalProperties: false
@@ -1443,6 +1445,8 @@ components:
         enabled:
           type: boolean
           description: Whether the task is enabled or not.
+        failureThreshold:
+          $ref: '#/components/schemas/failureThreshold'
     TaskUpdateResponse:
       type: object
       description: The response from the API after a task update.
@@ -1535,7 +1539,7 @@ components:
               type: integer
         outcome:
           $ref: '#/components/schemas/RunOutcome'
-        failureThrehsold:
+        failureThreshold:
           $ref: '#/components/schemas/failureThreshold'
         reason:
           type: string

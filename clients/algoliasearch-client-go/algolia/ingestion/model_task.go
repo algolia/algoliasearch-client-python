@@ -17,8 +17,10 @@ type Task struct {
 	Trigger       Trigger    `json:"trigger" validate:"required"`
 	Input         *TaskInput `json:"input,omitempty"`
 	// Whether the task is enabled or not.
-	Enabled bool       `json:"enabled" validate:"required"`
-	Action  ActionType `json:"action" validate:"required"`
+	Enabled bool `json:"enabled" validate:"required"`
+	// A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
+	FailureThreshold *int32     `json:"failureThreshold,omitempty"`
+	Action           ActionType `json:"action" validate:"required"`
 	// Date of creation (RFC3339 format).
 	CreatedAt string `json:"createdAt" validate:"required"`
 	// Date of last update (RFC3339 format).
@@ -30,6 +32,12 @@ type TaskOption func(f *Task)
 func WithTaskInput(val TaskInput) TaskOption {
 	return func(f *Task) {
 		f.Input = &val
+	}
+}
+
+func WithTaskFailureThreshold(val int32) TaskOption {
+	return func(f *Task) {
+		f.FailureThreshold = &val
 	}
 }
 
@@ -220,6 +228,38 @@ func (o *Task) SetEnabled(v bool) {
 	o.Enabled = v
 }
 
+// GetFailureThreshold returns the FailureThreshold field value if set, zero value otherwise.
+func (o *Task) GetFailureThreshold() int32 {
+	if o == nil || o.FailureThreshold == nil {
+		var ret int32
+		return ret
+	}
+	return *o.FailureThreshold
+}
+
+// GetFailureThresholdOk returns a tuple with the FailureThreshold field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Task) GetFailureThresholdOk() (*int32, bool) {
+	if o == nil || o.FailureThreshold == nil {
+		return nil, false
+	}
+	return o.FailureThreshold, true
+}
+
+// HasFailureThreshold returns a boolean if a field has been set.
+func (o *Task) HasFailureThreshold() bool {
+	if o != nil && o.FailureThreshold != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureThreshold gets a reference to the given int32 and assigns it to the FailureThreshold field.
+func (o *Task) SetFailureThreshold(v int32) {
+	o.FailureThreshold = &v
+}
+
 // GetAction returns the Action field value
 func (o *Task) GetAction() ActionType {
 	if o == nil {
@@ -320,6 +360,9 @@ func (o Task) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["enabled"] = o.Enabled
 	}
+	if o.FailureThreshold != nil {
+		toSerialize["failureThreshold"] = o.FailureThreshold
+	}
 	if true {
 		toSerialize["action"] = o.Action
 	}
@@ -340,6 +383,7 @@ func (o Task) String() string {
 	out += fmt.Sprintf("  trigger=%v\n", o.Trigger)
 	out += fmt.Sprintf("  input=%v\n", o.Input)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
+	out += fmt.Sprintf("  failureThreshold=%v\n", o.FailureThreshold)
 	out += fmt.Sprintf("  action=%v\n", o.Action)
 	out += fmt.Sprintf("  createdAt=%v\n", o.CreatedAt)
 	out += fmt.Sprintf("  updatedAt=%v\n", o.UpdatedAt)

@@ -14,6 +14,8 @@ type TaskUpdate struct {
 	Input         *TaskInput    `json:"input,omitempty"`
 	// Whether the task is enabled or not.
 	Enabled *bool `json:"enabled,omitempty"`
+	// A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
+	FailureThreshold *int32 `json:"failureThreshold,omitempty"`
 }
 
 type TaskUpdateOption func(f *TaskUpdate)
@@ -39,6 +41,12 @@ func WithTaskUpdateInput(val TaskInput) TaskUpdateOption {
 func WithTaskUpdateEnabled(val bool) TaskUpdateOption {
 	return func(f *TaskUpdate) {
 		f.Enabled = &val
+	}
+}
+
+func WithTaskUpdateFailureThreshold(val int32) TaskUpdateOption {
+	return func(f *TaskUpdate) {
+		f.FailureThreshold = &val
 	}
 }
 
@@ -190,6 +198,38 @@ func (o *TaskUpdate) SetEnabled(v bool) {
 	o.Enabled = &v
 }
 
+// GetFailureThreshold returns the FailureThreshold field value if set, zero value otherwise.
+func (o *TaskUpdate) GetFailureThreshold() int32 {
+	if o == nil || o.FailureThreshold == nil {
+		var ret int32
+		return ret
+	}
+	return *o.FailureThreshold
+}
+
+// GetFailureThresholdOk returns a tuple with the FailureThreshold field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TaskUpdate) GetFailureThresholdOk() (*int32, bool) {
+	if o == nil || o.FailureThreshold == nil {
+		return nil, false
+	}
+	return o.FailureThreshold, true
+}
+
+// HasFailureThreshold returns a boolean if a field has been set.
+func (o *TaskUpdate) HasFailureThreshold() bool {
+	if o != nil && o.FailureThreshold != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureThreshold gets a reference to the given int32 and assigns it to the FailureThreshold field.
+func (o *TaskUpdate) SetFailureThreshold(v int32) {
+	o.FailureThreshold = &v
+}
+
 func (o TaskUpdate) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.DestinationID != nil {
@@ -204,6 +244,9 @@ func (o TaskUpdate) MarshalJSON() ([]byte, error) {
 	if o.Enabled != nil {
 		toSerialize["enabled"] = o.Enabled
 	}
+	if o.FailureThreshold != nil {
+		toSerialize["failureThreshold"] = o.FailureThreshold
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -213,6 +256,7 @@ func (o TaskUpdate) String() string {
 	out += fmt.Sprintf("  trigger=%v\n", o.Trigger)
 	out += fmt.Sprintf("  input=%v\n", o.Input)
 	out += fmt.Sprintf("  enabled=%v\n", o.Enabled)
+	out += fmt.Sprintf("  failureThreshold=%v\n", o.FailureThreshold)
 	return fmt.Sprintf("TaskUpdate {\n%s}", out)
 }
 
