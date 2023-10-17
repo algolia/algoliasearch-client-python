@@ -16,6 +16,8 @@ Task:
       type: boolean
       default: true
       description: Whether the task is enabled or not.
+    failureThreshold:
+      $ref: '#/failureThreshold'
     action:
       $ref: '#/ActionType'
     # lastCursorValue:
@@ -102,6 +104,8 @@ TaskUpdate:
     enabled:
       type: boolean
       description: Whether the task is enabled or not.
+    failureThreshold:
+      $ref: '#/failureThreshold'
 
 TaskUpdateResponse:
   type: object
