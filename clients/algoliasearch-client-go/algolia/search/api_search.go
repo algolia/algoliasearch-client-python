@@ -8,9 +8,12 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"slices"
 	"strings"
+	"time"
 
 	"github.com/algolia/algoliasearch-client-go/v4/algolia/call"
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/internal/errs"
 )
 
 type Option struct {
@@ -10296,4 +10299,266 @@ func (c *APIClient) UpdateApiKeyWithContext(ctx context.Context, r ApiUpdateApiK
 	}
 
 	return returnValue, nil
+}
+
+/*
+WaitForTask waits for a task to be published.
+Wraps WaitForTaskWithContext with context.Background().
+It returns the task response if the operation was successful.
+It returns an error if the operation failed.
+
+The maxRetries parameter is the maximum number of retries.
+The initialDelay parameter is the initial delay between each retry.
+The maxDelay parameter is the maximum delay between each retry.
+
+	@param indexName string - Index name.
+	@param taskID int64 - Task ID.
+	@param maxRetries *int - Maximum number of retries.
+	@param initialDelay *time.Duration - Initial delay between retries.
+	@param maxDelay *time.Duration - Maximum delay between retries.
+	@param opts ...Option - Optional parameters for the request.
+	@return *GetTaskResponse - Task response.
+	@return error - Error if any.
+*/
+func (c *APIClient) WaitForTask(
+	indexName string,
+	taskID int64,
+	maxRetries *int,
+	initialDelay *time.Duration,
+	maxDelay *time.Duration,
+	opts ...Option,
+) (*GetTaskResponse, error) {
+	return c.WaitForTaskWithContext(
+		context.Background(),
+		indexName,
+		taskID,
+		maxRetries,
+		initialDelay,
+		maxDelay,
+		opts...,
+	)
+}
+
+/*
+WaitForTaskWithContext waits for a task to be published.
+It returns the task response if the operation was successful.
+It returns an error if the operation failed.
+
+The maxRetries parameter is the maximum number of retries.
+The initialDelay parameter is the initial delay between each retry.
+The maxDelay parameter is the maximum delay between each retry.
+
+	@param ctx context.Context - The context that will be drilled down to the actual request.
+	@param indexName string - Index name.
+	@param taskID int64 - Task ID.
+	@param maxRetries *int - Maximum number of retries.
+	@param initialDelay *time.Duration - Initial delay between retries.
+	@param maxDelay *time.Duration - Maximum delay between retries.
+	@param opts ...Option - Optional parameters for the request.
+	@return *GetTaskResponse - Task response.
+	@return error - Error if any.
+*/
+func (c *APIClient) WaitForTaskWithContext(
+	ctx context.Context,
+	indexName string,
+	taskID int64,
+	maxRetries *int,
+	initialDelay *time.Duration,
+	maxDelay *time.Duration,
+	opts ...Option,
+) (*GetTaskResponse, error) {
+	return RetryUntil(
+		func() (*GetTaskResponse, error) {
+			return c.GetTaskWithContext(ctx, c.NewApiGetTaskRequest(indexName, taskID), opts...)
+		},
+		func(response *GetTaskResponse, err error) bool {
+			return response.Status == TASKSTATUS_PUBLISHED
+		},
+		maxRetries,
+		initialDelay,
+		maxDelay,
+	)
+}
+
+/*
+WaitForApiKey waits for an API key to be created, deleted or updated.
+Wraps WaitForApiKeyWithContext with context.Background().
+It returns the API key response if the operation was successful.
+It returns an error if the operation failed.
+
+The operation can be one of the following:
+  - "add": wait for the API key to be created
+  - "delete": wait for the API key to be deleted
+  - "update": wait for the API key to be updated
+
+The maxRetries parameter is the maximum number of retries.
+The initialDelay parameter is the initial delay between each retry.
+The maxDelay parameter is the maximum delay between each retry.
+
+If the operation is "update", the apiKey parameter must be set.
+If the operation is "delete" or "add", the apiKey parameter is not used.
+
+	@param key string - API key.
+	@param apiKey *ApiKey - API key structure - required for update operation.
+	@param operation string - Operation type - add, delete or update.
+	@param maxRetries *int - Maximum number of retries.
+	@param initialDelay *time.Duration - Initial delay between retries.
+	@param maxDelay *time.Duration - Maximum delay between retries.
+	@param opts ...Option - Optional parameters for the request.
+	@return *GetApiKeyResponse - API key response.
+	@return error - Error if any.
+*/
+func (c *APIClient) WaitForApiKey(
+	key string,
+	apiKey *ApiKey,
+	operation string,
+	maxRetries *int,
+	initialDelay *time.Duration,
+	maxDelay *time.Duration,
+	opts ...Option,
+) (*GetApiKeyResponse, error) {
+	return c.WaitForApiKeyWithContext(
+		context.Background(),
+		key,
+		apiKey,
+		operation,
+		maxRetries,
+		initialDelay,
+		maxDelay,
+		opts...,
+	)
+}
+
+/*
+WaitForApiKeyWithContext waits for an API key to be created, deleted or updated.
+It returns the API key response if the operation was successful.
+It returns an error if the operation failed.
+
+The operation can be one of the following:
+  - "add": wait for the API key to be created
+  - "delete": wait for the API key to be deleted
+  - "update": wait for the API key to be updated
+
+The maxRetries parameter is the maximum number of retries.
+The initialDelay parameter is the initial delay between each retry.
+The maxDelay parameter is the maximum delay between each retry.
+
+If the operation is "update", the apiKey parameter must be set.
+If the operation is "delete" or "add", the apiKey parameter is not used.
+
+	@param ctx context.Context - The context that will be drilled down to the actual request.
+	@param key string - API key.
+	@param apiKey *ApiKey - API key structure - required for update operation.
+	@param operation string - Operation type - add, delete or update.
+	@param maxRetries *int - Maximum number of retries.
+	@param initialDelay *time.Duration - Initial delay between retries.
+	@param maxDelay *time.Duration - Maximum delay between retries.
+	@param opts ...Option - Optional parameters for the request.
+	@return *GetApiKeyResponse - API key response.
+	@return error - Error if any.
+*/
+func (c *APIClient) WaitForApiKeyWithContext(
+	ctx context.Context,
+	key string,
+	apiKey *ApiKey,
+	operation string,
+	maxRetries *int,
+	initialDelay *time.Duration,
+	maxDelay *time.Duration,
+	opts ...Option,
+) (*GetApiKeyResponse, error) {
+	if operation != "add" && operation != "delete" && operation != "update" {
+		return nil, &errs.WaitKeyOperationError{}
+	}
+
+	if operation == "update" {
+		if apiKey == nil {
+			return nil, &errs.WaitKeyUpdateError{}
+		}
+
+		return RetryUntil(
+			func() (*GetApiKeyResponse, error) {
+				return c.GetApiKeyWithContext(ctx, c.NewApiGetApiKeyRequest(key), opts...)
+			},
+			func(response *GetApiKeyResponse, err error) bool {
+				if err != nil || response == nil {
+					return false
+				}
+
+				if apiKey.GetDescription() != response.GetDescription() {
+					return false
+				}
+
+				if apiKey.GetQueryParameters() != response.GetQueryParameters() {
+					return false
+				}
+
+				if apiKey.GetMaxHitsPerQuery() != response.GetMaxHitsPerQuery() {
+					return false
+				}
+
+				if apiKey.GetMaxQueriesPerIPPerHour() != response.GetMaxQueriesPerIPPerHour() {
+					return false
+				}
+
+				if apiKey.GetValidity() != response.GetValidity() {
+					return false
+				}
+
+				if apiKey.GetValidity() != response.GetValidity() {
+					return false
+				}
+
+				slices.Sort(apiKey.Acl)
+				slices.Sort(response.Acl)
+
+				if slices.Equal(apiKey.Acl, response.Acl) == false {
+					return false
+				}
+
+				slices.Sort(apiKey.Indexes)
+				slices.Sort(response.Indexes)
+
+				if slices.Equal(apiKey.Indexes, response.Indexes) == false {
+					return false
+				}
+
+				slices.Sort(apiKey.Referers)
+				slices.Sort(response.Referers)
+
+				if slices.Equal(apiKey.Referers, response.Referers) == false {
+					return false
+				}
+
+				return true
+			},
+			maxRetries,
+			initialDelay,
+			maxDelay,
+		)
+	}
+
+	return RetryUntil(
+		func() (*GetApiKeyResponse, error) {
+			return c.GetApiKeyWithContext(ctx, c.NewApiGetApiKeyRequest(key), opts...)
+		},
+		func(response *GetApiKeyResponse, err error) bool {
+			switch operation {
+			case "add":
+				return err == nil && response != nil && response.CreatedAt > 0
+			case "delete":
+				if _, ok := err.(*APIError); ok {
+					apiErr := err.(*APIError)
+
+					return apiErr.Status == 404
+				}
+
+				return false
+			}
+			return false
+		},
+		maxRetries,
+		initialDelay,
+		maxDelay,
+	)
 }

@@ -14,6 +14,8 @@ import (
 	"encoding/json"
 	"reflect"
 	"time"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/internal/errs"
 )
 
 // PtrBool is a helper routine that returns a pointer to given boolean value.
@@ -341,4 +343,43 @@ func isNilorEmpty(i any) bool {
 	default:
 		return reflect.ValueOf(i).IsZero()
 	}
+}
+
+func RetryUntil[T any](
+	retry func() (*T, error),
+	until func(*T, error) bool,
+	maxRetries *int,
+	initialDelay *time.Duration,
+	maxDelay *time.Duration,
+) (*T, error) {
+	if maxRetries == nil {
+		maxRetries = new(int)
+		*maxRetries = 50
+	}
+
+	if initialDelay == nil {
+		initialDelay = new(time.Duration)
+		*initialDelay = 200 * time.Millisecond
+	}
+
+	if maxDelay == nil {
+		maxDelay = new(time.Duration)
+		*maxDelay = 5 * time.Second
+	}
+
+	for i := 0; i < *maxRetries; i++ {
+		res, err := retry()
+
+		if ok := until(res, err); ok {
+			return res, nil
+		}
+
+		time.Sleep(*initialDelay)
+		*initialDelay *= 2
+		if *initialDelay > *maxDelay {
+			*initialDelay = *maxDelay
+		}
+	}
+
+	return nil, &errs.WaitError{}
 }
