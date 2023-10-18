@@ -98,7 +98,7 @@ TaskUpdate:
     destinationID:
       $ref: './common.yml#/destinationID'
     trigger:
-      $ref: '#/TriggerInput'
+      $ref: '#/TriggerUpdateInput'
     input:
       $ref: '#/TaskInput'
     enabled:
@@ -150,6 +150,16 @@ TriggerInput:
       $ref: '#/TriggerType'
   required:
     - type
+
+TriggerUpdateInput:
+  type: object
+  additionalProperties: false
+  description: The trigger input for a task update.
+  properties:
+    cron:
+      $ref: '#/Cron'
+  required:
+    - cron
 
 TriggerType:
   type: string
