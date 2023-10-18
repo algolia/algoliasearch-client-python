@@ -9,9 +9,9 @@ import (
 // TaskUpdate The payload for a task update.
 type TaskUpdate struct {
 	// The destination UUID.
-	DestinationID *string       `json:"destinationID,omitempty"`
-	Trigger       *TriggerInput `json:"trigger,omitempty"`
-	Input         *TaskInput    `json:"input,omitempty"`
+	DestinationID *string             `json:"destinationID,omitempty"`
+	Trigger       *TriggerUpdateInput `json:"trigger,omitempty"`
+	Input         *TaskInput          `json:"input,omitempty"`
 	// Whether the task is enabled or not.
 	Enabled *bool `json:"enabled,omitempty"`
 	// A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.
@@ -26,7 +26,7 @@ func WithTaskUpdateDestinationID(val string) TaskUpdateOption {
 	}
 }
 
-func WithTaskUpdateTrigger(val TriggerInput) TaskUpdateOption {
+func WithTaskUpdateTrigger(val TriggerUpdateInput) TaskUpdateOption {
 	return func(f *TaskUpdate) {
 		f.Trigger = &val
 	}
@@ -103,9 +103,9 @@ func (o *TaskUpdate) SetDestinationID(v string) {
 }
 
 // GetTrigger returns the Trigger field value if set, zero value otherwise.
-func (o *TaskUpdate) GetTrigger() TriggerInput {
+func (o *TaskUpdate) GetTrigger() TriggerUpdateInput {
 	if o == nil || o.Trigger == nil {
-		var ret TriggerInput
+		var ret TriggerUpdateInput
 		return ret
 	}
 	return *o.Trigger
@@ -113,7 +113,7 @@ func (o *TaskUpdate) GetTrigger() TriggerInput {
 
 // GetTriggerOk returns a tuple with the Trigger field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *TaskUpdate) GetTriggerOk() (*TriggerInput, bool) {
+func (o *TaskUpdate) GetTriggerOk() (*TriggerUpdateInput, bool) {
 	if o == nil || o.Trigger == nil {
 		return nil, false
 	}
@@ -129,8 +129,8 @@ func (o *TaskUpdate) HasTrigger() bool {
 	return false
 }
 
-// SetTrigger gets a reference to the given TriggerInput and assigns it to the Trigger field.
-func (o *TaskUpdate) SetTrigger(v TriggerInput) {
+// SetTrigger gets a reference to the given TriggerUpdateInput and assigns it to the Trigger field.
+func (o *TaskUpdate) SetTrigger(v TriggerUpdateInput) {
 	o.Trigger = &v
 }
 

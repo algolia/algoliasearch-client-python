@@ -1422,15 +1422,15 @@ components:
             type: string
       required:
         - taskIDs
-    TriggerInput:
+    TriggerUpdateInput:
       type: object
       additionalProperties: false
-      description: The trigger input of a task.
+      description: The trigger input for a task update.
       properties:
-        type:
-          $ref: '#/components/schemas/TriggerType'
+        cron:
+          $ref: '#/components/schemas/Cron'
       required:
-        - type
+        - cron
     TaskUpdate:
       type: object
       additionalProperties: false
@@ -1439,7 +1439,7 @@ components:
         destinationID:
           $ref: '#/components/schemas/destinationID'
         trigger:
-          $ref: '#/components/schemas/TriggerInput'
+          $ref: '#/components/schemas/TriggerUpdateInput'
         input:
           $ref: '#/components/schemas/TaskInput'
         enabled:

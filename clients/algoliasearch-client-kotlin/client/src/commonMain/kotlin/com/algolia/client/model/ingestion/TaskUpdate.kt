@@ -19,7 +19,7 @@ public data class TaskUpdate(
   /** The destination UUID. */
   @SerialName(value = "destinationID") val destinationID: String? = null,
 
-  @SerialName(value = "trigger") val trigger: TriggerInput? = null,
+  @SerialName(value = "trigger") val trigger: TriggerUpdateInput? = null,
 
   @SerialName(value = "input") val input: TaskInput? = null,
 

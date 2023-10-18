@@ -5,12 +5,13 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * The trigger input of a task.
+ * The trigger input for a task update.
  *
- * @param type
+ * @param cron A cron expression that represent at which regularity the task should run.
  */
 @Serializable
-public data class TriggerInput(
+public data class TriggerUpdateInput(
 
-  @SerialName(value = "type") val type: TriggerType,
+  /** A cron expression that represent at which regularity the task should run. */
+  @SerialName(value = "cron") val cron: String,
 )
