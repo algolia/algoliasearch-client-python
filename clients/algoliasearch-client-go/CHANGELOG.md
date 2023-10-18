@@ -1,3 +1,10 @@
+## [4.0.0-alpha.33](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.32...4.0.0-alpha.33)
+
+- [d25921cb](https://github.com/algolia/api-clients-automation/commit/d25921cb) fix(specs): Change trigger input for task update ([#2147](https://github.com/algolia/api-clients-automation/pull/2147)) by [@damcou](https://github.com/damcou/)
+- [dcd1201e](https://github.com/algolia/api-clients-automation/commit/dcd1201e) feat(specs): Add `failureThreshold` to `Task` and `TaskUpdate` types ([#2144](https://github.com/algolia/api-clients-automation/pull/2144)) by [@damcou](https://github.com/damcou/)
+- [2062fa86](https://github.com/algolia/api-clients-automation/commit/2062fa86) feat(go): wait task and api key operation helpers ([#2117](https://github.com/algolia/api-clients-automation/pull/2117)) by [@Fluf22](https://github.com/Fluf22/)
+- [a5ff0a76](https://github.com/algolia/api-clients-automation/commit/a5ff0a76) fix(specs): remove duplicate objectID ([#2113](https://github.com/algolia/api-clients-automation/pull/2113)) by [@millotp](https://github.com/millotp/)
+
 ## [4.0.0-alpha.32](https://github.com/algolia/algoliasearch-client-go/compare/4.0.0-alpha.31...4.0.0-alpha.32)
 
 - [b5ec54151](https://github.com/algolia/api-clients-automation/commit/b5ec54151) feat(specs): revenue and filterEffects typing updates ([#2105](https://github.com/algolia/api-clients-automation/pull/2105)) by [@cdhawke](https://github.com/cdhawke/)
