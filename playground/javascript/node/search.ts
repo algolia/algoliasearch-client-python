@@ -24,11 +24,9 @@ console.log('verison', apiClientVersion, 'requests', requests);
 
 async function testSearch() {
   try {
-    const res = await client.search<{ name: string }>({
-      requests,
-    });
+    const res = await client.searchForHits<{foo: 'bar', baz: number}>({requests})
 
-    console.log(`[OK]`, res);
+    console.log(`[OK]`, res.results[0].hits[0].foo);
   } catch (e: any) {
     // Instance of
     if (e instanceof ApiError) {
