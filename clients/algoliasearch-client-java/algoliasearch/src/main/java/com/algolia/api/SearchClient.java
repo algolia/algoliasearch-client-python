@@ -6010,4 +6010,163 @@ public class SearchClient extends ApiClient {
   public Iterable<Rule> browseRules(String indexName) {
     return browseRules(indexName, new SearchRulesParams(), null);
   }
+
+  /**
+   * Executes a synchronous search for the provided search requests, with certainty that we will
+   * only request Algolia records (hits). Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   */
+  public List<SearchResponse<?>> searchForHits(@Nonnull List<SearchForHits> requests) {
+    return LaunderThrowable.await(searchForHitsAsync(requests, null, null));
+  }
+
+  /**
+   * Executes a synchronous search for the provided search requests, with certainty that we will
+   * only request Algolia records (hits). Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   */
+  public List<SearchResponse<?>> searchForHits(@Nonnull List<SearchForHits> requests, SearchStrategy strategy) {
+    return LaunderThrowable.await(searchForHitsAsync(requests, strategy, null));
+  }
+
+  /**
+   * Executes a synchronous search for the provided search requests, with certainty that we will
+   * only request Algolia records (hits). Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   * @param requestOptions Additional options for the search request.
+   */
+  public List<SearchResponse<?>> searchForHits(
+    @Nonnull List<SearchForHits> requests,
+    SearchStrategy strategy,
+    RequestOptions requestOptions
+  ) {
+    return LaunderThrowable.await(searchForHitsAsync(requests, strategy, requestOptions));
+  }
+
+  /**
+   * Executes an asynchronous search for the provided search requests, with certainty that we will
+   * only request Algolia records (hits). Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   */
+  public CompletableFuture<List<SearchResponse<?>>> searchForHitsAsync(@Nonnull List<SearchForHits> requests) {
+    return searchForHitsAsync(requests, null, null);
+  }
+
+  /**
+   * Executes an asynchronous search for the provided search requests, with certainty that we will
+   * only request Algolia records (hits). Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   */
+  public CompletableFuture<List<SearchResponse<?>>> searchForHitsAsync(@Nonnull List<SearchForHits> requests, SearchStrategy strategy) {
+    return searchForHitsAsync(requests, strategy, null);
+  }
+
+  /**
+   * Executes an asynchronous search for the provided search requests, with certainty that we will
+   * only request Algolia records (hits). Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   * @param requestOptions Additional options for the search request.
+   */
+  public CompletableFuture<List<SearchResponse<?>>> searchForHitsAsync(
+    @Nonnull List<SearchForHits> requests,
+    SearchStrategy strategy,
+    RequestOptions requestOptions
+  ) {
+    final List<SearchQuery> searchQueries = new ArrayList<>(requests); // Upcast the list
+    final SearchMethodParams params = new SearchMethodParams().setRequests(searchQueries).setStrategy(strategy);
+    return searchAsync(params)
+      .thenApply(searchResponses -> searchResponses.getResults().stream().map(res -> (SearchResponse<?>) res).collect(Collectors.toList()));
+  }
+
+  /**
+   * Executes a synchronous search for the provided search requests, with certainty that we will
+   * only request Algolia facets. Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   */
+  public List<SearchForFacetValuesResponse> searchForFacets(@Nonnull List<SearchForFacets> requests) {
+    return LaunderThrowable.await(searchForFacetsAsync(requests, null, null));
+  }
+
+  /**
+   * Executes a synchronous search for the provided search requests, with certainty that we will
+   * only request Algolia facets. Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   */
+  public List<SearchForFacetValuesResponse> searchForFacets(@Nonnull List<SearchForFacets> requests, SearchStrategy strategy) {
+    return LaunderThrowable.await(searchForFacetsAsync(requests, strategy, null));
+  }
+
+  /**
+   * Executes a synchronous search for the provided search requests, with certainty that we will
+   * only request Algolia facets. Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   * @param requestOptions Additional options for the search request.
+   */
+  public List<SearchForFacetValuesResponse> searchForFacets(
+    @Nonnull List<SearchForFacets> requests,
+    SearchStrategy strategy,
+    RequestOptions requestOptions
+  ) {
+    return LaunderThrowable.await(searchForFacetsAsync(requests, strategy, requestOptions));
+  }
+
+  /**
+   * Executes an asynchronous search for the provided search requests, with certainty that we will
+   * only request Algolia facets. Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   */
+  public CompletableFuture<List<SearchForFacetValuesResponse>> searchForFacetsAsync(@Nonnull List<SearchForFacets> requests) {
+    return searchForFacetsAsync(requests, null, null);
+  }
+
+  /**
+   * Executes an asynchronous search for the provided search requests, with certainty that we will
+   * only request Algolia facets. Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   */
+  public CompletableFuture<List<SearchForFacetValuesResponse>> searchForFacetsAsync(
+    @Nonnull List<SearchForFacets> requests,
+    SearchStrategy strategy
+  ) {
+    return searchForFacetsAsync(requests, strategy, null);
+  }
+
+  /**
+   * Executes an asynchronous search for the provided search requests, with certainty that we will
+   * only request Algolia facets. Results will be received in the same order as the queries.
+   *
+   * @param requests A list of search requests to be executed.
+   * @param strategy The search strategy to be employed during the search.
+   * @param requestOptions Additional options for the search request.
+   */
+  public CompletableFuture<List<SearchForFacetValuesResponse>> searchForFacetsAsync(
+    @Nonnull List<SearchForFacets> requests,
+    SearchStrategy strategy,
+    RequestOptions requestOptions
+  ) {
+    final List<SearchQuery> searchQueries = new ArrayList<>(requests); // Upcast the list
+    final SearchMethodParams params = new SearchMethodParams().setRequests(searchQueries).setStrategy(strategy);
+    return searchAsync(params)
+      .thenApply(searchResponses ->
+        searchResponses.getResults().stream().map(res -> (SearchForFacetValuesResponse) res).collect(Collectors.toList())
+      );
+  }
 }
