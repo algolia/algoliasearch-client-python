@@ -2,7 +2,7 @@
   "java": {
     "folder": "clients/algoliasearch-client-java",
     "gitRepoId": "algoliasearch-client-java",
-    "packageVersion": "4.0.0-beta.9",
+    "packageVersion": "4.0.0-beta.10",
     "modelFolder": "algoliasearch/src/main/java/com/algolia/model",
     "apiFolder": "algoliasearch/src/main/java/com/algolia/api",
     "customGenerator": "algolia-java",
@@ -51,7 +51,7 @@
   "kotlin": {
     "folder": "clients/algoliasearch-client-kotlin",
     "gitRepoId": "algoliasearch-client-kotlin",
-    "packageVersion": "3.0.0-beta.2",
+    "packageVersion": "3.0.0-beta.3",
     "modelFolder": "client/src/commonMain/kotlin/com/algolia/client/model",
     "apiFolder": "client/src/commonMain/kotlin/com/algolia/client/api",
     "customGenerator": "algolia-kotlin",
@@ -63,7 +63,7 @@
   "dart": {
     "folder": "clients/algoliasearch-client-dart",
     "gitRepoId": "algoliasearch-client-dart",
-    "packageVersion": "0.6.0",
+    "packageVersion": "1.0.0",
     "modelFolder": "lib/src/model",
     "apiFolder": "lib/src/api",
     "customGenerator": "algolia-dart",

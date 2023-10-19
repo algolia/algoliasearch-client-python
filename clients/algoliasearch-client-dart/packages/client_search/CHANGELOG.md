@@ -1,3 +1,7 @@
+## [1.0.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.6.0...1.0.0)
+
+- [e1b51f8d](https://github.com/algolia/api-clients-automation/commit/e1b51f8d) feat(dart): promote to stable [BREAKING CHANGE] ([#2152](https://github.com/algolia/api-clients-automation/pull/2152)) by [@aallam](https://github.com/aallam/)
+
 ## [0.6.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.5.0...0.6.0)
 
 - [d25921cb](https://github.com/algolia/api-clients-automation/commit/d25921cb) fix(specs): Change trigger input for task update ([#2147](https://github.com/algolia/api-clients-automation/pull/2147)) by [@damcou](https://github.com/damcou/)

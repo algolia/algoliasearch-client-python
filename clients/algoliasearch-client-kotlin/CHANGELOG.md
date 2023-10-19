@@ -1,3 +1,7 @@
+## [3.0.0-beta.3](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-beta.2...3.0.0-beta.3)
+
+- [928057e3](https://github.com/algolia/api-clients-automation/commit/928057e3) feat(kotlin): add search helpers `searchForHits` and `searchForFacets` ([#2149](https://github.com/algolia/api-clients-automation/pull/2149)) by [@aallam](https://github.com/aallam/)
+
 ## [3.0.0-beta.2](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-beta.1...3.0.0-beta.2)
 
 - [d25921cb](https://github.com/algolia/api-clients-automation/commit/d25921cb) fix(specs): Change trigger input for task update ([#2147](https://github.com/algolia/api-clients-automation/pull/2147)) by [@damcou](https://github.com/damcou/)
