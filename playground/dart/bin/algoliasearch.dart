@@ -29,8 +29,8 @@ void main() async {
     hitsPerPage: 5,
   );
   // Execute the multi-search request.
-  final responseMulti = await clientLite.searchMultiIndex(
-    queries: [querySuggestions, queryHits],
+  final responseMulti = await clientLite.searchForHits(
+    requests: [querySuggestions, queryHits],
   );
   // Decompose the search results into separate results and suggestions.
   final [searchResult, suggestionsResult] = responseMulti.toList();

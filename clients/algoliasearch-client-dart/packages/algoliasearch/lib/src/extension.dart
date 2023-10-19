@@ -25,20 +25,6 @@ extension SearchClientExt on SearchClient {
         .then((res) => res.results.map((e) => SearchResponse.fromJson(e)));
   }
 
-  /// Perform a search operation targeting one index.
-  @Deprecated("renamed to `searchForHits`")
-  Future<Iterable<SearchResponse>> searchMultiIndex({
-    required List<SearchForHits> queries,
-    SearchStrategy? strategy,
-    RequestOptions? requestOptions,
-  }) {
-    return searchForHits(
-      requests: queries,
-      strategy: strategy,
-      requestOptions: requestOptions,
-    );
-  }
-
   /// Calls the `search` method but with certainty that we will only request
   /// Algolia facets.
   Future<Iterable<SearchForFacetValuesResponse>> searchForFacets({
