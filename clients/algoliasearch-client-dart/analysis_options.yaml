@@ -1,5 +1,11 @@
 include: package:lints/recommended.yaml
 
+linter:
+  rules:
+    deprecated_member_use_from_same_package: false
+
 analyzer:
   exclude:
     - "**/*.g.dart"
+  errors:
+    deprecated_member_use_from_same_package: ignore

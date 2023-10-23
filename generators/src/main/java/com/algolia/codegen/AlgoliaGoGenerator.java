@@ -1,13 +1,16 @@
 package com.algolia.codegen;
 
 import com.algolia.codegen.exceptions.*;
+import com.algolia.codegen.utils.OneOfUtils;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.servers.Server;
 import java.io.File;
-import java.util.List;
-import org.openapitools.codegen.CodegenOperation;
-import org.openapitools.codegen.SupportingFile;
+import java.util.*;
+import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.GoClientCodegen;
+import org.openapitools.codegen.model.ModelMap;
+import org.openapitools.codegen.model.ModelsMap;
+import org.openapitools.codegen.model.OperationsMap;
 
 public class AlgoliaGoGenerator extends GoClientCodegen {
 
@@ -53,5 +56,20 @@ public class AlgoliaGoGenerator extends GoClientCodegen {
   @Override
   public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, List<Server> servers) {
     return Utils.specifyCustomRequest(super.fromOperation(path, httpMethod, operation, servers));
+  }
+
+  @Override
+  public Map<String, ModelsMap> postProcessAllModels(Map<String, ModelsMap> objs) {
+    Map<String, ModelsMap> models = super.postProcessAllModels(objs);
+    OneOfUtils.updateModelsOneOf(models, modelPackage);
+    GenericPropagator.propagateGenericsToModels(models);
+    return models;
+  }
+
+  @Override
+  public OperationsMap postProcessOperationsWithModels(OperationsMap objs, List<ModelMap> models) {
+    OperationsMap operations = super.postProcessOperationsWithModels(objs, models);
+    GenericPropagator.propagateGenericsToOperations(operations, models);
+    return operations;
   }
 }

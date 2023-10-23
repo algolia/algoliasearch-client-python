@@ -35,3 +35,8 @@ required:
   - index
   - objectIDs
   - userToken
+x-discriminator-fields:
+  - eventType
+  - eventSubtype
+  - queryID
+  - objectIDs

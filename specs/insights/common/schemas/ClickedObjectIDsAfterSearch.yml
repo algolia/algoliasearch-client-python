@@ -34,3 +34,7 @@ required:
   - positions
   - queryID
   - userToken
+x-discriminator-fields:
+  - positions
+  - queryID
+  - eventType

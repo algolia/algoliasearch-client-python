@@ -12,6 +12,9 @@ SearchForFacets:
   allOf:
     - $ref: '../../../common/schemas/SearchParams.yml#/searchParams'
     - $ref: '#/searchForFacetsOptions'
+  x-discriminator-fields:
+    - facet
+    - type
 
 searchForFacetsOptions:
   type: object
