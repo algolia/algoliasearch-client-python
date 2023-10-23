@@ -9,7 +9,7 @@ import (
 // GetClickPositionsResponse struct for GetClickPositionsResponse
 type GetClickPositionsResponse struct {
 	// Click positions.
-	Positions []ClickPosition `json:"positions" validate:"required"`
+	Positions []ClickPosition `json:"positions"`
 }
 
 // NewGetClickPositionsResponse instantiates a new GetClickPositionsResponse object

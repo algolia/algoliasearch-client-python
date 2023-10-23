@@ -9,11 +9,11 @@ import (
 // TaskCreate The payload for a task creation.
 type TaskCreate struct {
 	// The source UUID.
-	SourceID string `json:"sourceID" validate:"required"`
+	SourceID string `json:"sourceID"`
 	// The destination UUID.
-	DestinationID string            `json:"destinationID" validate:"required"`
-	Trigger       TaskCreateTrigger `json:"trigger" validate:"required"`
-	Action        ActionType        `json:"action" validate:"required"`
+	DestinationID string            `json:"destinationID"`
+	Trigger       TaskCreateTrigger `json:"trigger"`
+	Action        ActionType        `json:"action"`
 	// Whether the task is enabled or not.
 	Enabled *bool `json:"enabled,omitempty"`
 	// A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.

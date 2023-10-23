@@ -9,11 +9,11 @@ import (
 // TopSearch struct for TopSearch
 type TopSearch struct {
 	// User query.
-	Search string `json:"search" validate:"required"`
+	Search string `json:"search"`
 	// Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
-	Count int32 `json:"count" validate:"required"`
+	Count int32 `json:"count"`
 	// Number of hits the search query matched.
-	NbHits int32 `json:"nbHits" validate:"required"`
+	NbHits int32 `json:"nbHits"`
 }
 
 // NewTopSearch instantiates a new TopSearch object

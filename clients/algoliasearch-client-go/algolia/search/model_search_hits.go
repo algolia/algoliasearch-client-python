@@ -8,12 +8,15 @@ import (
 
 // SearchHits struct for SearchHits
 type SearchHits struct {
-	Hits []Hit `json:"hits" validate:"required"`
+	Hits []Hit `json:"hits"`
 	// Text to search for in an index.
-	Query string `json:"query" validate:"required"`
+	Query string `json:"query"`
 	// URL-encoded string of all search parameters.
-	Params string `json:"params" validate:"required"`
+	Params               string `json:"params"`
+	AdditionalProperties map[string]any
 }
+
+type _SearchHits SearchHits
 
 // NewSearchHits instantiates a new SearchHits object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,31 @@ func (o SearchHits) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["params"] = o.Params
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return json.Marshal(toSerialize)
+}
+
+func (o *SearchHits) UnmarshalJSON(bytes []byte) (err error) {
+	varSearchHits := _SearchHits{}
+
+	if err = json.Unmarshal(bytes, &varSearchHits); err == nil {
+		*o = SearchHits(varSearchHits)
+	}
+
+	additionalProperties := make(map[string]any)
+
+	if err = json.Unmarshal(bytes, &additionalProperties); err == nil {
+		delete(additionalProperties, "hits")
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "params")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 func (o SearchHits) String() string {
@@ -128,6 +155,9 @@ func (o SearchHits) String() string {
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  params=%v\n", o.Params)
+	for key, value := range o.AdditionalProperties {
+		out += fmt.Sprintf("  %s=%v\n", key, value)
+	}
 	return fmt.Sprintf("SearchHits {\n%s}", out)
 }
 

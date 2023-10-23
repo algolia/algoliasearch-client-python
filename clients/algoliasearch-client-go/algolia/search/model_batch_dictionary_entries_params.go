@@ -11,7 +11,7 @@ type BatchDictionaryEntriesParams struct {
 	// Incidates whether to replace all custom entries in the dictionary with the ones sent with this request.
 	ClearExistingDictionaryEntries *bool `json:"clearExistingDictionaryEntries,omitempty"`
 	// Operations to batch.
-	Requests []BatchDictionaryEntriesRequest `json:"requests" validate:"required"`
+	Requests []BatchDictionaryEntriesRequest `json:"requests"`
 }
 
 type BatchDictionaryEntriesParamsOption func(f *BatchDictionaryEntriesParams)

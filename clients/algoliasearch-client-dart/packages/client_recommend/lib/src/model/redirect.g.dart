@@ -1,18 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'base_search_response_redirect.dart';
+part of 'redirect.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-BaseSearchResponseRedirect _$BaseSearchResponseRedirectFromJson(
-        Map<String, dynamic> json) =>
-    $checkedCreate(
-      'BaseSearchResponseRedirect',
+Redirect _$RedirectFromJson(Map<String, dynamic> json) => $checkedCreate(
+      'Redirect',
       json,
       ($checkedConvert) {
-        final val = BaseSearchResponseRedirect(
+        final val = Redirect(
           index: $checkedConvert(
               'index',
               (v) => (v as List<dynamic>?)
@@ -24,8 +22,7 @@ BaseSearchResponseRedirect _$BaseSearchResponseRedirectFromJson(
       },
     );
 
-Map<String, dynamic> _$BaseSearchResponseRedirectToJson(
-    BaseSearchResponseRedirect instance) {
+Map<String, dynamic> _$RedirectToJson(Redirect instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

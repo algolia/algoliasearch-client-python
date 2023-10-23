@@ -9,9 +9,9 @@ import (
 // PromoteObjectIDs Records to promote.
 type PromoteObjectIDs struct {
 	// Unique identifiers of the records to promote.
-	ObjectIDs []string `json:"objectIDs" validate:"required"`
+	ObjectIDs []string `json:"objectIDs"`
 	// The position to promote the records to. If you pass objectIDs, the records are placed at this position as a group. For example, if you pronmote four objectIDs to position 0, the records take the first four positions.
-	Position int32 `json:"position" validate:"required"`
+	Position int32 `json:"position"`
 }
 
 // NewPromoteObjectIDs instantiates a new PromoteObjectIDs object

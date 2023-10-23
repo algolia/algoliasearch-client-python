@@ -9,9 +9,9 @@ import (
 // GetSearchesCountResponse struct for GetSearchesCountResponse
 type GetSearchesCountResponse struct {
 	// Number of occurrences.
-	Count int32 `json:"count" validate:"required"`
+	Count int32 `json:"count"`
 	// Search events with their associated dates and hit counts.
-	Dates []SearchEvent `json:"dates" validate:"required"`
+	Dates []SearchEvent `json:"dates"`
 }
 
 // NewGetSearchesCountResponse instantiates a new GetSearchesCountResponse object

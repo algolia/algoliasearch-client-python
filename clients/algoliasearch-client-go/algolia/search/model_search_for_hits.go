@@ -150,7 +150,7 @@ type SearchForHits struct {
 	EnableReRanking      *bool                        `json:"enableReRanking,omitempty"`
 	ReRankingApplyFilter NullableReRankingApplyFilter `json:"reRankingApplyFilter,omitempty"`
 	// Algolia index name.
-	IndexName string             `json:"indexName" validate:"required"`
+	IndexName string             `json:"indexName"`
 	Type      *SearchTypeDefault `json:"type,omitempty"`
 }
 

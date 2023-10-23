@@ -9,7 +9,6 @@ import 'package:algolia_client_recommend/src/model/base_recommendations_query.da
 import 'package:algolia_client_recommend/src/model/base_search_params.dart';
 import 'package:algolia_client_recommend/src/model/base_search_params_without_query.dart';
 import 'package:algolia_client_recommend/src/model/base_search_response.dart';
-import 'package:algolia_client_recommend/src/model/base_search_response_redirect.dart';
 import 'package:algolia_client_recommend/src/model/base_trending_facets_query.dart';
 import 'package:algolia_client_recommend/src/model/base_trending_items_query.dart';
 import 'package:algolia_client_recommend/src/model/condition.dart';
@@ -22,6 +21,7 @@ import 'package:algolia_client_recommend/src/model/edit.dart';
 import 'package:algolia_client_recommend/src/model/edit_type.dart';
 import 'package:algolia_client_recommend/src/model/error_base.dart';
 import 'package:algolia_client_recommend/src/model/exact_on_single_word_query.dart';
+import 'package:algolia_client_recommend/src/model/exhaustive.dart';
 import 'package:algolia_client_recommend/src/model/facet_ordering.dart';
 import 'package:algolia_client_recommend/src/model/facets.dart';
 import 'package:algolia_client_recommend/src/model/facets_stats.dart';
@@ -45,6 +45,7 @@ import 'package:algolia_client_recommend/src/model/recommend_models.dart';
 import 'package:algolia_client_recommend/src/model/recommendation_models.dart';
 import 'package:algolia_client_recommend/src/model/recommendations_query.dart';
 import 'package:algolia_client_recommend/src/model/recommendations_response.dart';
+import 'package:algolia_client_recommend/src/model/redirect.dart';
 import 'package:algolia_client_recommend/src/model/redirect_rule_index_metadata.dart';
 import 'package:algolia_client_recommend/src/model/redirect_rule_index_metadata_data.dart';
 import 'package:algolia_client_recommend/src/model/remove_words_if_no_results.dart';
@@ -114,9 +115,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'BaseSearchResponse':
       return BaseSearchResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
-    case 'BaseSearchResponseRedirect':
-      return BaseSearchResponseRedirect.fromJson(value as Map<String, dynamic>)
-          as ReturnType;
     case 'BaseTrendingFacetsQuery':
       return BaseTrendingFacetsQuery.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -147,6 +145,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return ErrorBase.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'ExactOnSingleWordQuery':
       return ExactOnSingleWordQuery.fromJson(value) as ReturnType;
+    case 'Exhaustive':
+      return Exhaustive.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'FacetOrdering':
       return FacetOrdering.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -206,6 +206,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'RecommendationsResponse':
       return RecommendationsResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'Redirect':
+      return Redirect.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'RedirectRuleIndexMetadata':
       return RedirectRuleIndexMetadata.fromJson(value as Map<String, dynamic>)
           as ReturnType;

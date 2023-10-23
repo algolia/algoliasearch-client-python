@@ -9,9 +9,9 @@ import (
 // UserWithDate struct for UserWithDate
 type UserWithDate struct {
 	// Date of the event in the format YYYY-MM-DD.
-	Date string `json:"date" validate:"required"`
+	Date string `json:"date"`
 	// Number of occurrences.
-	Count int32 `json:"count" validate:"required"`
+	Count int32 `json:"count"`
 }
 
 // NewUserWithDate instantiates a new UserWithDate object

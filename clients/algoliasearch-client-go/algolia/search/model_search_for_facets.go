@@ -150,12 +150,12 @@ type SearchForFacets struct {
 	EnableReRanking      *bool                        `json:"enableReRanking,omitempty"`
 	ReRankingApplyFilter NullableReRankingApplyFilter `json:"reRankingApplyFilter,omitempty"`
 	// Facet name.
-	Facet string `json:"facet" validate:"required"`
+	Facet string `json:"facet"`
 	// Algolia index name.
-	IndexName string `json:"indexName" validate:"required"`
+	IndexName string `json:"indexName"`
 	// Text to search inside the facet's values.
 	FacetQuery *string         `json:"facetQuery,omitempty"`
-	Type       SearchTypeFacet `json:"type" validate:"required"`
+	Type       SearchTypeFacet `json:"type"`
 }
 
 type SearchForFacetsOption func(f *SearchForFacets)

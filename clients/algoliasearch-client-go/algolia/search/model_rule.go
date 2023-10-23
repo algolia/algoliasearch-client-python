@@ -9,7 +9,7 @@ import (
 // Rule Rule object.
 type Rule struct {
 	// Unique identifier for a rule object.
-	ObjectID string `json:"objectID" validate:"required"`
+	ObjectID string `json:"objectID"`
 	// [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions) required to activate a rule. You can use up to 25 conditions per rule.
 	Conditions  []Condition  `json:"conditions,omitempty"`
 	Consequence *Consequence `json:"consequence,omitempty"`

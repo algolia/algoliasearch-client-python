@@ -8,9 +8,9 @@ import (
 
 // SourceCreate struct for SourceCreate
 type SourceCreate struct {
-	Type  SourceType  `json:"type" validate:"required"`
-	Name  string      `json:"name" validate:"required"`
-	Input SourceInput `json:"input" validate:"required"`
+	Type  SourceType  `json:"type"`
+	Name  string      `json:"name"`
+	Input SourceInput `json:"input"`
 	// The authentication UUID.
 	AuthenticationID *string `json:"authenticationID,omitempty"`
 }

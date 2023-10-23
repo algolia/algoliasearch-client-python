@@ -8,7 +8,7 @@ import (
 
 // GetDictionarySettingsResponse struct for GetDictionarySettingsResponse
 type GetDictionarySettingsResponse struct {
-	DisableStandardEntries StandardEntries `json:"disableStandardEntries" validate:"required"`
+	DisableStandardEntries StandardEntries `json:"disableStandardEntries"`
 }
 
 // NewGetDictionarySettingsResponse instantiates a new GetDictionarySettingsResponse object

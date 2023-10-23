@@ -6,7 +6,9 @@ package com.algolia.model.search;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /** SearchHits */
@@ -20,6 +22,19 @@ public class SearchHits<T> {
 
   @JsonProperty("params")
   private String params;
+
+  private Map<String, Object> additionalProperties = new HashMap<>();
+
+  @JsonAnyGetter
+  public Map<String, Object> getAdditionalProperties() {
+    return this.additionalProperties;
+  }
+
+  @JsonAnySetter
+  public SearchHits setAdditionalProperty(String name, Object value) {
+    this.additionalProperties.put(name, value);
+    return this;
+  }
 
   public SearchHits setHits(List<T> hits) {
     this.hits = hits;
@@ -71,19 +86,21 @@ public class SearchHits<T> {
     return (
       Objects.equals(this.hits, searchHits.hits) &&
       Objects.equals(this.query, searchHits.query) &&
-      Objects.equals(this.params, searchHits.params)
+      Objects.equals(this.params, searchHits.params) &&
+      super.equals(o)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hits, query, params);
+    return Objects.hash(hits, query, params, super.hashCode());
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SearchHits {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    params: ").append(toIndentedString(params)).append("\n");

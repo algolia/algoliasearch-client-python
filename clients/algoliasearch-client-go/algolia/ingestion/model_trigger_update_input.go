@@ -9,7 +9,7 @@ import (
 // TriggerUpdateInput The trigger input for a task update.
 type TriggerUpdateInput struct {
 	// A cron expression that represent at which regularity the task should run.
-	Cron string `json:"cron" validate:"required"`
+	Cron string `json:"cron"`
 }
 
 // NewTriggerUpdateInput instantiates a new TriggerUpdateInput object

@@ -9,7 +9,7 @@ import (
 // BaseTrendingFacetsQuery struct for BaseTrendingFacetsQuery
 type BaseTrendingFacetsQuery struct {
 	// Facet name for trending models.
-	FacetName string               `json:"facetName" validate:"required"`
+	FacetName string               `json:"facetName"`
 	Model     *TrendingFacetsModel `json:"model,omitempty"`
 }
 

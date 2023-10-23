@@ -9,27 +9,27 @@ import (
 // RankingInfo struct for RankingInfo
 type RankingInfo struct {
 	// This field is reserved for advanced usage.
-	Filters int32 `json:"filters" validate:"required"`
+	Filters int32 `json:"filters"`
 	// Position of the most important matched attribute in the attributes to index list.
-	FirstMatchedWord int32 `json:"firstMatchedWord" validate:"required"`
+	FirstMatchedWord int32 `json:"firstMatchedWord"`
 	// Distance between the geo location in the search query and the best matching geo location in the record, divided by the geo precision (in meters).
-	GeoDistance int32 `json:"geoDistance" validate:"required"`
+	GeoDistance int32 `json:"geoDistance"`
 	// Precision used when computing the geo distance, in meters.
 	GeoPrecision       *int32              `json:"geoPrecision,omitempty"`
 	MatchedGeoLocation *MatchedGeoLocation `json:"matchedGeoLocation,omitempty"`
 	Personalization    *Personalization    `json:"personalization,omitempty"`
 	// Number of exactly matched words.
-	NbExactWords int32 `json:"nbExactWords" validate:"required"`
+	NbExactWords int32 `json:"nbExactWords"`
 	// Number of typos encountered when matching the record.
-	NbTypos int32 `json:"nbTypos" validate:"required"`
+	NbTypos int32 `json:"nbTypos"`
 	// Present and set to true if a Rule promoted the hit.
-	Promoted bool `json:"promoted" validate:"required"`
+	Promoted bool `json:"promoted"`
 	// When the query contains more than one word, the sum of the distances between matched words (in meters).
 	ProximityDistance *int32 `json:"proximityDistance,omitempty"`
 	// Custom ranking for the object, expressed as a single integer value.
-	UserScore int32 `json:"userScore" validate:"required"`
+	UserScore int32 `json:"userScore"`
 	// Number of matched words, including prefixes and typos.
-	Words int32 `json:"words" validate:"required"`
+	Words int32 `json:"words"`
 	// Wether the record are promoted by the re-ranking strategy.
 	PromotedByReRanking *bool `json:"promotedByReRanking,omitempty"`
 }

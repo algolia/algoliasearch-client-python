@@ -9,7 +9,7 @@ import (
 // GetObjectsResponse struct for GetObjectsResponse
 type GetObjectsResponse struct {
 	// Retrieved results.
-	Results []map[string]interface{} `json:"results" validate:"required"`
+	Results []map[string]interface{} `json:"results"`
 }
 
 // NewGetObjectsResponse instantiates a new GetObjectsResponse object

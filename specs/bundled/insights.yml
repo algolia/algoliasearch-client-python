@@ -173,6 +173,10 @@ components:
         - positions
         - queryID
         - userToken
+      x-discriminator-fields:
+        - positions
+        - queryID
+        - eventType
     ConversionEvent:
       type: string
       enum:
@@ -218,6 +222,9 @@ components:
         - objectIDs
         - queryID
         - userToken
+      x-discriminator-fields:
+        - queryID
+        - eventType
     ClickedObjectIDs:
       type: object
       title: Clicked object IDs
@@ -251,6 +258,9 @@ components:
         - index
         - objectIDs
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - objectIDs
     ConvertedObjectIDs:
       type: object
       title: Converted object IDs
@@ -286,6 +296,9 @@ components:
         - index
         - objectIDs
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - objectIDs
     filters:
       type: array
       description: |
@@ -326,6 +339,9 @@ components:
         - index
         - filters
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - filters
     ConvertedFilters:
       type: object
       title: Converted filters
@@ -351,6 +367,9 @@ components:
         - index
         - filters
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - filters
     ViewEvent:
       type: string
       enum:
@@ -381,6 +400,9 @@ components:
         - index
         - objectIDs
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - objectIDs
     ViewedFilters:
       type: object
       title: Viewed filters
@@ -410,6 +432,9 @@ components:
         - index
         - filters
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - filters
     AddToCartEvent:
       type: string
       enum:
@@ -508,6 +533,11 @@ components:
         - index
         - objectIDs
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - eventSubtype
+        - queryID
+        - objectIDs
     objectData:
       type: object
       additionalProperties: false
@@ -573,6 +603,10 @@ components:
         - index
         - objectIDs
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - eventSubtype
+        - objectIDs
     PurchaseEvent:
       type: string
       enum:
@@ -617,6 +651,10 @@ components:
         - index
         - objectIDs
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - eventSubtype
+        - objectIDs
     PurchasedObjectIDsAfterSearch:
       type: object
       title: Purchased object IDs after search
@@ -658,6 +696,11 @@ components:
         - index
         - objectIDs
         - userToken
+      x-discriminator-fields:
+        - eventType
+        - eventSubtype
+        - queryID
+        - objectIDs
     EventsItems:
       oneOf:
         - $ref: '#/components/schemas/ClickedObjectIDsAfterSearch'

@@ -9,7 +9,7 @@ import (
 // DeleteSourceResponse struct for DeleteSourceResponse
 type DeleteSourceResponse struct {
 	// Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
-	DeletedAt string `json:"deletedAt" validate:"required"`
+	DeletedAt string `json:"deletedAt"`
 }
 
 // NewDeleteSourceResponse instantiates a new DeleteSourceResponse object

@@ -9,13 +9,13 @@ import (
 // ConversionRateEvent struct for ConversionRateEvent
 type ConversionRateEvent struct {
 	// [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
-	Rate float64 `json:"rate" validate:"required"`
+	Rate float64 `json:"rate"`
 	// Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
-	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
+	TrackedSearchCount int32 `json:"trackedSearchCount"`
 	// Number of converted clicks.
-	ConversionCount int32 `json:"conversionCount" validate:"required"`
+	ConversionCount int32 `json:"conversionCount"`
 	// Date of the event in the format YYYY-MM-DD.
-	Date string `json:"date" validate:"required"`
+	Date string `json:"date"`
 }
 
 // NewConversionRateEvent instantiates a new ConversionRateEvent object

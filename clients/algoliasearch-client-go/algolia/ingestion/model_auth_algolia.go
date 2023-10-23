@@ -9,9 +9,9 @@ import (
 // AuthAlgolia struct for AuthAlgolia
 type AuthAlgolia struct {
 	// Algolia Application ID.
-	AppID string `json:"appID" validate:"required"`
+	AppID string `json:"appID"`
 	// Algolia API Key, with the correct rights to push to an index and change settings.
-	ApiKey string `json:"apiKey" validate:"required"`
+	ApiKey string `json:"apiKey"`
 }
 
 // NewAuthAlgolia instantiates a new AuthAlgolia object

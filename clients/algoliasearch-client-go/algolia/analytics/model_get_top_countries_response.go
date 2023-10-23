@@ -9,7 +9,7 @@ import (
 // GetTopCountriesResponse struct for GetTopCountriesResponse
 type GetTopCountriesResponse struct {
 	// Countries
-	Countries []TopCountry `json:"countries" validate:"required"`
+	Countries []TopCountry `json:"countries"`
 }
 
 // NewGetTopCountriesResponse instantiates a new GetTopCountriesResponse object

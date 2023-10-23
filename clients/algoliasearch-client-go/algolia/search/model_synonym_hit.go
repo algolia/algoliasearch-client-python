@@ -9,8 +9,8 @@ import (
 // SynonymHit Synonym object.
 type SynonymHit struct {
 	// Unique identifier of a synonym object.
-	ObjectID string      `json:"objectID" validate:"required"`
-	Type     SynonymType `json:"type" validate:"required"`
+	ObjectID string      `json:"objectID"`
+	Type     SynonymType `json:"type"`
 	// Words or phrases considered equivalent.
 	Synonyms []string `json:"synonyms,omitempty"`
 	// Word or phrase to appear in query strings (for [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)).

@@ -29,18 +29,49 @@ func SearchForHitsAsSearchQuery(v *SearchForHits) SearchQuery {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *SearchQuery) UnmarshalJSON(data []byte) error {
 	var err error
-	// try to unmarshal data into SearchForFacets
-	err = newStrictDecoder(data).Decode(&dst.SearchForFacets)
-	if err == nil && validateStruct(dst.SearchForFacets) == nil {
-		jsonSearchForFacets, _ := json.Marshal(dst.SearchForFacets)
-		if string(jsonSearchForFacets) == "{}" { // empty struct
-			dst.SearchForFacets = nil
-		} else {
-			return nil
-		}
-	} else {
-		dst.SearchForFacets = nil
+	// use discriminator value to speed up the lookup
+	var jsonDict map[string]any
+	err = newStrictDecoder(data).Decode(&jsonDict)
+	if err != nil {
+		return fmt.Errorf("Failed to unmarshal JSON into map for the discriminator lookup (SearchForFacets).")
 	}
+
+	// Hold the schema validity between checks
+	validSchemaForModel := true
+
+	// If the model wasn't discriminated yet, continue checking for other discriminating properties
+	if validSchemaForModel {
+		// Check if the model holds a property 'facet'
+		if _, ok := jsonDict["facet"]; !ok {
+			validSchemaForModel = false
+		}
+	}
+
+	// If the model wasn't discriminated yet, continue checking for other discriminating properties
+	if validSchemaForModel {
+		// Check if the model holds a property 'type'
+		if _, ok := jsonDict["type"]; !ok {
+			validSchemaForModel = false
+		}
+	}
+
+	if validSchemaForModel {
+		// try to unmarshal data into SearchForFacets
+		err = newStrictDecoder(data).Decode(&dst.SearchForFacets)
+		if err == nil && validateStruct(dst.SearchForFacets) == nil {
+			jsonSearchForFacets, _ := json.Marshal(dst.SearchForFacets)
+			if string(jsonSearchForFacets) == "{}" { // empty struct
+				dst.SearchForFacets = nil
+			} else {
+				return nil
+			}
+		} else {
+			dst.SearchForFacets = nil
+		}
+	}
+
+	// Reset the schema validity for the next class check
+	validSchemaForModel = true
 
 	// try to unmarshal data into SearchForHits
 	err = newStrictDecoder(data).Decode(&dst.SearchForHits)

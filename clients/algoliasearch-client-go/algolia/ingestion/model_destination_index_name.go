@@ -9,7 +9,7 @@ import (
 // DestinationIndexName struct for DestinationIndexName
 type DestinationIndexName struct {
 	// The index name to store data in.
-	IndexName  string      `json:"indexName" validate:"required"`
+	IndexName  string      `json:"indexName"`
 	RecordType *RecordType `json:"recordType,omitempty"`
 	// Determines the attributes to exclude from an Algolia record. To remove nested element, you can separate the path to the element with dots (`.`):   - \"foo.bar\": will remove `bar` from `foo`. To remove elements from an array, you can use the following:   - \"foo.[0].bar\": will only remove `bar` from the first element of `foo`.   - \"foo.[*].bar\": will remove `bar` from every elements of `foo`.
 	AttributesToExclude []string `json:"attributesToExclude,omitempty"`

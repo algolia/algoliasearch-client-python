@@ -9,23 +9,23 @@ import (
 // FetchedIndex struct for FetchedIndex
 type FetchedIndex struct {
 	// Index name.
-	Name string `json:"name" validate:"required"`
+	Name string `json:"name"`
 	// Index creation date. An empty string means that the index has no records.
-	CreatedAt string `json:"createdAt" validate:"required"`
+	CreatedAt string `json:"createdAt"`
 	// Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
-	UpdatedAt string `json:"updatedAt" validate:"required"`
+	UpdatedAt string `json:"updatedAt"`
 	// Number of records contained in the index.
-	Entries int32 `json:"entries" validate:"required"`
+	Entries int32 `json:"entries"`
 	// Number of bytes of the index in minified format.
-	DataSize int32 `json:"dataSize" validate:"required"`
+	DataSize int32 `json:"dataSize"`
 	// Number of bytes of the index binary file.
-	FileSize int32 `json:"fileSize" validate:"required"`
+	FileSize int32 `json:"fileSize"`
 	// Last build time.
-	LastBuildTimeS int32 `json:"lastBuildTimeS" validate:"required"`
+	LastBuildTimeS int32 `json:"lastBuildTimeS"`
 	// Number of pending indexing operations. This value is deprecated and should not be used.
-	NumberOfPendingTasks int32 `json:"numberOfPendingTasks" validate:"required"`
+	NumberOfPendingTasks int32 `json:"numberOfPendingTasks"`
 	// A boolean which says whether the index has pending tasks. This value is deprecated and should not be used.
-	PendingTask bool `json:"pendingTask" validate:"required"`
+	PendingTask bool `json:"pendingTask"`
 	// Only present if the index is a replica. Contains the name of the related primary index.
 	Primary *string `json:"primary,omitempty"`
 	// Only present if the index is a primary index with replicas. Contains the names of all linked replicas.

@@ -10,7 +10,7 @@ import kotlinx.serialization.json.*
  * @param index
  */
 @Serializable
-public data class BaseSearchResponseRedirect(
+public data class Redirect(
 
   @SerialName(value = "index") val index: List<RedirectRuleIndexMetadata>? = null,
 )

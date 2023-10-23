@@ -9,7 +9,7 @@ import (
 // ListUserIdsResponse User ID data.
 type ListUserIdsResponse struct {
 	// User IDs.
-	UserIDs []UserId `json:"userIDs" validate:"required"`
+	UserIDs []UserId `json:"userIDs"`
 }
 
 // NewListUserIdsResponse instantiates a new ListUserIdsResponse object

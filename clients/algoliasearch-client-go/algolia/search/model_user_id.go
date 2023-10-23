@@ -9,13 +9,13 @@ import (
 // UserId Unique user ID.
 type UserId struct {
 	// userID of the user.
-	UserID string `json:"userID" validate:"required"`
+	UserID string `json:"userID"`
 	// Cluster to which the user is assigned.
-	ClusterName string `json:"clusterName" validate:"required"`
+	ClusterName string `json:"clusterName"`
 	// Number of records belonging to the user.
-	NbRecords int32 `json:"nbRecords" validate:"required"`
+	NbRecords int32 `json:"nbRecords"`
 	// Data size used by the user.
-	DataSize int32 `json:"dataSize" validate:"required"`
+	DataSize int32 `json:"dataSize"`
 }
 
 // NewUserId instantiates a new UserId object

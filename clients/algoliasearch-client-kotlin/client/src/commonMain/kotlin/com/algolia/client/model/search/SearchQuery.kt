@@ -39,7 +39,7 @@ internal class SearchQuerySerializer : KSerializer<SearchQuery> {
     val tree = codec.decodeJsonElement()
 
     // deserialize SearchForFacets
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("facet") && tree.containsKey("type")) {
       try {
         return codec.json.decodeFromJsonElement(SearchForFacets.serializer(), tree)
       } catch (e: Exception) {

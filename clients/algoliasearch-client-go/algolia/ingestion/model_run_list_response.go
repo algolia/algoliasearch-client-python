@@ -8,8 +8,8 @@ import (
 
 // RunListResponse struct for RunListResponse
 type RunListResponse struct {
-	Runs       []Run      `json:"runs" validate:"required"`
-	Pagination Pagination `json:"pagination" validate:"required"`
+	Runs       []Run      `json:"runs"`
+	Pagination Pagination `json:"pagination"`
 }
 
 // NewRunListResponse instantiates a new RunListResponse object

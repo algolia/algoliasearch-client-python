@@ -9,7 +9,7 @@ import (
 // GetRecommendationsParams Recommend parameters.
 type GetRecommendationsParams struct {
 	// Request parameters depend on the model (recommendations or trending).
-	Requests []RecommendationsRequest `json:"requests" validate:"required"`
+	Requests []RecommendationsRequest `json:"requests"`
 }
 
 // NewGetRecommendationsParams instantiates a new GetRecommendationsParams object

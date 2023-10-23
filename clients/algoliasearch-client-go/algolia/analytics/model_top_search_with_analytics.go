@@ -9,23 +9,23 @@ import (
 // TopSearchWithAnalytics struct for TopSearchWithAnalytics
 type TopSearchWithAnalytics struct {
 	// User query.
-	Search string `json:"search" validate:"required"`
+	Search string `json:"search"`
 	// Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`).
-	Count int32 `json:"count" validate:"required"`
+	Count int32 `json:"count"`
 	// [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
-	ClickThroughRate float64 `json:"clickThroughRate" validate:"required"`
+	ClickThroughRate float64 `json:"clickThroughRate"`
 	// Average [position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position) of clicked search result.
-	AverageClickPosition int32 `json:"averageClickPosition" validate:"required"`
+	AverageClickPosition int32 `json:"averageClickPosition"`
 	// [Conversion rate (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
-	ConversionRate float64 `json:"conversionRate" validate:"required"`
+	ConversionRate float64 `json:"conversionRate"`
 	// Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
-	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
+	TrackedSearchCount int32 `json:"trackedSearchCount"`
 	// Number of click events.
-	ClickCount int32 `json:"clickCount" validate:"required"`
+	ClickCount int32 `json:"clickCount"`
 	// Number of converted clicks.
-	ConversionCount int32 `json:"conversionCount" validate:"required"`
+	ConversionCount int32 `json:"conversionCount"`
 	// Number of hits the search query matched.
-	NbHits int32 `json:"nbHits" validate:"required"`
+	NbHits int32 `json:"nbHits"`
 }
 
 // NewTopSearchWithAnalytics instantiates a new TopSearchWithAnalytics object

@@ -9,10 +9,10 @@ import (
 // HighlightResultOption Show highlighted section and words matched on a query.
 type HighlightResultOption struct {
 	// Markup text with `facetQuery` matches highlighted.
-	Value      string     `json:"value" validate:"required"`
-	MatchLevel MatchLevel `json:"matchLevel" validate:"required"`
+	Value      string     `json:"value"`
+	MatchLevel MatchLevel `json:"matchLevel"`
 	// List of words from the query that matched the object.
-	MatchedWords []string `json:"matchedWords" validate:"required"`
+	MatchedWords []string `json:"matchedWords"`
 	// Whether the entire attribute value is highlighted.
 	FullyHighlighted *bool `json:"fullyHighlighted,omitempty"`
 }

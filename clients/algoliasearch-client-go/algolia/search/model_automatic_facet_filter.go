@@ -9,7 +9,7 @@ import (
 // AutomaticFacetFilter Automatic facet Filter.
 type AutomaticFacetFilter struct {
 	// Attribute to filter on. This must match a facet placeholder in the Rule's pattern.
-	Facet string `json:"facet" validate:"required"`
+	Facet string `json:"facet"`
 	// Score for the filter. Typically used for optional or disjunctive filters.
 	Score *int32 `json:"score,omitempty"`
 	// Whether the filter is disjunctive (true) or conjunctive (false).

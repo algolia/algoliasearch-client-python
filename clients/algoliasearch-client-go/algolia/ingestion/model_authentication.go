@@ -9,14 +9,14 @@ import (
 // Authentication An authentication is used to login into a Source or a Destination.
 type Authentication struct {
 	// The authentication UUID.
-	AuthenticationID string             `json:"authenticationID" validate:"required"`
-	Type             AuthenticationType `json:"type" validate:"required"`
+	AuthenticationID string             `json:"authenticationID"`
+	Type             AuthenticationType `json:"type"`
 	// An human readable name describing the object.
-	Name     string    `json:"name" validate:"required"`
+	Name     string    `json:"name"`
 	Platform *Platform `json:"platform,omitempty"`
-	Input    AuthInput `json:"input" validate:"required"`
+	Input    AuthInput `json:"input"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt" validate:"required"`
+	CreatedAt string `json:"createdAt"`
 	// Date of last update (RFC3339 format).
 	UpdatedAt *string `json:"updatedAt,omitempty"`
 }

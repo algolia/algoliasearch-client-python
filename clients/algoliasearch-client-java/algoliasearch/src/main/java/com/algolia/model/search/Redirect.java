@@ -13,17 +13,17 @@ import java.util.Objects;
  * [Redirect results to a
  * URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
  */
-public class BaseSearchResponseRedirect {
+public class Redirect {
 
   @JsonProperty("index")
   private List<RedirectRuleIndexMetadata> index;
 
-  public BaseSearchResponseRedirect setIndex(List<RedirectRuleIndexMetadata> index) {
+  public Redirect setIndex(List<RedirectRuleIndexMetadata> index) {
     this.index = index;
     return this;
   }
 
-  public BaseSearchResponseRedirect addIndex(RedirectRuleIndexMetadata indexItem) {
+  public Redirect addIndex(RedirectRuleIndexMetadata indexItem) {
     if (this.index == null) {
       this.index = new ArrayList<>();
     }
@@ -45,8 +45,8 @@ public class BaseSearchResponseRedirect {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BaseSearchResponseRedirect baseSearchResponseRedirect = (BaseSearchResponseRedirect) o;
-    return Objects.equals(this.index, baseSearchResponseRedirect.index);
+    Redirect redirect = (Redirect) o;
+    return Objects.equals(this.index, redirect.index);
   }
 
   @Override
@@ -57,7 +57,7 @@ public class BaseSearchResponseRedirect {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BaseSearchResponseRedirect {\n");
+    sb.append("class Redirect {\n");
     sb.append("    index: ").append(toIndentedString(index)).append("\n");
     sb.append("}");
     return sb.toString();

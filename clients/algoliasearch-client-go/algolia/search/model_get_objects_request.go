@@ -11,9 +11,9 @@ type GetObjectsRequest struct {
 	// Attributes to retrieve. If not specified, all retrievable attributes are returned.
 	AttributesToRetrieve []string `json:"attributesToRetrieve,omitempty"`
 	// Record's objectID.
-	ObjectID string `json:"objectID" validate:"required"`
+	ObjectID string `json:"objectID"`
 	// Name of the index containing the required records.
-	IndexName string `json:"indexName" validate:"required"`
+	IndexName string `json:"indexName"`
 }
 
 type GetObjectsRequestOption func(f *GetObjectsRequest)

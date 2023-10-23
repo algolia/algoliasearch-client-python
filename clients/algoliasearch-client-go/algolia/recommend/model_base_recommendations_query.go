@@ -8,9 +8,9 @@ import (
 
 // BaseRecommendationsQuery struct for BaseRecommendationsQuery
 type BaseRecommendationsQuery struct {
-	Model RecommendationModels `json:"model" validate:"required"`
+	Model RecommendationModels `json:"model"`
 	// Unique object identifier.
-	ObjectID           string              `json:"objectID" validate:"required"`
+	ObjectID           string              `json:"objectID"`
 	QueryParameters    *SearchParamsObject `json:"queryParameters,omitempty"`
 	FallbackParameters *SearchParamsObject `json:"fallbackParameters,omitempty"`
 }

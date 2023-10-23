@@ -9,9 +9,9 @@ import (
 // BigCommerceMetafield struct for BigCommerceMetafield
 type BigCommerceMetafield struct {
 	// The namespace of the metafield.
-	Namespace string `json:"namespace" validate:"required"`
+	Namespace string `json:"namespace"`
 	// The key identifier of the metafield.
-	Key string `json:"key" validate:"required"`
+	Key string `json:"key"`
 }
 
 // NewBigCommerceMetafield instantiates a new BigCommerceMetafield object

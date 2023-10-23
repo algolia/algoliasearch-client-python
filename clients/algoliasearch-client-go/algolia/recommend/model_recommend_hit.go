@@ -9,7 +9,7 @@ import (
 // RecommendHit Recommend hit.
 type RecommendHit struct {
 	// Unique object identifier.
-	ObjectID string `json:"objectID" validate:"required"`
+	ObjectID string `json:"objectID"`
 	// Show highlighted section and words matched on a query.
 	HighlightResult *map[string]HighlightResult `json:"_highlightResult,omitempty"`
 	// Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
@@ -17,7 +17,7 @@ type RecommendHit struct {
 	RankingInfo   *RankingInfo              `json:"_rankingInfo,omitempty"`
 	DistinctSeqID *int32                    `json:"_distinctSeqID,omitempty"`
 	// Recommendation score.
-	Score                float64 `json:"_score" validate:"required"`
+	Score                float64 `json:"_score"`
 	AdditionalProperties map[string]any
 }
 

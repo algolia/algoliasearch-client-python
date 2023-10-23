@@ -9,13 +9,13 @@ import (
 // GetConversationRateResponse struct for GetConversationRateResponse
 type GetConversationRateResponse struct {
 	// [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
-	Rate float64 `json:"rate" validate:"required"`
+	Rate float64 `json:"rate"`
 	// Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
-	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
+	TrackedSearchCount int32 `json:"trackedSearchCount"`
 	// Number of converted clicks.
-	ConversionCount int32 `json:"conversionCount" validate:"required"`
+	ConversionCount int32 `json:"conversionCount"`
 	// Conversion events.
-	Dates []ConversionRateEvent `json:"dates" validate:"required"`
+	Dates []ConversionRateEvent `json:"dates"`
 }
 
 // NewGetConversationRateResponse instantiates a new GetConversationRateResponse object

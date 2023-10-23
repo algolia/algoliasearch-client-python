@@ -8,7 +8,7 @@ import (
 
 // SearchMethodParams struct for SearchMethodParams
 type SearchMethodParams struct {
-	Requests []SearchQuery   `json:"requests" validate:"required"`
+	Requests []SearchQuery   `json:"requests"`
 	Strategy *SearchStrategy `json:"strategy,omitempty"`
 }
 

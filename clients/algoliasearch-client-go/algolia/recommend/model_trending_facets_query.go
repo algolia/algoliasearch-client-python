@@ -9,10 +9,10 @@ import (
 // TrendingFacetsQuery struct for TrendingFacetsQuery
 type TrendingFacetsQuery struct {
 	// Facet name for trending models.
-	FacetName string               `json:"facetName" validate:"required"`
+	FacetName string               `json:"facetName"`
 	Model     *TrendingFacetsModel `json:"model,omitempty"`
 	// Algolia index name.
-	IndexName string `json:"indexName" validate:"required"`
+	IndexName string `json:"indexName"`
 	// Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are.
 	Threshold *int32 `json:"threshold,omitempty"`
 	// Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.

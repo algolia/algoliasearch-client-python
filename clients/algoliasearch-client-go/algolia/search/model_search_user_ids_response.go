@@ -9,15 +9,15 @@ import (
 // SearchUserIdsResponse userIDs data.
 type SearchUserIdsResponse struct {
 	// User objects that match the query.
-	Hits []UserHit `json:"hits" validate:"required"`
+	Hits []UserHit `json:"hits"`
 	// Number of hits the search query matched.
-	NbHits int32 `json:"nbHits" validate:"required"`
+	NbHits int32 `json:"nbHits"`
 	// Page to retrieve (the first page is `0`, not `1`).
-	Page int32 `json:"page" validate:"required"`
+	Page int32 `json:"page"`
 	// Maximum number of hits per page.
-	HitsPerPage int32 `json:"hitsPerPage" validate:"required"`
+	HitsPerPage int32 `json:"hitsPerPage"`
 	// Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
-	UpdatedAt string `json:"updatedAt" validate:"required"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 // NewSearchUserIdsResponse instantiates a new SearchUserIdsResponse object

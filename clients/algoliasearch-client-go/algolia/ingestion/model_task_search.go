@@ -8,7 +8,7 @@ import (
 
 // TaskSearch struct for TaskSearch
 type TaskSearch struct {
-	TaskIDs []string `json:"taskIDs" validate:"required"`
+	TaskIDs []string `json:"taskIDs"`
 }
 
 // NewTaskSearch instantiates a new TaskSearch object

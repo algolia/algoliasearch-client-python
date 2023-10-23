@@ -1305,7 +1305,7 @@ components:
         - Advanced
     baseSearchResponse:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - nbHits
         - page
@@ -1332,21 +1332,69 @@ components:
         automaticRadius:
           type: string
           description: Automatically-computed radius.
+        exhaustive:
+          type: object
+          title: exhaustive
+          description: >-
+            Whether certain properties of the search response are calculated
+            exhaustive (exact) or approximated.
+          properties:
+            facetsCount:
+              type: boolean
+              title: facetsCount
+              description: >-
+                Whether the facet count is exhaustive (`true`) or approximate
+                (`false`). See the [related
+                discussion](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).
+            facetValues:
+              type: boolean
+              title: facetValues
+              description: The value is `false` if not all facet values are retrieved.
+            nbHits:
+              type: boolean
+              title: nbHits
+              description: >-
+                Whether the `nbHits` is exhaustive (`true`) or approximate
+                (`false`). When the query takes more than 50ms to be processed,
+                the engine makes an approximation. This can happen when using
+                complex filters on millions of records, when typo-tolerance was
+                not exhaustive, or when enough hits have been retrieved (for
+                example, after the engine finds 10,000 exact matches). `nbHits`
+                is reported as non-exhaustive whenever an approximation is made,
+                even if the approximation didn’t, in the end, impact the
+                exhaustivity of the query.
+            rulesMatch:
+              type: boolean
+              title: rulesMatch
+              description: >-
+                Rules matching exhaustivity. The value is `false` if rules were
+                enable for this query, and could not be fully processed due a
+                timeout. This is generally caused by the number of alternatives
+                (such as typos) which is too large.
+            typo:
+              type: boolean
+              title: typo
+              description: >-
+                Whether the typo search was exhaustive (`true`) or approximate
+                (`false`). An approximation is done when the typo search query
+                part takes more than 10% of the query budget (ie. 5ms by
+                default) to be processed (this can happen when a lot of typo
+                alternatives exist for the query). This field will not be
+                included when typo-tolerance is entirely disabled.
         exhaustiveFacetsCount:
           type: boolean
           description: >-
-            Indicates whether the facet count is exhaustive (exact) or
-            approximate.
+            See the `facetsCount` field of the `exhaustive` object in the
+            response.
+          deprecated: true
         exhaustiveNbHits:
           type: boolean
-          description: >-
-            Indicates whether the number of hits `nbHits` is exhaustive (exact)
-            or approximate.
+          description: See the `nbHits` field of the `exhaustive` object in the response.
+          deprecated: true
         exhaustiveTypo:
           type: boolean
-          description: >-
-            Indicates whether the search for typos was exhaustive (exact) or
-            approximate.
+          description: See the `typo` field of the `exhaustive` object in the response.
+          deprecated: true
         facets:
           title: facets
           type: object
@@ -1408,16 +1456,6 @@ components:
           example: 20
         page:
           $ref: '#/components/schemas/page'
-        redirect:
-          type: object
-          description: >
-            [Redirect results to a
-            URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
-          properties:
-            index:
-              type: array
-              items:
-                $ref: '#/components/schemas/RedirectRuleIndexMetadata'
         parsedQuery:
           type: string
           description: >-
@@ -1428,19 +1466,40 @@ components:
           type: integer
           description: Time the server took to process the request, in milliseconds.
           example: 20
+        processingTimingsMS:
+          type: object
+          description: >-
+            Experimental. List of processing steps and their times, in
+            milliseconds. You can use this list to investigate performance
+            issues.
         queryAfterRemoval:
           type: string
           description: >-
             Markup text indicating which parts of the original query have been
             removed to retrieve a non-empty result set.
+        redirect:
+          title: redirect
+          type: object
+          description: >
+            [Redirect results to a
+            URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
+          properties:
+            index:
+              type: array
+              items:
+                $ref: '#/components/schemas/RedirectRuleIndexMetadata'
+        renderingContent:
+          $ref: '#/components/schemas/renderingContent'
+        serverTimeMS:
+          type: integer
+          description: Time the server took to process the request, in milliseconds.
+          example: 20
         serverUsed:
           type: string
           description: Host name of the server that processed the request.
           example: c2-uk-3.algolia.net
         userData:
           $ref: '#/components/schemas/userData'
-        renderingContent:
-          $ref: '#/components/schemas/renderingContent'
     objectID:
       type: string
       description: Unique object identifier.
@@ -1624,7 +1683,7 @@ components:
           $ref: '#/components/schemas/_distinctSeqID'
     searchHits:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       properties:
         hits:
           type: array
@@ -1641,6 +1700,7 @@ components:
         - query
         - params
     searchResponse:
+      additionalProperties: true
       allOf:
         - $ref: '#/components/schemas/baseSearchResponse'
         - $ref: '#/components/schemas/searchHits'
@@ -1705,6 +1765,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/searchParams'
         - $ref: '#/components/schemas/searchForFacetsOptions'
+      x-discriminator-fields:
+        - facet
+        - type
     SearchQuery:
       oneOf:
         - $ref: '#/components/schemas/SearchForHits'

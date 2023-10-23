@@ -2,18 +2,20 @@
 // ignore_for_file: unused_element
 import 'package:algoliasearch/src/model/hit.dart';
 
+import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'search_hits.g.dart';
 
-@JsonSerializable()
-final class SearchHits {
+@JsonSerializable(createFieldMap: true)
+final class SearchHits extends DelegatingMap<String, dynamic> {
   /// Returns a new [SearchHits] instance.
   const SearchHits({
     required this.hits,
     required this.query,
     required this.params,
-  });
+    Map<String, dynamic> additionalProperties = const {},
+  }) : super(additionalProperties);
 
   @JsonKey(name: r'hits')
   final List<Hit> hits;
@@ -32,15 +34,29 @@ final class SearchHits {
       other is SearchHits &&
           other.hits == hits &&
           other.query == query &&
-          other.params == params;
+          other.params == params &&
+          const MapEquality<String, dynamic>().equals(this, this);
 
   @override
-  int get hashCode => hits.hashCode + query.hashCode + params.hashCode;
+  int get hashCode =>
+      hits.hashCode +
+      query.hashCode +
+      params.hashCode +
+      const MapEquality<String, dynamic>().hash(this);
 
-  factory SearchHits.fromJson(Map<String, dynamic> json) =>
-      _$SearchHitsFromJson(json);
+  factory SearchHits.fromJson(Map<String, dynamic> json) {
+    final instance = _$SearchHitsFromJson(json);
+    final additionalProperties = Map<String, dynamic>.from(json)
+      ..removeWhere((key, value) => _$SearchHitsFieldMap.containsKey(key));
+    return SearchHits(
+      hits: instance.hits,
+      query: instance.query,
+      params: instance.params,
+      additionalProperties: additionalProperties,
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$SearchHitsToJson(this);
+  Map<String, dynamic> toJson() => _$SearchHitsToJson(this)..addAll(this);
 
   @override
   String toString() {

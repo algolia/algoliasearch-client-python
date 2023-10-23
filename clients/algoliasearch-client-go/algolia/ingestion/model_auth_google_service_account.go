@@ -9,9 +9,9 @@ import (
 // AuthGoogleServiceAccount Authentication input to connect to a Google service (e.g. BigQuery).
 type AuthGoogleServiceAccount struct {
 	// Email address of the Service Account.
-	ClientEmail string `json:"clientEmail" validate:"required"`
+	ClientEmail string `json:"clientEmail"`
 	// Private key of the Service Account.
-	PrivateKey string `json:"privateKey" validate:"required"`
+	PrivateKey string `json:"privateKey"`
 }
 
 // NewAuthGoogleServiceAccount instantiates a new AuthGoogleServiceAccount object

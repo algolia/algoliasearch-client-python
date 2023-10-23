@@ -13,7 +13,6 @@ import 'package:algoliasearch/src/model/base_index_settings.dart';
 import 'package:algoliasearch/src/model/base_search_params.dart';
 import 'package:algoliasearch/src/model/base_search_params_without_query.dart';
 import 'package:algoliasearch/src/model/base_search_response.dart';
-import 'package:algoliasearch/src/model/base_search_response_redirect.dart';
 import 'package:algoliasearch/src/model/browse_params_object.dart';
 import 'package:algoliasearch/src/model/browse_response.dart';
 import 'package:algoliasearch/src/model/built_in_operation.dart';
@@ -34,6 +33,7 @@ import 'package:algoliasearch/src/model/edit.dart';
 import 'package:algoliasearch/src/model/edit_type.dart';
 import 'package:algoliasearch/src/model/error_base.dart';
 import 'package:algoliasearch/src/model/exact_on_single_word_query.dart';
+import 'package:algoliasearch/src/model/exhaustive.dart';
 import 'package:algoliasearch/src/model/facet_hits.dart';
 import 'package:algoliasearch/src/model/facet_ordering.dart';
 import 'package:algoliasearch/src/model/facets.dart';
@@ -57,6 +57,7 @@ import 'package:algoliasearch/src/model/promote_object_id.dart';
 import 'package:algoliasearch/src/model/promote_object_ids.dart';
 import 'package:algoliasearch/src/model/query_type.dart';
 import 'package:algoliasearch/src/model/ranking_info.dart';
+import 'package:algoliasearch/src/model/redirect.dart';
 import 'package:algoliasearch/src/model/redirect_rule_index_metadata.dart';
 import 'package:algoliasearch/src/model/redirect_rule_index_metadata_data.dart';
 import 'package:algoliasearch/src/model/remove_words_if_no_results.dart';
@@ -150,9 +151,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'BaseSearchResponse':
       return BaseSearchResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
-    case 'BaseSearchResponseRedirect':
-      return BaseSearchResponseRedirect.fromJson(value as Map<String, dynamic>)
-          as ReturnType;
     case 'BrowseParamsObject':
       return BrowseParamsObject.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -202,6 +200,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return ErrorBase.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'ExactOnSingleWordQuery':
       return ExactOnSingleWordQuery.fromJson(value) as ReturnType;
+    case 'Exhaustive':
+      return Exhaustive.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'FacetHits':
       return FacetHits.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'FacetOrdering':
@@ -258,6 +258,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return QueryType.fromJson(value) as ReturnType;
     case 'RankingInfo':
       return RankingInfo.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'Redirect':
+      return Redirect.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'RedirectRuleIndexMetadata':
       return RedirectRuleIndexMetadata.fromJson(value as Map<String, dynamic>)
           as ReturnType;

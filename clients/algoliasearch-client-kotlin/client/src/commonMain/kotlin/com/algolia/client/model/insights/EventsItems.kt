@@ -13,16 +13,16 @@ import kotlinx.serialization.json.*
  * EventsItems
  *
  * Implementations:
- * - [AddedToCartObjectIDs]
  * - [AddedToCartObjectIDsAfterSearch]
+ * - [PurchasedObjectIDsAfterSearch]
+ * - [AddedToCartObjectIDs]
+ * - [ClickedObjectIDsAfterSearch]
+ * - [PurchasedObjectIDs]
  * - [ClickedFilters]
  * - [ClickedObjectIDs]
- * - [ClickedObjectIDsAfterSearch]
  * - [ConvertedFilters]
  * - [ConvertedObjectIDs]
  * - [ConvertedObjectIDsAfterSearch]
- * - [PurchasedObjectIDs]
- * - [PurchasedObjectIDsAfterSearch]
  * - [ViewedFilters]
  * - [ViewedObjectIDs]
  */
@@ -39,16 +39,16 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
 
   override fun serialize(encoder: Encoder, value: EventsItems) {
     when (value) {
-      is AddedToCartObjectIDs -> AddedToCartObjectIDs.serializer().serialize(encoder, value)
       is AddedToCartObjectIDsAfterSearch -> AddedToCartObjectIDsAfterSearch.serializer().serialize(encoder, value)
+      is PurchasedObjectIDsAfterSearch -> PurchasedObjectIDsAfterSearch.serializer().serialize(encoder, value)
+      is AddedToCartObjectIDs -> AddedToCartObjectIDs.serializer().serialize(encoder, value)
+      is ClickedObjectIDsAfterSearch -> ClickedObjectIDsAfterSearch.serializer().serialize(encoder, value)
+      is PurchasedObjectIDs -> PurchasedObjectIDs.serializer().serialize(encoder, value)
       is ClickedFilters -> ClickedFilters.serializer().serialize(encoder, value)
       is ClickedObjectIDs -> ClickedObjectIDs.serializer().serialize(encoder, value)
-      is ClickedObjectIDsAfterSearch -> ClickedObjectIDsAfterSearch.serializer().serialize(encoder, value)
       is ConvertedFilters -> ConvertedFilters.serializer().serialize(encoder, value)
       is ConvertedObjectIDs -> ConvertedObjectIDs.serializer().serialize(encoder, value)
       is ConvertedObjectIDsAfterSearch -> ConvertedObjectIDsAfterSearch.serializer().serialize(encoder, value)
-      is PurchasedObjectIDs -> PurchasedObjectIDs.serializer().serialize(encoder, value)
-      is PurchasedObjectIDsAfterSearch -> PurchasedObjectIDsAfterSearch.serializer().serialize(encoder, value)
       is ViewedFilters -> ViewedFilters.serializer().serialize(encoder, value)
       is ViewedObjectIDs -> ViewedObjectIDs.serializer().serialize(encoder, value)
     }
@@ -58,18 +58,8 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
     val codec = decoder.asJsonDecoder()
     val tree = codec.decodeJsonElement()
 
-    // deserialize AddedToCartObjectIDs
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement(AddedToCartObjectIDs.serializer(), tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize AddedToCartObjectIDs (error: ${e.message})")
-      }
-    }
-
     // deserialize AddedToCartObjectIDsAfterSearch
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("eventSubtype") && tree.containsKey("queryID") && tree.containsKey("objectIDs")) {
       try {
         return codec.json.decodeFromJsonElement(AddedToCartObjectIDsAfterSearch.serializer(), tree)
       } catch (e: Exception) {
@@ -78,8 +68,48 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
       }
     }
 
+    // deserialize PurchasedObjectIDsAfterSearch
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("eventSubtype") && tree.containsKey("queryID") && tree.containsKey("objectIDs")) {
+      try {
+        return codec.json.decodeFromJsonElement(PurchasedObjectIDsAfterSearch.serializer(), tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize PurchasedObjectIDsAfterSearch (error: ${e.message})")
+      }
+    }
+
+    // deserialize AddedToCartObjectIDs
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("eventSubtype") && tree.containsKey("objectIDs")) {
+      try {
+        return codec.json.decodeFromJsonElement(AddedToCartObjectIDs.serializer(), tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize AddedToCartObjectIDs (error: ${e.message})")
+      }
+    }
+
+    // deserialize ClickedObjectIDsAfterSearch
+    if (tree is JsonObject && tree.containsKey("positions") && tree.containsKey("queryID") && tree.containsKey("eventType")) {
+      try {
+        return codec.json.decodeFromJsonElement(ClickedObjectIDsAfterSearch.serializer(), tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize ClickedObjectIDsAfterSearch (error: ${e.message})")
+      }
+    }
+
+    // deserialize PurchasedObjectIDs
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("eventSubtype") && tree.containsKey("objectIDs")) {
+      try {
+        return codec.json.decodeFromJsonElement(PurchasedObjectIDs.serializer(), tree)
+      } catch (e: Exception) {
+        // deserialization failed, continue
+        println("Failed to deserialize PurchasedObjectIDs (error: ${e.message})")
+      }
+    }
+
     // deserialize ClickedFilters
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("filters")) {
       try {
         return codec.json.decodeFromJsonElement(ClickedFilters.serializer(), tree)
       } catch (e: Exception) {
@@ -89,7 +119,7 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
     }
 
     // deserialize ClickedObjectIDs
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("objectIDs")) {
       try {
         return codec.json.decodeFromJsonElement(ClickedObjectIDs.serializer(), tree)
       } catch (e: Exception) {
@@ -98,18 +128,8 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
       }
     }
 
-    // deserialize ClickedObjectIDsAfterSearch
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement(ClickedObjectIDsAfterSearch.serializer(), tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize ClickedObjectIDsAfterSearch (error: ${e.message})")
-      }
-    }
-
     // deserialize ConvertedFilters
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("filters")) {
       try {
         return codec.json.decodeFromJsonElement(ConvertedFilters.serializer(), tree)
       } catch (e: Exception) {
@@ -119,7 +139,7 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
     }
 
     // deserialize ConvertedObjectIDs
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("objectIDs")) {
       try {
         return codec.json.decodeFromJsonElement(ConvertedObjectIDs.serializer(), tree)
       } catch (e: Exception) {
@@ -129,7 +149,7 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
     }
 
     // deserialize ConvertedObjectIDsAfterSearch
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("queryID") && tree.containsKey("eventType")) {
       try {
         return codec.json.decodeFromJsonElement(ConvertedObjectIDsAfterSearch.serializer(), tree)
       } catch (e: Exception) {
@@ -138,28 +158,8 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
       }
     }
 
-    // deserialize PurchasedObjectIDs
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement(PurchasedObjectIDs.serializer(), tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize PurchasedObjectIDs (error: ${e.message})")
-      }
-    }
-
-    // deserialize PurchasedObjectIDsAfterSearch
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement(PurchasedObjectIDsAfterSearch.serializer(), tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize PurchasedObjectIDsAfterSearch (error: ${e.message})")
-      }
-    }
-
     // deserialize ViewedFilters
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("filters")) {
       try {
         return codec.json.decodeFromJsonElement(ViewedFilters.serializer(), tree)
       } catch (e: Exception) {
@@ -169,7 +169,7 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
     }
 
     // deserialize ViewedObjectIDs
-    if (tree is JsonObject) {
+    if (tree is JsonObject && tree.containsKey("eventType") && tree.containsKey("objectIDs")) {
       try {
         return codec.json.decodeFromJsonElement(ViewedObjectIDs.serializer(), tree)
       } catch (e: Exception) {

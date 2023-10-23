@@ -9,7 +9,7 @@ import (
 // SearchDictionaryEntriesParams `searchDictionaryEntries` parameters.
 type SearchDictionaryEntriesParams struct {
 	// Text to search for in an index.
-	Query string `json:"query" validate:"required"`
+	Query string `json:"query"`
 	// Page to retrieve (the first page is `0`, not `1`).
 	Page *int32 `json:"page,omitempty"`
 	// Number of hits per page.

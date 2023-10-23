@@ -8,7 +8,7 @@ import (
 
 // SearchResponses struct for SearchResponses
 type SearchResponses struct {
-	Results []SearchResult `json:"results" validate:"required"`
+	Results []SearchResult `json:"results"`
 }
 
 // NewSearchResponses instantiates a new SearchResponses object

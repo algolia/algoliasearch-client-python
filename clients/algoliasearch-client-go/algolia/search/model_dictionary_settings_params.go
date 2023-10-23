@@ -8,7 +8,7 @@ import (
 
 // DictionarySettingsParams Enable or turn off the built-in Algolia stop words for a specific language.
 type DictionarySettingsParams struct {
-	DisableStandardEntries StandardEntries `json:"disableStandardEntries" validate:"required"`
+	DisableStandardEntries StandardEntries `json:"disableStandardEntries"`
 }
 
 // NewDictionarySettingsParams instantiates a new DictionarySettingsParams object

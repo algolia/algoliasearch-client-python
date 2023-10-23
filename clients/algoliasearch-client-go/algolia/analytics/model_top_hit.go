@@ -9,9 +9,9 @@ import (
 // TopHit struct for TopHit
 type TopHit struct {
 	// Hit.
-	Hit string `json:"hit" validate:"required"`
+	Hit string `json:"hit"`
 	// Number of occurrences.
-	Count int32 `json:"count" validate:"required"`
+	Count int32 `json:"count"`
 }
 
 // NewTopHit instantiates a new TopHit object

@@ -9,27 +9,27 @@ import (
 // Log struct for Log
 type Log struct {
 	// Timestamp in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.
-	Timestamp string `json:"timestamp" validate:"required"`
+	Timestamp string `json:"timestamp"`
 	// HTTP method of the performed request.
-	Method string `json:"method" validate:"required"`
+	Method string `json:"method"`
 	// HTTP response code.
-	AnswerCode string `json:"answer_code" validate:"required"`
+	AnswerCode string `json:"answer_code"`
 	// Request body. Truncated after 1,000 characters.
-	QueryBody string `json:"query_body" validate:"required"`
+	QueryBody string `json:"query_body"`
 	// Answer body. Truncated after 1,000 characters.
-	Answer string `json:"answer" validate:"required"`
+	Answer string `json:"answer"`
 	// Request URL.
-	Url string `json:"url" validate:"required"`
+	Url string `json:"url"`
 	// IP address of the client that performed the request.
-	Ip string `json:"ip" validate:"required"`
+	Ip string `json:"ip"`
 	// Request headers (API key is obfuscated).
-	QueryHeaders string `json:"query_headers" validate:"required"`
+	QueryHeaders string `json:"query_headers"`
 	// SHA1 signature of the log entry.
-	Sha1 string `json:"sha1" validate:"required"`
+	Sha1 string `json:"sha1"`
 	// Number of API calls.
-	NbApiCalls string `json:"nb_api_calls" validate:"required"`
+	NbApiCalls string `json:"nb_api_calls"`
 	// Processing time for the query. Doesn't include network time.
-	ProcessingTimeMs string `json:"processing_time_ms" validate:"required"`
+	ProcessingTimeMs string `json:"processing_time_ms"`
 	// Index targeted by the query.
 	Index *string `json:"index,omitempty"`
 	// Query parameters sent with the request.

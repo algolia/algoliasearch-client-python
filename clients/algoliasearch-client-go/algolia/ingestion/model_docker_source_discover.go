@@ -9,9 +9,9 @@ import (
 // DockerSourceDiscover struct for DockerSourceDiscover
 type DockerSourceDiscover struct {
 	// The run UUID.
-	RunID string `json:"runID" validate:"required"`
+	RunID string `json:"runID"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt" validate:"required"`
+	CreatedAt string `json:"createdAt"`
 }
 
 // NewDockerSourceDiscover instantiates a new DockerSourceDiscover object

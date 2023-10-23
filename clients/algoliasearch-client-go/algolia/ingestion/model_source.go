@@ -9,14 +9,14 @@ import (
 // Source struct for Source
 type Source struct {
 	// The source UUID.
-	SourceID string      `json:"sourceID" validate:"required"`
-	Type     SourceType  `json:"type" validate:"required"`
-	Name     string      `json:"name" validate:"required"`
-	Input    SourceInput `json:"input" validate:"required"`
+	SourceID string      `json:"sourceID"`
+	Type     SourceType  `json:"type"`
+	Name     string      `json:"name"`
+	Input    SourceInput `json:"input"`
 	// The authentication UUID.
 	AuthenticationID *string `json:"authenticationID,omitempty"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt" validate:"required"`
+	CreatedAt string `json:"createdAt"`
 	// Date of last update (RFC3339 format).
 	UpdatedAt *string `json:"updatedAt,omitempty"`
 }

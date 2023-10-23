@@ -8,11 +8,11 @@ import (
 
 // AuthenticationCreate The payload when creating an authentication.
 type AuthenticationCreate struct {
-	Type AuthenticationType `json:"type" validate:"required"`
+	Type AuthenticationType `json:"type"`
 	// An human readable name describing the object.
-	Name     string    `json:"name" validate:"required"`
+	Name     string    `json:"name"`
 	Platform *Platform `json:"platform,omitempty"`
-	Input    AuthInput `json:"input" validate:"required"`
+	Input    AuthInput `json:"input"`
 }
 
 type AuthenticationCreateOption func(f *AuthenticationCreate)

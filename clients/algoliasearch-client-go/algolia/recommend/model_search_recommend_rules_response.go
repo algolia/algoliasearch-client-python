@@ -9,13 +9,13 @@ import (
 // SearchRecommendRulesResponse struct for SearchRecommendRulesResponse
 type SearchRecommendRulesResponse struct {
 	// Fetched rules.
-	Hits []RuleResponse `json:"hits" validate:"required"`
+	Hits []RuleResponse `json:"hits"`
 	// Number of fetched rules.
-	NbHits int32 `json:"nbHits" validate:"required"`
+	NbHits int32 `json:"nbHits"`
 	// Current page.
-	Page int32 `json:"page" validate:"required"`
+	Page int32 `json:"page"`
 	// Number of pages.
-	NbPages int32 `json:"nbPages" validate:"required"`
+	NbPages int32 `json:"nbPages"`
 }
 
 // NewSearchRecommendRulesResponse instantiates a new SearchRecommendRulesResponse object

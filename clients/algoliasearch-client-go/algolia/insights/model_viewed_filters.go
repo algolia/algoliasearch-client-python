@@ -9,14 +9,14 @@ import (
 // ViewedFilters Use this method to capture active filters. For example, when browsing a category page, users see content filtered on that specific category.
 type ViewedFilters struct {
 	// Can contain up to 64 ASCII characters.   Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.
-	EventName string    `json:"eventName" validate:"required"`
-	EventType ViewEvent `json:"eventType" validate:"required"`
+	EventName string    `json:"eventName"`
+	EventType ViewEvent `json:"eventType"`
 	// Name of the Algolia index.
-	Index string `json:"index" validate:"required"`
+	Index string `json:"index"`
 	// Facet filters.  Each facet filter string must be URL-encoded, such as, `discount:10%25`.
-	Filters []string `json:"filters" validate:"required"`
+	Filters []string `json:"filters"`
 	// Anonymous or pseudonymous user identifier.   > **Note**: Never include personally identifiable information in user tokens.
-	UserToken string `json:"userToken" validate:"required"`
+	UserToken string `json:"userToken"`
 	// Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
 	Timestamp *int64 `json:"timestamp,omitempty"`
 	// User token for authenticated users.

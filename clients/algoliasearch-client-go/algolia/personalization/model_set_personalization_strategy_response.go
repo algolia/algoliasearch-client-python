@@ -9,7 +9,7 @@ import (
 // SetPersonalizationStrategyResponse struct for SetPersonalizationStrategyResponse
 type SetPersonalizationStrategyResponse struct {
 	// A message confirming the strategy update.
-	Message string `json:"message" validate:"required"`
+	Message string `json:"message"`
 }
 
 // NewSetPersonalizationStrategyResponse instantiates a new SetPersonalizationStrategyResponse object

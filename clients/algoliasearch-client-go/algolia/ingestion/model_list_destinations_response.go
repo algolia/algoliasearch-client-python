@@ -8,8 +8,8 @@ import (
 
 // ListDestinationsResponse struct for ListDestinationsResponse
 type ListDestinationsResponse struct {
-	Destinations []Destination `json:"destinations" validate:"required"`
-	Pagination   Pagination    `json:"pagination" validate:"required"`
+	Destinations []Destination `json:"destinations"`
+	Pagination   Pagination    `json:"pagination"`
 }
 
 // NewListDestinationsResponse instantiates a new ListDestinationsResponse object

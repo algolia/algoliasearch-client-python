@@ -8,8 +8,8 @@ import (
 
 // ListSourcesResponse struct for ListSourcesResponse
 type ListSourcesResponse struct {
-	Sources    []Source   `json:"sources" validate:"required"`
-	Pagination Pagination `json:"pagination" validate:"required"`
+	Sources    []Source   `json:"sources"`
+	Pagination Pagination `json:"pagination"`
 }
 
 // NewListSourcesResponse instantiates a new ListSourcesResponse object

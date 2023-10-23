@@ -29,19 +29,41 @@ func SearchResponseAsSearchResult(v *SearchResponse) SearchResult {
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *SearchResult) UnmarshalJSON(data []byte) error {
 	var err error
-	// try to unmarshal data into SearchForFacetValuesResponse
-	err = newStrictDecoder(data).Decode(&dst.SearchForFacetValuesResponse)
-	if err == nil && validateStruct(dst.SearchForFacetValuesResponse) == nil {
-		jsonSearchForFacetValuesResponse, _ := json.Marshal(dst.SearchForFacetValuesResponse)
-		if string(jsonSearchForFacetValuesResponse) == "{}" { // empty struct
-			dst.SearchForFacetValuesResponse = nil
-		} else {
-			return nil
-		}
-	} else {
-		dst.SearchForFacetValuesResponse = nil
+	// use discriminator value to speed up the lookup
+	var jsonDict map[string]any
+	err = newStrictDecoder(data).Decode(&jsonDict)
+	if err != nil {
+		return fmt.Errorf("Failed to unmarshal JSON into map for the discriminator lookup (SearchForFacetValuesResponse).")
 	}
 
+	// Hold the schema validity between checks
+	validSchemaForModel := true
+
+	// If the model wasn't discriminated yet, continue checking for other discriminating properties
+	if validSchemaForModel {
+		// Check if the model holds a property 'facetHits'
+		if _, ok := jsonDict["facetHits"]; !ok {
+			validSchemaForModel = false
+		}
+	}
+
+	if validSchemaForModel {
+		// try to unmarshal data into SearchForFacetValuesResponse
+		err = newStrictDecoder(data).Decode(&dst.SearchForFacetValuesResponse)
+		if err == nil && validateStruct(dst.SearchForFacetValuesResponse) == nil {
+			jsonSearchForFacetValuesResponse, _ := json.Marshal(dst.SearchForFacetValuesResponse)
+			if string(jsonSearchForFacetValuesResponse) == "{}" { // empty struct
+				dst.SearchForFacetValuesResponse = nil
+			} else {
+				return nil
+			}
+		} else {
+			dst.SearchForFacetValuesResponse = nil
+		}
+	}
+
+	// Reset the schema validity for the next class check
+	validSchemaForModel = true
 	// try to unmarshal data into SearchResponse
 	err = newStrictDecoder(data).Decode(&dst.SearchResponse)
 	if err == nil && validateStruct(dst.SearchResponse) == nil {

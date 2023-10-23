@@ -9,11 +9,11 @@ import (
 // GetAverageClickPositionResponse struct for GetAverageClickPositionResponse
 type GetAverageClickPositionResponse struct {
 	// Average count of all click events.
-	Average float64 `json:"average" validate:"required"`
+	Average float64 `json:"average"`
 	// Number of click events.
-	ClickCount int32 `json:"clickCount" validate:"required"`
+	ClickCount int32 `json:"clickCount"`
 	// Average click positions.
-	Dates []AverageClickEvent `json:"dates" validate:"required"`
+	Dates []AverageClickEvent `json:"dates"`
 }
 
 // NewGetAverageClickPositionResponse instantiates a new GetAverageClickPositionResponse object

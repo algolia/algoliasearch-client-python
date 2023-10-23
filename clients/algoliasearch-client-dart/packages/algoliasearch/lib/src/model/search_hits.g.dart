@@ -23,6 +23,12 @@ SearchHits _$SearchHitsFromJson(Map<String, dynamic> json) => $checkedCreate(
       },
     );
 
+const _$SearchHitsFieldMap = <String, String>{
+  'hits': 'hits',
+  'query': 'query',
+  'params': 'params',
+};
+
 Map<String, dynamic> _$SearchHitsToJson(SearchHits instance) =>
     <String, dynamic>{
       'hits': instance.hits.map((e) => e.toJson()).toList(),

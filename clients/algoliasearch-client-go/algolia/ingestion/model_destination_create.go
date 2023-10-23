@@ -8,10 +8,10 @@ import (
 
 // DestinationCreate The payload when creating a destination.
 type DestinationCreate struct {
-	Type DestinationType `json:"type" validate:"required"`
+	Type DestinationType `json:"type"`
 	// An human readable name describing the object.
-	Name  string           `json:"name" validate:"required"`
-	Input DestinationInput `json:"input" validate:"required"`
+	Name  string           `json:"name"`
+	Input DestinationInput `json:"input"`
 	// The authentication UUID.
 	AuthenticationID *string `json:"authenticationID,omitempty"`
 }

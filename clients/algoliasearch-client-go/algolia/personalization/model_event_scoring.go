@@ -9,11 +9,11 @@ import (
 // EventScoring struct for EventScoring
 type EventScoring struct {
 	// The score for the event.
-	Score int32 `json:"score" validate:"required"`
+	Score int32 `json:"score"`
 	// The name of the event.
-	EventName string `json:"eventName" validate:"required"`
+	EventName string `json:"eventName"`
 	// The type of the event.
-	EventType string `json:"eventType" validate:"required"`
+	EventType string `json:"eventType"`
 }
 
 // NewEventScoring instantiates a new EventScoring object

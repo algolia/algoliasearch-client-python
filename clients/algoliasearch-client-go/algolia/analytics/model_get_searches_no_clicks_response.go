@@ -9,7 +9,7 @@ import (
 // GetSearchesNoClicksResponse struct for GetSearchesNoClicksResponse
 type GetSearchesNoClicksResponse struct {
 	// Searches with no clicks.
-	Searches []SearchNoClickEvent `json:"searches" validate:"required"`
+	Searches []SearchNoClickEvent `json:"searches"`
 }
 
 // NewGetSearchesNoClicksResponse instantiates a new GetSearchesNoClicksResponse object

@@ -9,7 +9,7 @@ import (
 // QuerySuggestionsConfiguration Query Suggestions configuration.
 type QuerySuggestionsConfiguration struct {
 	// Algolia indices from which to get the popular searches for query suggestions.
-	SourceIndices []SourceIndex `json:"sourceIndices" validate:"required"`
+	SourceIndices []SourceIndex `json:"sourceIndices"`
 	Languages     *Languages    `json:"languages,omitempty"`
 	// Patterns to exclude from query suggestions.
 	Exclude []string `json:"exclude,omitempty"`

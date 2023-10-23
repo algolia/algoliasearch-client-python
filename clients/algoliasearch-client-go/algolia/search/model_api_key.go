@@ -9,7 +9,7 @@ import (
 // ApiKey API key object.
 type ApiKey struct {
 	// [Permissions](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl) associated with the key.
-	Acl []Acl `json:"acl" validate:"required"`
+	Acl []Acl `json:"acl"`
 	// Description of an API key for you and your team members.
 	Description *string `json:"description,omitempty"`
 	// Restricts this API key to a list of indices or index patterns. If the list is empty, all indices are allowed. Specify either an exact index name or a pattern with a leading or trailing wildcard character (or both). For example: - `dev_*` matches all indices starting with \"dev_\" - `*_dev` matches all indices ending with \"_dev\" - `*_products_*` matches all indices containing \"_products_\".

@@ -8,14 +8,14 @@ import (
 
 // SourceDocker struct for SourceDocker
 type SourceDocker struct {
-	ImageType DockerImageType `json:"imageType" validate:"required"`
-	Registry  DockerRegistry  `json:"registry" validate:"required"`
+	ImageType DockerImageType `json:"imageType"`
+	Registry  DockerRegistry  `json:"registry"`
 	// The name of the image to pull.
-	Image string `json:"image" validate:"required"`
+	Image string `json:"image"`
 	// The version of the image, defaults to `latest`.
 	Version *string `json:"version,omitempty"`
 	// The configuration of the spec.
-	Configuration map[string]interface{} `json:"configuration" validate:"required"`
+	Configuration map[string]interface{} `json:"configuration"`
 }
 
 type SourceDockerOption func(f *SourceDocker)

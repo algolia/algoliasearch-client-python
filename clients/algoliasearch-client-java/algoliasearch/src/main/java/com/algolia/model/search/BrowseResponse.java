@@ -26,6 +26,9 @@ public class BrowseResponse<T> {
   @JsonProperty("automaticRadius")
   private String automaticRadius;
 
+  @JsonProperty("exhaustive")
+  private Exhaustive exhaustive;
+
   @JsonProperty("exhaustiveFacetsCount")
   private Boolean exhaustiveFacetsCount;
 
@@ -65,26 +68,32 @@ public class BrowseResponse<T> {
   @JsonProperty("page")
   private Integer page;
 
-  @JsonProperty("redirect")
-  private BaseSearchResponseRedirect redirect;
-
   @JsonProperty("parsedQuery")
   private String parsedQuery;
 
   @JsonProperty("processingTimeMS")
   private Integer processingTimeMS;
 
+  @JsonProperty("processingTimingsMS")
+  private Object processingTimingsMS;
+
   @JsonProperty("queryAfterRemoval")
   private String queryAfterRemoval;
+
+  @JsonProperty("redirect")
+  private Redirect redirect;
+
+  @JsonProperty("renderingContent")
+  private RenderingContent renderingContent;
+
+  @JsonProperty("serverTimeMS")
+  private Integer serverTimeMS;
 
   @JsonProperty("serverUsed")
   private String serverUsed;
 
   @JsonProperty("userData")
   private Object userData;
-
-  @JsonProperty("renderingContent")
-  private RenderingContent renderingContent;
 
   @JsonProperty("hits")
   private List<T> hits = new ArrayList<>();
@@ -147,12 +156,28 @@ public class BrowseResponse<T> {
     return automaticRadius;
   }
 
+  public BrowseResponse setExhaustive(Exhaustive exhaustive) {
+    this.exhaustive = exhaustive;
+    return this;
+  }
+
+  /** Get exhaustive */
+  @javax.annotation.Nullable
+  public Exhaustive getExhaustive() {
+    return exhaustive;
+  }
+
   public BrowseResponse setExhaustiveFacetsCount(Boolean exhaustiveFacetsCount) {
     this.exhaustiveFacetsCount = exhaustiveFacetsCount;
     return this;
   }
 
-  /** Indicates whether the facet count is exhaustive (exact) or approximate. */
+  /**
+   * See the `facetsCount` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveFacetsCount() {
     return exhaustiveFacetsCount;
@@ -163,7 +188,12 @@ public class BrowseResponse<T> {
     return this;
   }
 
-  /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
+  /**
+   * See the `nbHits` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveNbHits() {
     return exhaustiveNbHits;
@@ -174,7 +204,12 @@ public class BrowseResponse<T> {
     return this;
   }
 
-  /** Indicates whether the search for typos was exhaustive (exact) or approximate. */
+  /**
+   * See the `typo` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveTypo() {
     return exhaustiveTypo;
@@ -309,17 +344,6 @@ public class BrowseResponse<T> {
     return page;
   }
 
-  public BrowseResponse setRedirect(BaseSearchResponseRedirect redirect) {
-    this.redirect = redirect;
-    return this;
-  }
-
-  /** Get redirect */
-  @javax.annotation.Nullable
-  public BaseSearchResponseRedirect getRedirect() {
-    return redirect;
-  }
-
   public BrowseResponse setParsedQuery(String parsedQuery) {
     this.parsedQuery = parsedQuery;
     return this;
@@ -345,6 +369,20 @@ public class BrowseResponse<T> {
     return processingTimeMS;
   }
 
+  public BrowseResponse setProcessingTimingsMS(Object processingTimingsMS) {
+    this.processingTimingsMS = processingTimingsMS;
+    return this;
+  }
+
+  /**
+   * Experimental. List of processing steps and their times, in milliseconds. You can use this list
+   * to investigate performance issues.
+   */
+  @javax.annotation.Nullable
+  public Object getProcessingTimingsMS() {
+    return processingTimingsMS;
+  }
+
   public BrowseResponse setQueryAfterRemoval(String queryAfterRemoval) {
     this.queryAfterRemoval = queryAfterRemoval;
     return this;
@@ -357,6 +395,39 @@ public class BrowseResponse<T> {
   @javax.annotation.Nullable
   public String getQueryAfterRemoval() {
     return queryAfterRemoval;
+  }
+
+  public BrowseResponse setRedirect(Redirect redirect) {
+    this.redirect = redirect;
+    return this;
+  }
+
+  /** Get redirect */
+  @javax.annotation.Nullable
+  public Redirect getRedirect() {
+    return redirect;
+  }
+
+  public BrowseResponse setRenderingContent(RenderingContent renderingContent) {
+    this.renderingContent = renderingContent;
+    return this;
+  }
+
+  /** Get renderingContent */
+  @javax.annotation.Nullable
+  public RenderingContent getRenderingContent() {
+    return renderingContent;
+  }
+
+  public BrowseResponse setServerTimeMS(Integer serverTimeMS) {
+    this.serverTimeMS = serverTimeMS;
+    return this;
+  }
+
+  /** Time the server took to process the request, in milliseconds. */
+  @javax.annotation.Nullable
+  public Integer getServerTimeMS() {
+    return serverTimeMS;
   }
 
   public BrowseResponse setServerUsed(String serverUsed) {
@@ -379,17 +450,6 @@ public class BrowseResponse<T> {
   @javax.annotation.Nullable
   public Object getUserData() {
     return userData;
-  }
-
-  public BrowseResponse setRenderingContent(RenderingContent renderingContent) {
-    this.renderingContent = renderingContent;
-    return this;
-  }
-
-  /** Get renderingContent */
-  @javax.annotation.Nullable
-  public RenderingContent getRenderingContent() {
-    return renderingContent;
   }
 
   public BrowseResponse setHits(List<T> hits) {
@@ -459,6 +519,7 @@ public class BrowseResponse<T> {
       Objects.equals(this.abTestVariantID, browseResponse.abTestVariantID) &&
       Objects.equals(this.aroundLatLng, browseResponse.aroundLatLng) &&
       Objects.equals(this.automaticRadius, browseResponse.automaticRadius) &&
+      Objects.equals(this.exhaustive, browseResponse.exhaustive) &&
       Objects.equals(this.exhaustiveFacetsCount, browseResponse.exhaustiveFacetsCount) &&
       Objects.equals(this.exhaustiveNbHits, browseResponse.exhaustiveNbHits) &&
       Objects.equals(this.exhaustiveTypo, browseResponse.exhaustiveTypo) &&
@@ -472,13 +533,15 @@ public class BrowseResponse<T> {
       Objects.equals(this.nbPages, browseResponse.nbPages) &&
       Objects.equals(this.nbSortedHits, browseResponse.nbSortedHits) &&
       Objects.equals(this.page, browseResponse.page) &&
-      Objects.equals(this.redirect, browseResponse.redirect) &&
       Objects.equals(this.parsedQuery, browseResponse.parsedQuery) &&
       Objects.equals(this.processingTimeMS, browseResponse.processingTimeMS) &&
+      Objects.equals(this.processingTimingsMS, browseResponse.processingTimingsMS) &&
       Objects.equals(this.queryAfterRemoval, browseResponse.queryAfterRemoval) &&
+      Objects.equals(this.redirect, browseResponse.redirect) &&
+      Objects.equals(this.renderingContent, browseResponse.renderingContent) &&
+      Objects.equals(this.serverTimeMS, browseResponse.serverTimeMS) &&
       Objects.equals(this.serverUsed, browseResponse.serverUsed) &&
       Objects.equals(this.userData, browseResponse.userData) &&
-      Objects.equals(this.renderingContent, browseResponse.renderingContent) &&
       Objects.equals(this.hits, browseResponse.hits) &&
       Objects.equals(this.query, browseResponse.query) &&
       Objects.equals(this.params, browseResponse.params) &&
@@ -493,6 +556,7 @@ public class BrowseResponse<T> {
       abTestVariantID,
       aroundLatLng,
       automaticRadius,
+      exhaustive,
       exhaustiveFacetsCount,
       exhaustiveNbHits,
       exhaustiveTypo,
@@ -506,13 +570,15 @@ public class BrowseResponse<T> {
       nbPages,
       nbSortedHits,
       page,
-      redirect,
       parsedQuery,
       processingTimeMS,
+      processingTimingsMS,
       queryAfterRemoval,
+      redirect,
+      renderingContent,
+      serverTimeMS,
       serverUsed,
       userData,
-      renderingContent,
       hits,
       query,
       params,
@@ -528,6 +594,7 @@ public class BrowseResponse<T> {
     sb.append("    abTestVariantID: ").append(toIndentedString(abTestVariantID)).append("\n");
     sb.append("    aroundLatLng: ").append(toIndentedString(aroundLatLng)).append("\n");
     sb.append("    automaticRadius: ").append(toIndentedString(automaticRadius)).append("\n");
+    sb.append("    exhaustive: ").append(toIndentedString(exhaustive)).append("\n");
     sb.append("    exhaustiveFacetsCount: ").append(toIndentedString(exhaustiveFacetsCount)).append("\n");
     sb.append("    exhaustiveNbHits: ").append(toIndentedString(exhaustiveNbHits)).append("\n");
     sb.append("    exhaustiveTypo: ").append(toIndentedString(exhaustiveTypo)).append("\n");
@@ -541,13 +608,15 @@ public class BrowseResponse<T> {
     sb.append("    nbPages: ").append(toIndentedString(nbPages)).append("\n");
     sb.append("    nbSortedHits: ").append(toIndentedString(nbSortedHits)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
     sb.append("    parsedQuery: ").append(toIndentedString(parsedQuery)).append("\n");
     sb.append("    processingTimeMS: ").append(toIndentedString(processingTimeMS)).append("\n");
+    sb.append("    processingTimingsMS: ").append(toIndentedString(processingTimingsMS)).append("\n");
     sb.append("    queryAfterRemoval: ").append(toIndentedString(queryAfterRemoval)).append("\n");
+    sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
+    sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
+    sb.append("    serverTimeMS: ").append(toIndentedString(serverTimeMS)).append("\n");
     sb.append("    serverUsed: ").append(toIndentedString(serverUsed)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");
-    sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    params: ").append(toIndentedString(params)).append("\n");

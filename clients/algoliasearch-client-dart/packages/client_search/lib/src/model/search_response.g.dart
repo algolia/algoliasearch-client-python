@@ -17,6 +17,11 @@ SearchResponse _$SearchResponseFromJson(Map<String, dynamic> json) =>
           aroundLatLng: $checkedConvert('aroundLatLng', (v) => v as String?),
           automaticRadius:
               $checkedConvert('automaticRadius', (v) => v as String?),
+          exhaustive: $checkedConvert(
+              'exhaustive',
+              (v) => v == null
+                  ? null
+                  : Exhaustive.fromJson(v as Map<String, dynamic>)),
           exhaustiveFacetsCount:
               $checkedConvert('exhaustiveFacetsCount', (v) => v as bool?),
           exhaustiveNbHits:
@@ -41,24 +46,25 @@ SearchResponse _$SearchResponseFromJson(Map<String, dynamic> json) =>
           nbPages: $checkedConvert('nbPages', (v) => v as int),
           nbSortedHits: $checkedConvert('nbSortedHits', (v) => v as int?),
           page: $checkedConvert('page', (v) => v as int),
+          parsedQuery: $checkedConvert('parsedQuery', (v) => v as String?),
+          processingTimeMS:
+              $checkedConvert('processingTimeMS', (v) => v as int),
+          processingTimingsMS: $checkedConvert('processingTimingsMS', (v) => v),
+          queryAfterRemoval:
+              $checkedConvert('queryAfterRemoval', (v) => v as String?),
           redirect: $checkedConvert(
               'redirect',
               (v) => v == null
                   ? null
-                  : BaseSearchResponseRedirect.fromJson(
-                      v as Map<String, dynamic>)),
-          parsedQuery: $checkedConvert('parsedQuery', (v) => v as String?),
-          processingTimeMS:
-              $checkedConvert('processingTimeMS', (v) => v as int),
-          queryAfterRemoval:
-              $checkedConvert('queryAfterRemoval', (v) => v as String?),
-          serverUsed: $checkedConvert('serverUsed', (v) => v as String?),
-          userData: $checkedConvert('userData', (v) => v),
+                  : Redirect.fromJson(v as Map<String, dynamic>)),
           renderingContent: $checkedConvert(
               'renderingContent',
               (v) => v == null
                   ? null
                   : RenderingContent.fromJson(v as Map<String, dynamic>)),
+          serverTimeMS: $checkedConvert('serverTimeMS', (v) => v as int?),
+          serverUsed: $checkedConvert('serverUsed', (v) => v as String?),
+          userData: $checkedConvert('userData', (v) => v),
           hits: $checkedConvert(
               'hits',
               (v) => (v as List<dynamic>)
@@ -85,6 +91,7 @@ Map<String, dynamic> _$SearchResponseToJson(SearchResponse instance) {
   writeNotNull('abTestVariantID', instance.abTestVariantID);
   writeNotNull('aroundLatLng', instance.aroundLatLng);
   writeNotNull('automaticRadius', instance.automaticRadius);
+  writeNotNull('exhaustive', instance.exhaustive?.toJson());
   writeNotNull('exhaustiveFacetsCount', instance.exhaustiveFacetsCount);
   writeNotNull('exhaustiveNbHits', instance.exhaustiveNbHits);
   writeNotNull('exhaustiveTypo', instance.exhaustiveTypo);
@@ -99,13 +106,15 @@ Map<String, dynamic> _$SearchResponseToJson(SearchResponse instance) {
   val['nbPages'] = instance.nbPages;
   writeNotNull('nbSortedHits', instance.nbSortedHits);
   val['page'] = instance.page;
-  writeNotNull('redirect', instance.redirect?.toJson());
   writeNotNull('parsedQuery', instance.parsedQuery);
   val['processingTimeMS'] = instance.processingTimeMS;
+  writeNotNull('processingTimingsMS', instance.processingTimingsMS);
   writeNotNull('queryAfterRemoval', instance.queryAfterRemoval);
+  writeNotNull('redirect', instance.redirect?.toJson());
+  writeNotNull('renderingContent', instance.renderingContent?.toJson());
+  writeNotNull('serverTimeMS', instance.serverTimeMS);
   writeNotNull('serverUsed', instance.serverUsed);
   writeNotNull('userData', instance.userData);
-  writeNotNull('renderingContent', instance.renderingContent?.toJson());
   val['hits'] = instance.hits.map((e) => e.toJson()).toList();
   val['query'] = instance.query;
   val['params'] = instance.params;

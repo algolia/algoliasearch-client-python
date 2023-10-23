@@ -15,19 +15,23 @@ type RecommendationsResponse struct {
 	// Computed geographical location.
 	AroundLatLng *string `json:"aroundLatLng,omitempty"`
 	// Automatically-computed radius.
-	AutomaticRadius *string `json:"automaticRadius,omitempty"`
-	// Indicates whether the facet count is exhaustive (exact) or approximate.
+	AutomaticRadius *string     `json:"automaticRadius,omitempty"`
+	Exhaustive      *Exhaustive `json:"exhaustive,omitempty"`
+	// See the `facetsCount` field of the `exhaustive` object in the response.
+	// Deprecated
 	ExhaustiveFacetsCount *bool `json:"exhaustiveFacetsCount,omitempty"`
-	// Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
+	// See the `nbHits` field of the `exhaustive` object in the response.
+	// Deprecated
 	ExhaustiveNbHits *bool `json:"exhaustiveNbHits,omitempty"`
-	// Indicates whether the search for typos was exhaustive (exact) or approximate.
+	// See the `typo` field of the `exhaustive` object in the response.
+	// Deprecated
 	ExhaustiveTypo *bool `json:"exhaustiveTypo,omitempty"`
 	// Mapping of each facet name to the corresponding facet counts.
 	Facets *map[string]map[string]int32 `json:"facets,omitempty"`
 	// Statistics for numerical facets.
 	FacetsStats *map[string]FacetsStats `json:"facets_stats,omitempty"`
 	// Number of hits per page.
-	HitsPerPage int32 `json:"hitsPerPage" validate:"required"`
+	HitsPerPage int32 `json:"hitsPerPage"`
 	// Index name used for the query.
 	Index *string `json:"index,omitempty"`
 	// Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query.
@@ -35,26 +39,30 @@ type RecommendationsResponse struct {
 	// Warnings about the query.
 	Message *string `json:"message,omitempty"`
 	// Number of hits the search query matched.
-	NbHits int32 `json:"nbHits" validate:"required"`
+	NbHits int32 `json:"nbHits"`
 	// Number of pages of results for the current query.
-	NbPages int32 `json:"nbPages" validate:"required"`
+	NbPages int32 `json:"nbPages"`
 	// Number of hits selected and sorted by the relevant sort algorithm.
 	NbSortedHits *int32 `json:"nbSortedHits,omitempty"`
 	// Page to retrieve (the first page is `0`, not `1`).
-	Page     int32                       `json:"page" validate:"required"`
-	Redirect *BaseSearchResponseRedirect `json:"redirect,omitempty"`
+	Page int32 `json:"page"`
 	// Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
 	ParsedQuery *string `json:"parsedQuery,omitempty"`
 	// Time the server took to process the request, in milliseconds.
-	ProcessingTimeMS int32 `json:"processingTimeMS" validate:"required"`
+	ProcessingTimeMS int32 `json:"processingTimeMS"`
+	// Experimental. List of processing steps and their times, in milliseconds. You can use this list to investigate performance issues.
+	ProcessingTimingsMS map[string]interface{} `json:"processingTimingsMS,omitempty"`
 	// Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
-	QueryAfterRemoval *string `json:"queryAfterRemoval,omitempty"`
+	QueryAfterRemoval *string           `json:"queryAfterRemoval,omitempty"`
+	Redirect          *Redirect         `json:"redirect,omitempty"`
+	RenderingContent  *RenderingContent `json:"renderingContent,omitempty"`
+	// Time the server took to process the request, in milliseconds.
+	ServerTimeMS *int32 `json:"serverTimeMS,omitempty"`
 	// Host name of the server that processed the request.
 	ServerUsed *string `json:"serverUsed,omitempty"`
 	// Lets you store custom data in your indices.
-	UserData         interface{}       `json:"userData,omitempty"`
-	RenderingContent *RenderingContent `json:"renderingContent,omitempty"`
-	Hits             []RecommendHit    `json:"hits" validate:"required"`
+	UserData interface{}    `json:"userData,omitempty"`
+	Hits     []RecommendHit `json:"hits"`
 	// Text to search for in an index.
 	Query *string `json:"query,omitempty"`
 	// URL-encoded string of all search parameters.
@@ -84,6 +92,12 @@ func WithRecommendationsResponseAroundLatLng(val string) RecommendationsResponse
 func WithRecommendationsResponseAutomaticRadius(val string) RecommendationsResponseOption {
 	return func(f *RecommendationsResponse) {
 		f.AutomaticRadius = &val
+	}
+}
+
+func WithRecommendationsResponseExhaustive(val Exhaustive) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.Exhaustive = &val
 	}
 }
 
@@ -141,21 +155,39 @@ func WithRecommendationsResponseNbSortedHits(val int32) RecommendationsResponseO
 	}
 }
 
-func WithRecommendationsResponseRedirect(val BaseSearchResponseRedirect) RecommendationsResponseOption {
-	return func(f *RecommendationsResponse) {
-		f.Redirect = &val
-	}
-}
-
 func WithRecommendationsResponseParsedQuery(val string) RecommendationsResponseOption {
 	return func(f *RecommendationsResponse) {
 		f.ParsedQuery = &val
 	}
 }
 
+func WithRecommendationsResponseProcessingTimingsMS(val map[string]interface{}) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.ProcessingTimingsMS = val
+	}
+}
+
 func WithRecommendationsResponseQueryAfterRemoval(val string) RecommendationsResponseOption {
 	return func(f *RecommendationsResponse) {
 		f.QueryAfterRemoval = &val
+	}
+}
+
+func WithRecommendationsResponseRedirect(val Redirect) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.Redirect = &val
+	}
+}
+
+func WithRecommendationsResponseRenderingContent(val RenderingContent) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.RenderingContent = &val
+	}
+}
+
+func WithRecommendationsResponseServerTimeMS(val int32) RecommendationsResponseOption {
+	return func(f *RecommendationsResponse) {
+		f.ServerTimeMS = &val
 	}
 }
 
@@ -168,12 +200,6 @@ func WithRecommendationsResponseServerUsed(val string) RecommendationsResponseOp
 func WithRecommendationsResponseUserData(val interface{}) RecommendationsResponseOption {
 	return func(f *RecommendationsResponse) {
 		f.UserData = val
-	}
-}
-
-func WithRecommendationsResponseRenderingContent(val RenderingContent) RecommendationsResponseOption {
-	return func(f *RecommendationsResponse) {
-		f.RenderingContent = &val
 	}
 }
 
@@ -349,7 +375,40 @@ func (o *RecommendationsResponse) SetAutomaticRadius(v string) {
 	o.AutomaticRadius = &v
 }
 
+// GetExhaustive returns the Exhaustive field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetExhaustive() Exhaustive {
+	if o == nil || o.Exhaustive == nil {
+		var ret Exhaustive
+		return ret
+	}
+	return *o.Exhaustive
+}
+
+// GetExhaustiveOk returns a tuple with the Exhaustive field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetExhaustiveOk() (*Exhaustive, bool) {
+	if o == nil || o.Exhaustive == nil {
+		return nil, false
+	}
+	return o.Exhaustive, true
+}
+
+// HasExhaustive returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasExhaustive() bool {
+	if o != nil && o.Exhaustive != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExhaustive gets a reference to the given Exhaustive and assigns it to the Exhaustive field.
+func (o *RecommendationsResponse) SetExhaustive(v Exhaustive) {
+	o.Exhaustive = &v
+}
+
 // GetExhaustiveFacetsCount returns the ExhaustiveFacetsCount field value if set, zero value otherwise.
+// Deprecated
 func (o *RecommendationsResponse) GetExhaustiveFacetsCount() bool {
 	if o == nil || o.ExhaustiveFacetsCount == nil {
 		var ret bool
@@ -360,6 +419,7 @@ func (o *RecommendationsResponse) GetExhaustiveFacetsCount() bool {
 
 // GetExhaustiveFacetsCountOk returns a tuple with the ExhaustiveFacetsCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *RecommendationsResponse) GetExhaustiveFacetsCountOk() (*bool, bool) {
 	if o == nil || o.ExhaustiveFacetsCount == nil {
 		return nil, false
@@ -377,11 +437,13 @@ func (o *RecommendationsResponse) HasExhaustiveFacetsCount() bool {
 }
 
 // SetExhaustiveFacetsCount gets a reference to the given bool and assigns it to the ExhaustiveFacetsCount field.
+// Deprecated
 func (o *RecommendationsResponse) SetExhaustiveFacetsCount(v bool) {
 	o.ExhaustiveFacetsCount = &v
 }
 
 // GetExhaustiveNbHits returns the ExhaustiveNbHits field value if set, zero value otherwise.
+// Deprecated
 func (o *RecommendationsResponse) GetExhaustiveNbHits() bool {
 	if o == nil || o.ExhaustiveNbHits == nil {
 		var ret bool
@@ -392,6 +454,7 @@ func (o *RecommendationsResponse) GetExhaustiveNbHits() bool {
 
 // GetExhaustiveNbHitsOk returns a tuple with the ExhaustiveNbHits field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *RecommendationsResponse) GetExhaustiveNbHitsOk() (*bool, bool) {
 	if o == nil || o.ExhaustiveNbHits == nil {
 		return nil, false
@@ -409,11 +472,13 @@ func (o *RecommendationsResponse) HasExhaustiveNbHits() bool {
 }
 
 // SetExhaustiveNbHits gets a reference to the given bool and assigns it to the ExhaustiveNbHits field.
+// Deprecated
 func (o *RecommendationsResponse) SetExhaustiveNbHits(v bool) {
 	o.ExhaustiveNbHits = &v
 }
 
 // GetExhaustiveTypo returns the ExhaustiveTypo field value if set, zero value otherwise.
+// Deprecated
 func (o *RecommendationsResponse) GetExhaustiveTypo() bool {
 	if o == nil || o.ExhaustiveTypo == nil {
 		var ret bool
@@ -424,6 +489,7 @@ func (o *RecommendationsResponse) GetExhaustiveTypo() bool {
 
 // GetExhaustiveTypoOk returns a tuple with the ExhaustiveTypo field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *RecommendationsResponse) GetExhaustiveTypoOk() (*bool, bool) {
 	if o == nil || o.ExhaustiveTypo == nil {
 		return nil, false
@@ -441,6 +507,7 @@ func (o *RecommendationsResponse) HasExhaustiveTypo() bool {
 }
 
 // SetExhaustiveTypo gets a reference to the given bool and assigns it to the ExhaustiveTypo field.
+// Deprecated
 func (o *RecommendationsResponse) SetExhaustiveTypo(v bool) {
 	o.ExhaustiveTypo = &v
 }
@@ -733,38 +800,6 @@ func (o *RecommendationsResponse) SetPage(v int32) {
 	o.Page = v
 }
 
-// GetRedirect returns the Redirect field value if set, zero value otherwise.
-func (o *RecommendationsResponse) GetRedirect() BaseSearchResponseRedirect {
-	if o == nil || o.Redirect == nil {
-		var ret BaseSearchResponseRedirect
-		return ret
-	}
-	return *o.Redirect
-}
-
-// GetRedirectOk returns a tuple with the Redirect field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *RecommendationsResponse) GetRedirectOk() (*BaseSearchResponseRedirect, bool) {
-	if o == nil || o.Redirect == nil {
-		return nil, false
-	}
-	return o.Redirect, true
-}
-
-// HasRedirect returns a boolean if a field has been set.
-func (o *RecommendationsResponse) HasRedirect() bool {
-	if o != nil && o.Redirect != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetRedirect gets a reference to the given BaseSearchResponseRedirect and assigns it to the Redirect field.
-func (o *RecommendationsResponse) SetRedirect(v BaseSearchResponseRedirect) {
-	o.Redirect = &v
-}
-
 // GetParsedQuery returns the ParsedQuery field value if set, zero value otherwise.
 func (o *RecommendationsResponse) GetParsedQuery() string {
 	if o == nil || o.ParsedQuery == nil {
@@ -821,6 +856,38 @@ func (o *RecommendationsResponse) SetProcessingTimeMS(v int32) {
 	o.ProcessingTimeMS = v
 }
 
+// GetProcessingTimingsMS returns the ProcessingTimingsMS field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetProcessingTimingsMS() map[string]interface{} {
+	if o == nil || o.ProcessingTimingsMS == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.ProcessingTimingsMS
+}
+
+// GetProcessingTimingsMSOk returns a tuple with the ProcessingTimingsMS field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetProcessingTimingsMSOk() (map[string]interface{}, bool) {
+	if o == nil || o.ProcessingTimingsMS == nil {
+		return nil, false
+	}
+	return o.ProcessingTimingsMS, true
+}
+
+// HasProcessingTimingsMS returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasProcessingTimingsMS() bool {
+	if o != nil && o.ProcessingTimingsMS != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetProcessingTimingsMS gets a reference to the given map[string]interface{} and assigns it to the ProcessingTimingsMS field.
+func (o *RecommendationsResponse) SetProcessingTimingsMS(v map[string]interface{}) {
+	o.ProcessingTimingsMS = v
+}
+
 // GetQueryAfterRemoval returns the QueryAfterRemoval field value if set, zero value otherwise.
 func (o *RecommendationsResponse) GetQueryAfterRemoval() string {
 	if o == nil || o.QueryAfterRemoval == nil {
@@ -851,6 +918,102 @@ func (o *RecommendationsResponse) HasQueryAfterRemoval() bool {
 // SetQueryAfterRemoval gets a reference to the given string and assigns it to the QueryAfterRemoval field.
 func (o *RecommendationsResponse) SetQueryAfterRemoval(v string) {
 	o.QueryAfterRemoval = &v
+}
+
+// GetRedirect returns the Redirect field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetRedirect() Redirect {
+	if o == nil || o.Redirect == nil {
+		var ret Redirect
+		return ret
+	}
+	return *o.Redirect
+}
+
+// GetRedirectOk returns a tuple with the Redirect field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetRedirectOk() (*Redirect, bool) {
+	if o == nil || o.Redirect == nil {
+		return nil, false
+	}
+	return o.Redirect, true
+}
+
+// HasRedirect returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasRedirect() bool {
+	if o != nil && o.Redirect != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRedirect gets a reference to the given Redirect and assigns it to the Redirect field.
+func (o *RecommendationsResponse) SetRedirect(v Redirect) {
+	o.Redirect = &v
+}
+
+// GetRenderingContent returns the RenderingContent field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetRenderingContent() RenderingContent {
+	if o == nil || o.RenderingContent == nil {
+		var ret RenderingContent
+		return ret
+	}
+	return *o.RenderingContent
+}
+
+// GetRenderingContentOk returns a tuple with the RenderingContent field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetRenderingContentOk() (*RenderingContent, bool) {
+	if o == nil || o.RenderingContent == nil {
+		return nil, false
+	}
+	return o.RenderingContent, true
+}
+
+// HasRenderingContent returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasRenderingContent() bool {
+	if o != nil && o.RenderingContent != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRenderingContent gets a reference to the given RenderingContent and assigns it to the RenderingContent field.
+func (o *RecommendationsResponse) SetRenderingContent(v RenderingContent) {
+	o.RenderingContent = &v
+}
+
+// GetServerTimeMS returns the ServerTimeMS field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetServerTimeMS() int32 {
+	if o == nil || o.ServerTimeMS == nil {
+		var ret int32
+		return ret
+	}
+	return *o.ServerTimeMS
+}
+
+// GetServerTimeMSOk returns a tuple with the ServerTimeMS field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RecommendationsResponse) GetServerTimeMSOk() (*int32, bool) {
+	if o == nil || o.ServerTimeMS == nil {
+		return nil, false
+	}
+	return o.ServerTimeMS, true
+}
+
+// HasServerTimeMS returns a boolean if a field has been set.
+func (o *RecommendationsResponse) HasServerTimeMS() bool {
+	if o != nil && o.ServerTimeMS != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetServerTimeMS gets a reference to the given int32 and assigns it to the ServerTimeMS field.
+func (o *RecommendationsResponse) SetServerTimeMS(v int32) {
+	o.ServerTimeMS = &v
 }
 
 // GetServerUsed returns the ServerUsed field value if set, zero value otherwise.
@@ -916,38 +1079,6 @@ func (o *RecommendationsResponse) HasUserData() bool {
 // SetUserData gets a reference to the given interface{} and assigns it to the UserData field.
 func (o *RecommendationsResponse) SetUserData(v interface{}) {
 	o.UserData = v
-}
-
-// GetRenderingContent returns the RenderingContent field value if set, zero value otherwise.
-func (o *RecommendationsResponse) GetRenderingContent() RenderingContent {
-	if o == nil || o.RenderingContent == nil {
-		var ret RenderingContent
-		return ret
-	}
-	return *o.RenderingContent
-}
-
-// GetRenderingContentOk returns a tuple with the RenderingContent field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *RecommendationsResponse) GetRenderingContentOk() (*RenderingContent, bool) {
-	if o == nil || o.RenderingContent == nil {
-		return nil, false
-	}
-	return o.RenderingContent, true
-}
-
-// HasRenderingContent returns a boolean if a field has been set.
-func (o *RecommendationsResponse) HasRenderingContent() bool {
-	if o != nil && o.RenderingContent != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetRenderingContent gets a reference to the given RenderingContent and assigns it to the RenderingContent field.
-func (o *RecommendationsResponse) SetRenderingContent(v RenderingContent) {
-	o.RenderingContent = &v
 }
 
 // GetHits returns the Hits field value
@@ -1052,6 +1183,9 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	if o.AutomaticRadius != nil {
 		toSerialize["automaticRadius"] = o.AutomaticRadius
 	}
+	if o.Exhaustive != nil {
+		toSerialize["exhaustive"] = o.Exhaustive
+	}
 	if o.ExhaustiveFacetsCount != nil {
 		toSerialize["exhaustiveFacetsCount"] = o.ExhaustiveFacetsCount
 	}
@@ -1091,26 +1225,32 @@ func (o RecommendationsResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["page"] = o.Page
 	}
-	if o.Redirect != nil {
-		toSerialize["redirect"] = o.Redirect
-	}
 	if o.ParsedQuery != nil {
 		toSerialize["parsedQuery"] = o.ParsedQuery
 	}
 	if true {
 		toSerialize["processingTimeMS"] = o.ProcessingTimeMS
 	}
+	if o.ProcessingTimingsMS != nil {
+		toSerialize["processingTimingsMS"] = o.ProcessingTimingsMS
+	}
 	if o.QueryAfterRemoval != nil {
 		toSerialize["queryAfterRemoval"] = o.QueryAfterRemoval
+	}
+	if o.Redirect != nil {
+		toSerialize["redirect"] = o.Redirect
+	}
+	if o.RenderingContent != nil {
+		toSerialize["renderingContent"] = o.RenderingContent
+	}
+	if o.ServerTimeMS != nil {
+		toSerialize["serverTimeMS"] = o.ServerTimeMS
 	}
 	if o.ServerUsed != nil {
 		toSerialize["serverUsed"] = o.ServerUsed
 	}
 	if o.UserData != nil {
 		toSerialize["userData"] = o.UserData
-	}
-	if o.RenderingContent != nil {
-		toSerialize["renderingContent"] = o.RenderingContent
 	}
 	if true {
 		toSerialize["hits"] = o.Hits
@@ -1130,6 +1270,7 @@ func (o RecommendationsResponse) String() string {
 	out += fmt.Sprintf("  abTestVariantID=%v\n", o.AbTestVariantID)
 	out += fmt.Sprintf("  aroundLatLng=%v\n", o.AroundLatLng)
 	out += fmt.Sprintf("  automaticRadius=%v\n", o.AutomaticRadius)
+	out += fmt.Sprintf("  exhaustive=%v\n", o.Exhaustive)
 	out += fmt.Sprintf("  exhaustiveFacetsCount=%v\n", o.ExhaustiveFacetsCount)
 	out += fmt.Sprintf("  exhaustiveNbHits=%v\n", o.ExhaustiveNbHits)
 	out += fmt.Sprintf("  exhaustiveTypo=%v\n", o.ExhaustiveTypo)
@@ -1143,13 +1284,15 @@ func (o RecommendationsResponse) String() string {
 	out += fmt.Sprintf("  nbPages=%v\n", o.NbPages)
 	out += fmt.Sprintf("  nbSortedHits=%v\n", o.NbSortedHits)
 	out += fmt.Sprintf("  page=%v\n", o.Page)
-	out += fmt.Sprintf("  redirect=%v\n", o.Redirect)
 	out += fmt.Sprintf("  parsedQuery=%v\n", o.ParsedQuery)
 	out += fmt.Sprintf("  processingTimeMS=%v\n", o.ProcessingTimeMS)
+	out += fmt.Sprintf("  processingTimingsMS=%v\n", o.ProcessingTimingsMS)
 	out += fmt.Sprintf("  queryAfterRemoval=%v\n", o.QueryAfterRemoval)
+	out += fmt.Sprintf("  redirect=%v\n", o.Redirect)
+	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
+	out += fmt.Sprintf("  serverTimeMS=%v\n", o.ServerTimeMS)
 	out += fmt.Sprintf("  serverUsed=%v\n", o.ServerUsed)
 	out += fmt.Sprintf("  userData=%v\n", o.UserData)
-	out += fmt.Sprintf("  renderingContent=%v\n", o.RenderingContent)
 	out += fmt.Sprintf("  hits=%v\n", o.Hits)
 	out += fmt.Sprintf("  query=%v\n", o.Query)
 	out += fmt.Sprintf("  params=%v\n", o.Params)

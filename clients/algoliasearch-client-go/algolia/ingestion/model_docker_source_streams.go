@@ -8,7 +8,7 @@ import (
 
 // DockerSourceStreams struct for DockerSourceStreams
 type DockerSourceStreams struct {
-	Streams []map[string]interface{} `json:"streams" validate:"required"`
+	Streams []map[string]interface{} `json:"streams"`
 }
 
 // NewDockerSourceStreams instantiates a new DockerSourceStreams object

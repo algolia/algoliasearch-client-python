@@ -8,7 +8,7 @@ import (
 
 // SourceSearch struct for SourceSearch
 type SourceSearch struct {
-	SourceIDs []string `json:"sourceIDs" validate:"required"`
+	SourceIDs []string `json:"sourceIDs"`
 }
 
 // NewSourceSearch instantiates a new SourceSearch object

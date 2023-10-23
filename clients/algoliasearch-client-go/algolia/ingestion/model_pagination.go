@@ -8,10 +8,10 @@ import (
 
 // Pagination struct for Pagination
 type Pagination struct {
-	NbPages      int32 `json:"nbPages" validate:"required"`
-	Page         int32 `json:"page" validate:"required"`
-	NbItems      int32 `json:"nbItems" validate:"required"`
-	ItemsPerPage int32 `json:"itemsPerPage" validate:"required"`
+	NbPages      int32 `json:"nbPages"`
+	Page         int32 `json:"page"`
+	NbItems      int32 `json:"nbItems"`
+	ItemsPerPage int32 `json:"itemsPerPage"`
 }
 
 // NewPagination instantiates a new Pagination object

@@ -9,7 +9,7 @@ import (
 // SourceIndex Configuration of an Algolia index for Query Suggestions.
 type SourceIndex struct {
 	// Name of the Algolia index to use as source for query suggestions.
-	IndexName string `json:"indexName" validate:"required"`
+	IndexName string `json:"indexName"`
 	// If true, Query Suggestions uses all replicas of the primary index to find popular searches. If false, only the primary index is used.
 	Replicas *bool `json:"replicas,omitempty"`
 	// [Analytics tags](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) for filtering the popular searches.

@@ -8,7 +8,7 @@ import (
 
 // OnDemandTriggerInput The trigger information of a task of type `onDemand`.
 type OnDemandTriggerInput struct {
-	Type OnDemandTriggerType `json:"type" validate:"required"`
+	Type OnDemandTriggerType `json:"type"`
 }
 
 // NewOnDemandTriggerInput instantiates a new OnDemandTriggerInput object

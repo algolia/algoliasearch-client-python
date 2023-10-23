@@ -8,9 +8,9 @@ import (
 
 // ScheduleTriggerInput The trigger input for a task of type 'schedule'.
 type ScheduleTriggerInput struct {
-	Type ScheduleTriggerType `json:"type" validate:"required"`
+	Type ScheduleTriggerType `json:"type"`
 	// A cron expression that represent at which regularity the task should run.
-	Cron string `json:"cron" validate:"required"`
+	Cron string `json:"cron"`
 }
 
 // NewScheduleTriggerInput instantiates a new ScheduleTriggerInput object

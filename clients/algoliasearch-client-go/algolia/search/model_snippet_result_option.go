@@ -9,8 +9,8 @@ import (
 // SnippetResultOption Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
 type SnippetResultOption struct {
 	// Markup text with `facetQuery` matches highlighted.
-	Value      string     `json:"value" validate:"required"`
-	MatchLevel MatchLevel `json:"matchLevel" validate:"required"`
+	Value      string     `json:"value"`
+	MatchLevel MatchLevel `json:"matchLevel"`
 }
 
 // NewSnippetResultOption instantiates a new SnippetResultOption object

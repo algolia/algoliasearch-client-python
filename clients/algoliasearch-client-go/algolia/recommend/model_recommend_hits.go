@@ -8,7 +8,7 @@ import (
 
 // RecommendHits struct for RecommendHits
 type RecommendHits struct {
-	Hits []RecommendHit `json:"hits" validate:"required"`
+	Hits []RecommendHit `json:"hits"`
 	// Text to search for in an index.
 	Query *string `json:"query,omitempty"`
 	// URL-encoded string of all search parameters.

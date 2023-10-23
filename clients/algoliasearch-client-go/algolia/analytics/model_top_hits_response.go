@@ -9,7 +9,7 @@ import (
 // TopHitsResponse struct for TopHitsResponse
 type TopHitsResponse struct {
 	// Top hits.
-	Hits []TopHit `json:"hits" validate:"required"`
+	Hits []TopHit `json:"hits"`
 }
 
 // NewTopHitsResponse instantiates a new TopHitsResponse object

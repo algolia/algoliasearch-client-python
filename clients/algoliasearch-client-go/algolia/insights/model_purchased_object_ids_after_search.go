@@ -9,21 +9,21 @@ import (
 // PurchasedObjectIDsAfterSearch Use this event to track when users make a purchase after a previous Algolia request. If you're building your category pages with Algolia, you'll also use this event.
 type PurchasedObjectIDsAfterSearch struct {
 	// Can contain up to 64 ASCII characters.   Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.
-	EventName    string          `json:"eventName" validate:"required"`
-	EventType    ConversionEvent `json:"eventType" validate:"required"`
-	EventSubtype PurchaseEvent   `json:"eventSubtype" validate:"required"`
+	EventName    string          `json:"eventName"`
+	EventType    ConversionEvent `json:"eventType"`
+	EventSubtype PurchaseEvent   `json:"eventSubtype"`
 	// Name of the Algolia index.
-	Index string `json:"index" validate:"required"`
+	Index string `json:"index"`
 	// Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response.
-	QueryID string `json:"queryID" validate:"required"`
+	QueryID string `json:"queryID"`
 	// List of object identifiers for items of an Algolia index.
-	ObjectIDs []string `json:"objectIDs" validate:"required"`
+	ObjectIDs []string `json:"objectIDs"`
 	// Extra information about the records involved in the event—for example, to add price and quantities of purchased products.  If provided, must be the same length as `objectIDs`.
 	ObjectData []ObjectDataAfterSearch `json:"objectData,omitempty"`
 	// If you include pricing information in the `objectData` parameter, you must also specify the currency as ISO-4217 currency code, such as USD or EUR.
 	Currency *string `json:"currency,omitempty"`
 	// Anonymous or pseudonymous user identifier.   > **Note**: Never include personally identifiable information in user tokens.
-	UserToken string `json:"userToken" validate:"required"`
+	UserToken string `json:"userToken"`
 	// Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
 	Timestamp *int64 `json:"timestamp,omitempty"`
 	// User token for authenticated users.

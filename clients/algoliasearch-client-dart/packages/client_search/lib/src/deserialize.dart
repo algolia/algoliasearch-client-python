@@ -14,7 +14,6 @@ import 'package:algolia_client_search/src/model/base_index_settings.dart';
 import 'package:algolia_client_search/src/model/base_search_params.dart';
 import 'package:algolia_client_search/src/model/base_search_params_without_query.dart';
 import 'package:algolia_client_search/src/model/base_search_response.dart';
-import 'package:algolia_client_search/src/model/base_search_response_redirect.dart';
 import 'package:algolia_client_search/src/model/batch_assign_user_ids_params.dart';
 import 'package:algolia_client_search/src/model/batch_dictionary_entries_params.dart';
 import 'package:algolia_client_search/src/model/batch_dictionary_entries_request.dart';
@@ -47,6 +46,7 @@ import 'package:algolia_client_search/src/model/edit.dart';
 import 'package:algolia_client_search/src/model/edit_type.dart';
 import 'package:algolia_client_search/src/model/error_base.dart';
 import 'package:algolia_client_search/src/model/exact_on_single_word_query.dart';
+import 'package:algolia_client_search/src/model/exhaustive.dart';
 import 'package:algolia_client_search/src/model/facet_hits.dart';
 import 'package:algolia_client_search/src/model/facet_ordering.dart';
 import 'package:algolia_client_search/src/model/facets.dart';
@@ -86,6 +86,7 @@ import 'package:algolia_client_search/src/model/promote_object_id.dart';
 import 'package:algolia_client_search/src/model/promote_object_ids.dart';
 import 'package:algolia_client_search/src/model/query_type.dart';
 import 'package:algolia_client_search/src/model/ranking_info.dart';
+import 'package:algolia_client_search/src/model/redirect.dart';
 import 'package:algolia_client_search/src/model/redirect_rule_index_metadata.dart';
 import 'package:algolia_client_search/src/model/redirect_rule_index_metadata_data.dart';
 import 'package:algolia_client_search/src/model/remove_user_id_response.dart';
@@ -198,9 +199,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'BaseSearchResponse':
       return BaseSearchResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
-    case 'BaseSearchResponseRedirect':
-      return BaseSearchResponseRedirect.fromJson(value as Map<String, dynamic>)
-          as ReturnType;
     case 'BatchAssignUserIdsParams':
       return BatchAssignUserIdsParams.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -284,6 +282,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return ErrorBase.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'ExactOnSingleWordQuery':
       return ExactOnSingleWordQuery.fromJson(value) as ReturnType;
+    case 'Exhaustive':
+      return Exhaustive.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'FacetHits':
       return FacetHits.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'FacetOrdering':
@@ -386,6 +386,8 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
       return QueryType.fromJson(value) as ReturnType;
     case 'RankingInfo':
       return RankingInfo.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'Redirect':
+      return Redirect.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'RedirectRuleIndexMetadata':
       return RedirectRuleIndexMetadata.fromJson(value as Map<String, dynamic>)
           as ReturnType;

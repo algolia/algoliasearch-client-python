@@ -9,9 +9,9 @@ import (
 // SearchSynonymsResponse struct for SearchSynonymsResponse
 type SearchSynonymsResponse struct {
 	// Synonym objects.
-	Hits []SynonymHit `json:"hits" validate:"required"`
+	Hits []SynonymHit `json:"hits"`
 	// Number of hits the search query matched.
-	NbHits               int32 `json:"nbHits" validate:"required"`
+	NbHits               int32 `json:"nbHits"`
 	AdditionalProperties map[string]any
 }
 

@@ -8,8 +8,8 @@ import (
 
 // ListTasksResponse A list of tasks with pagination details.
 type ListTasksResponse struct {
-	Tasks      []Task     `json:"tasks" validate:"required"`
-	Pagination Pagination `json:"pagination" validate:"required"`
+	Tasks      []Task     `json:"tasks"`
+	Pagination Pagination `json:"pagination"`
 }
 
 // NewListTasksResponse instantiates a new ListTasksResponse object

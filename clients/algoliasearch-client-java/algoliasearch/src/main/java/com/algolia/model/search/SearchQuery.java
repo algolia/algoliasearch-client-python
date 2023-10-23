@@ -23,7 +23,7 @@ public interface SearchQuery {
       JsonNode tree = jp.readValueAsTree();
 
       // deserialize SearchForFacets
-      if (tree.isObject()) {
+      if (tree.isObject() && tree.has("facet") && tree.has("type")) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {
           return parser.readValueAs(SearchForFacets.class);
         } catch (Exception e) {

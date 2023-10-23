@@ -9,13 +9,13 @@ import (
 // Destination A destination describe how the data is indexed on the Algolia side.
 type Destination struct {
 	// The destination UUID.
-	DestinationID string          `json:"destinationID" validate:"required"`
-	Type          DestinationType `json:"type" validate:"required"`
+	DestinationID string          `json:"destinationID"`
+	Type          DestinationType `json:"type"`
 	// An human readable name describing the object.
-	Name  string           `json:"name" validate:"required"`
-	Input DestinationInput `json:"input" validate:"required"`
+	Name  string           `json:"name"`
+	Input DestinationInput `json:"input"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt" validate:"required"`
+	CreatedAt string `json:"createdAt"`
 	// Date of last update (RFC3339 format).
 	UpdatedAt        *string `json:"updatedAt,omitempty"`
 	AuthenticationID *string `json:"authenticationID,omitempty"`

@@ -9,7 +9,7 @@ import (
 // ScheduleDateUtilsInput The input for a `schedule` task whose source is of type `bigquery` and for which extracted data spans a fixed number of days.
 type ScheduleDateUtilsInput struct {
 	// The timeframe of the extraction, in number of days from today.
-	Timeframe int32 `json:"timeframe" validate:"required"`
+	Timeframe int32 `json:"timeframe"`
 }
 
 // NewScheduleDateUtilsInput instantiates a new ScheduleDateUtilsInput object

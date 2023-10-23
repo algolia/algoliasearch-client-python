@@ -8,7 +8,7 @@ import (
 
 // SubscriptionTrigger The trigger input for a task of type 'subscription'.
 type SubscriptionTrigger struct {
-	Type SubscriptionTriggerType `json:"type" validate:"required"`
+	Type SubscriptionTriggerType `json:"type"`
 }
 
 // NewSubscriptionTrigger instantiates a new SubscriptionTrigger object

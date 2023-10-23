@@ -9,7 +9,7 @@ import (
 // ListIndicesResponse struct for ListIndicesResponse
 type ListIndicesResponse struct {
 	// All indices in your Algolia application.
-	Items []FetchedIndex `json:"items" validate:"required"`
+	Items []FetchedIndex `json:"items"`
 	// Number of pages.
 	NbPages *int32 `json:"nbPages,omitempty"`
 }

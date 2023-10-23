@@ -8,7 +8,7 @@ import (
 
 // GetTaskResponse struct for GetTaskResponse
 type GetTaskResponse struct {
-	Status TaskStatus `json:"status" validate:"required"`
+	Status TaskStatus `json:"status"`
 }
 
 // NewGetTaskResponse instantiates a new GetTaskResponse object

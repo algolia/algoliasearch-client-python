@@ -27,6 +27,9 @@ public class SearchResponse<T> implements SearchResult {
   @JsonProperty("automaticRadius")
   private String automaticRadius;
 
+  @JsonProperty("exhaustive")
+  private Exhaustive exhaustive;
+
   @JsonProperty("exhaustiveFacetsCount")
   private Boolean exhaustiveFacetsCount;
 
@@ -66,26 +69,32 @@ public class SearchResponse<T> implements SearchResult {
   @JsonProperty("page")
   private Integer page;
 
-  @JsonProperty("redirect")
-  private BaseSearchResponseRedirect redirect;
-
   @JsonProperty("parsedQuery")
   private String parsedQuery;
 
   @JsonProperty("processingTimeMS")
   private Integer processingTimeMS;
 
+  @JsonProperty("processingTimingsMS")
+  private Object processingTimingsMS;
+
   @JsonProperty("queryAfterRemoval")
   private String queryAfterRemoval;
+
+  @JsonProperty("redirect")
+  private Redirect redirect;
+
+  @JsonProperty("renderingContent")
+  private RenderingContent renderingContent;
+
+  @JsonProperty("serverTimeMS")
+  private Integer serverTimeMS;
 
   @JsonProperty("serverUsed")
   private String serverUsed;
 
   @JsonProperty("userData")
   private Object userData;
-
-  @JsonProperty("renderingContent")
-  private RenderingContent renderingContent;
 
   @JsonProperty("hits")
   private List<T> hits = new ArrayList<>();
@@ -95,6 +104,19 @@ public class SearchResponse<T> implements SearchResult {
 
   @JsonProperty("params")
   private String params;
+
+  private Map<String, Object> additionalProperties = new HashMap<>();
+
+  @JsonAnyGetter
+  public Map<String, Object> getAdditionalProperties() {
+    return this.additionalProperties;
+  }
+
+  @JsonAnySetter
+  public SearchResponse setAdditionalProperty(String name, Object value) {
+    this.additionalProperties.put(name, value);
+    return this;
+  }
 
   public SearchResponse setAbTestID(Integer abTestID) {
     this.abTestID = abTestID;
@@ -145,12 +167,28 @@ public class SearchResponse<T> implements SearchResult {
     return automaticRadius;
   }
 
+  public SearchResponse setExhaustive(Exhaustive exhaustive) {
+    this.exhaustive = exhaustive;
+    return this;
+  }
+
+  /** Get exhaustive */
+  @javax.annotation.Nullable
+  public Exhaustive getExhaustive() {
+    return exhaustive;
+  }
+
   public SearchResponse setExhaustiveFacetsCount(Boolean exhaustiveFacetsCount) {
     this.exhaustiveFacetsCount = exhaustiveFacetsCount;
     return this;
   }
 
-  /** Indicates whether the facet count is exhaustive (exact) or approximate. */
+  /**
+   * See the `facetsCount` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveFacetsCount() {
     return exhaustiveFacetsCount;
@@ -161,7 +199,12 @@ public class SearchResponse<T> implements SearchResult {
     return this;
   }
 
-  /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
+  /**
+   * See the `nbHits` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveNbHits() {
     return exhaustiveNbHits;
@@ -172,7 +215,12 @@ public class SearchResponse<T> implements SearchResult {
     return this;
   }
 
-  /** Indicates whether the search for typos was exhaustive (exact) or approximate. */
+  /**
+   * See the `typo` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveTypo() {
     return exhaustiveTypo;
@@ -307,17 +355,6 @@ public class SearchResponse<T> implements SearchResult {
     return page;
   }
 
-  public SearchResponse setRedirect(BaseSearchResponseRedirect redirect) {
-    this.redirect = redirect;
-    return this;
-  }
-
-  /** Get redirect */
-  @javax.annotation.Nullable
-  public BaseSearchResponseRedirect getRedirect() {
-    return redirect;
-  }
-
   public SearchResponse setParsedQuery(String parsedQuery) {
     this.parsedQuery = parsedQuery;
     return this;
@@ -343,6 +380,20 @@ public class SearchResponse<T> implements SearchResult {
     return processingTimeMS;
   }
 
+  public SearchResponse setProcessingTimingsMS(Object processingTimingsMS) {
+    this.processingTimingsMS = processingTimingsMS;
+    return this;
+  }
+
+  /**
+   * Experimental. List of processing steps and their times, in milliseconds. You can use this list
+   * to investigate performance issues.
+   */
+  @javax.annotation.Nullable
+  public Object getProcessingTimingsMS() {
+    return processingTimingsMS;
+  }
+
   public SearchResponse setQueryAfterRemoval(String queryAfterRemoval) {
     this.queryAfterRemoval = queryAfterRemoval;
     return this;
@@ -355,6 +406,39 @@ public class SearchResponse<T> implements SearchResult {
   @javax.annotation.Nullable
   public String getQueryAfterRemoval() {
     return queryAfterRemoval;
+  }
+
+  public SearchResponse setRedirect(Redirect redirect) {
+    this.redirect = redirect;
+    return this;
+  }
+
+  /** Get redirect */
+  @javax.annotation.Nullable
+  public Redirect getRedirect() {
+    return redirect;
+  }
+
+  public SearchResponse setRenderingContent(RenderingContent renderingContent) {
+    this.renderingContent = renderingContent;
+    return this;
+  }
+
+  /** Get renderingContent */
+  @javax.annotation.Nullable
+  public RenderingContent getRenderingContent() {
+    return renderingContent;
+  }
+
+  public SearchResponse setServerTimeMS(Integer serverTimeMS) {
+    this.serverTimeMS = serverTimeMS;
+    return this;
+  }
+
+  /** Time the server took to process the request, in milliseconds. */
+  @javax.annotation.Nullable
+  public Integer getServerTimeMS() {
+    return serverTimeMS;
   }
 
   public SearchResponse setServerUsed(String serverUsed) {
@@ -377,17 +461,6 @@ public class SearchResponse<T> implements SearchResult {
   @javax.annotation.Nullable
   public Object getUserData() {
     return userData;
-  }
-
-  public SearchResponse setRenderingContent(RenderingContent renderingContent) {
-    this.renderingContent = renderingContent;
-    return this;
-  }
-
-  /** Get renderingContent */
-  @javax.annotation.Nullable
-  public RenderingContent getRenderingContent() {
-    return renderingContent;
   }
 
   public SearchResponse setHits(List<T> hits) {
@@ -442,6 +515,7 @@ public class SearchResponse<T> implements SearchResult {
       Objects.equals(this.abTestVariantID, searchResponse.abTestVariantID) &&
       Objects.equals(this.aroundLatLng, searchResponse.aroundLatLng) &&
       Objects.equals(this.automaticRadius, searchResponse.automaticRadius) &&
+      Objects.equals(this.exhaustive, searchResponse.exhaustive) &&
       Objects.equals(this.exhaustiveFacetsCount, searchResponse.exhaustiveFacetsCount) &&
       Objects.equals(this.exhaustiveNbHits, searchResponse.exhaustiveNbHits) &&
       Objects.equals(this.exhaustiveTypo, searchResponse.exhaustiveTypo) &&
@@ -455,16 +529,19 @@ public class SearchResponse<T> implements SearchResult {
       Objects.equals(this.nbPages, searchResponse.nbPages) &&
       Objects.equals(this.nbSortedHits, searchResponse.nbSortedHits) &&
       Objects.equals(this.page, searchResponse.page) &&
-      Objects.equals(this.redirect, searchResponse.redirect) &&
       Objects.equals(this.parsedQuery, searchResponse.parsedQuery) &&
       Objects.equals(this.processingTimeMS, searchResponse.processingTimeMS) &&
+      Objects.equals(this.processingTimingsMS, searchResponse.processingTimingsMS) &&
       Objects.equals(this.queryAfterRemoval, searchResponse.queryAfterRemoval) &&
+      Objects.equals(this.redirect, searchResponse.redirect) &&
+      Objects.equals(this.renderingContent, searchResponse.renderingContent) &&
+      Objects.equals(this.serverTimeMS, searchResponse.serverTimeMS) &&
       Objects.equals(this.serverUsed, searchResponse.serverUsed) &&
       Objects.equals(this.userData, searchResponse.userData) &&
-      Objects.equals(this.renderingContent, searchResponse.renderingContent) &&
       Objects.equals(this.hits, searchResponse.hits) &&
       Objects.equals(this.query, searchResponse.query) &&
-      Objects.equals(this.params, searchResponse.params)
+      Objects.equals(this.params, searchResponse.params) &&
+      super.equals(o)
     );
   }
 
@@ -475,6 +552,7 @@ public class SearchResponse<T> implements SearchResult {
       abTestVariantID,
       aroundLatLng,
       automaticRadius,
+      exhaustive,
       exhaustiveFacetsCount,
       exhaustiveNbHits,
       exhaustiveTypo,
@@ -488,16 +566,19 @@ public class SearchResponse<T> implements SearchResult {
       nbPages,
       nbSortedHits,
       page,
-      redirect,
       parsedQuery,
       processingTimeMS,
+      processingTimingsMS,
       queryAfterRemoval,
+      redirect,
+      renderingContent,
+      serverTimeMS,
       serverUsed,
       userData,
-      renderingContent,
       hits,
       query,
-      params
+      params,
+      super.hashCode()
     );
   }
 
@@ -505,10 +586,12 @@ public class SearchResponse<T> implements SearchResult {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SearchResponse {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    abTestID: ").append(toIndentedString(abTestID)).append("\n");
     sb.append("    abTestVariantID: ").append(toIndentedString(abTestVariantID)).append("\n");
     sb.append("    aroundLatLng: ").append(toIndentedString(aroundLatLng)).append("\n");
     sb.append("    automaticRadius: ").append(toIndentedString(automaticRadius)).append("\n");
+    sb.append("    exhaustive: ").append(toIndentedString(exhaustive)).append("\n");
     sb.append("    exhaustiveFacetsCount: ").append(toIndentedString(exhaustiveFacetsCount)).append("\n");
     sb.append("    exhaustiveNbHits: ").append(toIndentedString(exhaustiveNbHits)).append("\n");
     sb.append("    exhaustiveTypo: ").append(toIndentedString(exhaustiveTypo)).append("\n");
@@ -522,13 +605,15 @@ public class SearchResponse<T> implements SearchResult {
     sb.append("    nbPages: ").append(toIndentedString(nbPages)).append("\n");
     sb.append("    nbSortedHits: ").append(toIndentedString(nbSortedHits)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
     sb.append("    parsedQuery: ").append(toIndentedString(parsedQuery)).append("\n");
     sb.append("    processingTimeMS: ").append(toIndentedString(processingTimeMS)).append("\n");
+    sb.append("    processingTimingsMS: ").append(toIndentedString(processingTimingsMS)).append("\n");
     sb.append("    queryAfterRemoval: ").append(toIndentedString(queryAfterRemoval)).append("\n");
+    sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
+    sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
+    sb.append("    serverTimeMS: ").append(toIndentedString(serverTimeMS)).append("\n");
     sb.append("    serverUsed: ").append(toIndentedString(serverUsed)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");
-    sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    params: ").append(toIndentedString(params)).append("\n");

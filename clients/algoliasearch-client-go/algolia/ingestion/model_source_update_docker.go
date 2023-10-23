@@ -14,7 +14,7 @@ type SourceUpdateDocker struct {
 	// The version of the image, defaults to `latest`.
 	Version *string `json:"version,omitempty"`
 	// The configuration of the spec.
-	Configuration map[string]interface{} `json:"configuration" validate:"required"`
+	Configuration map[string]interface{} `json:"configuration"`
 }
 
 type SourceUpdateDockerOption func(f *SourceUpdateDocker)

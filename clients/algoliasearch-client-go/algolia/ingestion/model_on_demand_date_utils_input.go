@@ -9,9 +9,9 @@ import (
 // OnDemandDateUtilsInput The input for an `onDemand` task whose source is of type `bigquery` and for which extracted data spans a given time range.
 type OnDemandDateUtilsInput struct {
 	// The start date of the extraction (RFC3339 format).
-	StartDate string `json:"startDate" validate:"required"`
+	StartDate string `json:"startDate"`
 	// The end date of the extraction (RFC3339 format).
-	EndDate string `json:"endDate" validate:"required"`
+	EndDate string `json:"endDate"`
 }
 
 // NewOnDemandDateUtilsInput instantiates a new OnDemandDateUtilsInput object

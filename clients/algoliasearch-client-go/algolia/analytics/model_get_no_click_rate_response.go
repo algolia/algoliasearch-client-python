@@ -9,13 +9,13 @@ import (
 // GetNoClickRateResponse struct for GetNoClickRateResponse
 type GetNoClickRateResponse struct {
 	// [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
-	Rate float64 `json:"rate" validate:"required"`
+	Rate float64 `json:"rate"`
 	// Number of click events.
-	Count int32 `json:"count" validate:"required"`
+	Count int32 `json:"count"`
 	// Number of click events.
-	NoClickCount int32 `json:"noClickCount" validate:"required"`
+	NoClickCount int32 `json:"noClickCount"`
 	// Overall count of searches without clicks plus a daily breakdown.
-	Dates []NoClickRateEvent `json:"dates" validate:"required"`
+	Dates []NoClickRateEvent `json:"dates"`
 }
 
 // NewGetNoClickRateResponse instantiates a new GetNoClickRateResponse object

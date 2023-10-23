@@ -9,9 +9,9 @@ import (
 // RunResponse The response from the run task API, containing an Observability Run ID and the time it was created at.
 type RunResponse struct {
 	// The run UUID.
-	RunID string `json:"runID" validate:"required"`
+	RunID string `json:"runID"`
 	// Date of creation (RFC3339 format).
-	CreatedAt string `json:"createdAt" validate:"required"`
+	CreatedAt string `json:"createdAt"`
 }
 
 // NewRunResponse instantiates a new RunResponse object

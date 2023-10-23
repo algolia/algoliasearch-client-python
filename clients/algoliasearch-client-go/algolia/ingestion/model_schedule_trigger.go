@@ -8,13 +8,13 @@ import (
 
 // ScheduleTrigger The trigger information for a task of type 'schedule'.
 type ScheduleTrigger struct {
-	Type ScheduleTriggerType `json:"type" validate:"required"`
+	Type ScheduleTriggerType `json:"type"`
 	// A cron expression that represent at which regularity the task should run.
-	Cron string `json:"cron" validate:"required"`
+	Cron string `json:"cron"`
 	// The last time the scheduled task ran (RFC3339 format).
 	LastRun *string `json:"lastRun,omitempty"`
 	// The next scheduled run of the task (RFC3339 format).
-	NextRun string `json:"nextRun" validate:"required"`
+	NextRun string `json:"nextRun"`
 }
 
 type ScheduleTriggerOption func(f *ScheduleTrigger)

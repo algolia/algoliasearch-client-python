@@ -9,7 +9,7 @@ import (
 // CreatedAtResponse Response and creation timestamp.
 type CreatedAtResponse struct {
 	// Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.
-	CreatedAt string `json:"createdAt" validate:"required"`
+	CreatedAt string `json:"createdAt"`
 }
 
 // NewCreatedAtResponse instantiates a new CreatedAtResponse object

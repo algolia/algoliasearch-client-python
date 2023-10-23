@@ -9,19 +9,19 @@ import (
 // TopHitWithAnalytics struct for TopHitWithAnalytics
 type TopHitWithAnalytics struct {
 	// Hit.
-	Hit string `json:"hit" validate:"required"`
+	Hit string `json:"hit"`
 	// Number of occurrences.
-	Count int32 `json:"count" validate:"required"`
+	Count int32 `json:"count"`
 	// [Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
-	ClickThroughRate float64 `json:"clickThroughRate" validate:"required"`
+	ClickThroughRate float64 `json:"clickThroughRate"`
 	// [Conversion rate (CR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
-	ConversionRate float64 `json:"conversionRate" validate:"required"`
+	ConversionRate float64 `json:"conversionRate"`
 	// Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.
-	TrackedSearchCount int32 `json:"trackedSearchCount" validate:"required"`
+	TrackedSearchCount int32 `json:"trackedSearchCount"`
 	// Number of click events.
-	ClickCount int32 `json:"clickCount" validate:"required"`
+	ClickCount int32 `json:"clickCount"`
 	// Number of converted clicks.
-	ConversionCount int32 `json:"conversionCount" validate:"required"`
+	ConversionCount int32 `json:"conversionCount"`
 }
 
 // NewTopHitWithAnalytics instantiates a new TopHitWithAnalytics object

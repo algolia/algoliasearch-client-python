@@ -8,8 +8,8 @@ import (
 
 // ListEventsResponse struct for ListEventsResponse
 type ListEventsResponse struct {
-	Events     []Event    `json:"events" validate:"required"`
-	Pagination Pagination `json:"pagination" validate:"required"`
+	Events     []Event    `json:"events"`
+	Pagination Pagination `json:"pagination"`
 }
 
 // NewListEventsResponse instantiates a new ListEventsResponse object

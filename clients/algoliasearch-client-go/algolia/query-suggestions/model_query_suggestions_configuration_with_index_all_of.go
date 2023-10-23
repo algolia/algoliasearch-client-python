@@ -9,7 +9,7 @@ import (
 // QuerySuggestionsConfigurationWithIndexAllOf struct for QuerySuggestionsConfigurationWithIndexAllOf
 type QuerySuggestionsConfigurationWithIndexAllOf struct {
 	// Query Suggestions index name.
-	IndexName string `json:"indexName" validate:"required"`
+	IndexName string `json:"indexName"`
 }
 
 // NewQuerySuggestionsConfigurationWithIndexAllOf instantiates a new QuerySuggestionsConfigurationWithIndexAllOf object

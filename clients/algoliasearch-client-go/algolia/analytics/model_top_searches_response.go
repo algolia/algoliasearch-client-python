@@ -9,7 +9,7 @@ import (
 // TopSearchesResponse struct for TopSearchesResponse
 type TopSearchesResponse struct {
 	// Top searches with their hits count.
-	Searches []TopSearch `json:"searches" validate:"required"`
+	Searches []TopSearch `json:"searches"`
 }
 
 // NewTopSearchesResponse instantiates a new TopSearchesResponse object

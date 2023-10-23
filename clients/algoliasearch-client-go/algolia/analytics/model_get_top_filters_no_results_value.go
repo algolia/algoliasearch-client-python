@@ -9,11 +9,11 @@ import (
 // GetTopFiltersNoResultsValue struct for GetTopFiltersNoResultsValue
 type GetTopFiltersNoResultsValue struct {
 	// Attribute name.
-	Attribute string `json:"attribute" validate:"required"`
+	Attribute string `json:"attribute"`
 	// Operator.
-	Operator string `json:"operator" validate:"required"`
+	Operator string `json:"operator"`
 	// Attribute value.
-	Value string `json:"value" validate:"required"`
+	Value string `json:"value"`
 }
 
 // NewGetTopFiltersNoResultsValue instantiates a new GetTopFiltersNoResultsValue object

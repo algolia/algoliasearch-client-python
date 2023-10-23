@@ -9,18 +9,18 @@ import (
 // ClickedObjectIDsAfterSearch Click event after an Algolia request.  Use this event to track when users click items in the search results. If you're building your category pages with Algolia, you'll also use this event.
 type ClickedObjectIDsAfterSearch struct {
 	// Can contain up to 64 ASCII characters.   Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.
-	EventName string     `json:"eventName" validate:"required"`
-	EventType ClickEvent `json:"eventType" validate:"required"`
+	EventName string     `json:"eventName"`
+	EventType ClickEvent `json:"eventType"`
 	// Name of the Algolia index.
-	Index string `json:"index" validate:"required"`
+	Index string `json:"index"`
 	// List of object identifiers for items of an Algolia index.
-	ObjectIDs []string `json:"objectIDs" validate:"required"`
+	ObjectIDs []string `json:"objectIDs"`
 	// Position of the clicked objects in the search results.  The first search result has a position of 1 (not 0). You must provide 1 `position` for each `objectID`.
-	Positions []int32 `json:"positions" validate:"required"`
+	Positions []int32 `json:"positions"`
 	// Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response.
-	QueryID string `json:"queryID" validate:"required"`
+	QueryID string `json:"queryID"`
 	// Anonymous or pseudonymous user identifier.   > **Note**: Never include personally identifiable information in user tokens.
-	UserToken string `json:"userToken" validate:"required"`
+	UserToken string `json:"userToken"`
 	// Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
 	Timestamp *int64 `json:"timestamp,omitempty"`
 	// User token for authenticated users.

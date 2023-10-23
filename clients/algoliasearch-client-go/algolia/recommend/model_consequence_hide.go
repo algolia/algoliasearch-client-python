@@ -9,7 +9,7 @@ import (
 // ConsequenceHide Unique identifier of the record to hide.
 type ConsequenceHide struct {
 	// Unique object identifier.
-	ObjectID string `json:"objectID" validate:"required"`
+	ObjectID string `json:"objectID"`
 }
 
 // NewConsequenceHide instantiates a new ConsequenceHide object
