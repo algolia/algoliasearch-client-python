@@ -260,30 +260,5 @@
         ]
       }
     }
-  },
-  {
-    "testName": "Identify",
-    "parameters": {
-      "events": [
-        {
-          "eventType": "identify",
-          "userToken": "anonymous-1",
-          "authenticatedUserToken": "authenticated-1"
-        }
-      ]
-    },
-    "request": {
-      "path": "/1/events",
-      "method": "POST",
-      "body": {
-        "events": [
-          {
-            "eventType": "identify",
-            "userToken": "anonymous-1",
-            "authenticatedUserToken": "authenticated-1"
-          }
-        ]
-      }
-    }
   }
 ]
