@@ -11,3 +11,4 @@ oneOf:
   - $ref: './AddedToCartObjectIDs.yml'
   - $ref: './PurchasedObjectIDs.yml'
   - $ref: './PurchasedObjectIDsAfterSearch.yml'
+  - $ref: './Identify.yml'

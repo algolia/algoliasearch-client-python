@@ -28,6 +28,11 @@ userToken:
     > **Note**: Never include personally identifiable information in user tokens.
   example: test-user-1
 
+authenticatedUserToken:
+  type: string
+  description: User token for authenticated users.
+  example: c6a52c02-d0c7-4b53-8ce3-2b8fd202f3f9
+
 timestamp:
   type: integer
   format: int64
