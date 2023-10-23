@@ -29,6 +29,8 @@ AddedToCartObjectIDs _$AddedToCartObjectIDsFromJson(
           currency: $checkedConvert('currency', (v) => v as String?),
           userToken: $checkedConvert('userToken', (v) => v as String),
           timestamp: $checkedConvert('timestamp', (v) => v as int?),
+          authenticatedUserToken:
+              $checkedConvert('authenticatedUserToken', (v) => v as String?),
         );
         return val;
       },
@@ -55,6 +57,7 @@ Map<String, dynamic> _$AddedToCartObjectIDsToJson(
   writeNotNull('currency', instance.currency);
   val['userToken'] = instance.userToken;
   writeNotNull('timestamp', instance.timestamp);
+  writeNotNull('authenticatedUserToken', instance.authenticatedUserToken);
   return val;
 }
 

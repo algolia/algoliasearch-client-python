@@ -19,6 +19,8 @@ type ConvertedObjectIDs struct {
 	UserToken string `json:"userToken" validate:"required"`
 	// Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
 	Timestamp *int64 `json:"timestamp,omitempty"`
+	// User token for authenticated users.
+	AuthenticatedUserToken *string `json:"authenticatedUserToken,omitempty"`
 }
 
 type ConvertedObjectIDsOption func(f *ConvertedObjectIDs)
@@ -26,6 +28,12 @@ type ConvertedObjectIDsOption func(f *ConvertedObjectIDs)
 func WithConvertedObjectIDsTimestamp(val int64) ConvertedObjectIDsOption {
 	return func(f *ConvertedObjectIDs) {
 		f.Timestamp = &val
+	}
+}
+
+func WithConvertedObjectIDsAuthenticatedUserToken(val string) ConvertedObjectIDsOption {
+	return func(f *ConvertedObjectIDs) {
+		f.AuthenticatedUserToken = &val
 	}
 }
 
@@ -206,6 +214,38 @@ func (o *ConvertedObjectIDs) SetTimestamp(v int64) {
 	o.Timestamp = &v
 }
 
+// GetAuthenticatedUserToken returns the AuthenticatedUserToken field value if set, zero value otherwise.
+func (o *ConvertedObjectIDs) GetAuthenticatedUserToken() string {
+	if o == nil || o.AuthenticatedUserToken == nil {
+		var ret string
+		return ret
+	}
+	return *o.AuthenticatedUserToken
+}
+
+// GetAuthenticatedUserTokenOk returns a tuple with the AuthenticatedUserToken field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ConvertedObjectIDs) GetAuthenticatedUserTokenOk() (*string, bool) {
+	if o == nil || o.AuthenticatedUserToken == nil {
+		return nil, false
+	}
+	return o.AuthenticatedUserToken, true
+}
+
+// HasAuthenticatedUserToken returns a boolean if a field has been set.
+func (o *ConvertedObjectIDs) HasAuthenticatedUserToken() bool {
+	if o != nil && o.AuthenticatedUserToken != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAuthenticatedUserToken gets a reference to the given string and assigns it to the AuthenticatedUserToken field.
+func (o *ConvertedObjectIDs) SetAuthenticatedUserToken(v string) {
+	o.AuthenticatedUserToken = &v
+}
+
 func (o ConvertedObjectIDs) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -226,6 +266,9 @@ func (o ConvertedObjectIDs) MarshalJSON() ([]byte, error) {
 	if o.Timestamp != nil {
 		toSerialize["timestamp"] = o.Timestamp
 	}
+	if o.AuthenticatedUserToken != nil {
+		toSerialize["authenticatedUserToken"] = o.AuthenticatedUserToken
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -237,6 +280,7 @@ func (o ConvertedObjectIDs) String() string {
 	out += fmt.Sprintf("  objectIDs=%v\n", o.ObjectIDs)
 	out += fmt.Sprintf("  userToken=%v\n", o.UserToken)
 	out += fmt.Sprintf("  timestamp=%v\n", o.Timestamp)
+	out += fmt.Sprintf("  authenticatedUserToken=%v\n", o.AuthenticatedUserToken)
 	return fmt.Sprintf("ConvertedObjectIDs {\n%s}", out)
 }
 

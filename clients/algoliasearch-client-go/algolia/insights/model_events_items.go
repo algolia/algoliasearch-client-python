@@ -16,6 +16,7 @@ type EventsItems struct {
 	ConvertedFilters                *ConvertedFilters
 	ConvertedObjectIDs              *ConvertedObjectIDs
 	ConvertedObjectIDsAfterSearch   *ConvertedObjectIDsAfterSearch
+	Identify                        *Identify
 	PurchasedObjectIDs              *PurchasedObjectIDs
 	PurchasedObjectIDsAfterSearch   *PurchasedObjectIDsAfterSearch
 	ViewedFilters                   *ViewedFilters
@@ -75,6 +76,13 @@ func ConvertedObjectIDsAsEventsItems(v *ConvertedObjectIDs) EventsItems {
 func ConvertedObjectIDsAfterSearchAsEventsItems(v *ConvertedObjectIDsAfterSearch) EventsItems {
 	return EventsItems{
 		ConvertedObjectIDsAfterSearch: v,
+	}
+}
+
+// IdentifyAsEventsItems is a convenience function that returns Identify wrapped in EventsItems
+func IdentifyAsEventsItems(v *Identify) EventsItems {
+	return EventsItems{
+		Identify: v,
 	}
 }
 
@@ -213,6 +221,19 @@ func (dst *EventsItems) UnmarshalJSON(data []byte) error {
 		dst.ConvertedObjectIDsAfterSearch = nil
 	}
 
+	// try to unmarshal data into Identify
+	err = newStrictDecoder(data).Decode(&dst.Identify)
+	if err == nil && validateStruct(dst.Identify) == nil {
+		jsonIdentify, _ := json.Marshal(dst.Identify)
+		if string(jsonIdentify) == "{}" { // empty struct
+			dst.Identify = nil
+		} else {
+			return nil
+		}
+	} else {
+		dst.Identify = nil
+	}
+
 	// try to unmarshal data into PurchasedObjectIDs
 	err = newStrictDecoder(data).Decode(&dst.PurchasedObjectIDs)
 	if err == nil && validateStruct(dst.PurchasedObjectIDs) == nil {
@@ -302,6 +323,10 @@ func (src EventsItems) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.ConvertedObjectIDsAfterSearch)
 	}
 
+	if src.Identify != nil {
+		return json.Marshal(&src.Identify)
+	}
+
 	if src.PurchasedObjectIDs != nil {
 		return json.Marshal(&src.PurchasedObjectIDs)
 	}
@@ -356,6 +381,10 @@ func (obj *EventsItems) GetActualInstance() any {
 
 	if obj.ConvertedObjectIDsAfterSearch != nil {
 		return obj.ConvertedObjectIDsAfterSearch
+	}
+
+	if obj.Identify != nil {
+		return obj.Identify
 	}
 
 	if obj.PurchasedObjectIDs != nil {

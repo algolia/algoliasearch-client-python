@@ -20,6 +20,8 @@ ConvertedFilters _$ConvertedFiltersFromJson(Map<String, dynamic> json) =>
               (v) => (v as List<dynamic>).map((e) => e as String).toList()),
           userToken: $checkedConvert('userToken', (v) => v as String),
           timestamp: $checkedConvert('timestamp', (v) => v as int?),
+          authenticatedUserToken:
+              $checkedConvert('authenticatedUserToken', (v) => v as String?),
         );
         return val;
       },
@@ -41,6 +43,7 @@ Map<String, dynamic> _$ConvertedFiltersToJson(ConvertedFilters instance) {
   }
 
   writeNotNull('timestamp', instance.timestamp);
+  writeNotNull('authenticatedUserToken', instance.authenticatedUserToken);
   return val;
 }
 

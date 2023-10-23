@@ -31,6 +31,9 @@ public class ConvertedFilters implements EventsItems {
   @JsonProperty("timestamp")
   private Long timestamp;
 
+  @JsonProperty("authenticatedUserToken")
+  private String authenticatedUserToken;
+
   public ConvertedFilters setEventName(String eventName) {
     this.eventName = eventName;
     return this;
@@ -113,6 +116,17 @@ public class ConvertedFilters implements EventsItems {
     return timestamp;
   }
 
+  public ConvertedFilters setAuthenticatedUserToken(String authenticatedUserToken) {
+    this.authenticatedUserToken = authenticatedUserToken;
+    return this;
+  }
+
+  /** User token for authenticated users. */
+  @javax.annotation.Nullable
+  public String getAuthenticatedUserToken() {
+    return authenticatedUserToken;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -128,13 +142,14 @@ public class ConvertedFilters implements EventsItems {
       Objects.equals(this.index, convertedFilters.index) &&
       Objects.equals(this.filters, convertedFilters.filters) &&
       Objects.equals(this.userToken, convertedFilters.userToken) &&
-      Objects.equals(this.timestamp, convertedFilters.timestamp)
+      Objects.equals(this.timestamp, convertedFilters.timestamp) &&
+      Objects.equals(this.authenticatedUserToken, convertedFilters.authenticatedUserToken)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventName, eventType, index, filters, userToken, timestamp);
+    return Objects.hash(eventName, eventType, index, filters, userToken, timestamp, authenticatedUserToken);
   }
 
   @Override
@@ -147,6 +162,7 @@ public class ConvertedFilters implements EventsItems {
     sb.append("    filters: ").append(toIndentedString(filters)).append("\n");
     sb.append("    userToken: ").append(toIndentedString(userToken)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
+    sb.append("    authenticatedUserToken: ").append(toIndentedString(authenticatedUserToken)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -597,6 +597,8 @@ class InsightsClientRequestsTests {
           events_02.setIndex(index3);
           String userToken3 = "user-123456";
           events_02.setUserToken(userToken3);
+          String authenticatedUserToken3 = "user-123456";
+          events_02.setAuthenticatedUserToken(authenticatedUserToken3);
           long timestamp3 = 1641290601962L;
           events_02.setTimestamp(timestamp3);
           List<String> objectIDs3 = new ArrayList<>();
@@ -632,7 +634,7 @@ class InsightsClientRequestsTests {
     assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"events\":[{\"eventType\":\"click\",\"eventName\":\"Product" +
-        " Clicked\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\",\"positions\":[7,6]}]}",
+        " Clicked\",\"index\":\"products\",\"userToken\":\"user-123456\",\"authenticatedUserToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\",\"positions\":[7,6]}]}",
         req.body,
         JSONCompareMode.STRICT
       )
@@ -656,6 +658,8 @@ class InsightsClientRequestsTests {
           events_02.setIndex(index3);
           String userToken3 = "user-123456";
           events_02.setUserToken(userToken3);
+          String authenticatedUserToken3 = "user-123456";
+          events_02.setAuthenticatedUserToken(authenticatedUserToken3);
           long timestamp3 = 1641290601962L;
           events_02.setTimestamp(timestamp3);
           List<String> objectIDs3 = new ArrayList<>();
@@ -680,6 +684,8 @@ class InsightsClientRequestsTests {
           events_12.setIndex(index3);
           String userToken3 = "user-123456";
           events_12.setUserToken(userToken3);
+          String authenticatedUserToken3 = "user-123456";
+          events_12.setAuthenticatedUserToken(authenticatedUserToken3);
           long timestamp3 = 1641290601962L;
           events_12.setTimestamp(timestamp3);
           List<String> objectIDs3 = new ArrayList<>();
@@ -705,9 +711,9 @@ class InsightsClientRequestsTests {
     assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"events\":[{\"eventType\":\"conversion\",\"eventName\":\"Product" +
-        " Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"},{\"eventType\":\"view\",\"eventName\":\"Product" +
+        " Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"authenticatedUserToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"},{\"eventType\":\"view\",\"eventName\":\"Product" +
         " Detail Page" +
-        " Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}",
+        " Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"authenticatedUserToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}",
         req.body,
         JSONCompareMode.STRICT
       )
@@ -731,6 +737,8 @@ class InsightsClientRequestsTests {
           events_02.setIndex(index3);
           String userToken3 = "user-123456";
           events_02.setUserToken(userToken3);
+          String authenticatedUserToken3 = "user-123456";
+          events_02.setAuthenticatedUserToken(authenticatedUserToken3);
           long timestamp3 = 1641290601962L;
           events_02.setTimestamp(timestamp3);
           List<String> objectIDs3 = new ArrayList<>();
@@ -758,7 +766,7 @@ class InsightsClientRequestsTests {
     assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"events\":[{\"eventType\":\"conversion\",\"eventName\":\"Product" +
-        " Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"}]}",
+        " Purchased\",\"index\":\"products\",\"userToken\":\"user-123456\",\"authenticatedUserToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\"}]}",
         req.body,
         JSONCompareMode.STRICT
       )
@@ -782,6 +790,8 @@ class InsightsClientRequestsTests {
           events_02.setIndex(index3);
           String userToken3 = "user-123456";
           events_02.setUserToken(userToken3);
+          String authenticatedUserToken3 = "user-123456";
+          events_02.setAuthenticatedUserToken(authenticatedUserToken3);
           long timestamp3 = 1641290601962L;
           events_02.setTimestamp(timestamp3);
           List<String> objectIDs3 = new ArrayList<>();
@@ -807,7 +817,7 @@ class InsightsClientRequestsTests {
     assertDoesNotThrow(() ->
       JSONAssert.assertEquals(
         "{\"events\":[{\"eventType\":\"view\",\"eventName\":\"Product Detail Page" +
-        " Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}",
+        " Viewed\",\"index\":\"products\",\"userToken\":\"user-123456\",\"authenticatedUserToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"]}]}",
         req.body,
         JSONCompareMode.STRICT
       )
@@ -835,6 +845,8 @@ class InsightsClientRequestsTests {
           events_02.setQueryID(queryID3);
           String userToken3 = "user-123456";
           events_02.setUserToken(userToken3);
+          String authenticatedUserToken3 = "user-123456";
+          events_02.setAuthenticatedUserToken(authenticatedUserToken3);
           long timestamp3 = 1641290601962L;
           events_02.setTimestamp(timestamp3);
           List<String> objectIDs3 = new ArrayList<>();
@@ -887,7 +899,43 @@ class InsightsClientRequestsTests {
       JSONAssert.assertEquals(
         "{\"events\":[{\"eventType\":\"conversion\",\"eventSubtype\":\"addToCart\",\"eventName\":\"Product" +
         " Added To" +
-        " Cart\",\"index\":\"products\",\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\",\"userToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"objectData\":[{\"price\":19.99,\"quantity\":10,\"discount\":2.5},{\"price\":\"8$\",\"quantity\":7,\"discount\":\"30%\"}],\"currency\":\"USD\"}]}",
+        " Cart\",\"index\":\"products\",\"queryID\":\"43b15df305339e827f0ac0bdc5ebcaa7\",\"userToken\":\"user-123456\",\"authenticatedUserToken\":\"user-123456\",\"timestamp\":1641290601962,\"objectIDs\":[\"9780545139700\",\"9780439784542\"],\"objectData\":[{\"price\":19.99,\"quantity\":10,\"discount\":2.5},{\"price\":\"8$\",\"quantity\":7,\"discount\":\"30%\"}],\"currency\":\"USD\"}]}",
+        req.body,
+        JSONCompareMode.STRICT
+      )
+    );
+  }
+
+  @Test
+  @DisplayName("Identify")
+  void pushEventsTest5() {
+    InsightsEvents insightsEvents0 = new InsightsEvents();
+    {
+      List<EventsItems> events1 = new ArrayList<>();
+      {
+        Identify events_02 = new Identify();
+        {
+          IdentifyEvent eventType3 = IdentifyEvent.fromValue("identify");
+          events_02.setEventType(eventType3);
+          String userToken3 = "anonymous-1";
+          events_02.setUserToken(userToken3);
+          String authenticatedUserToken3 = "authenticated-1";
+          events_02.setAuthenticatedUserToken(authenticatedUserToken3);
+        }
+        events1.add(events_02);
+      }
+      insightsEvents0.setEvents(events1);
+    }
+
+    assertDoesNotThrow(() -> {
+      client.pushEvents(insightsEvents0);
+    });
+    EchoResponse req = echo.getLastResponse();
+    assertEquals("/1/events", req.path);
+    assertEquals("POST", req.method);
+    assertDoesNotThrow(() ->
+      JSONAssert.assertEquals(
+        "{\"events\":[{\"eventType\":\"identify\",\"userToken\":\"anonymous-1\",\"authenticatedUserToken\":\"authenticated-1\"}]}",
         req.body,
         JSONCompareMode.STRICT
       )

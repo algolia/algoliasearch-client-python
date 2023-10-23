@@ -34,6 +34,9 @@ public class ViewedFilters implements EventsItems {
   @JsonProperty("timestamp")
   private Long timestamp;
 
+  @JsonProperty("authenticatedUserToken")
+  private String authenticatedUserToken;
+
   public ViewedFilters setEventName(String eventName) {
     this.eventName = eventName;
     return this;
@@ -116,6 +119,17 @@ public class ViewedFilters implements EventsItems {
     return timestamp;
   }
 
+  public ViewedFilters setAuthenticatedUserToken(String authenticatedUserToken) {
+    this.authenticatedUserToken = authenticatedUserToken;
+    return this;
+  }
+
+  /** User token for authenticated users. */
+  @javax.annotation.Nullable
+  public String getAuthenticatedUserToken() {
+    return authenticatedUserToken;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -131,13 +145,14 @@ public class ViewedFilters implements EventsItems {
       Objects.equals(this.index, viewedFilters.index) &&
       Objects.equals(this.filters, viewedFilters.filters) &&
       Objects.equals(this.userToken, viewedFilters.userToken) &&
-      Objects.equals(this.timestamp, viewedFilters.timestamp)
+      Objects.equals(this.timestamp, viewedFilters.timestamp) &&
+      Objects.equals(this.authenticatedUserToken, viewedFilters.authenticatedUserToken)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventName, eventType, index, filters, userToken, timestamp);
+    return Objects.hash(eventName, eventType, index, filters, userToken, timestamp, authenticatedUserToken);
   }
 
   @Override
@@ -150,6 +165,7 @@ public class ViewedFilters implements EventsItems {
     sb.append("    filters: ").append(toIndentedString(filters)).append("\n");
     sb.append("    userToken: ").append(toIndentedString(userToken)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
+    sb.append("    authenticatedUserToken: ").append(toIndentedString(authenticatedUserToken)).append("\n");
     sb.append("}");
     return sb.toString();
   }

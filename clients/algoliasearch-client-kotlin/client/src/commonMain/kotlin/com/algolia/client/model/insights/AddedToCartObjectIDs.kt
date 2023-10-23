@@ -16,6 +16,7 @@ import kotlinx.serialization.json.*
  * @param objectData Extra information about the records involved in the event—for example, to add price and quantities of purchased products.  If provided, must be the same length as `objectIDs`.
  * @param currency If you include pricing information in the `objectData` parameter, you must also specify the currency as ISO-4217 currency code, such as USD or EUR.
  * @param timestamp Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
+ * @param authenticatedUserToken User token for authenticated users.
  */
 @Serializable
 public data class AddedToCartObjectIDs(
@@ -44,4 +45,7 @@ public data class AddedToCartObjectIDs(
 
   /** Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.  */
   @SerialName(value = "timestamp") val timestamp: Long? = null,
+
+  /** User token for authenticated users. */
+  @SerialName(value = "authenticatedUserToken") val authenticatedUserToken: String? = null,
 ) : EventsItems

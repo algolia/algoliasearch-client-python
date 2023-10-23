@@ -22,6 +22,8 @@ ConvertedObjectIDsAfterSearch _$ConvertedObjectIDsAfterSearchFromJson(
           queryID: $checkedConvert('queryID', (v) => v as String),
           userToken: $checkedConvert('userToken', (v) => v as String),
           timestamp: $checkedConvert('timestamp', (v) => v as int?),
+          authenticatedUserToken:
+              $checkedConvert('authenticatedUserToken', (v) => v as String?),
         );
         return val;
       },
@@ -45,6 +47,7 @@ Map<String, dynamic> _$ConvertedObjectIDsAfterSearchToJson(
   }
 
   writeNotNull('timestamp', instance.timestamp);
+  writeNotNull('authenticatedUserToken', instance.authenticatedUserToken);
   return val;
 }
 

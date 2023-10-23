@@ -475,7 +475,7 @@ func TestInsights_PushEvents(t *testing.T) {
 		{
 			name: "pushEvents",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}`
+				parametersStr := `{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}`
 				req := insights.ApiPushEventsRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.PushEvents(req)
@@ -487,13 +487,13 @@ func TestInsights_PushEvents(t *testing.T) {
 				require.Equal(t, "POST", echo.method)
 
 				ja := jsonassert.New(t)
-				ja.Assertf(*echo.body, `{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}`)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}`)
 			},
 		},
 		{
 			name: "Many events type",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`
+				parametersStr := `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`
 				req := insights.ApiPushEventsRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.PushEvents(req)
@@ -505,13 +505,13 @@ func TestInsights_PushEvents(t *testing.T) {
 				require.Equal(t, "POST", echo.method)
 
 				ja := jsonassert.New(t)
-				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`)
 			},
 		},
 		{
 			name: "ConvertedObjectIDsAfterSearch",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}`
+				parametersStr := `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}`
 				req := insights.ApiPushEventsRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.PushEvents(req)
@@ -523,13 +523,13 @@ func TestInsights_PushEvents(t *testing.T) {
 				require.Equal(t, "POST", echo.method)
 
 				ja := jsonassert.New(t)
-				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}`)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}`)
 			},
 		},
 		{
 			name: "ViewedObjectIDs",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`
+				parametersStr := `{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`
 				req := insights.ApiPushEventsRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.PushEvents(req)
@@ -541,13 +541,13 @@ func TestInsights_PushEvents(t *testing.T) {
 				require.Equal(t, "POST", echo.method)
 
 				ja := jsonassert.New(t)
-				ja.Assertf(*echo.body, `{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}`)
 			},
 		},
 		{
 			name: "AddedToCartObjectIDs",
 			testFunc: func(t *testing.T) {
-				parametersStr := `{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}`
+				parametersStr := `{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}`
 				req := insights.ApiPushEventsRequest{}
 				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
 				_, err := client.PushEvents(req)
@@ -559,7 +559,25 @@ func TestInsights_PushEvents(t *testing.T) {
 				require.Equal(t, "POST", echo.method)
 
 				ja := jsonassert.New(t)
-				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%%"}],"currency":"USD"}]}`)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%%"}],"currency":"USD"}]}`)
+			},
+		},
+		{
+			name: "Identify",
+			testFunc: func(t *testing.T) {
+				parametersStr := `{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}`
+				req := insights.ApiPushEventsRequest{}
+				require.NoError(t, json.Unmarshal([]byte(parametersStr), &req))
+				_, err := client.PushEvents(req)
+				require.NoError(t, err)
+
+				expectedPath, err := url.QueryUnescape("/1/events")
+				require.NoError(t, err)
+				require.Equal(t, expectedPath, echo.path)
+				require.Equal(t, "POST", echo.method)
+
+				ja := jsonassert.New(t)
+				ja.Assertf(*echo.body, `{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}`)
 			},
 		},
 	}

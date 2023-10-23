@@ -132,6 +132,10 @@ components:
         By default, the Insights API uses the time it receives an event as its
         timestamp.
       example: 1687193127
+    authenticatedUserToken:
+      type: string
+      description: User token for authenticated users.
+      example: c6a52c02-d0c7-4b53-8ce3-2b8fd202f3f9
     ClickedObjectIDsAfterSearch:
       type: object
       title: Clicked object IDs after search
@@ -159,6 +163,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -203,6 +209,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -270,6 +278,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -308,6 +318,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -331,6 +343,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -359,6 +373,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -386,6 +402,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -480,6 +498,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -544,6 +564,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -586,6 +608,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -624,6 +648,8 @@ components:
           $ref: '#/components/schemas/userToken'
         timestamp:
           $ref: '#/components/schemas/timestamp'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
       required:
         - eventName
         - eventType
@@ -632,6 +658,28 @@ components:
         - index
         - objectIDs
         - userToken
+    IdentifyEvent:
+      type: string
+      enum:
+        - identify
+    Identify:
+      type: object
+      title: Identify user
+      description: >
+        The identify event is a signal for Insights to process all events coming
+        from 'userToken' as if they were from 'authenticatedUserToken'.
+      properties:
+        eventType:
+          $ref: '#/components/schemas/IdentifyEvent'
+          default: identify
+        userToken:
+          $ref: '#/components/schemas/userToken'
+        authenticatedUserToken:
+          $ref: '#/components/schemas/authenticatedUserToken'
+      required:
+        - eventType
+        - userToken
+        - authenticatedUserToken
     EventsItems:
       oneOf:
         - $ref: '#/components/schemas/ClickedObjectIDsAfterSearch'
@@ -646,6 +694,7 @@ components:
         - $ref: '#/components/schemas/AddedToCartObjectIDs'
         - $ref: '#/components/schemas/PurchasedObjectIDs'
         - $ref: '#/components/schemas/PurchasedObjectIDsAfterSearch'
+        - $ref: '#/components/schemas/Identify'
     EventsResponse:
       type: object
       description: The response of the Insights API.

@@ -15,6 +15,7 @@ import kotlinx.serialization.json.*
  * @param queryID Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response.
  * @param userToken Anonymous or pseudonymous user identifier.   > **Note**: Never include personally identifiable information in user tokens.
  * @param timestamp Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
+ * @param authenticatedUserToken User token for authenticated users.
  */
 @Serializable
 public data class ClickedObjectIDsAfterSearch(
@@ -41,4 +42,7 @@ public data class ClickedObjectIDsAfterSearch(
 
   /** Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.  */
   @SerialName(value = "timestamp") val timestamp: Long? = null,
+
+  /** User token for authenticated users. */
+  @SerialName(value = "authenticatedUserToken") val authenticatedUserToken: String? = null,
 ) : EventsItems

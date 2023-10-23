@@ -44,6 +44,9 @@ public class PurchasedObjectIDs implements EventsItems {
   @JsonProperty("timestamp")
   private Long timestamp;
 
+  @JsonProperty("authenticatedUserToken")
+  private String authenticatedUserToken;
+
   public PurchasedObjectIDs setEventName(String eventName) {
     this.eventName = eventName;
     return this;
@@ -173,6 +176,17 @@ public class PurchasedObjectIDs implements EventsItems {
     return timestamp;
   }
 
+  public PurchasedObjectIDs setAuthenticatedUserToken(String authenticatedUserToken) {
+    this.authenticatedUserToken = authenticatedUserToken;
+    return this;
+  }
+
+  /** User token for authenticated users. */
+  @javax.annotation.Nullable
+  public String getAuthenticatedUserToken() {
+    return authenticatedUserToken;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -191,13 +205,25 @@ public class PurchasedObjectIDs implements EventsItems {
       Objects.equals(this.objectData, purchasedObjectIDs.objectData) &&
       Objects.equals(this.currency, purchasedObjectIDs.currency) &&
       Objects.equals(this.userToken, purchasedObjectIDs.userToken) &&
-      Objects.equals(this.timestamp, purchasedObjectIDs.timestamp)
+      Objects.equals(this.timestamp, purchasedObjectIDs.timestamp) &&
+      Objects.equals(this.authenticatedUserToken, purchasedObjectIDs.authenticatedUserToken)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventName, eventType, eventSubtype, index, objectIDs, objectData, currency, userToken, timestamp);
+    return Objects.hash(
+      eventName,
+      eventType,
+      eventSubtype,
+      index,
+      objectIDs,
+      objectData,
+      currency,
+      userToken,
+      timestamp,
+      authenticatedUserToken
+    );
   }
 
   @Override
@@ -213,6 +239,7 @@ public class PurchasedObjectIDs implements EventsItems {
     sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
     sb.append("    userToken: ").append(toIndentedString(userToken)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
+    sb.append("    authenticatedUserToken: ").append(toIndentedString(authenticatedUserToken)).append("\n");
     sb.append("}");
     return sb.toString();
   }

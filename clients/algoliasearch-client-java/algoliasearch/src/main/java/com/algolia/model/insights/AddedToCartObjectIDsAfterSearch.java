@@ -46,6 +46,9 @@ public class AddedToCartObjectIDsAfterSearch implements EventsItems {
   @JsonProperty("timestamp")
   private Long timestamp;
 
+  @JsonProperty("authenticatedUserToken")
+  private String authenticatedUserToken;
+
   public AddedToCartObjectIDsAfterSearch setEventName(String eventName) {
     this.eventName = eventName;
     return this;
@@ -190,6 +193,17 @@ public class AddedToCartObjectIDsAfterSearch implements EventsItems {
     return timestamp;
   }
 
+  public AddedToCartObjectIDsAfterSearch setAuthenticatedUserToken(String authenticatedUserToken) {
+    this.authenticatedUserToken = authenticatedUserToken;
+    return this;
+  }
+
+  /** User token for authenticated users. */
+  @javax.annotation.Nullable
+  public String getAuthenticatedUserToken() {
+    return authenticatedUserToken;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -209,13 +223,26 @@ public class AddedToCartObjectIDsAfterSearch implements EventsItems {
       Objects.equals(this.objectData, addedToCartObjectIDsAfterSearch.objectData) &&
       Objects.equals(this.currency, addedToCartObjectIDsAfterSearch.currency) &&
       Objects.equals(this.userToken, addedToCartObjectIDsAfterSearch.userToken) &&
-      Objects.equals(this.timestamp, addedToCartObjectIDsAfterSearch.timestamp)
+      Objects.equals(this.timestamp, addedToCartObjectIDsAfterSearch.timestamp) &&
+      Objects.equals(this.authenticatedUserToken, addedToCartObjectIDsAfterSearch.authenticatedUserToken)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventName, eventType, eventSubtype, index, queryID, objectIDs, objectData, currency, userToken, timestamp);
+    return Objects.hash(
+      eventName,
+      eventType,
+      eventSubtype,
+      index,
+      queryID,
+      objectIDs,
+      objectData,
+      currency,
+      userToken,
+      timestamp,
+      authenticatedUserToken
+    );
   }
 
   @Override
@@ -232,6 +259,7 @@ public class AddedToCartObjectIDsAfterSearch implements EventsItems {
     sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
     sb.append("    userToken: ").append(toIndentedString(userToken)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
+    sb.append("    authenticatedUserToken: ").append(toIndentedString(authenticatedUserToken)).append("\n");
     sb.append("}");
     return sb.toString();
   }

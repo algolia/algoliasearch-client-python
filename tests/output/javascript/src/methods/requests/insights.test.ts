@@ -298,6 +298,7 @@ describe('pushEvents', () => {
           eventName: 'Product Clicked',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
@@ -315,6 +316,7 @@ describe('pushEvents', () => {
           eventName: 'Product Clicked',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
@@ -333,6 +335,7 @@ describe('pushEvents', () => {
           eventName: 'Product Purchased',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
@@ -342,6 +345,7 @@ describe('pushEvents', () => {
           eventName: 'Product Detail Page Viewed',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
         },
@@ -357,6 +361,7 @@ describe('pushEvents', () => {
           eventName: 'Product Purchased',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
@@ -366,6 +371,7 @@ describe('pushEvents', () => {
           eventName: 'Product Detail Page Viewed',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
         },
@@ -382,6 +388,7 @@ describe('pushEvents', () => {
           eventName: 'Product Purchased',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
@@ -398,6 +405,7 @@ describe('pushEvents', () => {
           eventName: 'Product Purchased',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
@@ -415,6 +423,7 @@ describe('pushEvents', () => {
           eventName: 'Product Detail Page Viewed',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
         },
@@ -430,6 +439,7 @@ describe('pushEvents', () => {
           eventName: 'Product Detail Page Viewed',
           index: 'products',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
         },
@@ -448,6 +458,7 @@ describe('pushEvents', () => {
           index: 'products',
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           objectData: [
@@ -470,6 +481,7 @@ describe('pushEvents', () => {
           index: 'products',
           queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
           userToken: 'user-123456',
+          authenticatedUserToken: 'user-123456',
           timestamp: 1641290601962,
           objectIDs: ['9780545139700', '9780439784542'],
           objectData: [
@@ -477,6 +489,31 @@ describe('pushEvents', () => {
             { price: '8$', quantity: 7, discount: '30%' },
           ],
           currency: 'USD',
+        },
+      ],
+    });
+    expect(req.searchParams).toStrictEqual(undefined);
+  });
+
+  test('Identify', async () => {
+    const req = (await client.pushEvents({
+      events: [
+        {
+          eventType: 'identify',
+          userToken: 'anonymous-1',
+          authenticatedUserToken: 'authenticated-1',
+        },
+      ],
+    })) as unknown as EchoResponse;
+
+    expect(req.path).toEqual('/1/events');
+    expect(req.method).toEqual('POST');
+    expect(req.data).toEqual({
+      events: [
+        {
+          eventType: 'identify',
+          userToken: 'anonymous-1',
+          authenticatedUserToken: 'authenticated-1',
         },
       ],
     });

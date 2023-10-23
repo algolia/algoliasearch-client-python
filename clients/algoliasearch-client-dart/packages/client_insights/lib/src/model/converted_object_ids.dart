@@ -16,6 +16,7 @@ final class ConvertedObjectIDs {
     required this.objectIDs,
     required this.userToken,
     this.timestamp,
+    this.authenticatedUserToken,
   });
 
   /// Can contain up to 64 ASCII characters.   Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.
@@ -41,6 +42,10 @@ final class ConvertedObjectIDs {
   @JsonKey(name: r'timestamp')
   final int? timestamp;
 
+  /// User token for authenticated users.
+  @JsonKey(name: r'authenticatedUserToken')
+  final String? authenticatedUserToken;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -50,7 +55,8 @@ final class ConvertedObjectIDs {
           other.index == index &&
           other.objectIDs == objectIDs &&
           other.userToken == userToken &&
-          other.timestamp == timestamp;
+          other.timestamp == timestamp &&
+          other.authenticatedUserToken == authenticatedUserToken;
 
   @override
   int get hashCode =>
@@ -59,7 +65,8 @@ final class ConvertedObjectIDs {
       index.hashCode +
       objectIDs.hashCode +
       userToken.hashCode +
-      timestamp.hashCode;
+      timestamp.hashCode +
+      authenticatedUserToken.hashCode;
 
   factory ConvertedObjectIDs.fromJson(Map<String, dynamic> json) =>
       _$ConvertedObjectIDsFromJson(json);

@@ -481,6 +481,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
                     'eventName' => 'Product Clicked',
                     'index' => 'products',
                     'userToken' => 'user-123456',
+                    'authenticatedUserToken' => 'user-123456',
                     'timestamp' => 1641290601962,
                     'objectIDs' => [
                         '9780545139700',
@@ -502,7 +503,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
             [
                 'path' => '/1/events',
                 'method' => 'POST',
-                'body' => json_decode('{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}'),
+                'body' => json_decode('{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}'),
             ],
         ]);
     }
@@ -520,6 +521,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
                     'eventName' => 'Product Purchased',
                     'index' => 'products',
                     'userToken' => 'user-123456',
+                    'authenticatedUserToken' => 'user-123456',
                     'timestamp' => 1641290601962,
                     'objectIDs' => [
                         '9780545139700',
@@ -533,6 +535,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
                     'eventName' => 'Product Detail Page Viewed',
                     'index' => 'products',
                     'userToken' => 'user-123456',
+                    'authenticatedUserToken' => 'user-123456',
                     'timestamp' => 1641290601962,
                     'objectIDs' => [
                         '9780545139700',
@@ -548,7 +551,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
             [
                 'path' => '/1/events',
                 'method' => 'POST',
-                'body' => json_decode('{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}'),
+                'body' => json_decode('{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}'),
             ],
         ]);
     }
@@ -566,6 +569,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
                     'eventName' => 'Product Purchased',
                     'index' => 'products',
                     'userToken' => 'user-123456',
+                    'authenticatedUserToken' => 'user-123456',
                     'timestamp' => 1641290601962,
                     'objectIDs' => [
                         '9780545139700',
@@ -582,7 +586,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
             [
                 'path' => '/1/events',
                 'method' => 'POST',
-                'body' => json_decode('{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}'),
+                'body' => json_decode('{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}'),
             ],
         ]);
     }
@@ -600,6 +604,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
                     'eventName' => 'Product Detail Page Viewed',
                     'index' => 'products',
                     'userToken' => 'user-123456',
+                    'authenticatedUserToken' => 'user-123456',
                     'timestamp' => 1641290601962,
                     'objectIDs' => [
                         '9780545139700',
@@ -615,7 +620,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
             [
                 'path' => '/1/events',
                 'method' => 'POST',
-                'body' => json_decode('{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}'),
+                'body' => json_decode('{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}'),
             ],
         ]);
     }
@@ -635,6 +640,7 @@ class InsightsTest extends TestCase implements HttpClientInterface
                     'index' => 'products',
                     'queryID' => '43b15df305339e827f0ac0bdc5ebcaa7',
                     'userToken' => 'user-123456',
+                    'authenticatedUserToken' => 'user-123456',
                     'timestamp' => 1641290601962,
                     'objectIDs' => [
                         '9780545139700',
@@ -662,7 +668,33 @@ class InsightsTest extends TestCase implements HttpClientInterface
             [
                 'path' => '/1/events',
                 'method' => 'POST',
-                'body' => json_decode('{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}'),
+                'body' => json_decode('{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}'),
+            ],
+        ]);
+    }
+
+    /**
+     * Test case for PushEvents
+     * Identify.
+     */
+    public function testPushEvents5()
+    {
+        $client = $this->getClient();
+        $client->pushEvents(
+            ['events' => [
+                ['eventType' => 'identify',
+                    'userToken' => 'anonymous-1',
+                    'authenticatedUserToken' => 'authenticated-1',
+                ],
+            ],
+            ],
+        );
+
+        $this->assertRequests([
+            [
+                'path' => '/1/events',
+                'method' => 'POST',
+                'body' => json_decode('{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}'),
             ],
         ]);
     }

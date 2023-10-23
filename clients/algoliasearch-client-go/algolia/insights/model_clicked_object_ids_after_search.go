@@ -23,6 +23,8 @@ type ClickedObjectIDsAfterSearch struct {
 	UserToken string `json:"userToken" validate:"required"`
 	// Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
 	Timestamp *int64 `json:"timestamp,omitempty"`
+	// User token for authenticated users.
+	AuthenticatedUserToken *string `json:"authenticatedUserToken,omitempty"`
 }
 
 type ClickedObjectIDsAfterSearchOption func(f *ClickedObjectIDsAfterSearch)
@@ -30,6 +32,12 @@ type ClickedObjectIDsAfterSearchOption func(f *ClickedObjectIDsAfterSearch)
 func WithClickedObjectIDsAfterSearchTimestamp(val int64) ClickedObjectIDsAfterSearchOption {
 	return func(f *ClickedObjectIDsAfterSearch) {
 		f.Timestamp = &val
+	}
+}
+
+func WithClickedObjectIDsAfterSearchAuthenticatedUserToken(val string) ClickedObjectIDsAfterSearchOption {
+	return func(f *ClickedObjectIDsAfterSearch) {
+		f.AuthenticatedUserToken = &val
 	}
 }
 
@@ -260,6 +268,38 @@ func (o *ClickedObjectIDsAfterSearch) SetTimestamp(v int64) {
 	o.Timestamp = &v
 }
 
+// GetAuthenticatedUserToken returns the AuthenticatedUserToken field value if set, zero value otherwise.
+func (o *ClickedObjectIDsAfterSearch) GetAuthenticatedUserToken() string {
+	if o == nil || o.AuthenticatedUserToken == nil {
+		var ret string
+		return ret
+	}
+	return *o.AuthenticatedUserToken
+}
+
+// GetAuthenticatedUserTokenOk returns a tuple with the AuthenticatedUserToken field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ClickedObjectIDsAfterSearch) GetAuthenticatedUserTokenOk() (*string, bool) {
+	if o == nil || o.AuthenticatedUserToken == nil {
+		return nil, false
+	}
+	return o.AuthenticatedUserToken, true
+}
+
+// HasAuthenticatedUserToken returns a boolean if a field has been set.
+func (o *ClickedObjectIDsAfterSearch) HasAuthenticatedUserToken() bool {
+	if o != nil && o.AuthenticatedUserToken != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAuthenticatedUserToken gets a reference to the given string and assigns it to the AuthenticatedUserToken field.
+func (o *ClickedObjectIDsAfterSearch) SetAuthenticatedUserToken(v string) {
+	o.AuthenticatedUserToken = &v
+}
+
 func (o ClickedObjectIDsAfterSearch) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -286,6 +326,9 @@ func (o ClickedObjectIDsAfterSearch) MarshalJSON() ([]byte, error) {
 	if o.Timestamp != nil {
 		toSerialize["timestamp"] = o.Timestamp
 	}
+	if o.AuthenticatedUserToken != nil {
+		toSerialize["authenticatedUserToken"] = o.AuthenticatedUserToken
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -299,6 +342,7 @@ func (o ClickedObjectIDsAfterSearch) String() string {
 	out += fmt.Sprintf("  queryID=%v\n", o.QueryID)
 	out += fmt.Sprintf("  userToken=%v\n", o.UserToken)
 	out += fmt.Sprintf("  timestamp=%v\n", o.Timestamp)
+	out += fmt.Sprintf("  authenticatedUserToken=%v\n", o.AuthenticatedUserToken)
 	return fmt.Sprintf("ClickedObjectIDsAfterSearch {\n%s}", out)
 }
 

@@ -409,6 +409,7 @@ class InsightsTest {
                 eventName = "Product Clicked",
                 index = "products",
                 userToken = "user-123456",
+                authenticatedUserToken = "user-123456",
                 timestamp = 1641290601962L,
                 objectIDs = listOf("9780545139700", "9780439784542"),
                 queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
@@ -421,7 +422,7 @@ class InsightsTest {
       intercept = {
         assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}""", it.body)
+        assertJsonBody("""{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}""", it.body)
       },
     )
   }
@@ -438,6 +439,7 @@ class InsightsTest {
                 eventName = "Product Purchased",
                 index = "products",
                 userToken = "user-123456",
+                authenticatedUserToken = "user-123456",
                 timestamp = 1641290601962L,
                 objectIDs = listOf("9780545139700", "9780439784542"),
                 queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
@@ -447,6 +449,7 @@ class InsightsTest {
                 eventName = "Product Detail Page Viewed",
                 index = "products",
                 userToken = "user-123456",
+                authenticatedUserToken = "user-123456",
                 timestamp = 1641290601962L,
                 objectIDs = listOf("9780545139700", "9780439784542"),
               ),
@@ -457,7 +460,7 @@ class InsightsTest {
       intercept = {
         assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""", it.body)
+        assertJsonBody("""{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""", it.body)
       },
     )
   }
@@ -474,6 +477,7 @@ class InsightsTest {
                 eventName = "Product Purchased",
                 index = "products",
                 userToken = "user-123456",
+                authenticatedUserToken = "user-123456",
                 timestamp = 1641290601962L,
                 objectIDs = listOf("9780545139700", "9780439784542"),
                 queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
@@ -485,7 +489,7 @@ class InsightsTest {
       intercept = {
         assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}""", it.body)
+        assertJsonBody("""{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}""", it.body)
       },
     )
   }
@@ -502,6 +506,7 @@ class InsightsTest {
                 eventName = "Product Detail Page Viewed",
                 index = "products",
                 userToken = "user-123456",
+                authenticatedUserToken = "user-123456",
                 timestamp = 1641290601962L,
                 objectIDs = listOf("9780545139700", "9780439784542"),
               ),
@@ -512,7 +517,7 @@ class InsightsTest {
       intercept = {
         assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""", it.body)
+        assertJsonBody("""{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""", it.body)
       },
     )
   }
@@ -531,6 +536,7 @@ class InsightsTest {
                 index = "products",
                 queryID = "43b15df305339e827f0ac0bdc5ebcaa7",
                 userToken = "user-123456",
+                authenticatedUserToken = "user-123456",
                 timestamp = 1641290601962L,
                 objectIDs = listOf("9780545139700", "9780439784542"),
                 objectData = listOf(
@@ -554,7 +560,31 @@ class InsightsTest {
       intercept = {
         assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
         assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}""", it.body)
+        assertJsonBody("""{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8$","quantity":7,"discount":"30%"}],"currency":"USD"}]}""", it.body)
+      },
+    )
+  }
+
+  @Test
+  fun `Identify`() = runTest {
+    client.runTest(
+      call = {
+        pushEvents(
+          insightsEvents = InsightsEvents(
+            events = listOf(
+              Identify(
+                eventType = IdentifyEvent.entries.first { it.value == "identify" },
+                userToken = "anonymous-1",
+                authenticatedUserToken = "authenticated-1",
+              ),
+            ),
+          ),
+        )
+      },
+      intercept = {
+        assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
+        assertEquals(HttpMethod.parse("POST"), it.method)
+        assertJsonBody("""{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}""", it.body)
       },
     )
   }

@@ -13,6 +13,7 @@ import kotlinx.serialization.json.*
  * @param objectIDs List of object identifiers for items of an Algolia index.
  * @param userToken Anonymous or pseudonymous user identifier.   > **Note**: Never include personally identifiable information in user tokens.
  * @param timestamp Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.
+ * @param authenticatedUserToken User token for authenticated users.
  */
 @Serializable
 public data class ViewedObjectIDs(
@@ -33,4 +34,7 @@ public data class ViewedObjectIDs(
 
   /** Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp.  */
   @SerialName(value = "timestamp") val timestamp: Long? = null,
+
+  /** User token for authenticated users. */
+  @SerialName(value = "authenticatedUserToken") val authenticatedUserToken: String? = null,
 ) : EventsItems

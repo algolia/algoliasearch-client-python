@@ -18,6 +18,7 @@ final class ClickedObjectIDsAfterSearch {
     required this.queryID,
     required this.userToken,
     this.timestamp,
+    this.authenticatedUserToken,
   });
 
   /// Can contain up to 64 ASCII characters.   Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.
@@ -51,6 +52,10 @@ final class ClickedObjectIDsAfterSearch {
   @JsonKey(name: r'timestamp')
   final int? timestamp;
 
+  /// User token for authenticated users.
+  @JsonKey(name: r'authenticatedUserToken')
+  final String? authenticatedUserToken;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -62,7 +67,8 @@ final class ClickedObjectIDsAfterSearch {
           other.positions == positions &&
           other.queryID == queryID &&
           other.userToken == userToken &&
-          other.timestamp == timestamp;
+          other.timestamp == timestamp &&
+          other.authenticatedUserToken == authenticatedUserToken;
 
   @override
   int get hashCode =>
@@ -73,7 +79,8 @@ final class ClickedObjectIDsAfterSearch {
       positions.hashCode +
       queryID.hashCode +
       userToken.hashCode +
-      timestamp.hashCode;
+      timestamp.hashCode +
+      authenticatedUserToken.hashCode;
 
   factory ClickedObjectIDsAfterSearch.fromJson(Map<String, dynamic> json) =>
       _$ClickedObjectIDsAfterSearchFromJson(json);

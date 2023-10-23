@@ -112,6 +112,16 @@ public interface EventsItems {
         }
       }
 
+      // deserialize Identify
+      if (tree.isObject()) {
+        try (JsonParser parser = tree.traverse(jp.getCodec())) {
+          return parser.readValueAs(Identify.class);
+        } catch (Exception e) {
+          // deserialization failed, continue
+          LOGGER.finest("Failed to deserialize oneOf Identify (error: " + e.getMessage() + ") (type: Identify)");
+        }
+      }
+
       // deserialize PurchasedObjectIDs
       if (tree.isObject()) {
         try (JsonParser parser = tree.traverse(jp.getCodec())) {

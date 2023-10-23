@@ -18,6 +18,8 @@ export 'src/model/converted_object_ids.dart';
 export 'src/model/converted_object_ids_after_search.dart';
 export 'src/model/error_base.dart';
 export 'src/model/events_response.dart';
+export 'src/model/identify.dart';
+export 'src/model/identify_event.dart';
 export 'src/model/insights_events.dart';
 export 'src/model/object_data.dart';
 export 'src/model/object_data_after_search.dart';

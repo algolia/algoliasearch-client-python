@@ -478,6 +478,7 @@ void main() {
               eventName: "Product Clicked",
               index: "products",
               userToken: "user-123456",
+              authenticatedUserToken: "user-123456",
               timestamp: 1641290601962,
               objectIDs: [
                 "9780545139700",
@@ -496,7 +497,7 @@ void main() {
         expectPath(request.path, '/1/events');
         expect(request.method, 'post');
         expectBody(request.body,
-            """{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}""");
+            """{"events":[{"eventType":"click","eventName":"Product Clicked","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7","positions":[7,6]}]}""");
       },
     ),
   );
@@ -519,6 +520,7 @@ void main() {
               eventName: "Product Purchased",
               index: "products",
               userToken: "user-123456",
+              authenticatedUserToken: "user-123456",
               timestamp: 1641290601962,
               objectIDs: [
                 "9780545139700",
@@ -531,6 +533,7 @@ void main() {
               eventName: "Product Detail Page Viewed",
               index: "products",
               userToken: "user-123456",
+              authenticatedUserToken: "user-123456",
               timestamp: 1641290601962,
               objectIDs: [
                 "9780545139700",
@@ -544,7 +547,7 @@ void main() {
         expectPath(request.path, '/1/events');
         expect(request.method, 'post');
         expectBody(request.body,
-            """{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""");
+            """{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"},{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""");
       },
     ),
   );
@@ -567,6 +570,7 @@ void main() {
               eventName: "Product Purchased",
               index: "products",
               userToken: "user-123456",
+              authenticatedUserToken: "user-123456",
               timestamp: 1641290601962,
               objectIDs: [
                 "9780545139700",
@@ -581,7 +585,7 @@ void main() {
         expectPath(request.path, '/1/events');
         expect(request.method, 'post');
         expectBody(request.body,
-            """{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}""");
+            """{"events":[{"eventType":"conversion","eventName":"Product Purchased","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"queryID":"43b15df305339e827f0ac0bdc5ebcaa7"}]}""");
       },
     ),
   );
@@ -604,6 +608,7 @@ void main() {
               eventName: "Product Detail Page Viewed",
               index: "products",
               userToken: "user-123456",
+              authenticatedUserToken: "user-123456",
               timestamp: 1641290601962,
               objectIDs: [
                 "9780545139700",
@@ -617,7 +622,7 @@ void main() {
         expectPath(request.path, '/1/events');
         expect(request.method, 'post');
         expectBody(request.body,
-            """{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""");
+            """{"events":[{"eventType":"view","eventName":"Product Detail Page Viewed","index":"products","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"]}]}""");
       },
     ),
   );
@@ -642,6 +647,7 @@ void main() {
               index: "products",
               queryID: "43b15df305339e827f0ac0bdc5ebcaa7",
               userToken: "user-123456",
+              authenticatedUserToken: "user-123456",
               timestamp: 1641290601962,
               objectIDs: [
                 "9780545139700",
@@ -668,7 +674,37 @@ void main() {
         expectPath(request.path, '/1/events');
         expect(request.method, 'post');
         expectBody(request.body,
-            """{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8\$","quantity":7,"discount":"30%"}],"currency":"USD"}]}""");
+            """{"events":[{"eventType":"conversion","eventSubtype":"addToCart","eventName":"Product Added To Cart","index":"products","queryID":"43b15df305339e827f0ac0bdc5ebcaa7","userToken":"user-123456","authenticatedUserToken":"user-123456","timestamp":1641290601962,"objectIDs":["9780545139700","9780439784542"],"objectData":[{"price":19.99,"quantity":10,"discount":2.5},{"price":"8\$","quantity":7,"discount":"30%"}],"currency":"USD"}]}""");
+      },
+    ),
+  );
+
+  // pushEvents
+  test(
+    'Identify',
+    () => runTest(
+      builder: (requester) => InsightsClient(
+        appId: 'appId',
+        apiKey: 'apiKey',
+        region: 'us',
+        options: ClientOptions(requester: requester),
+      ),
+      call: (client) => client.pushEvents(
+        insightsEvents: InsightsEvents(
+          events: [
+            Identify(
+              eventType: IdentifyEvent.fromJson("identify"),
+              userToken: "anonymous-1",
+              authenticatedUserToken: "authenticated-1",
+            ),
+          ],
+        ),
+      ),
+      intercept: (request) {
+        expectPath(request.path, '/1/events');
+        expect(request.method, 'post');
+        expectBody(request.body,
+            """{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}""");
       },
     ),
   );
