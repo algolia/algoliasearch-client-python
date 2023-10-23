@@ -658,28 +658,6 @@ components:
         - index
         - objectIDs
         - userToken
-    IdentifyEvent:
-      type: string
-      enum:
-        - identify
-    Identify:
-      type: object
-      title: Identify user
-      description: >
-        The identify event is a signal for Insights to process all events coming
-        from 'userToken' as if they were from 'authenticatedUserToken'.
-      properties:
-        eventType:
-          $ref: '#/components/schemas/IdentifyEvent'
-          default: identify
-        userToken:
-          $ref: '#/components/schemas/userToken'
-        authenticatedUserToken:
-          $ref: '#/components/schemas/authenticatedUserToken'
-      required:
-        - eventType
-        - userToken
-        - authenticatedUserToken
     EventsItems:
       oneOf:
         - $ref: '#/components/schemas/ClickedObjectIDsAfterSearch'
@@ -694,7 +672,6 @@ components:
         - $ref: '#/components/schemas/AddedToCartObjectIDs'
         - $ref: '#/components/schemas/PurchasedObjectIDs'
         - $ref: '#/components/schemas/PurchasedObjectIDsAfterSearch'
-        - $ref: '#/components/schemas/Identify'
     EventsResponse:
       type: object
       description: The response of the Insights API.

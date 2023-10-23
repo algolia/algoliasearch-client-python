@@ -565,30 +565,6 @@ class InsightsTest {
     )
   }
 
-  @Test
-  fun `Identify`() = runTest {
-    client.runTest(
-      call = {
-        pushEvents(
-          insightsEvents = InsightsEvents(
-            events = listOf(
-              Identify(
-                eventType = IdentifyEvent.entries.first { it.value == "identify" },
-                userToken = "anonymous-1",
-                authenticatedUserToken = "authenticated-1",
-              ),
-            ),
-          ),
-        )
-      },
-      intercept = {
-        assertEquals("/1/events".toPathSegments(), it.url.pathSegments)
-        assertEquals(HttpMethod.parse("POST"), it.method)
-        assertJsonBody("""{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}""", it.body)
-      },
-    )
-  }
-
   // put
 
   @Test

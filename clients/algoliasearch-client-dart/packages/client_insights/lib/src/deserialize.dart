@@ -11,8 +11,6 @@ import 'package:algolia_client_insights/src/model/converted_object_ids.dart';
 import 'package:algolia_client_insights/src/model/converted_object_ids_after_search.dart';
 import 'package:algolia_client_insights/src/model/error_base.dart';
 import 'package:algolia_client_insights/src/model/events_response.dart';
-import 'package:algolia_client_insights/src/model/identify.dart';
-import 'package:algolia_client_insights/src/model/identify_event.dart';
 import 'package:algolia_client_insights/src/model/insights_events.dart';
 import 'package:algolia_client_insights/src/model/object_data.dart';
 import 'package:algolia_client_insights/src/model/object_data_after_search.dart';
@@ -77,10 +75,6 @@ ReturnType deserialize<ReturnType, BaseType>(dynamic value, String targetType,
     case 'EventsResponse':
       return EventsResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
-    case 'Identify':
-      return Identify.fromJson(value as Map<String, dynamic>) as ReturnType;
-    case 'IdentifyEvent':
-      return IdentifyEvent.fromJson(value) as ReturnType;
     case 'InsightsEvents':
       return InsightsEvents.fromJson(value as Map<String, dynamic>)
           as ReturnType;

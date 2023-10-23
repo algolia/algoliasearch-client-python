@@ -907,42 +907,6 @@ class InsightsClientRequestsTests {
   }
 
   @Test
-  @DisplayName("Identify")
-  void pushEventsTest5() {
-    InsightsEvents insightsEvents0 = new InsightsEvents();
-    {
-      List<EventsItems> events1 = new ArrayList<>();
-      {
-        Identify events_02 = new Identify();
-        {
-          IdentifyEvent eventType3 = IdentifyEvent.fromValue("identify");
-          events_02.setEventType(eventType3);
-          String userToken3 = "anonymous-1";
-          events_02.setUserToken(userToken3);
-          String authenticatedUserToken3 = "authenticated-1";
-          events_02.setAuthenticatedUserToken(authenticatedUserToken3);
-        }
-        events1.add(events_02);
-      }
-      insightsEvents0.setEvents(events1);
-    }
-
-    assertDoesNotThrow(() -> {
-      client.pushEvents(insightsEvents0);
-    });
-    EchoResponse req = echo.getLastResponse();
-    assertEquals("/1/events", req.path);
-    assertEquals("POST", req.method);
-    assertDoesNotThrow(() ->
-      JSONAssert.assertEquals(
-        "{\"events\":[{\"eventType\":\"identify\",\"userToken\":\"anonymous-1\",\"authenticatedUserToken\":\"authenticated-1\"}]}",
-        req.body,
-        JSONCompareMode.STRICT
-      )
-    );
-  }
-
-  @Test
   @DisplayName("allow put method for a custom path with minimal parameters")
   void putTest0() {
     String path0 = "/test/minimal";

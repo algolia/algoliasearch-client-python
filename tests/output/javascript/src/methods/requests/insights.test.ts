@@ -494,31 +494,6 @@ describe('pushEvents', () => {
     });
     expect(req.searchParams).toStrictEqual(undefined);
   });
-
-  test('Identify', async () => {
-    const req = (await client.pushEvents({
-      events: [
-        {
-          eventType: 'identify',
-          userToken: 'anonymous-1',
-          authenticatedUserToken: 'authenticated-1',
-        },
-      ],
-    })) as unknown as EchoResponse;
-
-    expect(req.path).toEqual('/1/events');
-    expect(req.method).toEqual('POST');
-    expect(req.data).toEqual({
-      events: [
-        {
-          eventType: 'identify',
-          userToken: 'anonymous-1',
-          authenticatedUserToken: 'authenticated-1',
-        },
-      ],
-    });
-    expect(req.searchParams).toStrictEqual(undefined);
-  });
 });
 
 describe('put', () => {

@@ -679,36 +679,6 @@ void main() {
     ),
   );
 
-  // pushEvents
-  test(
-    'Identify',
-    () => runTest(
-      builder: (requester) => InsightsClient(
-        appId: 'appId',
-        apiKey: 'apiKey',
-        region: 'us',
-        options: ClientOptions(requester: requester),
-      ),
-      call: (client) => client.pushEvents(
-        insightsEvents: InsightsEvents(
-          events: [
-            Identify(
-              eventType: IdentifyEvent.fromJson("identify"),
-              userToken: "anonymous-1",
-              authenticatedUserToken: "authenticated-1",
-            ),
-          ],
-        ),
-      ),
-      intercept: (request) {
-        expectPath(request.path, '/1/events');
-        expect(request.method, 'post');
-        expectBody(request.body,
-            """{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}""");
-      },
-    ),
-  );
-
   // put
   test(
     'allow put method for a custom path with minimal parameters',

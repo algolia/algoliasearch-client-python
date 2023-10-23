@@ -674,32 +674,6 @@ class InsightsTest extends TestCase implements HttpClientInterface
     }
 
     /**
-     * Test case for PushEvents
-     * Identify.
-     */
-    public function testPushEvents5()
-    {
-        $client = $this->getClient();
-        $client->pushEvents(
-            ['events' => [
-                ['eventType' => 'identify',
-                    'userToken' => 'anonymous-1',
-                    'authenticatedUserToken' => 'authenticated-1',
-                ],
-            ],
-            ],
-        );
-
-        $this->assertRequests([
-            [
-                'path' => '/1/events',
-                'method' => 'POST',
-                'body' => json_decode('{"events":[{"eventType":"identify","userToken":"anonymous-1","authenticatedUserToken":"authenticated-1"}]}'),
-            ],
-        ]);
-    }
-
-    /**
      * Test case for Put
      * allow put method for a custom path with minimal parameters.
      */

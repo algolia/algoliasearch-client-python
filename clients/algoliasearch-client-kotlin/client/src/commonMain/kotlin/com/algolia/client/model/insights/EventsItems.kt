@@ -21,7 +21,6 @@ import kotlinx.serialization.json.*
  * - [ConvertedFilters]
  * - [ConvertedObjectIDs]
  * - [ConvertedObjectIDsAfterSearch]
- * - [Identify]
  * - [PurchasedObjectIDs]
  * - [PurchasedObjectIDsAfterSearch]
  * - [ViewedFilters]
@@ -48,7 +47,6 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
       is ConvertedFilters -> ConvertedFilters.serializer().serialize(encoder, value)
       is ConvertedObjectIDs -> ConvertedObjectIDs.serializer().serialize(encoder, value)
       is ConvertedObjectIDsAfterSearch -> ConvertedObjectIDsAfterSearch.serializer().serialize(encoder, value)
-      is Identify -> Identify.serializer().serialize(encoder, value)
       is PurchasedObjectIDs -> PurchasedObjectIDs.serializer().serialize(encoder, value)
       is PurchasedObjectIDsAfterSearch -> PurchasedObjectIDsAfterSearch.serializer().serialize(encoder, value)
       is ViewedFilters -> ViewedFilters.serializer().serialize(encoder, value)
@@ -137,16 +135,6 @@ internal class EventsItemsSerializer : KSerializer<EventsItems> {
       } catch (e: Exception) {
         // deserialization failed, continue
         println("Failed to deserialize ConvertedObjectIDsAfterSearch (error: ${e.message})")
-      }
-    }
-
-    // deserialize Identify
-    if (tree is JsonObject) {
-      try {
-        return codec.json.decodeFromJsonElement(Identify.serializer(), tree)
-      } catch (e: Exception) {
-        // deserialization failed, continue
-        println("Failed to deserialize Identify (error: ${e.message})")
       }
     }
 
