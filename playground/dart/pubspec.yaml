@@ -5,9 +5,9 @@ environment:
   sdk: ^3.0.0
 
 dependencies:
-  algoliasearch: ^0.5.0
-  algolia_client_recommend: ^0.5.0
+  algoliasearch: ^1.0.0
+  algolia_client_recommend: ^1.0.0
   dotenv: ^4.1.0
 
 dev_dependencies:
-  lints: ^2.0.0
+  lints: ^3.0.0
