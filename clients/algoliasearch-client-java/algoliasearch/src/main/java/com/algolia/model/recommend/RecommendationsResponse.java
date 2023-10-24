@@ -26,6 +26,9 @@ public class RecommendationsResponse {
   @JsonProperty("automaticRadius")
   private String automaticRadius;
 
+  @JsonProperty("exhaustive")
+  private Exhaustive exhaustive;
+
   @JsonProperty("exhaustiveFacetsCount")
   private Boolean exhaustiveFacetsCount;
 
@@ -65,26 +68,32 @@ public class RecommendationsResponse {
   @JsonProperty("page")
   private Integer page;
 
-  @JsonProperty("redirect")
-  private BaseSearchResponseRedirect redirect;
-
   @JsonProperty("parsedQuery")
   private String parsedQuery;
 
   @JsonProperty("processingTimeMS")
   private Integer processingTimeMS;
 
+  @JsonProperty("processingTimingsMS")
+  private Object processingTimingsMS;
+
   @JsonProperty("queryAfterRemoval")
   private String queryAfterRemoval;
+
+  @JsonProperty("redirect")
+  private Redirect redirect;
+
+  @JsonProperty("renderingContent")
+  private RenderingContent renderingContent;
+
+  @JsonProperty("serverTimeMS")
+  private Integer serverTimeMS;
 
   @JsonProperty("serverUsed")
   private String serverUsed;
 
   @JsonProperty("userData")
   private Object userData;
-
-  @JsonProperty("renderingContent")
-  private RenderingContent renderingContent;
 
   @JsonProperty("hits")
   private List<RecommendHit> hits = new ArrayList<>();
@@ -144,12 +153,28 @@ public class RecommendationsResponse {
     return automaticRadius;
   }
 
+  public RecommendationsResponse setExhaustive(Exhaustive exhaustive) {
+    this.exhaustive = exhaustive;
+    return this;
+  }
+
+  /** Get exhaustive */
+  @javax.annotation.Nullable
+  public Exhaustive getExhaustive() {
+    return exhaustive;
+  }
+
   public RecommendationsResponse setExhaustiveFacetsCount(Boolean exhaustiveFacetsCount) {
     this.exhaustiveFacetsCount = exhaustiveFacetsCount;
     return this;
   }
 
-  /** Indicates whether the facet count is exhaustive (exact) or approximate. */
+  /**
+   * See the `facetsCount` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveFacetsCount() {
     return exhaustiveFacetsCount;
@@ -160,7 +185,12 @@ public class RecommendationsResponse {
     return this;
   }
 
-  /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
+  /**
+   * See the `nbHits` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveNbHits() {
     return exhaustiveNbHits;
@@ -171,7 +201,12 @@ public class RecommendationsResponse {
     return this;
   }
 
-  /** Indicates whether the search for typos was exhaustive (exact) or approximate. */
+  /**
+   * See the `typo` field of the `exhaustive` object in the response.
+   *
+   * @deprecated
+   */
+  @Deprecated
   @javax.annotation.Nullable
   public Boolean getExhaustiveTypo() {
     return exhaustiveTypo;
@@ -306,17 +341,6 @@ public class RecommendationsResponse {
     return page;
   }
 
-  public RecommendationsResponse setRedirect(BaseSearchResponseRedirect redirect) {
-    this.redirect = redirect;
-    return this;
-  }
-
-  /** Get redirect */
-  @javax.annotation.Nullable
-  public BaseSearchResponseRedirect getRedirect() {
-    return redirect;
-  }
-
   public RecommendationsResponse setParsedQuery(String parsedQuery) {
     this.parsedQuery = parsedQuery;
     return this;
@@ -342,6 +366,20 @@ public class RecommendationsResponse {
     return processingTimeMS;
   }
 
+  public RecommendationsResponse setProcessingTimingsMS(Object processingTimingsMS) {
+    this.processingTimingsMS = processingTimingsMS;
+    return this;
+  }
+
+  /**
+   * Experimental. List of processing steps and their times, in milliseconds. You can use this list
+   * to investigate performance issues.
+   */
+  @javax.annotation.Nullable
+  public Object getProcessingTimingsMS() {
+    return processingTimingsMS;
+  }
+
   public RecommendationsResponse setQueryAfterRemoval(String queryAfterRemoval) {
     this.queryAfterRemoval = queryAfterRemoval;
     return this;
@@ -354,6 +392,39 @@ public class RecommendationsResponse {
   @javax.annotation.Nullable
   public String getQueryAfterRemoval() {
     return queryAfterRemoval;
+  }
+
+  public RecommendationsResponse setRedirect(Redirect redirect) {
+    this.redirect = redirect;
+    return this;
+  }
+
+  /** Get redirect */
+  @javax.annotation.Nullable
+  public Redirect getRedirect() {
+    return redirect;
+  }
+
+  public RecommendationsResponse setRenderingContent(RenderingContent renderingContent) {
+    this.renderingContent = renderingContent;
+    return this;
+  }
+
+  /** Get renderingContent */
+  @javax.annotation.Nullable
+  public RenderingContent getRenderingContent() {
+    return renderingContent;
+  }
+
+  public RecommendationsResponse setServerTimeMS(Integer serverTimeMS) {
+    this.serverTimeMS = serverTimeMS;
+    return this;
+  }
+
+  /** Time the server took to process the request, in milliseconds. */
+  @javax.annotation.Nullable
+  public Integer getServerTimeMS() {
+    return serverTimeMS;
   }
 
   public RecommendationsResponse setServerUsed(String serverUsed) {
@@ -376,17 +447,6 @@ public class RecommendationsResponse {
   @javax.annotation.Nullable
   public Object getUserData() {
     return userData;
-  }
-
-  public RecommendationsResponse setRenderingContent(RenderingContent renderingContent) {
-    this.renderingContent = renderingContent;
-    return this;
-  }
-
-  /** Get renderingContent */
-  @javax.annotation.Nullable
-  public RenderingContent getRenderingContent() {
-    return renderingContent;
   }
 
   public RecommendationsResponse setHits(List<RecommendHit> hits) {
@@ -441,6 +501,7 @@ public class RecommendationsResponse {
       Objects.equals(this.abTestVariantID, recommendationsResponse.abTestVariantID) &&
       Objects.equals(this.aroundLatLng, recommendationsResponse.aroundLatLng) &&
       Objects.equals(this.automaticRadius, recommendationsResponse.automaticRadius) &&
+      Objects.equals(this.exhaustive, recommendationsResponse.exhaustive) &&
       Objects.equals(this.exhaustiveFacetsCount, recommendationsResponse.exhaustiveFacetsCount) &&
       Objects.equals(this.exhaustiveNbHits, recommendationsResponse.exhaustiveNbHits) &&
       Objects.equals(this.exhaustiveTypo, recommendationsResponse.exhaustiveTypo) &&
@@ -454,13 +515,15 @@ public class RecommendationsResponse {
       Objects.equals(this.nbPages, recommendationsResponse.nbPages) &&
       Objects.equals(this.nbSortedHits, recommendationsResponse.nbSortedHits) &&
       Objects.equals(this.page, recommendationsResponse.page) &&
-      Objects.equals(this.redirect, recommendationsResponse.redirect) &&
       Objects.equals(this.parsedQuery, recommendationsResponse.parsedQuery) &&
       Objects.equals(this.processingTimeMS, recommendationsResponse.processingTimeMS) &&
+      Objects.equals(this.processingTimingsMS, recommendationsResponse.processingTimingsMS) &&
       Objects.equals(this.queryAfterRemoval, recommendationsResponse.queryAfterRemoval) &&
+      Objects.equals(this.redirect, recommendationsResponse.redirect) &&
+      Objects.equals(this.renderingContent, recommendationsResponse.renderingContent) &&
+      Objects.equals(this.serverTimeMS, recommendationsResponse.serverTimeMS) &&
       Objects.equals(this.serverUsed, recommendationsResponse.serverUsed) &&
       Objects.equals(this.userData, recommendationsResponse.userData) &&
-      Objects.equals(this.renderingContent, recommendationsResponse.renderingContent) &&
       Objects.equals(this.hits, recommendationsResponse.hits) &&
       Objects.equals(this.query, recommendationsResponse.query) &&
       Objects.equals(this.params, recommendationsResponse.params)
@@ -474,6 +537,7 @@ public class RecommendationsResponse {
       abTestVariantID,
       aroundLatLng,
       automaticRadius,
+      exhaustive,
       exhaustiveFacetsCount,
       exhaustiveNbHits,
       exhaustiveTypo,
@@ -487,13 +551,15 @@ public class RecommendationsResponse {
       nbPages,
       nbSortedHits,
       page,
-      redirect,
       parsedQuery,
       processingTimeMS,
+      processingTimingsMS,
       queryAfterRemoval,
+      redirect,
+      renderingContent,
+      serverTimeMS,
       serverUsed,
       userData,
-      renderingContent,
       hits,
       query,
       params
@@ -508,6 +574,7 @@ public class RecommendationsResponse {
     sb.append("    abTestVariantID: ").append(toIndentedString(abTestVariantID)).append("\n");
     sb.append("    aroundLatLng: ").append(toIndentedString(aroundLatLng)).append("\n");
     sb.append("    automaticRadius: ").append(toIndentedString(automaticRadius)).append("\n");
+    sb.append("    exhaustive: ").append(toIndentedString(exhaustive)).append("\n");
     sb.append("    exhaustiveFacetsCount: ").append(toIndentedString(exhaustiveFacetsCount)).append("\n");
     sb.append("    exhaustiveNbHits: ").append(toIndentedString(exhaustiveNbHits)).append("\n");
     sb.append("    exhaustiveTypo: ").append(toIndentedString(exhaustiveTypo)).append("\n");
@@ -521,13 +588,15 @@ public class RecommendationsResponse {
     sb.append("    nbPages: ").append(toIndentedString(nbPages)).append("\n");
     sb.append("    nbSortedHits: ").append(toIndentedString(nbSortedHits)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
     sb.append("    parsedQuery: ").append(toIndentedString(parsedQuery)).append("\n");
     sb.append("    processingTimeMS: ").append(toIndentedString(processingTimeMS)).append("\n");
+    sb.append("    processingTimingsMS: ").append(toIndentedString(processingTimingsMS)).append("\n");
     sb.append("    queryAfterRemoval: ").append(toIndentedString(queryAfterRemoval)).append("\n");
+    sb.append("    redirect: ").append(toIndentedString(redirect)).append("\n");
+    sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
+    sb.append("    serverTimeMS: ").append(toIndentedString(serverTimeMS)).append("\n");
     sb.append("    serverUsed: ").append(toIndentedString(serverUsed)).append("\n");
     sb.append("    userData: ").append(toIndentedString(userData)).append("\n");
-    sb.append("    renderingContent: ").append(toIndentedString(renderingContent)).append("\n");
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    params: ").append(toIndentedString(params)).append("\n");

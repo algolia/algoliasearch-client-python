@@ -17,21 +17,24 @@ import kotlinx.serialization.json.*
  * @param abTestVariantID Variant ID. This is only included in the response for indices that are part of an A/B test.
  * @param aroundLatLng Computed geographical location.
  * @param automaticRadius Automatically-computed radius.
- * @param exhaustiveFacetsCount Indicates whether the facet count is exhaustive (exact) or approximate.
- * @param exhaustiveNbHits Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate.
- * @param exhaustiveTypo Indicates whether the search for typos was exhaustive (exact) or approximate.
+ * @param exhaustive
+ * @param exhaustiveFacetsCount See the `facetsCount` field of the `exhaustive` object in the response.
+ * @param exhaustiveNbHits See the `nbHits` field of the `exhaustive` object in the response.
+ * @param exhaustiveTypo See the `typo` field of the `exhaustive` object in the response.
  * @param facets Mapping of each facet name to the corresponding facet counts.
  * @param facetsStats Statistics for numerical facets.
  * @param index Index name used for the query.
  * @param indexUsed Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query.
  * @param message Warnings about the query.
  * @param nbSortedHits Number of hits selected and sorted by the relevant sort algorithm.
- * @param redirect
  * @param parsedQuery Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched.
+ * @param processingTimingsMS Experimental. List of processing steps and their times, in milliseconds. You can use this list to investigate performance issues.
  * @param queryAfterRemoval Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set.
+ * @param redirect
+ * @param renderingContent
+ * @param serverTimeMS Time the server took to process the request, in milliseconds.
  * @param serverUsed Host name of the server that processed the request.
  * @param userData Lets you store custom data in your indices.
- * @param renderingContent
  * @param query Text to search for in an index.
  * @param params URL-encoded string of all search parameters.
  */
@@ -67,13 +70,18 @@ public data class RecommendationsResponse(
   /** Automatically-computed radius. */
   @SerialName(value = "automaticRadius") val automaticRadius: String? = null,
 
-  /** Indicates whether the facet count is exhaustive (exact) or approximate. */
+  @SerialName(value = "exhaustive") val exhaustive: Exhaustive? = null,
+
+  /** See the `facetsCount` field of the `exhaustive` object in the response. */
+  @Deprecated(message = "This property is deprecated.")
   @SerialName(value = "exhaustiveFacetsCount") val exhaustiveFacetsCount: Boolean? = null,
 
-  /** Indicates whether the number of hits `nbHits` is exhaustive (exact) or approximate. */
+  /** See the `nbHits` field of the `exhaustive` object in the response. */
+  @Deprecated(message = "This property is deprecated.")
   @SerialName(value = "exhaustiveNbHits") val exhaustiveNbHits: Boolean? = null,
 
-  /** Indicates whether the search for typos was exhaustive (exact) or approximate. */
+  /** See the `typo` field of the `exhaustive` object in the response. */
+  @Deprecated(message = "This property is deprecated.")
   @SerialName(value = "exhaustiveTypo") val exhaustiveTypo: Boolean? = null,
 
   /** Mapping of each facet name to the corresponding facet counts. */
@@ -94,21 +102,27 @@ public data class RecommendationsResponse(
   /** Number of hits selected and sorted by the relevant sort algorithm. */
   @SerialName(value = "nbSortedHits") val nbSortedHits: Int? = null,
 
-  @SerialName(value = "redirect") val redirect: BaseSearchResponseRedirect? = null,
-
   /** Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched. */
   @SerialName(value = "parsedQuery") val parsedQuery: String? = null,
 
+  /** Experimental. List of processing steps and their times, in milliseconds. You can use this list to investigate performance issues. */
+  @SerialName(value = "processingTimingsMS") val processingTimingsMS: JsonObject? = null,
+
   /** Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set. */
   @SerialName(value = "queryAfterRemoval") val queryAfterRemoval: String? = null,
+
+  @SerialName(value = "redirect") val redirect: Redirect? = null,
+
+  @SerialName(value = "renderingContent") val renderingContent: RenderingContent? = null,
+
+  /** Time the server took to process the request, in milliseconds. */
+  @SerialName(value = "serverTimeMS") val serverTimeMS: Int? = null,
 
   /** Host name of the server that processed the request. */
   @SerialName(value = "serverUsed") val serverUsed: String? = null,
 
   /** Lets you store custom data in your indices. */
   @SerialName(value = "userData") val userData: JsonElement? = null,
-
-  @SerialName(value = "renderingContent") val renderingContent: RenderingContent? = null,
 
   /** Text to search for in an index. */
   @SerialName(value = "query") val query: String? = null,
