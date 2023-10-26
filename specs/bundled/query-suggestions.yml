@@ -55,11 +55,36 @@ components:
         message:
           type: string
           example: Invalid Application-Id or API-Key
+    baseQuerySuggestionsConfigurationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        appId:
+          type: string
+          description: Your Algolia application ID.
+        sourceIndicesAPIKey:
+          type: string
+          description: API key used to read from your source index.
+        suggestionsIndicesAPIKey:
+          type: string
+          description: API key used to write and configure your Query Suggestions index.
+        externalIndicesAPIKey:
+          type: string
+          default: ''
+          description: API key used to read from external Algolia indices.
     QuerySuggestionsIndexName:
       title: indexName
       type: string
       description: Query Suggestions index name.
       example: products_query_suggestions
+    baseQuerySuggestionsConfigurationWithIndex:
+      type: object
+      additionalProperties: false
+      required:
+        - indexName
+      properties:
+        indexName:
+          $ref: '#/components/schemas/QuerySuggestionsIndexName'
     Facet:
       title: facet
       description: Facet to use as category.
@@ -232,35 +257,12 @@ components:
         - indexName
         - sourceIndices
       allOf:
-        - type: object
-          additionalProperties: false
-          required:
-            - indexName
-          properties:
-            indexName:
-              $ref: '#/components/schemas/QuerySuggestionsIndexName'
+        - $ref: '#/components/schemas/baseQuerySuggestionsConfigurationWithIndex'
         - $ref: '#/components/schemas/QuerySuggestionsConfiguration'
     QuerySuggestionsConfigurationResponse:
       type: object
       allOf:
-        - type: object
-          additionalProperties: false
-          properties:
-            appId:
-              type: string
-              description: Your Algolia application ID.
-            sourceIndicesAPIKey:
-              type: string
-              description: API key used to read from your source index.
-            suggestionsIndicesAPIKey:
-              type: string
-              description: >-
-                API key used to write and configure your Query Suggestions
-                index.
-            externalIndicesAPIKey:
-              type: string
-              default: ''
-              description: API key used to read from external Algolia indices.
+        - $ref: '#/components/schemas/baseQuerySuggestionsConfigurationResponse'
         - $ref: '#/components/schemas/QuerySuggestionsConfigurationWithIndex'
     BaseResponse:
       type: object

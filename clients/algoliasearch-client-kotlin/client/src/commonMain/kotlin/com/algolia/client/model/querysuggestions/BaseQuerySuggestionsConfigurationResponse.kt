@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * QuerySuggestionsConfigurationResponseAllOf
+ * BaseQuerySuggestionsConfigurationResponse
  *
  * @param appId Your Algolia application ID.
  * @param sourceIndicesAPIKey API key used to read from your source index.
@@ -13,7 +13,7 @@ import kotlinx.serialization.json.*
  * @param externalIndicesAPIKey API key used to read from external Algolia indices.
  */
 @Serializable
-public data class QuerySuggestionsConfigurationResponseAllOf(
+public data class BaseQuerySuggestionsConfigurationResponse(
 
   /** Your Algolia application ID. */
   @SerialName(value = "appId") val appId: String? = null,

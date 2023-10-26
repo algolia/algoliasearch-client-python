@@ -1142,6 +1142,21 @@ components:
       allOf:
         - $ref: '#/components/schemas/baseSearchParams'
         - $ref: '#/components/schemas/indexSettingsAsSearchParams'
+    baseTrendingItemsQuery:
+      type: object
+      additionalProperties: false
+      properties:
+        facetName:
+          $ref: '#/components/schemas/facetName'
+        facetValue:
+          type: string
+          description: Facet value for trending models.
+        model:
+          $ref: '#/components/schemas/trendingItemsModel'
+        queryParameters:
+          $ref: '#/components/schemas/searchParamsObject'
+        fallbackParameters:
+          $ref: '#/components/schemas/searchParamsObject'
     indexName:
       type: string
       example: products
@@ -1173,39 +1188,26 @@ components:
         - indexName
     trendingItemsQuery:
       allOf:
-        - type: object
-          title: baseTrendingItemsQuery
-          additionalProperties: false
-          properties:
-            facetName:
-              $ref: '#/components/schemas/facetName'
-            facetValue:
-              type: string
-              description: Facet value for trending models.
-            model:
-              $ref: '#/components/schemas/trendingItemsModel'
-            queryParameters:
-              $ref: '#/components/schemas/searchParamsObject'
-            fallbackParameters:
-              $ref: '#/components/schemas/searchParamsObject'
+        - $ref: '#/components/schemas/baseTrendingItemsQuery'
         - $ref: '#/components/schemas/baseRecommendRequest'
     trendingFacetsModel:
       description: Trending facets model.
       type: string
       enum:
         - trending-facets
+    baseTrendingFacetsQuery:
+      type: object
+      additionalProperties: false
+      properties:
+        facetName:
+          $ref: '#/components/schemas/facetName'
+        model:
+          $ref: '#/components/schemas/trendingFacetsModel'
+      required:
+        - facetName
     trendingFacetsQuery:
       allOf:
-        - type: object
-          title: baseTrendingFacetsQuery
-          additionalProperties: false
-          properties:
-            facetName:
-              $ref: '#/components/schemas/facetName'
-            model:
-              $ref: '#/components/schemas/trendingFacetsModel'
-          required:
-            - facetName
+        - $ref: '#/components/schemas/baseTrendingFacetsQuery'
         - $ref: '#/components/schemas/baseRecommendRequest'
     recommendationModels:
       description: Recommendation model.
@@ -1217,23 +1219,24 @@ components:
       type: string
       description: Unique object identifier.
       example: product-1
+    baseRecommendationsQuery:
+      type: object
+      additionalProperties: false
+      properties:
+        model:
+          $ref: '#/components/schemas/recommendationModels'
+        objectID:
+          $ref: '#/components/schemas/objectID'
+        queryParameters:
+          $ref: '#/components/schemas/searchParamsObject'
+        fallbackParameters:
+          $ref: '#/components/schemas/searchParamsObject'
+      required:
+        - model
+        - objectID
     recommendationsQuery:
       allOf:
-        - type: object
-          title: baseRecommendationsQuery
-          additionalProperties: false
-          properties:
-            model:
-              $ref: '#/components/schemas/recommendationModels'
-            objectID:
-              $ref: '#/components/schemas/objectID'
-            queryParameters:
-              $ref: '#/components/schemas/searchParamsObject'
-            fallbackParameters:
-              $ref: '#/components/schemas/searchParamsObject'
-          required:
-            - model
-            - objectID
+        - $ref: '#/components/schemas/baseRecommendationsQuery'
         - $ref: '#/components/schemas/baseRecommendRequest'
     recommendationsRequest:
       oneOf:

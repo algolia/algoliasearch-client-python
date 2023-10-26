@@ -6,8 +6,8 @@ import (
 	"fmt"
 )
 
-// QuerySuggestionsConfigurationResponseAllOf struct for QuerySuggestionsConfigurationResponseAllOf
-type QuerySuggestionsConfigurationResponseAllOf struct {
+// BaseQuerySuggestionsConfigurationResponse struct for BaseQuerySuggestionsConfigurationResponse
+type BaseQuerySuggestionsConfigurationResponse struct {
 	// Your Algolia application ID.
 	AppId *string `json:"appId,omitempty"`
 	// API key used to read from your source index.
@@ -18,56 +18,56 @@ type QuerySuggestionsConfigurationResponseAllOf struct {
 	ExternalIndicesAPIKey *string `json:"externalIndicesAPIKey,omitempty"`
 }
 
-type QuerySuggestionsConfigurationResponseAllOfOption func(f *QuerySuggestionsConfigurationResponseAllOf)
+type BaseQuerySuggestionsConfigurationResponseOption func(f *BaseQuerySuggestionsConfigurationResponse)
 
-func WithQuerySuggestionsConfigurationResponseAllOfAppId(val string) QuerySuggestionsConfigurationResponseAllOfOption {
-	return func(f *QuerySuggestionsConfigurationResponseAllOf) {
+func WithBaseQuerySuggestionsConfigurationResponseAppId(val string) BaseQuerySuggestionsConfigurationResponseOption {
+	return func(f *BaseQuerySuggestionsConfigurationResponse) {
 		f.AppId = &val
 	}
 }
 
-func WithQuerySuggestionsConfigurationResponseAllOfSourceIndicesAPIKey(val string) QuerySuggestionsConfigurationResponseAllOfOption {
-	return func(f *QuerySuggestionsConfigurationResponseAllOf) {
+func WithBaseQuerySuggestionsConfigurationResponseSourceIndicesAPIKey(val string) BaseQuerySuggestionsConfigurationResponseOption {
+	return func(f *BaseQuerySuggestionsConfigurationResponse) {
 		f.SourceIndicesAPIKey = &val
 	}
 }
 
-func WithQuerySuggestionsConfigurationResponseAllOfSuggestionsIndicesAPIKey(val string) QuerySuggestionsConfigurationResponseAllOfOption {
-	return func(f *QuerySuggestionsConfigurationResponseAllOf) {
+func WithBaseQuerySuggestionsConfigurationResponseSuggestionsIndicesAPIKey(val string) BaseQuerySuggestionsConfigurationResponseOption {
+	return func(f *BaseQuerySuggestionsConfigurationResponse) {
 		f.SuggestionsIndicesAPIKey = &val
 	}
 }
 
-func WithQuerySuggestionsConfigurationResponseAllOfExternalIndicesAPIKey(val string) QuerySuggestionsConfigurationResponseAllOfOption {
-	return func(f *QuerySuggestionsConfigurationResponseAllOf) {
+func WithBaseQuerySuggestionsConfigurationResponseExternalIndicesAPIKey(val string) BaseQuerySuggestionsConfigurationResponseOption {
+	return func(f *BaseQuerySuggestionsConfigurationResponse) {
 		f.ExternalIndicesAPIKey = &val
 	}
 }
 
-// NewQuerySuggestionsConfigurationResponseAllOf instantiates a new QuerySuggestionsConfigurationResponseAllOf object
+// NewBaseQuerySuggestionsConfigurationResponse instantiates a new BaseQuerySuggestionsConfigurationResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewQuerySuggestionsConfigurationResponseAllOf(opts ...QuerySuggestionsConfigurationResponseAllOfOption) *QuerySuggestionsConfigurationResponseAllOf {
-	this := &QuerySuggestionsConfigurationResponseAllOf{}
+func NewBaseQuerySuggestionsConfigurationResponse(opts ...BaseQuerySuggestionsConfigurationResponseOption) *BaseQuerySuggestionsConfigurationResponse {
+	this := &BaseQuerySuggestionsConfigurationResponse{}
 	for _, opt := range opts {
 		opt(this)
 	}
 	return this
 }
 
-// NewQuerySuggestionsConfigurationResponseAllOfWithDefaults instantiates a new QuerySuggestionsConfigurationResponseAllOf object
+// NewBaseQuerySuggestionsConfigurationResponseWithDefaults instantiates a new BaseQuerySuggestionsConfigurationResponse object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewQuerySuggestionsConfigurationResponseAllOfWithDefaults() *QuerySuggestionsConfigurationResponseAllOf {
-	this := &QuerySuggestionsConfigurationResponseAllOf{}
+func NewBaseQuerySuggestionsConfigurationResponseWithDefaults() *BaseQuerySuggestionsConfigurationResponse {
+	this := &BaseQuerySuggestionsConfigurationResponse{}
 	var externalIndicesAPIKey string = ""
 	this.ExternalIndicesAPIKey = &externalIndicesAPIKey
 	return this
 }
 
 // GetAppId returns the AppId field value if set, zero value otherwise.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetAppId() string {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetAppId() string {
 	if o == nil || o.AppId == nil {
 		var ret string
 		return ret
@@ -77,7 +77,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetAppId() string {
 
 // GetAppIdOk returns a tuple with the AppId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetAppIdOk() (*string, bool) {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetAppIdOk() (*string, bool) {
 	if o == nil || o.AppId == nil {
 		return nil, false
 	}
@@ -85,7 +85,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetAppIdOk() (*string, bool
 }
 
 // HasAppId returns a boolean if a field has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) HasAppId() bool {
+func (o *BaseQuerySuggestionsConfigurationResponse) HasAppId() bool {
 	if o != nil && o.AppId != nil {
 		return true
 	}
@@ -94,12 +94,12 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) HasAppId() bool {
 }
 
 // SetAppId gets a reference to the given string and assigns it to the AppId field.
-func (o *QuerySuggestionsConfigurationResponseAllOf) SetAppId(v string) {
+func (o *BaseQuerySuggestionsConfigurationResponse) SetAppId(v string) {
 	o.AppId = &v
 }
 
 // GetSourceIndicesAPIKey returns the SourceIndicesAPIKey field value if set, zero value otherwise.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetSourceIndicesAPIKey() string {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetSourceIndicesAPIKey() string {
 	if o == nil || o.SourceIndicesAPIKey == nil {
 		var ret string
 		return ret
@@ -109,7 +109,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetSourceIndicesAPIKey() st
 
 // GetSourceIndicesAPIKeyOk returns a tuple with the SourceIndicesAPIKey field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetSourceIndicesAPIKeyOk() (*string, bool) {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetSourceIndicesAPIKeyOk() (*string, bool) {
 	if o == nil || o.SourceIndicesAPIKey == nil {
 		return nil, false
 	}
@@ -117,7 +117,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetSourceIndicesAPIKeyOk() 
 }
 
 // HasSourceIndicesAPIKey returns a boolean if a field has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) HasSourceIndicesAPIKey() bool {
+func (o *BaseQuerySuggestionsConfigurationResponse) HasSourceIndicesAPIKey() bool {
 	if o != nil && o.SourceIndicesAPIKey != nil {
 		return true
 	}
@@ -126,12 +126,12 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) HasSourceIndicesAPIKey() bo
 }
 
 // SetSourceIndicesAPIKey gets a reference to the given string and assigns it to the SourceIndicesAPIKey field.
-func (o *QuerySuggestionsConfigurationResponseAllOf) SetSourceIndicesAPIKey(v string) {
+func (o *BaseQuerySuggestionsConfigurationResponse) SetSourceIndicesAPIKey(v string) {
 	o.SourceIndicesAPIKey = &v
 }
 
 // GetSuggestionsIndicesAPIKey returns the SuggestionsIndicesAPIKey field value if set, zero value otherwise.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetSuggestionsIndicesAPIKey() string {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetSuggestionsIndicesAPIKey() string {
 	if o == nil || o.SuggestionsIndicesAPIKey == nil {
 		var ret string
 		return ret
@@ -141,7 +141,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetSuggestionsIndicesAPIKey
 
 // GetSuggestionsIndicesAPIKeyOk returns a tuple with the SuggestionsIndicesAPIKey field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetSuggestionsIndicesAPIKeyOk() (*string, bool) {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetSuggestionsIndicesAPIKeyOk() (*string, bool) {
 	if o == nil || o.SuggestionsIndicesAPIKey == nil {
 		return nil, false
 	}
@@ -149,7 +149,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetSuggestionsIndicesAPIKey
 }
 
 // HasSuggestionsIndicesAPIKey returns a boolean if a field has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) HasSuggestionsIndicesAPIKey() bool {
+func (o *BaseQuerySuggestionsConfigurationResponse) HasSuggestionsIndicesAPIKey() bool {
 	if o != nil && o.SuggestionsIndicesAPIKey != nil {
 		return true
 	}
@@ -158,12 +158,12 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) HasSuggestionsIndicesAPIKey
 }
 
 // SetSuggestionsIndicesAPIKey gets a reference to the given string and assigns it to the SuggestionsIndicesAPIKey field.
-func (o *QuerySuggestionsConfigurationResponseAllOf) SetSuggestionsIndicesAPIKey(v string) {
+func (o *BaseQuerySuggestionsConfigurationResponse) SetSuggestionsIndicesAPIKey(v string) {
 	o.SuggestionsIndicesAPIKey = &v
 }
 
 // GetExternalIndicesAPIKey returns the ExternalIndicesAPIKey field value if set, zero value otherwise.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetExternalIndicesAPIKey() string {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetExternalIndicesAPIKey() string {
 	if o == nil || o.ExternalIndicesAPIKey == nil {
 		var ret string
 		return ret
@@ -173,7 +173,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetExternalIndicesAPIKey() 
 
 // GetExternalIndicesAPIKeyOk returns a tuple with the ExternalIndicesAPIKey field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) GetExternalIndicesAPIKeyOk() (*string, bool) {
+func (o *BaseQuerySuggestionsConfigurationResponse) GetExternalIndicesAPIKeyOk() (*string, bool) {
 	if o == nil || o.ExternalIndicesAPIKey == nil {
 		return nil, false
 	}
@@ -181,7 +181,7 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) GetExternalIndicesAPIKeyOk(
 }
 
 // HasExternalIndicesAPIKey returns a boolean if a field has been set.
-func (o *QuerySuggestionsConfigurationResponseAllOf) HasExternalIndicesAPIKey() bool {
+func (o *BaseQuerySuggestionsConfigurationResponse) HasExternalIndicesAPIKey() bool {
 	if o != nil && o.ExternalIndicesAPIKey != nil {
 		return true
 	}
@@ -190,11 +190,11 @@ func (o *QuerySuggestionsConfigurationResponseAllOf) HasExternalIndicesAPIKey() 
 }
 
 // SetExternalIndicesAPIKey gets a reference to the given string and assigns it to the ExternalIndicesAPIKey field.
-func (o *QuerySuggestionsConfigurationResponseAllOf) SetExternalIndicesAPIKey(v string) {
+func (o *BaseQuerySuggestionsConfigurationResponse) SetExternalIndicesAPIKey(v string) {
 	o.ExternalIndicesAPIKey = &v
 }
 
-func (o QuerySuggestionsConfigurationResponseAllOf) MarshalJSON() ([]byte, error) {
+func (o BaseQuerySuggestionsConfigurationResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if o.AppId != nil {
 		toSerialize["appId"] = o.AppId
@@ -211,47 +211,47 @@ func (o QuerySuggestionsConfigurationResponseAllOf) MarshalJSON() ([]byte, error
 	return json.Marshal(toSerialize)
 }
 
-func (o QuerySuggestionsConfigurationResponseAllOf) String() string {
+func (o BaseQuerySuggestionsConfigurationResponse) String() string {
 	out := ""
 	out += fmt.Sprintf("  appId=%v\n", o.AppId)
 	out += fmt.Sprintf("  sourceIndicesAPIKey=%v\n", o.SourceIndicesAPIKey)
 	out += fmt.Sprintf("  suggestionsIndicesAPIKey=%v\n", o.SuggestionsIndicesAPIKey)
 	out += fmt.Sprintf("  externalIndicesAPIKey=%v\n", o.ExternalIndicesAPIKey)
-	return fmt.Sprintf("QuerySuggestionsConfigurationResponseAllOf {\n%s}", out)
+	return fmt.Sprintf("BaseQuerySuggestionsConfigurationResponse {\n%s}", out)
 }
 
-type NullableQuerySuggestionsConfigurationResponseAllOf struct {
-	value *QuerySuggestionsConfigurationResponseAllOf
+type NullableBaseQuerySuggestionsConfigurationResponse struct {
+	value *BaseQuerySuggestionsConfigurationResponse
 	isSet bool
 }
 
-func (v NullableQuerySuggestionsConfigurationResponseAllOf) Get() *QuerySuggestionsConfigurationResponseAllOf {
+func (v NullableBaseQuerySuggestionsConfigurationResponse) Get() *BaseQuerySuggestionsConfigurationResponse {
 	return v.value
 }
 
-func (v *NullableQuerySuggestionsConfigurationResponseAllOf) Set(val *QuerySuggestionsConfigurationResponseAllOf) {
+func (v *NullableBaseQuerySuggestionsConfigurationResponse) Set(val *BaseQuerySuggestionsConfigurationResponse) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableQuerySuggestionsConfigurationResponseAllOf) IsSet() bool {
+func (v NullableBaseQuerySuggestionsConfigurationResponse) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableQuerySuggestionsConfigurationResponseAllOf) Unset() {
+func (v *NullableBaseQuerySuggestionsConfigurationResponse) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableQuerySuggestionsConfigurationResponseAllOf(val *QuerySuggestionsConfigurationResponseAllOf) *NullableQuerySuggestionsConfigurationResponseAllOf {
-	return &NullableQuerySuggestionsConfigurationResponseAllOf{value: val, isSet: true}
+func NewNullableBaseQuerySuggestionsConfigurationResponse(val *BaseQuerySuggestionsConfigurationResponse) *NullableBaseQuerySuggestionsConfigurationResponse {
+	return &NullableBaseQuerySuggestionsConfigurationResponse{value: val, isSet: true}
 }
 
-func (v NullableQuerySuggestionsConfigurationResponseAllOf) MarshalJSON() ([]byte, error) {
+func (v NullableBaseQuerySuggestionsConfigurationResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableQuerySuggestionsConfigurationResponseAllOf) UnmarshalJSON(src []byte) error {
+func (v *NullableBaseQuerySuggestionsConfigurationResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

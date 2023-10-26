@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
-/** QuerySuggestionsConfigurationResponseAllOf */
-public class QuerySuggestionsConfigurationResponseAllOf {
+/** BaseQuerySuggestionsConfigurationResponse */
+public class BaseQuerySuggestionsConfigurationResponse {
 
   @JsonProperty("appId")
   private String appId;
@@ -22,7 +22,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
   @JsonProperty("externalIndicesAPIKey")
   private String externalIndicesAPIKey;
 
-  public QuerySuggestionsConfigurationResponseAllOf setAppId(String appId) {
+  public BaseQuerySuggestionsConfigurationResponse setAppId(String appId) {
     this.appId = appId;
     return this;
   }
@@ -33,7 +33,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     return appId;
   }
 
-  public QuerySuggestionsConfigurationResponseAllOf setSourceIndicesAPIKey(String sourceIndicesAPIKey) {
+  public BaseQuerySuggestionsConfigurationResponse setSourceIndicesAPIKey(String sourceIndicesAPIKey) {
     this.sourceIndicesAPIKey = sourceIndicesAPIKey;
     return this;
   }
@@ -44,7 +44,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     return sourceIndicesAPIKey;
   }
 
-  public QuerySuggestionsConfigurationResponseAllOf setSuggestionsIndicesAPIKey(String suggestionsIndicesAPIKey) {
+  public BaseQuerySuggestionsConfigurationResponse setSuggestionsIndicesAPIKey(String suggestionsIndicesAPIKey) {
     this.suggestionsIndicesAPIKey = suggestionsIndicesAPIKey;
     return this;
   }
@@ -55,7 +55,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     return suggestionsIndicesAPIKey;
   }
 
-  public QuerySuggestionsConfigurationResponseAllOf setExternalIndicesAPIKey(String externalIndicesAPIKey) {
+  public BaseQuerySuggestionsConfigurationResponse setExternalIndicesAPIKey(String externalIndicesAPIKey) {
     this.externalIndicesAPIKey = externalIndicesAPIKey;
     return this;
   }
@@ -74,12 +74,12 @@ public class QuerySuggestionsConfigurationResponseAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    QuerySuggestionsConfigurationResponseAllOf querySuggestionsConfigurationResponseAllOf = (QuerySuggestionsConfigurationResponseAllOf) o;
+    BaseQuerySuggestionsConfigurationResponse baseQuerySuggestionsConfigurationResponse = (BaseQuerySuggestionsConfigurationResponse) o;
     return (
-      Objects.equals(this.appId, querySuggestionsConfigurationResponseAllOf.appId) &&
-      Objects.equals(this.sourceIndicesAPIKey, querySuggestionsConfigurationResponseAllOf.sourceIndicesAPIKey) &&
-      Objects.equals(this.suggestionsIndicesAPIKey, querySuggestionsConfigurationResponseAllOf.suggestionsIndicesAPIKey) &&
-      Objects.equals(this.externalIndicesAPIKey, querySuggestionsConfigurationResponseAllOf.externalIndicesAPIKey)
+      Objects.equals(this.appId, baseQuerySuggestionsConfigurationResponse.appId) &&
+      Objects.equals(this.sourceIndicesAPIKey, baseQuerySuggestionsConfigurationResponse.sourceIndicesAPIKey) &&
+      Objects.equals(this.suggestionsIndicesAPIKey, baseQuerySuggestionsConfigurationResponse.suggestionsIndicesAPIKey) &&
+      Objects.equals(this.externalIndicesAPIKey, baseQuerySuggestionsConfigurationResponse.externalIndicesAPIKey)
     );
   }
 
@@ -91,7 +91,7 @@ public class QuerySuggestionsConfigurationResponseAllOf {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class QuerySuggestionsConfigurationResponseAllOf {\n");
+    sb.append("class BaseQuerySuggestionsConfigurationResponse {\n");
     sb.append("    appId: ").append(toIndentedString(appId)).append("\n");
     sb.append("    sourceIndicesAPIKey: ").append(toIndentedString(sourceIndicesAPIKey)).append("\n");
     sb.append("    suggestionsIndicesAPIKey: ").append(toIndentedString(suggestionsIndicesAPIKey)).append("\n");

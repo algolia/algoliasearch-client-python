@@ -5,12 +5,12 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 /**
- * QuerySuggestionsConfigurationWithIndexAllOf
+ * BaseQuerySuggestionsConfigurationWithIndex
  *
  * @param indexName Query Suggestions index name.
  */
 @Serializable
-public data class QuerySuggestionsConfigurationWithIndexAllOf(
+public data class BaseQuerySuggestionsConfigurationWithIndex(
 
   /** Query Suggestions index name. */
   @SerialName(value = "indexName") val indexName: String,

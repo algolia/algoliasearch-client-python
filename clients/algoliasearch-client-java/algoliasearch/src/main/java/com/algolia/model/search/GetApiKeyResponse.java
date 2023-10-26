@@ -19,7 +19,7 @@ public class GetApiKeyResponse {
   private Long createdAt;
 
   @JsonProperty("acl")
-  private List<Acl> acl = null;
+  private List<Acl> acl = new ArrayList<>();
 
   @JsonProperty("description")
   private String description;

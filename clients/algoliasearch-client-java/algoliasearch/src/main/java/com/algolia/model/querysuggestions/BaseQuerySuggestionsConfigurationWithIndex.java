@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.*;
 import java.util.Objects;
 
-/** QuerySuggestionsConfigurationWithIndexAllOf */
-public class QuerySuggestionsConfigurationWithIndexAllOf {
+/** BaseQuerySuggestionsConfigurationWithIndex */
+public class BaseQuerySuggestionsConfigurationWithIndex {
 
   @JsonProperty("indexName")
   private String indexName;
 
-  public QuerySuggestionsConfigurationWithIndexAllOf setIndexName(String indexName) {
+  public BaseQuerySuggestionsConfigurationWithIndex setIndexName(String indexName) {
     this.indexName = indexName;
     return this;
   }
@@ -32,9 +32,8 @@ public class QuerySuggestionsConfigurationWithIndexAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    QuerySuggestionsConfigurationWithIndexAllOf querySuggestionsConfigurationWithIndexAllOf =
-      (QuerySuggestionsConfigurationWithIndexAllOf) o;
-    return Objects.equals(this.indexName, querySuggestionsConfigurationWithIndexAllOf.indexName);
+    BaseQuerySuggestionsConfigurationWithIndex baseQuerySuggestionsConfigurationWithIndex = (BaseQuerySuggestionsConfigurationWithIndex) o;
+    return Objects.equals(this.indexName, baseQuerySuggestionsConfigurationWithIndex.indexName);
   }
 
   @Override
@@ -45,7 +44,7 @@ public class QuerySuggestionsConfigurationWithIndexAllOf {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class QuerySuggestionsConfigurationWithIndexAllOf {\n");
+    sb.append("class BaseQuerySuggestionsConfigurationWithIndex {\n");
     sb.append("    indexName: ").append(toIndentedString(indexName)).append("\n");
     sb.append("}");
     return sb.toString();
