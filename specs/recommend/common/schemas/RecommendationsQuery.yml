@@ -1,21 +1,23 @@
 recommendationsQuery:
   allOf:
-    - type: object
-      title: baseRecommendationsQuery
-      additionalProperties: false
-      properties:
-        model:
-          $ref: '#/recommendationModels'
-        objectID:
-          $ref: '../../../common/parameters.yml#/objectID'
-        queryParameters:
-          $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
-        fallbackParameters:
-          $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
-      required:
-        - model
-        - objectID
+    - $ref: '#/baseRecommendationsQuery'
     - $ref: './RecommendationsRequest.yml#/baseRecommendRequest'
+
+baseRecommendationsQuery:
+  type: object
+  additionalProperties: false
+  properties:
+    model:
+      $ref: '#/recommendationModels'
+    objectID:
+      $ref: '../../../common/parameters.yml#/objectID'
+    queryParameters:
+      $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
+    fallbackParameters:
+      $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
+  required:
+    - model
+    - objectID
 
 recommendationModels:
   description: Recommendation model.

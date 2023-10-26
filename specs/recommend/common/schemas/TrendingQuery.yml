@@ -1,35 +1,39 @@
 trendingItemsQuery:
   allOf:
-    - type: object
-      title: baseTrendingItemsQuery
-      additionalProperties: false
-      properties:
-        facetName:
-          $ref: '#/facetName'
-        facetValue:
-          type: string
-          description: Facet value for trending models.
-        model:
-          $ref: '#/trendingItemsModel'
-        queryParameters:
-          $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
-        fallbackParameters:
-          $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
+    - $ref: '#/baseTrendingItemsQuery'
     - $ref: './RecommendationsRequest.yml#/baseRecommendRequest'
+
+baseTrendingItemsQuery:
+  type: object
+  additionalProperties: false
+  properties:
+    facetName:
+      $ref: '#/facetName'
+    facetValue:
+      type: string
+      description: Facet value for trending models.
+    model:
+      $ref: '#/trendingItemsModel'
+    queryParameters:
+      $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
+    fallbackParameters:
+      $ref: '../../../common/schemas/SearchParams.yml#/searchParamsObject'
 
 trendingFacetsQuery:
   allOf:
-    - type: object
-      title: baseTrendingFacetsQuery
-      additionalProperties: false
-      properties:
-        facetName:
-          $ref: '#/facetName'
-        model:
-          $ref: '#/trendingFacetsModel'
-      required:
-        - facetName
+    - $ref: '#/baseTrendingFacetsQuery'
     - $ref: './RecommendationsRequest.yml#/baseRecommendRequest'
+
+baseTrendingFacetsQuery: 
+  type: object
+  additionalProperties: false
+  properties:
+    facetName:
+      $ref: '#/facetName'
+    model:
+      $ref: '#/trendingFacetsModel'
+  required:
+    - facetName
 
 trendingFacetsModel:
   description: Trending facets model.

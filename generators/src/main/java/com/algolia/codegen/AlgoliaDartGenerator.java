@@ -171,19 +171,6 @@ class SchemaSupport {
         String classname = modelMap.getModel().classname;
         oneOfs.put(classname, new OneOfMetadata(asImport(libName, classname), model.oneOf));
         iterator.remove();
-        continue;
-      }
-      if (model.allOf.size() == 1) { // Changed from 'oneOf' to 'allOf'
-        String classname = modelMap.getModel().classname;
-        oneOfs.put(classname, new OneOfMetadata(asImport(libName, classname), model.oneOf));
-        iterator.remove();
-      }
-
-      if (model.allOf.size() == 1) {
-        model.vendorExtensions.put("x-is-type-alias", true);
-        ModelsMap map = modelsMap.get(model.allOf.iterator().next());
-        String aliasType = map != null ? map.getModels().get(0).getModel().classname : GENERIC_TYPE;
-        model.vendorExtensions.put("x-type-alias", aliasType);
       }
     }
   }

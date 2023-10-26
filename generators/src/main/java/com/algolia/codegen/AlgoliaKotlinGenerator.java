@@ -166,20 +166,7 @@ public class AlgoliaKotlinGenerator extends KotlinClientCodegen {
     OneOfUtils.updateModelsOneOf(models, modelPackage);
     GenericPropagator.propagateGenericsToModels(models);
     jsonParent(models);
-    typealias(models);
     return models;
-  }
-
-  private static void typealias(Map<String, ModelsMap> models) {
-    for (ModelsMap modelContainer : models.values()) {
-      CodegenModel compoundModel = modelContainer.getModels().get(0).getModel();
-      if (compoundModel.allOf.size() == 1) {
-        compoundModel.vendorExtensions.put("x-is-type-alias", true);
-        ModelsMap modelsMap = models.get(compoundModel.allOf.iterator().next());
-        CodegenModel alias = modelsMap.getModels().get(0).getModel();
-        compoundModel.vendorExtensions.put("x-type-alias", alias.classname);
-      }
-    }
   }
 
   private static void jsonParent(Map<String, ModelsMap> models) {

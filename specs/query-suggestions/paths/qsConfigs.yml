@@ -12,7 +12,7 @@ get:
           schema:
             type: array
             items:
-              $ref: '../common/schemas/QuerySuggestionsConfigurationResponse.yml'
+              $ref: '../common/schemas/QuerySuggestionsConfigurationResponse.yml#/QuerySuggestionsConfigurationResponse'
     '401':
       $ref: '../common/responses/Unauthorized.yml'
 
@@ -30,7 +30,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../common/schemas/QuerySuggestionsConfigurationWithIndex.yml'
+          $ref: '../common/schemas/QuerySuggestionsConfigurationWithIndex.yml#/QuerySuggestionsConfigurationWithIndex'
   responses:
     '200':
       description: OK

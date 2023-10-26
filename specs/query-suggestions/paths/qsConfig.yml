@@ -12,7 +12,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../common/schemas/QuerySuggestionsConfigurationResponse.yml'
+            $ref: '../common/schemas/QuerySuggestionsConfigurationResponse.yml#/QuerySuggestionsConfigurationResponse'
     '400':
       $ref: '../common/responses/BadRequest.yml'
     '401':

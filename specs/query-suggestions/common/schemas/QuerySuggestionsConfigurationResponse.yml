@@ -1,19 +1,23 @@
-type: object
-allOf:
-  - type: object
-    additionalProperties: false
-    properties:
-      appId:
-        type: string
-        description: Your Algolia application ID.
-      sourceIndicesAPIKey:
-        type: string
-        description: API key used to read from your source index.
-      suggestionsIndicesAPIKey:
-        type: string
-        description: API key used to write and configure your Query Suggestions index.
-      externalIndicesAPIKey:
-        type: string
-        default: ''
-        description: API key used to read from external Algolia indices.
-  - $ref: './QuerySuggestionsConfigurationWithIndex.yml'
+QuerySuggestionsConfigurationResponse:
+  type: object
+  allOf:
+    - $ref: '#/baseQuerySuggestionsConfigurationResponse'
+    - $ref: './QuerySuggestionsConfigurationWithIndex.yml#/QuerySuggestionsConfigurationWithIndex'
+
+baseQuerySuggestionsConfigurationResponse:
+  type: object
+  additionalProperties: false
+  properties:
+    appId:
+      type: string
+      description: Your Algolia application ID.
+    sourceIndicesAPIKey:
+      type: string
+      description: API key used to read from your source index.
+    suggestionsIndicesAPIKey:
+      type: string
+      description: API key used to write and configure your Query Suggestions index.
+    externalIndicesAPIKey:
+      type: string
+      default: ''
+      description: API key used to read from external Algolia indices.
