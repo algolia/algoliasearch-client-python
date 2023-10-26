@@ -2,6 +2,7 @@
   "name": "javascript-playground",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start:algoliasearch": "ts-node algoliasearch.ts",
     "start:abtesting": "ts-node abtesting.ts",

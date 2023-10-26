@@ -14,9 +14,9 @@ ENV DOCKER=true
 # use bash for subsequent commands
 SHELL ["/bin/bash", "--login", "-c"]
 
-# Global
+# Global (python3 is needed by npm to build parcel on some platforms)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl zip unzip git openssh-server \
+    curl zip unzip git openssh-server python3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

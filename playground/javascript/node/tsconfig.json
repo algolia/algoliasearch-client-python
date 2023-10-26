@@ -1,7 +1,14 @@
 {
   "extends": "../../../config/base.tsconfig.json",
   "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
     "outDir": "dist"
   },
-  "include": ["*.ts"]
+  "ts-node": {
+    "esm": true
+  },
+  "include": [
+    "*.ts"
+  ]
 }

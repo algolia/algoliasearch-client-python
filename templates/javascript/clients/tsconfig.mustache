@@ -6,12 +6,6 @@
     {{/isAlgoliasearchClient}}
     "outDir": "dist"
   },
-  {{#isAlgoliasearchClient}}
-  "include": ["*.ts"],
-  "exclude": ["dist", "node_modules", "__tests__", "lite"]
-  {{/isAlgoliasearchClient}}
-  {{^isAlgoliasearchClient}}
   "include": ["{{apiPackage}}", "model", "builds"],
   "exclude": ["dist", "node_modules"]
-  {{/isAlgoliasearchClient}}
 }
