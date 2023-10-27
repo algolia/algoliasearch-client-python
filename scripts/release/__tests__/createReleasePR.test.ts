@@ -1,7 +1,6 @@
-import { jest } from '@jest/globals';
+import { afterAll, describe, expect, it, vi } from "vitest";
 
 import releaseConfig from '../../../config/release.config.json' assert { type: 'json' };
-import * as common from '../../common.js';
 import type { PassedCommit } from '../types.js';
 
 const gitAuthor = releaseConfig.gitAuthor;
@@ -21,22 +20,22 @@ const buildTestCommit = (
 };
 
 // Mock `getOctokit` to bypass the API call and credential requirements
-jest.unstable_mockModule('../../common.js', () => ({
-  ...common,
-  getOctokit: jest.fn(() => {
-    return {
+vi.mock('../../common.js', async () => {
+  const mod = await vi.importActual<typeof import('../../common.js')>('../../common.js')
+  return {
+    ...mod,
+    getOctokit: vi.fn().mockReturnValue({
       pulls: {
-        get: (): any => ({
-          data: {
-            user: {
-              login: gitAuthor.name,
-            },
+      get: (): any => ({
+        data: {
+          user: {
+            login: gitAuthor.name,
           },
-        }),
-      },
-    };
-  }),
-}));
+        },
+      }),
+    }}),
+  }
+})
 
 const {
   parseCommit,
@@ -49,7 +48,7 @@ const {
 
 describe('createReleasePR', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('reads versions of the current language', () => {

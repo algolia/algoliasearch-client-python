@@ -1,11 +1,11 @@
-import { jest } from '@jest/globals';
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { getClientsConfigField } from '../config.js';
 
-jest.unstable_mockModule('execa', () => {
+vi.mock('execa', () => {
   return {
-    execaCommand: jest.fn(),
-    execa: jest.fn(),
+    execaCommand: vi.fn(),
+    execa: vi.fn(),
   };
 });
 
@@ -16,7 +16,7 @@ const { execa } = await import('execa');
 
 describe('gitCommit', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('commits with message', () => {

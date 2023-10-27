@@ -16,7 +16,7 @@ async function testABTesting() {
     const res = await client.addABTests({
       endAt: '2022-02-01',
       name: 'testing',
-      variant: [
+      variants: [
         {
           index: 'test1',
           trafficPercentage: 30,

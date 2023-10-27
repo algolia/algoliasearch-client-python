@@ -4,11 +4,9 @@
     "module": "esnext",
     "target": "esnext",
     "typeRoots": ["../node_modules/@types"],
-    "types": ["node", "jest"],
+    "types": ["node"],
+    "lib": ["esnext", "dom"],
     "outDir": "dist"
-  },
-  "ts-node": {
-    "esm": true
   },
   "include": ["**/*.ts", "./.eslintrc.cjs", "**/*.mjs"],
   "exclude": ["dist", "*.json", "node_modules", "**/*.test.ts"]

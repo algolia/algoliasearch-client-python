@@ -23,7 +23,7 @@ export function createOutOfLineRule({
       },
     },
     create(context) {
-      if (!context.parserServices.isYAML) {
+      if (!context.sourceCode.parserServices.isYAML) {
         return {};
       }
 

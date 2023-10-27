@@ -13,7 +13,7 @@ export const endWithDot: Rule.RuleModule = {
     fixable: 'code',
   },
   create(context) {
-    if (!context.parserServices.isYAML) {
+    if (!context.sourceCode.parserServices.isYAML) {
       return {};
     }
 

@@ -3,10 +3,8 @@
   "compilerOptions": {
     "module": "esnext",
     "target": "esnext",
+    "lib": ["dom", "esnext"],
     "outDir": "dist"
-  },
-  "ts-node": {
-    "esm": true
   },
   "include": [
     "*.ts"

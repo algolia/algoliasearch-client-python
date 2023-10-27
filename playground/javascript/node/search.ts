@@ -1,5 +1,4 @@
-import { searchClient } from '@algolia/client-search';
-import { apiClientVersion } from '@algolia/client-search/src/searchClient';
+import { searchClient, apiClientVersion } from '@algolia/client-search';
 import { SearchQuery } from '@algolia/client-search/model';
 import { ApiError } from '@algolia/client-common';
 import dotenv from 'dotenv';

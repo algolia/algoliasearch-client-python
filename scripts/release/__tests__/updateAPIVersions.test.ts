@@ -1,3 +1,4 @@
+import {  describe, expect, it } from "vitest";
 import { getNextVersion } from '../createReleasePR.js';
 import { getVersionsToRelease } from '../updateAPIVersions.js';
 

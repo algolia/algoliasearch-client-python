@@ -1,3 +1,4 @@
+import {  describe, expect, it } from "vitest";
 import { cleanUpCommitMessage } from '../spreadGeneration.js';
 import text from '../text.js';
 

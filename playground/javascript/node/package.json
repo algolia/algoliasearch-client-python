@@ -4,15 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start:algoliasearch": "ts-node algoliasearch.ts",
-    "start:abtesting": "ts-node abtesting.ts",
-    "start:analytics": "ts-node analytics.ts",
-    "start:insights": "ts-node insights.ts",
-    "start:personalization": "ts-node personalization.ts",
-    "start:query-suggestions": "ts-node query-suggestions.ts",
-    "start:recommend": "ts-node recommend.ts",
-    "start:search": "ts-node search.ts",
-    "start:sources": "ts-node sources.ts"
+    "start:algoliasearch": "tsc && node dist/algoliasearch.js",
+    "start:abtesting": "tsc && node dist/abtesting.js",
+    "start:analytics": "tsc && node dist/analytics.js",
+    "start:insights": "tsc && node dist/insights.js",
+    "start:personalization": "tsc && node dist/personalization.js",
+    "start:query-suggestions": "tsc && node dist/query-suggestions.js",
+    "start:recommend": "tsc && node dist/recommend.js",
+    "start:search": "tsc && node dist/search.js",
+    "start:sources": "tsc && node dist/sources.js"
   },
   "dependencies": {
     "@algolia/client-abtesting": "link:../../../clients/algoliasearch-client-javascript/packages/client-abtesting",
@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "dotenv": "16.3.1",
-    "ts-node": "10.9.1",
     "typescript": "5.2.2"
   },
   "engines": {

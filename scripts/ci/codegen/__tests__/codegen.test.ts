@@ -1,23 +1,19 @@
-import { jest } from '@jest/globals';
-
-import * as common from '../../../common.js';
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { cleanGeneratedBranch } from '../cleanGeneratedBranch.js';
 import { pushGeneratedCode } from '../pushGeneratedCode.js';
+import { upsertGenerationComment, getCommentBody } from '../upsertGenerationComment.js';
 import commentText from '../text.js';
 
-const mockedRun = jest.fn(() => {
-  return Promise.resolve('');
+vi.mock('../../../common.js', async () => {
+  const mod = await vi.importActual<typeof import('../../../common.js')>('../../../common.js')
+  return {
+    ...mod,
+    run: vi.fn().mockResolvedValue(''),
+  }
 });
 
-jest.unstable_mockModule('../../../common.js', () => ({
-  ...common,
-  run: mockedRun,
-}));
-const { upsertGenerationComment, getCommentBody } = await import(
-  '../upsertGenerationComment.js'
-);
-
 describe('codegen', () => {
+
   describe('cleanGeneratedBranch', () => {
     it('throws without parameters', async () => {
       await expect(
@@ -80,28 +76,28 @@ describe('codegen', () => {
 
     describe('cleanup', () => {
       afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
       });
 
       it('returns the right comment for a `cleanup` trigger', async () => {
-        mockedRun.mockResolvedValue('mocked');
+        vi.spyOn(await import('../../../common.js'), 'run').mockResolvedValue('mocked');
 
         expect(await getCommentBody('cleanup')).toMatchInlineSnapshot(`
           "### ✗ The generated branch has been deleted.
 
-          If the PR has been merged, you can check the generated code on the [\`${common.MAIN_BRANCH}\` branch](https://github.com/algolia/api-clients-automation/tree/${common.MAIN_BRANCH}).
+          If the PR has been merged, you can check the generated code on the [\`main\` branch](https://github.com/algolia/api-clients-automation/tree/main).
           You can still access the code generated on \`mocked\` via [this commit](https://github.com/algolia/api-clients-automation/commit/mocked)."
           `);
       });
 
       it('fallbacks to the env variable HEAD_BRANCH if found when we are on `main`', async () => {
         process.env.HEAD_BRANCH = 'myFakeBranch';
-        mockedRun.mockResolvedValue('main');
+        vi.spyOn(await import('../../../common.js'), 'run').mockResolvedValue('main');
 
         expect(await getCommentBody('cleanup')).toMatchInlineSnapshot(`
           "### ✗ The generated branch has been deleted.
 
-          If the PR has been merged, you can check the generated code on the [\`${common.MAIN_BRANCH}\` branch](https://github.com/algolia/api-clients-automation/tree/${common.MAIN_BRANCH}).
+          If the PR has been merged, you can check the generated code on the [\`main\` branch](https://github.com/algolia/api-clients-automation/tree/main).
           You can still access the code generated on \`generated/myFakeBranch\` via [this commit](https://github.com/algolia/api-clients-automation/commit/main)."
         `);
       });

@@ -11,7 +11,8 @@ client.addAlgoliaAgent('Browser playground', '0.0.1');
 const searchButton = document.querySelector('#search');
 
 searchButton?.addEventListener('click', async () => {
-  const { results } = await client.search({
+
+  const { results } = await client.searchForHits({
     requests: [
       {
         indexName: 'docsearch',
