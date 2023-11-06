@@ -2,7 +2,7 @@ module github.com/algolia/algoliasearch-client-go/v4
 
 go 1.19
 
-require github.com/go-playground/validator/v10 v10.15.5
+require github.com/go-playground/validator/v10 v10.16.0
 
 require (
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
