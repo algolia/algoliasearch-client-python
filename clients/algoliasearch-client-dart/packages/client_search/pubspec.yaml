@@ -1,5 +1,5 @@
 name: algolia_client_search
-version: 1.0.0
+version: 1.1.0
 description: A sub-package of the AlgoliaSearch library, offering search-specific functionalities for enhanced search and discovery in Dart/Flutter apps.
 homepage: https://www.algolia.com/doc/
 repository: https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/client_search
@@ -11,7 +11,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  algolia_client_core: ^1.0.0
+  algolia_client_core: ^1.1.0
   json_annotation: ^4.8.1
   collection: ^1.17.1
 
