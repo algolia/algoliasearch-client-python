@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/algolia/algoliasearch-client-dart/compare/1.0.0...1.1.0)
+
+- [ebc2a0c4d](https://github.com/algolia/api-clients-automation/commit/ebc2a0c4d) chore(specs): remove unused spec file ([#2186](https://github.com/algolia/api-clients-automation/pull/2186)) by [@shortcuts](https://github.com/shortcuts/)
+- [517f9cb72](https://github.com/algolia/api-clients-automation/commit/517f9cb72) revert(specs): insights identify ([#2182](https://github.com/algolia/api-clients-automation/pull/2182)) by [@aallam](https://github.com/aallam/)
+- [fa326a50e](https://github.com/algolia/api-clients-automation/commit/fa326a50e) feat(specs): add `authenticatedUserToken` and `Identify` to insights ([#2151](https://github.com/algolia/api-clients-automation/pull/2151)) by [@aallam](https://github.com/aallam/)
+
 ## [1.0.0](https://github.com/algolia/algoliasearch-client-dart/compare/0.6.0...1.0.0)
 
 - [e1b51f8d](https://github.com/algolia/api-clients-automation/commit/e1b51f8d) feat(dart): promote to stable [BREAKING CHANGE] ([#2152](https://github.com/algolia/api-clients-automation/pull/2152)) by [@aallam](https://github.com/aallam/)

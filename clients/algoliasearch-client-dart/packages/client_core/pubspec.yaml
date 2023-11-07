@@ -3,7 +3,7 @@ description: >-
   Algolia Client Core is a Dart package for seamless Algolia API integration,
   offering HTTP request handling, retry strategy, and robust exception
   management.
-version: 1.0.0
+version: 1.1.0
 homepage: https://www.algolia.com/doc/
 repository: >-
   https://github.com/algolia/algoliasearch-client-dart/tree/main/packages/client_core

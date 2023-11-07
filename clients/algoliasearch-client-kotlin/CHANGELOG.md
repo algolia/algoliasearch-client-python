@@ -1,3 +1,9 @@
+## [3.0.0-beta.4](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-beta.3...3.0.0-beta.4)
+
+- [ebc2a0c4d](https://github.com/algolia/api-clients-automation/commit/ebc2a0c4d) chore(specs): remove unused spec file ([#2186](https://github.com/algolia/api-clients-automation/pull/2186)) by [@shortcuts](https://github.com/shortcuts/)
+- [517f9cb72](https://github.com/algolia/api-clients-automation/commit/517f9cb72) revert(specs): insights identify ([#2182](https://github.com/algolia/api-clients-automation/pull/2182)) by [@aallam](https://github.com/aallam/)
+- [fa326a50e](https://github.com/algolia/api-clients-automation/commit/fa326a50e) feat(specs): add `authenticatedUserToken` and `Identify` to insights ([#2151](https://github.com/algolia/api-clients-automation/pull/2151)) by [@aallam](https://github.com/aallam/)
+
 ## [3.0.0-beta.3](https://github.com/algolia/algoliasearch-client-kotlin/compare/3.0.0-beta.2...3.0.0-beta.3)
 
 - [928057e3](https://github.com/algolia/api-clients-automation/commit/928057e3) feat(kotlin): add search helpers `searchForHits` and `searchForFacets` ([#2149](https://github.com/algolia/api-clients-automation/pull/2149)) by [@aallam](https://github.com/aallam/)
