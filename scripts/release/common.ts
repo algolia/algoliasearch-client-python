@@ -8,7 +8,7 @@ export function getLastReleasedTag(): Promise<string> {
 }
 
 export function getNewReleasedTag(): string {
-  const now = new Date().toISOString().split('T')[0];
+  const now = new Date().toISOString();
 
   return `${config.releasedTag}-${now}`;
 }
