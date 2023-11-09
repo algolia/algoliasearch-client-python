@@ -1596,6 +1596,7 @@ components:
       required:
         - runs
         - pagination
+        - window
     EventStatus:
       type: string
       enum:

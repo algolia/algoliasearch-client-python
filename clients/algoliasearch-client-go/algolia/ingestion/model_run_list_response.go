@@ -10,28 +10,18 @@ import (
 type RunListResponse struct {
 	Runs       []Run      `json:"runs"`
 	Pagination Pagination `json:"pagination"`
-	Window     *Window    `json:"window,omitempty"`
-}
-
-type RunListResponseOption func(f *RunListResponse)
-
-func WithRunListResponseWindow(val Window) RunListResponseOption {
-	return func(f *RunListResponse) {
-		f.Window = &val
-	}
+	Window     Window     `json:"window"`
 }
 
 // NewRunListResponse instantiates a new RunListResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRunListResponse(runs []Run, pagination Pagination, opts ...RunListResponseOption) *RunListResponse {
+func NewRunListResponse(runs []Run, pagination Pagination, window Window) *RunListResponse {
 	this := &RunListResponse{}
 	this.Runs = runs
 	this.Pagination = pagination
-	for _, opt := range opts {
-		opt(this)
-	}
+	this.Window = window
 	return this
 }
 
@@ -91,36 +81,28 @@ func (o *RunListResponse) SetPagination(v Pagination) {
 	o.Pagination = v
 }
 
-// GetWindow returns the Window field value if set, zero value otherwise.
+// GetWindow returns the Window field value
 func (o *RunListResponse) GetWindow() Window {
-	if o == nil || o.Window == nil {
+	if o == nil {
 		var ret Window
 		return ret
 	}
-	return *o.Window
+
+	return o.Window
 }
 
-// GetWindowOk returns a tuple with the Window field value if set, nil otherwise
+// GetWindowOk returns a tuple with the Window field value
 // and a boolean to check if the value has been set.
 func (o *RunListResponse) GetWindowOk() (*Window, bool) {
-	if o == nil || o.Window == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Window, true
+	return &o.Window, true
 }
 
-// HasWindow returns a boolean if a field has been set.
-func (o *RunListResponse) HasWindow() bool {
-	if o != nil && o.Window != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetWindow gets a reference to the given Window and assigns it to the Window field.
+// SetWindow sets field value
 func (o *RunListResponse) SetWindow(v Window) {
-	o.Window = &v
+	o.Window = v
 }
 
 func (o RunListResponse) MarshalJSON() ([]byte, error) {
@@ -131,7 +113,7 @@ func (o RunListResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["pagination"] = o.Pagination
 	}
-	if o.Window != nil {
+	if true {
 		toSerialize["window"] = o.Window
 	}
 	return json.Marshal(toSerialize)

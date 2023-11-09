@@ -18,5 +18,5 @@ public data class RunListResponse(
 
   @SerialName(value = "pagination") val pagination: Pagination,
 
-  @SerialName(value = "window") val window: Window? = null,
+  @SerialName(value = "window") val window: Window,
 )
