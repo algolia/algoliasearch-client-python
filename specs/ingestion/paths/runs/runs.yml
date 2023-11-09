@@ -11,8 +11,16 @@ get:
     - $ref: '../../common/observabilityParameters.yml#/taskID'
     - $ref: '../../common/observabilityParameters.yml#/runSort'
     - $ref: '../../common/parameters.yml#/order'
-    - $ref: '../../common/observabilityParameters.yml#/startDate'
-    - $ref: '../../common/observabilityParameters.yml#/endDate'
+    - name: startDate
+      in: query
+      description: The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted.
+      schema:
+        type: string
+    - name: endDate
+      in: query
+      description: The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted.
+      schema:
+        type: string
   responses:
     '200':
       description: OK

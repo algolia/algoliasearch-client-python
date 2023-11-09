@@ -12,6 +12,16 @@ get:
     - $ref: '../../../common/observabilityParameters.yml#/eventType'
     - $ref: '../../../common/observabilityParameters.yml#/eventSort'
     - $ref: '../../../common/parameters.yml#/order'
+    - name: startDate
+      in: query
+      description: The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted.
+      schema:
+        type: string
+    - name: endDate
+      in: query
+      description: The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted.
+      schema:
+        type: string
   responses:
     '200':
       description: OK
