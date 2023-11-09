@@ -26,6 +26,7 @@ RunListResponse:
   required:
     - runs
     - pagination
+    - window
 
 Run:
   type: object
