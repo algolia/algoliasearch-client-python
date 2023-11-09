@@ -10,16 +10,18 @@ import (
 type ListEventsResponse struct {
 	Events     []Event    `json:"events"`
 	Pagination Pagination `json:"pagination"`
+	Window     Window     `json:"window"`
 }
 
 // NewListEventsResponse instantiates a new ListEventsResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListEventsResponse(events []Event, pagination Pagination) *ListEventsResponse {
+func NewListEventsResponse(events []Event, pagination Pagination, window Window) *ListEventsResponse {
 	this := &ListEventsResponse{}
 	this.Events = events
 	this.Pagination = pagination
+	this.Window = window
 	return this
 }
 
@@ -79,6 +81,30 @@ func (o *ListEventsResponse) SetPagination(v Pagination) {
 	o.Pagination = v
 }
 
+// GetWindow returns the Window field value
+func (o *ListEventsResponse) GetWindow() Window {
+	if o == nil {
+		var ret Window
+		return ret
+	}
+
+	return o.Window
+}
+
+// GetWindowOk returns a tuple with the Window field value
+// and a boolean to check if the value has been set.
+func (o *ListEventsResponse) GetWindowOk() (*Window, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Window, true
+}
+
+// SetWindow sets field value
+func (o *ListEventsResponse) SetWindow(v Window) {
+	o.Window = v
+}
+
 func (o ListEventsResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -87,6 +113,9 @@ func (o ListEventsResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["pagination"] = o.Pagination
 	}
+	if true {
+		toSerialize["window"] = o.Window
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -94,6 +123,7 @@ func (o ListEventsResponse) String() string {
 	out := ""
 	out += fmt.Sprintf("  events=%v\n", o.Events)
 	out += fmt.Sprintf("  pagination=%v\n", o.Pagination)
+	out += fmt.Sprintf("  window=%v\n", o.Window)
 	return fmt.Sprintf("ListEventsResponse {\n%s}", out)
 }
 

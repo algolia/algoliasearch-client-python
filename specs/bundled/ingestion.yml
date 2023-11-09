@@ -1561,6 +1561,26 @@ components:
         - status
         - type
         - createdAt
+    Window:
+      type: object
+      additionalProperties: false
+      description: >-
+        The window parameter represents the holds the dates used to query the
+        Observability data from the database in a given window.
+      properties:
+        startDate:
+          type: string
+          description: >-
+            A date in format RFC3339 representing the oldest possible data in
+            query window.
+        endDate:
+          type: string
+          description: >-
+            A date in format RFC3339 representing the newest possible data in
+            query window.
+      required:
+        - startDate
+        - endDate
     RunListResponse:
       type: object
       additionalProperties: false
@@ -1571,6 +1591,8 @@ components:
             $ref: '#/components/schemas/Run'
         pagination:
           $ref: '#/components/schemas/Pagination'
+        window:
+          $ref: '#/components/schemas/Window'
       required:
         - runs
         - pagination
@@ -2569,9 +2591,12 @@ paths:
                       $ref: '#/components/schemas/Event'
                   pagination:
                     $ref: '#/components/schemas/Pagination'
+                  window:
+                    $ref: '#/components/schemas/Window'
                 required:
                   - events
                   - pagination
+                  - window
         '400':
           $ref: '#/components/responses/BadRequest'
   /1/runs/{runID}/events/{eventID}:

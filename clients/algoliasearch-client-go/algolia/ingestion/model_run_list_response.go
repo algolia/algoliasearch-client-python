@@ -10,16 +10,28 @@ import (
 type RunListResponse struct {
 	Runs       []Run      `json:"runs"`
 	Pagination Pagination `json:"pagination"`
+	Window     *Window    `json:"window,omitempty"`
+}
+
+type RunListResponseOption func(f *RunListResponse)
+
+func WithRunListResponseWindow(val Window) RunListResponseOption {
+	return func(f *RunListResponse) {
+		f.Window = &val
+	}
 }
 
 // NewRunListResponse instantiates a new RunListResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRunListResponse(runs []Run, pagination Pagination) *RunListResponse {
+func NewRunListResponse(runs []Run, pagination Pagination, opts ...RunListResponseOption) *RunListResponse {
 	this := &RunListResponse{}
 	this.Runs = runs
 	this.Pagination = pagination
+	for _, opt := range opts {
+		opt(this)
+	}
 	return this
 }
 
@@ -79,6 +91,38 @@ func (o *RunListResponse) SetPagination(v Pagination) {
 	o.Pagination = v
 }
 
+// GetWindow returns the Window field value if set, zero value otherwise.
+func (o *RunListResponse) GetWindow() Window {
+	if o == nil || o.Window == nil {
+		var ret Window
+		return ret
+	}
+	return *o.Window
+}
+
+// GetWindowOk returns a tuple with the Window field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunListResponse) GetWindowOk() (*Window, bool) {
+	if o == nil || o.Window == nil {
+		return nil, false
+	}
+	return o.Window, true
+}
+
+// HasWindow returns a boolean if a field has been set.
+func (o *RunListResponse) HasWindow() bool {
+	if o != nil && o.Window != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetWindow gets a reference to the given Window and assigns it to the Window field.
+func (o *RunListResponse) SetWindow(v Window) {
+	o.Window = &v
+}
+
 func (o RunListResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]any{}
 	if true {
@@ -87,6 +131,9 @@ func (o RunListResponse) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["pagination"] = o.Pagination
 	}
+	if o.Window != nil {
+		toSerialize["window"] = o.Window
+	}
 	return json.Marshal(toSerialize)
 }
 
@@ -94,6 +141,7 @@ func (o RunListResponse) String() string {
 	out := ""
 	out += fmt.Sprintf("  runs=%v\n", o.Runs)
 	out += fmt.Sprintf("  pagination=%v\n", o.Pagination)
+	out += fmt.Sprintf("  window=%v\n", o.Window)
 	return fmt.Sprintf("RunListResponse {\n%s}", out)
 }
 

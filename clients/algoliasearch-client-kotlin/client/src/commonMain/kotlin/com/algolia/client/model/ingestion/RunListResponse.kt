@@ -9,6 +9,7 @@ import kotlinx.serialization.json.*
  *
  * @param runs
  * @param pagination
+ * @param window
  */
 @Serializable
 public data class RunListResponse(
@@ -16,4 +17,6 @@ public data class RunListResponse(
   @SerialName(value = "runs") val runs: List<Run>,
 
   @SerialName(value = "pagination") val pagination: Pagination,
+
+  @SerialName(value = "window") val window: Window? = null,
 )

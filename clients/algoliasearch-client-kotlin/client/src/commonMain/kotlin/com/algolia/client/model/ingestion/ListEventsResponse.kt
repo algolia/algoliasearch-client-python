@@ -9,6 +9,7 @@ import kotlinx.serialization.json.*
  *
  * @param events
  * @param pagination
+ * @param window
  */
 @Serializable
 public data class ListEventsResponse(
@@ -16,4 +17,6 @@ public data class ListEventsResponse(
   @SerialName(value = "events") val events: List<Event>,
 
   @SerialName(value = "pagination") val pagination: Pagination,
+
+  @SerialName(value = "window") val window: Window,
 )
