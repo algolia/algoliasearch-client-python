@@ -396,9 +396,11 @@ public class IngestionClient(
    * @param type Filter the type of the events.
    * @param sort The key by which the list should be sorted.
    * @param order The order of the returned list.
+   * @param startDate The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted.
+   * @param endDate The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted.
    * @param requestOptions additional request configuration.
    */
-  public suspend fun getEvents(runID: String, itemsPerPage: Int? = null, page: Int? = null, status: List<EventStatus>? = null, type: List<EventType>? = null, sort: EventSortKeys? = null, order: OrderKeys? = null, requestOptions: RequestOptions? = null): ListEventsResponse {
+  public suspend fun getEvents(runID: String, itemsPerPage: Int? = null, page: Int? = null, status: List<EventStatus>? = null, type: List<EventType>? = null, sort: EventSortKeys? = null, order: OrderKeys? = null, startDate: String? = null, endDate: String? = null, requestOptions: RequestOptions? = null): ListEventsResponse {
     require(runID.isNotBlank()) { "Parameter `runID` is required when calling `getEvents`." }
     val requestConfig = RequestConfig(
       method = RequestMethod.GET,
@@ -410,6 +412,8 @@ public class IngestionClient(
         type?.let { put("type", it.joinToString(",")) }
         sort?.let { put("sort", it) }
         order?.let { put("order", it) }
+        startDate?.let { put("startDate", it) }
+        endDate?.let { put("endDate", it) }
       },
     )
     return requester.execute(
@@ -445,8 +449,8 @@ public class IngestionClient(
    * @param taskID Filter by taskID.
    * @param sort The key by which the list should be sorted.
    * @param order The order of the returned list.
-   * @param startDate The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
-   * @param endDate The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
+   * @param startDate The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted.
+   * @param endDate The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted.
    * @param requestOptions additional request configuration.
    */
   public suspend fun getRuns(itemsPerPage: Int? = null, page: Int? = null, status: List<RunStatus>? = null, taskID: String? = null, sort: RunSortKeys? = null, order: OrderKeys? = null, startDate: String? = null, endDate: String? = null, requestOptions: RequestOptions? = null): RunListResponse {

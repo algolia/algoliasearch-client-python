@@ -2658,6 +2658,24 @@ func (r *ApiGetEventsRequest) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
+	if v, ok := req["startDate"]; ok {
+		err = json.Unmarshal(v, &r.startDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.startDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if v, ok := req["endDate"]; ok {
+		err = json.Unmarshal(v, &r.endDate)
+		if err != nil {
+			err = json.Unmarshal(b, &r.endDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
 
 	return nil
 }
@@ -2671,6 +2689,8 @@ type ApiGetEventsRequest struct {
 	type_        []EventType
 	sort         *EventSortKeys
 	order        *OrderKeys
+	startDate    string
+	endDate      string
 }
 
 // NewApiGetEventsRequest creates an instance of the ApiGetEventsRequest to be used for the API call.
@@ -2716,6 +2736,18 @@ func (r ApiGetEventsRequest) WithOrder(order *OrderKeys) ApiGetEventsRequest {
 	return r
 }
 
+// WithStartDate adds the startDate to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithStartDate(startDate string) ApiGetEventsRequest {
+	r.startDate = startDate
+	return r
+}
+
+// WithEndDate adds the endDate to the ApiGetEventsRequest and returns the request for chaining.
+func (r ApiGetEventsRequest) WithEndDate(endDate string) ApiGetEventsRequest {
+	r.endDate = endDate
+	return r
+}
+
 /*
 GetEvents Get a list of events. Wraps GetEventsWithContext using context.Background.
 
@@ -2730,6 +2762,8 @@ Request can be constructed by NewApiGetEventsRequest with parameters below.
 	@param type_ []EventType - Filter the type of the events.
 	@param sort EventSortKeys - The key by which the list should be sorted.
 	@param order OrderKeys - The order of the returned list.
+	@param startDate string - The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted.
+	@param endDate string - The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted.
 	@return ListEventsResponse
 */
 func (c *APIClient) GetEvents(r ApiGetEventsRequest, opts ...Option) (*ListEventsResponse, error) {
@@ -2750,6 +2784,8 @@ Request can be constructed by NewApiGetEventsRequest with parameters below.
 	@param type_ []EventType - Filter the type of the events.
 	@param sort EventSortKeys - The key by which the list should be sorted.
 	@param order OrderKeys - The order of the returned list.
+	@param startDate string - The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted.
+	@param endDate string - The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted.
 	@return ListEventsResponse
 */
 func (c *APIClient) GetEventsWithContext(ctx context.Context, r ApiGetEventsRequest, opts ...Option) (*ListEventsResponse, error) {
@@ -2781,6 +2817,12 @@ func (c *APIClient) GetEventsWithContext(ctx context.Context, r ApiGetEventsRequ
 	}
 	if !isNilorEmpty(r.order) {
 		queryParams.Set("order", parameterToString(*r.order))
+	}
+	if !isNilorEmpty(r.startDate) {
+		queryParams.Set("startDate", parameterToString(r.startDate))
+	}
+	if !isNilorEmpty(r.endDate) {
+		queryParams.Set("endDate", parameterToString(r.endDate))
 	}
 
 	// optional params if any
@@ -3118,8 +3160,8 @@ Request can be constructed by NewApiGetRunsRequest with parameters below.
 	@param taskID string - Filter by taskID.
 	@param sort RunSortKeys - The key by which the list should be sorted.
 	@param order OrderKeys - The order of the returned list.
-	@param startDate string - The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
-	@param endDate string - The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
+	@param startDate string - The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted.
+	@param endDate string - The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted.
 	@return RunListResponse
 */
 func (c *APIClient) GetRuns(r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
@@ -3139,8 +3181,8 @@ Request can be constructed by NewApiGetRunsRequest with parameters below.
 	@param taskID string - Filter by taskID.
 	@param sort RunSortKeys - The key by which the list should be sorted.
 	@param order OrderKeys - The order of the returned list.
-	@param startDate string - The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
-	@param endDate string - The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted. The timespan between `startDate` and `endDate` must be smaller than 7 days.
+	@param startDate string - The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted.
+	@param endDate string - The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted.
 	@return RunListResponse
 */
 func (c *APIClient) GetRunsWithContext(ctx context.Context, r ApiGetRunsRequest, opts ...Option) (*RunListResponse, error) {
