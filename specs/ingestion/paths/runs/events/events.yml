@@ -28,8 +28,11 @@ get:
                   $ref: '../../../common/schemas/event.yml#/Event'
               pagination:
                 $ref: '../../../common/schemas/pagination.yml#/Pagination'
+              window:
+                $ref: '../../../common/schemas/common.yml#/Window'
             required:
               - events
               - pagination
+              - window
     '400':
       $ref: '../../../../common/responses/BadRequest.yml'

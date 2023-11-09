@@ -60,3 +60,18 @@ eventID:
 name:
   type: string
   description: An human readable name describing the object.
+
+Window:
+  type: object
+  additionalProperties: false
+  description: The window parameter represents the holds the dates used to query the Observability data from the database in a given window.
+  properties:
+    startDate:
+      type: string
+      description: A date in format RFC3339 representing the oldest possible data in query window.
+    endDate:
+      type: string
+      description: A date in format RFC3339 representing the newest possible data in query window.
+  required:
+    - startDate
+    - endDate

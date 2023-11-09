@@ -21,6 +21,8 @@ RunListResponse:
         $ref: '#/Run'
     pagination:
       $ref: './pagination.yml#/Pagination'
+    window:
+      $ref: './common.yml#/Window'
   required:
     - runs
     - pagination
