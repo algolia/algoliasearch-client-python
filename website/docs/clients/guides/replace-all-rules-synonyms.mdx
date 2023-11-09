@@ -70,7 +70,40 @@ await client.saveRules(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.SaveRules(
+  searchClient.NewApiSaveRulesRequest(
+    indexName,
+    []search.Rule{/* ... */},
+  ).WithClearExistingRules(true),
+)
+if err != nil {
+  return 0
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -140,7 +173,40 @@ await client.saveSynonyms(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.SaveSynonyms(
+  searchClient.NewApiSaveSynonymsRequest(
+    indexName,
+    []search.SynonymHit{ /* ... */ },
+  ).WithReplaceExistingSynonyms(true),
+)
+if err != nil {
+  return 0
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -148,3 +214,4 @@ The `synonymHit`parameter should contain the synonyms you want to save.
 By executing the above code, all existing synonyms will be replaced with the new synonyms provided.
 
 That's it! You have learned how to replace all existing rules and synonyms in Algolia using the `saveRules` and `saveSynonyms` methods respectively.
+

@@ -74,6 +74,42 @@ client.waitForTask("<SOURCE_INDEX_NAME>", response.getTaskID());
 ```
 
 </TabItem>
+<TabItem value="go">
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<SOURCE_INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+operationIndexRequest := searchClient.NewApiOperationIndexRequest(
+  indexName,
+  search.NewOperationIndexParams(search.OPERATIONTYPE_COPY, "<DESTINATION_INDEX_NAME>"),
+)
+
+operationIndex, err := searchClient.OperationIndex(operationIndexRequest)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  operationIndex.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
+</TabItem>
 
 <TabItem value="kotlin">
 
@@ -212,9 +248,41 @@ await client.waitTask('<SOURCE_INDEX_NAME>', response.taskID);
 ```
 
 </TabItem>
-
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<SOURCE_INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+operationIndexRequest := searchClient.NewApiOperationIndexRequest(
+  indexName,
+  search.NewOperationIndexParams(search.OPERATIONTYPE_MOVE, "<DESTINATION_INDEX_NAME>"),
+)
+
+operationIndex, err := searchClient.OperationIndex(operationIndexRequest)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  operationIndex.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -322,6 +390,43 @@ await client.waitTask('<SOURCE_INDEX_NAME>', response.taskID);
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<SOURCE_INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+operationIndexRequest := searchClient.NewApiOperationIndexRequest(
+  indexName,
+  search.NewOperationIndexParams(
+    search.OPERATIONTYPE_MOVE,
+    "<DESTINATION_INDEX_NAME>",
+    search.WithOperationIndexParamsScope([]search.ScopeType{search.SCOPETYPE_RULES}),
+  ),
+)
+
+operationIndex, err := searchClient.OperationIndex(operationIndexRequest)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  operationIndex.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>

@@ -69,7 +69,15 @@ var client = SearchClient(appId: '<YOUR_APP_ID>', apiKey: '<YOUR_API_KEY>');
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+searchClient := search.NewClient("<APPLICATION_ID>", "<API_KEY>")
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -240,6 +248,53 @@ await client.waitTask('<YOUR_INDEX_NAME>', response.taskID);
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+actors := []map[string]interface{}{
+  {"name": "Tom Cruise"},
+  {"name": "Scarlett Johansson"},
+}
+
+requests := make([]search.BatchRequest, 0, len(actors))
+
+for _, actor := range actors {
+  requests = append(
+    requests,
+    *search.NewBatchRequest(search.ACTION_ADD_OBJECT, actor),
+  )
+}
+
+response, err := searchClient.Batch(
+  searchClient.NewApiBatchRequest(
+    indexName,
+    search.NewBatchWriteParams(requests),
+  ),
+)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>

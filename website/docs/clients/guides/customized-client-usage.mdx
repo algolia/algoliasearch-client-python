@@ -49,7 +49,6 @@ val client = SearchClient(
     )
 )
 ```
-
 </TabItem>
 
 <TabItem value="dart">
@@ -65,7 +64,15 @@ var client = SearchClient(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+  If you enable the `debug` property of the Go API client, it will print the request and response to the standard output.
+
+```go
+searchClient := search.NewClientWithConfig(search.Configuration{
+  AppID:         "<YOUR_APP_ID>",
+  ApiKey:        "<YOUR_API_KEY>",
+  Debug:         true,
+})
+```
 </TabItem>
 </TabsLanguage>
 
@@ -199,7 +206,38 @@ await client.search(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams([]search.SearchQuery{
+      search.SearchForHitsAsSearchQuery(
+        search.NewSearchForHits(
+          indexName,
+          search.WithSearchForHitsQuery("jeans"),
+          search.WithSearchForHitsHitsPerPage(50),
+        ),
+      ),
+    }),
+  ),
+  // This header is added to the request
+  search.HeaderParamOption("additional-header", "hello"),
+
+  // As we re-define `hitsPerPage`, it will override the value defined in the method's parameters.
+  search.QueryParamOption("hitsPerPage", 100),
+)
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -295,7 +333,28 @@ var client = SearchClient(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+> In the Go client, you can use the NewClientWithConfig method to create a new API client with the given configuration to fully customize the client behaviour. Only the AppID and APIKey are required, other configuration parameters will be defaulted if not provided.
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+searchClient := search.NewClientWithConfig(search.Configuration{
+  AppID:         appID,
+  ApiKey:        apiKey,
+  Hosts:         nil,
+  DefaultHeader: nil,
+  UserAgent:     "my user agent (optional version)",
+  Debug:         false,
+  Requester:     nil,
+  ReadTimeout:   0,
+  WriteTimeout:  0,
+  Compression:   0,
+})
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -385,8 +444,46 @@ var client = SearchClient(
 ```
 
 </TabItem>
-
 <TabItem value="go">
-// TBD
+
+> In the Go client, you can use the NewClientWithConfig method to create a new API client with the given configuration to fully customize the client behaviour. Only the AppID and APIKey are required, other configuration parameters will be defaulted if not provided.
+
+```go
+import (
+"net/http"
+
+"github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+type MyCustomRequester struct {
+  client *http.Client
+}
+
+func NewCustomRequester() *MyCustomRequester {
+  return &MyCustomRequester{
+    client: http.DefaultClient,
+  }
+}
+
+func (r *MyCustomRequester) Request(req *http.Request) (*http.Response, error) {
+  println("MyCustomRequester > Request: ", req.RequestURI)
+
+  return r.client.Do(req)
+}
+
+searchClient := search.NewClientWithConfig(search.Configuration{
+  AppID:         appID,
+  ApiKey:        apiKey,
+  Hosts:         nil,
+  DefaultHeader: nil,
+  UserAgent:     "",
+  Debug:         false,
+  Requester:     NewCustomerRequester(),
+  ReadTimeout:   0,
+  WriteTimeout:  0,
+  Compression:   0,
+})
+```
+
 </TabItem>
 </TabsLanguage>

@@ -153,8 +153,61 @@ await client.waitTask(
 ```
 
 </TabItem>
-
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.SaveObject(
+  searchClient.NewApiSaveObjectRequest(
+    indexName,
+    map[string]interface{}{
+      "name": "Tom Cruise",
+    },
+  ),
+)
+if err != nil {
+  panic(err)
+}
+
+// Poll the task status with defaults values
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+
+// Poll the task status with your options
+initialDelay := 1000*time.Millisecond
+maxDelay := 10_000*time.Millisecond
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  // Number of maximum retries to do.
+  search.PtrInt(100),
+  // The time to wait between retries, in milliseconds.
+  &initialDelay,
+  // The maximum delay to wait before making the request timeout, in milliseconds.
+  &maxDelay,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>

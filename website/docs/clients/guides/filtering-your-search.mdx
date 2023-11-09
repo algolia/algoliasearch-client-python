@@ -87,7 +87,43 @@ client.setSettings(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.SetSettings(searchClient.NewApiSetSettingsRequest(
+  indexName,
+  search.NewIndexSettings(
+    search.WithIndexSettingsAttributesForFaceting(
+      []string{
+        "actor",
+        "filterOnly(category)",
+        "searchable(publisher)",
+      },
+    ),
+  ),
+))
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+```
+
 </TabItem>
 
 </TabsLanguage>
@@ -308,7 +344,70 @@ await client.search(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+// Only "Scarlett Johansson" actor
+results, err := searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams(
+      []search.SearchQuery{
+        search.SearchForHitsAsSearchQuery(
+          search.NewSearchForHits(
+            indexName,
+            search.WithSearchForHitsQuery("<YOUR_QUERY>"),
+            search.WithSearchForHitsFilters("actor:Scarlett Johansson"),
+          ),
+        ),
+      },
+    ),
+  ),
+)
+
+// Only "Tom Cruise" or "Scarlett Johansson" actor
+results, err := searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams(
+      []search.SearchQuery{
+        search.SearchForHitsAsSearchQuery(
+          search.NewSearchForHits(
+            indexName,
+            search.WithSearchForHitsQuery("<YOUR_QUERY>"),
+            search.WithSearchForHitsFilters("actor:Tom Cruise OR actor:Scarlett Johansson"),
+          ),
+        ),
+      },
+    ),
+  ),
+)
+
+// Everything but "Nicolas Cage" actor
+results, err := searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams(
+      []search.SearchQuery{
+        search.SearchForHitsAsSearchQuery(
+          search.NewSearchForHits(
+            indexName,
+            search.WithSearchForHitsQuery("<YOUR_QUERY>"),
+            search.WithSearchForHitsFilters("NOT actor:Nicolas Cage"),
+          ),
+        ),
+      },
+    ),
+  ),
+)
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -465,8 +564,60 @@ client.search(
 ```
 
 </TabItem>
-
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+// Only "Scarlett Johansson" actor
+results, err := searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams(
+      []search.SearchQuery{
+        search.SearchForHitsAsSearchQuery(
+          search.NewSearchForHits(
+            indexName,
+            search.WithSearchForHitsQuery("<YOUR_QUERY>"),
+            search.WithSearchForHitsFacetFilters(
+              search.StringAsFacetFilters(search.PtrString("actor:Tom Cruise")),
+            ),
+          ),
+        ),
+      },
+    ),
+  ),
+)
+
+// Only "Tom Cruise" or "Scarlett Johansson" actor
+results, err := searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams(
+      []search.SearchQuery{
+        search.SearchForHitsAsSearchQuery(
+          search.NewSearchForHits(
+            indexName,
+            search.WithSearchForHitsQuery("<YOUR_QUERY>"),
+            search.WithSearchForHitsFacetFilters(
+              search.StringAsFacetFilters(search.PtrString("actor:Tom Cruise")),
+            ),
+            search.WithSearchForHitsFacetFilters(
+              search.StringAsFacetFilters(search.PtrString("actor:Scarlett Johansson")),
+            ),
+          ),
+        ),
+      },
+    ),
+  ),
+)
+```
+
 </TabItem>
 </TabsLanguage>

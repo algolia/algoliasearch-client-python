@@ -5,7 +5,7 @@ title: Manage dictionary entries
 import { TabsLanguage } from '../../../src/components/TabsLanguage';
 import TabItem from '@theme/TabItem';
 
-The REST API offers [a single endpoint to manage your dictorionary](https://api-clients-automation.netlify.app/specs/search#tag/Dictionaries/operation/batchDictionaryEntries). In this guide, we will demonstrate how to manage entries for different scenarios.
+The REST API offers [a single endpoint to manage your dictionary](https://api-clients-automation.netlify.app/specs/search#tag/Dictionaries/operation/batchDictionaryEntries). In this guide, we will demonstrate how to manage entries for different scenarios.
 
 A `dictionaryName` can be either `stopwords`, `plurals` or `compounds`.
 
@@ -126,7 +126,57 @@ await client.batchDictionaryEntries(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.BatchDictionaryEntries(
+  searchClient.NewApiBatchDictionaryEntriesRequest(
+    // One of search.DICTIONARYTYPE_STOPWORDS, search.DICTIONARYTYPE_PLURALS or search.DICTIONARYTYPE_COMPOUNDS.
+    dictionaryType,
+    search.NewBatchDictionaryEntriesParams(
+      []search.BatchDictionaryEntriesRequest{
+        *search.NewBatchDictionaryEntriesRequest(
+          search.DICTIONARYACTION_ADD_ENTRY,
+          *search.NewDictionaryEntry(
+            "1",
+            "en",
+            search.WithDictionaryEntryWord("fancy"),
+            search.WithDictionaryEntryWords([]string{"believe", "algolia"}),
+            search.WithDictionaryEntryDecomposition([]string{"trust", "algolia"}),
+            search.WithDictionaryEntryState(search.DICTIONARYENTRYSTATE_ENABLED),
+          ),
+        ),
+      },
+      // Here we want to append data, so we don't clear existing entries.
+      search.WithBatchDictionaryEntriesParamsClearExistingDictionaryEntries(false),
+    ),
+  ),
+)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -247,7 +297,57 @@ await client.batchDictionaryEntries(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.BatchDictionaryEntries(
+  searchClient.NewApiBatchDictionaryEntriesRequest(
+    // One of search.DICTIONARYTYPE_STOPWORDS, search.DICTIONARYTYPE_PLURALS or search.DICTIONARYTYPE_COMPOUNDS.
+    dictionaryType,
+    search.NewBatchDictionaryEntriesParams(
+      []search.BatchDictionaryEntriesRequest{
+        *search.NewBatchDictionaryEntriesRequest(
+          search.DICTIONARYACTION_ADD_ENTRY,
+          *search.NewDictionaryEntry(
+            "1",
+            "en",
+            search.WithDictionaryEntryWord("fancy"),
+            search.WithDictionaryEntryWords([]string{"believe", "algolia"}),
+            search.WithDictionaryEntryDecomposition([]string{"trust", "algolia"}),
+            search.WithDictionaryEntryState(search.DICTIONARYENTRYSTATE_ENABLED),
+          ),
+        ),
+      },
+      // Since we replace, we will create a new dictionary from those entries
+      search.WithBatchDictionaryEntriesParamsClearExistingDictionaryEntries(true),
+    ),
+  ),
+)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -321,7 +421,44 @@ await client.batchDictionaryEntries(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.BatchDictionaryEntries(
+  searchClient.NewApiBatchDictionaryEntriesRequest(
+    // One of search.DICTIONARYTYPE_STOPWORDS, search.DICTIONARYTYPE_PLURALS or search.DICTIONARYTYPE_COMPOUNDS.
+    dictionaryType,
+    search.NewBatchDictionaryEntriesParams(
+      []search.BatchDictionaryEntriesRequest{}, // We don't push any new entries to it
+      search.WithBatchDictionaryEntriesParamsClearExistingDictionaryEntries(true),
+    ),
+  ),
+)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 
@@ -416,7 +553,54 @@ await client.batchDictionaryEntries(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+response, err := searchClient.BatchDictionaryEntries(
+  searchClient.NewApiBatchDictionaryEntriesRequest(
+    // One of search.DICTIONARYTYPE_STOPWORDS, search.DICTIONARYTYPE_PLURALS or search.DICTIONARYTYPE_COMPOUNDS.
+    dictionaryType,
+    search.NewBatchDictionaryEntriesParams(
+      []search.BatchDictionaryEntriesRequest{
+        *search.NewBatchDictionaryEntriesRequest(
+          // `deleteEntry` will remove any entries in the dictionary that have the same `objectID` as the `body.objectID` field.
+          search.DICTIONARYACTION_DELETE_ENTRY,
+          *search.NewDictionaryEntry(
+            "1",
+            "en",
+          ),
+        ),
+      },
+      // We don't want to impact other entries.
+      search.WithBatchDictionaryEntriesParamsClearExistingDictionaryEntries(false),
+    ),
+  ),
+)
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  response.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 

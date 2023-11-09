@@ -112,6 +112,15 @@ dependencies {
 In multiplatform projects, add Algolia API client dependency to `commonMain`, and choose an [engine](https://ktor.io/docs/http-client-engines.html) for each target.
 
 </TabItem>
+<TabItem value="go">
+
+First, install the Algolia API Go Client via the `go get` command:
+
+```bash
+go get github.com/algolia/algoliasearch-client-go/v4
+```
+
+</TabItem>
 </TabsLanguage>
 
 ## Using the client
@@ -280,7 +289,73 @@ void main() async {
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+func main() {
+  // Instantiate the client
+  searchClient := search.NewClient("<YOUR_APP_ID>", "<YOUR_API_KEY>")
+
+  // Add a new record to your Algolia index.
+  response, err := searchClient.AddOrUpdateObject(
+    searchClient.NewApiAddOrUpdateObjectRequest(
+      "<YOUR_INDEX_NAME>",
+      "1",
+      map[string]interface{}{
+        "name": "Foo",
+        "age":  42,
+        "city": "Paris",
+      },
+    ),
+  )
+  if err != nil {
+    panic(err)
+  }
+
+  // Wait for the save operation to complete.
+  _, err = searchClient.WaitForTask(
+    indexName,
+    *response.TaskID,
+    nil,
+    nil,
+    nil,
+  )
+  if err != nil {
+    panic(err)
+  }
+
+  // Fetch search results.
+  searchResponse, err := searchClient.Search(
+    searchClient.NewApiSearchRequest(
+      search.NewSearchMethodParams(
+        []search.SearchQuery{
+          search.SearchForHitsAsSearchQuery(
+            search.NewSearchForHits(
+              indexName,
+              search.WithSearchForHitsQuery("<YOUR_SEARCH_QUERY>"), // Typo tolerant search.
+            ),
+          ),
+        },
+      ),
+    ),
+  )
+  if err != nil {
+    panic(err)
+  }
+
+  for _, result := range searchResponse.Results {
+    fmt.Printf("Result: %v", result.SearchResponse)
+  }
+}
+```
+
 </TabItem>
 
 </TabsLanguage>

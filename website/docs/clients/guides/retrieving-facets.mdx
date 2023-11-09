@@ -160,8 +160,69 @@ await client.search(
 ```
 
 </TabItem>
-
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+results, err := searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams(
+      []search.SearchQuery{
+        search.SearchForHitsAsSearchQuery(
+          search.NewSearchForHits(
+            indexName,
+            search.WithSearchForHitsFacets([]string{"author", "genre"}),
+          ),
+        ),
+      },
+    ),
+  ),
+)
+if err != nil {
+  panic(err)
+}
+```
+
+To extract all facet information, you can use a wildcard (`*`).
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+results, err := searchClient.Search(
+  searchClient.NewApiSearchRequest(
+    search.NewSearchMethodParams(
+      []search.SearchQuery{
+        search.SearchForHitsAsSearchQuery(
+          search.NewSearchForHits(
+            indexName,
+            search.WithSearchForHitsFacets([]string{"*"}),
+          ),
+        ),
+      },
+    ),
+  ),
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>

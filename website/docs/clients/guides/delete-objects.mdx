@@ -97,7 +97,50 @@ await client.batch(
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+objectIDs := []string{"1", "2", "3", "4", "5"}
+batchRequests := make([]search.BatchRequest, 0, len(objectIDs))
+
+for _, objectID := range objectIDs {
+  batchRequests = append(
+    batchRequests,
+    *search.NewBatchRequest(search.ACTION_DELETE, map[string]any{"objectID": objectID}),
+  )
+}
+
+batchWriteParams := search.NewBatchWriteParams(batchRequests)
+
+batchResponse, err := searchClient.Batch(searchClient.NewApiBatchRequest(
+  indexName,
+  batchWriteParams,
+))
+if err != nil {
+  panic(err)
+}
+
+taskResponse, err := searchClient.WaitForTask(
+  indexName,
+  batchResponse.TaskID,
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
 

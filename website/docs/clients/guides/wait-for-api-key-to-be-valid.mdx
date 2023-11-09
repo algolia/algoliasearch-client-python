@@ -196,6 +196,78 @@ await client.waitKeyDelete(key: keyResponse.key);
 </TabItem>
 
 <TabItem value="go">
-// TBD
+
+```go
+import (
+  "github.com/algolia/algoliasearch-client-go/v4/algolia/search"
+)
+
+indexName := "<INDEX_NAME>"
+appID := "<APPLICATION_ID>"
+apiKey := "<API_KEY>"
+
+searchClient := search.NewClient(appID, apiKey)
+
+apiKeyStruct := search.NewApiKey([]search.Acl{"search"})
+
+addApiKeyResponse, err := searchClient.AddApiKey(searchClient.NewApiAddApiKeyRequest(apiKeyStruct))
+if err != nil {
+  panic(err)
+}
+
+_, err = searchClient.WaitForApiKey(
+  addApiKeyResponse.Key,
+  apiKeyStruct,
+  "add",
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+
+apiKeyStruct.SetAcl([]search.Acl{"search", "addObject"})
+
+updateApiKeyResponse, err := searchClient.UpdateApiKey(
+  searchClient.NewApiUpdateApiKeyRequest(
+    addApiKeyResponse.Key,
+    apiKeyStruct,
+  ),
+)
+if err != nil {
+  panic(err)
+}
+
+_, err = searchClient.WaitForApiKey(
+  updateApiKeyResponse.Key,
+  apiKeyStruct,
+  "update",
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+
+deleteApiKeyResponse, err := searchClient.DeleteApiKey(searchClient.NewApiDeleteApiKeyRequest(addApiKeyResponse.Key))
+if err != nil {
+  panic(err)
+}
+
+_, err = searchClient.WaitForApiKey(
+  deleteApiKeyResponse.Key,
+  apiKeyStruct,
+  "delete",
+  nil,
+  nil,
+  nil,
+)
+if err != nil {
+  panic(err)
+}
+```
+
 </TabItem>
 </TabsLanguage>
