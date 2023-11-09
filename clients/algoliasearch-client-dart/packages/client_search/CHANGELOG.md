@@ -1,3 +1,7 @@
+## [1.2.1](https://github.com/algolia/algoliasearch-client-dart/compare/1.2.0...1.2.1)
+
+- [472dc87c4](https://github.com/algolia/api-clients-automation/commit/472dc87c4) fix(specs): require `window` in list runs ([#2226](https://github.com/algolia/api-clients-automation/pull/2226)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [1.2.0](https://github.com/algolia/algoliasearch-client-dart/compare/1.1.0...1.2.0)
 
 - [15b81fe64](https://github.com/algolia/api-clients-automation/commit/15b81fe64) feat(specs): add `window` parameter to observability responses ([#2223](https://github.com/algolia/api-clients-automation/pull/2223)) by [@shortcuts](https://github.com/shortcuts/)
