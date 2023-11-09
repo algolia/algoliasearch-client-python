@@ -442,14 +442,6 @@ async function createReleasePR(): Promise<void> {
     head: headBranch,
   });
 
-  console.log('Assigning team members to the PR...');
-  await octokit.pulls.requestReviewers({
-    owner: OWNER,
-    repo: REPO,
-    pull_number: data.number,
-    team_reviewers: ['api-clients-automation'],
-  });
-
   console.log(`Release PR #${data.number} is ready for review.`);
   console.log(`  > ${data.url}`);
 }

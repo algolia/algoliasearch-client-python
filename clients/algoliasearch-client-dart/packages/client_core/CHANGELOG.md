@@ -1,3 +1,8 @@
+## [1.2.0](https://github.com/algolia/algoliasearch-client-dart/compare/1.1.0...1.2.0)
+
+- [15b81fe64](https://github.com/algolia/api-clients-automation/commit/15b81fe64) feat(specs): add `window` parameter to observability responses ([#2223](https://github.com/algolia/api-clients-automation/pull/2223)) by [@shortcuts](https://github.com/shortcuts/)
+- [54fb30d53](https://github.com/algolia/api-clients-automation/commit/54fb30d53) chore(specs): lint --fix on pre-commit ([#2224](https://github.com/algolia/api-clients-automation/pull/2224)) by [@millotp](https://github.com/millotp/)
+
 ## [1.1.0](https://github.com/algolia/algoliasearch-client-dart/compare/1.0.0...1.1.0)
 
 - [ebc2a0c4d](https://github.com/algolia/api-clients-automation/commit/ebc2a0c4d) chore(specs): remove unused spec file ([#2186](https://github.com/algolia/api-clients-automation/pull/2186)) by [@shortcuts](https://github.com/shortcuts/)
