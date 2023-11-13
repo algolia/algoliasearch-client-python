@@ -65,7 +65,7 @@ async function spreadGeneration(): Promise<void> {
   // So we want to set the released tag at the monorepo level too.
   if (IS_RELEASE_COMMIT) {
     console.log('Creating new `released` tag for latest commit');
-    await run(`git tag ${getNewReleasedTag()}`);
+    await run(`git tag ${await getNewReleasedTag()}`);
     await run('git push --tags');
   }
 
