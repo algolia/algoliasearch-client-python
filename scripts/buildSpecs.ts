@@ -227,6 +227,11 @@ async function buildSpec(spec: string, outputFormat: string, useCache: boolean):
   spinner.text = `linting '${spec}' bundled spec`;
   await run(`yarn specs:fix bundled/${spec}.${outputFormat}`);
 
+  if (!isAlgoliasearch) {
+    spinner.text = `linting '${spec}' doc spec`;
+    await run(`yarn specs:fix bundled/${spec}.doc.yml`);
+  }
+
   if (hash) {
     spinner.text = `storing '${spec}' spec cache`;
     await fsp.writeFile(cacheFile, hash);

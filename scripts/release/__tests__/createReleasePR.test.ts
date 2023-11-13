@@ -37,6 +37,22 @@ vi.mock('../../common.js', async () => {
   }
 })
 
+vi.mock('../../ci/utils.js', async () => {
+  const mod = await vi.importActual<typeof import('../../ci/utils.js')>('../../ci/utils.js')
+  return {
+    ...mod,
+    getNbGitDiff: vi.fn().mockResolvedValue(1)
+  }
+})
+
+vi.mock('../common.js', async () => {
+  const mod = await vi.importActual<typeof import('../common.js')>('../common.js')
+  return {
+    ...mod,
+    getLastReleasedTag: vi.fn().mockResolvedValue("foobar")
+  }
+})
+
 const {
   parseCommit,
   getVersionChangesText,
@@ -294,7 +310,7 @@ describe('createReleasePR', () => {
 
   describe('decideReleaseStrategy', () => {
     it('bumps major version for BREAKING CHANGE', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -322,7 +338,7 @@ describe('createReleasePR', () => {
     });
 
     it('bumps minor version for feat', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -350,7 +366,7 @@ describe('createReleasePR', () => {
     });
 
     it('bumps patch version for fix', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -378,7 +394,7 @@ describe('createReleasePR', () => {
     });
 
     it('marks noCommit for languages without any commit', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -409,7 +425,7 @@ describe('createReleasePR', () => {
     });
 
     it('releases every languages if a `specs` commit is present', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -444,7 +460,7 @@ describe('createReleasePR', () => {
     });
 
     it('releases every languages if a `clients` commit is present', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -479,7 +495,7 @@ describe('createReleasePR', () => {
     });
 
     it('bumps for `specs` feat with only language `fix` commits', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -521,7 +537,7 @@ describe('createReleasePR', () => {
     });
 
     it('marks skipRelease for patch upgrade without fix commit', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1',
@@ -549,7 +565,7 @@ describe('createReleasePR', () => {
     });
 
     it('consider prerelease version and correctly bumps them', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1-alpha',
@@ -584,7 +600,7 @@ describe('createReleasePR', () => {
     });
 
     it('bumps SNAPSHOT versions correctly', async () => {
-      const versions = decideReleaseStrategy({
+      const versions = await decideReleaseStrategy({
         versions: {
           javascript: {
             current: '0.0.1-alpha',

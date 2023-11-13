@@ -58,6 +58,7 @@ __metadata:
     json: "npm:11.0.0"
     lint-staged: "npm:15.0.2"
     mustache: "npm:4.2.0"
+    pinst: "npm:3.0.0"
     prettier: "npm:3.0.3"
     prettier-plugin-java: "npm:2.3.1"
     renovate-config-algolia: "npm:2.1.10"
@@ -10450,6 +10451,15 @@ __metadata:
   bin:
     pidtree: bin/pidtree.js
   checksum: 0829ec4e9209e230f74ebf4265f5ccc9ebfb488334b525cb13f86ff801dca44b362c41252cd43ae4d7653a10a5c6ab3be39d2c79064d6895e0d78dc50a5ed6e9
+  languageName: node
+  linkType: hard
+
+"pinst@npm:3.0.0":
+  version: 3.0.0
+  resolution: "pinst@npm:3.0.0"
+  bin:
+    pinst: bin.js
+  checksum: abb1ed62ea2acb2207a7a860715bdb26ecbde74ede8fad5f6200194f3e22db25e2b7a49af05e5cc7fc05384709c651e0000323f0077d7239060c4b68c8acd428
   languageName: node
   linkType: hard
 

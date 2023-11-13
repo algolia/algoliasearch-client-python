@@ -20,7 +20,8 @@ import {
   setVerbose,
   configureGitHubAuthor,
 } from '../common.js';
-import { getPackageVersionDefault } from '../config.js';
+import { getLanguageFolder, getPackageVersionDefault } from '../config.js';
+import type { Language } from '../types.js';
 
 import { getLastReleasedTag } from './common.js';
 import TEXT from './text.js';
@@ -191,72 +192,94 @@ export function getNextVersion(current: string, releaseType: semver.ReleaseType 
   return nextVersion;
 }
 
-/* eslint-disable no-param-reassign */
-export function decideReleaseStrategy({
+export async function decideReleaseStrategy({
   versions,
   commits,
 }: {
   versions: VersionsBeforeBump;
   commits: PassedCommit[];
-}): Versions {
-  return Object.entries(versions).reduce((versionsWithReleaseType: Versions, [lang, version]) => {
+}): Promise<Versions> {
+  const versionsToPublish: Versions = {};
+
+  for (const [lang, version] of Object.entries(versions)) {
     const commitsPerLang = commits.filter(
       (commit) => commit.scope === lang || COMMON_SCOPES.includes(commit.scope)
     );
-    const currentVersion = versions[lang].current;
 
-    if (commitsPerLang.length === 0) {
-      versionsWithReleaseType[lang] = {
+    const currentVersion = versions[lang].current;
+    const nbGitDiff = await getNbGitDiff({
+      branch: await getLastReleasedTag(),
+      head: null,
+      path: getLanguageFolder(lang as Language),
+    });
+
+    console.log(`Deciding next version bump for ${lang}.`);
+
+    if (nbGitDiff === 0 || commitsPerLang.length === 0) {
+      versionsToPublish[lang] = {
         ...version,
         noCommit: true,
         releaseType: null,
         next: getNextVersion(currentVersion, null),
       };
-      return versionsWithReleaseType;
-    }
 
-    console.log(`Deciding next version bump for ${lang}.`);
+      const msg =
+        commitsPerLang.length === 0
+          ? 'no commits found'
+          : `no changes found in '${getLanguageFolder(lang as Language)}' in '${
+              commitsPerLang.length
+            }' commits`;
+
+      console.log(`    > Skipping, ${msg}`);
+
+      continue;
+    }
 
     // snapshots should not be bumped as prerelease
     if (semver.prerelease(currentVersion) && !currentVersion.endsWith('-SNAPSHOT')) {
       // if version is like 0.1.2-beta.1, it increases to 0.1.2-beta.2, even if there's a breaking change.
-      versionsWithReleaseType[lang] = {
+      versionsToPublish[lang] = {
         ...version,
         releaseType: 'prerelease',
         next: getNextVersion(currentVersion, 'prerelease'),
       };
-      return versionsWithReleaseType;
+
+      continue;
     }
 
     if (commitsPerLang.some((commit) => commit.message.includes('BREAKING CHANGE'))) {
-      versionsWithReleaseType[lang] = {
+      versionsToPublish[lang] = {
         ...version,
         releaseType: 'major',
         next: getNextVersion(currentVersion, 'major'),
       };
-      return versionsWithReleaseType;
+
+      continue;
     }
 
     const commitTypes = new Set(commitsPerLang.map(({ type }) => type));
     if (commitTypes.has('feat')) {
-      versionsWithReleaseType[lang] = {
+      versionsToPublish[lang] = {
         ...version,
         releaseType: 'minor',
         next: getNextVersion(currentVersion, 'minor'),
       };
-      return versionsWithReleaseType;
+
+      continue;
     }
 
-    versionsWithReleaseType[lang] = {
+    versionsToPublish[lang] = {
       ...version,
       releaseType: 'patch',
       ...(commitTypes.has('fix') ? undefined : { skipRelease: true }),
       next: getNextVersion(currentVersion, 'patch'),
     };
-    return versionsWithReleaseType;
-  }, {});
+
+    continue;
+  }
+
+  return versionsToPublish;
 }
-/* eslint-enable no-param-reassign */
 
 /**
  * Returns commits separated in categories used to compute the next release version.
@@ -358,7 +381,7 @@ async function createReleasePR(): Promise<void> {
   console.log('Searching for commits since last release...');
   const { validCommits, skippedCommits } = await getCommits();
 
-  const versions = decideReleaseStrategy({
+  const versions = await decideReleaseStrategy({
     versions: readVersions(),
     commits: validCommits,
   });
