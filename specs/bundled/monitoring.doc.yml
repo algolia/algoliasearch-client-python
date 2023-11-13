@@ -1,0 +1,852 @@
+openapi: 3.0.2
+info:
+  title: Algolia Monitoring API
+  description: |
+    The Monitoring API lets you check the status and performance of your Algolia
+    infrastructure.
+
+    > **Note**: The Monitoring API is available on [Premium
+    plans](https://www.algolia.com/pricing/) and plans including the Enterprise
+    add-on.
+  version: 1.0.0
+servers:
+  - url: https://status.algolia.com
+components:
+  securitySchemes:
+    appId:
+      type: apiKey
+      in: header
+      name: X-Algolia-Application-Id
+      description: Your Algolia application ID.
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-Algolia-API-Key
+      description: Your Algolia API key. Make sure to use your Monitoring API key.
+  parameters:
+    PathInPath:
+      name: path
+      in: path
+      description: Path of the endpoint, anything after "/1" must be specified.
+      required: true
+      schema:
+        type: string
+        example: /keys
+    Parameters:
+      name: parameters
+      in: query
+      description: Query parameters to apply to the current query.
+      schema:
+        type: object
+        additionalProperties: true
+    Clusters:
+      name: clusters
+      in: path
+      required: true
+      description: Subset of clusters, separated by comma.
+      schema:
+        type: string
+        example: c1-de,c2-de,c3-de
+    MetricInPath:
+      name: metric
+      in: path
+      required: true
+      description: |
+        Metric to report.
+
+        For more information about the individual metrics, see the response.
+        To include all metrics, use `*` as the parameter.
+      schema:
+        $ref: '#/components/schemas/Metric'
+    PeriodInPath:
+      name: period
+      in: path
+      required: true
+      description: |
+        Period over which to aggregate the metrics:
+
+        - `minute`. Aggregate the last minute. 1 data point per 10 seconds.
+        - `hour`. Aggregate the last hour. 1 data point per minute.
+        - `day`. Aggregate the last day. 1 data point per 10 minutes.
+        - `week`. Aggregate the last week. 1 data point per hour.
+        - `month`. Aggregate the last month. 1 data point per day.
+      schema:
+        $ref: '#/components/schemas/Period'
+  schemas:
+    ErrorBase:
+      description: Error.
+      type: object
+      additionalProperties: true
+      properties:
+        message:
+          type: string
+          example: Invalid Application-Id or API-Key
+    Status:
+      title: status
+      type: string
+      description: Status of the cluster.
+      enum:
+        - operational
+        - degraded_performance
+        - partial_outage
+        - major_outage
+    Timestamp:
+      type: integer
+      format: int64
+      description: >-
+        Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in
+        milliseconds.
+    Incident:
+      title: incident
+      description: Incident details.
+      type: object
+      properties:
+        title:
+          type: string
+          description: Description of the incident.
+        status:
+          $ref: '#/components/schemas/Status'
+    Incidents:
+      title: incidents
+      description: >-
+        Key-value pairs with the cluster names as keys and the list of incidents
+        reported for this cluster as values.
+      type: array
+      items:
+        type: object
+        properties:
+          t:
+            $ref: '#/components/schemas/Timestamp'
+          v:
+            $ref: '#/components/schemas/Incident'
+    Region:
+      title: region
+      type: string
+      description: The region where the cluster is located.
+      enum:
+        - au
+        - br
+        - ca
+        - de
+        - eu
+        - hk
+        - in
+        - jp
+        - sg
+        - uae
+        - uk
+        - usc
+        - use
+        - usw
+        - za
+      example: de
+    ServerStatus:
+      title: status
+      type: string
+      enum:
+        - PRODUCTION
+    Type:
+      title: type
+      type: string
+      enum:
+        - cluster
+    Server:
+      title: server
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Server name.
+          example: c16-de-1
+        region:
+          $ref: '#/components/schemas/Region'
+        is_slave:
+          type: boolean
+          default: false
+          deprecated: true
+          description: |
+            Included to support legacy applications.
+            Do not rely on this attribute being present in the response.
+            Use `is_replica` instead.
+          example: false
+        is_replica:
+          type: boolean
+          default: false
+          description: Indicates whether this server is a replica of another server.
+          example: false
+        cluster:
+          type: string
+          description: Name of the cluster to which this server belongs.
+          example: c16-de
+        status:
+          $ref: '#/components/schemas/ServerStatus'
+        type:
+          $ref: '#/components/schemas/Type'
+    Time:
+      title: time
+      description: Time measured by a probe.
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          t:
+            $ref: '#/components/schemas/Timestamp'
+          v:
+            type: integer
+            description: Time in ms.
+    Probes:
+      title: probes
+      description: Probes and their response.
+      type: object
+      additionalProperties:
+        x-additionalPropertiesName: probe
+        type: boolean
+        description: >-
+          Key-value pair with the probe name as the key and the reachability
+          status as the value.
+    Metric:
+      type: string
+      enum:
+        - avg_build_time
+        - ssd_usage
+        - ram_search_usage
+        - ram_indexing_usage
+        - cpu_usage
+        - '*'
+      example: '*'
+    Period:
+      type: string
+      enum:
+        - minute
+        - hour
+        - day
+        - week
+        - month
+      example: week
+    ProbesMetric:
+      title: metric
+      type: object
+      additionalProperties: false
+      properties:
+        t:
+          $ref: '#/components/schemas/Timestamp'
+        v:
+          type: integer
+          description: Value of the metric.
+    InfraProbes:
+      title: probes
+      type: array
+      items:
+        $ref: '#/components/schemas/ProbesMetric'
+  responses:
+    BadRequest:
+      description: Bad request or request arguments.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorBase'
+    FeatureNotEnabled:
+      description: This feature is not enabled on your Algolia account.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorBase'
+    MethodNotAllowed:
+      description: Method not allowed with this API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorBase'
+    IndexNotFound:
+      description: Index not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorBase'
+    StatusResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: StatusResponse
+            type: object
+            properties:
+              status:
+                type: object
+                additionalProperties:
+                  x-additionalPropertiesName: status
+                  $ref: '#/components/schemas/Status'
+          examples:
+            Success:
+              value:
+                status:
+                  c16-de: operational
+    UnauthorizedResponse:
+      description: Unauthorized
+      content:
+        text/plain:
+          schema:
+            type: string
+          examples:
+            Unauthorized:
+              summary: Invalid credentials.
+              description: >-
+                Make sure to use the Monitoring API key if you authenticate your
+                API requests.
+              value: Invalid credentials
+    NotFoundResponse:
+      description: Not Found.
+      content:
+        text/plain:
+          schema:
+            type: string
+          examples:
+            NotFound:
+              value: Unknown cluster "test"
+    IncidentsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: IncidentsResponse
+            type: object
+            properties:
+              incidents:
+                type: object
+                additionalProperties:
+                  x-additionalPropertiesName: cluster
+                  $ref: '#/components/schemas/Incidents'
+          examples:
+            success:
+              value:
+                incidents:
+                  m134-de:
+                    - t: 1687441685000
+                      v:
+                        title: >-
+                          Incident on cluster m134-de: Everything operating
+                          normally.
+                        status: operational
+                    - t: 1687441579000
+                      v:
+                        title: >-
+                          Incident on cluster m134-de: We are encountering a
+                          major issue that impact all API calls.
+                        status: major_outage
+    InventoryResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: InventoryResponse
+            type: object
+            properties:
+              inventory:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Server'
+          examples:
+            Success:
+              value:
+                inventory:
+                  - name: c16-de-3
+                    region: de
+                    is_slave: false
+                    is_replica: false
+                    cluster: c16-de
+                    status: PRODUCTION
+                    type: cluster
+                  - name: c16-de-2
+                    region: de
+                    is_slave: false
+                    is_replica: false
+                    cluster: c16-de
+                    status: PRODUCTION
+                    type: cluster
+                  - name: c16-de-1
+                    region: de
+                    is_slave: false
+                    is_replica: false
+                    cluster: c16-de
+                    status: PRODUCTION
+                    type: cluster
+    ForbiddenResponse:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              reason:
+                type: string
+          examples:
+            Forbidden:
+              value:
+                reason: invalid credentials
+    LatencyResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: LatencyResponse
+            type: object
+            properties:
+              metrics:
+                type: object
+                additionalProperties: false
+                properties:
+                  latency:
+                    additionalProperties:
+                      x-additionalPropertiesName: latencies
+                      $ref: '#/components/schemas/Time'
+          examples:
+            Success:
+              value:
+                metrics:
+                  latency:
+                    c16-de:
+                      - t: 1688056200000
+                        v: 64
+                      - t: 1688056800000
+                        v: 59
+                      - t: 1688057400000
+                        v: 55
+    BadRequestResponse:
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              reason:
+                type: string
+          examples:
+            BadRequest:
+              value:
+                reason: Unknown servers
+    IndexingResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: IndexingTimeResponse
+            type: object
+            properties:
+              metrics:
+                type: object
+                additionalProperties: false
+                properties:
+                  indexing:
+                    additionalProperties:
+                      x-additionalPropertiesName: times
+                      $ref: '#/components/schemas/Time'
+          examples:
+            Success:
+              value:
+                metrics:
+                  indexing:
+                    c16-de:
+                      - t: 1688056200000
+                        v: 1562
+                      - t: 1688056800000
+                        v: 1637
+                      - t: 1688057400000
+                        v: 1754
+    ReachabilityResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: ReachabilityResponse
+            type: object
+            additionalProperties:
+              x-additionalPropertiesName: Server
+              $ref: '#/components/schemas/Probes'
+          examples:
+            Success:
+              value:
+                c16-de:
+                  sdn-probe-frankfurt: false
+                  monitoring-2: false
+                  sdn-probe-awswest1: false
+    InfrastructureResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            title: InfrastructureResponse
+            type: object
+            additionalProperties: false
+            properties:
+              metrics:
+                type: object
+                additionalProperties: false
+                properties:
+                  cpu_usage:
+                    type: object
+                    description: CPU idleness in %.
+                    additionalProperties:
+                      x-additionalPropertiesName: probes
+                      $ref: '#/components/schemas/InfraProbes'
+                  ram_indexing_usage:
+                    type: object
+                    description: RAM used for indexing in MB.
+                    additionalProperties:
+                      x-additionalPropertiesName: probes
+                      $ref: '#/components/schemas/InfraProbes'
+                  ram_search_usage:
+                    type: object
+                    description: RAM used for search in MB.
+                    additionalProperties:
+                      x-additionalPropertiesName: probes
+                      $ref: '#/components/schemas/InfraProbes'
+                  ssd_usage:
+                    type: object
+                    description: >
+                      Solid-state disk (SSD) usage expressed as % of RAM. 
+
+                      0% means no SSD usage. A value of 50% indicates 32&nbsp;GB
+                      SSD usage for a machine with 64&nbsp;RAM.
+                    additionalProperties:
+                      x-additionalPropertiesName: probes
+                      $ref: '#/components/schemas/InfraProbes'
+                  avg_build_time:
+                    type: object
+                    description: Average build time of the indices in seconds.
+                    additionalProperties:
+                      x-additionalPropertiesName: probes
+                      $ref: '#/components/schemas/InfraProbes'
+          examples:
+            success:
+              value:
+                metrics:
+                  cpu_usage:
+                    s4-fr:
+                      - t: 1455101280
+                        v: 46
+                      - t: 1455101290
+                        v: 46
+                      - t: 1455101300
+                        v: 46
+                    c3-use-1:
+                      - t: 1455101280
+                        v: 42
+                      - t: 1455101290
+                        v: 42
+                      - t: 1455101300
+                        v: 42
+                      - t: 1455101310
+                        v: 37
+                    c3-use-2:
+                      - t: 1455101280
+                        v: 56
+                      - t: 1455101290
+                        v: 56
+                      - t: 1455101300
+                        v: 56
+                      - t: 1455101310
+                        v: 56
+                      - t: 1455101320
+                        v: 51
+    InfrastructureAPIUnauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              reason:
+                type: string
+          examples:
+            Unauthorized:
+              value:
+                reason: >-
+                  The infrastructure usage API is only available on Enterprise
+                  plans. Please contact enterprise@algolia.com for more detail.
+tags:
+  - name: incidents
+    description: List the known incidents.
+    x-displayName: Incidents
+  - name: infrastructure
+    description: >-
+      Return information about the Algolia infrastructure used by your
+      application.
+    x-displayName: Infrastructure
+  - name: monitoring-tag
+    description: >-
+      Report search and indexing times for your clusters, and get a list of
+      servers.
+    x-displayName: Monitoring
+  - name: status
+    description: |
+      Report the status of your clusters.
+
+      At Algolia, your application is hosted on a [cluster with three
+      servers](https://www.algolia.com/doc/guides/scaling/servers-clusters/).
+
+      Cluster names follow a pattern: `c{[0-9]+}-{region}` where `{region}` is
+      one of the supported Algolia regions.
+
+      Server names follow the pattern: `{cluster-name}-{1|2|3}`.
+    x-displayName: Status
+paths:
+  /1{path}:
+    get:
+      operationId: get
+      summary: Send requests to the Algolia REST API.
+      description: This method allow you to send requests to the Algolia REST API.
+      parameters:
+        - $ref: '#/components/parameters/PathInPath'
+        - $ref: '#/components/parameters/Parameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '402':
+          $ref: '#/components/responses/FeatureNotEnabled'
+        '403':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '404':
+          $ref: '#/components/responses/IndexNotFound'
+    post:
+      operationId: post
+      requestBody:
+        description: Parameters to send with the custom request.
+        content:
+          application/json:
+            schema:
+              type: object
+      summary: Send requests to the Algolia REST API.
+      description: This method allow you to send requests to the Algolia REST API.
+      parameters:
+        - $ref: '#/components/parameters/PathInPath'
+        - $ref: '#/components/parameters/Parameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '402':
+          $ref: '#/components/responses/FeatureNotEnabled'
+        '403':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '404':
+          $ref: '#/components/responses/IndexNotFound'
+    put:
+      operationId: put
+      requestBody:
+        description: Parameters to send with the custom request.
+        content:
+          application/json:
+            schema:
+              type: object
+      summary: Send requests to the Algolia REST API.
+      description: This method allow you to send requests to the Algolia REST API.
+      parameters:
+        - $ref: '#/components/parameters/PathInPath'
+        - $ref: '#/components/parameters/Parameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '402':
+          $ref: '#/components/responses/FeatureNotEnabled'
+        '403':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '404':
+          $ref: '#/components/responses/IndexNotFound'
+    delete:
+      operationId: del
+      summary: Send requests to the Algolia REST API.
+      description: This method allow you to send requests to the Algolia REST API.
+      parameters:
+        - $ref: '#/components/parameters/PathInPath'
+        - $ref: '#/components/parameters/Parameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '402':
+          $ref: '#/components/responses/FeatureNotEnabled'
+        '403':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '404':
+          $ref: '#/components/responses/IndexNotFound'
+  /1/status:
+    get:
+      operationId: getStatus
+      summary: List cluster statuses.
+      tags:
+        - status
+      security:
+        - appId: []
+        - apiKey: []
+      description: |
+        Report whether clusters are operational.
+
+        The response depends on whether you authenticate your API request.
+
+        - With authentication, the response includes the status of the cluster
+        assigned to your Algolia application.
+
+        - Without authentication, the response lists the statuses of all public
+        Algolia clusters.
+      responses:
+        '200':
+          $ref: '#/components/responses/StatusResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+  /1/status/{clusters}:
+    get:
+      summary: List statuses of selected clusters.
+      description: Report whether a cluster is operational.
+      operationId: getClusterStatus
+      tags:
+        - status
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Clusters'
+      responses:
+        '200':
+          $ref: '#/components/responses/StatusResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /1/incidents:
+    get:
+      summary: List incidents.
+      description: List known incidents for all clusters.
+      operationId: getIncidents
+      security: []
+      tags:
+        - incidents
+      responses:
+        '200':
+          $ref: '#/components/responses/IncidentsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+  /1/incidents/{clusters}:
+    get:
+      summary: List incidents for selected clusters.
+      description: List known incidents for selected clusters.
+      operationId: getClusterIncidents
+      tags:
+        - incidents
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Clusters'
+      responses:
+        '200':
+          $ref: '#/components/responses/IncidentsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /1/inventory/servers:
+    get:
+      summary: List servers.
+      operationId: getInventory
+      security:
+        - appId: []
+        - apiKey: []
+      description: |
+        List the servers belonging to clusters.
+
+        The response depends on whether you authenticate your API request:
+
+        - With authentication, the response lists the servers assigned to your
+        Algolia application's cluster.
+
+        - Without authentication, the response lists the servers for all Algolia
+        clusters.
+      tags:
+        - monitoring-tag
+      responses:
+        '200':
+          $ref: '#/components/responses/InventoryResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+  /1/latency/{clusters}:
+    get:
+      summary: Get search latency times.
+      description: List the average latency for search requests for selected clusters.
+      operationId: getLatency
+      security: []
+      tags:
+        - monitoring-tag
+      parameters:
+        - $ref: '#/components/parameters/Clusters'
+      responses:
+        '200':
+          $ref: '#/components/responses/LatencyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+  /1/indexing/{clusters}:
+    get:
+      summary: Get indexing times.
+      description: List the average times for indexing operations for selected clusters.
+      operationId: getIndexingTime
+      security: []
+      tags:
+        - monitoring-tag
+      parameters:
+        - $ref: '#/components/parameters/Clusters'
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+  /1/reachability/{clusters}/probes:
+    get:
+      summary: Test the reachability of clusters.
+      description: Test whether clusters are reachable or not.
+      operationId: getReachability
+      security: []
+      tags:
+        - monitoring-tag
+      parameters:
+        - $ref: '#/components/parameters/Clusters'
+      responses:
+        '200':
+          $ref: '#/components/responses/ReachabilityResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+  /1/infrastructure/{metric}/period/{period}:
+    get:
+      summary: Get metrics for a given period.
+      description: Report the aggregate value of a metric for a selected period of time.
+      operationId: getMetrics
+      tags:
+        - infrastructure
+      parameters:
+        - $ref: '#/components/parameters/MetricInPath'
+        - $ref: '#/components/parameters/PeriodInPath'
+      responses:
+        '200':
+          $ref: '#/components/responses/InfrastructureResponse'
+        '401':
+          $ref: '#/components/responses/InfrastructureAPIUnauthorized'
