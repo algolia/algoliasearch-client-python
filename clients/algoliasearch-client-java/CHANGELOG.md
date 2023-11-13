@@ -1,12 +1,3 @@
-## [4.0.0-beta.14](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.13...4.0.0-beta.14)
-
-- [c2e9fb52c](https://github.com/algolia/api-clients-automation/commit/c2e9fb52c) feat(specs): add `startDate` and `endDate` query parameter to list events ([#2229](https://github.com/algolia/api-clients-automation/pull/2229)) by [@shortcuts](https://github.com/shortcuts/)
-- [472dc87c4](https://github.com/algolia/api-clients-automation/commit/472dc87c4) fix(specs): require `window` in list runs ([#2226](https://github.com/algolia/api-clients-automation/pull/2226)) by [@shortcuts](https://github.com/shortcuts/)
-
-## [4.0.0-beta.13](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.12...4.0.0-beta.13)
-
-- [472dc87c4](https://github.com/algolia/api-clients-automation/commit/472dc87c4) fix(specs): require `window` in list runs ([#2226](https://github.com/algolia/api-clients-automation/pull/2226)) by [@shortcuts](https://github.com/shortcuts/)
-
 ## [4.0.0-beta.12](https://github.com/algolia/algoliasearch-client-java/compare/4.0.0-beta.11...4.0.0-beta.12)
 
 - [15b81fe64](https://github.com/algolia/api-clients-automation/commit/15b81fe64) feat(specs): add `window` parameter to observability responses ([#2223](https://github.com/algolia/api-clients-automation/pull/2223)) by [@shortcuts](https://github.com/shortcuts/)
