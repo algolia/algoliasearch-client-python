@@ -8,9 +8,10 @@ export function getLastReleasedTag(): Promise<string> {
 }
 
 export function getNewReleasedTag(): string {
-  const now = new Date().toISOString();
+  const lastCommitHash = run(`git rev-parse --short HEAD`);
+  const now = new Date().toISOString().split('T')[0];
 
-  return `${config.releasedTag}-${now}`;
+  return `${config.releasedTag}-${now}-${lastCommitHash}`;
 }
 
 export function getTargetBranch(language: string): string {
