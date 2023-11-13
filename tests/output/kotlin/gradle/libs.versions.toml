@@ -2,7 +2,7 @@
 kotlin = "1.9.20"
 coroutines = "1.7.3"
 serialization = "1.5.0"
-ktor = "2.3.5"
+ktor = "2.3.6"
 
 [libraries]
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }

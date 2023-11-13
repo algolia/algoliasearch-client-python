@@ -81,12 +81,6 @@ function getSpecsForNavBar() {
         }),
       ],
       [
-        'docusaurus-preset-shiki-twoslash',
-        {
-          themes: ['dark-plus', 'light-plus'],
-        },
-      ],
-      [
         'redocusaurus',
         {
           specs: getSpecsForPlugin(),
@@ -108,6 +102,10 @@ function getSpecsForNavBar() {
     themeConfig:
       /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
       ({
+        prism: {
+          // scala is required to make java work
+          additionalLanguages: ['php', 'java', 'scala', 'dart', 'go']
+        },
         navbar: {
           title: 'Algolia API',
           logo: {

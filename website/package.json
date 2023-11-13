@@ -21,12 +21,11 @@
   },
   "dependencies": {
     "@algolia/ui-library": "6.4.0",
-    "@docusaurus/core": "2.4.3",
-    "@docusaurus/preset-classic": "2.4.3",
-    "@docusaurus/types": "2.4.3",
-    "@mdx-js/react": "1.6.22",
+    "@docusaurus/core": "3.0.0",
+    "@docusaurus/preset-classic": "3.0.0",
+    "@docusaurus/types": "3.0.0",
+    "@mdx-js/react": "3.0.0",
     "clsx": "2.0.0",
-    "docusaurus-preset-shiki-twoslash": "1.1.41",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "redocusaurus": "2.0.0"
