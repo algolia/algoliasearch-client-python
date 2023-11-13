@@ -19,8 +19,8 @@
     "algoliasearch": "link:../../../clients/algoliasearch-client-javascript/packages/algoliasearch"
   },
   "devDependencies": {
-    "@types/jest": "29.5.7",
-    "@types/node": "20.8.10",
+    "@types/jest": "29.5.8",
+    "@types/node": "20.9.0",
     "jest": "29.7.0",
     "typescript": "5.2.2"
   }
