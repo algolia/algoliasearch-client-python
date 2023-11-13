@@ -3,8 +3,7 @@
 # treat website as independant yarn project
 touch website/yarn.lock
 
-# build doc specs
-yarn website:build-specs
+DOCKER=true yarn cli build specs all -s 
 
 # install website deps and build
 cd website && yarn install && yarn build

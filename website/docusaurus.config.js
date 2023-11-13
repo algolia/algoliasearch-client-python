@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 function getSpecFiles() {
-  const bundledSpecsPath = path.resolve(process.cwd(), 'specs');
+  const bundledSpecsPath = path.resolve(process.cwd(), '../specs/bundled');
   const specs = [];
 
   fs.readdirSync(bundledSpecsPath).forEach((file) => {

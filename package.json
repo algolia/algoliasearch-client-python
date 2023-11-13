@@ -27,9 +27,8 @@
     "scripts:test": "yarn workspace scripts test",
     "specs:fix": "eslint --ext=yml specs/$0 --fix",
     "specs:lint": "eslint --ext=yml specs/$0",
-    "website": "yarn website:build-specs && cd website && yarn start",
-    "website:build": "bash scripts/website/build.sh",
-    "website:build-specs": "BUNDLE_WITH_DOC=true DOCKER=true yarn cli build specs all -s"
+    "website": "DOCKER=true yarn cli build specs all -s && cd website && yarn start",
+    "website:build": "bash scripts/website/build.sh"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.22.15",

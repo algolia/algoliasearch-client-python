@@ -2,7 +2,7 @@ import fsp from 'fs/promises';
 
 import yaml from 'js-yaml';
 
-import { BUNDLE_WITH_DOC, checkForCache, exists, run, toAbsolutePath } from './common.js';
+import { checkForCache, exists, run, toAbsolutePath } from './common.js';
 import { createSpinner } from './spinners.js';
 import type { Spec } from './types.js';
 
@@ -87,18 +87,9 @@ async function transformBundle({
   );
 
   if (withDoc) {
-    const docFolderPath = toAbsolutePath('website/specs');
-    if (!(await exists(docFolderPath))) {
-      fsp.mkdir(docFolderPath, { recursive: true });
-    }
+    const pathToDocFile = toAbsolutePath(`specs/bundled/${clientName}.doc.yml`);
 
-    const pathToSpecDoc = `${docFolderPath}/${clientName}.doc.yml`;
-    await fsp.writeFile(
-      pathToSpecDoc,
-      yaml.dump(bundledDocSpec, {
-        noRefs: true,
-      })
-    );
+    await fsp.writeFile(pathToDocFile, yaml.dump(bundledDocSpec, { noRefs: true }));
   }
 }
 
@@ -219,7 +210,7 @@ async function buildSpec(spec: string, outputFormat: string, useCache: boolean):
     await transformBundle({
       bundledPath: toAbsolutePath(bundledPath),
       clientName: spec,
-      withDoc: BUNDLE_WITH_DOC,
+      withDoc: true,
     });
   } else {
     await buildLiteSpec({

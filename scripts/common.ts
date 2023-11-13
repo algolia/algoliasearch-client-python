@@ -28,7 +28,6 @@ export const TODAY = new Date().toISOString().split('T')[0];
 
 export const CI = Boolean(process.env.CI);
 export const DOCKER = Boolean(process.env.DOCKER);
-export const BUNDLE_WITH_DOC = process.env.BUNDLE_WITH_DOC === 'true';
 
 // This script is run by `yarn workspace ...`, which means the current working directory is `./script`
 const ROOT_DIR = path.resolve(process.cwd(), '..');
