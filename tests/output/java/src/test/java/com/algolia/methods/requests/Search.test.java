@@ -4250,7 +4250,11 @@ class SearchClientRequestsTests {
         unretrievableAttributes1.add(unretrievableAttributes_02);
       }
       indexSettings0.setUnretrievableAttributes(unretrievableAttributes1);
-      Map userData1 = Map.of("user", "data");
+      Map<String, String> userData1 = new HashMap<>();
+      {
+        String user2 = "data";
+        userData1.put("user", user2);
+      }
       indexSettings0.setUserData(userData1);
     }
 

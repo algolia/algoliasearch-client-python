@@ -129,7 +129,7 @@ public data class BrowseResponse(
   @SerialName(value = "serverUsed") val serverUsed: String? = null,
 
   /** Lets you store custom data in your indices. */
-  @SerialName(value = "userData") val userData: JsonElement? = null,
+  @SerialName(value = "userData") val userData: JsonObject? = null,
 
   /** Cursor indicating the location to resume browsing from. Must match the value returned by the previous call. Pass this value to the subsequent browse call to get the next page of results. When the end of the index has been reached, `cursor` is absent from the response.  */
   @SerialName(value = "cursor") val cursor: String? = null,

@@ -225,7 +225,7 @@ final class SearchResponse {
       renderingContent.hashCode +
       serverTimeMS.hashCode +
       serverUsed.hashCode +
-      (userData == null ? 0 : userData.hashCode) +
+      userData.hashCode +
       hits.hashCode +
       query.hashCode +
       params.hashCode;

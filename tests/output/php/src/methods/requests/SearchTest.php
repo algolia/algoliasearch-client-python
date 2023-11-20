@@ -3231,7 +3231,8 @@ class SearchTest extends TestCase implements HttpClientInterface
                 'unretrievableAttributes' => [
                     'foo',
                 ],
-                'userData' => ['user' => 'data'],
+                'userData' => ['user' => 'data',
+                ],
             ],
         );
 

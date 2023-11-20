@@ -3364,7 +3364,7 @@ void main() {
             "foo",
           ],
           userData: {
-            'user': 'data',
+            'user': "data",
           },
         ),
       ),

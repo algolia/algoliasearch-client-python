@@ -131,7 +131,7 @@ public data class SearchResponse(
   val serverUsed: String? = null,
 
   /** Lets you store custom data in your indices. */
-  val userData: JsonElement? = null,
+  val userData: JsonObject? = null,
 
   val additionalProperties: Map<String, JsonElement>? = null,
 ) : SearchResult
@@ -168,7 +168,7 @@ internal object SearchResponseSerializer : KSerializer<SearchResponse> {
     element<RenderingContent>("renderingContent")
     element<Int>("serverTimeMS")
     element<String>("serverUsed")
-    element<Any>("userData")
+    element<JsonObject>("userData")
   }
 
   override fun deserialize(decoder: Decoder): SearchResponse {

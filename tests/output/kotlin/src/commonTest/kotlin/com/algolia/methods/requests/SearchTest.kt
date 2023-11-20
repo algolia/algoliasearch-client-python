@@ -2792,7 +2792,10 @@ class SearchTest {
             typoTolerance = TypoTolerance.of(false),
             unretrievableAttributes = listOf("foo"),
             userData = buildJsonObject {
-              put("user", "data")
+              put(
+                "user",
+                JsonPrimitive("data"),
+              )
             },
           ),
         )

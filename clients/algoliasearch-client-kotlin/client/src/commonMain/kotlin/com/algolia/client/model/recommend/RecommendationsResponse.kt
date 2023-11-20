@@ -122,7 +122,7 @@ public data class RecommendationsResponse(
   @SerialName(value = "serverUsed") val serverUsed: String? = null,
 
   /** Lets you store custom data in your indices. */
-  @SerialName(value = "userData") val userData: JsonElement? = null,
+  @SerialName(value = "userData") val userData: JsonObject? = null,
 
   /** Text to search for in an index. */
   @SerialName(value = "query") val query: String? = null,

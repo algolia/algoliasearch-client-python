@@ -61,8 +61,8 @@ type RecommendationsResponse struct {
 	// Host name of the server that processed the request.
 	ServerUsed *string `json:"serverUsed,omitempty"`
 	// Lets you store custom data in your indices.
-	UserData interface{}    `json:"userData,omitempty"`
-	Hits     []RecommendHit `json:"hits"`
+	UserData map[string]interface{} `json:"userData,omitempty"`
+	Hits     []RecommendHit         `json:"hits"`
 	// Text to search for in an index.
 	Query *string `json:"query,omitempty"`
 	// URL-encoded string of all search parameters.
@@ -197,7 +197,7 @@ func WithRecommendationsResponseServerUsed(val string) RecommendationsResponseOp
 	}
 }
 
-func WithRecommendationsResponseUserData(val interface{}) RecommendationsResponseOption {
+func WithRecommendationsResponseUserData(val map[string]interface{}) RecommendationsResponseOption {
 	return func(f *RecommendationsResponse) {
 		f.UserData = val
 	}
@@ -1048,10 +1048,10 @@ func (o *RecommendationsResponse) SetServerUsed(v string) {
 	o.ServerUsed = &v
 }
 
-// GetUserData returns the UserData field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *RecommendationsResponse) GetUserData() interface{} {
-	if o == nil {
-		var ret interface{}
+// GetUserData returns the UserData field value if set, zero value otherwise.
+func (o *RecommendationsResponse) GetUserData() map[string]interface{} {
+	if o == nil || o.UserData == nil {
+		var ret map[string]interface{}
 		return ret
 	}
 	return o.UserData
@@ -1059,12 +1059,11 @@ func (o *RecommendationsResponse) GetUserData() interface{} {
 
 // GetUserDataOk returns a tuple with the UserData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *RecommendationsResponse) GetUserDataOk() (*interface{}, bool) {
+func (o *RecommendationsResponse) GetUserDataOk() (map[string]interface{}, bool) {
 	if o == nil || o.UserData == nil {
 		return nil, false
 	}
-	return &o.UserData, true
+	return o.UserData, true
 }
 
 // HasUserData returns a boolean if a field has been set.
@@ -1076,8 +1075,8 @@ func (o *RecommendationsResponse) HasUserData() bool {
 	return false
 }
 
-// SetUserData gets a reference to the given interface{} and assigns it to the UserData field.
-func (o *RecommendationsResponse) SetUserData(v interface{}) {
+// SetUserData gets a reference to the given map[string]interface{} and assigns it to the UserData field.
+func (o *RecommendationsResponse) SetUserData(v map[string]interface{}) {
 	o.UserData = v
 }
 
