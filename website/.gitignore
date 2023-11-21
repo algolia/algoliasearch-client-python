@@ -24,3 +24,5 @@ yarn-error.log*
 !.yarn/plugins
 
 specs
+
+src/generated

@@ -10,6 +10,9 @@ The amount of changes in this new version is significant. **If you are upgrading
 
 import { TabsLanguage } from '../../src/components/TabsLanguage';
 import TabItem from '@theme/TabItem';
+import { versions } from '../../src/generated/variables';
+import CodeBlock from '@theme/CodeBlock';
+import Link from '@docusaurus/Link';
 
 <TabsLanguage>
 <TabItem value="javascript">
@@ -54,23 +57,24 @@ composer require algolia/algoliasearch-client-php
 
 <TabItem value="java">
 
-To get started, add the [algoliasearch-client-java](https://oss.sonatype.org/content/repositories/snapshots/com/algolia/algoliasearch-client-java/4.0.0-beta.1/) dependency to your project, either with [Maven](https://maven.apache.org/):
+To get started, add the <Link href={`https://oss.sonatype.org/service/local/repositories/releases/content/com/algolia/algoliasearch/${versions.java}/algoliasearch-${versions.java}.jar`}>algoliasearch-client-java</Link> dependency to your project, either with [Maven](https://maven.apache.org/):
 
-```xml
-<dependency>
+
+<CodeBlock language="xml">
+{`<dependency>
   <groupId>com.algolia</groupId>
-  <artifactId>algoliasearch-client-java</artifactId>
-  <version>4.0.0-beta.1</version>
-</dependency>
-```
+  <artifactId>algoliasearch</artifactId>
+  <version>${versions.java}</version>
+</dependency>`}
+</CodeBlock>
 
 or [Gradle](https://gradle.org/):
 
-```groovy
-dependencies {
-  testImplementation 'com.algolia:algoliasearch-client-java:4.0.0-beta.1'
-}
-```
+<CodeBlock language="groovy">
+{`dependencies {
+  testImplementation 'com.algolia:algoliasearch-client-java:${versions.java}'
+}`}
+</CodeBlock>
 
 </TabItem>
 
@@ -80,15 +84,15 @@ dependencies {
 
 1. Install the Kotlin client by adding the following dependency to your `gradle.build` file:
 
-```groovy
-repositories {
+<CodeBlock language="groovy">
+{`repositories {
   mavenCentral()
 }
 
 dependencies {
-  implementation "com.algolia:algoliasearch-client-kotlin:$version"
-}
-```
+  implementation "com.algolia:algoliasearch-client-kotlin:${versions.kotlin}"
+}`}
+</CodeBlock>
 
 2. Choose and add to your dependencies one of [Ktor's engines](https://ktor.io/docs/http-client-engines.html).
 
@@ -96,16 +100,16 @@ dependencies {
 
     Alternatively, you can use `algoliasearch-client-kotlin-bom`  by adding the following dependency to your `build.gradle` file
 
-    ```groovy
-    dependencies {
-        // import Kotlin API client BOM
-        implementation platform("com.algolia:algoliasearch-client-kotlin-bom:$version")
+<CodeBlock language="groovy">
+{`dependencies {
+    // import Kotlin API client BOM
+    implementation platform("com.algolia:algoliasearch-client-kotlin-bom:${versions.kotlin}}")
 
-        // define dependencies without versions
-        implementation 'com.algolia:algoliasearch-client-kotlin'
-        runtimeOnly 'io.ktor:ktor-client-okhttp'
-    }
-    ```
+    // define dependencies without versions
+    implementation 'com.algolia:algoliasearch-client-kotlin'
+    runtimeOnly 'io.ktor:ktor-client-okhttp'
+}`}
+</CodeBlock>
 
 **Multiplaform**
 
