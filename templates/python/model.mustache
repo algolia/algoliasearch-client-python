@@ -1,0 +1,45 @@
+# coding: utf-8
+
+{{>partial_header}}
+
+from __future__ import annotations
+from inspect import getfullargspec
+import pprint
+import json
+import re
+
+from enum import Enum
+
+from typing_extensions import Literal
+
+{{#models}}
+{{#model}}
+{{#vendorExtensions.x-py-datetime-imports}}{{#-first}}from datetime import (
+{{/-first}}{{{.}}}{{^-last}},
+{{/-last}}{{#-last}}
+){{/-last}}{{/vendorExtensions.x-py-datetime-imports}}
+{{#vendorExtensions.x-py-typing-imports}}{{#-first}}from typing import (
+Dict,Union,{{/-first}}{{{.}}}{{^-last}},
+{{/-last}}{{#-last}}
+){{/-last}}{{/vendorExtensions.x-py-typing-imports}}
+{{#vendorExtensions.x-py-pydantic-imports}}{{#-first}}from pydantic import (
+Field, Annotated,{{/-first}}{{{.}}}{{^-last}},
+{{/-last}}{{#-last}}
+){{/-last}}{{/vendorExtensions.x-py-pydantic-imports}}
+{{/model}}
+{{/models}}
+
+{{#imports}}
+{{import}}
+{{/imports}}
+
+{{#models}}
+{{#model}}
+{{#isEnum}}
+{{>model_enum}}
+{{/isEnum}}
+{{^isEnum}}
+{{#oneOf}}{{#-first}}{{>model_oneof}}{{/-first}}{{/oneOf}}{{^oneOf}}{{#anyOf}}{{#-first}}{{>model_anyof}}{{/-first}}{{/anyOf}}{{^anyOf}}{{>model_generic}}{{/anyOf}}{{/oneOf}}
+{{/isEnum}}
+{{/model}}
+{{/models}}

@@ -10,7 +10,8 @@
     "java": "next",
     "go": "next",
     "kotlin": "next",
-    "dart": "main"
+    "dart": "main",
+    "python": "next"
   },
   "defaultTargetBranch": "next",
   "gitAuthor": {

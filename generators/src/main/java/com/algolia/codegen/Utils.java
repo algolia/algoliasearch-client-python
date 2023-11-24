@@ -68,6 +68,12 @@ public class Utils {
     return camelStr.replaceAll("(.+?)([A-Z]|[0-9])", "$1-$2").toLowerCase(Locale.ROOT);
   }
 
+  // testInput -> test_input
+  // test-input -> test_input
+  public static String toSnakeCase(String s) {
+    return toKebabCase(s).replaceAll("-", "_");
+  }
+
   /** Inject server info into the client to generate the right URL */
   public static void generateServer(String clientKebab, Map<String, Object> additionalProperties) throws ConfigException {
     Yaml yaml = new Yaml();

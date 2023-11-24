@@ -1,64 +1,72 @@
-# Contributing to the api-clients-automation repository
+## Contributing
 
-Welcome to the contributing guide for the api-clients-automation repository!
+Hi there! We're thrilled that you'd like to contribute to this project.
+Your help is essential to keeping it great.
 
-You can find a lot more information about how to contribute [on our documentation](https://api-clients-automation.netlify.app/docs/contributing/introduction/)
+### Opening an issue
 
-If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to [open an issue](https://github.com/algolia/api-clients-automation/issues/new/choose).
+Each repository provides a template for issues. Please tell us the client and language version, and
+provide a clear description of the problem you're facing. Steps to reproduce, or example code
+(repository, jsfiddle, and such), are a big help.
 
-## Reporting an issue
+### Submitting a pull request
 
-Opening an issue is very effective way to contribute because many users might also be impacted. We'll make sure to fix it quickly if it's technically feasible and doesn't have important side effects for other users.
+Keep your changes as focused as possible. If there are multiple changes you'd like to make,
+please consider submitting them as separate pull requests unless they are related to each other.
 
-Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/api-clients-automation/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
+Here are a few tips to increase the likelihood of being merged:
 
-Another element that will help us go faster at solving the issue is to provide a reproducible test case.
+- [ ] Write tests.
+- [ ] Write a [good commit message](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
+- [ ] Allow [edits from maintainers](https://blog.github.com/2016-09-07-improving-collaboration-with-forks/).
 
-## Code contribution
+### Security issues
+If you find any security risk in the project, please open an issue.
 
-For any code contribution, you need to:
+### API Breaking changes
 
-- Fork and clone the project
-- Create a new branch for what you want to solve (fix/_issue-number_, feat/_name-of-the-feature_)
-- Make your changes
-- Open a pull request
+We care deeply about backward compatibility for our API clients libraries.
+If it's necessary, we're ready to break backward compatibility,
+but this should be pretty rare.
 
-Then:
+If you want to make a change that will break the backward compatibility of the API,
+open an issue first to discuss it with the maintainers.
 
-- A team member will review the pull request
-- Automatic checks will run
+### Editing `README.md` and similar files
 
-When every check is green and a team member approves, your contribution is merged! 🚀
+Note that some files are managed outside this repository and are committed automatically.
 
-## Commit conventions
+The `README.md` is generated automatically from our doc. If you'd like us to update this file,
+feel free to open an issue.
 
-This project follows the [conventional changelog](https://conventionalcommits.org/) approach. This means that all commit messages should be formatted using the following scheme:
+`.github` directory is managed in [this repository](https://github.com/algolia/algoliasearch-client-common),
+any Pull Request there is welcome.
 
-```
-type(scope): description
-```
+## Label caption
 
-In most cases, we use the following types:
+Labels across all Algolia API clients repositories are normalized.
 
-- `fix`: for any resolution of an issue (identified or not)
-- `feat`: for any new feature
-- `refactor`: for any code change that neither adds a feature nor fixes an issue
-- `docs`: for any documentation change or addition
-- `chore`: for anything that is not related to the library itself (doc, tooling)
+<!-- DO NOT EDIT THE TABLE NOR REMOVE HTML COMMENTS -->
+<!-- LABELTABLE -->
+| Label                                                                     | Meaning                                                                                |
+|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| ![#050f2c](https://placehold.it/15/050f2c/000000?text=+) Do not merge     | PR should not be merged (decided by maintainers)                                       |
+| ![#ffc168](https://placehold.it/15/ffc168/000000?text=+) WIP              | PR is not ready, no need to look at it (decided by contributors)                       |
+| ![#2ede98](https://placehold.it/15/2ede98/000000?text=+) Ready            | The PR is ready, reviewed, tests are green, if you're brave enough: click merge button |
+| ![#ffc168](https://placehold.it/15/ffc168/000000?text=+) Waiting for API  | The feature is implemented but the REST API is not live yet                            |
+| ![#3369e6](https://placehold.it/15/3369e6/000000?text=+) Discussion       | We need everyone's opinion on this, please join the conversation and share your ideas  |
+| ![#3369e6](https://placehold.it/15/3369e6/000000?text=+) Support          | A user needs help but it's not really a bug                                            |
+| ![#3369e6](https://placehold.it/15/3369e6/000000?text=+) API feature      | New API feature added to every client (like query rules)                               |
+| ![#3369e6](https://placehold.it/15/3369e6/000000?text=+) Chore            | CI, docs, and everything around the code                                               |
+| ![#ff4f81](https://placehold.it/15/ff4f81/000000?text=+) Bug              | It's a bug, fix it!                                                                    |
+| ![#b60205](https://placehold.it/15/b60205/000000?text=+) Breaking change  | RED ALERT! This means we need a new major version                                      |
+| ![#ff6c5f](https://placehold.it/15/ff6c5f/000000?text=+) Good First Issue | If you want to contribute, this one is _easy_ to tackle!                               |
 
-Finally, if your work is based on an issue on GitHub, please add in the body of the commit message "fix #1234" if it solves the issue #1234 (read "[Closing issues using keywords](https://help.github.com/en/articles/closing-issues-using-keywords)").
+<!-- /LABELTABLE -->
+<!-- DO NOT REMOVE ANY HTML COMMENT -->
 
-Some examples of valid commit messages (used as first lines):
+## Resources
 
-> - fix(javascript): ensure property X is valid
-> - chore(deps): update dependency Y to v1.2.3
-> - fix(specs): add missing property
-> - docs(contributing): reword release section
-
-## Requirements
-
-To run this project, you will need:
-
-- Node.js ≥ 18 – [nvm](https://github.com/creationix/nvm#install-script) is recommended
-- [Yarn](https://yarnpkg.com)
-- [Docker](https://docs.docker.com/desktop/install/mac-install/)
+- [Contributing to Open Source on GitHub](https://guides.github.com/activities/contributing-to-open-source/)
+- [Using Pull Requests](https://help.github.com/articles/using-pull-requests/)
+- [GitHub Help](https://help.github.com)

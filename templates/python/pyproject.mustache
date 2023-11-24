@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "algoliasearch"
+version = "{{{packageVersion}}}"
+description = "A fully-featured and blazing-fast Python API client to interact with Algolia."
+authors = ["Algolia Team <support@algolia.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://www.algolia.com"
+repository = "https://github.com/algolia/algoliasearch-client-python"
+keywords = ["algolia", "search", "full-text-search", "neural-search"]
+classifiers = [
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Intended Audience :: Developers"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+requests = "2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "1.7.0"
+types-requests = "2.31.0.10"
+flake8 = "6.1.0"
+autoflake = "2.2.1"
+autopep8 = "2.0.4"
+black = "23.11.0"
+isort = "5.12.0"
+
+[tool.flake8]
+max-line-length = 88
+ignore = ['E501']
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

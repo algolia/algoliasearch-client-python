@@ -29,6 +29,14 @@ export async function ctsGenerateMany(generators: Generator[]): Promise<void> {
     if (!getTestOutputFolder(gen.language)) {
       continue;
     }
+
+    if (gen.language === 'python') {
+      const spinner = createSpinner('');
+      spinner.warn(`CTS not yet implemented for Python`);
+
+      continue;
+    }
+
     await ctsGenerate(gen);
   }
 
@@ -48,6 +56,10 @@ export async function ctsGenerateMany(generators: Generator[]): Promise<void> {
       await run('go mod tidy', {
         cwd: 'tests/output/go',
       });
+    }
+
+    if (lang === 'python') {
+      continue;
     }
 
     await formatter(lang, toAbsolutePath(`tests/output/${lang}`));

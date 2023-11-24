@@ -149,6 +149,30 @@ runs:
       shell: bash
       run: dart pub global activate melos    
 
+    # Python deps 
+    - name: Get Python version
+      if: ${{ inputs.language == 'python' }}
+      id: python-version
+      shell: bash
+      run: |
+        echo "PYTHON_VERSION=$(cat config/.python-version)" >> $GITHUB_OUTPUT
+
+    - name: Install poetry
+      if: ${{ inputs.language == 'python' }}
+      shell: bash
+      run: pipx install poetry
+
+    - uses: actions/setup-python@v4
+      if: ${{ inputs.language == 'python' }}
+      with:
+        python-version: ${{ steps.python-version.outputs.PYTHON_VERSION }}
+        cache: 'poetry'
+
+    - run: poetry install
+      if: ${{ inputs.language == 'python' }}
+      working-directory: clients/algoliasearch-client-python
+      shell: bash
+
     # Computing jobs that should run
     - name: Setting diff outputs variables
       if: inputs.type == 'matrix'
@@ -217,6 +241,9 @@ outputs:
   RUN_GEN_DART:
     description: Indicates if we plan to run the job for this language
     value: ${{ steps.gen-matrix.outputs.RUN_GEN_DART }}  
+  RUN_GEN_PYTHON:
+    description: Indicates if we plan to run the job for this language
+    value: ${{ steps.gen-matrix.outputs.RUN_GEN_PYTHON }}
 
   RUN_JS_UTILS:
     description: Whether to build JS client common folders when RUN_JS is false

@@ -13,6 +13,7 @@ NODE_VERSION=$(cat .nvmrc)
 PHP_VERSION=$(cat config/.php-version)
 GO_VERSION=$(cat config/.go-version)
 DART_VERSION=$(cat config/.dart-version)
+PYTHON_VERSION=$(cat config/.python-version)
 
 docker build \
   --build-arg JAVA_VERSION=$JAVA_VERSION \
@@ -20,4 +21,5 @@ docker build \
   --build-arg PHP_VERSION=$PHP_VERSION \
   --build-arg GO_VERSION=$GO_VERSION \
   --build-arg DART_VERSION=$DART_VERSION \
+  --build-arg PYTHON_VERSION=$PYTHON_VERSION \
   -t api-clients-automation .

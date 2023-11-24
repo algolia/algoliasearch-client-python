@@ -71,5 +71,17 @@
       "extension": "_test.dart",
       "outputFolder": "test"
     }
+  },
+  "python": {
+    "folder": "clients/algoliasearch-client-python",
+    "gitRepoId": "algoliasearch-client-python",
+    "packageVersion": "4.0.0-alpha.0",
+    "modelFolder": "algoliasearch",
+    "apiFolder": "algoliasearch",
+    "customGenerator": "algolia-python",
+    "tests": {
+      "extension": "_test.py",
+      "outputFolder": "tests"
+    }
   }
 }

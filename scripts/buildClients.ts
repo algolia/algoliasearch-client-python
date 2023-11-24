@@ -17,6 +17,9 @@ async function buildClient(language: Language, gens: Generator[]): Promise<void>
       break;
     case 'php':
       break;
+    case 'python':
+      await run('poetry build', { cwd });
+      break;
     case 'javascript':
       const npmNamespace = getClientsConfigField('javascript', 'npmNamespace');
       const packageNames = gens.map(({ additionalProperties: { packageName } }) =>

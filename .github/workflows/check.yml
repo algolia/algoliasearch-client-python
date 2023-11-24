@@ -70,6 +70,7 @@ jobs:
       RUN_GEN_GO: ${{ steps.setup.outputs.RUN_GEN_GO }}
       RUN_GEN_KOTLIN: ${{ steps.setup.outputs.RUN_GEN_KOTLIN }}
       RUN_GEN_DART: ${{ steps.setup.outputs.RUN_GEN_DART }}
+      RUN_GEN_PYTHON: ${{ steps.setup.outputs.RUN_GEN_PYTHON }}
 
       RUN_JS_UTILS: ${{ steps.setup.outputs.RUN_JS_UTILS }}
 
@@ -320,6 +321,7 @@ jobs:
           go: ${{ needs.setup.outputs.RUN_GEN_GO }}
           kotlin: ${{ needs.setup.outputs.RUN_GEN_KOTLIN }}
           dart: ${{ needs.setup.outputs.RUN_GEN_DART }}
+          python: ${{ needs.setup.outputs.RUN_GEN_PYTHON }}
 
       - name: Setup
         uses: ./.github/actions/setup

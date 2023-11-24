@@ -169,6 +169,33 @@
       },
       "dart-recommend": {
         "output": "#{cwd}/clients/algoliasearch-client-dart/packages/client_recommend"
+      },
+      "python-search": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-recommend": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-personalization": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-analytics": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-insights": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-abtesting": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-query-suggestions": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-ingestion": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
+      },
+      "python-monitoring": {
+        "output": "#{cwd}/clients/algoliasearch-client-python/algoliasearch"
       }
     }
   }
