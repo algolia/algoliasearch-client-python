@@ -15,11 +15,13 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-requests = "2.31.0"
+urllib3 = ">= 1.25.3"
+aiohttp = ">= 3.9.0"
+python-dateutil = ">= 2.8.2"
+pydantic = ">= 2"
+typing-extensions = ">= 4.7.1"
 
 [tool.poetry.group.dev.dependencies]
-mypy = "1.7.0"
-types-requests = "2.31.0.10"
 flake8 = "6.1.0"
 autoflake = "2.2.1"
 autopep8 = "2.0.4"
@@ -29,6 +31,13 @@ isort = "5.12.0"
 [tool.flake8]
 max-line-length = 88
 ignore = ['E501']
+
+[tool.isort]
+line_length=88
+include_trailing_comma=true
+multi_line_output=3
+force_grid_wrap=0
+combine_as_imports=true
 
 [build-system]
 requires = ["poetry-core"]
