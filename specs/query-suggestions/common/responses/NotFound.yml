@@ -1,9 +1,0 @@
-description: Not Found.
-content:
-  application/json:
-    schema:
-      $ref: '../schemas/BaseResponse.yml'
-    examples:
-      NotFound:
-        summary: Index not found.
-        value: {'status': 404, 'message': 'Not Found'}

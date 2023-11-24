@@ -1,6 +1,0 @@
-[build]
-  command="yarn website:build"
-  publish="website/build"
-
-[build.environment]
-  YARN_VERSION = "3.5.0"

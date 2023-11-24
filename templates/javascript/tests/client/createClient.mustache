@@ -1,1 +1,0 @@
-{{^autoCreateClient}}const $client = {{/autoCreateClient}}{{client}}('{{parametersWithDataTypeMap.appId.value}}','{{parametersWithDataTypeMap.apiKey.value}}',{{#hasRegionalHost}}'{{parametersWithDataTypeMap.region.value}}',{{/hasRegionalHost}}{requester: echoRequester()});

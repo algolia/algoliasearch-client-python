@@ -1,9 +1,0 @@
-description: Internal Server Error.
-content:
-  application/json:
-    schema:
-      $ref: '../schemas/BaseResponse.yml'
-    examples:
-      Error:
-        description: This error can happen if you use a non-existing `indexName` as a path parameter when trying to update or delete a Query Suggestions configuration.
-        value: {'status': 500, 'message': 'Internal Server Error'}

@@ -1,7 +1,0 @@
-rootProject.name = 'java-playground'
-
-includeBuild('../../clients/algoliasearch-client-java') {
-    dependencySubstitution {
-        substitute module('com.algolia:algoliasearch-client-java') using project(':algoliasearch')
-    }
-}

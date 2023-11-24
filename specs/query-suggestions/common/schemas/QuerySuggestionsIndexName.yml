@@ -1,4 +1,0 @@
-title: indexName
-type: string
-description: Query Suggestions index name.
-example: products_query_suggestions

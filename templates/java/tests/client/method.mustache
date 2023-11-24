@@ -1,3 +1,0 @@
-{{#parametersWithDataType}}{{> generateParams}}{{/parametersWithDataType}}
-client{{#path}}.{{.}}{{/path}}({{#parametersWithDataType}}{{> maybeConvertOneOf}}{{^-last}},{{/-last}}{{/parametersWithDataType}});
-EchoResponse result = echo.getLastResponse();

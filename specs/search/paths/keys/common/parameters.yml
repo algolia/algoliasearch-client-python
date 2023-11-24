@@ -1,8 +1,0 @@
-KeyString:
-  in: path
-  name: key
-  required: true
-  schema:
-    type: string
-    example: YourAPIKey
-  description: API key.

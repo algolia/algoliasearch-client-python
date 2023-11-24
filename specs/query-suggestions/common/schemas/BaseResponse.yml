@@ -1,9 +1,0 @@
-type: object
-additionalProperties: false
-properties:
-  status:
-    type: integer
-    description: HTTP status code.
-  message:
-    type: string
-    description: Details about the response, such as error messages.

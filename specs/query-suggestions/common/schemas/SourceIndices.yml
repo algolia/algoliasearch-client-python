@@ -1,6 +1,0 @@
-title: sourceIndices
-type: array
-description: Algolia indices from which to get the popular searches for query suggestions.
-minItems: 1
-items:
-  $ref: './SourceIndex.yml'

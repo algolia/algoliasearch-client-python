@@ -1,8 +1,0 @@
-com.algolia.codegen.AlgoliaGoGenerator
-com.algolia.codegen.AlgoliaJavaGenerator
-com.algolia.codegen.AlgoliaJavascriptGenerator
-com.algolia.codegen.AlgoliaPhpGenerator
-com.algolia.codegen.AlgoliaKotlinGenerator
-com.algolia.codegen.AlgoliaDartGenerator
-com.algolia.codegen.AlgoliaPythonGenerator
-com.algolia.codegen.cts.AlgoliaCTSGenerator

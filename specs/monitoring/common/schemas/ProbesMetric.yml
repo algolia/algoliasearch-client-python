@@ -1,9 +1,0 @@
-title: metric
-type: object
-additionalProperties: false
-properties:
-  t:
-    $ref: './Timestamp.yml'
-  v:
-    type: integer
-    description: Value of the metric.

@@ -1,3 +1,0 @@
-type: integer
-format: int64
-description: Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds.

@@ -1,4 +1,0 @@
-{{#vendorExtensions}}
-  {{#isContainer}}{{#x-has-child-generic}}List<{{{complexType}}}>List<{{{complexType}}}<T>>{{/x-has-child-generic}}{{^x-has-child-generic}}{{#x-propagated-generic}}List<T>{{/x-propagated-generic}}{{^x-propagated-generic}}{{{datatypeWithEnum}}}{{/x-propagated-generic}}{{/x-has-child-generic}}{{/isContainer}}
-  {{^isContainer}}{{#x-is-generic}}T{{/x-is-generic}}{{^x-is-generic}}{{{datatypeWithEnum}}}{{/x-is-generic}}{{/isContainer}}
-{{/vendorExtensions}}

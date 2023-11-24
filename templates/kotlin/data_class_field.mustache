@@ -1,7 +1,0 @@
-{{#description}}
-    /** {{{.}}} */
-{{/description}}
-    {{#deprecated}}
-    @Deprecated(message = "This property is deprecated.")
-    {{/deprecated}}
-    @SerialName(value = "{{{vendorExtensions.x-base-name-literal}}}") {{#isInherited}}override {{/isInherited}}val {{{name}}}: {{>data_class_field_type}}{{^required}}? = null{{/required}}

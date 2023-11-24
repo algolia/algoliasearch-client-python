@@ -1,9 +1,0 @@
-title: probes
-description: Probes and their response.
-type: object
-additionalProperties:
-  x-additionalPropertiesName: probe
-  type: boolean
-  description: >-
-    Key-value pair with the probe name as the key and the reachability status as
-    the value.

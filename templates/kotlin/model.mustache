@@ -1,8 +1,0 @@
-{{>licenseInfo}}
-package {{modelPackage}}
-
-{{#models}}
-{{#model}}
-{{#isEnum}}{{>enum_class}}{{/isEnum}}{{^isEnum}}{{#vendorExtensions.x-is-one-of}}{{>oneof_interface}}{{/vendorExtensions.x-is-one-of}}{{^vendorExtensions.x-is-one-of}}{{#isAlias}}typealias {{classname}} = {{{dataType}}}{{/isAlias}}{{^isAlias}}{{>data_class}}{{/isAlias}}{{/vendorExtensions.x-is-one-of}}{{/isEnum}}
-{{/model}}
-{{/models}}
