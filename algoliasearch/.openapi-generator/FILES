@@ -1,13 +1,11 @@
 ../.gitignore
 ../pyproject.toml
-.gitignore
 __init__.py
 monitoring/__init__.py
-monitoring/api_client.py
-monitoring/api_response.py
+monitoring/__init__.py
 monitoring/client.py
-monitoring/configuration.py
-monitoring/exceptions.py
+monitoring/config.py
+monitoring/models/__init__.py
 monitoring/models/__init__.py
 monitoring/models/error_base.py
 monitoring/models/get_inventory403_response.py
@@ -31,4 +29,3 @@ monitoring/models/status.py
 monitoring/models/status_response.py
 monitoring/models/time_inner.py
 monitoring/models/type.py
-monitoring/rest.py
