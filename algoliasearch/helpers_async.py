@@ -43,7 +43,7 @@ def _gen_async(client, method):
             result.raw_response = await result.raw_response
 
         # We make sure we resolve the promise
-        if isinstance(result, types.GeneratorType):
+        if isinstance(result, (types.GeneratorType, types.CoroutineType)):
             result = await result
 
         return result
