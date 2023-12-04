@@ -9,7 +9,7 @@ import json
 import pprint
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, ValidationError, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 from typing_extensions import Literal
 
 from algoliasearch.search.models.highlight_result_option import HighlightResultOption
@@ -20,8 +20,8 @@ except ImportError:
     from typing_extensions import Self
 
 HIGHLIGHTRESULT_ONE_OF_SCHEMAS = [
+    "Dict[str, HighlightResultOption]",
     "HighlightResultOption",
-    "List[HighlightResultOption]",
 ]
 
 
@@ -32,13 +32,16 @@ class HighlightResult(BaseModel):
 
     # data type: HighlightResultOption
     oneof_schema_1_validator: Optional[HighlightResultOption] = None
-    # data type: List[HighlightResultOption]
-    oneof_schema_2_validator: Optional[List[HighlightResultOption]] = None
+    # data type: Dict[str, HighlightResultOption]
+    oneof_schema_2_validator: Optional[Dict[str, HighlightResultOption]] = Field(
+        default=None,
+        description="Show highlighted section and words matched on a query.",
+    )
     actual_instance: Optional[
-        Union[HighlightResultOption, List[HighlightResultOption]]
+        Union[Dict[str, HighlightResultOption], HighlightResultOption]
     ] = None
     one_of_schemas: List[str] = Literal[
-        "HighlightResultOption", "List[HighlightResultOption]"
+        "Dict[str, HighlightResultOption]", "HighlightResultOption"
     ]
 
     model_config = {"validate_assignment": True}
@@ -69,7 +72,7 @@ class HighlightResult(BaseModel):
             )
         else:
             match += 1
-        # validate data type: List[HighlightResultOption]
+        # validate data type: Dict[str, HighlightResultOption]
         try:
             instance.oneof_schema_2_validator = v
             match += 1
@@ -78,13 +81,13 @@ class HighlightResult(BaseModel):
         if match > 1:
             # more than 1 match
             raise ValueError(
-                "Multiple matches found when setting `actual_instance` in HighlightResult with oneOf schemas: HighlightResultOption, List[HighlightResultOption]. Details: "
+                "Multiple matches found when setting `actual_instance` in HighlightResult with oneOf schemas: Dict[str, HighlightResultOption], HighlightResultOption. Details: "
                 + ", ".join(error_messages)
             )
         elif match == 0:
             # no match
             raise ValueError(
-                "No match found when setting `actual_instance` in HighlightResult with oneOf schemas: HighlightResultOption, List[HighlightResultOption]. Details: "
+                "No match found when setting `actual_instance` in HighlightResult with oneOf schemas: Dict[str, HighlightResultOption], HighlightResultOption. Details: "
                 + ", ".join(error_messages)
             )
         else:
@@ -107,7 +110,7 @@ class HighlightResult(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[HighlightResultOption]
+        # deserialize data into Dict[str, HighlightResultOption]
         try:
             # validation
             instance.oneof_schema_2_validator = json.loads(json_str)
@@ -120,13 +123,13 @@ class HighlightResult(BaseModel):
         if match > 1:
             # more than 1 match
             raise ValueError(
-                "Multiple matches found when deserializing the JSON string into HighlightResult with oneOf schemas: HighlightResultOption, List[HighlightResultOption]. Details: "
+                "Multiple matches found when deserializing the JSON string into HighlightResult with oneOf schemas: Dict[str, HighlightResultOption], HighlightResultOption. Details: "
                 + ", ".join(error_messages)
             )
         elif match == 0:
             # no match
             raise ValueError(
-                "No match found when deserializing the JSON string into HighlightResult with oneOf schemas: HighlightResultOption, List[HighlightResultOption]. Details: "
+                "No match found when deserializing the JSON string into HighlightResult with oneOf schemas: Dict[str, HighlightResultOption], HighlightResultOption. Details: "
                 + ", ".join(error_messages)
             )
         else:

@@ -9,7 +9,7 @@ import json
 import pprint
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, ValidationError, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 from typing_extensions import Literal
 
 from algoliasearch.recommend.models.snippet_result_option import SnippetResultOption
@@ -19,7 +19,7 @@ try:
 except ImportError:
     from typing_extensions import Self
 
-SNIPPETRESULT_ONE_OF_SCHEMAS = ["List[SnippetResultOption]", "SnippetResultOption"]
+SNIPPETRESULT_ONE_OF_SCHEMAS = ["Dict[str, SnippetResultOption]", "SnippetResultOption"]
 
 
 class SnippetResult(BaseModel):
@@ -29,13 +29,16 @@ class SnippetResult(BaseModel):
 
     # data type: SnippetResultOption
     oneof_schema_1_validator: Optional[SnippetResultOption] = None
-    # data type: List[SnippetResultOption]
-    oneof_schema_2_validator: Optional[List[SnippetResultOption]] = None
+    # data type: Dict[str, SnippetResultOption]
+    oneof_schema_2_validator: Optional[Dict[str, SnippetResultOption]] = Field(
+        default=None,
+        description="Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.",
+    )
     actual_instance: Optional[
-        Union[List[SnippetResultOption], SnippetResultOption]
+        Union[Dict[str, SnippetResultOption], SnippetResultOption]
     ] = None
     one_of_schemas: List[str] = Literal[
-        "List[SnippetResultOption]", "SnippetResultOption"
+        "Dict[str, SnippetResultOption]", "SnippetResultOption"
     ]
 
     model_config = {"validate_assignment": True}
@@ -64,7 +67,7 @@ class SnippetResult(BaseModel):
             error_messages.append(f"""Type '{type(v)}' is not 'SnippetResultOption'""")
         else:
             match += 1
-        # validate data type: List[SnippetResultOption]
+        # validate data type: Dict[str, SnippetResultOption]
         try:
             instance.oneof_schema_2_validator = v
             match += 1
@@ -73,13 +76,13 @@ class SnippetResult(BaseModel):
         if match > 1:
             # more than 1 match
             raise ValueError(
-                "Multiple matches found when setting `actual_instance` in SnippetResult with oneOf schemas: List[SnippetResultOption], SnippetResultOption. Details: "
+                "Multiple matches found when setting `actual_instance` in SnippetResult with oneOf schemas: Dict[str, SnippetResultOption], SnippetResultOption. Details: "
                 + ", ".join(error_messages)
             )
         elif match == 0:
             # no match
             raise ValueError(
-                "No match found when setting `actual_instance` in SnippetResult with oneOf schemas: List[SnippetResultOption], SnippetResultOption. Details: "
+                "No match found when setting `actual_instance` in SnippetResult with oneOf schemas: Dict[str, SnippetResultOption], SnippetResultOption. Details: "
                 + ", ".join(error_messages)
             )
         else:
@@ -102,7 +105,7 @@ class SnippetResult(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[SnippetResultOption]
+        # deserialize data into Dict[str, SnippetResultOption]
         try:
             # validation
             instance.oneof_schema_2_validator = json.loads(json_str)
@@ -115,13 +118,13 @@ class SnippetResult(BaseModel):
         if match > 1:
             # more than 1 match
             raise ValueError(
-                "Multiple matches found when deserializing the JSON string into SnippetResult with oneOf schemas: List[SnippetResultOption], SnippetResultOption. Details: "
+                "Multiple matches found when deserializing the JSON string into SnippetResult with oneOf schemas: Dict[str, SnippetResultOption], SnippetResultOption. Details: "
                 + ", ".join(error_messages)
             )
         elif match == 0:
             # no match
             raise ValueError(
-                "No match found when deserializing the JSON string into SnippetResult with oneOf schemas: List[SnippetResultOption], SnippetResultOption. Details: "
+                "No match found when deserializing the JSON string into SnippetResult with oneOf schemas: Dict[str, SnippetResultOption], SnippetResultOption. Details: "
                 + ", ".join(error_messages)
             )
         else:

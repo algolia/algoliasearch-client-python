@@ -24,14 +24,8 @@ class UserHighlightResult(BaseModel):
     UserHighlightResult
     """
 
-    user_id: Dict[str, HighlightResult] = Field(
-        description="Show highlighted section and words matched on a query.",
-        alias="userID",
-    )
-    cluster_name: Dict[str, HighlightResult] = Field(
-        description="Show highlighted section and words matched on a query.",
-        alias="clusterName",
-    )
+    user_id: HighlightResult = Field(alias="userID")
+    cluster_name: HighlightResult = Field(alias="clusterName")
     __properties: ClassVar[List[str]] = ["userID", "clusterName"]
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -67,21 +61,13 @@ class UserHighlightResult(BaseModel):
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of
-        # each value in user_id (dict)
-        _field_dict = {}
+        # user_id
         if self.user_id:
-            for _key in self.user_id:
-                if self.user_id[_key]:
-                    _field_dict[_key] = self.user_id[_key].to_dict()
-            _dict["userID"] = _field_dict
+            _dict["userID"] = self.user_id.to_dict()
         # override the default output from pydantic by calling `to_dict()` of
-        # each value in cluster_name (dict)
-        _field_dict = {}
+        # cluster_name
         if self.cluster_name:
-            for _key in self.cluster_name:
-                if self.cluster_name[_key]:
-                    _field_dict[_key] = self.cluster_name[_key].to_dict()
-            _dict["clusterName"] = _field_dict
+            _dict["clusterName"] = self.cluster_name.to_dict()
         return _dict
 
     @classmethod
@@ -95,16 +81,10 @@ class UserHighlightResult(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "userID": dict(
-                    (_k, HighlightResult.from_dict(_v))
-                    for _k, _v in obj.get("userID").items()
-                )
+                "userID": HighlightResult.from_dict(obj.get("userID"))
                 if obj.get("userID") is not None
                 else None,
-                "clusterName": dict(
-                    (_k, HighlightResult.from_dict(_v))
-                    for _k, _v in obj.get("clusterName").items()
-                )
+                "clusterName": HighlightResult.from_dict(obj.get("clusterName"))
                 if obj.get("clusterName") is not None
                 else None,
             }
