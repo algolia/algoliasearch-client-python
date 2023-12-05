@@ -1,6 +1,7 @@
 ../.gitignore
 ../pyproject.toml
 __init__.py
+http/__init__.py
 monitoring/__init__.py
 monitoring/__init__.py
 monitoring/client.py

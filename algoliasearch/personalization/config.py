@@ -46,13 +46,12 @@ class Config:
             del self.proxies["https"]
 
         _regions = ["eu", "us"]
-        _region = region
 
-        if _region == "" or (_region and _region not in _regions):
+        if not region or (region is not None and region not in _regions):
             raise AlgoliaException(
                 f"`region` is required and must be one of the following: {', '.join(_regions)}"
             )
 
         self.hosts = HostsCollection(
-            [Host("personalization.{region}.algolia.com".replace("{region}", _region))]
+            [Host("personalization.{region}.algolia.com".replace("{region}", region))]
         )
