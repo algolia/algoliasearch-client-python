@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictInt, StrictStr
 
@@ -104,27 +105,29 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if add_ab_tests_request is None:
+            raise ValueError(
+                "'add_ab_tests_request' is required when calling 'add_ab_tests'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/abtests"
 
         if add_ab_tests_request is not None:
-            _body_params = add_ab_tests_request
+            _body = add_ab_tests_request
 
         _param = self._transporter.param_serialize(
-            path="/2/abtests",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -180,30 +183,27 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'call_del'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -257,27 +257,24 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if id is None:
+            raise ValueError("'id' is required when calling 'delete_ab_test'")
 
-        if id is not None:
-            _path_params["id"] = id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/2/abtests/{id}".replace("{id}", quote(str(id)))
 
         _param = self._transporter.param_serialize(
-            path="/2/abtests/{id}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -331,30 +328,27 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'get'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -408,27 +402,24 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if id is None:
+            raise ValueError("'id' is required when calling 'get_ab_test'")
 
-        if id is not None:
-            _path_params["id"] = id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/2/abtests/{id}".replace("{id}", quote(str(id)))
 
         _param = self._transporter.param_serialize(
-            path="/2/abtests/{id}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -498,36 +489,30 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/abtests"
 
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if index_prefix is not None:
             _query_params.append(("indexPrefix", index_prefix))
-
         if index_suffix is not None:
             _query_params.append(("indexSuffix", index_suffix))
 
         _param = self._transporter.param_serialize(
-            path="/2/abtests",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -616,33 +601,30 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'post'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -721,33 +703,30 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'put'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -809,27 +788,24 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if id is None:
+            raise ValueError("'id' is required when calling 'stop_ab_test'")
 
-        if id is not None:
-            _path_params["id"] = id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/2/abtests/{id}/stop".replace("{id}", quote(str(id)))
 
         _param = self._transporter.param_serialize(
-            path="/2/abtests/{id}/stop",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data

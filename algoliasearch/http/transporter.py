@@ -1,7 +1,6 @@
 from asyncio import TimeoutError
 from json import dumps
 from typing import Dict, List, Optional, Tuple, Union
-from urllib.parse import quote
 
 from aiohttp import ClientSession, TCPConnector
 from async_timeout import timeout
@@ -84,26 +83,18 @@ class Transporter:
 
     def param_serialize(
         self,
-        path: str,
-        path_params: Dict[str, str],
         query_params: List[Tuple[str, str]] = [],
         body: Optional[bytes] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Tuple:
         """Builds the HTTP request params needed by the request.
-        :param resource_path: Path to method endpoint.
-        :param path_params: Path parameters in the url.
         :param query_params: Query parameters in the url.
         :param body: Request body.
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: tuple of form (path, body, request_options)
+        :return: tuple of form (body, request_options)
         """
 
-        if request_options is None or isinstance(request_options, dict):
-            request_options = RequestOptions.create(self._config, request_options)
-
-        for k, v in path_params.items():
-            path = path.replace("{%s}" % k, quote(str(v)))
+        request_options = RequestOptions.create(self._config, request_options)
 
         if body is not None:
             body = dumps(self.sanitize_for_serialization(body))
@@ -111,7 +102,7 @@ class Transporter:
         for k, v in query_params:
             request_options.query_parameters[k] = v
 
-        return path, body, request_options
+        return body, request_options
 
     async def send(
         self,

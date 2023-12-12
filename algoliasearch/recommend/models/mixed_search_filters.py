@@ -8,15 +8,12 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, StrictStr, ValidationError, field_validator
-from typing_extensions import Literal
+from pydantic import BaseModel, StrictStr, ValidationError
 
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
-
-MIXEDSEARCHFILTERS_ONE_OF_SCHEMAS = ["List[str]", "str"]
 
 
 class MixedSearchFilters(BaseModel):
@@ -24,12 +21,9 @@ class MixedSearchFilters(BaseModel):
     MixedSearchFilters
     """
 
-    # data type: List[str]
     oneof_schema_1_validator: Optional[List[StrictStr]] = None
-    # data type: str
     oneof_schema_2_validator: Optional[StrictStr] = None
     actual_instance: Optional[Union[List[str], str]] = None
-    one_of_schemas: List[str] = Literal["List[str]", "str"]
 
     model_config = {"validate_assignment": True}
 
@@ -47,38 +41,6 @@ class MixedSearchFilters(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @field_validator("actual_instance")
-    def actual_instance_must_validate_oneof(cls, v):
-        instance = MixedSearchFilters.model_construct()
-        error_messages = []
-        match = 0
-        # validate data type: List[str]
-        try:
-            instance.oneof_schema_1_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # validate data type: str
-        try:
-            instance.oneof_schema_2_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when setting `actual_instance` in MixedSearchFilters with oneOf schemas: List[str], str. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when setting `actual_instance` in MixedSearchFilters with oneOf schemas: List[str], str. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return v
-
     @classmethod
     def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(dumps(obj))
@@ -88,41 +50,26 @@ class MixedSearchFilters(BaseModel):
         """Returns the object represented by the json string"""
         instance = cls.model_construct()
         error_messages = []
-        match = 0
 
-        # deserialize data into List[str]
         try:
-            # validation
             instance.oneof_schema_1_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_1_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into str
         try:
-            # validation
             instance.oneof_schema_2_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_2_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when deserializing the JSON string into MixedSearchFilters with oneOf schemas: List[str], str. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when deserializing the JSON string into MixedSearchFilters with oneOf schemas: List[str], str. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return instance
+        raise ValueError(
+            "No match found when deserializing the JSON string into MixedSearchFilters with oneOf schemas: List[str], str. Details: "
+            + ", ".join(error_messages)
+        )
 
     def to_json(self) -> str:
         """Returns the JSON representation of the actual instance"""
@@ -144,5 +91,4 @@ class MixedSearchFilters(BaseModel):
         if callable(to_dict):
             return self.actual_instance.to_dict()
         else:
-            # primitive type
             return self.actual_instance

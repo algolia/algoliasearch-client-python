@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 from typing import Any, Dict, Optional, Union
 
 from algoliasearch.search.config import Config
@@ -9,7 +9,7 @@ except ImportError:
     from typing_extensions import Self
 
 
-class RequestOptions(object):
+class RequestOptions:
     def __init__(
         self,
         headers: Dict[str, str],
@@ -22,24 +22,49 @@ class RequestOptions(object):
         self.timeouts = timeouts
         self.data = data
 
+    def to_dict(self) -> Dict[str, Any]:
+        return deepcopy(self.__dict__)
+
+    def to_json(self) -> str:
+        return str(self.__dict__)
+
+    def from_dict(data: Optional[Dict[str, Dict[str, Any]]]) -> Self:
+        return RequestOptions(
+            data.get("headers", {}),
+            data.get("query_parameters", {}),
+            data.get("timeouts", {}),
+            data.get("data", {}),
+        )
+
     def create(
-        config: Config, options: Optional[Union[Self, Dict[str, Any]]] = None
+        config: Config,
+        user_request_options: Optional[Union[Self, Dict[str, Any]]] = None,
     ) -> Self:
-        if isinstance(options, RequestOptions):
-            return copy.copy(options)
+        """
+        Creates a RequestOption object from the given `options`, then merges
+        it with the given configuration, overriding the already
+        existing `config` options.
+        """
 
-        headers = dict(config.headers)
-
-        timeouts = {
-            "readTimeout": int(config.read_timeout),
-            "writeTimeout": int(config.write_timeout),
-            "connectTimeout": int(config.connect_timeout),
+        request_options = {
+            "headers": dict(config.headers),
+            "query_parameters": {},
+            "timeouts": {
+                "readTimeout": int(config.read_timeout),
+                "writeTimeout": int(config.write_timeout),
+                "connectTimeout": int(config.connect_timeout),
+            },
+            "data": {},
         }
 
-        request_options = RequestOptions(headers, {}, timeouts, {})
+        if user_request_options is not None:
+            if isinstance(user_request_options, RequestOptions):
+                _user_request_options = user_request_options.to_dict()
+            else:
+                _user_request_options = user_request_options or {}
 
-        if options is not None:
-            for option, value in options.items():
-                request_options[option] = value
+            for key, value in _user_request_options.items():
+                if value is not None:
+                    request_options[key].update(value)
 
-        return request_options
+        return RequestOptions.from_dict(request_options)

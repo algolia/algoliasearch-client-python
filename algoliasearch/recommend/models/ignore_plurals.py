@@ -8,15 +8,12 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, StrictBool, StrictStr, ValidationError, field_validator
-from typing_extensions import Literal
+from pydantic import BaseModel, StrictBool, StrictStr, ValidationError
 
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
-
-IGNOREPLURALS_ONE_OF_SCHEMAS = ["List[str]", "bool"]
 
 
 class IgnorePlurals(BaseModel):
@@ -24,12 +21,9 @@ class IgnorePlurals(BaseModel):
     Treats singular, plurals, and other forms of declensions as matching terms. `ignorePlurals` is used in conjunction with the `queryLanguages` setting. _list_: language ISO codes for which ignoring plurals should be enabled. This list will override any values that you may have set in `queryLanguages`. _true_: enables the ignore plurals feature, where singulars and plurals are considered equivalent (\"foot\" = \"feet\"). The languages supported here are either [every language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) (this is the default) or those set by `queryLanguages`. _false_: turns off the ignore plurals feature, so that singulars and plurals aren't considered to be the same (\"foot\" will not find \"feet\").
     """
 
-    # data type: List[str]
     oneof_schema_1_validator: Optional[List[StrictStr]] = None
-    # data type: bool
     oneof_schema_2_validator: Optional[StrictBool] = False
     actual_instance: Optional[Union[List[str], bool]] = None
-    one_of_schemas: List[str] = Literal["List[str]", "bool"]
 
     model_config = {"validate_assignment": True}
 
@@ -47,38 +41,6 @@ class IgnorePlurals(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @field_validator("actual_instance")
-    def actual_instance_must_validate_oneof(cls, v):
-        instance = IgnorePlurals.model_construct()
-        error_messages = []
-        match = 0
-        # validate data type: List[str]
-        try:
-            instance.oneof_schema_1_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # validate data type: bool
-        try:
-            instance.oneof_schema_2_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when setting `actual_instance` in IgnorePlurals with oneOf schemas: List[str], bool. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when setting `actual_instance` in IgnorePlurals with oneOf schemas: List[str], bool. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return v
-
     @classmethod
     def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(dumps(obj))
@@ -88,41 +50,26 @@ class IgnorePlurals(BaseModel):
         """Returns the object represented by the json string"""
         instance = cls.model_construct()
         error_messages = []
-        match = 0
 
-        # deserialize data into List[str]
         try:
-            # validation
             instance.oneof_schema_1_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_1_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into bool
         try:
-            # validation
             instance.oneof_schema_2_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_2_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when deserializing the JSON string into IgnorePlurals with oneOf schemas: List[str], bool. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when deserializing the JSON string into IgnorePlurals with oneOf schemas: List[str], bool. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return instance
+        raise ValueError(
+            "No match found when deserializing the JSON string into IgnorePlurals with oneOf schemas: List[str], bool. Details: "
+            + ", ".join(error_messages)
+        )
 
     def to_json(self) -> str:
         """Returns the JSON representation of the actual instance"""
@@ -144,5 +91,4 @@ class IgnorePlurals(BaseModel):
         if callable(to_dict):
             return self.actual_instance.to_dict()
         else:
-            # primitive type
             return self.actual_instance

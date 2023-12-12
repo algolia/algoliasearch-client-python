@@ -1,4 +1,4 @@
-class Verb(object):
+class Verb:
     GET = "GET"
     POST = "POST"
     PUT = "PUT"

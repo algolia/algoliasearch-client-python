@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 
@@ -163,30 +164,27 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'call_del'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -240,27 +238,29 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if authentication_create is None:
+            raise ValueError(
+                "'authentication_create' is required when calling 'create_authentication'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/authentications"
 
         if authentication_create is not None:
-            _body_params = authentication_create
+            _body = authentication_create
 
         _param = self._transporter.param_serialize(
-            path="/1/authentications",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -305,27 +305,29 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if destination_create is None:
+            raise ValueError(
+                "'destination_create' is required when calling 'create_destination'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/destinations"
 
         if destination_create is not None:
-            _body_params = destination_create
+            _body = destination_create
 
         _param = self._transporter.param_serialize(
-            path="/1/destinations",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -370,27 +372,27 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if source_create is None:
+            raise ValueError("'source_create' is required when calling 'create_source'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/sources"
 
         if source_create is not None:
-            _body_params = source_create
+            _body = source_create
 
         _param = self._transporter.param_serialize(
-            path="/1/sources",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -435,27 +437,27 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if task_create is None:
+            raise ValueError("'task_create' is required when calling 'create_task'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/tasks"
 
         if task_create is not None:
-            _body_params = task_create
+            _body = task_create
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -500,27 +502,28 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if authentication_id is None:
+            raise ValueError(
+                "'authentication_id' is required when calling 'delete_authentication'"
+            )
 
-        if authentication_id is not None:
-            _path_params["authenticationID"] = authentication_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/authentications/{authenticationID}".replace(
+            "{authenticationID}", quote(str(authentication_id))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/authentications/{authenticationID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -569,27 +572,28 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if destination_id is None:
+            raise ValueError(
+                "'destination_id' is required when calling 'delete_destination'"
+            )
 
-        if destination_id is not None:
-            _path_params["destinationID"] = destination_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/destinations/{destinationID}".replace(
+            "{destinationID}", quote(str(destination_id))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/destinations/{destinationID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -636,27 +640,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if source_id is None:
+            raise ValueError("'source_id' is required when calling 'delete_source'")
 
-        if source_id is not None:
-            _path_params["sourceID"] = source_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/sources/{sourceID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -699,27 +700,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if task_id is None:
+            raise ValueError("'task_id' is required when calling 'delete_task'")
 
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks/{taskID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -762,27 +760,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if task_id is None:
+            raise ValueError("'task_id' is required when calling 'disable_task'")
 
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/tasks/{taskID}/disable".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks/{taskID}/disable",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -825,27 +820,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if task_id is None:
+            raise ValueError("'task_id' is required when calling 'enable_task'")
 
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/tasks/{taskID}/enable".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks/{taskID}/enable",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -899,30 +891,27 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'get'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -978,27 +967,28 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if authentication_id is None:
+            raise ValueError(
+                "'authentication_id' is required when calling 'get_authentication'"
+            )
 
-        if authentication_id is not None:
-            _path_params["authenticationID"] = authentication_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/authentications/{authenticationID}".replace(
+            "{authenticationID}", quote(str(authentication_id))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/authentications/{authenticationID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1077,42 +1067,34 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/authentications"
 
         if items_per_page is not None:
             _query_params.append(("itemsPerPage", items_per_page))
-
         if page is not None:
             _query_params.append(("page", page))
-
         if type is not None:
             _query_params.append(("type", type))
-
         if platform is not None:
             _query_params.append(("platform", platform))
-
         if sort is not None:
             _query_params.append(("sort", sort.value))
-
         if order is not None:
             _query_params.append(("order", order.value))
 
         _param = self._transporter.param_serialize(
-            path="/1/authentications",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1191,27 +1173,28 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if destination_id is None:
+            raise ValueError(
+                "'destination_id' is required when calling 'get_destination'"
+            )
 
-        if destination_id is not None:
-            _path_params["destinationID"] = destination_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/destinations/{destinationID}".replace(
+            "{destinationID}", quote(str(destination_id))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/destinations/{destinationID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1290,42 +1273,34 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/destinations"
 
         if items_per_page is not None:
             _query_params.append(("itemsPerPage", items_per_page))
-
         if page is not None:
             _query_params.append(("page", page))
-
         if type is not None:
             _query_params.append(("type", type))
-
         if authentication_id is not None:
             _query_params.append(("authenticationID", authentication_id))
-
         if sort is not None:
             _query_params.append(("sort", sort.value))
-
         if order is not None:
             _query_params.append(("order", order.value))
 
         _param = self._transporter.param_serialize(
-            path="/1/destinations",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1402,27 +1377,28 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if source_id is None:
+            raise ValueError(
+                "'source_id' is required when calling 'get_docker_source_streams'"
+            )
 
-        if source_id is not None:
-            _path_params["sourceID"] = source_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/sources/{sourceID}/discover".replace(
+            "{sourceID}", quote(str(source_id))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/sources/{sourceID}/discover",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1470,29 +1446,29 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if run_id is None:
+            raise ValueError("'run_id' is required when calling 'get_event'")
 
-        if run_id is not None:
-            _path_params["runID"] = run_id
-        if event_id is not None:
-            _path_params["eventID"] = event_id
+        if event_id is None:
+            raise ValueError("'event_id' is required when calling 'get_event'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/runs/{runID}/events/{eventID}".replace(
+            "{runID}", quote(str(run_id))
+        ).replace("{eventID}", quote(str(event_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/runs/{runID}/events/{eventID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1591,51 +1567,41 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if run_id is None:
+            raise ValueError("'run_id' is required when calling 'get_events'")
 
-        if run_id is not None:
-            _path_params["runID"] = run_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/runs/{runID}/events".replace("{runID}", quote(str(run_id)))
 
         if items_per_page is not None:
             _query_params.append(("itemsPerPage", items_per_page))
-
         if page is not None:
             _query_params.append(("page", page))
-
         if status is not None:
             _query_params.append(("status", status))
-
         if type is not None:
             _query_params.append(("type", type))
-
         if sort is not None:
             _query_params.append(("sort", sort.value))
-
         if order is not None:
             _query_params.append(("order", order.value))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
 
         _param = self._transporter.param_serialize(
-            path="/1/runs/{runID}/events",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1740,27 +1706,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if run_id is None:
+            raise ValueError("'run_id' is required when calling 'get_run'")
 
-        if run_id is not None:
-            _path_params["runID"] = run_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/runs/{runID}".replace("{runID}", quote(str(run_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/runs/{runID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1850,48 +1813,38 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/runs"
 
         if items_per_page is not None:
             _query_params.append(("itemsPerPage", items_per_page))
-
         if page is not None:
             _query_params.append(("page", page))
-
         if status is not None:
             _query_params.append(("status", status))
-
         if task_id is not None:
             _query_params.append(("taskID", task_id))
-
         if sort is not None:
             _query_params.append(("sort", sort.value))
-
         if order is not None:
             _query_params.append(("order", order.value))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
 
         _param = self._transporter.param_serialize(
-            path="/1/runs",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1991,27 +1944,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if source_id is None:
+            raise ValueError("'source_id' is required when calling 'get_source'")
 
-        if source_id is not None:
-            _path_params["sourceID"] = source_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/sources/{sourceID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2088,42 +2038,34 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/sources"
 
         if items_per_page is not None:
             _query_params.append(("itemsPerPage", items_per_page))
-
         if page is not None:
             _query_params.append(("page", page))
-
         if type is not None:
             _query_params.append(("type", type))
-
         if authentication_id is not None:
             _query_params.append(("authenticationID", authentication_id))
-
         if sort is not None:
             _query_params.append(("sort", sort.value))
-
         if order is not None:
             _query_params.append(("order", order.value))
 
         _param = self._transporter.param_serialize(
-            path="/1/sources",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2202,27 +2144,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if task_id is None:
+            raise ValueError("'task_id' is required when calling 'get_task'")
 
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks/{taskID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2315,51 +2254,40 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/tasks"
 
         if items_per_page is not None:
             _query_params.append(("itemsPerPage", items_per_page))
-
         if page is not None:
             _query_params.append(("page", page))
-
         if action is not None:
             _query_params.append(("action", action))
-
         if enabled is not None:
             _query_params.append(("enabled", enabled))
-
         if source_id is not None:
             _query_params.append(("sourceID", source_id))
-
         if destination_id is not None:
             _query_params.append(("destinationID", destination_id))
-
         if trigger_type is not None:
             _query_params.append(("triggerType", trigger_type))
-
         if sort is not None:
             _query_params.append(("sort", sort.value))
-
         if order is not None:
             _query_params.append(("order", order.value))
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2480,33 +2408,30 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'post'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2585,33 +2510,30 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'put'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2673,27 +2595,24 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if task_id is None:
+            raise ValueError("'task_id' is required when calling 'run_task'")
 
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/tasks/{taskID}/run".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks/{taskID}/run",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2736,27 +2655,29 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if authentication_search is None:
+            raise ValueError(
+                "'authentication_search' is required when calling 'search_authentications'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/authentications/search"
 
         if authentication_search is not None:
-            _body_params = authentication_search
+            _body = authentication_search
 
         _param = self._transporter.param_serialize(
-            path="/1/authentications/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2801,27 +2722,29 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if destination_search is None:
+            raise ValueError(
+                "'destination_search' is required when calling 'search_destinations'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/destinations/search"
 
         if destination_search is not None:
-            _body_params = destination_search
+            _body = destination_search
 
         _param = self._transporter.param_serialize(
-            path="/1/destinations/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2866,27 +2789,29 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if source_search is None:
+            raise ValueError(
+                "'source_search' is required when calling 'search_sources'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/sources/search"
 
         if source_search is not None:
-            _body_params = source_search
+            _body = source_search
 
         _param = self._transporter.param_serialize(
-            path="/1/sources/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2931,27 +2856,27 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if task_search is None:
+            raise ValueError("'task_search' is required when calling 'search_tasks'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/tasks/search"
 
         if task_search is not None:
-            _body_params = task_search
+            _body = task_search
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2994,27 +2919,28 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if source_id is None:
+            raise ValueError(
+                "'source_id' is required when calling 'trigger_docker_source_discover'"
+            )
 
-        if source_id is not None:
-            _path_params["sourceID"] = source_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/sources/{sourceID}/discover".replace(
+            "{sourceID}", quote(str(source_id))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/sources/{sourceID}/discover",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3064,30 +2990,36 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if authentication_id is None:
+            raise ValueError(
+                "'authentication_id' is required when calling 'update_authentication'"
+            )
 
-        if authentication_id is not None:
-            _path_params["authenticationID"] = authentication_id
+        if authentication_update is None:
+            raise ValueError(
+                "'authentication_update' is required when calling 'update_authentication'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/authentications/{authenticationID}".replace(
+            "{authenticationID}", quote(str(authentication_id))
+        )
 
         if authentication_update is not None:
-            _body_params = authentication_update
+            _body = authentication_update
 
         _param = self._transporter.param_serialize(
-            path="/1/authentications/{authenticationID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PATCH,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3142,30 +3074,36 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if destination_id is None:
+            raise ValueError(
+                "'destination_id' is required when calling 'update_destination'"
+            )
 
-        if destination_id is not None:
-            _path_params["destinationID"] = destination_id
+        if destination_update is None:
+            raise ValueError(
+                "'destination_update' is required when calling 'update_destination'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/destinations/{destinationID}".replace(
+            "{destinationID}", quote(str(destination_id))
+        )
 
         if destination_update is not None:
-            _body_params = destination_update
+            _body = destination_update
 
         _param = self._transporter.param_serialize(
-            path="/1/destinations/{destinationID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PATCH,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3218,30 +3156,30 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if source_id is None:
+            raise ValueError("'source_id' is required when calling 'update_source'")
 
-        if source_id is not None:
-            _path_params["sourceID"] = source_id
+        if source_update is None:
+            raise ValueError("'source_update' is required when calling 'update_source'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id)))
 
         if source_update is not None:
-            _body_params = source_update
+            _body = source_update
 
         _param = self._transporter.param_serialize(
-            path="/1/sources/{sourceID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PATCH,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3292,30 +3230,30 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if task_id is None:
+            raise ValueError("'task_id' is required when calling 'update_task'")
 
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        if task_update is None:
+            raise ValueError("'task_update' is required when calling 'update_task'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id)))
 
         if task_update is not None:
-            _body_params = task_update
+            _body = task_update
 
         _param = self._transporter.param_serialize(
-            path="/1/tasks/{taskID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PATCH,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data

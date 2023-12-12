@@ -8,8 +8,7 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, StrictStr, ValidationError, field_validator
-from typing_extensions import Literal
+from pydantic import BaseModel, StrictStr, ValidationError
 
 from algoliasearch.recommend.models.automatic_facet_filter import AutomaticFacetFilter
 
@@ -18,20 +17,15 @@ try:
 except ImportError:
     from typing_extensions import Self
 
-AUTOMATICFACETFILTERS_ONE_OF_SCHEMAS = ["List[AutomaticFacetFilter]", "List[str]"]
-
 
 class AutomaticFacetFilters(BaseModel):
     """
     Names of facets to which automatic filtering must be applied; they must match the facet name of a facet value placeholder in the query pattern.
     """
 
-    # data type: List[AutomaticFacetFilter]
     oneof_schema_1_validator: Optional[List[AutomaticFacetFilter]] = None
-    # data type: List[str]
     oneof_schema_2_validator: Optional[List[StrictStr]] = None
     actual_instance: Optional[Union[List[AutomaticFacetFilter], List[str]]] = None
-    one_of_schemas: List[str] = Literal["List[AutomaticFacetFilter]", "List[str]"]
 
     model_config = {"validate_assignment": True}
 
@@ -49,38 +43,6 @@ class AutomaticFacetFilters(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @field_validator("actual_instance")
-    def actual_instance_must_validate_oneof(cls, v):
-        instance = AutomaticFacetFilters.model_construct()
-        error_messages = []
-        match = 0
-        # validate data type: List[AutomaticFacetFilter]
-        try:
-            instance.oneof_schema_1_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # validate data type: List[str]
-        try:
-            instance.oneof_schema_2_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when setting `actual_instance` in AutomaticFacetFilters with oneOf schemas: List[AutomaticFacetFilter], List[str]. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when setting `actual_instance` in AutomaticFacetFilters with oneOf schemas: List[AutomaticFacetFilter], List[str]. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return v
-
     @classmethod
     def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(dumps(obj))
@@ -90,41 +52,26 @@ class AutomaticFacetFilters(BaseModel):
         """Returns the object represented by the json string"""
         instance = cls.model_construct()
         error_messages = []
-        match = 0
 
-        # deserialize data into List[AutomaticFacetFilter]
         try:
-            # validation
             instance.oneof_schema_1_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_1_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[str]
         try:
-            # validation
             instance.oneof_schema_2_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_2_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when deserializing the JSON string into AutomaticFacetFilters with oneOf schemas: List[AutomaticFacetFilter], List[str]. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when deserializing the JSON string into AutomaticFacetFilters with oneOf schemas: List[AutomaticFacetFilter], List[str]. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return instance
+        raise ValueError(
+            "No match found when deserializing the JSON string into AutomaticFacetFilters with oneOf schemas: List[AutomaticFacetFilter], List[str]. Details: "
+            + ", ".join(error_messages)
+        )
 
     def to_json(self) -> str:
         """Returns the JSON representation of the actual instance"""
@@ -146,5 +93,4 @@ class AutomaticFacetFilters(BaseModel):
         if callable(to_dict):
             return self.actual_instance.to_dict()
         else:
-            # primitive type
             return self.actual_instance

@@ -5,7 +5,7 @@ from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.hosts import Host
 
 
-class RetryOutcome(object):
+class RetryOutcome:
     SUCCESS = "SUCCESS"
     RETRY = "RETRY"
     FAIL = "FAIL"

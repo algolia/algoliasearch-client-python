@@ -8,8 +8,7 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, Field, StrictInt, ValidationError, field_validator
-from typing_extensions import Literal
+from pydantic import BaseModel, Field, StrictInt, ValidationError
 
 from algoliasearch.search.models.around_precision_from_value_inner import (
     AroundPrecisionFromValueInner,
@@ -20,23 +19,18 @@ try:
 except ImportError:
     from typing_extensions import Self
 
-AROUNDPRECISION_ONE_OF_SCHEMAS = ["List[AroundPrecisionFromValueInner]", "int"]
-
 
 class AroundPrecision(BaseModel):
     """
     Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
     """
 
-    # data type: int
     oneof_schema_1_validator: Optional[StrictInt] = 10
-    # data type: List[AroundPrecisionFromValueInner]
     oneof_schema_2_validator: Optional[List[AroundPrecisionFromValueInner]] = Field(
         default=None,
         description="Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).",
     )
     actual_instance: Optional[Union[List[AroundPrecisionFromValueInner], int]] = None
-    one_of_schemas: List[str] = Literal["List[AroundPrecisionFromValueInner]", "int"]
 
     model_config = {"validate_assignment": True}
 
@@ -54,38 +48,6 @@ class AroundPrecision(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @field_validator("actual_instance")
-    def actual_instance_must_validate_oneof(cls, v):
-        instance = AroundPrecision.model_construct()
-        error_messages = []
-        match = 0
-        # validate data type: int
-        try:
-            instance.oneof_schema_1_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # validate data type: List[AroundPrecisionFromValueInner]
-        try:
-            instance.oneof_schema_2_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when setting `actual_instance` in AroundPrecision with oneOf schemas: List[AroundPrecisionFromValueInner], int. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when setting `actual_instance` in AroundPrecision with oneOf schemas: List[AroundPrecisionFromValueInner], int. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return v
-
     @classmethod
     def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(dumps(obj))
@@ -95,41 +57,26 @@ class AroundPrecision(BaseModel):
         """Returns the object represented by the json string"""
         instance = cls.model_construct()
         error_messages = []
-        match = 0
 
-        # deserialize data into int
         try:
-            # validation
             instance.oneof_schema_1_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_1_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[AroundPrecisionFromValueInner]
         try:
-            # validation
             instance.oneof_schema_2_validator = loads(json_str)
-            # assign value to actual_instance
             instance.actual_instance = instance.oneof_schema_2_validator
-            match += 1
+
+            return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
-        if match > 1:
-            # more than 1 match
-            raise ValueError(
-                "Multiple matches found when deserializing the JSON string into AroundPrecision with oneOf schemas: List[AroundPrecisionFromValueInner], int. Details: "
-                + ", ".join(error_messages)
-            )
-        elif match == 0:
-            # no match
-            raise ValueError(
-                "No match found when deserializing the JSON string into AroundPrecision with oneOf schemas: List[AroundPrecisionFromValueInner], int. Details: "
-                + ", ".join(error_messages)
-            )
-        else:
-            return instance
+        raise ValueError(
+            "No match found when deserializing the JSON string into AroundPrecision with oneOf schemas: List[AroundPrecisionFromValueInner], int. Details: "
+            + ", ".join(error_messages)
+        )
 
     def to_json(self) -> str:
         """Returns the JSON representation of the actual instance"""
@@ -151,5 +98,4 @@ class AroundPrecision(BaseModel):
         if callable(to_dict):
             return self.actual_instance.to_dict()
         else:
-            # primitive type
             return self.actual_instance

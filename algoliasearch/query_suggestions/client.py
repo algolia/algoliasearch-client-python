@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictStr
 
@@ -117,30 +118,27 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'call_del'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -194,27 +192,29 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if query_suggestions_configuration_with_index is None:
+            raise ValueError(
+                "'query_suggestions_configuration_with_index' is required when calling 'create_config'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/configs"
 
         if query_suggestions_configuration_with_index is not None:
-            _body_params = query_suggestions_configuration_with_index
+            _body = query_suggestions_configuration_with_index
 
         _param = self._transporter.param_serialize(
-            path="/1/configs",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -261,27 +261,24 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'delete_config'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/configs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
-            path="/1/configs/{indexName}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -337,30 +334,27 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'get'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -410,24 +404,21 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/configs"
 
         _param = self._transporter.param_serialize(
-            path="/1/configs",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -470,27 +461,24 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'get_config'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/configs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
-            path="/1/configs/{indexName}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -539,27 +527,28 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'get_config_status'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/configs/{indexName}/status".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/configs/{indexName}/status",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -608,27 +597,24 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'get_log_file'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/logs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
-            path="/1/logs/{indexName}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -690,33 +676,30 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'post'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -795,33 +778,30 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'put'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -888,30 +868,32 @@ class QuerySuggestionsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'update_config'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if query_suggestions_configuration is None:
+            raise ValueError(
+                "'query_suggestions_configuration' is required when calling 'update_config'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/configs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         if query_suggestions_configuration is not None:
-            _body_params = query_suggestions_configuration
+            _body = query_suggestions_configuration
 
         _param = self._transporter.param_serialize(
-            path="/1/configs/{indexName}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictStr
 
@@ -115,30 +116,27 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'call_del'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -197,27 +195,26 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if user_token is None:
+            raise ValueError(
+                "'user_token' is required when calling 'delete_user_profile'"
+            )
 
-        if user_token is not None:
-            _path_params["userToken"] = user_token
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/profiles/{userToken}".replace("{userToken}", quote(str(user_token)))
 
         _param = self._transporter.param_serialize(
-            path="/1/profiles/{userToken}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -278,30 +275,27 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'get'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -351,24 +345,21 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/strategies/personalization"
 
         _param = self._transporter.param_serialize(
-            path="/1/strategies/personalization",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -414,27 +405,28 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if user_token is None:
+            raise ValueError(
+                "'user_token' is required when calling 'get_user_token_profile'"
+            )
 
-        if user_token is not None:
-            _path_params["userToken"] = user_token
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/profiles/personalization/{userToken}".replace(
+            "{userToken}", quote(str(user_token))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/profiles/personalization/{userToken}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -501,33 +493,30 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'post'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -606,33 +595,30 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'put'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -694,27 +680,29 @@ class PersonalizationClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if personalization_strategy_params is None:
+            raise ValueError(
+                "'personalization_strategy_params' is required when calling 'set_personalization_strategy'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/strategies/personalization"
 
         if personalization_strategy_params is not None:
-            _body_params = personalization_strategy_params
+            _body = personalization_strategy_params
 
         _param = self._transporter.param_serialize(
-            path="/1/strategies/personalization",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data

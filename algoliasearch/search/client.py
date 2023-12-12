@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 
@@ -161,27 +162,27 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if api_key is None:
+            raise ValueError("'api_key' is required when calling 'add_api_key'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/keys"
 
         if api_key is not None:
-            _body_params = api_key
+            _body = api_key
 
         _param = self._transporter.param_serialize(
-            path="/1/keys",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -234,32 +235,39 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'add_or_update_object'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError(
+                "'object_id' is required when calling 'add_or_update_object'"
+            )
+
+        if body is None:
+            raise ValueError("'body' is required when calling 'add_or_update_object'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -314,27 +322,27 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if source is None:
+            raise ValueError("'source' is required when calling 'append_source'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/security/sources/append"
 
         if source is not None:
-            _body_params = source
+            _body = source
 
         _param = self._transporter.param_serialize(
-            path="/1/security/sources/append",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -382,27 +390,34 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if x_algolia_user_id is None:
+            raise ValueError(
+                "'x_algolia_user_id' is required when calling 'assign_user_id'"
+            )
+
+        if assign_user_id_params is None:
+            raise ValueError(
+                "'assign_user_id_params' is required when calling 'assign_user_id'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping"
 
         if assign_user_id_params is not None:
-            _body_params = assign_user_id_params
+            _body = assign_user_id_params
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -457,30 +472,32 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'batch'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if batch_write_params is None:
+            raise ValueError("'batch_write_params' is required when calling 'batch'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/batch".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if batch_write_params is not None:
-            _body_params = batch_write_params
+            _body = batch_write_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/batch",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -535,27 +552,34 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if x_algolia_user_id is None:
+            raise ValueError(
+                "'x_algolia_user_id' is required when calling 'batch_assign_user_ids'"
+            )
+
+        if batch_assign_user_ids_params is None:
+            raise ValueError(
+                "'batch_assign_user_ids_params' is required when calling 'batch_assign_user_ids'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping/batch"
 
         if batch_assign_user_ids_params is not None:
-            _body_params = batch_assign_user_ids_params
+            _body = batch_assign_user_ids_params
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping/batch",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -610,30 +634,36 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if dictionary_name is None:
+            raise ValueError(
+                "'dictionary_name' is required when calling 'batch_dictionary_entries'"
+            )
 
-        if dictionary_name is not None:
-            _path_params["dictionaryName"] = dictionary_name.value
+        if batch_dictionary_entries_params is None:
+            raise ValueError(
+                "'batch_dictionary_entries_params' is required when calling 'batch_dictionary_entries'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/dictionaries/{dictionaryName}/batch".replace(
+            "{dictionaryName}", quote(str(dictionary_name))
+        )
 
         if batch_dictionary_entries_params is not None:
-            _body_params = batch_dictionary_entries_params
+            _body = batch_dictionary_entries_params
 
         _param = self._transporter.param_serialize(
-            path="/1/dictionaries/{dictionaryName}/batch",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -688,30 +718,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'browse'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/browse".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if browse_params is not None:
-            _body_params = browse_params
+            _body = browse_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/browse",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -772,30 +801,27 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'call_del'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -859,30 +885,31 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'clear_all_synonyms'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/synonyms/clear".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/synonyms/clear",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -939,27 +966,26 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'clear_objects'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/clear".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/clear",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1014,30 +1040,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'clear_rules'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/rules/clear".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/rules/clear",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1092,27 +1117,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if key is None:
+            raise ValueError("'key' is required when calling 'delete_api_key'")
 
-        if key is not None:
-            _path_params["key"] = key
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/keys/{key}".replace("{key}", quote(str(key)))
 
         _param = self._transporter.param_serialize(
-            path="/1/keys/{key}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1160,30 +1182,32 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'delete_by'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if delete_by_params is None:
+            raise ValueError("'delete_by_params' is required when calling 'delete_by'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/deleteByQuery".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if delete_by_params is not None:
-            _body_params = delete_by_params
+            _body = delete_by_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/deleteByQuery",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1235,27 +1259,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'delete_index'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1307,29 +1328,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'delete_object'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'delete_object'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1396,32 +1417,32 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'delete_rule'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'delete_rule'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/rules/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/rules/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1483,27 +1504,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if source is None:
+            raise ValueError("'source' is required when calling 'delete_source'")
 
-        if source is not None:
-            _path_params["source"] = source
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/security/sources/{source}".replace("{source}", quote(str(source)))
 
         _param = self._transporter.param_serialize(
-            path="/1/security/sources/{source}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1563,32 +1581,32 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'delete_synonym'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'delete_synonym'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/synonyms/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/synonyms/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1659,30 +1677,27 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'get'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1736,27 +1751,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if key is None:
+            raise ValueError("'key' is required when calling 'get_api_key'")
 
-        if key is not None:
-            _path_params["key"] = key
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/keys/{key}".replace("{key}", quote(str(key)))
 
         _param = self._transporter.param_serialize(
-            path="/1/keys/{key}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1795,24 +1807,21 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/dictionaries/*/languages"
 
         _param = self._transporter.param_serialize(
-            path="/1/dictionaries/*/languages",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1847,24 +1856,21 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/dictionaries/*/settings"
 
         _param = self._transporter.param_serialize(
-            path="/1/dictionaries/*/settings",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1930,36 +1936,30 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/logs"
 
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if length is not None:
             _query_params.append(("length", length))
-
         if index_name is not None:
             _query_params.append(("indexName", index_name))
-
         if type is not None:
             _query_params.append(("type", type.value))
 
         _param = self._transporter.param_serialize(
-            path="/1/logs",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2046,32 +2046,32 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'get_object'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'get_object'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         if attributes_to_retrieve is not None:
             _query_params.append(("attributesToRetrieve", attributes_to_retrieve))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2133,26 +2133,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if get_objects_params is None:
+            raise ValueError(
+                "'get_objects_params' is required when calling 'get_objects'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/*/objects"
 
         if get_objects_params is not None:
-            _body_params = get_objects_params
+            _body = get_objects_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/*/objects",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -2207,29 +2210,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'get_rule'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'get_rule'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/rules/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/rules/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2283,27 +2286,26 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'get_settings'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/settings".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/settings",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2344,24 +2346,21 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/security/sources"
 
         _param = self._transporter.param_serialize(
-            path="/1/security/sources",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2407,29 +2406,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'get_synonym'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'get_synonym'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/synonyms/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/synonyms/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2486,29 +2485,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'get_task'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        if task_id is None:
+            raise ValueError("'task_id' is required when calling 'get_task'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/task/{taskID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/task/{taskID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2554,24 +2553,21 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping/top"
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping/top",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2610,27 +2606,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if user_id is None:
+            raise ValueError("'user_id' is required when calling 'get_user_id'")
 
-        if user_id is not None:
-            _path_params["userID"] = user_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping/{userID}".replace("{userID}", quote(str(user_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping/{userID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2678,27 +2671,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping/pending"
 
         if get_clusters is not None:
             _query_params.append(("getClusters", get_clusters))
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping/pending",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2744,24 +2734,21 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/keys"
 
         _param = self._transporter.param_serialize(
-            path="/1/keys",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2796,24 +2783,21 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/clusters"
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2862,30 +2846,26 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/indexes"
 
         if page is not None:
             _query_params.append(("page", page))
-
         if hits_per_page is not None:
             _query_params.append(("hitsPerPage", hits_per_page))
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2950,30 +2930,26 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping"
 
         if page is not None:
             _query_params.append(("page", page))
-
         if hits_per_page is not None:
             _query_params.append(("hitsPerPage", hits_per_page))
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3028,27 +3004,27 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if batch_params is None:
+            raise ValueError("'batch_params' is required when calling 'multiple_batch'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/*/batch"
 
         if batch_params is not None:
-            _body_params = batch_params
+            _body = batch_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/*/batch",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3098,30 +3074,34 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'operation_index'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if operation_index_params is None:
+            raise ValueError(
+                "'operation_index_params' is required when calling 'operation_index'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/operation".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if operation_index_params is not None:
-            _body_params = operation_index_params
+            _body = operation_index_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/operation",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3192,35 +3172,44 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'partial_update_object'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError(
+                "'object_id' is required when calling 'partial_update_object'"
+            )
+
+        if attributes_to_update is None:
+            raise ValueError(
+                "'attributes_to_update' is required when calling 'partial_update_object'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/{objectID}/partial".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         if create_if_not_exists is not None:
             _query_params.append(("createIfNotExists", create_if_not_exists))
 
         if attributes_to_update is not None:
-            _body_params = attributes_to_update
+            _body = attributes_to_update
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{objectID}/partial",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3307,33 +3296,30 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'post'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3412,33 +3398,30 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'put'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3500,27 +3483,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if user_id is None:
+            raise ValueError("'user_id' is required when calling 'remove_user_id'")
 
-        if user_id is not None:
-            _path_params["userID"] = user_id
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping/{userID}".replace("{userID}", quote(str(user_id)))
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping/{userID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3563,27 +3543,27 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if source is None:
+            raise ValueError("'source' is required when calling 'replace_sources'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/security/sources"
 
         if source is not None:
-            _body_params = source
+            _body = source
 
         _param = self._transporter.param_serialize(
-            path="/1/security/sources",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3626,27 +3606,24 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if key is None:
+            raise ValueError("'key' is required when calling 'restore_api_key'")
 
-        if key is not None:
-            _path_params["key"] = key
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/keys/{key}/restore".replace("{key}", quote(str(key)))
 
         _param = self._transporter.param_serialize(
-            path="/1/keys/{key}/restore",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3694,30 +3671,30 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'save_object'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if body is None:
+            raise ValueError("'body' is required when calling 'save_object'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3785,35 +3762,38 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'save_rule'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'save_rule'")
+
+        if rule is None:
+            raise ValueError("'rule' is required when calling 'save_rule'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/rules/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
         if rule is not None:
-            _body_params = rule
+            _body = rule
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/rules/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -3897,36 +3877,37 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'save_rules'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if rules is None:
+            raise ValueError("'rules' is required when calling 'save_rules'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/rules/batch".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
-
         if clear_existing_rules is not None:
             _query_params.append(("clearExistingRules", clear_existing_rules))
 
         if rules is not None:
-            _body_params = rules
+            _body = rules
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/rules/batch",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -4014,35 +3995,38 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'save_synonym'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if object_id is None:
+            raise ValueError("'object_id' is required when calling 'save_synonym'")
+
+        if synonym_hit is None:
+            raise ValueError("'synonym_hit' is required when calling 'save_synonym'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/synonyms/{objectID}".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{objectID}", quote(str(object_id)))
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
         if synonym_hit is not None:
-            _body_params = synonym_hit
+            _body = synonym_hit
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/synonyms/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -4126,36 +4110,37 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'save_synonyms'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if synonym_hit is None:
+            raise ValueError("'synonym_hit' is required when calling 'save_synonyms'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/synonyms/batch".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
-
         if replace_existing_synonyms is not None:
             _query_params.append(("replaceExistingSynonyms", replace_existing_synonyms))
 
         if synonym_hit is not None:
-            _body_params = synonym_hit
+            _body = synonym_hit
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/synonyms/batch",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -4230,26 +4215,27 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if search_method_params is None:
+            raise ValueError("'search_method_params' is required when calling 'search'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/*/queries"
 
         if search_method_params is not None:
-            _body_params = search_method_params
+            _body = search_method_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/*/queries",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -4305,29 +4291,36 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if dictionary_name is None:
+            raise ValueError(
+                "'dictionary_name' is required when calling 'search_dictionary_entries'"
+            )
 
-        if dictionary_name is not None:
-            _path_params["dictionaryName"] = dictionary_name.value
+        if search_dictionary_entries_params is None:
+            raise ValueError(
+                "'search_dictionary_entries_params' is required when calling 'search_dictionary_entries'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/dictionaries/{dictionaryName}/search".replace(
+            "{dictionaryName}", quote(str(dictionary_name))
+        )
 
         if search_dictionary_entries_params is not None:
-            _body_params = search_dictionary_entries_params
+            _body = search_dictionary_entries_params
 
         _param = self._transporter.param_serialize(
-            path="/1/dictionaries/{dictionaryName}/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -4386,31 +4379,36 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'search_for_facet_values'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if facet_name is not None:
-            _path_params["facetName"] = facet_name
+        if facet_name is None:
+            raise ValueError(
+                "'facet_name' is required when calling 'search_for_facet_values'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/facets/{facetName}/query".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{facetName}", quote(str(facet_name)))
 
         if search_for_facet_values_request is not None:
-            _body_params = search_for_facet_values_request
+            _body = search_for_facet_values_request
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/facets/{facetName}/query",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -4469,29 +4467,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'search_rules'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/rules/search".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if search_rules_params is not None:
-            _body_params = search_rules_params
+            _body = search_rules_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/rules/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -4547,29 +4545,31 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'search_single_index'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/query".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if search_params is not None:
-            _body_params = search_params
+            _body = search_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/query",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -4649,38 +4649,36 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'search_synonyms'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/synonyms/search".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if type is not None:
             _query_params.append(("type", type.value))
-
         if page is not None:
             _query_params.append(("page", page))
-
         if hits_per_page is not None:
             _query_params.append(("hitsPerPage", hits_per_page))
 
         if search_synonyms_params is not None:
-            _body_params = search_synonyms_params
+            _body = search_synonyms_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/synonyms/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -4760,26 +4758,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if search_user_ids_params is None:
+            raise ValueError(
+                "'search_user_ids_params' is required when calling 'search_user_ids'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/clusters/mapping/search"
 
         if search_user_ids_params is not None:
-            _body_params = search_user_ids_params
+            _body = search_user_ids_params
 
         _param = self._transporter.param_serialize(
-            path="/1/clusters/mapping/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -4825,27 +4826,29 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if dictionary_settings_params is None:
+            raise ValueError(
+                "'dictionary_settings_params' is required when calling 'set_dictionary_settings'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/dictionaries/*/settings"
 
         if dictionary_settings_params is not None:
-            _body_params = dictionary_settings_params
+            _body = dictionary_settings_params
 
         _param = self._transporter.param_serialize(
-            path="/1/dictionaries/*/settings",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -4903,33 +4906,35 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError("'index_name' is required when calling 'set_settings'")
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
+        if index_settings is None:
+            raise ValueError("'index_settings' is required when calling 'set_settings'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/settings".replace(
+            "{indexName}", quote(str(index_name))
+        )
 
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
         if index_settings is not None:
-            _body_params = index_settings
+            _body = index_settings
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/settings",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -4990,30 +4995,30 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if key is None:
+            raise ValueError("'key' is required when calling 'update_api_key'")
 
-        if key is not None:
-            _path_params["key"] = key
+        if api_key is None:
+            raise ValueError("'api_key' is required when calling 'update_api_key'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/keys/{key}".replace("{key}", quote(str(key)))
 
         if api_key is not None:
-            _body_params = api_key
+            _body = api_key
 
         _param = self._transporter.param_serialize(
-            path="/1/keys/{key}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data

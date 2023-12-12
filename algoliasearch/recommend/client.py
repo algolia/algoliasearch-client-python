@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictInt, StrictStr
 
@@ -119,30 +120,27 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'call_del'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -211,31 +209,40 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'delete_recommend_rule'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if model is not None:
-            _path_params["model"] = model.value
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if model is None:
+            raise ValueError("'model' is required when calling 'delete_recommend_rule'")
+
+        if object_id is None:
+            raise ValueError(
+                "'object_id' is required when calling 'delete_recommend_rule'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = (
+            "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
+                "{indexName}", quote(str(index_name))
+            )
+            .replace("{model}", quote(str(model)))
+            .replace("{objectID}", quote(str(object_id)))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -306,30 +313,27 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'get'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -398,31 +402,40 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'get_recommend_rule'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if model is not None:
-            _path_params["model"] = model.value
-        if object_id is not None:
-            _path_params["objectID"] = object_id
+        if model is None:
+            raise ValueError("'model' is required when calling 'get_recommend_rule'")
+
+        if object_id is None:
+            raise ValueError(
+                "'object_id' is required when calling 'get_recommend_rule'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = (
+            "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
+                "{indexName}", quote(str(index_name))
+            )
+            .replace("{model}", quote(str(model)))
+            .replace("{objectID}", quote(str(object_id)))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -500,31 +513,40 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'get_recommend_status'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if model is not None:
-            _path_params["model"] = model.value
-        if task_id is not None:
-            _path_params["taskID"] = task_id
+        if model is None:
+            raise ValueError("'model' is required when calling 'get_recommend_status'")
+
+        if task_id is None:
+            raise ValueError(
+                "'task_id' is required when calling 'get_recommend_status'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = (
+            "/1/indexes/{indexName}/{model}/task/{taskID}".replace(
+                "{indexName}", quote(str(index_name))
+            )
+            .replace("{model}", quote(str(model)))
+            .replace("{taskID}", quote(str(task_id)))
+        )
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{model}/task/{taskID}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -587,26 +609,29 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if get_recommendations_params is None:
+            raise ValueError(
+                "'get_recommendations_params' is required when calling 'get_recommendations'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/*/recommendations"
 
         if get_recommendations_params is not None:
-            _body_params = get_recommendations_params
+            _body = get_recommendations_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/*/recommendations",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 
@@ -669,33 +694,30 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'post'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -774,33 +796,30 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'put'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -875,31 +894,36 @@ class RecommendClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if index_name is None:
+            raise ValueError(
+                "'index_name' is required when calling 'search_recommend_rules'"
+            )
 
-        if index_name is not None:
-            _path_params["indexName"] = index_name
-        if model is not None:
-            _path_params["model"] = model.value
+        if model is None:
+            raise ValueError(
+                "'model' is required when calling 'search_recommend_rules'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1/indexes/{indexName}/{model}/recommend/rules/search".replace(
+            "{indexName}", quote(str(index_name))
+        ).replace("{model}", quote(str(model)))
 
         if search_recommend_rules_params is not None:
-            _body_params = search_recommend_rules_params
+            _body = search_recommend_rules_params
 
         _param = self._transporter.param_serialize(
-            path="/1/indexes/{indexName}/{model}/recommend/rules/search",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
             use_read_transporter=True,
         )
 

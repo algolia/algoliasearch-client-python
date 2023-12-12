@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 
@@ -130,30 +131,27 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'call_del'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -218,30 +216,27 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'get'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -319,36 +314,35 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError(
+                "'index' is required when calling 'get_average_click_position'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/clicks/averageClickPosition"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/clicks/averageClickPosition",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -441,36 +435,33 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_click_positions'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/clicks/positions"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/clicks/positions",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -563,36 +554,35 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError(
+                "'index' is required when calling 'get_click_through_rate'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/clicks/clickThroughRate"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/clicks/clickThroughRate",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -685,36 +675,33 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_conversation_rate'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/conversions/conversionRate"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/conversions/conversionRate",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -807,36 +794,33 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_no_click_rate'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/searches/noClickRate"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/searches/noClickRate",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -929,36 +913,33 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_no_results_rate'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/searches/noResultRate"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/searches/noResultRate",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1051,36 +1032,33 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_searches_count'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/searches/count"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/searches/count",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1187,42 +1165,39 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError(
+                "'index' is required when calling 'get_searches_no_clicks'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/searches/noClicks"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/searches/noClicks",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1343,42 +1318,39 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError(
+                "'index' is required when calling 'get_searches_no_results'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/searches/noResults"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/searches/noResults",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1461,27 +1433,27 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_status'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/status"
 
         if index is not None:
             _query_params.append(("index", index))
 
         _param = self._transporter.param_serialize(
-            path="/2/status",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1562,42 +1534,37 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_top_countries'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/countries"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/countries",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1721,45 +1688,41 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError(
+                "'index' is required when calling 'get_top_filter_attributes'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/filters"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if search is not None:
             _query_params.append(("search", search))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/filters",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -1889,48 +1852,46 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if attribute is None:
+            raise ValueError(
+                "'attribute' is required when calling 'get_top_filter_for_attribute'"
+            )
 
-        if attribute is not None:
-            _path_params["attribute"] = attribute
+        if index is None:
+            raise ValueError(
+                "'index' is required when calling 'get_top_filter_for_attribute'"
+            )
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/2/filters/{attribute}".replace("{attribute}", quote(str(attribute)))
 
         if index is not None:
             _query_params.append(("index", index))
-
         if search is not None:
             _query_params.append(("search", search))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/filters/{attribute}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2068,45 +2029,41 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError(
+                "'index' is required when calling 'get_top_filters_no_results'"
+            )
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/filters/noResults"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if search is not None:
             _query_params.append(("search", search))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/filters/noResults",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2241,48 +2198,41 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_top_hits'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/hits"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if search is not None:
             _query_params.append(("search", search))
-
         if click_analytics is not None:
             _query_params.append(("clickAnalytics", click_analytics))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/hits",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2443,51 +2393,43 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_top_searches'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/searches"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if click_analytics is not None:
             _query_params.append(("clickAnalytics", click_analytics))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if order_by is not None:
             _query_params.append(("orderBy", order_by.value))
-
         if direction is not None:
             _query_params.append(("direction", direction.value))
-
         if limit is not None:
             _query_params.append(("limit", limit))
-
         if offset is not None:
             _query_params.append(("offset", offset))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/searches",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2624,36 +2566,33 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
+        if index is None:
+            raise ValueError("'index' is required when calling 'get_users_count'")
+
         _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        _body: Optional[bytes] = None
+        _path = "/2/users/count"
 
         if index is not None:
             _query_params.append(("index", index))
-
         if start_date is not None:
             _query_params.append(("startDate", start_date))
-
         if end_date is not None:
             _query_params.append(("endDate", end_date))
-
         if tags is not None:
             _query_params.append(("tags", tags))
 
         _param = self._transporter.param_serialize(
-            path="/2/users/count",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2739,33 +2678,30 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'post'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
@@ -2844,33 +2780,30 @@ class AnalyticsClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _body_params: Optional[bytes] = None
+        if path is None:
+            raise ValueError("'path' is required when calling 'put'")
 
-        if path is not None:
-            _path_params["path"] = path
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
             _query_params.append(("parameters", parameters))
 
         if body is not None:
-            _body_params = body
+            _body = body
 
         _param = self._transporter.param_serialize(
-            path="/1{path}",
-            path_params=_path_params,
             query_params=_query_params,
-            body=_body_params,
+            body=_body,
             request_options=request_options,
         )
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path=_param[0],
-            data=_param[1],
-            request_options=_param[2],
-            use_read_transporter=True,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
         )
 
         response.data = response.raw_data
