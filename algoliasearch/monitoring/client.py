@@ -93,7 +93,7 @@ class MonitoringClient:
         else:
             return klass.from_json(data)
 
-    async def call_del_with_http_info(
+    async def custom_delete_with_http_info(
         self,
         path: Annotated[
             StrictStr,
@@ -121,7 +121,7 @@ class MonitoringClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'call_del'")
+            raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
         _body: Optional[bytes] = None
@@ -147,7 +147,7 @@ class MonitoringClient:
 
         return response
 
-    async def call_del(
+    async def custom_delete(
         self,
         path: Annotated[
             StrictStr,
@@ -174,11 +174,13 @@ class MonitoringClient:
         :return: Returns the deserialized response in a 'object' result object.
         """
 
-        response = await self.call_del_with_http_info(path, parameters, request_options)
+        response = await self.custom_delete_with_http_info(
+            path, parameters, request_options
+        )
 
         return self.__deserialize(response.raw_data, object)
 
-    async def get_with_http_info(
+    async def custom_get_with_http_info(
         self,
         path: Annotated[
             StrictStr,
@@ -206,7 +208,7 @@ class MonitoringClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'get'")
+            raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
         _body: Optional[bytes] = None
@@ -232,7 +234,7 @@ class MonitoringClient:
 
         return response
 
-    async def get(
+    async def custom_get(
         self,
         path: Annotated[
             StrictStr,
@@ -259,7 +261,213 @@ class MonitoringClient:
         :return: Returns the deserialized response in a 'object' result object.
         """
 
-        response = await self.get_with_http_info(path, parameters, request_options)
+        response = await self.custom_get_with_http_info(
+            path, parameters, request_options
+        )
+
+        return self.__deserialize(response.raw_data, object)
+
+    async def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Send requests to the Algolia REST API.
+
+        This method allow you to send requests to the Algolia REST API.
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("'path' is required when calling 'custom_post'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
+
+        if parameters is not None:
+            _query_params.append(("parameters", parameters))
+
+        if body is not None:
+            _body = body
+
+        _param = self._transporter.param_serialize(
+            query_params=_query_params,
+            body=_body,
+            request_options=request_options,
+        )
+
+        response = await self._transporter.request(
+            verb=Verb.POST,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
+        )
+
+        response.data = response.raw_data
+
+        return response
+
+    async def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        Send requests to the Algolia REST API.
+
+        This method allow you to send requests to the Algolia REST API.
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+
+        response = await self.custom_post_with_http_info(
+            path, parameters, body, request_options
+        )
+
+        return self.__deserialize(response.raw_data, object)
+
+    async def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Send requests to the Algolia REST API.
+
+        This method allow you to send requests to the Algolia REST API.
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("'path' is required when calling 'custom_put'")
+
+        _query_params: List[Tuple[str, str]] = []
+        _body: Optional[bytes] = None
+        _path = "/1{path}".replace("{path}", path)
+
+        if parameters is not None:
+            _query_params.append(("parameters", parameters))
+
+        if body is not None:
+            _body = body
+
+        _param = self._transporter.param_serialize(
+            query_params=_query_params,
+            body=_body,
+            request_options=request_options,
+        )
+
+        response = await self._transporter.request(
+            verb=Verb.PUT,
+            path=_path,
+            data=_param[0],
+            request_options=_param[1],
+        )
+
+        response.data = response.raw_data
+
+        return response
+
+    async def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        Send requests to the Algolia REST API.
+
+        This method allow you to send requests to the Algolia REST API.
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+
+        response = await self.custom_put_with_http_info(
+            path, parameters, body, request_options
+        )
 
         return self.__deserialize(response.raw_data, object)
 
@@ -832,207 +1040,3 @@ class MonitoringClient:
         response = await self.get_status_with_http_info(request_options)
 
         return self.__deserialize(response.raw_data, StatusResponse)
-
-    async def post_with_http_info(
-        self,
-        path: Annotated[
-            StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
-        ],
-        parameters: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Query parameters to apply to the current query."),
-        ] = None,
-        body: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Parameters to send with the custom request."),
-        ] = None,
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ApiResponse[str]:
-        """
-        Send requests to the Algolia REST API.
-
-        This method allow you to send requests to the Algolia REST API.
-
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
-        :type path: str
-        :param parameters: Query parameters to apply to the current query.
-        :type parameters: Dict[str, object]
-        :param body: Parameters to send with the custom request.
-        :type body: object
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the raw algoliasearch 'APIResponse' object.
-        """
-
-        if path is None:
-            raise ValueError("'path' is required when calling 'post'")
-
-        _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
-        _path = "/1{path}".replace("{path}", path)
-
-        if parameters is not None:
-            _query_params.append(("parameters", parameters))
-
-        if body is not None:
-            _body = body
-
-        _param = self._transporter.param_serialize(
-            query_params=_query_params,
-            body=_body,
-            request_options=request_options,
-        )
-
-        response = await self._transporter.request(
-            verb=Verb.POST,
-            path=_path,
-            data=_param[0],
-            request_options=_param[1],
-        )
-
-        response.data = response.raw_data
-
-        return response
-
-    async def post(
-        self,
-        path: Annotated[
-            StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
-        ],
-        parameters: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Query parameters to apply to the current query."),
-        ] = None,
-        body: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Parameters to send with the custom request."),
-        ] = None,
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> object:
-        """
-        Send requests to the Algolia REST API.
-
-        This method allow you to send requests to the Algolia REST API.
-
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
-        :type path: str
-        :param parameters: Query parameters to apply to the current query.
-        :type parameters: Dict[str, object]
-        :param body: Parameters to send with the custom request.
-        :type body: object
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'object' result object.
-        """
-
-        response = await self.post_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return self.__deserialize(response.raw_data, object)
-
-    async def put_with_http_info(
-        self,
-        path: Annotated[
-            StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
-        ],
-        parameters: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Query parameters to apply to the current query."),
-        ] = None,
-        body: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Parameters to send with the custom request."),
-        ] = None,
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ApiResponse[str]:
-        """
-        Send requests to the Algolia REST API.
-
-        This method allow you to send requests to the Algolia REST API.
-
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
-        :type path: str
-        :param parameters: Query parameters to apply to the current query.
-        :type parameters: Dict[str, object]
-        :param body: Parameters to send with the custom request.
-        :type body: object
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the raw algoliasearch 'APIResponse' object.
-        """
-
-        if path is None:
-            raise ValueError("'path' is required when calling 'put'")
-
-        _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
-        _path = "/1{path}".replace("{path}", path)
-
-        if parameters is not None:
-            _query_params.append(("parameters", parameters))
-
-        if body is not None:
-            _body = body
-
-        _param = self._transporter.param_serialize(
-            query_params=_query_params,
-            body=_body,
-            request_options=request_options,
-        )
-
-        response = await self._transporter.request(
-            verb=Verb.PUT,
-            path=_path,
-            data=_param[0],
-            request_options=_param[1],
-        )
-
-        response.data = response.raw_data
-
-        return response
-
-    async def put(
-        self,
-        path: Annotated[
-            StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
-        ],
-        parameters: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Query parameters to apply to the current query."),
-        ] = None,
-        body: Annotated[
-            Optional[Dict[str, Any]],
-            Field(description="Parameters to send with the custom request."),
-        ] = None,
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> object:
-        """
-        Send requests to the Algolia REST API.
-
-        This method allow you to send requests to the Algolia REST API.
-
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
-        :type path: str
-        :param parameters: Query parameters to apply to the current query.
-        :type parameters: Dict[str, object]
-        :param body: Parameters to send with the custom request.
-        :type body: object
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'object' result object.
-        """
-
-        response = await self.put_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return self.__deserialize(response.raw_data, object)
