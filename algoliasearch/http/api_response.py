@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from re import match
 from typing import Any, Dict, Generic, Optional, TypeVar
 
 T = TypeVar("T")
@@ -11,6 +12,8 @@ class ApiResponse(Generic[T]):
     """
     API response object
     """
+
+    PRIMITIVE_TYPES = (float, bool, bytes, str, int)
 
     def __init__(
         self,
@@ -33,3 +36,39 @@ class ApiResponse(Generic[T]):
         self.is_timed_out_error = is_timed_out_error
         self.is_network_error = is_network_error
         self.model_config = model_config
+
+    def deserialize(self, klass: any = None) -> T:
+        """Deserializes dict, list, str into an object.
+
+        :param data: dict, list or str.
+        :param klass: class literal, or string of class name.
+
+        :return: object.
+        """
+        if self.raw_data is None:
+            return None
+
+        if isinstance(klass, str):
+            if klass.startswith("List["):
+                sub_kls = match(r"List\[(.*)]", klass).group(1)
+                return [
+                    self.__deserialize(sub_data, sub_kls) for sub_data in self.raw_data
+                ]
+
+            if klass.startswith("Dict["):
+                sub_kls = match(r"Dict\[([^,]*), (.*)]", klass).group(2)
+                return {
+                    k: self.__deserialize(v, sub_kls) for k, v in self.raw_data.items()
+                }
+
+        if klass in self.PRIMITIVE_TYPES:
+            try:
+                return klass(self.raw_data)
+            except UnicodeEncodeError:
+                return str(self.raw_data)
+            except TypeError:
+                return self.raw_data
+        elif klass == object:
+            return self.raw_data
+        else:
+            return klass.from_json(self.raw_data)
