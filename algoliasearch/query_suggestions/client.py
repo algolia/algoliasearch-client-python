@@ -10,14 +10,25 @@ from urllib.parse import quote
 
 from pydantic import Field, StrictStr
 
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 from algoliasearch.query_suggestions.config import Config
-from algoliasearch.query_suggestions.models import (
-    BaseResponse,
+from algoliasearch.query_suggestions.models.base_response import BaseResponse
+from algoliasearch.query_suggestions.models.get_config_status200_response import (
     GetConfigStatus200Response,
+)
+from algoliasearch.query_suggestions.models.get_log_file200_response import (
     GetLogFile200Response,
+)
+from algoliasearch.query_suggestions.models.query_suggestions_configuration import (
     QuerySuggestionsConfiguration,
+)
+from algoliasearch.query_suggestions.models.query_suggestions_configuration_response import (
     QuerySuggestionsConfigurationResponse,
+)
+from algoliasearch.query_suggestions.models.query_suggestions_configuration_with_index import (
     QuerySuggestionsConfigurationWithIndex,
 )
 
@@ -40,8 +51,12 @@ class QuerySuggestionsClient:
 
         return QuerySuggestionsClient(transporter, config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return QuerySuggestionsClient.create_with_config(Config(app_id, api_key))
+    def create(
+        app_id: Optional[str] = None, api_key: Optional[str] = None, region: str = None
+    ) -> Self:
+        return QuerySuggestionsClient.create_with_config(
+            Config(app_id, api_key, region)
+        )
 
     async def close(self) -> None:
         return await self._transporter.close()
@@ -68,14 +83,16 @@ class QuerySuggestionsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/configs"
 
+        _body = {}
         if query_suggestions_configuration_with_index is not None:
             _body = query_suggestions_configuration_with_index
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -145,15 +162,17 @@ class QuerySuggestionsClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -233,15 +252,17 @@ class QuerySuggestionsClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -327,17 +348,20 @@ class QuerySuggestionsClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -430,17 +454,20 @@ class QuerySuggestionsClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -518,12 +545,13 @@ class QuerySuggestionsClient:
             raise ValueError("'index_name' is required when calling 'delete_config'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/configs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -574,12 +602,13 @@ class QuerySuggestionsClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/configs"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -633,12 +662,13 @@ class QuerySuggestionsClient:
             raise ValueError("'index_name' is required when calling 'get_config'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/configs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -700,14 +730,15 @@ class QuerySuggestionsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/configs/{indexName}/status".replace(
             "{indexName}", quote(str(index_name))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -769,12 +800,13 @@ class QuerySuggestionsClient:
             raise ValueError("'index_name' is required when calling 'get_log_file'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/logs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -842,14 +874,16 @@ class QuerySuggestionsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/configs/{indexName}".replace("{indexName}", quote(str(index_name)))
 
+        _body = {}
         if query_suggestions_configuration is not None:
             _body = query_suggestions_configuration
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )

@@ -1,6 +1,7 @@
 from asyncio import TimeoutError
 from json import dumps
 from typing import Dict, List, Optional, Tuple, Union
+from urllib.parse import urlencode
 
 from aiohttp import ClientSession, TCPConnector
 from async_timeout import timeout
@@ -12,7 +13,7 @@ from algoliasearch.http.exceptions import (
 )
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
-from algoliasearch.http.serializer import QueryParametersSerializer
+from algoliasearch.http.serializer import Serializer
 from algoliasearch.http.verb import Verb
 from algoliasearch.search.config import Config
 
@@ -23,6 +24,7 @@ class Transporter:
     def __init__(self, config: Config) -> None:
         self._config = config
         self._retry_strategy = RetryStrategy()
+        self._serializer = Serializer()
 
         self._session = ClientSession(
             connector=TCPConnector(use_dns_cache=False), trust_env=True
@@ -84,6 +86,7 @@ class Transporter:
     def param_serialize(
         self,
         query_params: List[Tuple[str, str]] = [],
+        header_params: Dict[str, Optional[str]] = {},
         body: Optional[bytes] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Tuple:
@@ -94,51 +97,21 @@ class Transporter:
         :return: tuple of form (body, request_options)
         """
 
-        request_options = RequestOptions.create(self._config, request_options)
+        header_params.update(self._config.headers)
+
+        request_options = RequestOptions.create(
+            query_params,
+            header_params,
+            self._config.read_timeout,
+            self._config.write_timeout,
+            self._config.connect_timeout,
+            request_options,
+        )
 
         if body is not None:
             body = dumps(self.sanitize_for_serialization(body))
 
-        for k, v in query_params:
-            request_options.query_parameters[k] = v
-
         return body, request_options
-
-    async def send(
-        self,
-        verb: Verb,
-        url: str,
-        headers: Dict[str, str],
-        data: Optional[Union[dict, list]],
-    ) -> ApiResponse:
-        proxy = None
-        if url.startswith("https"):
-            proxy = self._config.proxies.get("https")
-        elif url.startswith("http"):
-            proxy = self._config.proxies.get("http")
-
-        try:
-            with timeout(self._timeout):
-                response = await self._session.request(
-                    method=verb,
-                    url=url,
-                    headers=headers,
-                    data=data,
-                    proxy=proxy,
-                )
-
-                raw_data = await response.text()
-
-        except TimeoutError as e:
-            ApiResponse(error_message=str(e), is_timed_out_error=True)
-
-        return ApiResponse(
-            url=url,
-            status_code=response.status,
-            headers=response.headers,
-            raw_data=raw_data,
-            error_message=str(response.reason),
-        )
 
     async def request(
         self,
@@ -151,30 +124,63 @@ class Transporter:
         query_parameters = dict(request_options.query_parameters)
 
         if verb == Verb.GET or use_read_transporter:
-            self._timeout = request_options.timeouts["readTimeout"]
+            self._timeout = request_options.timeouts["read"]
             hosts = self._config.hosts.read()
             query_parameters.update(request_options.data)
         else:
-            self._timeout = request_options.timeouts["writeTimeout"]
+            self._timeout = request_options.timeouts["write"]
             hosts = self._config.hosts.write()
 
         if isinstance(data, dict):
             data.update(request_options.data)
 
-        for host in self._retry_strategy.valid_hosts(hosts):
-            if len(query_parameters) > 0:
-                path = "{}?{}".format(
-                    path, QueryParametersSerializer.serialize(query_parameters)
-                )
+        if len(query_parameters) > 0:
+            path = "{}?{}".format(
+                path,
+                urlencode(
+                    sorted(
+                        self._serializer.query_parameters(
+                            query_parameters=query_parameters
+                        ).items(),
+                        key=lambda val: val[0],
+                    )
+                ),
+            )
 
+        for host in self._retry_strategy.valid_hosts(hosts):
             url = "https://{}{}".format(host.url, path)
 
-            response = await self.send(verb, url, request_options.headers, data)
+            proxy = None
+            if url.startswith("https"):
+                proxy = self._config.proxies.get("https")
+            elif url.startswith("http"):
+                proxy = self._config.proxies.get("http")
+
+            try:
+                async with timeout(self._timeout):
+                    resp = await self._session.request(
+                        method=verb,
+                        url=url,
+                        headers=request_options.headers,
+                        data=data,
+                        proxy=proxy,
+                    )
+
+                    response = ApiResponse(
+                        verb=verb,
+                        url=url,
+                        status_code=resp.status,
+                        headers=resp.headers,
+                        raw_data=await resp.text(),
+                        error_message=str(resp.reason),
+                    )
+
+            except TimeoutError as e:
+                response = ApiResponse(error_message=str(e), is_timed_out_error=True)
+
             decision = self._retry_strategy.decide(host, response)
 
-            if decision == RetryOutcome.RETRY:
-                continue
-            elif decision == RetryOutcome.SUCCESS:
+            if decision == RetryOutcome.SUCCESS:
                 return response
             elif decision == RetryOutcome.FAIL:
                 content = response.error_message
@@ -184,3 +190,28 @@ class Transporter:
                 raise RequestException(content, response.status_code)
 
         raise AlgoliaUnreachableHostException("Unreachable hosts")
+
+
+class EchoTransporter(Transporter):
+    def __init__(self, config: Config) -> None:
+        self._config = config
+        self._serializer = Serializer()
+
+    async def request(
+        self,
+        verb: Verb,
+        path: str,
+        data: Optional[Union[dict, list]],
+        request_options: RequestOptions,
+        use_read_transporter: bool,
+    ) -> ApiResponse:
+        return ApiResponse(
+            verb=verb,
+            path=path,
+            status_code=200,
+            query_parameters=self._serializer.query_parameters(
+                query_parameters=request_options.query_parameters
+            ),
+            headers=dict(request_options.headers),
+            raw_data=data,
+        )

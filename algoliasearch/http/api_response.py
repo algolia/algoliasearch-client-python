@@ -5,6 +5,8 @@ from __future__ import annotations
 from re import match
 from typing import Any, Dict, Generic, Optional, TypeVar
 
+from algoliasearch.http.verb import Verb
+
 T = TypeVar("T")
 
 
@@ -17,8 +19,11 @@ class ApiResponse(Generic[T]):
 
     def __init__(
         self,
+        verb: Verb,
+        path: str = "",
         url: str = "",
         status_code: int = None,
+        query_parameters: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         data: T = None,
         raw_data: str = None,
@@ -27,8 +32,11 @@ class ApiResponse(Generic[T]):
         is_network_error: bool = False,
         model_config: Dict[str, Any] = {"arbitrary_types_allowed": True},
     ) -> None:
+        self.verb = verb
+        self.path = path
         self.url = url
         self.status_code = status_code
+        self.query_parameters = query_parameters
         self.headers = headers
         self.data = data
         self.raw_data = raw_data
@@ -36,6 +44,9 @@ class ApiResponse(Generic[T]):
         self.is_timed_out_error = is_timed_out_error
         self.is_network_error = is_network_error
         self.model_config = model_config
+
+    def to_json(self) -> str:
+        return str(self.__dict__)
 
     def deserialize(self, klass: any = None) -> T:
         """Deserializes dict, list, str into an object.

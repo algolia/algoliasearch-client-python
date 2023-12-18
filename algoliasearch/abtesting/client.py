@@ -11,13 +11,14 @@ from urllib.parse import quote
 from pydantic import Field, StrictInt, StrictStr
 
 from algoliasearch.abtesting.config import Config
-from algoliasearch.abtesting.models import (
-    ABTest,
-    ABTestResponse,
-    AddABTestsRequest,
-    ListABTestsResponse,
-)
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.abtesting.models.ab_test import ABTest
+from algoliasearch.abtesting.models.ab_test_response import ABTestResponse
+from algoliasearch.abtesting.models.add_ab_tests_request import AddABTestsRequest
+from algoliasearch.abtesting.models.list_ab_tests_response import ListABTestsResponse
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 
 try:
     from typing import Self
@@ -38,8 +39,12 @@ class AbtestingClient:
 
         return AbtestingClient(transporter, config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return AbtestingClient.create_with_config(Config(app_id, api_key))
+    def create(
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        region: Optional[str] = None,
+    ) -> Self:
+        return AbtestingClient.create_with_config(Config(app_id, api_key, region))
 
     async def close(self) -> None:
         return await self._transporter.close()
@@ -66,14 +71,16 @@ class AbtestingClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/abtests"
 
+        _body = {}
         if add_ab_tests_request is not None:
             _body = add_ab_tests_request
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -143,15 +150,17 @@ class AbtestingClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -231,15 +240,17 @@ class AbtestingClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -325,17 +336,20 @@ class AbtestingClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -428,17 +442,20 @@ class AbtestingClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -514,12 +531,13 @@ class AbtestingClient:
             raise ValueError("'id' is required when calling 'delete_ab_test'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/abtests/{id}".replace("{id}", quote(str(id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -575,12 +593,13 @@ class AbtestingClient:
             raise ValueError("'id' is required when calling 'get_ab_test'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/abtests/{id}".replace("{id}", quote(str(id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -660,7 +679,7 @@ class AbtestingClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/abtests"
 
         if offset is not None:
@@ -674,7 +693,8 @@ class AbtestingClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -759,12 +779,13 @@ class AbtestingClient:
             raise ValueError("'id' is required when calling 'stop_ab_test'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/abtests/{id}/stop".replace("{id}", quote(str(id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 

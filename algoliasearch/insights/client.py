@@ -9,9 +9,13 @@ from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
 from pydantic import Field, StrictStr
 
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 from algoliasearch.insights.config import Config
-from algoliasearch.insights.models import EventsResponse, InsightsEvents
+from algoliasearch.insights.models.events_response import EventsResponse
+from algoliasearch.insights.models.insights_events import InsightsEvents
 
 try:
     from typing import Self
@@ -32,8 +36,12 @@ class InsightsClient:
 
         return InsightsClient(transporter, config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return InsightsClient.create_with_config(Config(app_id, api_key))
+    def create(
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        region: Optional[str] = None,
+    ) -> Self:
+        return InsightsClient.create_with_config(Config(app_id, api_key, region))
 
     async def close(self) -> None:
         return await self._transporter.close()
@@ -69,15 +77,17 @@ class InsightsClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -157,15 +167,17 @@ class InsightsClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -251,17 +263,20 @@ class InsightsClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -354,17 +369,20 @@ class InsightsClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -440,14 +458,16 @@ class InsightsClient:
             raise ValueError("'insights_events' is required when calling 'push_events'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/events"
 
+        _body = {}
         if insights_events is not None:
             _body = insights_events
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )

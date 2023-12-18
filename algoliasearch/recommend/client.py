@@ -10,16 +10,27 @@ from urllib.parse import quote
 
 from pydantic import Field, StrictInt, StrictStr
 
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 from algoliasearch.recommend.config import Config
-from algoliasearch.recommend.models import (
-    DeletedAtResponse,
-    GetRecommendationsParams,
-    GetRecommendationsResponse,
+from algoliasearch.recommend.models.deleted_at_response import DeletedAtResponse
+from algoliasearch.recommend.models.get_recommend_task_response import (
     GetRecommendTaskResponse,
-    RecommendModels,
-    RuleResponse,
+)
+from algoliasearch.recommend.models.get_recommendations_params import (
+    GetRecommendationsParams,
+)
+from algoliasearch.recommend.models.get_recommendations_response import (
+    GetRecommendationsResponse,
+)
+from algoliasearch.recommend.models.recommend_models import RecommendModels
+from algoliasearch.recommend.models.rule_response import RuleResponse
+from algoliasearch.recommend.models.search_recommend_rules_params import (
     SearchRecommendRulesParams,
+)
+from algoliasearch.recommend.models.search_recommend_rules_response import (
     SearchRecommendRulesResponse,
 )
 
@@ -79,15 +90,17 @@ class RecommendClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -167,15 +180,17 @@ class RecommendClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -261,17 +276,20 @@ class RecommendClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -364,17 +382,20 @@ class RecommendClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -475,7 +496,7 @@ class RecommendClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = (
             "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name))
@@ -486,7 +507,8 @@ class RecommendClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -584,7 +606,7 @@ class RecommendClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = (
             "/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name))
@@ -595,7 +617,8 @@ class RecommendClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -696,7 +719,7 @@ class RecommendClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = (
             "/1/indexes/{indexName}/{model}/task/{taskID}".replace(
                 "{indexName}", quote(str(index_name))
@@ -707,7 +730,8 @@ class RecommendClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -785,14 +809,16 @@ class RecommendClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/*/recommendations"
 
+        _body = {}
         if get_recommendations_params is not None:
             _body = get_recommendations_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -871,16 +897,18 @@ class RecommendClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/{model}/recommend/rules/search".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{model}", quote(str(model)))
 
+        _body = {}
         if search_recommend_rules_params is not None:
             _body = search_recommend_rules_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )

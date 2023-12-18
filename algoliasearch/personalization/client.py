@@ -10,12 +10,21 @@ from urllib.parse import quote
 
 from pydantic import Field, StrictStr
 
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 from algoliasearch.personalization.config import Config
-from algoliasearch.personalization.models import (
+from algoliasearch.personalization.models.delete_user_profile_response import (
     DeleteUserProfileResponse,
+)
+from algoliasearch.personalization.models.get_user_token_response import (
     GetUserTokenResponse,
+)
+from algoliasearch.personalization.models.personalization_strategy_params import (
     PersonalizationStrategyParams,
+)
+from algoliasearch.personalization.models.set_personalization_strategy_response import (
     SetPersonalizationStrategyResponse,
 )
 
@@ -38,8 +47,10 @@ class PersonalizationClient:
 
         return PersonalizationClient(transporter, config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return PersonalizationClient.create_with_config(Config(app_id, api_key))
+    def create(
+        app_id: Optional[str] = None, api_key: Optional[str] = None, region: str = None
+    ) -> Self:
+        return PersonalizationClient.create_with_config(Config(app_id, api_key, region))
 
     async def close(self) -> None:
         return await self._transporter.close()
@@ -75,15 +86,17 @@ class PersonalizationClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -163,15 +176,17 @@ class PersonalizationClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -257,17 +272,20 @@ class PersonalizationClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -360,17 +378,20 @@ class PersonalizationClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -453,12 +474,13 @@ class PersonalizationClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/profiles/{userToken}".replace("{userToken}", quote(str(user_token)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -514,12 +536,13 @@ class PersonalizationClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/strategies/personalization"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -580,14 +603,15 @@ class PersonalizationClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/profiles/personalization/{userToken}".replace(
             "{userToken}", quote(str(user_token))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -652,14 +676,16 @@ class PersonalizationClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/strategies/personalization"
 
+        _body = {}
         if personalization_strategy_params is not None:
             _body = personalization_strategy_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )

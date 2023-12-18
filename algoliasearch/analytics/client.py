@@ -11,28 +11,59 @@ from urllib.parse import quote
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 
 from algoliasearch.analytics.config import Config
-from algoliasearch.analytics.models import (
-    Direction,
+from algoliasearch.analytics.models.direction import Direction
+from algoliasearch.analytics.models.get_average_click_position_response import (
     GetAverageClickPositionResponse,
-    GetClickPositionsResponse,
-    GetClickThroughRateResponse,
-    GetConversationRateResponse,
-    GetNoClickRateResponse,
-    GetNoResultsRateResponse,
-    GetSearchesCountResponse,
-    GetSearchesNoClicksResponse,
-    GetSearchesNoResultsResponse,
-    GetStatusResponse,
-    GetTopCountriesResponse,
-    GetTopFilterAttributesResponse,
-    GetTopFilterForAttributeResponse,
-    GetTopFiltersNoResultsResponse,
-    GetTopHitsResponse,
-    GetTopSearchesResponse,
-    GetUsersCountResponse,
-    OrderBy,
 )
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.analytics.models.get_click_positions_response import (
+    GetClickPositionsResponse,
+)
+from algoliasearch.analytics.models.get_click_through_rate_response import (
+    GetClickThroughRateResponse,
+)
+from algoliasearch.analytics.models.get_conversation_rate_response import (
+    GetConversationRateResponse,
+)
+from algoliasearch.analytics.models.get_no_click_rate_response import (
+    GetNoClickRateResponse,
+)
+from algoliasearch.analytics.models.get_no_results_rate_response import (
+    GetNoResultsRateResponse,
+)
+from algoliasearch.analytics.models.get_searches_count_response import (
+    GetSearchesCountResponse,
+)
+from algoliasearch.analytics.models.get_searches_no_clicks_response import (
+    GetSearchesNoClicksResponse,
+)
+from algoliasearch.analytics.models.get_searches_no_results_response import (
+    GetSearchesNoResultsResponse,
+)
+from algoliasearch.analytics.models.get_status_response import GetStatusResponse
+from algoliasearch.analytics.models.get_top_countries_response import (
+    GetTopCountriesResponse,
+)
+from algoliasearch.analytics.models.get_top_filter_attributes_response import (
+    GetTopFilterAttributesResponse,
+)
+from algoliasearch.analytics.models.get_top_filter_for_attribute_response import (
+    GetTopFilterForAttributeResponse,
+)
+from algoliasearch.analytics.models.get_top_filters_no_results_response import (
+    GetTopFiltersNoResultsResponse,
+)
+from algoliasearch.analytics.models.get_top_hits_response import GetTopHitsResponse
+from algoliasearch.analytics.models.get_top_searches_response import (
+    GetTopSearchesResponse,
+)
+from algoliasearch.analytics.models.get_users_count_response import (
+    GetUsersCountResponse,
+)
+from algoliasearch.analytics.models.order_by import OrderBy
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 
 try:
     from typing import Self
@@ -53,8 +84,12 @@ class AnalyticsClient:
 
         return AnalyticsClient(transporter, config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return AnalyticsClient.create_with_config(Config(app_id, api_key))
+    def create(
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        region: Optional[str] = None,
+    ) -> Self:
+        return AnalyticsClient.create_with_config(Config(app_id, api_key, region))
 
     async def close(self) -> None:
         return await self._transporter.close()
@@ -90,15 +125,17 @@ class AnalyticsClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -178,15 +215,17 @@ class AnalyticsClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -272,17 +311,20 @@ class AnalyticsClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -375,17 +417,20 @@ class AnalyticsClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -487,7 +532,7 @@ class AnalyticsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/clicks/averageClickPosition"
 
         if index is not None:
@@ -501,7 +546,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -607,7 +653,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_click_positions'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/clicks/positions"
 
         if index is not None:
@@ -621,7 +667,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -729,7 +776,7 @@ class AnalyticsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/clicks/clickThroughRate"
 
         if index is not None:
@@ -743,7 +790,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -849,7 +897,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_conversation_rate'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/conversions/conversionRate"
 
         if index is not None:
@@ -863,7 +911,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -969,7 +1018,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_no_click_rate'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/searches/noClickRate"
 
         if index is not None:
@@ -983,7 +1032,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1089,7 +1139,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_no_results_rate'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/searches/noResultRate"
 
         if index is not None:
@@ -1103,7 +1153,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1209,7 +1260,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_searches_count'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/searches/count"
 
         if index is not None:
@@ -1223,7 +1274,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1345,7 +1397,7 @@ class AnalyticsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/searches/noClicks"
 
         if index is not None:
@@ -1363,7 +1415,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1499,7 +1552,7 @@ class AnalyticsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/searches/noResults"
 
         if index is not None:
@@ -1517,7 +1570,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1613,7 +1667,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_status'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/status"
 
         if index is not None:
@@ -1621,7 +1675,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1715,7 +1770,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_top_countries'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/countries"
 
         if index is not None:
@@ -1733,7 +1788,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1872,7 +1928,7 @@ class AnalyticsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/filters"
 
         if index is not None:
@@ -1892,7 +1948,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2042,7 +2099,7 @@ class AnalyticsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/filters/{attribute}".replace("{attribute}", quote(str(attribute)))
 
         if index is not None:
@@ -2062,7 +2119,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2215,7 +2273,7 @@ class AnalyticsClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/filters/noResults"
 
         if index is not None:
@@ -2235,7 +2293,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2383,7 +2442,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_top_hits'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/hits"
 
         if index is not None:
@@ -2405,7 +2464,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2579,7 +2639,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_top_searches'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/searches"
 
         if index is not None:
@@ -2591,9 +2651,9 @@ class AnalyticsClient:
         if end_date is not None:
             _query_params.append(("endDate", end_date))
         if order_by is not None:
-            _query_params.append(("orderBy", order_by.value))
+            _query_params.append(("orderBy", order_by))
         if direction is not None:
-            _query_params.append(("direction", direction.value))
+            _query_params.append(("direction", direction))
         if limit is not None:
             _query_params.append(("limit", limit))
         if offset is not None:
@@ -2603,7 +2663,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2753,7 +2814,7 @@ class AnalyticsClient:
             raise ValueError("'index' is required when calling 'get_users_count'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/2/users/count"
 
         if index is not None:
@@ -2767,7 +2828,8 @@ class AnalyticsClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 

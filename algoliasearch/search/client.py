@@ -10,71 +10,90 @@ from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 from algoliasearch.search.config import Config
-from algoliasearch.search.models import (
-    AddApiKeyResponse,
-    ApiKey,
-    AssignUserIdParams,
-    AttributeToUpdate,
+from algoliasearch.search.models.add_api_key_response import AddApiKeyResponse
+from algoliasearch.search.models.api_key import ApiKey
+from algoliasearch.search.models.assign_user_id_params import AssignUserIdParams
+from algoliasearch.search.models.attribute_to_update import AttributeToUpdate
+from algoliasearch.search.models.batch_assign_user_ids_params import (
     BatchAssignUserIdsParams,
-    BatchDictionaryEntriesParams,
-    BatchParams,
-    BatchResponse,
-    BatchWriteParams,
-    BrowseParams,
-    BrowseResponse,
-    CreatedAtResponse,
-    DeleteApiKeyResponse,
-    DeleteByParams,
-    DeletedAtResponse,
-    DeleteSourceResponse,
-    DictionarySettingsParams,
-    DictionaryType,
-    GetApiKeyResponse,
-    GetDictionarySettingsResponse,
-    GetLogsResponse,
-    GetObjectsParams,
-    GetObjectsResponse,
-    GetTaskResponse,
-    GetTopUserIdsResponse,
-    HasPendingMappingsResponse,
-    IndexSettings,
-    Languages,
-    ListApiKeysResponse,
-    ListClustersResponse,
-    ListIndicesResponse,
-    ListUserIdsResponse,
-    LogType,
-    MultipleBatchResponse,
-    OperationIndexParams,
-    RemoveUserIdResponse,
-    ReplaceSourceResponse,
-    Rule,
-    SaveObjectResponse,
-    SaveSynonymResponse,
-    SearchDictionaryEntriesParams,
-    SearchForFacetValuesRequest,
-    SearchForFacetValuesResponse,
-    SearchMethodParams,
-    SearchParams,
-    SearchResponse,
-    SearchResponses,
-    SearchRulesParams,
-    SearchRulesResponse,
-    SearchSynonymsParams,
-    SearchSynonymsResponse,
-    SearchUserIdsParams,
-    SearchUserIdsResponse,
-    Source,
-    SynonymHit,
-    SynonymType,
-    UpdateApiKeyResponse,
-    UpdatedAtResponse,
-    UpdatedAtWithObjectIdResponse,
-    UpdatedRuleResponse,
-    UserId,
 )
+from algoliasearch.search.models.batch_dictionary_entries_params import (
+    BatchDictionaryEntriesParams,
+)
+from algoliasearch.search.models.batch_params import BatchParams
+from algoliasearch.search.models.batch_response import BatchResponse
+from algoliasearch.search.models.batch_write_params import BatchWriteParams
+from algoliasearch.search.models.browse_params import BrowseParams
+from algoliasearch.search.models.browse_response import BrowseResponse
+from algoliasearch.search.models.created_at_response import CreatedAtResponse
+from algoliasearch.search.models.delete_api_key_response import DeleteApiKeyResponse
+from algoliasearch.search.models.delete_by_params import DeleteByParams
+from algoliasearch.search.models.delete_source_response import DeleteSourceResponse
+from algoliasearch.search.models.deleted_at_response import DeletedAtResponse
+from algoliasearch.search.models.dictionary_settings_params import (
+    DictionarySettingsParams,
+)
+from algoliasearch.search.models.dictionary_type import DictionaryType
+from algoliasearch.search.models.get_api_key_response import GetApiKeyResponse
+from algoliasearch.search.models.get_dictionary_settings_response import (
+    GetDictionarySettingsResponse,
+)
+from algoliasearch.search.models.get_logs_response import GetLogsResponse
+from algoliasearch.search.models.get_objects_params import GetObjectsParams
+from algoliasearch.search.models.get_objects_response import GetObjectsResponse
+from algoliasearch.search.models.get_task_response import GetTaskResponse
+from algoliasearch.search.models.get_top_user_ids_response import GetTopUserIdsResponse
+from algoliasearch.search.models.has_pending_mappings_response import (
+    HasPendingMappingsResponse,
+)
+from algoliasearch.search.models.index_settings import IndexSettings
+from algoliasearch.search.models.languages import Languages
+from algoliasearch.search.models.list_api_keys_response import ListApiKeysResponse
+from algoliasearch.search.models.list_clusters_response import ListClustersResponse
+from algoliasearch.search.models.list_indices_response import ListIndicesResponse
+from algoliasearch.search.models.list_user_ids_response import ListUserIdsResponse
+from algoliasearch.search.models.log_type import LogType
+from algoliasearch.search.models.multiple_batch_response import MultipleBatchResponse
+from algoliasearch.search.models.operation_index_params import OperationIndexParams
+from algoliasearch.search.models.remove_user_id_response import RemoveUserIdResponse
+from algoliasearch.search.models.replace_source_response import ReplaceSourceResponse
+from algoliasearch.search.models.rule import Rule
+from algoliasearch.search.models.save_object_response import SaveObjectResponse
+from algoliasearch.search.models.save_synonym_response import SaveSynonymResponse
+from algoliasearch.search.models.search_dictionary_entries_params import (
+    SearchDictionaryEntriesParams,
+)
+from algoliasearch.search.models.search_for_facet_values_request import (
+    SearchForFacetValuesRequest,
+)
+from algoliasearch.search.models.search_for_facet_values_response import (
+    SearchForFacetValuesResponse,
+)
+from algoliasearch.search.models.search_method_params import SearchMethodParams
+from algoliasearch.search.models.search_params import SearchParams
+from algoliasearch.search.models.search_response import SearchResponse
+from algoliasearch.search.models.search_responses import SearchResponses
+from algoliasearch.search.models.search_rules_params import SearchRulesParams
+from algoliasearch.search.models.search_rules_response import SearchRulesResponse
+from algoliasearch.search.models.search_synonyms_params import SearchSynonymsParams
+from algoliasearch.search.models.search_synonyms_response import SearchSynonymsResponse
+from algoliasearch.search.models.search_user_ids_params import SearchUserIdsParams
+from algoliasearch.search.models.search_user_ids_response import SearchUserIdsResponse
+from algoliasearch.search.models.source import Source
+from algoliasearch.search.models.synonym_hit import SynonymHit
+from algoliasearch.search.models.synonym_type import SynonymType
+from algoliasearch.search.models.update_api_key_response import UpdateApiKeyResponse
+from algoliasearch.search.models.updated_at_response import UpdatedAtResponse
+from algoliasearch.search.models.updated_at_with_object_id_response import (
+    UpdatedAtWithObjectIdResponse,
+)
+from algoliasearch.search.models.updated_rule_response import UpdatedRuleResponse
+from algoliasearch.search.models.user_id import UserId
 
 try:
     from typing import Self
@@ -121,14 +140,16 @@ class SearchClient:
             raise ValueError("'api_key' is required when calling 'add_api_key'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/keys"
 
+        _body = {}
         if api_key is not None:
             _body = api_key
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -205,16 +226,18 @@ class SearchClient:
             raise ValueError("'body' is required when calling 'add_or_update_object'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -283,14 +306,16 @@ class SearchClient:
             raise ValueError("'source' is required when calling 'append_source'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/security/sources/append"
 
+        _body = {}
         if source is not None:
             _body = source
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -359,14 +384,19 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping"
 
+        if x_algolia_user_id is not None:
+            _header_params["x-algolia-user-id"] = x_algolia_user_id
+
+        _body = {}
         if assign_user_id_params is not None:
             _body = assign_user_id_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -438,16 +468,18 @@ class SearchClient:
             raise ValueError("'batch_write_params' is required when calling 'batch'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/batch".replace(
             "{indexName}", quote(str(index_name))
         )
 
+        _body = {}
         if batch_write_params is not None:
             _body = batch_write_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -523,14 +555,19 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping/batch"
 
+        if x_algolia_user_id is not None:
+            _header_params["x-algolia-user-id"] = x_algolia_user_id
+
+        _body = {}
         if batch_assign_user_ids_params is not None:
             _body = batch_assign_user_ids_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -606,16 +643,18 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/dictionaries/{dictionaryName}/batch".replace(
             "{dictionaryName}", quote(str(dictionary_name))
         )
 
+        _body = {}
         if batch_dictionary_entries_params is not None:
             _body = batch_dictionary_entries_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -684,16 +723,18 @@ class SearchClient:
             raise ValueError("'index_name' is required when calling 'browse'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/browse".replace(
             "{indexName}", quote(str(index_name))
         )
 
+        _body = {}
         if browse_params is not None:
             _body = browse_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -769,7 +810,7 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/synonyms/clear".replace(
             "{indexName}", quote(str(index_name))
         )
@@ -779,7 +820,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -849,14 +891,15 @@ class SearchClient:
             raise ValueError("'index_name' is required when calling 'clear_objects'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/clear".replace(
             "{indexName}", quote(str(index_name))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -924,7 +967,7 @@ class SearchClient:
             raise ValueError("'index_name' is required when calling 'clear_rules'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/rules/clear".replace(
             "{indexName}", quote(str(index_name))
         )
@@ -934,7 +977,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1013,15 +1057,17 @@ class SearchClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1101,15 +1147,17 @@ class SearchClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1195,17 +1243,20 @@ class SearchClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -1298,17 +1349,20 @@ class SearchClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -1384,12 +1438,13 @@ class SearchClient:
             raise ValueError("'key' is required when calling 'delete_api_key'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/keys/{key}".replace("{key}", quote(str(key)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1453,16 +1508,18 @@ class SearchClient:
             raise ValueError("'delete_by_params' is required when calling 'delete_by'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/deleteByQuery".replace(
             "{indexName}", quote(str(index_name))
         )
 
+        _body = {}
         if delete_by_params is not None:
             _body = delete_by_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -1528,12 +1585,13 @@ class SearchClient:
             raise ValueError("'index_name' is required when calling 'delete_index'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}".replace("{indexName}", quote(str(index_name)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1601,14 +1659,15 @@ class SearchClient:
             raise ValueError("'object_id' is required when calling 'delete_object'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1691,7 +1750,7 @@ class SearchClient:
             raise ValueError("'object_id' is required when calling 'delete_rule'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/rules/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
@@ -1701,7 +1760,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1776,12 +1836,13 @@ class SearchClient:
             raise ValueError("'source' is required when calling 'delete_source'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/security/sources/{source}".replace("{source}", quote(str(source)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1857,7 +1918,7 @@ class SearchClient:
             raise ValueError("'object_id' is required when calling 'delete_synonym'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/synonyms/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
@@ -1867,7 +1928,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1940,12 +2002,13 @@ class SearchClient:
             raise ValueError("'key' is required when calling 'get_api_key'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/keys/{key}".replace("{key}", quote(str(key)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1994,12 +2057,13 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/dictionaries/*/languages"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2044,12 +2108,13 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/dictionaries/*/settings"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2125,7 +2190,7 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/logs"
 
         if offset is not None:
@@ -2135,11 +2200,12 @@ class SearchClient:
         if index_name is not None:
             _query_params.append(("indexName", index_name))
         if type is not None:
-            _query_params.append(("type", type.value))
+            _query_params.append(("type", type))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2242,7 +2308,7 @@ class SearchClient:
             raise ValueError("'object_id' is required when calling 'get_object'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
@@ -2252,7 +2318,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2329,14 +2396,16 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/*/objects"
 
+        _body = {}
         if get_objects_params is not None:
             _body = get_objects_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -2407,14 +2476,15 @@ class SearchClient:
             raise ValueError("'object_id' is required when calling 'get_rule'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/rules/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2481,14 +2551,15 @@ class SearchClient:
             raise ValueError("'index_name' is required when calling 'get_settings'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/settings".replace(
             "{indexName}", quote(str(index_name))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2539,12 +2610,13 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/security/sources"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2606,14 +2678,15 @@ class SearchClient:
             raise ValueError("'object_id' is required when calling 'get_synonym'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/synonyms/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2686,14 +2759,15 @@ class SearchClient:
             raise ValueError("'task_id' is required when calling 'get_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/task/{taskID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2749,12 +2823,13 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping/top"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2806,12 +2881,13 @@ class SearchClient:
             raise ValueError("'user_id' is required when calling 'get_user_id'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping/{userID}".replace("{userID}", quote(str(user_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2869,7 +2945,7 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping/pending"
 
         if get_clusters is not None:
@@ -2877,7 +2953,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2933,12 +3010,13 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/keys"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2983,12 +3061,13 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters"
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -3047,7 +3126,7 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes"
 
         if page is not None:
@@ -3057,7 +3136,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -3132,7 +3212,7 @@ class SearchClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping"
 
         if page is not None:
@@ -3142,7 +3222,8 @@ class SearchClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -3210,14 +3291,16 @@ class SearchClient:
             raise ValueError("'batch_params' is required when calling 'multiple_batch'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/*/batch"
 
+        _body = {}
         if batch_params is not None:
             _body = batch_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3286,16 +3369,18 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/operation".replace(
             "{indexName}", quote(str(index_name))
         )
 
+        _body = {}
         if operation_index_params is not None:
             _body = operation_index_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3392,7 +3477,7 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/{objectID}/partial".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
@@ -3400,11 +3485,13 @@ class SearchClient:
         if create_if_not_exists is not None:
             _query_params.append(("createIfNotExists", create_if_not_exists))
 
+        _body = {}
         if attributes_to_update is not None:
             _body = attributes_to_update
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3488,12 +3575,13 @@ class SearchClient:
             raise ValueError("'user_id' is required when calling 'remove_user_id'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping/{userID}".replace("{userID}", quote(str(user_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -3549,14 +3637,16 @@ class SearchClient:
             raise ValueError("'source' is required when calling 'replace_sources'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/security/sources"
 
+        _body = {}
         if source is not None:
             _body = source
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3613,12 +3703,13 @@ class SearchClient:
             raise ValueError("'key' is required when calling 'restore_api_key'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/keys/{key}/restore".replace("{key}", quote(str(key)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -3682,14 +3773,16 @@ class SearchClient:
             raise ValueError("'body' is required when calling 'save_object'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}".replace("{indexName}", quote(str(index_name)))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3777,7 +3870,7 @@ class SearchClient:
             raise ValueError("'rule' is required when calling 'save_rule'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/rules/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
@@ -3785,11 +3878,13 @@ class SearchClient:
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
+        _body = {}
         if rule is not None:
             _body = rule
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3890,7 +3985,7 @@ class SearchClient:
             raise ValueError("'rules' is required when calling 'save_rules'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/rules/batch".replace(
             "{indexName}", quote(str(index_name))
         )
@@ -3900,11 +3995,13 @@ class SearchClient:
         if clear_existing_rules is not None:
             _query_params.append(("clearExistingRules", clear_existing_rules))
 
+        _body = {}
         if rules is not None:
             _body = rules
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4012,7 +4109,7 @@ class SearchClient:
             raise ValueError("'synonym_hit' is required when calling 'save_synonym'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/synonyms/{objectID}".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{objectID}", quote(str(object_id)))
@@ -4020,11 +4117,13 @@ class SearchClient:
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
+        _body = {}
         if synonym_hit is not None:
             _body = synonym_hit
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4125,7 +4224,7 @@ class SearchClient:
             raise ValueError("'synonym_hit' is required when calling 'save_synonyms'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/synonyms/batch".replace(
             "{indexName}", quote(str(index_name))
         )
@@ -4135,11 +4234,13 @@ class SearchClient:
         if replace_existing_synonyms is not None:
             _query_params.append(("replaceExistingSynonyms", replace_existing_synonyms))
 
+        _body = {}
         if synonym_hit is not None:
             _body = synonym_hit
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4228,14 +4329,16 @@ class SearchClient:
             raise ValueError("'search_method_params' is required when calling 'search'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/*/queries"
 
+        _body = {}
         if search_method_params is not None:
             _body = search_method_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4311,16 +4414,18 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/dictionaries/{dictionaryName}/search".replace(
             "{dictionaryName}", quote(str(dictionary_name))
         )
 
+        _body = {}
         if search_dictionary_entries_params is not None:
             _body = search_dictionary_entries_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4399,16 +4504,18 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/facets/{facetName}/query".replace(
             "{indexName}", quote(str(index_name))
         ).replace("{facetName}", quote(str(facet_name)))
 
+        _body = {}
         if search_for_facet_values_request is not None:
             _body = search_for_facet_values_request
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4480,16 +4587,18 @@ class SearchClient:
             raise ValueError("'index_name' is required when calling 'search_rules'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/rules/search".replace(
             "{indexName}", quote(str(index_name))
         )
 
+        _body = {}
         if search_rules_params is not None:
             _body = search_rules_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4560,16 +4669,18 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/query".replace(
             "{indexName}", quote(str(index_name))
         )
 
+        _body = {}
         if search_params is not None:
             _body = search_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4662,23 +4773,25 @@ class SearchClient:
             raise ValueError("'index_name' is required when calling 'search_synonyms'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/synonyms/search".replace(
             "{indexName}", quote(str(index_name))
         )
 
         if type is not None:
-            _query_params.append(("type", type.value))
+            _query_params.append(("type", type))
         if page is not None:
             _query_params.append(("page", page))
         if hits_per_page is not None:
             _query_params.append(("hitsPerPage", hits_per_page))
 
+        _body = {}
         if search_synonyms_params is not None:
             _body = search_synonyms_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4773,14 +4886,16 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/clusters/mapping/search"
 
+        _body = {}
         if search_user_ids_params is not None:
             _body = search_user_ids_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4841,14 +4956,16 @@ class SearchClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/dictionaries/*/settings"
 
+        _body = {}
         if dictionary_settings_params is not None:
             _body = dictionary_settings_params
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -4923,7 +5040,7 @@ class SearchClient:
             raise ValueError("'index_settings' is required when calling 'set_settings'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/indexes/{indexName}/settings".replace(
             "{indexName}", quote(str(index_name))
         )
@@ -4931,11 +5048,13 @@ class SearchClient:
         if forward_to_replicas is not None:
             _query_params.append(("forwardToReplicas", forward_to_replicas))
 
+        _body = {}
         if index_settings is not None:
             _body = index_settings
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -5013,14 +5132,16 @@ class SearchClient:
             raise ValueError("'api_key' is required when calling 'update_api_key'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/keys/{key}".replace("{key}", quote(str(key)))
 
+        _body = {}
         if api_key is not None:
             _body = api_key
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )

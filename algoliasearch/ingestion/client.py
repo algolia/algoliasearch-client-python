@@ -10,62 +10,77 @@ from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 
-from algoliasearch.http import ApiResponse, RequestOptions, Transporter, Verb
+from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.request_options import RequestOptions
+from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.verb import Verb
 from algoliasearch.ingestion.config import Config
-from algoliasearch.ingestion.models import (
-    ActionType,
-    Authentication,
-    AuthenticationCreate,
+from algoliasearch.ingestion.models.action_type import ActionType
+from algoliasearch.ingestion.models.authentication import Authentication
+from algoliasearch.ingestion.models.authentication_create import AuthenticationCreate
+from algoliasearch.ingestion.models.authentication_create_response import (
     AuthenticationCreateResponse,
-    AuthenticationSearch,
-    AuthenticationSortKeys,
-    AuthenticationType,
-    AuthenticationUpdate,
-    AuthenticationUpdateResponse,
-    DeleteResponse,
-    Destination,
-    DestinationCreate,
-    DestinationCreateResponse,
-    DestinationSearch,
-    DestinationSortKeys,
-    DestinationType,
-    DestinationUpdate,
-    DestinationUpdateResponse,
-    DockerSourceDiscover,
-    DockerSourceStreams,
-    Event,
-    EventSortKeys,
-    EventStatus,
-    EventType,
-    ListAuthenticationsResponse,
-    ListDestinationsResponse,
-    ListEventsResponse,
-    ListSourcesResponse,
-    ListTasksResponse,
-    OrderKeys,
-    PlatformWithNone,
-    Run,
-    RunListResponse,
-    RunResponse,
-    RunSortKeys,
-    RunStatus,
-    Source,
-    SourceCreate,
-    SourceCreateResponse,
-    SourceSearch,
-    SourceSortKeys,
-    SourceType,
-    SourceUpdate,
-    SourceUpdateResponse,
-    Task,
-    TaskCreate,
-    TaskCreateResponse,
-    TaskSearch,
-    TaskSortKeys,
-    TaskUpdate,
-    TaskUpdateResponse,
-    TriggerType,
 )
+from algoliasearch.ingestion.models.authentication_search import AuthenticationSearch
+from algoliasearch.ingestion.models.authentication_sort_keys import (
+    AuthenticationSortKeys,
+)
+from algoliasearch.ingestion.models.authentication_type import AuthenticationType
+from algoliasearch.ingestion.models.authentication_update import AuthenticationUpdate
+from algoliasearch.ingestion.models.authentication_update_response import (
+    AuthenticationUpdateResponse,
+)
+from algoliasearch.ingestion.models.delete_response import DeleteResponse
+from algoliasearch.ingestion.models.destination import Destination
+from algoliasearch.ingestion.models.destination_create import DestinationCreate
+from algoliasearch.ingestion.models.destination_create_response import (
+    DestinationCreateResponse,
+)
+from algoliasearch.ingestion.models.destination_search import DestinationSearch
+from algoliasearch.ingestion.models.destination_sort_keys import DestinationSortKeys
+from algoliasearch.ingestion.models.destination_type import DestinationType
+from algoliasearch.ingestion.models.destination_update import DestinationUpdate
+from algoliasearch.ingestion.models.destination_update_response import (
+    DestinationUpdateResponse,
+)
+from algoliasearch.ingestion.models.docker_source_discover import DockerSourceDiscover
+from algoliasearch.ingestion.models.docker_source_streams import DockerSourceStreams
+from algoliasearch.ingestion.models.event import Event
+from algoliasearch.ingestion.models.event_sort_keys import EventSortKeys
+from algoliasearch.ingestion.models.event_status import EventStatus
+from algoliasearch.ingestion.models.event_type import EventType
+from algoliasearch.ingestion.models.list_authentications_response import (
+    ListAuthenticationsResponse,
+)
+from algoliasearch.ingestion.models.list_destinations_response import (
+    ListDestinationsResponse,
+)
+from algoliasearch.ingestion.models.list_events_response import ListEventsResponse
+from algoliasearch.ingestion.models.list_sources_response import ListSourcesResponse
+from algoliasearch.ingestion.models.list_tasks_response import ListTasksResponse
+from algoliasearch.ingestion.models.order_keys import OrderKeys
+from algoliasearch.ingestion.models.platform_with_none import PlatformWithNone
+from algoliasearch.ingestion.models.run import Run
+from algoliasearch.ingestion.models.run_list_response import RunListResponse
+from algoliasearch.ingestion.models.run_response import RunResponse
+from algoliasearch.ingestion.models.run_sort_keys import RunSortKeys
+from algoliasearch.ingestion.models.run_status import RunStatus
+from algoliasearch.ingestion.models.source import Source
+from algoliasearch.ingestion.models.source_create import SourceCreate
+from algoliasearch.ingestion.models.source_create_response import SourceCreateResponse
+from algoliasearch.ingestion.models.source_search import SourceSearch
+from algoliasearch.ingestion.models.source_sort_keys import SourceSortKeys
+from algoliasearch.ingestion.models.source_type import SourceType
+from algoliasearch.ingestion.models.source_update import SourceUpdate
+from algoliasearch.ingestion.models.source_update_response import SourceUpdateResponse
+from algoliasearch.ingestion.models.task import Task
+from algoliasearch.ingestion.models.task_create import TaskCreate
+from algoliasearch.ingestion.models.task_create_response import TaskCreateResponse
+from algoliasearch.ingestion.models.task_search import TaskSearch
+from algoliasearch.ingestion.models.task_sort_keys import TaskSortKeys
+from algoliasearch.ingestion.models.task_update import TaskUpdate
+from algoliasearch.ingestion.models.task_update_response import TaskUpdateResponse
+from algoliasearch.ingestion.models.trigger_type import TriggerType
 
 try:
     from typing import Self
@@ -86,8 +101,10 @@ class IngestionClient:
 
         return IngestionClient(transporter, config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return IngestionClient.create_with_config(Config(app_id, api_key))
+    def create(
+        app_id: Optional[str] = None, api_key: Optional[str] = None, region: str = None
+    ) -> Self:
+        return IngestionClient.create_with_config(Config(app_id, api_key, region))
 
     async def close(self) -> None:
         return await self._transporter.close()
@@ -114,14 +131,16 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/authentications"
 
+        _body = {}
         if authentication_create is not None:
             _body = authentication_create
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -182,14 +201,16 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/destinations"
 
+        _body = {}
         if destination_create is not None:
             _body = destination_create
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -248,14 +269,16 @@ class IngestionClient:
             raise ValueError("'source_create' is required when calling 'create_source'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources"
 
+        _body = {}
         if source_create is not None:
             _body = source_create
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -314,14 +337,16 @@ class IngestionClient:
             raise ValueError("'task_create' is required when calling 'create_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks"
 
+        _body = {}
         if task_create is not None:
             _body = task_create
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -389,15 +414,17 @@ class IngestionClient:
             raise ValueError("'path' is required when calling 'custom_delete'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -477,15 +504,17 @@ class IngestionClient:
             raise ValueError("'path' is required when calling 'custom_get'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -571,17 +600,20 @@ class IngestionClient:
             raise ValueError("'path' is required when calling 'custom_post'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -674,17 +706,20 @@ class IngestionClient:
             raise ValueError("'path' is required when calling 'custom_put'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1{path}".replace("{path}", path)
 
         if parameters is not None:
-            _query_params.append(("parameters", parameters))
+            for _qpkey, _qpvalue in parameters.items():
+                _query_params.append((_qpkey, _qpvalue))
 
+        _body = {}
         if body is not None:
             _body = body
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -764,14 +799,15 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/authentications/{authenticationID}".replace(
             "{authenticationID}", quote(str(authentication_id))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -835,14 +871,15 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/destinations/{destinationID}".replace(
             "{destinationID}", quote(str(destination_id))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -902,12 +939,13 @@ class IngestionClient:
             raise ValueError("'source_id' is required when calling 'delete_source'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -963,12 +1001,13 @@ class IngestionClient:
             raise ValueError("'task_id' is required when calling 'delete_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1024,12 +1063,13 @@ class IngestionClient:
             raise ValueError("'task_id' is required when calling 'disable_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks/{taskID}/disable".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1085,12 +1125,13 @@ class IngestionClient:
             raise ValueError("'task_id' is required when calling 'enable_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks/{taskID}/enable".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1150,14 +1191,15 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/authentications/{authenticationID}".replace(
             "{authenticationID}", quote(str(authentication_id))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1246,7 +1288,7 @@ class IngestionClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/authentications"
 
         if items_per_page is not None:
@@ -1258,13 +1300,14 @@ class IngestionClient:
         if platform is not None:
             _query_params.append(("platform", platform))
         if sort is not None:
-            _query_params.append(("sort", sort.value))
+            _query_params.append(("sort", sort))
         if order is not None:
-            _query_params.append(("order", order.value))
+            _query_params.append(("order", order))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1358,14 +1401,15 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/destinations/{destinationID}".replace(
             "{destinationID}", quote(str(destination_id))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1454,7 +1498,7 @@ class IngestionClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/destinations"
 
         if items_per_page is not None:
@@ -1466,13 +1510,14 @@ class IngestionClient:
         if authentication_id is not None:
             _query_params.append(("authenticationID", authentication_id))
         if sort is not None:
-            _query_params.append(("sort", sort.value))
+            _query_params.append(("sort", sort))
         if order is not None:
-            _query_params.append(("order", order.value))
+            _query_params.append(("order", order))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1564,14 +1609,15 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources/{sourceID}/discover".replace(
             "{sourceID}", quote(str(source_id))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1635,14 +1681,15 @@ class IngestionClient:
             raise ValueError("'event_id' is required when calling 'get_event'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/runs/{runID}/events/{eventID}".replace(
             "{runID}", quote(str(run_id))
         ).replace("{eventID}", quote(str(event_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1754,7 +1801,7 @@ class IngestionClient:
             raise ValueError("'run_id' is required when calling 'get_events'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/runs/{runID}/events".replace("{runID}", quote(str(run_id)))
 
         if items_per_page is not None:
@@ -1766,9 +1813,9 @@ class IngestionClient:
         if type is not None:
             _query_params.append(("type", type))
         if sort is not None:
-            _query_params.append(("sort", sort.value))
+            _query_params.append(("sort", sort))
         if order is not None:
-            _query_params.append(("order", order.value))
+            _query_params.append(("order", order))
         if start_date is not None:
             _query_params.append(("startDate", start_date))
         if end_date is not None:
@@ -1776,7 +1823,8 @@ class IngestionClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1894,12 +1942,13 @@ class IngestionClient:
             raise ValueError("'run_id' is required when calling 'get_run'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/runs/{runID}".replace("{runID}", quote(str(run_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -1999,7 +2048,7 @@ class IngestionClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/runs"
 
         if items_per_page is not None:
@@ -2011,9 +2060,9 @@ class IngestionClient:
         if task_id is not None:
             _query_params.append(("taskID", task_id))
         if sort is not None:
-            _query_params.append(("sort", sort.value))
+            _query_params.append(("sort", sort))
         if order is not None:
-            _query_params.append(("order", order.value))
+            _query_params.append(("order", order))
         if start_date is not None:
             _query_params.append(("startDate", start_date))
         if end_date is not None:
@@ -2021,7 +2070,8 @@ class IngestionClient:
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2134,12 +2184,13 @@ class IngestionClient:
             raise ValueError("'source_id' is required when calling 'get_source'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2226,7 +2277,7 @@ class IngestionClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources"
 
         if items_per_page is not None:
@@ -2238,13 +2289,14 @@ class IngestionClient:
         if authentication_id is not None:
             _query_params.append(("authenticationID", authentication_id))
         if sort is not None:
-            _query_params.append(("sort", sort.value))
+            _query_params.append(("sort", sort))
         if order is not None:
-            _query_params.append(("order", order.value))
+            _query_params.append(("order", order))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2336,12 +2388,13 @@ class IngestionClient:
             raise ValueError("'task_id' is required when calling 'get_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2444,7 +2497,7 @@ class IngestionClient:
         """
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks"
 
         if items_per_page is not None:
@@ -2462,13 +2515,14 @@ class IngestionClient:
         if trigger_type is not None:
             _query_params.append(("triggerType", trigger_type))
         if sort is not None:
-            _query_params.append(("sort", sort.value))
+            _query_params.append(("sort", sort))
         if order is not None:
-            _query_params.append(("order", order.value))
+            _query_params.append(("order", order))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2585,12 +2639,13 @@ class IngestionClient:
             raise ValueError("'task_id' is required when calling 'run_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks/{taskID}/run".replace("{taskID}", quote(str(task_id)))
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2648,14 +2703,16 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/authentications/search"
 
+        _body = {}
         if authentication_search is not None:
             _body = authentication_search
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -2716,14 +2773,16 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/destinations/search"
 
+        _body = {}
         if destination_search is not None:
             _body = destination_search
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -2784,14 +2843,16 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources/search"
 
+        _body = {}
         if source_search is not None:
             _body = source_search
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -2850,14 +2911,16 @@ class IngestionClient:
             raise ValueError("'task_search' is required when calling 'search_tasks'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks/search"
 
+        _body = {}
         if task_search is not None:
             _body = task_search
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -2916,14 +2979,15 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources/{sourceID}/discover".replace(
             "{sourceID}", quote(str(source_id))
         )
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
-            body=_body,
+            header_params=_header_params,
+            body=None,
             request_options=request_options,
         )
 
@@ -2993,16 +3057,18 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/authentications/{authenticationID}".replace(
             "{authenticationID}", quote(str(authentication_id))
         )
 
+        _body = {}
         if authentication_update is not None:
             _body = authentication_update
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3078,16 +3144,18 @@ class IngestionClient:
             )
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/destinations/{destinationID}".replace(
             "{destinationID}", quote(str(destination_id))
         )
 
+        _body = {}
         if destination_update is not None:
             _body = destination_update
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3157,14 +3225,16 @@ class IngestionClient:
             raise ValueError("'source_update' is required when calling 'update_source'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id)))
 
+        _body = {}
         if source_update is not None:
             _body = source_update
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
@@ -3232,14 +3302,16 @@ class IngestionClient:
             raise ValueError("'task_update' is required when calling 'update_task'")
 
         _query_params: List[Tuple[str, str]] = []
-        _body: Optional[bytes] = None
+        _header_params: Dict[str, Optional[str]] = {}
         _path = "/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id)))
 
+        _body = {}
         if task_update is not None:
             _body = task_update
 
         _param = self._transporter.param_serialize(
             query_params=_query_params,
+            header_params=_header_params,
             body=_body,
             request_options=request_options,
         )
