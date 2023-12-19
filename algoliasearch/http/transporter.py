@@ -1,31 +1,26 @@
 from asyncio import TimeoutError
-from json import dumps
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Optional, Union
 from urllib.parse import urlencode
 
 from aiohttp import ClientSession, TCPConnector
 from async_timeout import timeout
 
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.exceptions import (
     AlgoliaUnreachableHostException,
     RequestException,
 )
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
-from algoliasearch.http.serializer import Serializer
+from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.verb import Verb
-from algoliasearch.search.config import Config
 
 
 class Transporter:
-    PRIMITIVE_TYPES = (float, bool, bytes, str, int)
-
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: BaseConfig) -> None:
         self._config = config
         self._retry_strategy = RetryStrategy()
-        self._serializer = Serializer()
-
         self._session = ClientSession(
             connector=TCPConnector(use_dns_cache=False), trust_env=True
         )
@@ -48,70 +43,6 @@ class Transporter:
 
     def __exit__(self, exc_type, exc_value, traceback) -> None:
         pass
-
-    def sanitize_for_serialization(self, obj) -> dict:
-        """Builds a JSON POST object.
-
-        If obj is None, return None.
-        If obj is str, int, long, float, bool, return directly.
-        If obj is list, sanitize each element in the list.
-        If obj is dict, return the dict.
-        If obj is OpenAPI model, return the properties dict.
-
-        :param obj: The data to serialize.
-        :return: The serialized form of data.
-        """
-        if obj is None:
-            return None
-        elif isinstance(obj, self.PRIMITIVE_TYPES):
-            return obj
-        elif isinstance(obj, list):
-            return [self.sanitize_for_serialization(sub_obj) for sub_obj in obj]
-        elif isinstance(obj, tuple):
-            return tuple(self.sanitize_for_serialization(sub_obj) for sub_obj in obj)
-        elif isinstance(obj, dict):
-            obj_dict = obj
-        else:
-            # Convert model obj to dict except
-            # attributes `openapi_types`, `attribute_map`
-            # and attributes which value is not None.
-            # Convert attribute name to json key in
-            # model definition for request.
-            obj_dict = obj.to_dict()
-
-        return {
-            key: self.sanitize_for_serialization(val) for key, val in obj_dict.items()
-        }
-
-    def param_serialize(
-        self,
-        query_params: List[Tuple[str, str]] = [],
-        header_params: Dict[str, Optional[str]] = {},
-        body: Optional[bytes] = None,
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> Tuple:
-        """Builds the HTTP request params needed by the request.
-        :param query_params: Query parameters in the url.
-        :param body: Request body.
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: tuple of form (body, request_options)
-        """
-
-        header_params.update(self._config.headers)
-
-        request_options = RequestOptions.create(
-            query_params,
-            header_params,
-            self._config.read_timeout,
-            self._config.write_timeout,
-            self._config.connect_timeout,
-            request_options,
-        )
-
-        if body is not None:
-            body = dumps(self.sanitize_for_serialization(body))
-
-        return body, request_options
 
     async def request(
         self,
@@ -139,9 +70,9 @@ class Transporter:
                 path,
                 urlencode(
                     sorted(
-                        self._serializer.query_parameters(
+                        QueryParametersSerializer(
                             query_parameters=query_parameters
-                        ).items(),
+                        ).query_parameters.items(),
                         key=lambda val: val[0],
                     )
                 ),
@@ -193,9 +124,8 @@ class Transporter:
 
 
 class EchoTransporter(Transporter):
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: BaseConfig) -> None:
         self._config = config
-        self._serializer = Serializer()
 
     async def request(
         self,
@@ -209,9 +139,9 @@ class EchoTransporter(Transporter):
             verb=verb,
             path=path,
             status_code=200,
-            query_parameters=self._serializer.query_parameters(
+            query_parameters=QueryParametersSerializer(
                 query_parameters=request_options.query_parameters
-            ),
+            ).query_parameters,
             headers=dict(request_options.headers),
             raw_data=data,
         )

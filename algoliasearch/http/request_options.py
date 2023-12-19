@@ -1,6 +1,8 @@
 from copy import deepcopy
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+from algoliasearch.http.base_config import BaseConfig
+
 try:
     from typing import Self
 except ImportError:
@@ -35,24 +37,24 @@ class RequestOptions:
         )
 
     def create(
-        query_params: List[Tuple[str, str]],
-        header_params: Dict[str, Optional[str]],
-        default_read_timeout: int,
-        default_write_timeout: int,
-        default_connect_timeout: int,
+        config: BaseConfig,
+        query_parameters: List[Tuple[str, str]] = [],
+        headers_parameters: Dict[str, Optional[str]] = {},
         user_request_options: Optional[Union[Self, Dict[str, Any]]] = None,
     ) -> Self:
         """
         Overrides the default config values with the user given request options if it exists, merges it if not.
         """
 
+        headers_parameters.update(config.headers)
+
         request_options = {
-            "headers": header_params,
-            "query_parameters": {k: v for k, v in query_params},
+            "headers": headers_parameters,
+            "query_parameters": {k: v for k, v in query_parameters},
             "timeouts": {
-                "read": default_read_timeout,
-                "write": default_write_timeout,
-                "connect": default_connect_timeout,
+                "read": config.read_timeout,
+                "write": config.write_timeout,
+                "connect": config.connect_timeout,
             },
             "data": {},
         }

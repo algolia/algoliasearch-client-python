@@ -1,11 +1,12 @@
 from os import environ
 from typing import Optional
 
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.hosts import CallType, Host, HostsCollection
 from algoliasearch.http.user_agent import UserAgent
 
 
-class Config:
+class Config(BaseConfig):
     def __init__(
         self, app_id: Optional[str] = None, api_key: Optional[str] = None
     ) -> None:

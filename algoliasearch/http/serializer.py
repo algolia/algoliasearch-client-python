@@ -1,28 +1,55 @@
-import json
+from json import dumps
 from typing import Any, Dict
 
+PRIMITIVE_TYPES = (float, bool, bytes, str, int)
 
-class Serializer:
-    def parse_query_parameters(self, value) -> Any:
+
+class QueryParametersSerializer:
+    """
+    Parses the given 'query_parameters' values of each keys into their string value.
+    """
+
+    query_parameters: Dict[str, Any] = {}
+
+    def parse(self, value) -> Any:
         if isinstance(value, dict):
-            value = json.dumps(value)
+            return dumps(value)
         elif isinstance(value, list):
-            serialized_value: list[str] = []
-
-            for item in value:
-                serialized_value.append(self.parse_query_parameters(item))
-            value = ",".join(serialized_value)
+            return ",".join([self.parse(item) for item in value])
         elif isinstance(value, bool):
-            value = "true" if value else "false"
+            return "true" if value else "false"
         else:
-            value = str(value)
-        return value
+            return str(value)
 
-    def query_parameters(self, query_parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Parses the given 'query_parameters' values of each keys into their string value.
-        """
-
+    def __init__(self, query_parameters: Dict[str, Any]) -> None:
         for key, value in query_parameters.items():
-            query_parameters[key] = self.parse_query_parameters(value)
-        return query_parameters
+            self.query_parameters[key] = self.parse(value)
+
+
+def bodySerializer(obj: Any) -> dict:
+    """Builds a JSON POST object.
+
+    If obj is None, return None.
+    If obj is str, int, long, float, bool, return directly.
+    If obj is list, sanitize each element in the list.
+    If obj is dict, return the dict.
+    If obj is OpenAPI model, return the properties dict.
+
+    :param obj: The data to serialize.
+    :return: The serialized form of data.
+    """
+
+    if obj is None:
+        return None
+    elif isinstance(obj, PRIMITIVE_TYPES):
+        return obj
+    elif isinstance(obj, list):
+        return [bodySerializer(sub_obj) for sub_obj in obj]
+    elif isinstance(obj, tuple):
+        return tuple(bodySerializer(sub_obj) for sub_obj in obj)
+    elif isinstance(obj, dict):
+        obj_dict = obj
+    else:
+        obj_dict = obj.to_dict()
+
+    return {key: bodySerializer(val) for key, val in obj_dict.items()}
