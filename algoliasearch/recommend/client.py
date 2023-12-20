@@ -89,7 +89,9 @@ class RecommendClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -100,7 +102,7 @@ class RecommendClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -176,7 +178,7 @@ class RecommendClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -187,7 +189,7 @@ class RecommendClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -269,7 +271,7 @@ class RecommendClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -284,7 +286,7 @@ class RecommendClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -372,7 +374,7 @@ class RecommendClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -387,7 +389,7 @@ class RecommendClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -474,15 +476,17 @@ class RecommendClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'delete_recommend_rule'"
+                "Parameter `index_name` is required when calling `delete_recommend_rule`."
             )
 
         if model is None:
-            raise ValueError("'model' is required when calling 'delete_recommend_rule'")
+            raise ValueError(
+                "Parameter `model` is required when calling `delete_recommend_rule`."
+            )
 
         if object_id is None:
             raise ValueError(
-                "'object_id' is required when calling 'delete_recommend_rule'"
+                "Parameter `object_id` is required when calling `delete_recommend_rule`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -491,10 +495,10 @@ class RecommendClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             )
-            .replace("{model}", quote(str(model)))
-            .replace("{objectID}", quote(str(object_id))),
+            .replace("{model}", quote(str(model), safe=""))
+            .replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -579,15 +583,17 @@ class RecommendClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'get_recommend_rule'"
+                "Parameter `index_name` is required when calling `get_recommend_rule`."
             )
 
         if model is None:
-            raise ValueError("'model' is required when calling 'get_recommend_rule'")
+            raise ValueError(
+                "Parameter `model` is required when calling `get_recommend_rule`."
+            )
 
         if object_id is None:
             raise ValueError(
-                "'object_id' is required when calling 'get_recommend_rule'"
+                "Parameter `object_id` is required when calling `get_recommend_rule`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -596,10 +602,10 @@ class RecommendClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             )
-            .replace("{model}", quote(str(model)))
-            .replace("{objectID}", quote(str(object_id))),
+            .replace("{model}", quote(str(model), safe=""))
+            .replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -687,15 +693,17 @@ class RecommendClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'get_recommend_status'"
+                "Parameter `index_name` is required when calling `get_recommend_status`."
             )
 
         if model is None:
-            raise ValueError("'model' is required when calling 'get_recommend_status'")
+            raise ValueError(
+                "Parameter `model` is required when calling `get_recommend_status`."
+            )
 
         if task_id is None:
             raise ValueError(
-                "'task_id' is required when calling 'get_recommend_status'"
+                "Parameter `task_id` is required when calling `get_recommend_status`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -704,10 +712,10 @@ class RecommendClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/{model}/task/{taskID}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             )
-            .replace("{model}", quote(str(model)))
-            .replace("{taskID}", quote(str(task_id))),
+            .replace("{model}", quote(str(model), safe=""))
+            .replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -780,7 +788,7 @@ class RecommendClient:
 
         if get_recommendations_params is None:
             raise ValueError(
-                "'get_recommendations_params' is required when calling 'get_recommendations'"
+                "Parameter `get_recommendations_params` is required when calling `get_recommendations`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -860,12 +868,12 @@ class RecommendClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'search_recommend_rules'"
+                "Parameter `index_name` is required when calling `search_recommend_rules`."
             )
 
         if model is None:
             raise ValueError(
-                "'model' is required when calling 'search_recommend_rules'"
+                "Parameter `model` is required when calling `search_recommend_rules`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -878,8 +886,8 @@ class RecommendClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/{model}/recommend/rules/search".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{model}", quote(str(model))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{model}", quote(str(model), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,

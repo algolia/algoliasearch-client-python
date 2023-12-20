@@ -69,7 +69,7 @@ class AbtestingClient:
 
         if add_ab_tests_request is None:
             raise ValueError(
-                "'add_ab_tests_request' is required when calling 'add_ab_tests'"
+                "Parameter `add_ab_tests_request` is required when calling `add_ab_tests`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -146,7 +146,9 @@ class AbtestingClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -157,7 +159,7 @@ class AbtestingClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -233,7 +235,7 @@ class AbtestingClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -244,7 +246,7 @@ class AbtestingClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -326,7 +328,7 @@ class AbtestingClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -341,7 +343,7 @@ class AbtestingClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -429,7 +431,7 @@ class AbtestingClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -444,7 +446,7 @@ class AbtestingClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -515,14 +517,16 @@ class AbtestingClient:
         """
 
         if id is None:
-            raise ValueError("'id' is required when calling 'delete_ab_test'")
+            raise ValueError(
+                "Parameter `id` is required when calling `delete_ab_test`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/2/abtests/{id}".replace("{id}", quote(str(id))),
+            path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -574,14 +578,14 @@ class AbtestingClient:
         """
 
         if id is None:
-            raise ValueError("'id' is required when calling 'get_ab_test'")
+            raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/2/abtests/{id}".replace("{id}", quote(str(id))),
+            path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -754,14 +758,14 @@ class AbtestingClient:
         """
 
         if id is None:
-            raise ValueError("'id' is required when calling 'stop_ab_test'")
+            raise ValueError("Parameter `id` is required when calling `stop_ab_test`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/2/abtests/{id}/stop".replace("{id}", quote(str(id))),
+            path="/2/abtests/{id}/stop".replace("{id}", quote(str(id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,

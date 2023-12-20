@@ -139,7 +139,9 @@ class SearchClient:
         """
 
         if api_key is None:
-            raise ValueError("'api_key' is required when calling 'add_api_key'")
+            raise ValueError(
+                "Parameter `api_key` is required when calling `add_api_key`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -213,16 +215,18 @@ class SearchClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'add_or_update_object'"
+                "Parameter `index_name` is required when calling `add_or_update_object`."
             )
 
         if object_id is None:
             raise ValueError(
-                "'object_id' is required when calling 'add_or_update_object'"
+                "Parameter `object_id` is required when calling `add_or_update_object`."
             )
 
         if body is None:
-            raise ValueError("'body' is required when calling 'add_or_update_object'")
+            raise ValueError(
+                "Parameter `body` is required when calling `add_or_update_object`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -234,8 +238,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -299,7 +303,9 @@ class SearchClient:
         """
 
         if source is None:
-            raise ValueError("'source' is required when calling 'append_source'")
+            raise ValueError(
+                "Parameter `source` is required when calling `append_source`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -368,12 +374,12 @@ class SearchClient:
 
         if x_algolia_user_id is None:
             raise ValueError(
-                "'x_algolia_user_id' is required when calling 'assign_user_id'"
+                "Parameter `x_algolia_user_id` is required when calling `assign_user_id`."
             )
 
         if assign_user_id_params is None:
             raise ValueError(
-                "'assign_user_id_params' is required when calling 'assign_user_id'"
+                "Parameter `assign_user_id_params` is required when calling `assign_user_id`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -452,10 +458,12 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'batch'")
+            raise ValueError("Parameter `index_name` is required when calling `batch`.")
 
         if batch_write_params is None:
-            raise ValueError("'batch_write_params' is required when calling 'batch'")
+            raise ValueError(
+                "Parameter `batch_write_params` is required when calling `batch`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -467,7 +475,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/batch".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -533,12 +541,12 @@ class SearchClient:
 
         if x_algolia_user_id is None:
             raise ValueError(
-                "'x_algolia_user_id' is required when calling 'batch_assign_user_ids'"
+                "Parameter `x_algolia_user_id` is required when calling `batch_assign_user_ids`."
             )
 
         if batch_assign_user_ids_params is None:
             raise ValueError(
-                "'batch_assign_user_ids_params' is required when calling 'batch_assign_user_ids'"
+                "Parameter `batch_assign_user_ids_params` is required when calling `batch_assign_user_ids`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -618,12 +626,12 @@ class SearchClient:
 
         if dictionary_name is None:
             raise ValueError(
-                "'dictionary_name' is required when calling 'batch_dictionary_entries'"
+                "Parameter `dictionary_name` is required when calling `batch_dictionary_entries`."
             )
 
         if batch_dictionary_entries_params is None:
             raise ValueError(
-                "'batch_dictionary_entries_params' is required when calling 'batch_dictionary_entries'"
+                "Parameter `batch_dictionary_entries_params` is required when calling `batch_dictionary_entries`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -636,7 +644,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/dictionaries/{dictionaryName}/batch".replace(
-                "{dictionaryName}", quote(str(dictionary_name))
+                "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -701,7 +709,9 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'browse'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `browse`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -713,7 +723,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/browse".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -784,7 +794,7 @@ class SearchClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'clear_all_synonyms'"
+                "Parameter `index_name` is required when calling `clear_all_synonyms`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -796,7 +806,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/clear".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -863,7 +873,9 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'clear_objects'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_objects`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -871,7 +883,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/clear".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -936,7 +948,9 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'clear_rules'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_rules`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -947,7 +961,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/clear".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -1023,7 +1037,9 @@ class SearchClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1034,7 +1050,7 @@ class SearchClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1110,7 +1126,7 @@ class SearchClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1121,7 +1137,7 @@ class SearchClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1203,7 +1219,7 @@ class SearchClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1218,7 +1234,7 @@ class SearchClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1306,7 +1322,7 @@ class SearchClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1321,7 +1337,7 @@ class SearchClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1392,14 +1408,16 @@ class SearchClient:
         """
 
         if key is None:
-            raise ValueError("'key' is required when calling 'delete_api_key'")
+            raise ValueError(
+                "Parameter `key` is required when calling `delete_api_key`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1/keys/{key}".replace("{key}", quote(str(key))),
+            path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1456,10 +1474,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'delete_by'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_by`."
+            )
 
         if delete_by_params is None:
-            raise ValueError("'delete_by_params' is required when calling 'delete_by'")
+            raise ValueError(
+                "Parameter `delete_by_params` is required when calling `delete_by`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1471,7 +1493,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/deleteByQuery".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -1533,7 +1555,9 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'delete_index'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_index`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1541,7 +1565,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -1603,10 +1627,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'delete_object'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_object`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'delete_object'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_object`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1614,8 +1642,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1691,10 +1719,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'delete_rule'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_rule`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'delete_rule'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_rule`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1705,8 +1737,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1777,14 +1809,18 @@ class SearchClient:
         """
 
         if source is None:
-            raise ValueError("'source' is required when calling 'delete_source'")
+            raise ValueError(
+                "Parameter `source` is required when calling `delete_source`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1/security/sources/{source}".replace("{source}", quote(str(source))),
+            path="/1/security/sources/{source}".replace(
+                "{source}", quote(str(source), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1853,10 +1889,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'delete_synonym'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_synonym`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'delete_synonym'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_synonym`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1867,8 +1907,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1937,14 +1977,14 @@ class SearchClient:
         """
 
         if key is None:
-            raise ValueError("'key' is required when calling 'get_api_key'")
+            raise ValueError("Parameter `key` is required when calling `get_api_key`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/keys/{key}".replace("{key}", quote(str(key))),
+            path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2228,10 +2268,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'get_object'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_object`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'get_object'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_object`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2242,8 +2286,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2315,7 +2359,7 @@ class SearchClient:
 
         if get_objects_params is None:
             raise ValueError(
-                "'get_objects_params' is required when calling 'get_objects'"
+                "Parameter `get_objects_params` is required when calling `get_objects`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2390,10 +2434,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'get_rule'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_rule`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'get_rule'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2401,8 +2449,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2465,7 +2513,9 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'get_settings'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_settings`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2473,7 +2523,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/settings".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -2583,10 +2633,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'get_synonym'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_synonym`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'get_synonym'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_synonym`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2594,8 +2648,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2661,10 +2715,12 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'get_task'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_task`."
+            )
 
         if task_id is None:
-            raise ValueError("'task_id' is required when calling 'get_task'")
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2672,8 +2728,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/task/{taskID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{taskID}", quote(str(task_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2780,7 +2836,9 @@ class SearchClient:
         """
 
         if user_id is None:
-            raise ValueError("'user_id' is required when calling 'get_user_id'")
+            raise ValueError(
+                "Parameter `user_id` is required when calling `get_user_id`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2788,7 +2846,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping/{userID}".replace(
-                "{userID}", quote(str(user_id))
+                "{userID}", quote(str(user_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -3174,7 +3232,9 @@ class SearchClient:
         """
 
         if batch_params is None:
-            raise ValueError("'batch_params' is required when calling 'multiple_batch'")
+            raise ValueError(
+                "Parameter `batch_params` is required when calling `multiple_batch`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3244,11 +3304,13 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'operation_index'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `operation_index`."
+            )
 
         if operation_index_params is None:
             raise ValueError(
-                "'operation_index_params' is required when calling 'operation_index'"
+                "Parameter `operation_index_params` is required when calling `operation_index`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -3261,7 +3323,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/operation".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -3343,17 +3405,17 @@ class SearchClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'partial_update_object'"
+                "Parameter `index_name` is required when calling `partial_update_object`."
             )
 
         if object_id is None:
             raise ValueError(
-                "'object_id' is required when calling 'partial_update_object'"
+                "Parameter `object_id` is required when calling `partial_update_object`."
             )
 
         if attributes_to_update is None:
             raise ValueError(
-                "'attributes_to_update' is required when calling 'partial_update_object'"
+                "Parameter `attributes_to_update` is required when calling `partial_update_object`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -3369,8 +3431,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/{objectID}/partial".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -3449,7 +3511,9 @@ class SearchClient:
         """
 
         if user_id is None:
-            raise ValueError("'user_id' is required when calling 'remove_user_id'")
+            raise ValueError(
+                "Parameter `user_id` is required when calling `remove_user_id`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3457,7 +3521,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/clusters/mapping/{userID}".replace(
-                "{userID}", quote(str(user_id))
+                "{userID}", quote(str(user_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -3510,7 +3574,9 @@ class SearchClient:
         """
 
         if source is None:
-            raise ValueError("'source' is required when calling 'replace_sources'")
+            raise ValueError(
+                "Parameter `source` is required when calling `replace_sources`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3573,14 +3639,16 @@ class SearchClient:
         """
 
         if key is None:
-            raise ValueError("'key' is required when calling 'restore_api_key'")
+            raise ValueError(
+                "Parameter `key` is required when calling `restore_api_key`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1/keys/{key}/restore".replace("{key}", quote(str(key))),
+            path="/1/keys/{key}/restore".replace("{key}", quote(str(key), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -3637,10 +3705,12 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'save_object'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_object`."
+            )
 
         if body is None:
-            raise ValueError("'body' is required when calling 'save_object'")
+            raise ValueError("Parameter `body` is required when calling `save_object`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3652,7 +3722,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -3730,13 +3800,17 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'save_rule'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rule`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'save_rule'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_rule`."
+            )
 
         if rule is None:
-            raise ValueError("'rule' is required when calling 'save_rule'")
+            raise ValueError("Parameter `rule` is required when calling `save_rule`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3751,8 +3825,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -3845,10 +3919,12 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'save_rules'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rules`."
+            )
 
         if rules is None:
-            raise ValueError("'rules' is required when calling 'save_rules'")
+            raise ValueError("Parameter `rules` is required when calling `save_rules`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3865,7 +3941,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/batch".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -3963,13 +4039,19 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'save_synonym'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonym`."
+            )
 
         if object_id is None:
-            raise ValueError("'object_id' is required when calling 'save_synonym'")
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_synonym`."
+            )
 
         if synonym_hit is None:
-            raise ValueError("'synonym_hit' is required when calling 'save_synonym'")
+            raise ValueError(
+                "Parameter `synonym_hit` is required when calling `save_synonym`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3984,8 +4066,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{objectID}", quote(str(object_id))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -4078,10 +4160,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'save_synonyms'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonyms`."
+            )
 
         if synonym_hit is None:
-            raise ValueError("'synonym_hit' is required when calling 'save_synonyms'")
+            raise ValueError(
+                "Parameter `synonym_hit` is required when calling `save_synonyms`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -4100,7 +4186,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/batch".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -4185,7 +4271,9 @@ class SearchClient:
         """
 
         if search_method_params is None:
-            raise ValueError("'search_method_params' is required when calling 'search'")
+            raise ValueError(
+                "Parameter `search_method_params` is required when calling `search`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -4261,12 +4349,12 @@ class SearchClient:
 
         if dictionary_name is None:
             raise ValueError(
-                "'dictionary_name' is required when calling 'search_dictionary_entries'"
+                "Parameter `dictionary_name` is required when calling `search_dictionary_entries`."
             )
 
         if search_dictionary_entries_params is None:
             raise ValueError(
-                "'search_dictionary_entries_params' is required when calling 'search_dictionary_entries'"
+                "Parameter `search_dictionary_entries_params` is required when calling `search_dictionary_entries`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -4279,7 +4367,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/dictionaries/{dictionaryName}/search".replace(
-                "{dictionaryName}", quote(str(dictionary_name))
+                "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -4348,12 +4436,12 @@ class SearchClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'search_for_facet_values'"
+                "Parameter `index_name` is required when calling `search_for_facet_values`."
             )
 
         if facet_name is None:
             raise ValueError(
-                "'facet_name' is required when calling 'search_for_facet_values'"
+                "Parameter `facet_name` is required when calling `search_for_facet_values`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -4366,8 +4454,8 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/facets/{facetName}/query".replace(
-                "{indexName}", quote(str(index_name))
-            ).replace("{facetName}", quote(str(facet_name))),
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{facetName}", quote(str(facet_name), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -4434,7 +4522,9 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'search_rules'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_rules`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -4446,7 +4536,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/search".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -4512,7 +4602,7 @@ class SearchClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'search_single_index'"
+                "Parameter `index_name` is required when calling `search_single_index`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -4525,7 +4615,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/query".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -4614,7 +4704,9 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'search_synonyms'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_synonyms`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -4633,7 +4725,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/search".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -4723,7 +4815,7 @@ class SearchClient:
 
         if search_user_ids_params is None:
             raise ValueError(
-                "'search_user_ids_params' is required when calling 'search_user_ids'"
+                "Parameter `search_user_ids_params` is required when calling `search_user_ids`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -4790,7 +4882,7 @@ class SearchClient:
 
         if dictionary_settings_params is None:
             raise ValueError(
-                "'dictionary_settings_params' is required when calling 'set_dictionary_settings'"
+                "Parameter `dictionary_settings_params` is required when calling `set_dictionary_settings`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -4869,10 +4961,14 @@ class SearchClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'set_settings'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `set_settings`."
+            )
 
         if index_settings is None:
-            raise ValueError("'index_settings' is required when calling 'set_settings'")
+            raise ValueError(
+                "Parameter `index_settings` is required when calling `set_settings`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -4887,7 +4983,7 @@ class SearchClient:
         response = await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/settings".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -4958,10 +5054,14 @@ class SearchClient:
         """
 
         if key is None:
-            raise ValueError("'key' is required when calling 'update_api_key'")
+            raise ValueError(
+                "Parameter `key` is required when calling `update_api_key`."
+            )
 
         if api_key is None:
-            raise ValueError("'api_key' is required when calling 'update_api_key'")
+            raise ValueError(
+                "Parameter `api_key` is required when calling `update_api_key`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -4972,7 +5072,7 @@ class SearchClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1/keys/{key}".replace("{key}", quote(str(key))),
+            path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,

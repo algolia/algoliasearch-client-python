@@ -81,7 +81,7 @@ class QuerySuggestionsClient:
 
         if query_suggestions_configuration_with_index is None:
             raise ValueError(
-                "'query_suggestions_configuration_with_index' is required when calling 'create_config'"
+                "Parameter `query_suggestions_configuration_with_index` is required when calling `create_config`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -158,7 +158,9 @@ class QuerySuggestionsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -169,7 +171,7 @@ class QuerySuggestionsClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -245,7 +247,7 @@ class QuerySuggestionsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -256,7 +258,7 @@ class QuerySuggestionsClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -338,7 +340,7 @@ class QuerySuggestionsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -353,7 +355,7 @@ class QuerySuggestionsClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -441,7 +443,7 @@ class QuerySuggestionsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -456,7 +458,7 @@ class QuerySuggestionsClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -529,7 +531,9 @@ class QuerySuggestionsClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'delete_config'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_config`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -537,7 +541,7 @@ class QuerySuggestionsClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/configs/{indexName}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -642,7 +646,9 @@ class QuerySuggestionsClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'get_config'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_config`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -650,7 +656,7 @@ class QuerySuggestionsClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/configs/{indexName}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -708,7 +714,7 @@ class QuerySuggestionsClient:
 
         if index_name is None:
             raise ValueError(
-                "'index_name' is required when calling 'get_config_status'"
+                "Parameter `index_name` is required when calling `get_config_status`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -717,7 +723,7 @@ class QuerySuggestionsClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/configs/{indexName}/status".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -776,14 +782,18 @@ class QuerySuggestionsClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'get_log_file'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_log_file`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/logs/{indexName}".replace("{indexName}", quote(str(index_name))),
+            path="/1/logs/{indexName}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -842,11 +852,13 @@ class QuerySuggestionsClient:
         """
 
         if index_name is None:
-            raise ValueError("'index_name' is required when calling 'update_config'")
+            raise ValueError(
+                "Parameter `index_name` is required when calling `update_config`."
+            )
 
         if query_suggestions_configuration is None:
             raise ValueError(
-                "'query_suggestions_configuration' is required when calling 'update_config'"
+                "Parameter `query_suggestions_configuration` is required when calling `update_config`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -859,7 +871,7 @@ class QuerySuggestionsClient:
         response = await self._transporter.request(
             verb=Verb.PUT,
             path="/1/configs/{indexName}".replace(
-                "{indexName}", quote(str(index_name))
+                "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(

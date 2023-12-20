@@ -124,7 +124,9 @@ class AnalyticsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -135,7 +137,7 @@ class AnalyticsClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -211,7 +213,7 @@ class AnalyticsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -222,7 +224,7 @@ class AnalyticsClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -304,7 +306,7 @@ class AnalyticsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -319,7 +321,7 @@ class AnalyticsClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -407,7 +409,7 @@ class AnalyticsClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -422,7 +424,7 @@ class AnalyticsClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -518,7 +520,7 @@ class AnalyticsClient:
 
         if index is None:
             raise ValueError(
-                "'index' is required when calling 'get_average_click_position'"
+                "Parameter `index` is required when calling `get_average_click_position`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -637,7 +639,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_click_positions'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_click_positions`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -756,7 +760,7 @@ class AnalyticsClient:
 
         if index is None:
             raise ValueError(
-                "'index' is required when calling 'get_click_through_rate'"
+                "Parameter `index` is required when calling `get_click_through_rate`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -875,7 +879,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_conversation_rate'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_conversation_rate`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -993,7 +999,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_no_click_rate'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_no_click_rate`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1111,7 +1119,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_no_results_rate'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_no_results_rate`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1229,7 +1239,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_searches_count'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_searches_count`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1362,7 +1374,7 @@ class AnalyticsClient:
 
         if index is None:
             raise ValueError(
-                "'index' is required when calling 'get_searches_no_clicks'"
+                "Parameter `index` is required when calling `get_searches_no_clicks`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -1514,7 +1526,7 @@ class AnalyticsClient:
 
         if index is None:
             raise ValueError(
-                "'index' is required when calling 'get_searches_no_results'"
+                "Parameter `index` is required when calling `get_searches_no_results`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -1627,7 +1639,7 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_status'")
+            raise ValueError("Parameter `index` is required when calling `get_status`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1727,7 +1739,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_top_countries'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_countries`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1881,7 +1895,7 @@ class AnalyticsClient:
 
         if index is None:
             raise ValueError(
-                "'index' is required when calling 'get_top_filter_attributes'"
+                "Parameter `index` is required when calling `get_top_filter_attributes`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2044,12 +2058,12 @@ class AnalyticsClient:
 
         if attribute is None:
             raise ValueError(
-                "'attribute' is required when calling 'get_top_filter_for_attribute'"
+                "Parameter `attribute` is required when calling `get_top_filter_for_attribute`."
             )
 
         if index is None:
             raise ValueError(
-                "'index' is required when calling 'get_top_filter_for_attribute'"
+                "Parameter `index` is required when calling `get_top_filter_for_attribute`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2072,7 +2086,9 @@ class AnalyticsClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/2/filters/{attribute}".replace("{attribute}", quote(str(attribute))),
+            path="/2/filters/{attribute}".replace(
+                "{attribute}", quote(str(attribute), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2220,7 +2236,7 @@ class AnalyticsClient:
 
         if index is None:
             raise ValueError(
-                "'index' is required when calling 'get_top_filters_no_results'"
+                "Parameter `index` is required when calling `get_top_filters_no_results`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2387,7 +2403,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_top_hits'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_hits`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2581,7 +2599,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_top_searches'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_searches`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2753,7 +2773,9 @@ class AnalyticsClient:
         """
 
         if index is None:
-            raise ValueError("'index' is required when calling 'get_users_count'")
+            raise ValueError(
+                "Parameter `index` is required when calling `get_users_count`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}

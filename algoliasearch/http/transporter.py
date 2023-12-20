@@ -1,5 +1,5 @@
 from asyncio import TimeoutError
-from typing import Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from urllib.parse import urlencode
 
 from aiohttp import ClientSession, TCPConnector
@@ -11,6 +11,7 @@ from algoliasearch.http.exceptions import (
     AlgoliaUnreachableHostException,
     RequestException,
 )
+from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
 from algoliasearch.http.serializer import QueryParametersSerializer
@@ -18,6 +19,11 @@ from algoliasearch.http.verb import Verb
 
 
 class Transporter:
+    _config: BaseConfig
+    _retry_strategy: RetryStrategy
+    _session: ClientSession
+    _hosts: List[Host]
+
     def __init__(self, config: BaseConfig) -> None:
         self._config = config
         self._retry_strategy = RetryStrategy()
@@ -44,6 +50,23 @@ class Transporter:
     def __exit__(self, exc_type, exc_value, traceback) -> None:
         pass
 
+    def prepare(
+        self,
+        request_options: RequestOptions,
+        use_read_transporter: bool,
+    ) -> Dict[str, Any]:
+        query_parameters = dict(request_options.query_parameters)
+
+        if use_read_transporter:
+            self._timeout = request_options.timeouts["read"]
+            self._hosts = self._config.hosts.read()
+            query_parameters.update(request_options.data)
+
+            return query_parameters
+
+        self._timeout = request_options.timeouts["write"]
+        self._hosts = self._config.hosts.write()
+
     async def request(
         self,
         verb: Verb,
@@ -52,15 +75,9 @@ class Transporter:
         request_options: RequestOptions,
         use_read_transporter: bool,
     ) -> ApiResponse:
-        query_parameters = dict(request_options.query_parameters)
-
-        if verb == Verb.GET or use_read_transporter:
-            self._timeout = request_options.timeouts["read"]
-            hosts = self._config.hosts.read()
-            query_parameters.update(request_options.data)
-        else:
-            self._timeout = request_options.timeouts["write"]
-            hosts = self._config.hosts.write()
+        query_parameters = self.prepare(
+            request_options, verb == Verb.GET or use_read_transporter
+        )
 
         if isinstance(data, dict):
             data.update(request_options.data)
@@ -78,7 +95,7 @@ class Transporter:
                 ),
             )
 
-        for host in self._retry_strategy.valid_hosts(hosts):
+        for host in self._retry_strategy.valid_hosts(self._hosts):
             url = "https://{}{}".format(host.url, path)
 
             proxy = None
@@ -126,6 +143,7 @@ class Transporter:
 class EchoTransporter(Transporter):
     def __init__(self, config: BaseConfig) -> None:
         self._config = config
+        self._retry_strategy = RetryStrategy()
 
     async def request(
         self,
@@ -135,10 +153,17 @@ class EchoTransporter(Transporter):
         request_options: RequestOptions,
         use_read_transporter: bool,
     ) -> ApiResponse:
+        self.prepare(request_options, verb == Verb.GET or use_read_transporter)
+
         return ApiResponse(
             verb=verb,
             path=path,
             status_code=200,
+            host=self._retry_strategy.valid_hosts(self._hosts)[0].url,
+            timeouts={
+                "connect": request_options.timeouts["connect"],
+                "response": self._timeout,
+            },
             query_parameters=QueryParametersSerializer(
                 query_parameters=request_options.query_parameters
             ).query_parameters,

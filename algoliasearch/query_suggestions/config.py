@@ -2,7 +2,6 @@ from os import environ
 from typing import Optional
 
 from algoliasearch.http.base_config import BaseConfig
-from algoliasearch.http.exceptions import AlgoliaException
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.user_agent import UserAgent
 
@@ -30,6 +29,8 @@ class Config(BaseConfig):
         self.write_timeout = 30000
         self.connect_timeout = 2000
 
+        UserAgent.add("QuerySuggestions")
+
         self.headers = {
             "x-algolia-application-id": app_id,
             "x-algolia-api-key": api_key,
@@ -49,7 +50,7 @@ class Config(BaseConfig):
         _regions = ["eu", "us"]
 
         if not region or (region is not None and region not in _regions):
-            raise AlgoliaException(
+            raise ValueError(
                 f"`region` is required and must be one of the following: {', '.join(_regions)}"
             )
 

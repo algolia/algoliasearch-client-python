@@ -85,7 +85,9 @@ class PersonalizationClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -96,7 +98,7 @@ class PersonalizationClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -172,7 +174,7 @@ class PersonalizationClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -183,7 +185,7 @@ class PersonalizationClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -265,7 +267,7 @@ class PersonalizationClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -280,7 +282,7 @@ class PersonalizationClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -368,7 +370,7 @@ class PersonalizationClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -383,7 +385,7 @@ class PersonalizationClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -460,7 +462,7 @@ class PersonalizationClient:
 
         if user_token is None:
             raise ValueError(
-                "'user_token' is required when calling 'delete_user_profile'"
+                "Parameter `user_token` is required when calling `delete_user_profile`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -469,7 +471,7 @@ class PersonalizationClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/profiles/{userToken}".replace(
-                "{userToken}", quote(str(user_token))
+                "{userToken}", quote(str(user_token), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -585,7 +587,7 @@ class PersonalizationClient:
 
         if user_token is None:
             raise ValueError(
-                "'user_token' is required when calling 'get_user_token_profile'"
+                "Parameter `user_token` is required when calling `get_user_token_profile`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -594,7 +596,7 @@ class PersonalizationClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/profiles/personalization/{userToken}".replace(
-                "{userToken}", quote(str(user_token))
+                "{userToken}", quote(str(user_token), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -655,7 +657,7 @@ class PersonalizationClient:
 
         if personalization_strategy_params is None:
             raise ValueError(
-                "'personalization_strategy_params' is required when calling 'set_personalization_strategy'"
+                "Parameter `personalization_strategy_params` is required when calling `set_personalization_strategy`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []

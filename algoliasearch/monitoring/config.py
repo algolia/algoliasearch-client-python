@@ -26,6 +26,8 @@ class Config(BaseConfig):
         self.write_timeout = 30000
         self.connect_timeout = 2000
 
+        UserAgent.add("Monitoring")
+
         self.headers = {
             "x-algolia-application-id": app_id,
             "x-algolia-api-key": api_key,

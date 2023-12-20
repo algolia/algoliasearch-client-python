@@ -129,7 +129,7 @@ class IngestionClient:
 
         if authentication_create is None:
             raise ValueError(
-                "'authentication_create' is required when calling 'create_authentication'"
+                "Parameter `authentication_create` is required when calling `create_authentication`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -196,7 +196,7 @@ class IngestionClient:
 
         if destination_create is None:
             raise ValueError(
-                "'destination_create' is required when calling 'create_destination'"
+                "Parameter `destination_create` is required when calling `create_destination`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -262,7 +262,9 @@ class IngestionClient:
         """
 
         if source_create is None:
-            raise ValueError("'source_create' is required when calling 'create_source'")
+            raise ValueError(
+                "Parameter `source_create` is required when calling `create_source`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -327,7 +329,9 @@ class IngestionClient:
         """
 
         if task_create is None:
-            raise ValueError("'task_create' is required when calling 'create_task'")
+            raise ValueError(
+                "Parameter `task_create` is required when calling `create_task`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -401,7 +405,9 @@ class IngestionClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -412,7 +418,7 @@ class IngestionClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -488,7 +494,7 @@ class IngestionClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -499,7 +505,7 @@ class IngestionClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -581,7 +587,7 @@ class IngestionClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -596,7 +602,7 @@ class IngestionClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -684,7 +690,7 @@ class IngestionClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -699,7 +705,7 @@ class IngestionClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -773,7 +779,7 @@ class IngestionClient:
 
         if authentication_id is None:
             raise ValueError(
-                "'authentication_id' is required when calling 'delete_authentication'"
+                "Parameter `authentication_id` is required when calling `delete_authentication`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -782,7 +788,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/authentications/{authenticationID}".replace(
-                "{authenticationID}", quote(str(authentication_id))
+                "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -842,7 +848,7 @@ class IngestionClient:
 
         if destination_id is None:
             raise ValueError(
-                "'destination_id' is required when calling 'delete_destination'"
+                "Parameter `destination_id` is required when calling `delete_destination`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -851,7 +857,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/destinations/{destinationID}".replace(
-                "{destinationID}", quote(str(destination_id))
+                "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -908,14 +914,18 @@ class IngestionClient:
         """
 
         if source_id is None:
-            raise ValueError("'source_id' is required when calling 'delete_source'")
+            raise ValueError(
+                "Parameter `source_id` is required when calling `delete_source`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id))),
+            path="/1/sources/{sourceID}".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -967,14 +977,16 @@ class IngestionClient:
         """
 
         if task_id is None:
-            raise ValueError("'task_id' is required when calling 'delete_task'")
+            raise ValueError(
+                "Parameter `task_id` is required when calling `delete_task`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id))),
+            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1026,14 +1038,18 @@ class IngestionClient:
         """
 
         if task_id is None:
-            raise ValueError("'task_id' is required when calling 'disable_task'")
+            raise ValueError(
+                "Parameter `task_id` is required when calling `disable_task`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1/tasks/{taskID}/disable".replace("{taskID}", quote(str(task_id))),
+            path="/1/tasks/{taskID}/disable".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1085,14 +1101,18 @@ class IngestionClient:
         """
 
         if task_id is None:
-            raise ValueError("'task_id' is required when calling 'enable_task'")
+            raise ValueError(
+                "Parameter `task_id` is required when calling `enable_task`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1/tasks/{taskID}/enable".replace("{taskID}", quote(str(task_id))),
+            path="/1/tasks/{taskID}/enable".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1147,7 +1167,7 @@ class IngestionClient:
 
         if authentication_id is None:
             raise ValueError(
-                "'authentication_id' is required when calling 'get_authentication'"
+                "Parameter `authentication_id` is required when calling `get_authentication`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -1156,7 +1176,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/authentications/{authenticationID}".replace(
-                "{authenticationID}", quote(str(authentication_id))
+                "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -1351,7 +1371,7 @@ class IngestionClient:
 
         if destination_id is None:
             raise ValueError(
-                "'destination_id' is required when calling 'get_destination'"
+                "Parameter `destination_id` is required when calling `get_destination`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -1360,7 +1380,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/destinations/{destinationID}".replace(
-                "{destinationID}", quote(str(destination_id))
+                "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -1553,7 +1573,7 @@ class IngestionClient:
 
         if source_id is None:
             raise ValueError(
-                "'source_id' is required when calling 'get_docker_source_streams'"
+                "Parameter `source_id` is required when calling `get_docker_source_streams`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -1562,7 +1582,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/sources/{sourceID}/discover".replace(
-                "{sourceID}", quote(str(source_id))
+                "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -1620,10 +1640,12 @@ class IngestionClient:
         """
 
         if run_id is None:
-            raise ValueError("'run_id' is required when calling 'get_event'")
+            raise ValueError("Parameter `run_id` is required when calling `get_event`.")
 
         if event_id is None:
-            raise ValueError("'event_id' is required when calling 'get_event'")
+            raise ValueError(
+                "Parameter `event_id` is required when calling `get_event`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1631,8 +1653,8 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}/events/{eventID}".replace(
-                "{runID}", quote(str(run_id))
-            ).replace("{eventID}", quote(str(event_id))),
+                "{runID}", quote(str(run_id), safe="")
+            ).replace("{eventID}", quote(str(event_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1740,7 +1762,9 @@ class IngestionClient:
         """
 
         if run_id is None:
-            raise ValueError("'run_id' is required when calling 'get_events'")
+            raise ValueError(
+                "Parameter `run_id` is required when calling `get_events`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -1764,7 +1788,9 @@ class IngestionClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/runs/{runID}/events".replace("{runID}", quote(str(run_id))),
+            path="/1/runs/{runID}/events".replace(
+                "{runID}", quote(str(run_id), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -1878,14 +1904,14 @@ class IngestionClient:
         """
 
         if run_id is None:
-            raise ValueError("'run_id' is required when calling 'get_run'")
+            raise ValueError("Parameter `run_id` is required when calling `get_run`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/runs/{runID}".replace("{runID}", quote(str(run_id))),
+            path="/1/runs/{runID}".replace("{runID}", quote(str(run_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2114,14 +2140,18 @@ class IngestionClient:
         """
 
         if source_id is None:
-            raise ValueError("'source_id' is required when calling 'get_source'")
+            raise ValueError(
+                "Parameter `source_id` is required when calling `get_source`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id))),
+            path="/1/sources/{sourceID}".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2312,14 +2342,14 @@ class IngestionClient:
         """
 
         if task_id is None:
-            raise ValueError("'task_id' is required when calling 'get_task'")
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id))),
+            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2557,14 +2587,16 @@ class IngestionClient:
         """
 
         if task_id is None:
-            raise ValueError("'task_id' is required when calling 'run_task'")
+            raise ValueError("Parameter `task_id` is required when calling `run_task`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1/tasks/{taskID}/run".replace("{taskID}", quote(str(task_id))),
+            path="/1/tasks/{taskID}/run".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -2617,7 +2649,7 @@ class IngestionClient:
 
         if authentication_search is None:
             raise ValueError(
-                "'authentication_search' is required when calling 'search_authentications'"
+                "Parameter `authentication_search` is required when calling `search_authentications`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2684,7 +2716,7 @@ class IngestionClient:
 
         if destination_search is None:
             raise ValueError(
-                "'destination_search' is required when calling 'search_destinations'"
+                "Parameter `destination_search` is required when calling `search_destinations`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2751,7 +2783,7 @@ class IngestionClient:
 
         if source_search is None:
             raise ValueError(
-                "'source_search' is required when calling 'search_sources'"
+                "Parameter `source_search` is required when calling `search_sources`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2817,7 +2849,9 @@ class IngestionClient:
         """
 
         if task_search is None:
-            raise ValueError("'task_search' is required when calling 'search_tasks'")
+            raise ValueError(
+                "Parameter `task_search` is required when calling `search_tasks`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -2881,7 +2915,7 @@ class IngestionClient:
 
         if source_id is None:
             raise ValueError(
-                "'source_id' is required when calling 'trigger_docker_source_discover'"
+                "Parameter `source_id` is required when calling `trigger_docker_source_discover`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2890,7 +2924,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/sources/{sourceID}/discover".replace(
-                "{sourceID}", quote(str(source_id))
+                "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(
@@ -2951,12 +2985,12 @@ class IngestionClient:
 
         if authentication_id is None:
             raise ValueError(
-                "'authentication_id' is required when calling 'update_authentication'"
+                "Parameter `authentication_id` is required when calling `update_authentication`."
             )
 
         if authentication_update is None:
             raise ValueError(
-                "'authentication_update' is required when calling 'update_authentication'"
+                "Parameter `authentication_update` is required when calling `update_authentication`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -2969,7 +3003,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/authentications/{authenticationID}".replace(
-                "{authenticationID}", quote(str(authentication_id))
+                "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -3035,12 +3069,12 @@ class IngestionClient:
 
         if destination_id is None:
             raise ValueError(
-                "'destination_id' is required when calling 'update_destination'"
+                "Parameter `destination_id` is required when calling `update_destination`."
             )
 
         if destination_update is None:
             raise ValueError(
-                "'destination_update' is required when calling 'update_destination'"
+                "Parameter `destination_update` is required when calling `update_destination`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -3053,7 +3087,7 @@ class IngestionClient:
         response = await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/destinations/{destinationID}".replace(
-                "{destinationID}", quote(str(destination_id))
+                "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
@@ -3116,10 +3150,14 @@ class IngestionClient:
         """
 
         if source_id is None:
-            raise ValueError("'source_id' is required when calling 'update_source'")
+            raise ValueError(
+                "Parameter `source_id` is required when calling `update_source`."
+            )
 
         if source_update is None:
-            raise ValueError("'source_update' is required when calling 'update_source'")
+            raise ValueError(
+                "Parameter `source_update` is required when calling `update_source`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3130,7 +3168,9 @@ class IngestionClient:
 
         response = await self._transporter.request(
             verb=Verb.PATCH,
-            path="/1/sources/{sourceID}".replace("{sourceID}", quote(str(source_id))),
+            path="/1/sources/{sourceID}".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -3190,10 +3230,14 @@ class IngestionClient:
         """
 
         if task_id is None:
-            raise ValueError("'task_id' is required when calling 'update_task'")
+            raise ValueError(
+                "Parameter `task_id` is required when calling `update_task`."
+            )
 
         if task_update is None:
-            raise ValueError("'task_update' is required when calling 'update_task'")
+            raise ValueError(
+                "Parameter `task_update` is required when calling `update_task`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -3204,7 +3248,7 @@ class IngestionClient:
 
         response = await self._transporter.request(
             verb=Verb.PATCH,
-            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id))),
+            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,

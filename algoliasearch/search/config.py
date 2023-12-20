@@ -30,6 +30,8 @@ class Config(BaseConfig):
         # methods
         self.wait_task_time_before_retry = 100000
 
+        UserAgent.add("Search")
+
         self.headers = {
             "x-algolia-application-id": app_id,
             "x-algolia-api-key": api_key,

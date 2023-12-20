@@ -81,7 +81,9 @@ class MonitoringClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_delete'")
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -92,7 +94,7 @@ class MonitoringClient:
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -168,7 +170,7 @@ class MonitoringClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_get'")
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -179,7 +181,7 @@ class MonitoringClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -261,7 +263,7 @@ class MonitoringClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_post'")
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -276,7 +278,7 @@ class MonitoringClient:
 
         response = await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -364,7 +366,7 @@ class MonitoringClient:
         """
 
         if path is None:
-            raise ValueError("'path' is required when calling 'custom_put'")
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -379,7 +381,7 @@ class MonitoringClient:
 
         response = await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", quote(str(path))),
+            path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=RequestOptions.create(
                 config=self._config,
@@ -453,7 +455,7 @@ class MonitoringClient:
 
         if clusters is None:
             raise ValueError(
-                "'clusters' is required when calling 'get_cluster_incidents'"
+                "Parameter `clusters` is required when calling `get_cluster_incidents`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -461,7 +463,9 @@ class MonitoringClient:
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/incidents/{clusters}".replace("{clusters}", quote(str(clusters))),
+            path="/1/incidents/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -519,14 +523,18 @@ class MonitoringClient:
         """
 
         if clusters is None:
-            raise ValueError("'clusters' is required when calling 'get_cluster_status'")
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_cluster_status`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/status/{clusters}".replace("{clusters}", quote(str(clusters))),
+            path="/1/status/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -632,14 +640,18 @@ class MonitoringClient:
         """
 
         if clusters is None:
-            raise ValueError("'clusters' is required when calling 'get_indexing_time'")
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_indexing_time`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/indexing/{clusters}".replace("{clusters}", quote(str(clusters))),
+            path="/1/indexing/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -745,14 +757,18 @@ class MonitoringClient:
         """
 
         if clusters is None:
-            raise ValueError("'clusters' is required when calling 'get_latency'")
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_latency`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
-            path="/1/latency/{clusters}".replace("{clusters}", quote(str(clusters))),
+            path="/1/latency/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -819,10 +835,14 @@ class MonitoringClient:
         """
 
         if metric is None:
-            raise ValueError("'metric' is required when calling 'get_metrics'")
+            raise ValueError(
+                "Parameter `metric` is required when calling `get_metrics`."
+            )
 
         if period is None:
-            raise ValueError("'period' is required when calling 'get_metrics'")
+            raise ValueError(
+                "Parameter `period` is required when calling `get_metrics`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -830,8 +850,8 @@ class MonitoringClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/infrastructure/{metric}/period/{period}".replace(
-                "{metric}", quote(str(metric))
-            ).replace("{period}", quote(str(period))),
+                "{metric}", quote(str(metric), safe="")
+            ).replace("{period}", quote(str(period), safe="")),
             data=None,
             request_options=RequestOptions.create(
                 config=self._config,
@@ -900,7 +920,9 @@ class MonitoringClient:
         """
 
         if clusters is None:
-            raise ValueError("'clusters' is required when calling 'get_reachability'")
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_reachability`."
+            )
 
         _query_parameters: List[Tuple[str, str]] = []
         _headers_parameters: Dict[str, Optional[str]] = {}
@@ -908,7 +930,7 @@ class MonitoringClient:
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/reachability/{clusters}/probes".replace(
-                "{clusters}", quote(str(clusters))
+                "{clusters}", quote(str(clusters), safe="")
             ),
             data=None,
             request_options=RequestOptions.create(

@@ -22,9 +22,11 @@ class ApiResponse(Generic[T]):
         verb: Verb,
         path: str = "",
         url: str = "",
+        host: str = "",
         status_code: int = None,
         query_parameters: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
+        timeouts: Optional[Dict[str, int]] = None,
         data: T = None,
         raw_data: str = None,
         error_message: str = "",
@@ -35,6 +37,7 @@ class ApiResponse(Generic[T]):
         self.verb = verb
         self.path = path
         self.url = url
+        self.host = host
         self.status_code = status_code
         self.query_parameters = query_parameters
         self.headers = headers
@@ -44,6 +47,7 @@ class ApiResponse(Generic[T]):
         self.is_timed_out_error = is_timed_out_error
         self.is_network_error = is_network_error
         self.model_config = model_config
+        self.timeouts = timeouts
 
     def to_json(self) -> str:
         return str(self.__dict__)
