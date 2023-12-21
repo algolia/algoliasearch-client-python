@@ -116,7 +116,9 @@ class Transporter:
 
                     response = ApiResponse(
                         verb=verb,
+                        path=path,
                         url=url,
+                        host=host.url,
                         status_code=resp.status,
                         headers=resp.headers,
                         raw_data=await resp.text(),
@@ -124,7 +126,14 @@ class Transporter:
                     )
 
             except TimeoutError as e:
-                response = ApiResponse(error_message=str(e), is_timed_out_error=True)
+                response = ApiResponse(
+                    verb=verb,
+                    path=path,
+                    url=url,
+                    host=host.url,
+                    error_message=str(e),
+                    is_timed_out_error=True,
+                )
 
             decision = self._retry_strategy.decide(host, response)
 

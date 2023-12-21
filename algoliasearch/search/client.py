@@ -104,12 +104,17 @@ except ImportError:
 
 
 class SearchClient:
+    _transporter: Transporter
+    _config: Config
+    _request_options: RequestOptions
+
     def app_id(self) -> str:
         return self._config.app_id
 
     def __init__(self, transporter: Transporter, config: Config) -> None:
         self._transporter = transporter
         self._config = config
+        self._request_options = RequestOptions(config)
 
     def create_with_config(config: Config) -> Self:
         transporter = Transporter(config)
@@ -144,7 +149,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if api_key is not None:
@@ -154,10 +159,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/keys",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -229,7 +233,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if body is not None:
@@ -241,10 +245,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -308,7 +311,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if source is not None:
@@ -318,10 +321,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/security/sources/append",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -383,10 +385,10 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if x_algolia_user_id is not None:
-            _headers_parameters["x-algolia-user-id"] = x_algolia_user_id
+            _headers["x-algolia-user-id"] = x_algolia_user_id
 
         _body = {}
         if assign_user_id_params is not None:
@@ -396,10 +398,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/clusters/mapping",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -466,7 +467,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if batch_write_params is not None:
@@ -478,10 +479,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -550,10 +550,10 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if x_algolia_user_id is not None:
-            _headers_parameters["x-algolia-user-id"] = x_algolia_user_id
+            _headers["x-algolia-user-id"] = x_algolia_user_id
 
         _body = {}
         if batch_assign_user_ids_params is not None:
@@ -563,10 +563,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/clusters/mapping/batch",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -635,7 +634,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if batch_dictionary_entries_params is not None:
@@ -647,10 +646,9 @@ class SearchClient:
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -714,7 +712,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if browse_params is not None:
@@ -726,10 +724,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -798,7 +795,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -809,10 +806,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -878,7 +874,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
@@ -886,10 +882,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -953,7 +948,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -964,10 +959,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1042,7 +1036,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -1052,10 +1046,9 @@ class SearchClient:
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1129,7 +1122,7 @@ class SearchClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -1139,10 +1132,9 @@ class SearchClient:
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1222,7 +1214,7 @@ class SearchClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -1236,10 +1228,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1325,7 +1316,7 @@ class SearchClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -1339,10 +1330,9 @@ class SearchClient:
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1413,16 +1403,15 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1484,7 +1473,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if delete_by_params is not None:
@@ -1496,10 +1485,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1560,7 +1548,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -1568,10 +1556,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1637,7 +1624,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -1645,10 +1632,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1729,7 +1715,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -1740,10 +1726,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1814,7 +1799,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -1822,10 +1807,9 @@ class SearchClient:
                 "{source}", quote(str(source), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1899,7 +1883,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -1910,10 +1894,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1980,16 +1963,15 @@ class SearchClient:
             raise ValueError("Parameter `key` is required when calling `get_api_key`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2032,16 +2014,15 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/dictionaries/*/languages",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2080,16 +2061,15 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/dictionaries/*/settings",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2159,7 +2139,7 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if offset is not None:
             _query_parameters.append(("offset", offset))
@@ -2174,10 +2154,9 @@ class SearchClient:
             verb=Verb.GET,
             path="/1/logs",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2278,7 +2257,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if attributes_to_retrieve is not None:
             _query_parameters.append(("attributesToRetrieve", attributes_to_retrieve))
@@ -2289,10 +2268,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2363,7 +2341,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if get_objects_params is not None:
@@ -2373,10 +2351,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/indexes/*/objects",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -2444,7 +2421,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -2452,10 +2429,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2518,7 +2494,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -2526,10 +2502,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2574,16 +2549,15 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/security/sources",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2643,7 +2617,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -2651,10 +2625,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2723,7 +2696,7 @@ class SearchClient:
             raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -2731,10 +2704,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2784,16 +2756,15 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping/top",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2841,7 +2812,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -2849,10 +2820,9 @@ class SearchClient:
                 "{userID}", quote(str(user_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2904,7 +2874,7 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if get_clusters is not None:
             _query_parameters.append(("getClusters", get_clusters))
@@ -2913,10 +2883,9 @@ class SearchClient:
             verb=Verb.GET,
             path="/1/clusters/mapping/pending",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2966,16 +2935,15 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/keys",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3014,16 +2982,15 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3076,7 +3043,7 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if page is not None:
             _query_parameters.append(("page", page))
@@ -3087,10 +3054,9 @@ class SearchClient:
             verb=Verb.GET,
             path="/1/indexes",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3159,7 +3125,7 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if page is not None:
             _query_parameters.append(("page", page))
@@ -3170,10 +3136,9 @@ class SearchClient:
             verb=Verb.GET,
             path="/1/clusters/mapping",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3237,7 +3202,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if batch_params is not None:
@@ -3247,10 +3212,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/indexes/*/batch",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3314,7 +3278,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if operation_index_params is not None:
@@ -3326,10 +3290,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3419,7 +3382,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if create_if_not_exists is not None:
             _query_parameters.append(("createIfNotExists", create_if_not_exists))
@@ -3434,10 +3397,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3516,7 +3478,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -3524,10 +3486,9 @@ class SearchClient:
                 "{userID}", quote(str(user_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3579,7 +3540,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if source is not None:
@@ -3589,10 +3550,9 @@ class SearchClient:
             verb=Verb.PUT,
             path="/1/security/sources",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3644,16 +3604,15 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/1/keys/{key}/restore".replace("{key}", quote(str(key), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3713,7 +3672,7 @@ class SearchClient:
             raise ValueError("Parameter `body` is required when calling `save_object`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if body is not None:
@@ -3725,10 +3684,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3813,7 +3771,7 @@ class SearchClient:
             raise ValueError("Parameter `rule` is required when calling `save_rule`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -3828,10 +3786,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3927,7 +3884,7 @@ class SearchClient:
             raise ValueError("Parameter `rules` is required when calling `save_rules`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -3944,10 +3901,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4054,7 +4010,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -4069,10 +4025,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4170,7 +4125,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -4189,10 +4144,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4276,7 +4230,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if search_method_params is not None:
@@ -4286,10 +4240,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/indexes/*/queries",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4358,7 +4311,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if search_dictionary_entries_params is not None:
@@ -4370,10 +4323,9 @@ class SearchClient:
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4445,7 +4397,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if search_for_facet_values_request is not None:
@@ -4457,10 +4409,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{facetName}", quote(str(facet_name), safe="")),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4527,7 +4478,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if search_rules_params is not None:
@@ -4539,10 +4490,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4606,7 +4556,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if search_params is not None:
@@ -4618,10 +4568,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4709,7 +4658,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if type is not None:
             _query_parameters.append(("type", type))
@@ -4728,10 +4677,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4819,7 +4767,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if search_user_ids_params is not None:
@@ -4829,10 +4777,9 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/clusters/mapping/search",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4886,7 +4833,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if dictionary_settings_params is not None:
@@ -4896,10 +4843,9 @@ class SearchClient:
             verb=Verb.PUT,
             path="/1/dictionaries/*/settings",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4971,7 +4917,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -4986,10 +4932,9 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5064,7 +5009,7 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if api_key is not None:
@@ -5074,10 +5019,9 @@ class SearchClient:
             verb=Verb.PUT,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

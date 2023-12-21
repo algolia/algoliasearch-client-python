@@ -29,12 +29,17 @@ except ImportError:
 
 
 class AbtestingClient:
+    _transporter: Transporter
+    _config: Config
+    _request_options: RequestOptions
+
     def app_id(self) -> str:
         return self._config.app_id
 
     def __init__(self, transporter: Transporter, config: Config) -> None:
         self._transporter = transporter
         self._config = config
+        self._request_options = RequestOptions(config)
 
     def create_with_config(config: Config) -> Self:
         transporter = Transporter(config)
@@ -73,7 +78,7 @@ class AbtestingClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if add_ab_tests_request is not None:
@@ -83,10 +88,9 @@ class AbtestingClient:
             verb=Verb.POST,
             path="/2/abtests",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -151,7 +155,7 @@ class AbtestingClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -161,10 +165,9 @@ class AbtestingClient:
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -238,7 +241,7 @@ class AbtestingClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -248,10 +251,9 @@ class AbtestingClient:
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -331,7 +333,7 @@ class AbtestingClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -345,10 +347,9 @@ class AbtestingClient:
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -434,7 +435,7 @@ class AbtestingClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -448,10 +449,9 @@ class AbtestingClient:
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -522,16 +522,15 @@ class AbtestingClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -581,16 +580,15 @@ class AbtestingClient:
             raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -664,7 +662,7 @@ class AbtestingClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if offset is not None:
             _query_parameters.append(("offset", offset))
@@ -679,10 +677,9 @@ class AbtestingClient:
             verb=Verb.GET,
             path="/2/abtests",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -761,16 +758,15 @@ class AbtestingClient:
             raise ValueError("Parameter `id` is required when calling `stop_ab_test`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
             path="/2/abtests/{id}/stop".replace("{id}", quote(str(id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

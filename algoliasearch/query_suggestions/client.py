@@ -41,12 +41,17 @@ except ImportError:
 
 
 class QuerySuggestionsClient:
+    _transporter: Transporter
+    _config: Config
+    _request_options: RequestOptions
+
     def app_id(self) -> str:
         return self._config.app_id
 
     def __init__(self, transporter: Transporter, config: Config) -> None:
         self._transporter = transporter
         self._config = config
+        self._request_options = RequestOptions(config)
 
     def create_with_config(config: Config) -> Self:
         transporter = Transporter(config)
@@ -85,7 +90,7 @@ class QuerySuggestionsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if query_suggestions_configuration_with_index is not None:
@@ -95,10 +100,9 @@ class QuerySuggestionsClient:
             verb=Verb.POST,
             path="/1/configs",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -163,7 +167,7 @@ class QuerySuggestionsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -173,10 +177,9 @@ class QuerySuggestionsClient:
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -250,7 +253,7 @@ class QuerySuggestionsClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -260,10 +263,9 @@ class QuerySuggestionsClient:
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -343,7 +345,7 @@ class QuerySuggestionsClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -357,10 +359,9 @@ class QuerySuggestionsClient:
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -446,7 +447,7 @@ class QuerySuggestionsClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -460,10 +461,9 @@ class QuerySuggestionsClient:
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -536,7 +536,7 @@ class QuerySuggestionsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -544,10 +544,9 @@ class QuerySuggestionsClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -592,16 +591,15 @@ class QuerySuggestionsClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/configs",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -651,7 +649,7 @@ class QuerySuggestionsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -659,10 +657,9 @@ class QuerySuggestionsClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -718,7 +715,7 @@ class QuerySuggestionsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -726,10 +723,9 @@ class QuerySuggestionsClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -787,7 +783,7 @@ class QuerySuggestionsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -795,10 +791,9 @@ class QuerySuggestionsClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -862,7 +857,7 @@ class QuerySuggestionsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if query_suggestions_configuration is not None:
@@ -874,10 +869,9 @@ class QuerySuggestionsClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

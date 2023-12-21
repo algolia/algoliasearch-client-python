@@ -91,12 +91,17 @@ except ImportError:
 
 
 class IngestionClient:
+    _transporter: Transporter
+    _config: Config
+    _request_options: RequestOptions
+
     def app_id(self) -> str:
         return self._config.app_id
 
     def __init__(self, transporter: Transporter, config: Config) -> None:
         self._transporter = transporter
         self._config = config
+        self._request_options = RequestOptions(config)
 
     def create_with_config(config: Config) -> Self:
         transporter = Transporter(config)
@@ -133,7 +138,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if authentication_create is not None:
@@ -143,10 +148,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/authentications",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -200,7 +204,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if destination_create is not None:
@@ -210,10 +214,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/destinations",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -267,7 +270,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if source_create is not None:
@@ -277,10 +280,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/sources",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -334,7 +336,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if task_create is not None:
@@ -344,10 +346,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/tasks",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -410,7 +411,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -420,10 +421,9 @@ class IngestionClient:
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -497,7 +497,7 @@ class IngestionClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -507,10 +507,9 @@ class IngestionClient:
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -590,7 +589,7 @@ class IngestionClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -604,10 +603,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -693,7 +691,7 @@ class IngestionClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -707,10 +705,9 @@ class IngestionClient:
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -783,7 +780,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -791,10 +788,9 @@ class IngestionClient:
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -852,7 +848,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -860,10 +856,9 @@ class IngestionClient:
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -919,7 +914,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
@@ -927,10 +922,9 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -982,16 +976,15 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1043,7 +1036,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.PUT,
@@ -1051,10 +1044,9 @@ class IngestionClient:
                 "{taskID}", quote(str(task_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1106,7 +1098,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.PUT,
@@ -1114,10 +1106,9 @@ class IngestionClient:
                 "{taskID}", quote(str(task_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1171,7 +1162,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -1179,10 +1170,9 @@ class IngestionClient:
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1265,7 +1255,7 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -1284,10 +1274,9 @@ class IngestionClient:
             verb=Verb.GET,
             path="/1/authentications",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1375,7 +1364,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -1383,10 +1372,9 @@ class IngestionClient:
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1469,7 +1457,7 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -1488,10 +1476,9 @@ class IngestionClient:
             verb=Verb.GET,
             path="/1/destinations",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1577,7 +1564,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -1585,10 +1572,9 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1648,7 +1634,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -1656,10 +1642,9 @@ class IngestionClient:
                 "{runID}", quote(str(run_id), safe="")
             ).replace("{eventID}", quote(str(event_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1767,7 +1752,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -1792,10 +1777,9 @@ class IngestionClient:
                 "{runID}", quote(str(run_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1907,16 +1891,15 @@ class IngestionClient:
             raise ValueError("Parameter `run_id` is required when calling `get_run`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}".replace("{runID}", quote(str(run_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2010,7 +1993,7 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -2033,10 +2016,9 @@ class IngestionClient:
             verb=Verb.GET,
             path="/1/runs",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2145,7 +2127,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
@@ -2153,10 +2135,9 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2237,7 +2218,7 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -2256,10 +2237,9 @@ class IngestionClient:
             verb=Verb.GET,
             path="/1/sources",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2345,16 +2325,15 @@ class IngestionClient:
             raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.GET,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2451,7 +2430,7 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -2476,10 +2455,9 @@ class IngestionClient:
             verb=Verb.GET,
             path="/1/tasks",
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2590,7 +2568,7 @@ class IngestionClient:
             raise ValueError("Parameter `task_id` is required when calling `run_task`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
@@ -2598,10 +2576,9 @@ class IngestionClient:
                 "{taskID}", quote(str(task_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2653,7 +2630,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if authentication_search is not None:
@@ -2663,10 +2640,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/authentications/search",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2720,7 +2696,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if destination_search is not None:
@@ -2730,10 +2706,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/destinations/search",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2787,7 +2762,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if source_search is not None:
@@ -2797,10 +2772,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/sources/search",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2854,7 +2828,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if task_search is not None:
@@ -2864,10 +2838,9 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/tasks/search",
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2919,7 +2892,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         response = await self._transporter.request(
             verb=Verb.POST,
@@ -2927,10 +2900,9 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2994,7 +2966,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if authentication_update is not None:
@@ -3006,10 +2978,9 @@ class IngestionClient:
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3078,7 +3049,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if destination_update is not None:
@@ -3090,10 +3061,9 @@ class IngestionClient:
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3160,7 +3130,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if source_update is not None:
@@ -3172,10 +3142,9 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3240,7 +3209,7 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers_parameters: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, Optional[str]] = {}
 
         _body = {}
         if task_update is not None:
@@ -3250,10 +3219,9 @@ class IngestionClient:
             verb=Verb.PATCH,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=dumps(bodySerializer(_body)),
-            request_options=RequestOptions.create(
-                config=self._config,
+            request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers_parameters=_headers_parameters,
+                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

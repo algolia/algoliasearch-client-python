@@ -20,34 +20,32 @@ class ApiResponse(Generic[T]):
     def __init__(
         self,
         verb: Verb,
-        path: str = "",
-        url: str = "",
-        host: str = "",
-        status_code: int = None,
-        query_parameters: Optional[Dict[str, Any]] = None,
-        headers: Optional[Dict[str, str]] = None,
-        timeouts: Optional[Dict[str, int]] = None,
         data: T = None,
-        raw_data: str = None,
         error_message: str = "",
-        is_timed_out_error: bool = False,
+        headers: Optional[Dict[str, str]] = None,
+        host: str = "",
         is_network_error: bool = False,
-        model_config: Dict[str, Any] = {"arbitrary_types_allowed": True},
+        is_timed_out_error: bool = False,
+        path: str = "",
+        query_parameters: Optional[Dict[str, Any]] = None,
+        raw_data: str = None,
+        status_code: int = None,
+        timeouts: Optional[Dict[str, int]] = None,
+        url: str = "",
     ) -> None:
         self.verb = verb
-        self.path = path
-        self.url = url
-        self.host = host
-        self.status_code = status_code
-        self.query_parameters = query_parameters
-        self.headers = headers
         self.data = data
-        self.raw_data = raw_data
         self.error_message = error_message
-        self.is_timed_out_error = is_timed_out_error
+        self.headers = headers
+        self.host = host
         self.is_network_error = is_network_error
-        self.model_config = model_config
+        self.is_timed_out_error = is_timed_out_error
+        self.path = path
+        self.query_parameters = query_parameters
+        self.raw_data = raw_data
+        self.status_code = status_code
         self.timeouts = timeouts
+        self.url = url
 
     def to_json(self) -> str:
         return str(self.__dict__)

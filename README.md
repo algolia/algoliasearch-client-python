@@ -25,7 +25,7 @@
 ## ✨ Features
 
 - Thin & minimal low-level HTTP client to interact with Algolia's API
-- Supports Python from `3.7` to `3.12`
+- Supports Python from `3.8` to `3.12`
 
 ## 💡 Getting Started
 
@@ -35,16 +35,24 @@ First, install Algolia Python API Client via the [pip](https://pip.pypa.io/en/st
 pip install --upgrade 'algoliasearch>=4.0,<5.0'
 ```
 
-Then, create objects on your index:
+Now you can initialize any client with your Algolia credentials, for example the SearchClient:
 
 ```py
-# TODO
+from algoliasearch.search.client import SearchClient
+
+client = SearchClient.create("YOUR_APP_ID", "YOUR_API_KEY")
+```
+
+Add new object to your index:
+
+```py
+await client.save_object(index_name="nvim", body={"description": "blazing fast"})
 ```
 
 Finally, you may begin searching a object using the `search` method:
 
 ```py
-# TODO
+await client.search(search_method_params={"requests": [{"indexName": "nvim"}]})
 ```
 
 For full documentation, visit the **[Algolia Python API Client](https://www.algolia.com/doc/api-client/getting-started/install/python/)**.
