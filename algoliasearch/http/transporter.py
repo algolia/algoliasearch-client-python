@@ -27,9 +27,7 @@ class Transporter:
     def __init__(self, config: BaseConfig) -> None:
         self._config = config
         self._retry_strategy = RetryStrategy()
-        self._session = ClientSession(
-            connector=TCPConnector(use_dns_cache=False), trust_env=True
-        )
+        self._session = None
 
     async def __aenter__(self) -> None:
         return self
@@ -75,6 +73,11 @@ class Transporter:
         request_options: RequestOptions,
         use_read_transporter: bool,
     ) -> ApiResponse:
+        if self._session is None:
+            self._session = ClientSession(
+                connector=TCPConnector(use_dns_cache=False), trust_env=True
+            )
+
         query_parameters = self.prepare(
             request_options, verb == Verb.GET or use_read_transporter
         )
