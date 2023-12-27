@@ -7,18 +7,13 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List, Optional
+from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
 
 from algoliasearch.insights.models.add_to_cart_event import AddToCartEvent
 from algoliasearch.insights.models.conversion_event import ConversionEvent
 from algoliasearch.insights.models.object_data import ObjectData
-
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
 
 
 class AddedToCartObjectIDs(BaseModel):

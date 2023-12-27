@@ -20,7 +20,6 @@ aiohttp = ">= 3.9.0"
 python-dateutil = ">= 2.8.2"
 async-timeout = ">= 4.0.3"
 pydantic = ">= 2"
-typing-extensions = ">= 4.7.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "6.1.0"

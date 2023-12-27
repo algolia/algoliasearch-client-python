@@ -7,14 +7,9 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List
+from typing import Annotated, Any, ClassVar, Dict, List, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
-
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
 
 
 class UserId(BaseModel):

@@ -7,18 +7,13 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List, Optional
+from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
 
 from algoliasearch.insights.models.conversion_event import ConversionEvent
 from algoliasearch.insights.models.object_data_after_search import ObjectDataAfterSearch
 from algoliasearch.insights.models.purchase_event import PurchaseEvent
-
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
 
 
 class PurchasedObjectIDsAfterSearch(BaseModel):

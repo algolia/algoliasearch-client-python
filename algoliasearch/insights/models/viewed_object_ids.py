@@ -7,16 +7,11 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List, Optional
+from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
 
 from algoliasearch.insights.models.view_event import ViewEvent
-
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
 
 
 class ViewedObjectIDs(BaseModel):

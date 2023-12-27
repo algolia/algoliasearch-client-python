@@ -6,7 +6,7 @@ from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.user_agent import UserAgent
 
 
-class Config(BaseConfig):
+class AbtestingConfig(BaseConfig):
     def __init__(
         self,
         app_id: Optional[str] = None,

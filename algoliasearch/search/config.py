@@ -6,7 +6,7 @@ from algoliasearch.http.hosts import CallType, Host, HostsCollection
 from algoliasearch.http.user_agent import UserAgent
 
 
-class Config(BaseConfig):
+class SearchConfig(BaseConfig):
     def __init__(
         self, app_id: Optional[str] = None, api_key: Optional[str] = None
     ) -> None:

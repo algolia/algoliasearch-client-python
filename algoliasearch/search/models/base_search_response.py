@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List, Optional, Union
+from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr, field_validator
 
@@ -15,11 +15,6 @@ from algoliasearch.search.models.exhaustive import Exhaustive
 from algoliasearch.search.models.facets_stats import FacetsStats
 from algoliasearch.search.models.redirect import Redirect
 from algoliasearch.search.models.rendering_content import RenderingContent
-
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
 
 
 class BaseSearchResponse(BaseModel):
