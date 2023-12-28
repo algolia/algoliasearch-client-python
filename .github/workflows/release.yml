@@ -16,14 +16,14 @@ jobs:
     permissions:
       id-token: write
     steps:
+    - name: Install poetry
+      shell: bash
+      run: pipx install poetry
+
     - uses: actions/setup-python@v5
       with:
         python-version: 3.11.6
         cache: 'poetry'
-
-    - name: Install poetry
-      shell: bash
-      run: pipx install poetry
 
     - name: intall dependencies
       run: poetry install
