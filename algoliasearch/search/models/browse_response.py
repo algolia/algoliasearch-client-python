@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self, Union
+from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr, field_validator
 
@@ -103,7 +103,7 @@ class BrowseResponse(BaseModel):
         description="Time the server took to process the request, in milliseconds.",
         alias="processingTimeMS",
     )
-    processing_timings_ms: Optional[Union[str, Any]] = Field(
+    processing_timings_ms: Optional[Dict[str, Any]] = Field(
         default=None,
         description="Experimental. List of processing steps and their times, in milliseconds. You can use this list to investigate performance issues.",
         alias="processingTimingsMS",
@@ -127,7 +127,7 @@ class BrowseResponse(BaseModel):
         description="Host name of the server that processed the request.",
         alias="serverUsed",
     )
-    user_data: Optional[Union[str, Any]] = Field(
+    user_data: Optional[Dict[str, Any]] = Field(
         default=None,
         description="Lets you store custom data in your indices.",
         alias="userData",
