@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import dumps
 from typing import Dict, Optional, Self, Union
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, model_serializer
 
 from algoliasearch.ingestion.models.auth_algolia import AuthAlgolia
 from algoliasearch.ingestion.models.auth_api_key import AuthAPIKey
@@ -48,6 +48,17 @@ class AuthInput(BaseModel):
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
+
+    @model_serializer
+    def unwrap_actual_instance(
+        self,
+    ) -> Optional[
+        Union[AuthAPIKey, AuthAlgolia, AuthBasic, AuthGoogleServiceAccount, AuthOAuth]
+    ]:
+        """
+        Unwraps the `actual_instance` when calling the `to_json` method.
+        """
+        return self.actual_instance
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:

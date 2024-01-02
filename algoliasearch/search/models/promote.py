@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import dumps
 from typing import Dict, Optional, Self, Union
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, model_serializer
 
 from algoliasearch.search.models.promote_object_id import PromoteObjectID
 from algoliasearch.search.models.promote_object_ids import PromoteObjectIDs
@@ -38,6 +38,15 @@ class Promote(BaseModel):
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
+
+    @model_serializer
+    def unwrap_actual_instance(
+        self,
+    ) -> Optional[Union[PromoteObjectID, PromoteObjectIDs]]:
+        """
+        Unwraps the `actual_instance` when calling the `to_json` method.
+        """
+        return self.actual_instance
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:

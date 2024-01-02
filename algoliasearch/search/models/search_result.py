@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import dumps
 from typing import Dict, Optional, Self, Union
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, model_serializer
 
 from algoliasearch.search.models.search_for_facet_values_response import (
     SearchForFacetValuesResponse,
@@ -42,6 +42,15 @@ class SearchResult(BaseModel):
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
+
+    @model_serializer
+    def unwrap_actual_instance(
+        self,
+    ) -> Optional[Union[SearchForFacetValuesResponse, SearchResponse]]:
+        """
+        Unwraps the `actual_instance` when calling the `to_json` method.
+        """
+        return self.actual_instance
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:

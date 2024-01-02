@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, StrictStr, ValidationError
+from pydantic import BaseModel, StrictStr, ValidationError, model_serializer
 
 
 class MixedSearchFilters(BaseModel):
@@ -35,6 +35,13 @@ class MixedSearchFilters(BaseModel):
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
+
+    @model_serializer
+    def unwrap_actual_instance(self) -> Optional[Union[List[str], str]]:
+        """
+        Unwraps the `actual_instance` when calling the `to_json` method.
+        """
+        return self.actual_instance
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:

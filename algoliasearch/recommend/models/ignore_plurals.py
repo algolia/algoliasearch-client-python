@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, StrictBool, StrictStr, ValidationError
+from pydantic import BaseModel, StrictBool, StrictStr, ValidationError, model_serializer
 
 
 class IgnorePlurals(BaseModel):
@@ -35,6 +35,13 @@ class IgnorePlurals(BaseModel):
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
+
+    @model_serializer
+    def unwrap_actual_instance(self) -> Optional[Union[List[str], bool]]:
+        """
+        Unwraps the `actual_instance` when calling the `to_json` method.
+        """
+        return self.actual_instance
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:

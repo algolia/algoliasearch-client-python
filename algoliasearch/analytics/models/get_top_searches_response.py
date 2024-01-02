@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import dumps
 from typing import Dict, Optional, Self, Union
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, model_serializer
 
 from algoliasearch.analytics.models.top_searches_response import TopSearchesResponse
 from algoliasearch.analytics.models.top_searches_response_with_analytics import (
@@ -42,6 +42,15 @@ class GetTopSearchesResponse(BaseModel):
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
+
+    @model_serializer
+    def unwrap_actual_instance(
+        self,
+    ) -> Optional[Union[TopSearchesResponse, TopSearchesResponseWithAnalytics]]:
+        """
+        Unwraps the `actual_instance` when calling the `to_json` method.
+        """
+        return self.actual_instance
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:
