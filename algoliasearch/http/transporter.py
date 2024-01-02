@@ -85,7 +85,7 @@ class Transporter:
         if isinstance(data, dict):
             data.update(request_options.data)
 
-        if len(query_parameters) > 0:
+        if query_parameters is not None and len(query_parameters) > 0:
             path = "{}?{}".format(
                 path,
                 urlencode(

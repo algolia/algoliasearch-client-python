@@ -12,6 +12,8 @@ from urllib.parse import quote
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.exceptions import RequestException
+from algoliasearch.http.helpers import RetryTimeout, create_iterable
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import bodySerializer
 from algoliasearch.http.transporter import Transporter
@@ -121,6 +123,92 @@ class SearchClient:
 
     async def close(self) -> None:
         return await self._transporter.close()
+
+    async def wait_for_task(
+        self,
+        index_name: str,
+        task_id: str,
+        timeout: RetryTimeout = RetryTimeout(),
+        max_retries: int = 50,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Helper: Wait for a task to be published (completed) for a given `indexName` and `taskID`.
+        """
+        self._retry_count = 0
+
+        async def _func(_: GetTaskResponse) -> GetTaskResponse:
+            return await self.get_task(index_name, task_id, request_options)
+
+        def _aggregator(_: GetTaskResponse) -> None:
+            self._retry_count += 1
+
+        return await create_iterable(
+            func=_func,
+            aggregator=_aggregator,
+            validate=lambda _resp: _resp.status == "published",
+            timeout=lambda: timeout(self._retry_count),
+            error_validate=lambda: self._retry_count >= max_retries,
+            error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+        )
+
+    async def wait_for_api_key(
+        self,
+        operation: str,
+        key: str,
+        api_key: Optional[ApiKey] = None,
+        max_retries: int = 50,
+        timeout: RetryTimeout = RetryTimeout(),
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetApiKeyResponse:
+        """
+        Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
+        """
+        self._retry_count = 0
+
+        if operation == "update" and api_key is None:
+            raise ValueError(
+                "`apiKey` is required when waiting for an `update` operation."
+            )
+
+        async def _func(_prev: GetApiKeyResponse) -> GetApiKeyResponse:
+            try:
+                return await self.get_api_key(key=key, request_options=request_options)
+            except RequestException as e:
+                if e.status_code == 404 and (
+                    operation == "delete" or operation == "add"
+                ):
+                    return None
+                raise e
+
+        def _aggregator(_: GetApiKeyResponse) -> None:
+            self._retry_count += 1
+
+        def _validate(_resp: GetApiKeyResponse) -> bool:
+            if operation == "update":
+                for field in api_key:
+                    if isinstance(api_key[field], list) and isinstance(
+                        _resp[field], list
+                    ):
+                        if len(api_key[field]) != len(_resp[field]) or any(
+                            v != _resp[field][i] for i, v in enumerate(api_key[field])
+                        ):
+                            return False
+                    elif api_key[field] != _resp[field]:
+                        return False
+                return True
+            elif operation == "add":
+                return _resp is not None
+            return _resp is None
+
+        return await create_iterable(
+            func=_func,
+            validate=_validate,
+            aggregator=_aggregator,
+            timeout=lambda: timeout(self._retry_count),
+            error_validate=lambda _: self._retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+        )
 
     async def add_api_key_with_http_info(
         self,
