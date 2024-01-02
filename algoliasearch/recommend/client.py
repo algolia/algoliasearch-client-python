@@ -94,27 +94,21 @@ class RecommendClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_delete(
         self,
@@ -142,12 +136,9 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_delete_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_get_with_http_info(
         self,
@@ -180,27 +171,21 @@ class RecommendClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_get(
         self,
@@ -228,12 +213,9 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_get_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_post_with_http_info(
         self,
@@ -272,7 +254,6 @@ class RecommendClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -282,21 +263,16 @@ class RecommendClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_post(
         self,
@@ -330,12 +306,11 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_post_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_post_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def custom_put_with_http_info(
         self,
@@ -374,7 +349,6 @@ class RecommendClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -384,21 +358,16 @@ class RecommendClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_put(
         self,
@@ -432,12 +401,11 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_put_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_put_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def delete_recommend_rule_with_http_info(
         self,
@@ -485,10 +453,7 @@ class RecommendClient:
                 "Parameter `object_id` is required when calling `delete_recommend_rule`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -497,16 +462,10 @@ class RecommendClient:
             .replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_recommend_rule(
         self,
@@ -538,12 +497,11 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
         """
-
-        response = await self.delete_recommend_rule_with_http_info(
-            index_name, model, object_id, request_options
-        )
-
-        return response.deserialize(DeletedAtResponse)
+        return (
+            await self.delete_recommend_rule_with_http_info(
+                index_name, model, object_id, request_options
+            )
+        ).deserialize(DeletedAtResponse)
 
     async def get_recommend_rule_with_http_info(
         self,
@@ -591,10 +549,7 @@ class RecommendClient:
                 "Parameter `object_id` is required when calling `get_recommend_rule`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -603,16 +558,10 @@ class RecommendClient:
             .replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_recommend_rule(
         self,
@@ -644,12 +593,11 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RuleResponse' result object.
         """
-
-        response = await self.get_recommend_rule_with_http_info(
-            index_name, model, object_id, request_options
-        )
-
-        return response.deserialize(RuleResponse)
+        return (
+            await self.get_recommend_rule_with_http_info(
+                index_name, model, object_id, request_options
+            )
+        ).deserialize(RuleResponse)
 
     async def get_recommend_status_with_http_info(
         self,
@@ -700,10 +648,7 @@ class RecommendClient:
                 "Parameter `task_id` is required when calling `get_recommend_status`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/{model}/task/{taskID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -712,16 +657,10 @@ class RecommendClient:
             .replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_recommend_status(
         self,
@@ -756,12 +695,11 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRecommendTaskResponse' result object.
         """
-
-        response = await self.get_recommend_status_with_http_info(
-            index_name, model, task_id, request_options
-        )
-
-        return response.deserialize(GetRecommendTaskResponse)
+        return (
+            await self.get_recommend_status_with_http_info(
+                index_name, model, task_id, request_options
+            )
+        ).deserialize(GetRecommendTaskResponse)
 
     async def get_recommendations_with_http_info(
         self,
@@ -784,28 +722,19 @@ class RecommendClient:
                 "Parameter `get_recommendations_params` is required when calling `get_recommendations`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if get_recommendations_params is not None:
             _body = get_recommendations_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/recommendations",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_recommendations(
         self,
@@ -822,12 +751,11 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRecommendationsResponse' result object.
         """
-
-        response = await self.get_recommendations_with_http_info(
-            get_recommendations_params, request_options
-        )
-
-        return response.deserialize(GetRecommendationsResponse)
+        return (
+            await self.get_recommendations_with_http_info(
+                get_recommendations_params, request_options
+            )
+        ).deserialize(GetRecommendationsResponse)
 
     async def search_recommend_rules_with_http_info(
         self,
@@ -868,30 +796,21 @@ class RecommendClient:
                 "Parameter `model` is required when calling `search_recommend_rules`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if search_recommend_rules_params is not None:
             _body = search_recommend_rules_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/{model}/recommend/rules/search".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{model}", quote(str(model), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_recommend_rules(
         self,
@@ -921,9 +840,8 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchRecommendRulesResponse' result object.
         """
-
-        response = await self.search_recommend_rules_with_http_info(
-            index_name, model, search_recommend_rules_params, request_options
-        )
-
-        return response.deserialize(SearchRecommendRulesResponse)
+        return (
+            await self.search_recommend_rules_with_http_info(
+                index_name, model, search_recommend_rules_params, request_options
+            )
+        ).deserialize(SearchRecommendRulesResponse)

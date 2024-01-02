@@ -143,28 +143,19 @@ class SearchClient:
                 "Parameter `api_key` is required when calling `add_api_key`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if api_key is not None:
             _body = api_key
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/keys",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def add_api_key(
         self,
@@ -181,10 +172,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'AddApiKeyResponse' result object.
         """
-
-        response = await self.add_api_key_with_http_info(api_key, request_options)
-
-        return response.deserialize(AddApiKeyResponse)
+        return (
+            await self.add_api_key_with_http_info(api_key, request_options)
+        ).deserialize(AddApiKeyResponse)
 
     async def add_or_update_object_with_http_info(
         self,
@@ -227,30 +217,21 @@ class SearchClient:
                 "Parameter `body` is required when calling `add_or_update_object`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def add_or_update_object(
         self,
@@ -277,12 +258,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtWithObjectIdResponse' result object.
         """
-
-        response = await self.add_or_update_object_with_http_info(
-            index_name, object_id, body, request_options
-        )
-
-        return response.deserialize(UpdatedAtWithObjectIdResponse)
+        return (
+            await self.add_or_update_object_with_http_info(
+                index_name, object_id, body, request_options
+            )
+        ).deserialize(UpdatedAtWithObjectIdResponse)
 
     async def append_source_with_http_info(
         self,
@@ -305,28 +285,19 @@ class SearchClient:
                 "Parameter `source` is required when calling `append_source`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if source is not None:
             _body = source
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/security/sources/append",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def append_source(
         self,
@@ -343,10 +314,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'CreatedAtResponse' result object.
         """
-
-        response = await self.append_source_with_http_info(source, request_options)
-
-        return response.deserialize(CreatedAtResponse)
+        return (
+            await self.append_source_with_http_info(source, request_options)
+        ).deserialize(CreatedAtResponse)
 
     async def assign_user_id_with_http_info(
         self,
@@ -379,7 +349,6 @@ class SearchClient:
                 "Parameter `assign_user_id_params` is required when calling `assign_user_id`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
         _headers: Dict[str, Optional[str]] = {}
 
         if x_algolia_user_id is not None:
@@ -389,21 +358,16 @@ class SearchClient:
         if assign_user_id_params is not None:
             _body = assign_user_id_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/clusters/mapping",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
                 headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def assign_user_id(
         self,
@@ -425,12 +389,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'CreatedAtResponse' result object.
         """
-
-        response = await self.assign_user_id_with_http_info(
-            x_algolia_user_id, assign_user_id_params, request_options
-        )
-
-        return response.deserialize(CreatedAtResponse)
+        return (
+            await self.assign_user_id_with_http_info(
+                x_algolia_user_id, assign_user_id_params, request_options
+            )
+        ).deserialize(CreatedAtResponse)
 
     async def batch_with_http_info(
         self,
@@ -461,30 +424,21 @@ class SearchClient:
                 "Parameter `batch_write_params` is required when calling `batch`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if batch_write_params is not None:
             _body = batch_write_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/batch".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def batch(
         self,
@@ -506,12 +460,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'BatchResponse' result object.
         """
-
-        response = await self.batch_with_http_info(
-            index_name, batch_write_params, request_options
-        )
-
-        return response.deserialize(BatchResponse)
+        return (
+            await self.batch_with_http_info(
+                index_name, batch_write_params, request_options
+            )
+        ).deserialize(BatchResponse)
 
     async def batch_assign_user_ids_with_http_info(
         self,
@@ -544,7 +497,6 @@ class SearchClient:
                 "Parameter `batch_assign_user_ids_params` is required when calling `batch_assign_user_ids`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
         _headers: Dict[str, Optional[str]] = {}
 
         if x_algolia_user_id is not None:
@@ -554,21 +506,16 @@ class SearchClient:
         if batch_assign_user_ids_params is not None:
             _body = batch_assign_user_ids_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/clusters/mapping/batch",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
                 headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def batch_assign_user_ids(
         self,
@@ -590,12 +537,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'CreatedAtResponse' result object.
         """
-
-        response = await self.batch_assign_user_ids_with_http_info(
-            x_algolia_user_id, batch_assign_user_ids_params, request_options
-        )
-
-        return response.deserialize(CreatedAtResponse)
+        return (
+            await self.batch_assign_user_ids_with_http_info(
+                x_algolia_user_id, batch_assign_user_ids_params, request_options
+            )
+        ).deserialize(CreatedAtResponse)
 
     async def batch_dictionary_entries_with_http_info(
         self,
@@ -628,30 +574,21 @@ class SearchClient:
                 "Parameter `batch_dictionary_entries_params` is required when calling `batch_dictionary_entries`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if batch_dictionary_entries_params is not None:
             _body = batch_dictionary_entries_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/dictionaries/{dictionaryName}/batch".replace(
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def batch_dictionary_entries(
         self,
@@ -673,12 +610,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.batch_dictionary_entries_with_http_info(
-            dictionary_name, batch_dictionary_entries_params, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.batch_dictionary_entries_with_http_info(
+                dictionary_name, batch_dictionary_entries_params, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def browse_with_http_info(
         self,
@@ -706,30 +642,21 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `browse`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if browse_params is not None:
             _body = browse_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/browse".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def browse(
         self,
@@ -751,12 +678,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'BrowseResponse' result object.
         """
-
-        response = await self.browse_with_http_info(
-            index_name, browse_params, request_options
-        )
-
-        return response.deserialize(BrowseResponse)
+        return (
+            await self.browse_with_http_info(index_name, browse_params, request_options)
+        ).deserialize(BrowseResponse)
 
     async def clear_all_synonyms_with_http_info(
         self,
@@ -790,12 +714,11 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/clear".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -803,15 +726,10 @@ class SearchClient:
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def clear_all_synonyms(
         self,
@@ -838,12 +756,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.clear_all_synonyms_with_http_info(
-            index_name, forward_to_replicas, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.clear_all_synonyms_with_http_info(
+                index_name, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def clear_objects_with_http_info(
         self,
@@ -868,26 +785,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `clear_objects`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/clear".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def clear_objects(
         self,
@@ -906,10 +814,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.clear_objects_with_http_info(index_name, request_options)
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.clear_objects_with_http_info(index_name, request_options)
+        ).deserialize(UpdatedAtResponse)
 
     async def clear_rules_with_http_info(
         self,
@@ -943,12 +850,11 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/clear".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -956,15 +862,10 @@ class SearchClient:
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def clear_rules(
         self,
@@ -991,12 +892,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.clear_rules_with_http_info(
-            index_name, forward_to_replicas, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.clear_rules_with_http_info(
+                index_name, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def custom_delete_with_http_info(
         self,
@@ -1031,27 +931,21 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_delete(
         self,
@@ -1079,12 +973,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_delete_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_get_with_http_info(
         self,
@@ -1117,27 +1008,21 @@ class SearchClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_get(
         self,
@@ -1165,12 +1050,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_get_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_post_with_http_info(
         self,
@@ -1209,7 +1091,6 @@ class SearchClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -1219,21 +1100,16 @@ class SearchClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_post(
         self,
@@ -1267,12 +1143,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_post_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_post_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def custom_put_with_http_info(
         self,
@@ -1311,7 +1186,6 @@ class SearchClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -1321,21 +1195,16 @@ class SearchClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_put(
         self,
@@ -1369,12 +1238,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_put_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_put_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def delete_api_key_with_http_info(
         self,
@@ -1397,24 +1265,15 @@ class SearchClient:
                 "Parameter `key` is required when calling `delete_api_key`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_api_key(
         self,
@@ -1431,10 +1290,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteApiKeyResponse' result object.
         """
-
-        response = await self.delete_api_key_with_http_info(key, request_options)
-
-        return response.deserialize(DeleteApiKeyResponse)
+        return (
+            await self.delete_api_key_with_http_info(key, request_options)
+        ).deserialize(DeleteApiKeyResponse)
 
     async def delete_by_with_http_info(
         self,
@@ -1467,30 +1325,21 @@ class SearchClient:
                 "Parameter `delete_by_params` is required when calling `delete_by`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if delete_by_params is not None:
             _body = delete_by_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/deleteByQuery".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_by(
         self,
@@ -1512,12 +1361,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
         """
-
-        response = await self.delete_by_with_http_info(
-            index_name, delete_by_params, request_options
-        )
-
-        return response.deserialize(DeletedAtResponse)
+        return (
+            await self.delete_by_with_http_info(
+                index_name, delete_by_params, request_options
+            )
+        ).deserialize(DeletedAtResponse)
 
     async def delete_index_with_http_info(
         self,
@@ -1542,26 +1390,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `delete_index`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_index(
         self,
@@ -1580,10 +1419,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
         """
-
-        response = await self.delete_index_with_http_info(index_name, request_options)
-
-        return response.deserialize(DeletedAtResponse)
+        return (
+            await self.delete_index_with_http_info(index_name, request_options)
+        ).deserialize(DeletedAtResponse)
 
     async def delete_object_with_http_info(
         self,
@@ -1618,26 +1456,17 @@ class SearchClient:
                 "Parameter `object_id` is required when calling `delete_object`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_object(
         self,
@@ -1661,12 +1490,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
         """
-
-        response = await self.delete_object_with_http_info(
-            index_name, object_id, request_options
-        )
-
-        return response.deserialize(DeletedAtResponse)
+        return (
+            await self.delete_object_with_http_info(
+                index_name, object_id, request_options
+            )
+        ).deserialize(DeletedAtResponse)
 
     async def delete_rule_with_http_info(
         self,
@@ -1710,12 +1538,11 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -1723,15 +1550,10 @@ class SearchClient:
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_rule(
         self,
@@ -1763,12 +1585,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.delete_rule_with_http_info(
-            index_name, object_id, forward_to_replicas, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.delete_rule_with_http_info(
+                index_name, object_id, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def delete_source_with_http_info(
         self,
@@ -1793,26 +1614,17 @@ class SearchClient:
                 "Parameter `source` is required when calling `delete_source`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/security/sources/{source}".replace(
                 "{source}", quote(str(source), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_source(
         self,
@@ -1831,10 +1643,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteSourceResponse' result object.
         """
-
-        response = await self.delete_source_with_http_info(source, request_options)
-
-        return response.deserialize(DeleteSourceResponse)
+        return (
+            await self.delete_source_with_http_info(source, request_options)
+        ).deserialize(DeleteSourceResponse)
 
     async def delete_synonym_with_http_info(
         self,
@@ -1878,12 +1689,11 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -1891,15 +1701,10 @@ class SearchClient:
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_synonym(
         self,
@@ -1931,12 +1736,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
         """
-
-        response = await self.delete_synonym_with_http_info(
-            index_name, object_id, forward_to_replicas, request_options
-        )
-
-        return response.deserialize(DeletedAtResponse)
+        return (
+            await self.delete_synonym_with_http_info(
+                index_name, object_id, forward_to_replicas, request_options
+            )
+        ).deserialize(DeletedAtResponse)
 
     async def get_api_key_with_http_info(
         self,
@@ -1957,24 +1761,15 @@ class SearchClient:
         if key is None:
             raise ValueError("Parameter `key` is required when calling `get_api_key`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_api_key(
         self,
@@ -1991,10 +1786,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetApiKeyResponse' result object.
         """
-
-        response = await self.get_api_key_with_http_info(key, request_options)
-
-        return response.deserialize(GetApiKeyResponse)
+        return (
+            await self.get_api_key_with_http_info(key, request_options)
+        ).deserialize(GetApiKeyResponse)
 
     async def get_dictionary_languages_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2008,24 +1802,15 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/dictionaries/*/languages",
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_dictionary_languages(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2038,10 +1823,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, Languages]' result object.
         """
-
-        response = await self.get_dictionary_languages_with_http_info(request_options)
-
-        return response.deserialize(Dict[str, Languages])
+        return (
+            await self.get_dictionary_languages_with_http_info(request_options)
+        ).deserialize(Dict[str, Languages])
 
     async def get_dictionary_settings_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2055,24 +1839,15 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/dictionaries/*/settings",
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_dictionary_settings(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2085,10 +1860,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetDictionarySettingsResponse' result object.
         """
-
-        response = await self.get_dictionary_settings_with_http_info(request_options)
-
-        return response.deserialize(GetDictionarySettingsResponse)
+        return (
+            await self.get_dictionary_settings_with_http_info(request_options)
+        ).deserialize(GetDictionarySettingsResponse)
 
     async def get_logs_with_http_info(
         self,
@@ -2134,7 +1908,6 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if offset is not None:
             _query_parameters.append(("offset", offset))
@@ -2145,21 +1918,16 @@ class SearchClient:
         if type is not None:
             _query_parameters.append(("type", type))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/logs",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_logs(
         self,
@@ -2203,12 +1971,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetLogsResponse' result object.
         """
-
-        response = await self.get_logs_with_http_info(
-            offset, length, index_name, type, request_options
-        )
-
-        return response.deserialize(GetLogsResponse)
+        return (
+            await self.get_logs_with_http_info(
+                offset, length, index_name, type, request_options
+            )
+        ).deserialize(GetLogsResponse)
 
     async def get_object_with_http_info(
         self,
@@ -2252,12 +2019,11 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if attributes_to_retrieve is not None:
             _query_parameters.append(("attributesToRetrieve", attributes_to_retrieve))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -2265,15 +2031,10 @@ class SearchClient:
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_object(
         self,
@@ -2305,12 +2066,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, str]' result object.
         """
-
-        response = await self.get_object_with_http_info(
-            index_name, object_id, attributes_to_retrieve, request_options
-        )
-
-        return response.deserialize(Dict[str, str])
+        return (
+            await self.get_object_with_http_info(
+                index_name, object_id, attributes_to_retrieve, request_options
+            )
+        ).deserialize(Dict[str, str])
 
     async def get_objects_with_http_info(
         self,
@@ -2335,28 +2095,19 @@ class SearchClient:
                 "Parameter `get_objects_params` is required when calling `get_objects`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if get_objects_params is not None:
             _body = get_objects_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/objects",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_objects(
         self,
@@ -2375,12 +2126,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetObjectsResponse' result object.
         """
-
-        response = await self.get_objects_with_http_info(
-            get_objects_params, request_options
-        )
-
-        return response.deserialize(GetObjectsResponse)
+        return (
+            await self.get_objects_with_http_info(get_objects_params, request_options)
+        ).deserialize(GetObjectsResponse)
 
     async def get_rule_with_http_info(
         self,
@@ -2415,26 +2163,17 @@ class SearchClient:
                 "Parameter `object_id` is required when calling `get_rule`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_rule(
         self,
@@ -2458,12 +2197,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Rule' result object.
         """
-
-        response = await self.get_rule_with_http_info(
-            index_name, object_id, request_options
-        )
-
-        return response.deserialize(Rule)
+        return (
+            await self.get_rule_with_http_info(index_name, object_id, request_options)
+        ).deserialize(Rule)
 
     async def get_settings_with_http_info(
         self,
@@ -2488,26 +2224,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `get_settings`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/settings".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_settings(
         self,
@@ -2526,10 +2253,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IndexSettings' result object.
         """
-
-        response = await self.get_settings_with_http_info(index_name, request_options)
-
-        return response.deserialize(IndexSettings)
+        return (
+            await self.get_settings_with_http_info(index_name, request_options)
+        ).deserialize(IndexSettings)
 
     async def get_sources_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2543,24 +2269,15 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/security/sources",
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_sources(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2573,10 +2290,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[Source]' result object.
         """
-
-        response = await self.get_sources_with_http_info(request_options)
-
-        return response.deserialize(List[Source])
+        return (await self.get_sources_with_http_info(request_options)).deserialize(
+            List[Source]
+        )
 
     async def get_synonym_with_http_info(
         self,
@@ -2611,26 +2327,17 @@ class SearchClient:
                 "Parameter `object_id` is required when calling `get_synonym`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_synonym(
         self,
@@ -2654,12 +2361,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SynonymHit' result object.
         """
-
-        response = await self.get_synonym_with_http_info(
-            index_name, object_id, request_options
-        )
-
-        return response.deserialize(SynonymHit)
+        return (
+            await self.get_synonym_with_http_info(
+                index_name, object_id, request_options
+            )
+        ).deserialize(SynonymHit)
 
     async def get_task_with_http_info(
         self,
@@ -2690,26 +2396,17 @@ class SearchClient:
         if task_id is None:
             raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/task/{taskID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_task(
         self,
@@ -2731,12 +2428,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTaskResponse' result object.
         """
-
-        response = await self.get_task_with_http_info(
-            index_name, task_id, request_options
-        )
-
-        return response.deserialize(GetTaskResponse)
+        return (
+            await self.get_task_with_http_info(index_name, task_id, request_options)
+        ).deserialize(GetTaskResponse)
 
     async def get_top_user_ids_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2750,24 +2444,15 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping/top",
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_top_user_ids(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2780,10 +2465,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopUserIdsResponse' result object.
         """
-
-        response = await self.get_top_user_ids_with_http_info(request_options)
-
-        return response.deserialize(GetTopUserIdsResponse)
+        return (
+            await self.get_top_user_ids_with_http_info(request_options)
+        ).deserialize(GetTopUserIdsResponse)
 
     async def get_user_id_with_http_info(
         self,
@@ -2806,26 +2490,17 @@ class SearchClient:
                 "Parameter `user_id` is required when calling `get_user_id`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping/{userID}".replace(
                 "{userID}", quote(str(user_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_user_id(
         self,
@@ -2842,10 +2517,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UserId' result object.
         """
-
-        response = await self.get_user_id_with_http_info(user_id, request_options)
-
-        return response.deserialize(UserId)
+        return (
+            await self.get_user_id_with_http_info(user_id, request_options)
+        ).deserialize(UserId)
 
     async def has_pending_mappings_with_http_info(
         self,
@@ -2869,26 +2543,20 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if get_clusters is not None:
             _query_parameters.append(("getClusters", get_clusters))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping/pending",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def has_pending_mappings(
         self,
@@ -2910,12 +2578,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'HasPendingMappingsResponse' result object.
         """
-
-        response = await self.has_pending_mappings_with_http_info(
-            get_clusters, request_options
-        )
-
-        return response.deserialize(HasPendingMappingsResponse)
+        return (
+            await self.has_pending_mappings_with_http_info(
+                get_clusters, request_options
+            )
+        ).deserialize(HasPendingMappingsResponse)
 
     async def list_api_keys_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2929,24 +2596,15 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/keys",
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def list_api_keys(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2959,10 +2617,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListApiKeysResponse' result object.
         """
-
-        response = await self.list_api_keys_with_http_info(request_options)
-
-        return response.deserialize(ListApiKeysResponse)
+        return (await self.list_api_keys_with_http_info(request_options)).deserialize(
+            ListApiKeysResponse
+        )
 
     async def list_clusters_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -2976,24 +2633,15 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters",
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def list_clusters(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -3006,10 +2654,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListClustersResponse' result object.
         """
-
-        response = await self.list_clusters_with_http_info(request_options)
-
-        return response.deserialize(ListClustersResponse)
+        return (await self.list_clusters_with_http_info(request_options)).deserialize(
+            ListClustersResponse
+        )
 
     async def list_indices_with_http_info(
         self,
@@ -3038,28 +2685,22 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if page is not None:
             _query_parameters.append(("page", page))
         if hits_per_page is not None:
             _query_parameters.append(("hitsPerPage", hits_per_page))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def list_indices(
         self,
@@ -3086,12 +2727,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListIndicesResponse' result object.
         """
-
-        response = await self.list_indices_with_http_info(
-            page, hits_per_page, request_options
-        )
-
-        return response.deserialize(ListIndicesResponse)
+        return (
+            await self.list_indices_with_http_info(page, hits_per_page, request_options)
+        ).deserialize(ListIndicesResponse)
 
     async def list_user_ids_with_http_info(
         self,
@@ -3120,28 +2758,22 @@ class SearchClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if page is not None:
             _query_parameters.append(("page", page))
         if hits_per_page is not None:
             _query_parameters.append(("hitsPerPage", hits_per_page))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def list_user_ids(
         self,
@@ -3168,12 +2800,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListUserIdsResponse' result object.
         """
-
-        response = await self.list_user_ids_with_http_info(
-            page, hits_per_page, request_options
-        )
-
-        return response.deserialize(ListUserIdsResponse)
+        return (
+            await self.list_user_ids_with_http_info(
+                page, hits_per_page, request_options
+            )
+        ).deserialize(ListUserIdsResponse)
 
     async def multiple_batch_with_http_info(
         self,
@@ -3196,28 +2827,19 @@ class SearchClient:
                 "Parameter `batch_params` is required when calling `multiple_batch`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if batch_params is not None:
             _body = batch_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/batch",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def multiple_batch(
         self,
@@ -3234,12 +2856,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'MultipleBatchResponse' result object.
         """
-
-        response = await self.multiple_batch_with_http_info(
-            batch_params, request_options
-        )
-
-        return response.deserialize(MultipleBatchResponse)
+        return (
+            await self.multiple_batch_with_http_info(batch_params, request_options)
+        ).deserialize(MultipleBatchResponse)
 
     async def operation_index_with_http_info(
         self,
@@ -3272,30 +2891,21 @@ class SearchClient:
                 "Parameter `operation_index_params` is required when calling `operation_index`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if operation_index_params is not None:
             _body = operation_index_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/operation".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def operation_index(
         self,
@@ -3317,12 +2927,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.operation_index_with_http_info(
-            index_name, operation_index_params, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.operation_index_with_http_info(
+                index_name, operation_index_params, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def partial_update_object_with_http_info(
         self,
@@ -3377,7 +2986,6 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if create_if_not_exists is not None:
             _query_parameters.append(("createIfNotExists", create_if_not_exists))
@@ -3386,7 +2994,7 @@ class SearchClient:
         if attributes_to_update is not None:
             _body = attributes_to_update
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/{objectID}/partial".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -3394,15 +3002,10 @@ class SearchClient:
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def partial_update_object(
         self,
@@ -3440,16 +3043,15 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtWithObjectIdResponse' result object.
         """
-
-        response = await self.partial_update_object_with_http_info(
-            index_name,
-            object_id,
-            attributes_to_update,
-            create_if_not_exists,
-            request_options,
-        )
-
-        return response.deserialize(UpdatedAtWithObjectIdResponse)
+        return (
+            await self.partial_update_object_with_http_info(
+                index_name,
+                object_id,
+                attributes_to_update,
+                create_if_not_exists,
+                request_options,
+            )
+        ).deserialize(UpdatedAtWithObjectIdResponse)
 
     async def remove_user_id_with_http_info(
         self,
@@ -3472,26 +3074,17 @@ class SearchClient:
                 "Parameter `user_id` is required when calling `remove_user_id`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/clusters/mapping/{userID}".replace(
                 "{userID}", quote(str(user_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def remove_user_id(
         self,
@@ -3508,10 +3101,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RemoveUserIdResponse' result object.
         """
-
-        response = await self.remove_user_id_with_http_info(user_id, request_options)
-
-        return response.deserialize(RemoveUserIdResponse)
+        return (
+            await self.remove_user_id_with_http_info(user_id, request_options)
+        ).deserialize(RemoveUserIdResponse)
 
     async def replace_sources_with_http_info(
         self,
@@ -3534,28 +3126,19 @@ class SearchClient:
                 "Parameter `source` is required when calling `replace_sources`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if source is not None:
             _body = source
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/security/sources",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def replace_sources(
         self,
@@ -3572,10 +3155,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ReplaceSourceResponse' result object.
         """
-
-        response = await self.replace_sources_with_http_info(source, request_options)
-
-        return response.deserialize(ReplaceSourceResponse)
+        return (
+            await self.replace_sources_with_http_info(source, request_options)
+        ).deserialize(ReplaceSourceResponse)
 
     async def restore_api_key_with_http_info(
         self,
@@ -3598,24 +3180,15 @@ class SearchClient:
                 "Parameter `key` is required when calling `restore_api_key`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/keys/{key}/restore".replace("{key}", quote(str(key), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def restore_api_key(
         self,
@@ -3632,10 +3205,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'AddApiKeyResponse' result object.
         """
-
-        response = await self.restore_api_key_with_http_info(key, request_options)
-
-        return response.deserialize(AddApiKeyResponse)
+        return (
+            await self.restore_api_key_with_http_info(key, request_options)
+        ).deserialize(AddApiKeyResponse)
 
     async def save_object_with_http_info(
         self,
@@ -3666,30 +3238,21 @@ class SearchClient:
         if body is None:
             raise ValueError("Parameter `body` is required when calling `save_object`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def save_object(
         self,
@@ -3711,12 +3274,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SaveObjectResponse' result object.
         """
-
-        response = await self.save_object_with_http_info(
-            index_name, body, request_options
-        )
-
-        return response.deserialize(SaveObjectResponse)
+        return (
+            await self.save_object_with_http_info(index_name, body, request_options)
+        ).deserialize(SaveObjectResponse)
 
     async def save_rule_with_http_info(
         self,
@@ -3766,7 +3326,6 @@ class SearchClient:
             raise ValueError("Parameter `rule` is required when calling `save_rule`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -3775,7 +3334,7 @@ class SearchClient:
         if rule is not None:
             _body = rule
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -3783,15 +3342,10 @@ class SearchClient:
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def save_rule(
         self,
@@ -3826,12 +3380,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedRuleResponse' result object.
         """
-
-        response = await self.save_rule_with_http_info(
-            index_name, object_id, rule, forward_to_replicas, request_options
-        )
-
-        return response.deserialize(UpdatedRuleResponse)
+        return (
+            await self.save_rule_with_http_info(
+                index_name, object_id, rule, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedRuleResponse)
 
     async def save_rules_with_http_info(
         self,
@@ -3879,7 +3432,6 @@ class SearchClient:
             raise ValueError("Parameter `rules` is required when calling `save_rules`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -3890,7 +3442,7 @@ class SearchClient:
         if rules is not None:
             _body = rules
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/batch".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -3898,15 +3450,10 @@ class SearchClient:
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def save_rules(
         self,
@@ -3944,16 +3491,15 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.save_rules_with_http_info(
-            index_name,
-            rules,
-            forward_to_replicas,
-            clear_existing_rules,
-            request_options,
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.save_rules_with_http_info(
+                index_name,
+                rules,
+                forward_to_replicas,
+                clear_existing_rules,
+                request_options,
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def save_synonym_with_http_info(
         self,
@@ -4005,7 +3551,6 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -4014,7 +3559,7 @@ class SearchClient:
         if synonym_hit is not None:
             _body = synonym_hit
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -4022,15 +3567,10 @@ class SearchClient:
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def save_synonym(
         self,
@@ -4065,12 +3605,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SaveSynonymResponse' result object.
         """
-
-        response = await self.save_synonym_with_http_info(
-            index_name, object_id, synonym_hit, forward_to_replicas, request_options
-        )
-
-        return response.deserialize(SaveSynonymResponse)
+        return (
+            await self.save_synonym_with_http_info(
+                index_name, object_id, synonym_hit, forward_to_replicas, request_options
+            )
+        ).deserialize(SaveSynonymResponse)
 
     async def save_synonyms_with_http_info(
         self,
@@ -4120,7 +3659,6 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -4133,7 +3671,7 @@ class SearchClient:
         if synonym_hit is not None:
             _body = synonym_hit
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/batch".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -4141,15 +3679,10 @@ class SearchClient:
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def save_synonyms(
         self,
@@ -4187,16 +3720,15 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.save_synonyms_with_http_info(
-            index_name,
-            synonym_hit,
-            forward_to_replicas,
-            replace_existing_synonyms,
-            request_options,
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.save_synonyms_with_http_info(
+                index_name,
+                synonym_hit,
+                forward_to_replicas,
+                replace_existing_synonyms,
+                request_options,
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def search_with_http_info(
         self,
@@ -4224,28 +3756,19 @@ class SearchClient:
                 "Parameter `search_method_params` is required when calling `search`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if search_method_params is not None:
             _body = search_method_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/queries",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search(
         self,
@@ -4267,12 +3790,9 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchResponses' result object.
         """
-
-        response = await self.search_with_http_info(
-            search_method_params, request_options
-        )
-
-        return response.deserialize(SearchResponses)
+        return (
+            await self.search_with_http_info(search_method_params, request_options)
+        ).deserialize(SearchResponses)
 
     async def search_dictionary_entries_with_http_info(
         self,
@@ -4305,30 +3825,21 @@ class SearchClient:
                 "Parameter `search_dictionary_entries_params` is required when calling `search_dictionary_entries`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if search_dictionary_entries_params is not None:
             _body = search_dictionary_entries_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/dictionaries/{dictionaryName}/search".replace(
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_dictionary_entries(
         self,
@@ -4350,12 +3861,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.search_dictionary_entries_with_http_info(
-            dictionary_name, search_dictionary_entries_params, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.search_dictionary_entries_with_http_info(
+                dictionary_name, search_dictionary_entries_params, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def search_for_facet_values_with_http_info(
         self,
@@ -4391,30 +3901,21 @@ class SearchClient:
                 "Parameter `facet_name` is required when calling `search_for_facet_values`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if search_for_facet_values_request is not None:
             _body = search_for_facet_values_request
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/facets/{facetName}/query".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{facetName}", quote(str(facet_name), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_for_facet_values(
         self,
@@ -4439,12 +3940,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchForFacetValuesResponse' result object.
         """
-
-        response = await self.search_for_facet_values_with_http_info(
-            index_name, facet_name, search_for_facet_values_request, request_options
-        )
-
-        return response.deserialize(SearchForFacetValuesResponse)
+        return (
+            await self.search_for_facet_values_with_http_info(
+                index_name, facet_name, search_for_facet_values_request, request_options
+            )
+        ).deserialize(SearchForFacetValuesResponse)
 
     async def search_rules_with_http_info(
         self,
@@ -4472,30 +3972,21 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `search_rules`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if search_rules_params is not None:
             _body = search_rules_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/search".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_rules(
         self,
@@ -4517,12 +4008,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchRulesResponse' result object.
         """
-
-        response = await self.search_rules_with_http_info(
-            index_name, search_rules_params, request_options
-        )
-
-        return response.deserialize(SearchRulesResponse)
+        return (
+            await self.search_rules_with_http_info(
+                index_name, search_rules_params, request_options
+            )
+        ).deserialize(SearchRulesResponse)
 
     async def search_single_index_with_http_info(
         self,
@@ -4550,30 +4040,21 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `search_single_index`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if search_params is not None:
             _body = search_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/query".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_single_index(
         self,
@@ -4595,12 +4076,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchResponse' result object.
         """
-
-        response = await self.search_single_index_with_http_info(
-            index_name, search_params, request_options
-        )
-
-        return response.deserialize(SearchResponse)
+        return (
+            await self.search_single_index_with_http_info(
+                index_name, search_params, request_options
+            )
+        ).deserialize(SearchResponse)
 
     async def search_synonyms_with_http_info(
         self,
@@ -4653,7 +4133,6 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if type is not None:
             _query_parameters.append(("type", type))
@@ -4666,7 +4145,7 @@ class SearchClient:
         if search_synonyms_params is not None:
             _body = search_synonyms_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/search".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -4674,15 +4153,10 @@ class SearchClient:
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_synonyms(
         self,
@@ -4728,17 +4202,16 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchSynonymsResponse' result object.
         """
-
-        response = await self.search_synonyms_with_http_info(
-            index_name,
-            type,
-            page,
-            hits_per_page,
-            search_synonyms_params,
-            request_options,
-        )
-
-        return response.deserialize(SearchSynonymsResponse)
+        return (
+            await self.search_synonyms_with_http_info(
+                index_name,
+                type,
+                page,
+                hits_per_page,
+                search_synonyms_params,
+                request_options,
+            )
+        ).deserialize(SearchSynonymsResponse)
 
     async def search_user_ids_with_http_info(
         self,
@@ -4761,28 +4234,19 @@ class SearchClient:
                 "Parameter `search_user_ids_params` is required when calling `search_user_ids`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if search_user_ids_params is not None:
             _body = search_user_ids_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/clusters/mapping/search",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_user_ids(
         self,
@@ -4799,12 +4263,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchUserIdsResponse' result object.
         """
-
-        response = await self.search_user_ids_with_http_info(
-            search_user_ids_params, request_options
-        )
-
-        return response.deserialize(SearchUserIdsResponse)
+        return (
+            await self.search_user_ids_with_http_info(
+                search_user_ids_params, request_options
+            )
+        ).deserialize(SearchUserIdsResponse)
 
     async def set_dictionary_settings_with_http_info(
         self,
@@ -4827,28 +4290,19 @@ class SearchClient:
                 "Parameter `dictionary_settings_params` is required when calling `set_dictionary_settings`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if dictionary_settings_params is not None:
             _body = dictionary_settings_params
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/dictionaries/*/settings",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def set_dictionary_settings(
         self,
@@ -4865,12 +4319,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.set_dictionary_settings_with_http_info(
-            dictionary_settings_params, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.set_dictionary_settings_with_http_info(
+                dictionary_settings_params, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def set_settings_with_http_info(
         self,
@@ -4912,7 +4365,6 @@ class SearchClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
@@ -4921,7 +4373,7 @@ class SearchClient:
         if index_settings is not None:
             _body = index_settings
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/settings".replace(
                 "{indexName}", quote(str(index_name), safe="")
@@ -4929,15 +4381,10 @@ class SearchClient:
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def set_settings(
         self,
@@ -4967,12 +4414,11 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
-
-        response = await self.set_settings_with_http_info(
-            index_name, index_settings, forward_to_replicas, request_options
-        )
-
-        return response.deserialize(UpdatedAtResponse)
+        return (
+            await self.set_settings_with_http_info(
+                index_name, index_settings, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
 
     async def update_api_key_with_http_info(
         self,
@@ -5003,28 +4449,19 @@ class SearchClient:
                 "Parameter `api_key` is required when calling `update_api_key`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if api_key is not None:
             _body = api_key
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def update_api_key(
         self,
@@ -5044,9 +4481,6 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdateApiKeyResponse' result object.
         """
-
-        response = await self.update_api_key_with_http_info(
-            key, api_key, request_options
-        )
-
-        return response.deserialize(UpdateApiKeyResponse)
+        return (
+            await self.update_api_key_with_http_info(key, api_key, request_options)
+        ).deserialize(UpdateApiKeyResponse)

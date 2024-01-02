@@ -134,28 +134,19 @@ class IngestionClient:
                 "Parameter `authentication_create` is required when calling `create_authentication`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if authentication_create is not None:
             _body = authentication_create
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/authentications",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def create_authentication(
         self,
@@ -172,12 +163,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'AuthenticationCreateResponse' result object.
         """
-
-        response = await self.create_authentication_with_http_info(
-            authentication_create, request_options
-        )
-
-        return response.deserialize(AuthenticationCreateResponse)
+        return (
+            await self.create_authentication_with_http_info(
+                authentication_create, request_options
+            )
+        ).deserialize(AuthenticationCreateResponse)
 
     async def create_destination_with_http_info(
         self,
@@ -200,28 +190,19 @@ class IngestionClient:
                 "Parameter `destination_create` is required when calling `create_destination`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if destination_create is not None:
             _body = destination_create
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/destinations",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def create_destination(
         self,
@@ -238,12 +219,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DestinationCreateResponse' result object.
         """
-
-        response = await self.create_destination_with_http_info(
-            destination_create, request_options
-        )
-
-        return response.deserialize(DestinationCreateResponse)
+        return (
+            await self.create_destination_with_http_info(
+                destination_create, request_options
+            )
+        ).deserialize(DestinationCreateResponse)
 
     async def create_source_with_http_info(
         self,
@@ -266,28 +246,19 @@ class IngestionClient:
                 "Parameter `source_create` is required when calling `create_source`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if source_create is not None:
             _body = source_create
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/sources",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def create_source(
         self,
@@ -304,12 +275,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SourceCreateResponse' result object.
         """
-
-        response = await self.create_source_with_http_info(
-            source_create, request_options
-        )
-
-        return response.deserialize(SourceCreateResponse)
+        return (
+            await self.create_source_with_http_info(source_create, request_options)
+        ).deserialize(SourceCreateResponse)
 
     async def create_task_with_http_info(
         self,
@@ -332,28 +300,19 @@ class IngestionClient:
                 "Parameter `task_create` is required when calling `create_task`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if task_create is not None:
             _body = task_create
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/tasks",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def create_task(
         self,
@@ -370,10 +329,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'TaskCreateResponse' result object.
         """
-
-        response = await self.create_task_with_http_info(task_create, request_options)
-
-        return response.deserialize(TaskCreateResponse)
+        return (
+            await self.create_task_with_http_info(task_create, request_options)
+        ).deserialize(TaskCreateResponse)
 
     async def custom_delete_with_http_info(
         self,
@@ -408,27 +366,21 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_delete(
         self,
@@ -456,12 +408,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_delete_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_get_with_http_info(
         self,
@@ -494,27 +443,21 @@ class IngestionClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_get(
         self,
@@ -542,12 +485,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_get_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_post_with_http_info(
         self,
@@ -586,7 +526,6 @@ class IngestionClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -596,21 +535,16 @@ class IngestionClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_post(
         self,
@@ -644,12 +578,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_post_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_post_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def custom_put_with_http_info(
         self,
@@ -688,7 +621,6 @@ class IngestionClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -698,21 +630,16 @@ class IngestionClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_put(
         self,
@@ -746,12 +673,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_put_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_put_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def delete_authentication_with_http_info(
         self,
@@ -776,26 +702,17 @@ class IngestionClient:
                 "Parameter `authentication_id` is required when calling `delete_authentication`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/authentications/{authenticationID}".replace(
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_authentication(
         self,
@@ -814,12 +731,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
         """
-
-        response = await self.delete_authentication_with_http_info(
-            authentication_id, request_options
-        )
-
-        return response.deserialize(DeleteResponse)
+        return (
+            await self.delete_authentication_with_http_info(
+                authentication_id, request_options
+            )
+        ).deserialize(DeleteResponse)
 
     async def delete_destination_with_http_info(
         self,
@@ -844,26 +760,17 @@ class IngestionClient:
                 "Parameter `destination_id` is required when calling `delete_destination`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/destinations/{destinationID}".replace(
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_destination(
         self,
@@ -882,12 +789,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
         """
-
-        response = await self.delete_destination_with_http_info(
-            destination_id, request_options
-        )
-
-        return response.deserialize(DeleteResponse)
+        return (
+            await self.delete_destination_with_http_info(
+                destination_id, request_options
+            )
+        ).deserialize(DeleteResponse)
 
     async def delete_source_with_http_info(
         self,
@@ -910,26 +816,17 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `delete_source`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/sources/{sourceID}".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_source(
         self,
@@ -946,10 +843,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
         """
-
-        response = await self.delete_source_with_http_info(source_id, request_options)
-
-        return response.deserialize(DeleteResponse)
+        return (
+            await self.delete_source_with_http_info(source_id, request_options)
+        ).deserialize(DeleteResponse)
 
     async def delete_task_with_http_info(
         self,
@@ -972,24 +868,15 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `delete_task`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_task(
         self,
@@ -1006,10 +893,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
         """
-
-        response = await self.delete_task_with_http_info(task_id, request_options)
-
-        return response.deserialize(DeleteResponse)
+        return (
+            await self.delete_task_with_http_info(task_id, request_options)
+        ).deserialize(DeleteResponse)
 
     async def disable_task_with_http_info(
         self,
@@ -1032,26 +918,17 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `disable_task`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/tasks/{taskID}/disable".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def disable_task(
         self,
@@ -1068,10 +945,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
         """
-
-        response = await self.disable_task_with_http_info(task_id, request_options)
-
-        return response.deserialize(TaskUpdateResponse)
+        return (
+            await self.disable_task_with_http_info(task_id, request_options)
+        ).deserialize(TaskUpdateResponse)
 
     async def enable_task_with_http_info(
         self,
@@ -1094,26 +970,17 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `enable_task`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/tasks/{taskID}/enable".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def enable_task(
         self,
@@ -1130,10 +997,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
         """
-
-        response = await self.enable_task_with_http_info(task_id, request_options)
-
-        return response.deserialize(TaskUpdateResponse)
+        return (
+            await self.enable_task_with_http_info(task_id, request_options)
+        ).deserialize(TaskUpdateResponse)
 
     async def get_authentication_with_http_info(
         self,
@@ -1158,26 +1024,17 @@ class IngestionClient:
                 "Parameter `authentication_id` is required when calling `get_authentication`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/authentications/{authenticationID}".replace(
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_authentication(
         self,
@@ -1196,12 +1053,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Authentication' result object.
         """
-
-        response = await self.get_authentication_with_http_info(
-            authentication_id, request_options
-        )
-
-        return response.deserialize(Authentication)
+        return (
+            await self.get_authentication_with_http_info(
+                authentication_id, request_options
+            )
+        ).deserialize(Authentication)
 
     async def get_authentications_with_http_info(
         self,
@@ -1252,7 +1108,6 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -1267,21 +1122,16 @@ class IngestionClient:
         if order is not None:
             _query_parameters.append(("order", order))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/authentications",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_authentications(
         self,
@@ -1330,12 +1180,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListAuthenticationsResponse' result object.
         """
-
-        response = await self.get_authentications_with_http_info(
-            items_per_page, page, type, platform, sort, order, request_options
-        )
-
-        return response.deserialize(ListAuthenticationsResponse)
+        return (
+            await self.get_authentications_with_http_info(
+                items_per_page, page, type, platform, sort, order, request_options
+            )
+        ).deserialize(ListAuthenticationsResponse)
 
     async def get_destination_with_http_info(
         self,
@@ -1360,26 +1209,17 @@ class IngestionClient:
                 "Parameter `destination_id` is required when calling `get_destination`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/destinations/{destinationID}".replace(
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_destination(
         self,
@@ -1398,12 +1238,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Destination' result object.
         """
-
-        response = await self.get_destination_with_http_info(
-            destination_id, request_options
-        )
-
-        return response.deserialize(Destination)
+        return (
+            await self.get_destination_with_http_info(destination_id, request_options)
+        ).deserialize(Destination)
 
     async def get_destinations_with_http_info(
         self,
@@ -1454,7 +1291,6 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -1469,21 +1305,16 @@ class IngestionClient:
         if order is not None:
             _query_parameters.append(("order", order))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/destinations",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_destinations(
         self,
@@ -1532,12 +1363,17 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListDestinationsResponse' result object.
         """
-
-        response = await self.get_destinations_with_http_info(
-            items_per_page, page, type, authentication_id, sort, order, request_options
-        )
-
-        return response.deserialize(ListDestinationsResponse)
+        return (
+            await self.get_destinations_with_http_info(
+                items_per_page,
+                page,
+                type,
+                authentication_id,
+                sort,
+                order,
+                request_options,
+            )
+        ).deserialize(ListDestinationsResponse)
 
     async def get_docker_source_streams_with_http_info(
         self,
@@ -1560,26 +1396,17 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `get_docker_source_streams`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/sources/{sourceID}/discover".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_docker_source_streams(
         self,
@@ -1596,12 +1423,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DockerSourceStreams' result object.
         """
-
-        response = await self.get_docker_source_streams_with_http_info(
-            source_id, request_options
-        )
-
-        return response.deserialize(DockerSourceStreams)
+        return (
+            await self.get_docker_source_streams_with_http_info(
+                source_id, request_options
+            )
+        ).deserialize(DockerSourceStreams)
 
     async def get_event_with_http_info(
         self,
@@ -1630,26 +1456,17 @@ class IngestionClient:
                 "Parameter `event_id` is required when calling `get_event`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}/events/{eventID}".replace(
                 "{runID}", quote(str(run_id), safe="")
             ).replace("{eventID}", quote(str(event_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_event(
         self,
@@ -1669,12 +1486,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Event' result object.
         """
-
-        response = await self.get_event_with_http_info(
-            run_id, event_id, request_options
-        )
-
-        return response.deserialize(Event)
+        return (
+            await self.get_event_with_http_info(run_id, event_id, request_options)
+        ).deserialize(Event)
 
     async def get_events_with_http_info(
         self,
@@ -1749,7 +1563,6 @@ class IngestionClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -1768,7 +1581,7 @@ class IngestionClient:
         if end_date is not None:
             _query_parameters.append(("endDate", end_date))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}/events".replace(
                 "{runID}", quote(str(run_id), safe="")
@@ -1776,15 +1589,10 @@ class IngestionClient:
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_events(
         self,
@@ -1852,21 +1660,20 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListEventsResponse' result object.
         """
-
-        response = await self.get_events_with_http_info(
-            run_id,
-            items_per_page,
-            page,
-            status,
-            type,
-            sort,
-            order,
-            start_date,
-            end_date,
-            request_options,
-        )
-
-        return response.deserialize(ListEventsResponse)
+        return (
+            await self.get_events_with_http_info(
+                run_id,
+                items_per_page,
+                page,
+                status,
+                type,
+                sort,
+                order,
+                start_date,
+                end_date,
+                request_options,
+            )
+        ).deserialize(ListEventsResponse)
 
     async def get_run_with_http_info(
         self,
@@ -1887,24 +1694,15 @@ class IngestionClient:
         if run_id is None:
             raise ValueError("Parameter `run_id` is required when calling `get_run`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}".replace("{runID}", quote(str(run_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_run(
         self,
@@ -1921,10 +1719,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Run' result object.
         """
-
-        response = await self.get_run_with_http_info(run_id, request_options)
-
-        return response.deserialize(Run)
+        return (await self.get_run_with_http_info(run_id, request_options)).deserialize(
+            Run
+        )
 
     async def get_runs_with_http_info(
         self,
@@ -1990,7 +1787,6 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -2009,21 +1805,16 @@ class IngestionClient:
         if end_date is not None:
             _query_parameters.append(("endDate", end_date))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_runs(
         self,
@@ -2087,20 +1878,19 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunListResponse' result object.
         """
-
-        response = await self.get_runs_with_http_info(
-            items_per_page,
-            page,
-            status,
-            task_id,
-            sort,
-            order,
-            start_date,
-            end_date,
-            request_options,
-        )
-
-        return response.deserialize(RunListResponse)
+        return (
+            await self.get_runs_with_http_info(
+                items_per_page,
+                page,
+                status,
+                task_id,
+                sort,
+                order,
+                start_date,
+                end_date,
+                request_options,
+            )
+        ).deserialize(RunListResponse)
 
     async def get_source_with_http_info(
         self,
@@ -2123,26 +1913,17 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `get_source`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/sources/{sourceID}".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_source(
         self,
@@ -2159,10 +1940,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Source' result object.
         """
-
-        response = await self.get_source_with_http_info(source_id, request_options)
-
-        return response.deserialize(Source)
+        return (
+            await self.get_source_with_http_info(source_id, request_options)
+        ).deserialize(Source)
 
     async def get_sources_with_http_info(
         self,
@@ -2215,7 +1995,6 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -2230,21 +2009,16 @@ class IngestionClient:
         if order is not None:
             _query_parameters.append(("order", order))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/sources",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_sources(
         self,
@@ -2295,12 +2069,17 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListSourcesResponse' result object.
         """
-
-        response = await self.get_sources_with_http_info(
-            items_per_page, page, type, authentication_id, sort, order, request_options
-        )
-
-        return response.deserialize(ListSourcesResponse)
+        return (
+            await self.get_sources_with_http_info(
+                items_per_page,
+                page,
+                type,
+                authentication_id,
+                sort,
+                order,
+                request_options,
+            )
+        ).deserialize(ListSourcesResponse)
 
     async def get_task_with_http_info(
         self,
@@ -2321,24 +2100,15 @@ class IngestionClient:
         if task_id is None:
             raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_task(
         self,
@@ -2355,10 +2125,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Task' result object.
         """
-
-        response = await self.get_task_with_http_info(task_id, request_options)
-
-        return response.deserialize(Task)
+        return (
+            await self.get_task_with_http_info(task_id, request_options)
+        ).deserialize(Task)
 
     async def get_tasks_with_http_info(
         self,
@@ -2427,7 +2196,6 @@ class IngestionClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if items_per_page is not None:
             _query_parameters.append(("itemsPerPage", items_per_page))
@@ -2448,21 +2216,16 @@ class IngestionClient:
         if order is not None:
             _query_parameters.append(("order", order))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1/tasks",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_tasks(
         self,
@@ -2529,21 +2292,20 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListTasksResponse' result object.
         """
-
-        response = await self.get_tasks_with_http_info(
-            items_per_page,
-            page,
-            action,
-            enabled,
-            source_id,
-            destination_id,
-            trigger_type,
-            sort,
-            order,
-            request_options,
-        )
-
-        return response.deserialize(ListTasksResponse)
+        return (
+            await self.get_tasks_with_http_info(
+                items_per_page,
+                page,
+                action,
+                enabled,
+                source_id,
+                destination_id,
+                trigger_type,
+                sort,
+                order,
+                request_options,
+            )
+        ).deserialize(ListTasksResponse)
 
     async def run_task_with_http_info(
         self,
@@ -2564,26 +2326,17 @@ class IngestionClient:
         if task_id is None:
             raise ValueError("Parameter `task_id` is required when calling `run_task`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/tasks/{taskID}/run".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def run_task(
         self,
@@ -2600,10 +2353,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
-
-        response = await self.run_task_with_http_info(task_id, request_options)
-
-        return response.deserialize(RunResponse)
+        return (
+            await self.run_task_with_http_info(task_id, request_options)
+        ).deserialize(RunResponse)
 
     async def search_authentications_with_http_info(
         self,
@@ -2626,28 +2378,19 @@ class IngestionClient:
                 "Parameter `authentication_search` is required when calling `search_authentications`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if authentication_search is not None:
             _body = authentication_search
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/authentications/search",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_authentications(
         self,
@@ -2664,12 +2407,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[Authentication]' result object.
         """
-
-        response = await self.search_authentications_with_http_info(
-            authentication_search, request_options
-        )
-
-        return response.deserialize(List[Authentication])
+        return (
+            await self.search_authentications_with_http_info(
+                authentication_search, request_options
+            )
+        ).deserialize(List[Authentication])
 
     async def search_destinations_with_http_info(
         self,
@@ -2692,28 +2434,19 @@ class IngestionClient:
                 "Parameter `destination_search` is required when calling `search_destinations`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if destination_search is not None:
             _body = destination_search
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/destinations/search",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_destinations(
         self,
@@ -2730,12 +2463,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[Destination]' result object.
         """
-
-        response = await self.search_destinations_with_http_info(
-            destination_search, request_options
-        )
-
-        return response.deserialize(List[Destination])
+        return (
+            await self.search_destinations_with_http_info(
+                destination_search, request_options
+            )
+        ).deserialize(List[Destination])
 
     async def search_sources_with_http_info(
         self,
@@ -2758,28 +2490,19 @@ class IngestionClient:
                 "Parameter `source_search` is required when calling `search_sources`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if source_search is not None:
             _body = source_search
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/sources/search",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_sources(
         self,
@@ -2796,12 +2519,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[Source]' result object.
         """
-
-        response = await self.search_sources_with_http_info(
-            source_search, request_options
-        )
-
-        return response.deserialize(List[Source])
+        return (
+            await self.search_sources_with_http_info(source_search, request_options)
+        ).deserialize(List[Source])
 
     async def search_tasks_with_http_info(
         self,
@@ -2824,28 +2544,19 @@ class IngestionClient:
                 "Parameter `task_search` is required when calling `search_tasks`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if task_search is not None:
             _body = task_search
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/tasks/search",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def search_tasks(
         self,
@@ -2862,10 +2573,9 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[Task]' result object.
         """
-
-        response = await self.search_tasks_with_http_info(task_search, request_options)
-
-        return response.deserialize(List[Task])
+        return (
+            await self.search_tasks_with_http_info(task_search, request_options)
+        ).deserialize(List[Task])
 
     async def trigger_docker_source_discover_with_http_info(
         self,
@@ -2888,26 +2598,17 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `trigger_docker_source_discover`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1/sources/{sourceID}/discover".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def trigger_docker_source_discover(
         self,
@@ -2924,12 +2625,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DockerSourceDiscover' result object.
         """
-
-        response = await self.trigger_docker_source_discover_with_http_info(
-            source_id, request_options
-        )
-
-        return response.deserialize(DockerSourceDiscover)
+        return (
+            await self.trigger_docker_source_discover_with_http_info(
+                source_id, request_options
+            )
+        ).deserialize(DockerSourceDiscover)
 
     async def update_authentication_with_http_info(
         self,
@@ -2962,30 +2662,21 @@ class IngestionClient:
                 "Parameter `authentication_update` is required when calling `update_authentication`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if authentication_update is not None:
             _body = authentication_update
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/authentications/{authenticationID}".replace(
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def update_authentication(
         self,
@@ -3007,12 +2698,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'AuthenticationUpdateResponse' result object.
         """
-
-        response = await self.update_authentication_with_http_info(
-            authentication_id, authentication_update, request_options
-        )
-
-        return response.deserialize(AuthenticationUpdateResponse)
+        return (
+            await self.update_authentication_with_http_info(
+                authentication_id, authentication_update, request_options
+            )
+        ).deserialize(AuthenticationUpdateResponse)
 
     async def update_destination_with_http_info(
         self,
@@ -3045,30 +2735,21 @@ class IngestionClient:
                 "Parameter `destination_update` is required when calling `update_destination`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if destination_update is not None:
             _body = destination_update
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/destinations/{destinationID}".replace(
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def update_destination(
         self,
@@ -3090,12 +2771,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DestinationUpdateResponse' result object.
         """
-
-        response = await self.update_destination_with_http_info(
-            destination_id, destination_update, request_options
-        )
-
-        return response.deserialize(DestinationUpdateResponse)
+        return (
+            await self.update_destination_with_http_info(
+                destination_id, destination_update, request_options
+            )
+        ).deserialize(DestinationUpdateResponse)
 
     async def update_source_with_http_info(
         self,
@@ -3126,30 +2806,21 @@ class IngestionClient:
                 "Parameter `source_update` is required when calling `update_source`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if source_update is not None:
             _body = source_update
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/sources/{sourceID}".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def update_source(
         self,
@@ -3169,12 +2840,11 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SourceUpdateResponse' result object.
         """
-
-        response = await self.update_source_with_http_info(
-            source_id, source_update, request_options
-        )
-
-        return response.deserialize(SourceUpdateResponse)
+        return (
+            await self.update_source_with_http_info(
+                source_id, source_update, request_options
+            )
+        ).deserialize(SourceUpdateResponse)
 
     async def update_task_with_http_info(
         self,
@@ -3205,28 +2875,19 @@ class IngestionClient:
                 "Parameter `task_update` is required when calling `update_task`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if task_update is not None:
             _body = task_update
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def update_task(
         self,
@@ -3246,9 +2907,6 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
         """
-
-        response = await self.update_task_with_http_info(
-            task_id, task_update, request_options
-        )
-
-        return response.deserialize(TaskUpdateResponse)
+        return (
+            await self.update_task_with_http_info(task_id, task_update, request_options)
+        ).deserialize(TaskUpdateResponse)

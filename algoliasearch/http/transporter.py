@@ -117,6 +117,7 @@ class Transporter:
                         proxy=proxy,
                     )
 
+                    _raw_data = await resp.text()
                     response = ApiResponse(
                         verb=verb,
                         path=path,
@@ -124,7 +125,8 @@ class Transporter:
                         host=host.url,
                         status_code=resp.status,
                         headers=resp.headers,
-                        raw_data=await resp.text(),
+                        data=_raw_data,
+                        raw_data=_raw_data,
                         error_message=str(resp.reason),
                     )
 
@@ -180,5 +182,6 @@ class EchoTransporter(Transporter):
                 query_parameters=request_options.query_parameters
             ).query_parameters,
             headers=dict(request_options.headers),
+            data=data,
             raw_data=data,
         )

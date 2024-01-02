@@ -131,27 +131,21 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_delete(
         self,
@@ -179,12 +173,9 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_delete_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_get_with_http_info(
         self,
@@ -217,27 +208,21 @@ class AnalyticsClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_get(
         self,
@@ -265,12 +250,9 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_get_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_post_with_http_info(
         self,
@@ -309,7 +291,6 @@ class AnalyticsClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -319,21 +300,16 @@ class AnalyticsClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_post(
         self,
@@ -367,12 +343,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_post_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_post_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def custom_put_with_http_info(
         self,
@@ -411,7 +386,6 @@ class AnalyticsClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -421,21 +395,16 @@ class AnalyticsClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_put(
         self,
@@ -469,12 +438,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_put_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_put_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def get_average_click_position_with_http_info(
         self,
@@ -522,7 +490,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -533,21 +500,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/clicks/averageClickPosition",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_average_click_position(
         self,
@@ -588,12 +550,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetAverageClickPositionResponse' result object.
         """
-
-        response = await self.get_average_click_position_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetAverageClickPositionResponse)
+        return (
+            await self.get_average_click_position_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetAverageClickPositionResponse)
 
     async def get_click_positions_with_http_info(
         self,
@@ -641,7 +602,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -652,21 +612,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/clicks/positions",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_click_positions(
         self,
@@ -707,12 +662,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickPositionsResponse' result object.
         """
-
-        response = await self.get_click_positions_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetClickPositionsResponse)
+        return (
+            await self.get_click_positions_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetClickPositionsResponse)
 
     async def get_click_through_rate_with_http_info(
         self,
@@ -760,7 +714,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -771,21 +724,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/clicks/clickThroughRate",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_click_through_rate(
         self,
@@ -826,12 +774,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickThroughRateResponse' result object.
         """
-
-        response = await self.get_click_through_rate_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetClickThroughRateResponse)
+        return (
+            await self.get_click_through_rate_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetClickThroughRateResponse)
 
     async def get_conversation_rate_with_http_info(
         self,
@@ -879,7 +826,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -890,21 +836,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/conversions/conversionRate",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_conversation_rate(
         self,
@@ -945,12 +886,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetConversationRateResponse' result object.
         """
-
-        response = await self.get_conversation_rate_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetConversationRateResponse)
+        return (
+            await self.get_conversation_rate_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetConversationRateResponse)
 
     async def get_no_click_rate_with_http_info(
         self,
@@ -998,7 +938,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -1009,21 +948,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noClickRate",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_no_click_rate(
         self,
@@ -1064,12 +998,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoClickRateResponse' result object.
         """
-
-        response = await self.get_no_click_rate_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetNoClickRateResponse)
+        return (
+            await self.get_no_click_rate_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetNoClickRateResponse)
 
     async def get_no_results_rate_with_http_info(
         self,
@@ -1117,7 +1050,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -1128,21 +1060,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noResultRate",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_no_results_rate(
         self,
@@ -1183,12 +1110,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoResultsRateResponse' result object.
         """
-
-        response = await self.get_no_results_rate_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetNoResultsRateResponse)
+        return (
+            await self.get_no_results_rate_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetNoResultsRateResponse)
 
     async def get_searches_count_with_http_info(
         self,
@@ -1236,7 +1162,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -1247,21 +1172,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/count",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_searches_count(
         self,
@@ -1302,12 +1222,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesCountResponse' result object.
         """
-
-        response = await self.get_searches_count_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetSearchesCountResponse)
+        return (
+            await self.get_searches_count_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetSearchesCountResponse)
 
     async def get_searches_no_clicks_with_http_info(
         self,
@@ -1369,7 +1288,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -1384,21 +1302,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noClicks",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_searches_no_clicks(
         self,
@@ -1453,12 +1366,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoClicksResponse' result object.
         """
-
-        response = await self.get_searches_no_clicks_with_http_info(
-            index, start_date, end_date, limit, offset, tags, request_options
-        )
-
-        return response.deserialize(GetSearchesNoClicksResponse)
+        return (
+            await self.get_searches_no_clicks_with_http_info(
+                index, start_date, end_date, limit, offset, tags, request_options
+            )
+        ).deserialize(GetSearchesNoClicksResponse)
 
     async def get_searches_no_results_with_http_info(
         self,
@@ -1520,7 +1432,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -1535,21 +1446,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noResults",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_searches_no_results(
         self,
@@ -1604,12 +1510,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoResultsResponse' result object.
         """
-
-        response = await self.get_searches_no_results_with_http_info(
-            index, start_date, end_date, limit, offset, tags, request_options
-        )
-
-        return response.deserialize(GetSearchesNoResultsResponse)
+        return (
+            await self.get_searches_no_results_with_http_info(
+                index, start_date, end_date, limit, offset, tags, request_options
+            )
+        ).deserialize(GetSearchesNoResultsResponse)
 
     async def get_status_with_http_info(
         self,
@@ -1631,26 +1536,20 @@ class AnalyticsClient:
             raise ValueError("Parameter `index` is required when calling `get_status`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/status",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_status(
         self,
@@ -1667,10 +1566,9 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetStatusResponse' result object.
         """
-
-        response = await self.get_status_with_http_info(index, request_options)
-
-        return response.deserialize(GetStatusResponse)
+        return (
+            await self.get_status_with_http_info(index, request_options)
+        ).deserialize(GetStatusResponse)
 
     async def get_top_countries_with_http_info(
         self,
@@ -1732,7 +1630,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -1747,21 +1644,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/countries",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_top_countries(
         self,
@@ -1816,12 +1708,11 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopCountriesResponse' result object.
         """
-
-        response = await self.get_top_countries_with_http_info(
-            index, start_date, end_date, limit, offset, tags, request_options
-        )
-
-        return response.deserialize(GetTopCountriesResponse)
+        return (
+            await self.get_top_countries_with_http_info(
+                index, start_date, end_date, limit, offset, tags, request_options
+            )
+        ).deserialize(GetTopCountriesResponse)
 
     async def get_top_filter_attributes_with_http_info(
         self,
@@ -1886,7 +1777,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -1903,21 +1793,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/filters",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_top_filter_attributes(
         self,
@@ -1975,12 +1860,18 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterAttributesResponse' result object.
         """
-
-        response = await self.get_top_filter_attributes_with_http_info(
-            index, search, start_date, end_date, limit, offset, tags, request_options
-        )
-
-        return response.deserialize(GetTopFilterAttributesResponse)
+        return (
+            await self.get_top_filter_attributes_with_http_info(
+                index,
+                search,
+                start_date,
+                end_date,
+                limit,
+                offset,
+                tags,
+                request_options,
+            )
+        ).deserialize(GetTopFilterAttributesResponse)
 
     async def get_top_filter_for_attribute_with_http_info(
         self,
@@ -2053,7 +1944,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -2070,7 +1960,7 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/filters/{attribute}".replace(
                 "{attribute}", quote(str(attribute), safe="")
@@ -2078,15 +1968,10 @@ class AnalyticsClient:
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_top_filter_for_attribute(
         self,
@@ -2147,20 +2032,19 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterForAttributeResponse' result object.
         """
-
-        response = await self.get_top_filter_for_attribute_with_http_info(
-            attribute,
-            index,
-            search,
-            start_date,
-            end_date,
-            limit,
-            offset,
-            tags,
-            request_options,
-        )
-
-        return response.deserialize(GetTopFilterForAttributeResponse)
+        return (
+            await self.get_top_filter_for_attribute_with_http_info(
+                attribute,
+                index,
+                search,
+                start_date,
+                end_date,
+                limit,
+                offset,
+                tags,
+                request_options,
+            )
+        ).deserialize(GetTopFilterForAttributeResponse)
 
     async def get_top_filters_no_results_with_http_info(
         self,
@@ -2225,7 +2109,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -2242,21 +2125,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/filters/noResults",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_top_filters_no_results(
         self,
@@ -2314,12 +2192,18 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFiltersNoResultsResponse' result object.
         """
-
-        response = await self.get_top_filters_no_results_with_http_info(
-            index, search, start_date, end_date, limit, offset, tags, request_options
-        )
-
-        return response.deserialize(GetTopFiltersNoResultsResponse)
+        return (
+            await self.get_top_filters_no_results_with_http_info(
+                index,
+                search,
+                start_date,
+                end_date,
+                limit,
+                offset,
+                tags,
+                request_options,
+            )
+        ).deserialize(GetTopFiltersNoResultsResponse)
 
     async def get_top_hits_with_http_info(
         self,
@@ -2392,7 +2276,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -2411,21 +2294,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/hits",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_top_hits(
         self,
@@ -2491,20 +2369,19 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopHitsResponse' result object.
         """
-
-        response = await self.get_top_hits_with_http_info(
-            index,
-            search,
-            click_analytics,
-            start_date,
-            end_date,
-            limit,
-            offset,
-            tags,
-            request_options,
-        )
-
-        return response.deserialize(GetTopHitsResponse)
+        return (
+            await self.get_top_hits_with_http_info(
+                index,
+                search,
+                click_analytics,
+                start_date,
+                end_date,
+                limit,
+                offset,
+                tags,
+                request_options,
+            )
+        ).deserialize(GetTopHitsResponse)
 
     async def get_top_searches_with_http_info(
         self,
@@ -2587,7 +2464,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -2608,21 +2484,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_top_searches(
         self,
@@ -2698,21 +2569,20 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopSearchesResponse' result object.
         """
-
-        response = await self.get_top_searches_with_http_info(
-            index,
-            click_analytics,
-            start_date,
-            end_date,
-            order_by,
-            direction,
-            limit,
-            offset,
-            tags,
-            request_options,
-        )
-
-        return response.deserialize(GetTopSearchesResponse)
+        return (
+            await self.get_top_searches_with_http_info(
+                index,
+                click_analytics,
+                start_date,
+                end_date,
+                order_by,
+                direction,
+                limit,
+                offset,
+                tags,
+                request_options,
+            )
+        ).deserialize(GetTopSearchesResponse)
 
     async def get_users_count_with_http_info(
         self,
@@ -2760,7 +2630,6 @@ class AnalyticsClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if index is not None:
             _query_parameters.append(("index", index))
@@ -2771,21 +2640,16 @@ class AnalyticsClient:
         if tags is not None:
             _query_parameters.append(("tags", tags))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/users/count",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_users_count(
         self,
@@ -2826,9 +2690,8 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetUsersCountResponse' result object.
         """
-
-        response = await self.get_users_count_with_http_info(
-            index, start_date, end_date, tags, request_options
-        )
-
-        return response.deserialize(GetUsersCountResponse)
+        return (
+            await self.get_users_count_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetUsersCountResponse)

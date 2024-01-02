@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self
+from typing import Annotated, Any, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
 
@@ -43,15 +43,6 @@ class ConvertedFilters(BaseModel):
         description="User token for authenticated users.",
         alias="authenticatedUserToken",
     )
-    __properties: ClassVar[List[str]] = [
-        "eventName",
-        "eventType",
-        "index",
-        "filters",
-        "userToken",
-        "timestamp",
-        "authenticatedUserToken",
-    ]
 
     @field_validator("event_name")
     def event_name_validate_regular_expression(cls, value):

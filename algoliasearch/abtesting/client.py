@@ -74,28 +74,19 @@ class AbtestingClient:
                 "Parameter `add_ab_tests_request` is required when calling `add_ab_tests`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
         _body = {}
         if add_ab_tests_request is not None:
             _body = add_ab_tests_request
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/2/abtests",
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def add_ab_tests(
         self,
@@ -112,12 +103,11 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-
-        response = await self.add_ab_tests_with_http_info(
-            add_ab_tests_request, request_options
-        )
-
-        return response.deserialize(ABTestResponse)
+        return (
+            await self.add_ab_tests_with_http_info(
+                add_ab_tests_request, request_options
+            )
+        ).deserialize(ABTestResponse)
 
     async def custom_delete_with_http_info(
         self,
@@ -152,27 +142,21 @@ class AbtestingClient:
             )
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_delete(
         self,
@@ -200,12 +184,9 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_delete_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_get_with_http_info(
         self,
@@ -238,27 +219,21 @@ class AbtestingClient:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_get(
         self,
@@ -286,12 +261,9 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_get_with_http_info(
-            path, parameters, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
 
     async def custom_post_with_http_info(
         self,
@@ -330,7 +302,6 @@ class AbtestingClient:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -340,21 +311,16 @@ class AbtestingClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_post(
         self,
@@ -388,12 +354,11 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_post_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_post_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def custom_put_with_http_info(
         self,
@@ -432,7 +397,6 @@ class AbtestingClient:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
@@ -442,21 +406,16 @@ class AbtestingClient:
         if body is not None:
             _body = body
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
             data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def custom_put(
         self,
@@ -490,12 +449,11 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-
-        response = await self.custom_put_with_http_info(
-            path, parameters, body, request_options
-        )
-
-        return response.deserialize(object)
+        return (
+            await self.custom_put_with_http_info(
+                path, parameters, body, request_options
+            )
+        ).deserialize(object)
 
     async def delete_ab_test_with_http_info(
         self,
@@ -518,24 +476,15 @@ class AbtestingClient:
                 "Parameter `id` is required when calling `delete_ab_test`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.DELETE,
             path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def delete_ab_test(
         self,
@@ -552,10 +501,9 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-
-        response = await self.delete_ab_test_with_http_info(id, request_options)
-
-        return response.deserialize(ABTestResponse)
+        return (
+            await self.delete_ab_test_with_http_info(id, request_options)
+        ).deserialize(ABTestResponse)
 
     async def get_ab_test_with_http_info(
         self,
@@ -576,24 +524,15 @@ class AbtestingClient:
         if id is None:
             raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def get_ab_test(
         self,
@@ -610,10 +549,9 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTest' result object.
         """
-
-        response = await self.get_ab_test_with_http_info(id, request_options)
-
-        return response.deserialize(ABTest)
+        return (await self.get_ab_test_with_http_info(id, request_options)).deserialize(
+            ABTest
+        )
 
     async def list_ab_tests_with_http_info(
         self,
@@ -659,7 +597,6 @@ class AbtestingClient:
         """
 
         _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
 
         if offset is not None:
             _query_parameters.append(("offset", offset))
@@ -670,21 +607,16 @@ class AbtestingClient:
         if index_suffix is not None:
             _query_parameters.append(("indexSuffix", index_suffix))
 
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.GET,
             path="/2/abtests",
             data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def list_ab_tests(
         self,
@@ -728,12 +660,11 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListABTestsResponse' result object.
         """
-
-        response = await self.list_ab_tests_with_http_info(
-            offset, limit, index_prefix, index_suffix, request_options
-        )
-
-        return response.deserialize(ListABTestsResponse)
+        return (
+            await self.list_ab_tests_with_http_info(
+                offset, limit, index_prefix, index_suffix, request_options
+            )
+        ).deserialize(ListABTestsResponse)
 
     async def stop_ab_test_with_http_info(
         self,
@@ -754,24 +685,15 @@ class AbtestingClient:
         if id is None:
             raise ValueError("Parameter `id` is required when calling `stop_ab_test`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
-        _headers: Dict[str, Optional[str]] = {}
-
-        response = await self._transporter.request(
+        return await self._transporter.request(
             verb=Verb.POST,
             path="/2/abtests/{id}/stop".replace("{id}", quote(str(id), safe="")),
             data=None,
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                headers=_headers,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
         )
-
-        response.data = response.raw_data
-
-        return response
 
     async def stop_ab_test(
         self,
@@ -788,7 +710,6 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-
-        response = await self.stop_ab_test_with_http_info(id, request_options)
-
-        return response.deserialize(ABTestResponse)
+        return (
+            await self.stop_ab_test_with_http_info(id, request_options)
+        ).deserialize(ABTestResponse)

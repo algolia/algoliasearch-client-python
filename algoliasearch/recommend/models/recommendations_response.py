@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, ClassVar, Dict, List, Optional, Self
+from typing import Annotated, Any, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr, field_validator
 
@@ -139,38 +139,6 @@ class RecommendationsResponse(BaseModel):
     params: Optional[StrictStr] = Field(
         default=None, description="URL-encoded string of all search parameters."
     )
-    __properties: ClassVar[List[str]] = [
-        "abTestID",
-        "abTestVariantID",
-        "aroundLatLng",
-        "automaticRadius",
-        "exhaustive",
-        "exhaustiveFacetsCount",
-        "exhaustiveNbHits",
-        "exhaustiveTypo",
-        "facets",
-        "facets_stats",
-        "hitsPerPage",
-        "index",
-        "indexUsed",
-        "message",
-        "nbHits",
-        "nbPages",
-        "nbSortedHits",
-        "page",
-        "parsedQuery",
-        "processingTimeMS",
-        "processingTimingsMS",
-        "queryAfterRemoval",
-        "redirect",
-        "renderingContent",
-        "serverTimeMS",
-        "serverUsed",
-        "userData",
-        "hits",
-        "query",
-        "params",
-    ]
 
     @field_validator("around_lat_lng")
     def around_lat_lng_validate_regular_expression(cls, value):
