@@ -10,17 +10,23 @@ class Timeout(Protocol):
     def __call__(self) -> int:
         return 0
 
+    def __init__(self) -> None:
+        pass
+
 
 class RetryTimeout(Timeout):
     def __call__(self, retry_count: int) -> int:
         return min(retry_count * 0.2, 5)
+
+    def __init__(self) -> None:
+        pass
 
 
 async def create_iterable(
     func: Callable[[T], T],
     validate: Callable[[T], bool],
     aggregator: Callable[[T], None],
-    timeout: Timeout,
+    timeout: Timeout = Timeout(),
     error_validate: Callable[[T], bool] = None,
     error_message: Callable[[T], str] = None,
 ) -> T:

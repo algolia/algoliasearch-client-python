@@ -51,5 +51,7 @@ def bodySerializer(obj: Any) -> dict:
         obj_dict = obj
     else:
         obj_dict = obj.to_dict()
+        if obj_dict is None:
+            return None
 
     return {key: bodySerializer(val) for key, val in obj_dict.items()}
