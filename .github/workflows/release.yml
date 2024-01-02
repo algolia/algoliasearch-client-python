@@ -16,20 +16,22 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - name: Install poetry
-      shell: bash
-      run: pipx install poetry
+    - uses: actions/checkout@v4
 
     - uses: actions/setup-python@v5
       with:
         python-version: 3.11.6
-        cache: 'poetry'
 
-    - name: intall dependencies
-      run: poetry install
+    - name: install poetry
       shell: bash
+      run: pipx install poetry
 
-    - run: poetry build
+    - name: install dependencies
+      shell: bash
+      run: poetry install
+
+    - name: build client
+      run: poetry build
       shell: bash
 
     - name: Publish algoliasearch package to PyPI
