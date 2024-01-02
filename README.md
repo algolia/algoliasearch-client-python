@@ -46,13 +46,37 @@ client = SearchClient.create("YOUR_APP_ID", "YOUR_API_KEY")
 Add new object to your index:
 
 ```py
-await client.save_object(index_name="nvim", body={"description": "blazing fast"})
+save_resp = await client.save_object(index_name="nvim", body={"description": "blazing fast"})
+```
+
+Wait for the task to be processed on the Algolia side
+
+```py
+await client.wait_for_task(index_name="nvim", task_id=save_resp.task_id)
 ```
 
 Finally, you may begin searching a object using the `search` method:
 
 ```py
-await client.search(search_method_params={"requests": [{"indexName": "nvim"}]})
+# using a raw dict
+
+search_resp = await client.search(search_method_params={"requests": [{"indexName": "nvim"}]})
+
+# using the given models
+
+from algoliasearch.search.models.search_method_params import SearchMethodParams
+from algoliasearch.search.models.search_for_hits import SearchForHits
+from algoliasearch.search.models.search_query import SearchQuery
+
+search_resp = await client.search(
+    search_method_params=SearchMethodParams(
+        requests=[
+            SearchQuery(SearchForHits(index_name="nvim")),
+        ],
+    ),
+)
+
+print(search_resp.to_json())
 ```
 
 For full documentation, visit the **[Algolia Python API Client](https://www.algolia.com/doc/api-client/getting-started/install/python/)**.
