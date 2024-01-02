@@ -1,3 +1,7 @@
+## [4.0.0a4](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a3...4.0.0a4)
+
+- [959974537](https://github.com/algolia/api-clients-automation/commit/959974537) fix(python): release ([#2472](https://github.com/algolia/api-clients-automation/pull/2472)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0a3](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a2...4.0.0a3)
 
 - [271eb792c](https://github.com/algolia/api-clients-automation/commit/271eb792c) feat(python): add browse helpers ([#2452](https://github.com/algolia/api-clients-automation/pull/2452)) by [@shortcuts](https://github.com/shortcuts/)
