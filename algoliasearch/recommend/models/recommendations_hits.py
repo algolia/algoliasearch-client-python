@@ -8,19 +8,23 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, StrictStr
 
-from algoliasearch.recommend.models.recommendations_results import (
-    RecommendationsResults,
-)
+from algoliasearch.recommend.models.recommendations_hit import RecommendationsHit
 
 
-class GetRecommendationsResponse(BaseModel):
+class RecommendationsHits(BaseModel):
     """
-    GetRecommendationsResponse
+    RecommendationsHits
     """
 
-    results: Optional[List[RecommendationsResults]] = None
+    hits: List[RecommendationsHit]
+    query: Optional[StrictStr] = Field(
+        default="", description="Text to search for in an index."
+    )
+    params: Optional[StrictStr] = Field(
+        default=None, description="URL-encoded string of all search parameters."
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -29,7 +33,7 @@ class GetRecommendationsResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of GetRecommendationsResponse from a JSON string"""
+        """Create an instance of RecommendationsHits from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -48,18 +52,18 @@ class GetRecommendationsResponse(BaseModel):
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of
-        # each item in results (list)
+        # each item in hits (list)
         _items = []
-        if self.results:
-            for _item in self.results:
+        if self.hits:
+            for _item in self.hits:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict["results"] = _items
+            _dict["hits"] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of GetRecommendationsResponse from a dict"""
+        """Create an instance of RecommendationsHits from a dict"""
         if obj is None:
             return None
 
@@ -68,12 +72,13 @@ class GetRecommendationsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "results": [
-                    RecommendationsResults.from_dict(_item)
-                    for _item in obj.get("results")
+                "hits": [
+                    RecommendationsHit.from_dict(_item) for _item in obj.get("hits")
                 ]
-                if obj.get("results") is not None
-                else None
+                if obj.get("hits") is not None
+                else None,
+                "query": obj.get("query") if obj.get("query") is not None else "",
+                "params": obj.get("params"),
             }
         )
         return _obj

@@ -13,14 +13,14 @@ from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr, field_v
 
 from algoliasearch.recommend.models.exhaustive import Exhaustive
 from algoliasearch.recommend.models.facets_stats import FacetsStats
-from algoliasearch.recommend.models.recommend_hit import RecommendHit
+from algoliasearch.recommend.models.recommendations_hit import RecommendationsHit
 from algoliasearch.recommend.models.redirect import Redirect
 from algoliasearch.recommend.models.rendering_content import RenderingContent
 
 
-class RecommendationsResponse(BaseModel):
+class RecommendationsResults(BaseModel):
     """
-    RecommendationsResponse
+    RecommendationsResults
     """
 
     ab_test_id: Optional[StrictInt] = Field(
@@ -132,7 +132,7 @@ class RecommendationsResponse(BaseModel):
         description="Lets you store custom data in your indices.",
         alias="userData",
     )
-    hits: List[RecommendHit]
+    hits: List[RecommendationsHit]
     query: Optional[StrictStr] = Field(
         default="", description="Text to search for in an index."
     )
@@ -159,7 +159,7 @@ class RecommendationsResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of RecommendationsResponse from a JSON string"""
+        """Create an instance of RecommendationsResults from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -209,7 +209,7 @@ class RecommendationsResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of RecommendationsResponse from a dict"""
+        """Create an instance of RecommendationsResults from a dict"""
         if obj is None:
             return None
 
@@ -260,7 +260,9 @@ class RecommendationsResponse(BaseModel):
                 "serverTimeMS": obj.get("serverTimeMS"),
                 "serverUsed": obj.get("serverUsed"),
                 "userData": obj.get("userData"),
-                "hits": [RecommendHit.from_dict(_item) for _item in obj.get("hits")]
+                "hits": [
+                    RecommendationsHit.from_dict(_item) for _item in obj.get("hits")
+                ]
                 if obj.get("hits") is not None
                 else None,
                 "query": obj.get("query") if obj.get("query") is not None else "",

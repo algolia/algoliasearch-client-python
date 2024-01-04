@@ -10,31 +10,18 @@ from typing import Dict, Optional, Self, Union
 
 from pydantic import BaseModel, ValidationError, model_serializer
 
-from algoliasearch.recommend.models.recommendations_query import RecommendationsQuery
-from algoliasearch.recommend.models.recommended_for_you_query import (
-    RecommendedForYouQuery,
-)
-from algoliasearch.recommend.models.trending_facets_query import TrendingFacetsQuery
-from algoliasearch.recommend.models.trending_items_query import TrendingItemsQuery
+from algoliasearch.recommend.models.recommend_hit import RecommendHit
+from algoliasearch.recommend.models.trending_facet_hit import TrendingFacetHit
 
 
-class RecommendationsRequest(BaseModel):
+class RecommendationsHit(BaseModel):
     """
-    RecommendationsRequest
+    RecommendationsHit
     """
 
-    oneof_schema_1_validator: Optional[TrendingItemsQuery] = None
-    oneof_schema_2_validator: Optional[TrendingFacetsQuery] = None
-    oneof_schema_3_validator: Optional[RecommendationsQuery] = None
-    oneof_schema_4_validator: Optional[RecommendedForYouQuery] = None
-    actual_instance: Optional[
-        Union[
-            RecommendationsQuery,
-            RecommendedForYouQuery,
-            TrendingFacetsQuery,
-            TrendingItemsQuery,
-        ]
-    ] = None
+    oneof_schema_1_validator: Optional[RecommendHit] = None
+    oneof_schema_2_validator: Optional[TrendingFacetHit] = None
+    actual_instance: Optional[Union[RecommendHit, TrendingFacetHit]] = None
 
     model_config = {"validate_assignment": True}
 
@@ -53,16 +40,7 @@ class RecommendationsRequest(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(
-        self,
-    ) -> Optional[
-        Union[
-            RecommendationsQuery,
-            RecommendedForYouQuery,
-            TrendingFacetsQuery,
-            TrendingItemsQuery,
-        ]
-    ]:
+    def unwrap_actual_instance(self) -> Optional[Union[RecommendHit, TrendingFacetHit]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -79,32 +57,20 @@ class RecommendationsRequest(BaseModel):
         error_messages = []
 
         try:
-            instance.actual_instance = TrendingItemsQuery.from_json(json_str)
+            instance.actual_instance = RecommendHit.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = TrendingFacetsQuery.from_json(json_str)
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = RecommendationsQuery.from_json(json_str)
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = RecommendedForYouQuery.from_json(json_str)
+            instance.actual_instance = TrendingFacetHit.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into RecommendationsRequest with oneOf schemas: RecommendationsQuery, RecommendedForYouQuery, TrendingFacetsQuery, TrendingItemsQuery. Details: "
+            "No match found when deserializing the JSON string into RecommendationsHit with oneOf schemas: RecommendHit, TrendingFacetHit. Details: "
             + ", ".join(error_messages)
         )
 

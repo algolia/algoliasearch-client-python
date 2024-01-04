@@ -19,9 +19,15 @@ class SearchRecommendRulesResponse(BaseModel):
     """
 
     hits: List[RuleResponse] = Field(description="Fetched rules.")
-    nb_hits: StrictInt = Field(description="Number of fetched rules.", alias="nbHits")
-    page: StrictInt = Field(description="Current page.")
-    nb_pages: StrictInt = Field(description="Number of pages.", alias="nbPages")
+    nb_hits: StrictInt = Field(
+        description="Number of hits the search query matched.", alias="nbHits"
+    )
+    page: StrictInt = Field(
+        description="Page to retrieve (the first page is `0`, not `1`)."
+    )
+    nb_pages: StrictInt = Field(
+        description="Number of pages of results for the current query.", alias="nbPages"
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -73,7 +79,7 @@ class SearchRecommendRulesResponse(BaseModel):
                 if obj.get("hits") is not None
                 else None,
                 "nbHits": obj.get("nbHits"),
-                "page": obj.get("page"),
+                "page": obj.get("page") if obj.get("page") is not None else 0,
                 "nbPages": obj.get("nbPages"),
             }
         )

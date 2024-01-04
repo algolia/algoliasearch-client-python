@@ -19,6 +19,16 @@ class TrendingItemsQuery(BaseModel):
     TrendingItemsQuery
     """
 
+    index_name: StrictStr = Field(description="Algolia index name.", alias="indexName")
+    threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = Field(
+        default=None,
+        description="Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are. ",
+    )
+    max_recommendations: Optional[StrictInt] = Field(
+        default=0,
+        description="Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.",
+        alias="maxRecommendations",
+    )
     facet_name: Optional[StrictStr] = Field(
         default=None, description="Facet name for trending models.", alias="facetName"
     )
@@ -31,16 +41,6 @@ class TrendingItemsQuery(BaseModel):
     )
     fallback_parameters: Optional[SearchParamsObject] = Field(
         default=None, alias="fallbackParameters"
-    )
-    index_name: StrictStr = Field(description="Algolia index name.", alias="indexName")
-    threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = Field(
-        default=None,
-        description="Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are. ",
-    )
-    max_recommendations: Optional[StrictInt] = Field(
-        default=0,
-        description="Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.",
-        alias="maxRecommendations",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -89,6 +89,11 @@ class TrendingItemsQuery(BaseModel):
 
         _obj = cls.model_validate(
             {
+                "indexName": obj.get("indexName"),
+                "threshold": obj.get("threshold"),
+                "maxRecommendations": obj.get("maxRecommendations")
+                if obj.get("maxRecommendations") is not None
+                else 0,
                 "facetName": obj.get("facetName"),
                 "facetValue": obj.get("facetValue"),
                 "model": obj.get("model"),
@@ -102,11 +107,6 @@ class TrendingItemsQuery(BaseModel):
                 )
                 if obj.get("fallbackParameters") is not None
                 else None,
-                "indexName": obj.get("indexName"),
-                "threshold": obj.get("threshold"),
-                "maxRecommendations": obj.get("maxRecommendations")
-                if obj.get("maxRecommendations") is not None
-                else 0,
             }
         )
         return _obj

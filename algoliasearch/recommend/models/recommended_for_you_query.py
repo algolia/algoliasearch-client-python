@@ -10,12 +10,17 @@ from typing import Annotated, Any, Dict, Optional, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr
 
-from algoliasearch.recommend.models.trending_facets_model import TrendingFacetsModel
+from algoliasearch.recommend.models.recommended_for_you_model import (
+    RecommendedForYouModel,
+)
+from algoliasearch.recommend.models.recommended_for_you_query_parameters import (
+    RecommendedForYouQueryParameters,
+)
 
 
-class TrendingFacetsQuery(BaseModel):
+class RecommendedForYouQuery(BaseModel):
     """
-    TrendingFacetsQuery
+    RecommendedForYouQuery
     """
 
     index_name: StrictStr = Field(description="Algolia index name.", alias="indexName")
@@ -28,10 +33,13 @@ class TrendingFacetsQuery(BaseModel):
         description="Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.",
         alias="maxRecommendations",
     )
-    facet_name: StrictStr = Field(
-        description="Facet name for trending models.", alias="facetName"
+    model: RecommendedForYouModel
+    query_parameters: Optional[RecommendedForYouQueryParameters] = Field(
+        default=None, alias="queryParameters"
     )
-    model: Optional[TrendingFacetsModel] = None
+    fallback_parameters: Optional[RecommendedForYouQueryParameters] = Field(
+        default=None, alias="fallbackParameters"
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -40,7 +48,7 @@ class TrendingFacetsQuery(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TrendingFacetsQuery from a JSON string"""
+        """Create an instance of RecommendedForYouQuery from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -58,11 +66,19 @@ class TrendingFacetsQuery(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of
+        # query_parameters
+        if self.query_parameters:
+            _dict["queryParameters"] = self.query_parameters.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of
+        # fallback_parameters
+        if self.fallback_parameters:
+            _dict["fallbackParameters"] = self.fallback_parameters.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TrendingFacetsQuery from a dict"""
+        """Create an instance of RecommendedForYouQuery from a dict"""
         if obj is None:
             return None
 
@@ -76,8 +92,17 @@ class TrendingFacetsQuery(BaseModel):
                 "maxRecommendations": obj.get("maxRecommendations")
                 if obj.get("maxRecommendations") is not None
                 else 0,
-                "facetName": obj.get("facetName"),
                 "model": obj.get("model"),
+                "queryParameters": RecommendedForYouQueryParameters.from_dict(
+                    obj.get("queryParameters")
+                )
+                if obj.get("queryParameters") is not None
+                else None,
+                "fallbackParameters": RecommendedForYouQueryParameters.from_dict(
+                    obj.get("fallbackParameters")
+                )
+                if obj.get("fallbackParameters") is not None
+                else None,
             }
         )
         return _obj
