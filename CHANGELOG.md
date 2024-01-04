@@ -1,3 +1,7 @@
+## [4.0.0a5](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a4...4.0.0a5)
+
+- [ae6adfbf7](https://github.com/algolia/api-clients-automation/commit/ae6adfbf7) fix(specs): port recommend changes ([#2476](https://github.com/algolia/api-clients-automation/pull/2476)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0a4](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a3...4.0.0a4)
 
 - [959974537](https://github.com/algolia/api-clients-automation/commit/959974537) fix(python): release ([#2472](https://github.com/algolia/api-clients-automation/pull/2472)) by [@shortcuts](https://github.com/shortcuts/)
