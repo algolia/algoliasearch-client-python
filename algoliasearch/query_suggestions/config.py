@@ -47,6 +47,7 @@ class QuerySuggestionsConfig(BaseConfig):
         if self.proxies["https"] is None:
             del self.proxies["https"]
 
+        self.region = region
         _regions = ["eu", "us"]
 
         if not region or (region is not None and region not in _regions):

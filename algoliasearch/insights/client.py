@@ -25,26 +25,38 @@ class InsightsClient:
     _config: InsightsConfig
     _request_options: RequestOptions
 
-    def app_id(self) -> str:
-        return self._config.app_id
-
-    def __init__(self, transporter: Transporter, config: InsightsConfig) -> None:
-        self._transporter = transporter
-        self._config = config
-        self._request_options = RequestOptions(config)
-
-    def create_with_config(config: InsightsConfig) -> Self:
-        transporter = Transporter(config)
-
-        return InsightsClient(transporter, config)
-
-    def create(
+    def __init__(
+        self,
         app_id: Optional[str] = None,
         api_key: Optional[str] = None,
         region: Optional[str] = None,
+        transporter: Optional[Transporter] = None,
+        config: Optional[InsightsConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
+
+        if config is None:
+            config = InsightsConfig(app_id, api_key, region)
+        self._config = config
+        self._request_options = RequestOptions(config)
+
+        if transporter is None:
+            transporter = Transporter(config)
+        self._transporter = transporter
+
+    def create_with_config(
+        config: InsightsConfig, transporter: Optional[Transporter] = None
     ) -> Self:
-        return InsightsClient.create_with_config(
-            InsightsConfig(app_id, api_key, region)
+        if transporter is None:
+            transporter = Transporter(config)
+
+        return InsightsClient(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            region=config.region,
+            transporter=transporter,
+            config=config,
         )
 
     async def close(self) -> None:

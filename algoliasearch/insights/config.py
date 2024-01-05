@@ -47,6 +47,7 @@ class InsightsConfig(BaseConfig):
         if self.proxies["https"] is None:
             del self.proxies["https"]
 
+        self.region = region
         _regions = ["de", "us"]
 
         if region is not None and region not in _regions:

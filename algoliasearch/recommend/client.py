@@ -42,21 +42,37 @@ class RecommendClient:
     _config: RecommendConfig
     _request_options: RequestOptions
 
-    def app_id(self) -> str:
-        return self._config.app_id
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        transporter: Optional[Transporter] = None,
+        config: Optional[RecommendConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
 
-    def __init__(self, transporter: Transporter, config: RecommendConfig) -> None:
-        self._transporter = transporter
+        if config is None:
+            config = RecommendConfig(app_id, api_key)
         self._config = config
         self._request_options = RequestOptions(config)
 
-    def create_with_config(config: RecommendConfig) -> Self:
-        transporter = Transporter(config)
+        if transporter is None:
+            transporter = Transporter(config)
+        self._transporter = transporter
 
-        return RecommendClient(transporter, config)
+    def create_with_config(
+        config: RecommendConfig, transporter: Optional[Transporter] = None
+    ) -> Self:
+        if transporter is None:
+            transporter = Transporter(config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return RecommendClient.create_with_config(RecommendConfig(app_id, api_key))
+        return RecommendClient(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
 
     async def close(self) -> None:
         return await self._transporter.close()

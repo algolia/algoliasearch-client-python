@@ -105,21 +105,37 @@ class SearchClient:
     _config: SearchConfig
     _request_options: RequestOptions
 
-    def app_id(self) -> str:
-        return self._config.app_id
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        transporter: Optional[Transporter] = None,
+        config: Optional[SearchConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
 
-    def __init__(self, transporter: Transporter, config: SearchConfig) -> None:
-        self._transporter = transporter
+        if config is None:
+            config = SearchConfig(app_id, api_key)
         self._config = config
         self._request_options = RequestOptions(config)
 
-    def create_with_config(config: SearchConfig) -> Self:
-        transporter = Transporter(config)
+        if transporter is None:
+            transporter = Transporter(config)
+        self._transporter = transporter
 
-        return SearchClient(transporter, config)
+    def create_with_config(
+        config: SearchConfig, transporter: Optional[Transporter] = None
+    ) -> Self:
+        if transporter is None:
+            transporter = Transporter(config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return SearchClient.create_with_config(SearchConfig(app_id, api_key))
+        return SearchClient(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
 
     async def close(self) -> None:
         return await self._transporter.close()

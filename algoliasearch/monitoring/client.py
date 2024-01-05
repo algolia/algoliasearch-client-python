@@ -34,21 +34,37 @@ class MonitoringClient:
     _config: MonitoringConfig
     _request_options: RequestOptions
 
-    def app_id(self) -> str:
-        return self._config.app_id
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        transporter: Optional[Transporter] = None,
+        config: Optional[MonitoringConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
 
-    def __init__(self, transporter: Transporter, config: MonitoringConfig) -> None:
-        self._transporter = transporter
+        if config is None:
+            config = MonitoringConfig(app_id, api_key)
         self._config = config
         self._request_options = RequestOptions(config)
 
-    def create_with_config(config: MonitoringConfig) -> Self:
-        transporter = Transporter(config)
+        if transporter is None:
+            transporter = Transporter(config)
+        self._transporter = transporter
 
-        return MonitoringClient(transporter, config)
+    def create_with_config(
+        config: MonitoringConfig, transporter: Optional[Transporter] = None
+    ) -> Self:
+        if transporter is None:
+            transporter = Transporter(config)
 
-    def create(app_id: Optional[str] = None, api_key: Optional[str] = None) -> Self:
-        return MonitoringClient.create_with_config(MonitoringConfig(app_id, api_key))
+        return MonitoringClient(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
 
     async def close(self) -> None:
         return await self._transporter.close()
