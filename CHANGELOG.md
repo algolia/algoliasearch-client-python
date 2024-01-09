@@ -1,3 +1,7 @@
+## [4.0.0b1](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a6...4.0.0b1)
+
+- Bump pre-release to beta.
+
 ## [4.0.0a7](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a6...4.0.0a7)
 
 - [4f51dff5d](https://github.com/algolia/api-clients-automation/commit/4f51dff5d) feat(python): improve docstring and fix transporter errors ([#2501](https://github.com/algolia/api-clients-automation/pull/2501)) by [@shortcuts](https://github.com/shortcuts/)
