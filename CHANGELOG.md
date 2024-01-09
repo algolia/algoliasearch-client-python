@@ -1,3 +1,9 @@
+## [4.0.0a7](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a6...4.0.0a7)
+
+- [4f51dff5d](https://github.com/algolia/api-clients-automation/commit/4f51dff5d) feat(python): improve docstring and fix transporter errors ([#2501](https://github.com/algolia/api-clients-automation/pull/2501)) by [@shortcuts](https://github.com/shortcuts/)
+- [ae20258c6](https://github.com/algolia/api-clients-automation/commit/ae20258c6) feat(clients): deserialize in e2e and SFFV response ([#2500](https://github.com/algolia/api-clients-automation/pull/2500)) by [@shortcuts](https://github.com/shortcuts/)
+- [4dc28da98](https://github.com/algolia/api-clients-automation/commit/4dc28da98) chore(clients): add more e2e ([#2497](https://github.com/algolia/api-clients-automation/pull/2497)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0a6](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a5...4.0.0a6)
 
 - [461796bb7](https://github.com/algolia/api-clients-automation/commit/461796bb7) feat(clients): add missing clients ([#2479](https://github.com/algolia/api-clients-automation/pull/2479)) by [@shortcuts](https://github.com/shortcuts/)
