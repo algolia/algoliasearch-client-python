@@ -36,6 +36,23 @@ from algoliasearch.query_suggestions.models.query_suggestions_configuration_with
 
 
 class QuerySuggestionsClient:
+    """The Algolia 'QuerySuggestionsClient' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+    region ("eu" | "us"): The region of your Algolia application.
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = QuerySuggestionsClient("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY", region="'eu' or 'us'")
+    _client_with_named_args = QuerySuggestionsClient(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY", region="'eu' or 'us'")
+
+    See `QuerySuggestionsClient.create_with_config` for advanced configuration.
+    """
+
     _transporter: Transporter
     _config: QuerySuggestionsConfig
     _request_options: RequestOptions
@@ -63,6 +80,19 @@ class QuerySuggestionsClient:
     def create_with_config(
         config: QuerySuggestionsConfig, transporter: Optional[Transporter] = None
     ) -> Self:
+        """Allows creating a client with a customized `QuerySuggestionsConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (QuerySuggestionsConfig): The config of the API client.
+        transporter (Transporter): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = QuerySuggestionsClient.create_with_config(config=QuerySuggestionsConfig(...))
+        _client_with_custom_config_and_transporter = QuerySuggestionsClient.create_with_config(config=QuerySuggestionsConfig(...), transporter=Transporter(...))
+        """
         if transporter is None:
             transporter = Transporter(config)
 
@@ -74,7 +104,15 @@ class QuerySuggestionsClient:
             config=config,
         )
 
+    async def __aenter__(self) -> None:
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        await self.close()
+
     async def close(self) -> None:
+        """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
     async def create_config_with_http_info(

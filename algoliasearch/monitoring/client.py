@@ -30,6 +30,23 @@ from algoliasearch.monitoring.models.status_response import StatusResponse
 
 
 class MonitoringClient:
+    """The Algolia 'MonitoringClient' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = MonitoringClient("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY")
+    _client_with_named_args = MonitoringClient(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY")
+
+    See `MonitoringClient.create_with_config` for advanced configuration.
+    """
+
     _transporter: Transporter
     _config: MonitoringConfig
     _request_options: RequestOptions
@@ -56,6 +73,19 @@ class MonitoringClient:
     def create_with_config(
         config: MonitoringConfig, transporter: Optional[Transporter] = None
     ) -> Self:
+        """Allows creating a client with a customized `MonitoringConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (MonitoringConfig): The config of the API client.
+        transporter (Transporter): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = MonitoringClient.create_with_config(config=MonitoringConfig(...))
+        _client_with_custom_config_and_transporter = MonitoringClient.create_with_config(config=MonitoringConfig(...), transporter=Transporter(...))
+        """
         if transporter is None:
             transporter = Transporter(config)
 
@@ -66,7 +96,15 @@ class MonitoringClient:
             config=config,
         )
 
+    async def __aenter__(self) -> None:
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        await self.close()
+
     async def close(self) -> None:
+        """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
     async def custom_delete_with_http_info(

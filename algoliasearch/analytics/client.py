@@ -69,6 +69,23 @@ from algoliasearch.http.verb import Verb
 
 
 class AnalyticsClient:
+    """The Algolia 'AnalyticsClient' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+    region ("de" | "us"): The region of your Algolia application.
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = AnalyticsClient("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY", region="'de' or 'us'")
+    _client_with_named_args = AnalyticsClient(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY", region="'de' or 'us'")
+
+    See `AnalyticsClient.create_with_config` for advanced configuration.
+    """
+
     _transporter: Transporter
     _config: AnalyticsConfig
     _request_options: RequestOptions
@@ -96,6 +113,19 @@ class AnalyticsClient:
     def create_with_config(
         config: AnalyticsConfig, transporter: Optional[Transporter] = None
     ) -> Self:
+        """Allows creating a client with a customized `AnalyticsConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (AnalyticsConfig): The config of the API client.
+        transporter (Transporter): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = AnalyticsClient.create_with_config(config=AnalyticsConfig(...))
+        _client_with_custom_config_and_transporter = AnalyticsClient.create_with_config(config=AnalyticsConfig(...), transporter=Transporter(...))
+        """
         if transporter is None:
             transporter = Transporter(config)
 
@@ -107,7 +137,15 @@ class AnalyticsClient:
             config=config,
         )
 
+    async def __aenter__(self) -> None:
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        await self.close()
+
     async def close(self) -> None:
+        """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
     async def custom_delete_with_http_info(

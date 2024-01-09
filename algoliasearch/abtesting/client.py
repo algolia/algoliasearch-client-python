@@ -24,6 +24,23 @@ from algoliasearch.http.verb import Verb
 
 
 class AbtestingClient:
+    """The Algolia 'AbtestingClient' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+    region ("de" | "us"): The region of your Algolia application.
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = AbtestingClient("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY", region="'de' or 'us'")
+    _client_with_named_args = AbtestingClient(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY", region="'de' or 'us'")
+
+    See `AbtestingClient.create_with_config` for advanced configuration.
+    """
+
     _transporter: Transporter
     _config: AbtestingConfig
     _request_options: RequestOptions
@@ -51,6 +68,19 @@ class AbtestingClient:
     def create_with_config(
         config: AbtestingConfig, transporter: Optional[Transporter] = None
     ) -> Self:
+        """Allows creating a client with a customized `AbtestingConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (AbtestingConfig): The config of the API client.
+        transporter (Transporter): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = AbtestingClient.create_with_config(config=AbtestingConfig(...))
+        _client_with_custom_config_and_transporter = AbtestingClient.create_with_config(config=AbtestingConfig(...), transporter=Transporter(...))
+        """
         if transporter is None:
             transporter = Transporter(config)
 
@@ -62,7 +92,15 @@ class AbtestingClient:
             config=config,
         )
 
+    async def __aenter__(self) -> None:
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        await self.close()
+
     async def close(self) -> None:
+        """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
     async def add_ab_tests_with_http_info(

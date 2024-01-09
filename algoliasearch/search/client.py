@@ -101,6 +101,23 @@ from algoliasearch.search.models.user_id import UserId
 
 
 class SearchClient:
+    """The Algolia 'SearchClient' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = SearchClient("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY")
+    _client_with_named_args = SearchClient(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY")
+
+    See `SearchClient.create_with_config` for advanced configuration.
+    """
+
     _transporter: Transporter
     _config: SearchConfig
     _request_options: RequestOptions
@@ -127,6 +144,19 @@ class SearchClient:
     def create_with_config(
         config: SearchConfig, transporter: Optional[Transporter] = None
     ) -> Self:
+        """Allows creating a client with a customized `SearchConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (SearchConfig): The config of the API client.
+        transporter (Transporter): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = SearchClient.create_with_config(config=SearchConfig(...))
+        _client_with_custom_config_and_transporter = SearchClient.create_with_config(config=SearchConfig(...), transporter=Transporter(...))
+        """
         if transporter is None:
             transporter = Transporter(config)
 
@@ -137,7 +167,15 @@ class SearchClient:
             config=config,
         )
 
+    async def __aenter__(self) -> None:
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        await self.close()
+
     async def close(self) -> None:
+        """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
     async def wait_for_task(

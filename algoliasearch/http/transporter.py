@@ -1,4 +1,5 @@
 from asyncio import TimeoutError
+from json import loads
 from typing import Any, Dict, List, Optional, Union
 from urllib.parse import urlencode
 
@@ -147,7 +148,7 @@ class Transporter:
             elif decision == RetryOutcome.FAIL:
                 content = response.error_message
                 if response.data and "message" in response.data:
-                    content = response.content["message"]
+                    content = loads(response.data)["message"]
 
                 raise RequestException(content, response.status_code)
 
