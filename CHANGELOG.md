@@ -1,3 +1,8 @@
+## [4.0.0a6](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a5...4.0.0a6)
+
+- [461796bb7](https://github.com/algolia/api-clients-automation/commit/461796bb7) feat(clients): add missing clients ([#2479](https://github.com/algolia/api-clients-automation/pull/2479)) by [@shortcuts](https://github.com/shortcuts/)
+- [db1309c4d](https://github.com/algolia/api-clients-automation/commit/db1309c4d) fix(python): provide community requested changes ([#2478](https://github.com/algolia/api-clients-automation/pull/2478)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0a5](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0a4...4.0.0a5)
 
 - [ae6adfbf7](https://github.com/algolia/api-clients-automation/commit/ae6adfbf7) fix(specs): port recommend changes ([#2476](https://github.com/algolia/api-clients-automation/pull/2476)) by [@shortcuts](https://github.com/shortcuts/)
