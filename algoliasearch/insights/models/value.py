@@ -18,9 +18,9 @@ from pydantic import (
 )
 
 
-class Price(BaseModel):
+class Value(BaseModel):
     """
-    The total price of a product, including any discounts, in units of `currency`.
+    Total monetary value of this event in units of `currency`.
     """
 
     oneof_schema_1_validator: Optional[Union[StrictFloat, StrictInt]] = None
@@ -76,7 +76,7 @@ class Price(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into Price with oneOf schemas: float, str. Details: "
+            "No match found when deserializing the JSON string into Value with oneOf schemas: float, str. Details: "
             + ", ".join(error_messages)
         )
 

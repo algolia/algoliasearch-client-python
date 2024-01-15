@@ -20,28 +20,30 @@ class ConvertedFilters(BaseModel):
     """
 
     event_name: Annotated[str, Field(min_length=1, strict=True, max_length=64)] = Field(
-        description="Can contain up to 64 ASCII characters.   Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
+        description="The name of the event, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
         alias="eventName",
     )
     event_type: ConversionEvent = Field(alias="eventType")
-    index: StrictStr = Field(description="Name of the Algolia index.")
+    index: StrictStr = Field(description="The name of an Algolia index.")
     filters: Annotated[List[StrictStr], Field(min_length=1, max_length=20)] = Field(
         description="Facet filters.  Each facet filter string must be URL-encoded, such as, `discount:10%25`. "
     )
     user_token: Annotated[
         str, Field(min_length=1, strict=True, max_length=129)
     ] = Field(
-        description="Anonymous or pseudonymous user identifier.   > **Note**: Never include personally identifiable information in user tokens. ",
+        description="An anonymous or pseudonymous user identifier.  > **Note**: Never include personally identifiable information in user tokens. ",
         alias="userToken",
+    )
+    authenticated_user_token: Optional[
+        Annotated[str, Field(min_length=1, strict=True, max_length=129)]
+    ] = Field(
+        default=None,
+        description="An identifier for authenticated users.  > **Note**: Never include personally identifiable information in user tokens. ",
+        alias="authenticatedUserToken",
     )
     timestamp: Optional[StrictInt] = Field(
         default=None,
-        description="Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
-    )
-    authenticated_user_token: Optional[StrictStr] = Field(
-        default=None,
-        description="User token for authenticated users.",
-        alias="authenticatedUserToken",
+        description="The timestamp of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
     )
 
     @field_validator("event_name")
@@ -56,6 +58,18 @@ class ConvertedFilters(BaseModel):
     @field_validator("user_token")
     def user_token_validate_regular_expression(cls, value):
         """Validates the regular expression"""
+        if not match(r"[a-zA-Z0-9_=\/+-]{1,129}", value):
+            raise ValueError(
+                r"must validate the regular expression /[a-zA-Z0-9_=\/+-]{1,129}/"
+            )
+        return value
+
+    @field_validator("authenticated_user_token")
+    def authenticated_user_token_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if value is None:
+            return value
+
         if not match(r"[a-zA-Z0-9_=\/+-]{1,129}", value):
             raise ValueError(
                 r"must validate the regular expression /[a-zA-Z0-9_=\/+-]{1,129}/"
@@ -105,8 +119,8 @@ class ConvertedFilters(BaseModel):
                 "index": obj.get("index"),
                 "filters": obj.get("filters"),
                 "userToken": obj.get("userToken"),
-                "timestamp": obj.get("timestamp"),
                 "authenticatedUserToken": obj.get("authenticatedUserToken"),
+                "timestamp": obj.get("timestamp"),
             }
         )
         return _obj

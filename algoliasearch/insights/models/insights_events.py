@@ -19,7 +19,7 @@ class InsightsEvents(BaseModel):
     """
 
     events: Annotated[List[EventsItems], Field(min_length=1, max_length=1000)] = Field(
-        description="List of click and conversion events.  An event is an object representing a user interaction. Events have attributes that describe the interaction, such as an event name, a type, or a user token. Some attributes require other attributes to be declared, and some attributes can't be declared at the same time.  **All** events must be valid, otherwise the API returns an error. "
+        description="List of click and conversion events.  An event is an object representing a user interaction. Events have attributes that describe the interaction, such as an event name, a type, or a user token.  **All** events must be valid, otherwise the API returns an error. "
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

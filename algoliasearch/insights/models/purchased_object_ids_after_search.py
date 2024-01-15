@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
 from algoliasearch.insights.models.conversion_event import ConversionEvent
 from algoliasearch.insights.models.object_data_after_search import ObjectDataAfterSearch
 from algoliasearch.insights.models.purchase_event import PurchaseEvent
+from algoliasearch.insights.models.value import Value
 
 
 class PurchasedObjectIDsAfterSearch(BaseModel):
@@ -22,44 +23,45 @@ class PurchasedObjectIDsAfterSearch(BaseModel):
     """
 
     event_name: Annotated[str, Field(min_length=1, strict=True, max_length=64)] = Field(
-        description="Can contain up to 64 ASCII characters.   Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
+        description="The name of the event, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
         alias="eventName",
     )
     event_type: ConversionEvent = Field(alias="eventType")
     event_subtype: PurchaseEvent = Field(alias="eventSubtype")
-    index: StrictStr = Field(description="Name of the Algolia index.")
-    query_id: Annotated[str, Field(min_length=32, strict=True, max_length=32)] = Field(
-        description="Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response. ",
-        alias="queryID",
-    )
+    index: StrictStr = Field(description="The name of an Algolia index.")
     object_ids: Annotated[List[StrictStr], Field(min_length=1, max_length=20)] = Field(
-        description="List of object identifiers for items of an Algolia index.",
+        description="The object IDs of the records that are part of the event.",
         alias="objectIDs",
-    )
-    object_data: Optional[List[ObjectDataAfterSearch]] = Field(
-        default=None,
-        description="Extra information about the records involved in the event—for example, to add price and quantities of purchased products.  If provided, must be the same length as `objectIDs`. ",
-        alias="objectData",
-    )
-    currency: Optional[StrictStr] = Field(
-        default=None,
-        description="If you include pricing information in the `objectData` parameter, you must also specify the currency as ISO-4217 currency code, such as USD or EUR.",
     )
     user_token: Annotated[
         str, Field(min_length=1, strict=True, max_length=129)
     ] = Field(
-        description="Anonymous or pseudonymous user identifier.   > **Note**: Never include personally identifiable information in user tokens. ",
+        description="An anonymous or pseudonymous user identifier.  > **Note**: Never include personally identifiable information in user tokens. ",
         alias="userToken",
+    )
+    authenticated_user_token: Optional[
+        Annotated[str, Field(min_length=1, strict=True, max_length=129)]
+    ] = Field(
+        default=None,
+        description="An identifier for authenticated users.  > **Note**: Never include personally identifiable information in user tokens. ",
+        alias="authenticatedUserToken",
+    )
+    currency: Optional[StrictStr] = Field(
+        default=None,
+        description="Three-letter [currency code](https://www.iso.org/iso-4217-currency-codes.html).",
+    )
+    object_data: Optional[
+        Annotated[List[ObjectDataAfterSearch], Field(min_length=1, max_length=20)]
+    ] = Field(
+        default=None,
+        description="Extra information about the records involved in a purchase or add-to-cart events.  If provided, it must be the same length as `objectIDs`. ",
+        alias="objectData",
     )
     timestamp: Optional[StrictInt] = Field(
         default=None,
-        description="Time of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
+        description="The timestamp of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
     )
-    authenticated_user_token: Optional[StrictStr] = Field(
-        default=None,
-        description="User token for authenticated users.",
-        alias="authenticatedUserToken",
-    )
+    value: Optional[Value] = None
 
     @field_validator("event_name")
     def event_name_validate_regular_expression(cls, value):
@@ -70,16 +72,21 @@ class PurchasedObjectIDsAfterSearch(BaseModel):
             )
         return value
 
-    @field_validator("query_id")
-    def query_id_validate_regular_expression(cls, value):
-        """Validates the regular expression"""
-        if not match(r"[0-9a-f]{32}", value):
-            raise ValueError(r"must validate the regular expression /[0-9a-f]{32}/")
-        return value
-
     @field_validator("user_token")
     def user_token_validate_regular_expression(cls, value):
         """Validates the regular expression"""
+        if not match(r"[a-zA-Z0-9_=\/+-]{1,129}", value):
+            raise ValueError(
+                r"must validate the regular expression /[a-zA-Z0-9_=\/+-]{1,129}/"
+            )
+        return value
+
+    @field_validator("authenticated_user_token")
+    def authenticated_user_token_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if value is None:
+            return value
+
         if not match(r"[a-zA-Z0-9_=\/+-]{1,129}", value):
             raise ValueError(
                 r"must validate the regular expression /[a-zA-Z0-9_=\/+-]{1,129}/"
@@ -119,6 +126,10 @@ class PurchasedObjectIDsAfterSearch(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict["objectData"] = _items
+        # override the default output from pydantic by calling `to_dict()` of
+        # value
+        if self.value:
+            _dict["value"] = self.value.to_dict()
         return _dict
 
     @classmethod
@@ -136,18 +147,20 @@ class PurchasedObjectIDsAfterSearch(BaseModel):
                 "eventType": obj.get("eventType"),
                 "eventSubtype": obj.get("eventSubtype"),
                 "index": obj.get("index"),
-                "queryID": obj.get("queryID"),
                 "objectIDs": obj.get("objectIDs"),
+                "userToken": obj.get("userToken"),
+                "authenticatedUserToken": obj.get("authenticatedUserToken"),
+                "currency": obj.get("currency"),
                 "objectData": [
                     ObjectDataAfterSearch.from_dict(_item)
                     for _item in obj.get("objectData")
                 ]
                 if obj.get("objectData") is not None
                 else None,
-                "currency": obj.get("currency"),
-                "userToken": obj.get("userToken"),
                 "timestamp": obj.get("timestamp"),
-                "authenticatedUserToken": obj.get("authenticatedUserToken"),
+                "value": Value.from_dict(obj.get("value"))
+                if obj.get("value") is not None
+                else None,
             }
         )
         return _obj

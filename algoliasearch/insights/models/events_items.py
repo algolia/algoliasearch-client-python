@@ -38,17 +38,17 @@ class EventsItems(BaseModel):
     """
 
     oneof_schema_1_validator: Optional[ClickedObjectIDsAfterSearch] = None
-    oneof_schema_2_validator: Optional[ConvertedObjectIDsAfterSearch] = None
-    oneof_schema_3_validator: Optional[ClickedObjectIDs] = None
-    oneof_schema_4_validator: Optional[ConvertedObjectIDs] = None
-    oneof_schema_5_validator: Optional[ClickedFilters] = None
-    oneof_schema_6_validator: Optional[ConvertedFilters] = None
-    oneof_schema_7_validator: Optional[ViewedObjectIDs] = None
-    oneof_schema_8_validator: Optional[ViewedFilters] = None
-    oneof_schema_9_validator: Optional[AddedToCartObjectIDsAfterSearch] = None
-    oneof_schema_10_validator: Optional[AddedToCartObjectIDs] = None
-    oneof_schema_11_validator: Optional[PurchasedObjectIDs] = None
-    oneof_schema_12_validator: Optional[PurchasedObjectIDsAfterSearch] = None
+    oneof_schema_2_validator: Optional[AddedToCartObjectIDsAfterSearch] = None
+    oneof_schema_3_validator: Optional[PurchasedObjectIDsAfterSearch] = None
+    oneof_schema_4_validator: Optional[ConvertedObjectIDsAfterSearch] = None
+    oneof_schema_5_validator: Optional[ClickedObjectIDs] = None
+    oneof_schema_6_validator: Optional[PurchasedObjectIDs] = None
+    oneof_schema_7_validator: Optional[AddedToCartObjectIDs] = None
+    oneof_schema_8_validator: Optional[ConvertedObjectIDs] = None
+    oneof_schema_9_validator: Optional[ClickedFilters] = None
+    oneof_schema_10_validator: Optional[ConvertedFilters] = None
+    oneof_schema_11_validator: Optional[ViewedObjectIDs] = None
+    oneof_schema_12_validator: Optional[ViewedFilters] = None
     actual_instance: Optional[
         Union[
             AddedToCartObjectIDs,
@@ -123,6 +123,20 @@ class EventsItems(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
+            instance.actual_instance = AddedToCartObjectIDsAfterSearch.from_json(
+                json_str
+            )
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = PurchasedObjectIDsAfterSearch.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
             instance.actual_instance = ConvertedObjectIDsAfterSearch.from_json(json_str)
 
             return instance
@@ -130,6 +144,18 @@ class EventsItems(BaseModel):
             error_messages.append(str(e))
         try:
             instance.actual_instance = ClickedObjectIDs.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = PurchasedObjectIDs.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = AddedToCartObjectIDs.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
@@ -160,32 +186,6 @@ class EventsItems(BaseModel):
             error_messages.append(str(e))
         try:
             instance.actual_instance = ViewedFilters.from_json(json_str)
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = AddedToCartObjectIDsAfterSearch.from_json(
-                json_str
-            )
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = AddedToCartObjectIDs.from_json(json_str)
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = PurchasedObjectIDs.from_json(json_str)
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = PurchasedObjectIDsAfterSearch.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:

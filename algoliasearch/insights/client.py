@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from json import dumps
 from typing import Annotated, Any, Dict, List, Optional, Self, Tuple, Union
+from urllib.parse import quote
 
 from pydantic import Field, StrictStr
 
@@ -445,6 +446,73 @@ class InsightsClient:
                 path, parameters, body, request_options
             )
         ).deserialize(object)
+
+    async def delete_user_token_with_http_info(
+        self,
+        user_token: Annotated[
+            str,
+            Field(
+                min_length=1,
+                strict=True,
+                max_length=129,
+                description="The user token for which to delete all associated events.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Delete user token.
+
+        Delete all events related to a certain user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](https://www.algolia.com/doc/rest-api/personalization/#delete-a-user-profile).
+
+        :param user_token: The user token for which to delete all associated events. (required)
+        :type user_token: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if user_token is None:
+            raise ValueError(
+                "Parameter `user_token` is required when calling `delete_user_token`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/usertokens/{userToken}".replace(
+                "{userToken}", quote(str(user_token), safe="")
+            ),
+            data=None,
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def delete_user_token(
+        self,
+        user_token: Annotated[
+            str,
+            Field(
+                min_length=1,
+                strict=True,
+                max_length=129,
+                description="The user token for which to delete all associated events.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> None:
+        """
+        Delete user token.
+
+        Delete all events related to a certain user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](https://www.algolia.com/doc/rest-api/personalization/#delete-a-user-profile).
+
+        :param user_token: The user token for which to delete all associated events. (required)
+        :type user_token: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        """
+        return (
+            await self.delete_user_token_with_http_info(user_token, request_options)
+        ).deserialize()
 
     async def push_events_with_http_info(
         self,
