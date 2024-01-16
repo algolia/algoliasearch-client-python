@@ -912,86 +912,6 @@ class SearchClient:
             await self.browse_with_http_info(index_name, browse_params, request_options)
         ).deserialize(BrowseResponse)
 
-    async def clear_all_synonyms_with_http_info(
-        self,
-        index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
-        ],
-        forward_to_replicas: Annotated[
-            Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
-        ] = None,
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ApiResponse[str]:
-        """
-        Delete all synonyms.
-
-        Delete all synonyms in the index.
-
-        :param index_name: Index on which to perform the request. (required)
-        :type index_name: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
-        :type forward_to_replicas: bool
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the raw algoliasearch 'APIResponse' object.
-        """
-
-        if index_name is None:
-            raise ValueError(
-                "Parameter `index_name` is required when calling `clear_all_synonyms`."
-            )
-
-        _query_parameters: List[Tuple[str, str]] = []
-
-        if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
-
-        return await self._transporter.request(
-            verb=Verb.POST,
-            path="/1/indexes/{indexName}/synonyms/clear".replace(
-                "{indexName}", quote(str(index_name), safe="")
-            ),
-            data=None,
-            request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
-                user_request_options=request_options,
-            ),
-            use_read_transporter=False,
-        )
-
-    async def clear_all_synonyms(
-        self,
-        index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
-        ],
-        forward_to_replicas: Annotated[
-            Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
-        ] = None,
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> UpdatedAtResponse:
-        """
-        Delete all synonyms.
-
-        Delete all synonyms in the index.
-
-        :param index_name: Index on which to perform the request. (required)
-        :type index_name: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
-        :type forward_to_replicas: bool
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
-        """
-        return (
-            await self.clear_all_synonyms_with_http_info(
-                index_name, forward_to_replicas, request_options
-            )
-        ).deserialize(UpdatedAtResponse)
-
     async def clear_objects_with_http_info(
         self,
         index_name: Annotated[
@@ -1124,6 +1044,86 @@ class SearchClient:
         """
         return (
             await self.clear_rules_with_http_info(
+                index_name, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    async def clear_synonyms_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr, Field(description="Index on which to perform the request.")
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Indicates whether changed index settings are forwarded to the replica indices."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Delete all synonyms.
+
+        Delete all synonyms in the index.
+
+        :param index_name: Index on which to perform the request. (required)
+        :type index_name: str
+        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_synonyms`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/synonyms/clear".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            data=None,
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def clear_synonyms(
+        self,
+        index_name: Annotated[
+            StrictStr, Field(description="Index on which to perform the request.")
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Indicates whether changed index settings are forwarded to the replica indices."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Delete all synonyms.
+
+        Delete all synonyms in the index.
+
+        :param index_name: Index on which to perform the request. (required)
+        :type index_name: str
+        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            await self.clear_synonyms_with_http_info(
                 index_name, forward_to_replicas, request_options
             )
         ).deserialize(UpdatedAtResponse)
