@@ -152,7 +152,6 @@ class PersonalizationClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -229,7 +228,6 @@ class PersonalizationClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -309,16 +307,16 @@ class PersonalizationClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -404,16 +402,16 @@ class PersonalizationClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -488,7 +486,6 @@ class PersonalizationClient:
             path="/1/profiles/{userToken}".replace(
                 "{userToken}", quote(str(user_token), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -534,7 +531,6 @@ class PersonalizationClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/strategies/personalization",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -587,7 +583,6 @@ class PersonalizationClient:
             path="/1/profiles/personalization/{userToken}".replace(
                 "{userToken}", quote(str(user_token), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -641,15 +636,15 @@ class PersonalizationClient:
                 "Parameter `personalization_strategy_params` is required when calling `set_personalization_strategy`."
             )
 
-        _body = {}
+        _data = {}
         if personalization_strategy_params is not None:
-            _body = personalization_strategy_params
+            _data = personalization_strategy_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/strategies/personalization",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

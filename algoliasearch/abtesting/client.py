@@ -124,15 +124,15 @@ class AbtestingClient:
                 "Parameter `add_ab_tests_request` is required when calling `add_ab_tests`."
             )
 
-        _body = {}
+        _data = {}
         if add_ab_tests_request is not None:
-            _body = add_ab_tests_request
+            _data = add_ab_tests_request
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/2/abtests",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -200,7 +200,6 @@ class AbtestingClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -277,7 +276,6 @@ class AbtestingClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -357,16 +355,16 @@ class AbtestingClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -452,16 +450,16 @@ class AbtestingClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -529,7 +527,6 @@ class AbtestingClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -577,7 +574,6 @@ class AbtestingClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -660,7 +656,6 @@ class AbtestingClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/abtests",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -738,7 +733,6 @@ class AbtestingClient:
         return await self._transporter.request(
             verb=Verb.POST,
             path="/2/abtests/{id}/stop".replace("{id}", quote(str(id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),

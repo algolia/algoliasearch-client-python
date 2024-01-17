@@ -186,15 +186,15 @@ class IngestionClient:
                 "Parameter `authentication_create` is required when calling `create_authentication`."
             )
 
-        _body = {}
+        _data = {}
         if authentication_create is not None:
-            _body = authentication_create
+            _data = authentication_create
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/authentications",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -242,15 +242,15 @@ class IngestionClient:
                 "Parameter `destination_create` is required when calling `create_destination`."
             )
 
-        _body = {}
+        _data = {}
         if destination_create is not None:
-            _body = destination_create
+            _data = destination_create
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/destinations",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -298,15 +298,15 @@ class IngestionClient:
                 "Parameter `source_create` is required when calling `create_source`."
             )
 
-        _body = {}
+        _data = {}
         if source_create is not None:
-            _body = source_create
+            _data = source_create
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/sources",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -352,15 +352,15 @@ class IngestionClient:
                 "Parameter `task_create` is required when calling `create_task`."
             )
 
-        _body = {}
+        _data = {}
         if task_create is not None:
-            _body = task_create
+            _data = task_create
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/tasks",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -426,7 +426,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -503,7 +502,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -583,16 +581,16 @@ class IngestionClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -678,16 +676,16 @@ class IngestionClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -759,7 +757,6 @@ class IngestionClient:
             path="/1/authentications/{authenticationID}".replace(
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -817,7 +814,6 @@ class IngestionClient:
             path="/1/destinations/{destinationID}".replace(
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -873,7 +869,6 @@ class IngestionClient:
             path="/1/sources/{sourceID}".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -923,7 +918,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -975,7 +969,6 @@ class IngestionClient:
             path="/1/tasks/{taskID}/disable".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1027,7 +1020,6 @@ class IngestionClient:
             path="/1/tasks/{taskID}/enable".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1081,7 +1073,6 @@ class IngestionClient:
             path="/1/authentications/{authenticationID}".replace(
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1177,7 +1168,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/authentications",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1266,7 +1256,6 @@ class IngestionClient:
             path="/1/destinations/{destinationID}".replace(
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1360,7 +1349,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/destinations",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1453,7 +1441,6 @@ class IngestionClient:
             path="/1/sources/{sourceID}/discover".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1513,7 +1500,6 @@ class IngestionClient:
             path="/1/runs/{runID}/events/{eventID}".replace(
                 "{runID}", quote(str(run_id), safe="")
             ).replace("{eventID}", quote(str(event_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1638,7 +1624,6 @@ class IngestionClient:
             path="/1/runs/{runID}/events".replace(
                 "{runID}", quote(str(run_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1749,7 +1734,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}".replace("{runID}", quote(str(run_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1860,7 +1844,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1970,7 +1953,6 @@ class IngestionClient:
             path="/1/sources/{sourceID}".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2064,7 +2046,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/sources",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2155,7 +2136,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2271,7 +2251,6 @@ class IngestionClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/tasks",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2383,7 +2362,6 @@ class IngestionClient:
             path="/1/tasks/{taskID}/run".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2430,15 +2408,15 @@ class IngestionClient:
                 "Parameter `authentication_search` is required when calling `search_authentications`."
             )
 
-        _body = {}
+        _data = {}
         if authentication_search is not None:
-            _body = authentication_search
+            _data = authentication_search
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/authentications/search",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2486,15 +2464,15 @@ class IngestionClient:
                 "Parameter `destination_search` is required when calling `search_destinations`."
             )
 
-        _body = {}
+        _data = {}
         if destination_search is not None:
-            _body = destination_search
+            _data = destination_search
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/destinations/search",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2542,15 +2520,15 @@ class IngestionClient:
                 "Parameter `source_search` is required when calling `search_sources`."
             )
 
-        _body = {}
+        _data = {}
         if source_search is not None:
-            _body = source_search
+            _data = source_search
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/sources/search",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2596,15 +2574,15 @@ class IngestionClient:
                 "Parameter `task_search` is required when calling `search_tasks`."
             )
 
-        _body = {}
+        _data = {}
         if task_search is not None:
-            _body = task_search
+            _data = task_search
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/tasks/search",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2655,7 +2633,6 @@ class IngestionClient:
             path="/1/sources/{sourceID}/discover".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2714,17 +2691,17 @@ class IngestionClient:
                 "Parameter `authentication_update` is required when calling `update_authentication`."
             )
 
-        _body = {}
+        _data = {}
         if authentication_update is not None:
-            _body = authentication_update
+            _data = authentication_update
 
         return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/authentications/{authenticationID}".replace(
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2787,17 +2764,17 @@ class IngestionClient:
                 "Parameter `destination_update` is required when calling `update_destination`."
             )
 
-        _body = {}
+        _data = {}
         if destination_update is not None:
-            _body = destination_update
+            _data = destination_update
 
         return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/destinations/{destinationID}".replace(
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2858,17 +2835,17 @@ class IngestionClient:
                 "Parameter `source_update` is required when calling `update_source`."
             )
 
-        _body = {}
+        _data = {}
         if source_update is not None:
-            _body = source_update
+            _data = source_update
 
         return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/sources/{sourceID}".replace(
                 "{sourceID}", quote(str(source_id), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -2927,15 +2904,15 @@ class IngestionClient:
                 "Parameter `task_update` is required when calling `update_task`."
             )
 
-        _body = {}
+        _data = {}
         if task_update is not None:
-            _body = task_update
+            _data = task_update
 
         return await self._transporter.request(
             verb=Verb.PATCH,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

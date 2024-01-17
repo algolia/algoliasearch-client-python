@@ -189,7 +189,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -266,7 +265,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -346,16 +344,16 @@ class AnalyticsClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -441,16 +439,16 @@ class AnalyticsClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -553,7 +551,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/clicks/averageClickPosition",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -665,7 +662,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/clicks/positions",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -777,7 +773,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/clicks/clickThroughRate",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -889,7 +884,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/conversions/conversionRate",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1001,7 +995,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noClickRate",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1113,7 +1106,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noResultRate",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1225,7 +1217,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/count",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1355,7 +1346,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noClicks",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1499,7 +1489,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches/noResults",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1593,7 +1582,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/status",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1697,7 +1685,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/countries",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1846,7 +1833,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/filters",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2015,7 +2001,6 @@ class AnalyticsClient:
             path="/2/filters/{attribute}".replace(
                 "{attribute}", quote(str(attribute), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2178,7 +2163,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/filters/noResults",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2347,7 +2331,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/hits",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2537,7 +2520,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/searches",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2693,7 +2675,6 @@ class AnalyticsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/2/users/count",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,

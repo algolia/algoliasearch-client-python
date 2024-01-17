@@ -373,15 +373,15 @@ class SearchClient:
                 "Parameter `api_key` is required when calling `add_api_key`."
             )
 
-        _body = {}
+        _data = {}
         if api_key is not None:
-            _body = api_key
+            _data = api_key
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/keys",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -447,17 +447,17 @@ class SearchClient:
                 "Parameter `body` is required when calling `add_or_update_object`."
             )
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -515,15 +515,15 @@ class SearchClient:
                 "Parameter `source` is required when calling `append_source`."
             )
 
-        _body = {}
+        _data = {}
         if source is not None:
-            _body = source
+            _data = source
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/security/sources/append",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -584,16 +584,16 @@ class SearchClient:
         if x_algolia_user_id is not None:
             _headers["x-algolia-user-id"] = x_algolia_user_id
 
-        _body = {}
+        _data = {}
         if assign_user_id_params is not None:
-            _body = assign_user_id_params
+            _data = assign_user_id_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/clusters/mapping",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 headers=_headers,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -654,17 +654,17 @@ class SearchClient:
                 "Parameter `batch_write_params` is required when calling `batch`."
             )
 
-        _body = {}
+        _data = {}
         if batch_write_params is not None:
-            _body = batch_write_params
+            _data = batch_write_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/batch".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -732,16 +732,16 @@ class SearchClient:
         if x_algolia_user_id is not None:
             _headers["x-algolia-user-id"] = x_algolia_user_id
 
-        _body = {}
+        _data = {}
         if batch_assign_user_ids_params is not None:
-            _body = batch_assign_user_ids_params
+            _data = batch_assign_user_ids_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/clusters/mapping/batch",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 headers=_headers,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -804,17 +804,17 @@ class SearchClient:
                 "Parameter `batch_dictionary_entries_params` is required when calling `batch_dictionary_entries`."
             )
 
-        _body = {}
+        _data = {}
         if batch_dictionary_entries_params is not None:
-            _body = batch_dictionary_entries_params
+            _data = batch_dictionary_entries_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/dictionaries/{dictionaryName}/batch".replace(
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -872,17 +872,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `browse`."
             )
 
-        _body = {}
+        _data = {}
         if browse_params is not None:
-            _body = browse_params
+            _data = browse_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/browse".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -940,7 +940,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/clear".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1009,7 +1008,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/rules/clear".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1089,7 +1087,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/synonyms/clear".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1169,7 +1166,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1246,7 +1242,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1326,16 +1321,16 @@ class SearchClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1421,16 +1416,16 @@ class SearchClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1498,7 +1493,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1555,17 +1549,17 @@ class SearchClient:
                 "Parameter `delete_by_params` is required when calling `delete_by`."
             )
 
-        _body = {}
+        _data = {}
         if delete_by_params is not None:
-            _body = delete_by_params
+            _data = delete_by_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/deleteByQuery".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1625,7 +1619,6 @@ class SearchClient:
             path="/1/indexes/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1691,7 +1684,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1777,7 +1769,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1849,7 +1840,6 @@ class SearchClient:
             path="/1/security/sources/{source}".replace(
                 "{source}", quote(str(source), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -1928,7 +1918,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -1994,7 +1983,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2035,7 +2023,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/dictionaries/*/languages",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2072,7 +2059,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/dictionaries/*/settings",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2151,7 +2137,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/logs",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2258,7 +2243,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2325,15 +2309,15 @@ class SearchClient:
                 "Parameter `get_objects_params` is required when calling `get_objects`."
             )
 
-        _body = {}
+        _data = {}
         if get_objects_params is not None:
-            _body = get_objects_params
+            _data = get_objects_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/objects",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -2398,7 +2382,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2459,7 +2442,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/settings".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2502,7 +2484,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/security/sources",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2562,7 +2543,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2631,7 +2611,6 @@ class SearchClient:
             path="/1/indexes/{indexName}/task/{taskID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{taskID}", quote(str(task_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2677,7 +2656,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping/top",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2725,7 +2703,6 @@ class SearchClient:
             path="/1/clusters/mapping/{userID}".replace(
                 "{userID}", quote(str(user_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2780,7 +2757,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping/pending",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2829,7 +2805,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/keys",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2866,7 +2841,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -2924,7 +2898,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -2997,7 +2970,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/clusters/mapping",
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -3057,15 +3029,15 @@ class SearchClient:
                 "Parameter `batch_params` is required when calling `multiple_batch`."
             )
 
-        _body = {}
+        _data = {}
         if batch_params is not None:
-            _body = batch_params
+            _data = batch_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/batch",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3121,17 +3093,17 @@ class SearchClient:
                 "Parameter `operation_index_params` is required when calling `operation_index`."
             )
 
-        _body = {}
+        _data = {}
         if operation_index_params is not None:
-            _body = operation_index_params
+            _data = operation_index_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/operation".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3220,18 +3192,18 @@ class SearchClient:
         if create_if_not_exists is not None:
             _query_parameters.append(("createIfNotExists", create_if_not_exists))
 
-        _body = {}
+        _data = {}
         if attributes_to_update is not None:
-            _body = attributes_to_update
+            _data = attributes_to_update
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/{objectID}/partial".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3309,7 +3281,6 @@ class SearchClient:
             path="/1/clusters/mapping/{userID}".replace(
                 "{userID}", quote(str(user_id), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -3356,15 +3327,15 @@ class SearchClient:
                 "Parameter `source` is required when calling `replace_sources`."
             )
 
-        _body = {}
+        _data = {}
         if source is not None:
-            _body = source
+            _data = source
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/security/sources",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3413,7 +3384,6 @@ class SearchClient:
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/keys/{key}/restore".replace("{key}", quote(str(key), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -3468,17 +3438,17 @@ class SearchClient:
         if body is None:
             raise ValueError("Parameter `body` is required when calling `save_object`.")
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3560,18 +3530,18 @@ class SearchClient:
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
 
-        _body = {}
+        _data = {}
         if rule is not None:
-            _body = rule
+            _data = rule
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/rules/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3668,18 +3638,18 @@ class SearchClient:
         if clear_existing_rules is not None:
             _query_parameters.append(("clearExistingRules", clear_existing_rules))
 
-        _body = {}
+        _data = {}
         if rules is not None:
-            _body = rules
+            _data = rules
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/batch".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3785,18 +3755,18 @@ class SearchClient:
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
 
-        _body = {}
+        _data = {}
         if synonym_hit is not None:
-            _body = synonym_hit
+            _data = synonym_hit
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3897,18 +3867,18 @@ class SearchClient:
                 ("replaceExistingSynonyms", replace_existing_synonyms)
             )
 
-        _body = {}
+        _data = {}
         if synonym_hit is not None:
-            _body = synonym_hit
+            _data = synonym_hit
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/batch".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3986,15 +3956,15 @@ class SearchClient:
                 "Parameter `search_method_params` is required when calling `search`."
             )
 
-        _body = {}
+        _data = {}
         if search_method_params is not None:
-            _body = search_method_params
+            _data = search_method_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/queries",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4055,17 +4025,17 @@ class SearchClient:
                 "Parameter `search_dictionary_entries_params` is required when calling `search_dictionary_entries`."
             )
 
-        _body = {}
+        _data = {}
         if search_dictionary_entries_params is not None:
-            _body = search_dictionary_entries_params
+            _data = search_dictionary_entries_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/dictionaries/{dictionaryName}/search".replace(
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4131,17 +4101,17 @@ class SearchClient:
                 "Parameter `facet_name` is required when calling `search_for_facet_values`."
             )
 
-        _body = {}
+        _data = {}
         if search_for_facet_values_request is not None:
-            _body = search_for_facet_values_request
+            _data = search_for_facet_values_request
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/facets/{facetName}/query".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{facetName}", quote(str(facet_name), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4202,17 +4172,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `search_rules`."
             )
 
-        _body = {}
+        _data = {}
         if search_rules_params is not None:
-            _body = search_rules_params
+            _data = search_rules_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/rules/search".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4270,17 +4240,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `search_single_index`."
             )
 
-        _body = {}
+        _data = {}
         if search_params is not None:
-            _body = search_params
+            _data = search_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/query".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4371,18 +4341,18 @@ class SearchClient:
         if hits_per_page is not None:
             _query_parameters.append(("hitsPerPage", hits_per_page))
 
-        _body = {}
+        _data = {}
         if search_synonyms_params is not None:
-            _body = search_synonyms_params
+            _data = search_synonyms_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/synonyms/search".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4464,15 +4434,15 @@ class SearchClient:
                 "Parameter `search_user_ids_params` is required when calling `search_user_ids`."
             )
 
-        _body = {}
+        _data = {}
         if search_user_ids_params is not None:
-            _body = search_user_ids_params
+            _data = search_user_ids_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/clusters/mapping/search",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4520,15 +4490,15 @@ class SearchClient:
                 "Parameter `dictionary_settings_params` is required when calling `set_dictionary_settings`."
             )
 
-        _body = {}
+        _data = {}
         if dictionary_settings_params is not None:
-            _body = dictionary_settings_params
+            _data = dictionary_settings_params
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/dictionaries/*/settings",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4599,18 +4569,18 @@ class SearchClient:
         if forward_to_replicas is not None:
             _query_parameters.append(("forwardToReplicas", forward_to_replicas))
 
-        _body = {}
+        _data = {}
         if index_settings is not None:
-            _body = index_settings
+            _data = index_settings
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/indexes/{indexName}/settings".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4679,15 +4649,15 @@ class SearchClient:
                 "Parameter `api_key` is required when calling `update_api_key`."
             )
 
-        _body = {}
+        _data = {}
         if api_key is not None:
-            _body = api_key
+            _data = api_key
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

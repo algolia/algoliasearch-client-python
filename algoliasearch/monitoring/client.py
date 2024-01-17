@@ -148,7 +148,6 @@ class MonitoringClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -225,7 +224,6 @@ class MonitoringClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -305,16 +303,16 @@ class MonitoringClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -400,16 +398,16 @@ class MonitoringClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -481,7 +479,6 @@ class MonitoringClient:
             path="/1/incidents/{clusters}".replace(
                 "{clusters}", quote(str(clusters), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -537,7 +534,6 @@ class MonitoringClient:
             path="/1/status/{clusters}".replace(
                 "{clusters}", quote(str(clusters), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -580,7 +576,6 @@ class MonitoringClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/incidents",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -630,7 +625,6 @@ class MonitoringClient:
             path="/1/indexing/{clusters}".replace(
                 "{clusters}", quote(str(clusters), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -673,7 +667,6 @@ class MonitoringClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/inventory/servers",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -723,7 +716,6 @@ class MonitoringClient:
             path="/1/latency/{clusters}".replace(
                 "{clusters}", quote(str(clusters), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -795,7 +787,6 @@ class MonitoringClient:
             path="/1/infrastructure/{metric}/period/{period}".replace(
                 "{metric}", quote(str(metric), safe="")
             ).replace("{period}", quote(str(period), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -862,7 +853,6 @@ class MonitoringClient:
             path="/1/reachability/{clusters}/probes".replace(
                 "{clusters}", quote(str(clusters), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -905,7 +895,6 @@ class MonitoringClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/status",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),

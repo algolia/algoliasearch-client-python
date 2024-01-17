@@ -156,7 +156,6 @@ class RecommendClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -233,7 +232,6 @@ class RecommendClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -313,16 +311,16 @@ class RecommendClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -408,16 +406,16 @@ class RecommendClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -514,7 +512,6 @@ class RecommendClient:
             )
             .replace("{model}", quote(str(model), safe=""))
             .replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -610,7 +607,6 @@ class RecommendClient:
             )
             .replace("{model}", quote(str(model), safe=""))
             .replace("{objectID}", quote(str(object_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -709,7 +705,6 @@ class RecommendClient:
             )
             .replace("{model}", quote(str(model), safe=""))
             .replace("{taskID}", quote(str(task_id), safe="")),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -776,15 +771,15 @@ class RecommendClient:
                 "Parameter `get_recommendations_params` is required when calling `get_recommendations`."
             )
 
-        _body = {}
+        _data = {}
         if get_recommendations_params is not None:
-            _body = get_recommendations_params
+            _data = get_recommendations_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/*/recommendations",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -850,17 +845,17 @@ class RecommendClient:
                 "Parameter `model` is required when calling `search_recommend_rules`."
             )
 
-        _body = {}
+        _data = {}
         if search_recommend_rules_params is not None:
-            _body = search_recommend_rules_params
+            _data = search_recommend_rules_params
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/{model}/recommend/rules/search".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{model}", quote(str(model), safe="")),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,

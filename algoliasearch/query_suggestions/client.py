@@ -136,15 +136,15 @@ class QuerySuggestionsClient:
                 "Parameter `query_suggestions_configuration_with_index` is required when calling `create_config`."
             )
 
-        _body = {}
+        _data = {}
         if query_suggestions_configuration_with_index is not None:
-            _body = query_suggestions_configuration_with_index
+            _data = query_suggestions_configuration_with_index
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/configs",
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -212,7 +212,6 @@ class QuerySuggestionsClient:
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -289,7 +288,6 @@ class QuerySuggestionsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1{path}".replace("{path}", path),
-            data=None,
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -369,16 +367,16 @@ class QuerySuggestionsClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -464,16 +462,16 @@ class QuerySuggestionsClient:
             for _qpkey, _qpvalue in parameters.items():
                 _query_parameters.append((_qpkey, _qpvalue))
 
-        _body = {}
+        _data = {}
         if body is not None:
-            _body = body
+            _data = body
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1{path}".replace("{path}", path),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -545,7 +543,6 @@ class QuerySuggestionsClient:
             path="/1/configs/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -588,7 +585,6 @@ class QuerySuggestionsClient:
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/configs",
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -638,7 +634,6 @@ class QuerySuggestionsClient:
             path="/1/configs/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -694,7 +689,6 @@ class QuerySuggestionsClient:
             path="/1/configs/{indexName}/status".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -750,7 +744,6 @@ class QuerySuggestionsClient:
             path="/1/logs/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=None,
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
@@ -809,17 +802,17 @@ class QuerySuggestionsClient:
                 "Parameter `query_suggestions_configuration` is required when calling `update_config`."
             )
 
-        _body = {}
+        _data = {}
         if query_suggestions_configuration is not None:
-            _body = query_suggestions_configuration
+            _data = query_suggestions_configuration
 
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/configs/{indexName}".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
-            data=dumps(bodySerializer(_body)),
             request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,

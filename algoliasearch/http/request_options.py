@@ -50,6 +50,7 @@ class RequestOptions:
         query_parameters: List[Tuple[str, str]] = [],
         headers: Dict[str, Optional[str]] = {},
         timeouts: Dict[str, int] = {},
+        data: Optional[Union[dict, list]] = None,
         user_request_options: Optional[Union[Self, Dict[str, Any]]] = None,
     ) -> Self:
         """
@@ -66,7 +67,7 @@ class RequestOptions:
                 "write": self._config.write_timeout,
                 "connect": self._config.connect_timeout,
             },
-            "data": {},
+            "data": data,
         }
 
         if user_request_options is not None:
@@ -76,6 +77,9 @@ class RequestOptions:
                 _user_request_options = user_request_options
 
             for key, value in _user_request_options.items():
+                if key == "data" and isinstance(value, dict):
+                    request_options.data = value
+                    continue
                 request_options[key].update(value)
 
         return self.from_dict(request_options)

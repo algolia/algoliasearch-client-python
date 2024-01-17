@@ -1,6 +1,6 @@
 from asyncio import TimeoutError
 from json import loads
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List
 from urllib.parse import urlencode
 
 from aiohttp import ClientSession, TCPConnector
@@ -59,8 +59,8 @@ class Transporter:
         if use_read_transporter:
             self._timeout = request_options.timeouts["read"]
             self._hosts = self._config.hosts.read()
-            query_parameters.update(request_options.data)
-
+            if isinstance(request_options.data, dict):
+                query_parameters.update(request_options.data)
             return query_parameters
 
         self._timeout = request_options.timeouts["write"]
@@ -70,7 +70,6 @@ class Transporter:
         self,
         verb: Verb,
         path: str,
-        data: Optional[Union[dict, list]],
         request_options: RequestOptions,
         use_read_transporter: bool,
     ) -> ApiResponse:
@@ -82,9 +81,6 @@ class Transporter:
         query_parameters = self.prepare(
             request_options, verb == Verb.GET or use_read_transporter
         )
-
-        if isinstance(data, dict):
-            data.update(request_options.data)
 
         if query_parameters is not None and len(query_parameters) > 0:
             path = "{}?{}".format(
@@ -114,7 +110,7 @@ class Transporter:
                         method=verb,
                         url=url,
                         headers=request_options.headers,
-                        data=data,
+                        data=request_options.data,
                         proxy=proxy,
                     )
 
@@ -164,7 +160,6 @@ class EchoTransporter(Transporter):
         self,
         verb: Verb,
         path: str,
-        data: Optional[Union[dict, list]],
         request_options: RequestOptions,
         use_read_transporter: bool,
     ) -> ApiResponse:
@@ -183,6 +178,6 @@ class EchoTransporter(Transporter):
                 query_parameters=request_options.query_parameters
             ).query_parameters,
             headers=dict(request_options.headers),
-            data=data,
-            raw_data=data,
+            data=request_options.data,
+            raw_data=request_options.data,
         )
