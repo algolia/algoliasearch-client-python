@@ -2,7 +2,7 @@ from os import environ
 from typing import Optional
 
 from algoliasearch.http.base_config import BaseConfig
-from algoliasearch.http.hosts import CallType, Host, HostsCollection
+from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.user_agent import UserAgent
 
 
@@ -46,10 +46,6 @@ class MonitoringConfig(BaseConfig):
 
         self.hosts = HostsCollection(
             [
-                Host("{}-dsn.algolia.net".format(self.app_id), 10, CallType.READ),
-                Host("{}.algolia.net".format(self.app_id), 10, CallType.WRITE),
-                Host("{}-1.algolianet.com".format(self.app_id)),
-                Host("{}-2.algolianet.com".format(self.app_id)),
-                Host("{}-3.algolianet.com".format(self.app_id)),
+                Host("status.algolia.com"),
             ]
         )
