@@ -74,6 +74,10 @@ class Variant(BaseModel):
     user_count: StrictInt = Field(
         description="Number of users during the A/B test.", alias="userCount"
     )
+    tracked_user_count: StrictInt = Field(
+        description="Number of users that performed a tracked search during the A/B test.",
+        alias="trackedUserCount",
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -150,6 +154,7 @@ class Variant(BaseModel):
                 "trackedSearchCount": obj.get("trackedSearchCount"),
                 "trafficPercentage": obj.get("trafficPercentage"),
                 "userCount": obj.get("userCount"),
+                "trackedUserCount": obj.get("trackedUserCount"),
             }
         )
         return _obj
