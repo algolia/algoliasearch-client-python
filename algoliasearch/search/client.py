@@ -90,7 +90,6 @@ from algoliasearch.search.models.search_user_ids_params import SearchUserIdsPara
 from algoliasearch.search.models.search_user_ids_response import SearchUserIdsResponse
 from algoliasearch.search.models.source import Source
 from algoliasearch.search.models.synonym_hit import SynonymHit
-from algoliasearch.search.models.synonym_type import SynonymType
 from algoliasearch.search.models.update_api_key_response import UpdateApiKeyResponse
 from algoliasearch.search.models.updated_at_response import UpdatedAtResponse
 from algoliasearch.search.models.updated_at_with_object_id_response import (
@@ -324,31 +323,27 @@ class SearchClient:
         self,
         index_name: str,
         aggregator: Optional[Callable[[SearchSynonymsResponse], None]],
-        synonym_type: Optional[SynonymType] = None,
-        page: Optional[int] = 0,
-        hits_per_page: Optional[int] = 1000,
         search_synonyms_params: Optional[SearchSynonymsParams] = SearchSynonymsParams(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
+        search_synonyms_params.page = 0
+        search_synonyms_params.hits_per_page = 1000
 
         async def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
             if _prev is not None:
                 search_synonyms_params.page = _prev.page + 1
             return await self.search_synonyms(
                 index_name=index_name,
-                type=synonym_type,
-                page=page,
-                hits_per_page=hits_per_page,
                 search_synonyms_params=search_synonyms_params,
                 request_options=request_options,
             )
 
         return await create_iterable(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < hits_per_page,
+            validate=lambda _resp: _resp.nb_hits < search_synonyms_params.hits_per_page,
             aggregator=aggregator,
         )
 
@@ -4287,21 +4282,6 @@ class SearchClient:
         index_name: Annotated[
             StrictStr, Field(description="Index on which to perform the request.")
         ],
-        type: Annotated[
-            Optional[SynonymType],
-            Field(
-                description="Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms)."
-            ),
-        ] = None,
-        page: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(
-                description="Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination. "
-            ),
-        ] = None,
-        hits_per_page: Annotated[
-            Optional[StrictInt], Field(description="Maximum number of hits per page.")
-        ] = None,
         search_synonyms_params: Annotated[
             Optional[SearchSynonymsParams],
             Field(description="Body of the `searchSynonyms` operation."),
@@ -4315,12 +4295,6 @@ class SearchClient:
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
-        :param type: Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
-        :type type: SynonymType
-        :param page: Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination.
-        :type page: int
-        :param hits_per_page: Maximum number of hits per page.
-        :type hits_per_page: int
         :param search_synonyms_params: Body of the `searchSynonyms` operation.
         :type search_synonyms_params: SearchSynonymsParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -4332,15 +4306,6 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `search_synonyms`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
-
-        if type is not None:
-            _query_parameters.append(("type", type))
-        if page is not None:
-            _query_parameters.append(("page", page))
-        if hits_per_page is not None:
-            _query_parameters.append(("hitsPerPage", hits_per_page))
-
         _data = {}
         if search_synonyms_params is not None:
             _data = search_synonyms_params
@@ -4351,7 +4316,6 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                query_parameters=_query_parameters,
                 data=dumps(bodySerializer(_data)),
                 user_request_options=request_options,
             ),
@@ -4363,21 +4327,6 @@ class SearchClient:
         index_name: Annotated[
             StrictStr, Field(description="Index on which to perform the request.")
         ],
-        type: Annotated[
-            Optional[SynonymType],
-            Field(
-                description="Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms)."
-            ),
-        ] = None,
-        page: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(
-                description="Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination. "
-            ),
-        ] = None,
-        hits_per_page: Annotated[
-            Optional[StrictInt], Field(description="Maximum number of hits per page.")
-        ] = None,
         search_synonyms_params: Annotated[
             Optional[SearchSynonymsParams],
             Field(description="Body of the `searchSynonyms` operation."),
@@ -4391,12 +4340,6 @@ class SearchClient:
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
-        :param type: Search for specific [types of synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms).
-        :type type: SynonymType
-        :param page: Returns the requested page number (the first page is 0). Page size is set by `hitsPerPage`. When null, there's no pagination.
-        :type page: int
-        :param hits_per_page: Maximum number of hits per page.
-        :type hits_per_page: int
         :param search_synonyms_params: Body of the `searchSynonyms` operation.
         :type search_synonyms_params: SearchSynonymsParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -4404,12 +4347,7 @@ class SearchClient:
         """
         return (
             await self.search_synonyms_with_http_info(
-                index_name,
-                type,
-                page,
-                hits_per_page,
-                search_synonyms_params,
-                request_options,
+                index_name, search_synonyms_params, request_options
             )
         ).deserialize(SearchSynonymsResponse)
 
