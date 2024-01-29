@@ -122,9 +122,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -170,9 +169,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -200,9 +198,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -246,9 +243,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -280,9 +276,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -337,9 +332,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -375,9 +369,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -432,9 +425,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -459,9 +451,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        List incidents for selected clusters.
-
         List known incidents for selected clusters.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -493,9 +484,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> IncidentsResponse:
         """
-        List incidents for selected clusters.
-
         List known incidents for selected clusters.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -514,9 +504,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        List statuses of selected clusters.
-
         Report whether a cluster is operational.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -548,9 +537,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> StatusResponse:
         """
-        List statuses of selected clusters.
-
         Report whether a cluster is operational.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -565,9 +553,8 @@ class MonitoringClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        List incidents.
-
         List known incidents for all clusters.
+
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -586,9 +573,8 @@ class MonitoringClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> IncidentsResponse:
         """
-        List incidents.
-
         List known incidents for all clusters.
+
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IncidentsResponse' result object.
@@ -605,9 +591,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get indexing times.
-
         List the average times for indexing operations for selected clusters.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -639,9 +624,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> IndexingTimeResponse:
         """
-        Get indexing times.
-
         List the average times for indexing operations for selected clusters.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -656,9 +640,8 @@ class MonitoringClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        List servers.
-
         List the servers belonging to clusters.  The response depends on whether you authenticate your API request:  - With authentication, the response lists the servers assigned to your Algolia application's cluster.  - Without authentication, the response lists the servers for all Algolia clusters.
+
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -677,9 +660,8 @@ class MonitoringClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> InventoryResponse:
         """
-        List servers.
-
         List the servers belonging to clusters.  The response depends on whether you authenticate your API request:  - With authentication, the response lists the servers assigned to your Algolia application's cluster.  - Without authentication, the response lists the servers for all Algolia clusters.
+
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'InventoryResponse' result object.
@@ -696,9 +678,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get search latency times.
-
         List the average latency for search requests for selected clusters.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -730,9 +711,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> LatencyResponse:
         """
-        Get search latency times.
-
         List the average latency for search requests for selected clusters.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -760,9 +740,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get metrics for a given period.
-
         Report the aggregate value of a metric for a selected period of time.
+
 
         :param metric: Metric to report.  For more information about the individual metrics, see the response. To include all metrics, use `*` as the parameter.  (required)
         :type metric: Metric
@@ -810,9 +789,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> InfrastructureResponse:
         """
-        Get metrics for a given period.
-
         Report the aggregate value of a metric for a selected period of time.
+
 
         :param metric: Metric to report.  For more information about the individual metrics, see the response. To include all metrics, use `*` as the parameter.  (required)
         :type metric: Metric
@@ -833,9 +811,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Test the reachability of clusters.
-
         Test whether clusters are reachable or not.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -867,9 +844,8 @@ class MonitoringClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, Dict[str, bool]]:
         """
-        Test the reachability of clusters.
-
         Test whether clusters are reachable or not.
+
 
         :param clusters: Subset of clusters, separated by comma. (required)
         :type clusters: str
@@ -884,9 +860,8 @@ class MonitoringClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        List cluster statuses.
-
         Report whether clusters are operational.  The response depends on whether you authenticate your API request.  - With authentication, the response includes the status of the cluster assigned to your Algolia application.  - Without authentication, the response lists the statuses of all public Algolia clusters.
+
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -905,9 +880,8 @@ class MonitoringClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> StatusResponse:
         """
-        List cluster statuses.
-
         Report whether clusters are operational.  The response depends on whether you authenticate your API request.  - With authentication, the response includes the status of the cluster assigned to your Algolia application.  - Without authentication, the response lists the statuses of all public Algolia clusters.
+
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'StatusResponse' result object.

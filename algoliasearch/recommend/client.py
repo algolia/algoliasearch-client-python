@@ -130,9 +130,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -178,9 +177,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -208,9 +206,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -254,9 +251,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -288,9 +284,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -345,9 +340,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -383,9 +377,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -440,9 +433,8 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        Send requests to the Algolia REST API.
-
         This method allow you to send requests to the Algolia REST API.
+
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -476,9 +468,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete a Recommend rule.
-
         Delete a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+        Required API Key ACLs:
+          - editSettings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
@@ -535,9 +528,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
-        Delete a Recommend rule.
-
         Delete a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+        Required API Key ACLs:
+          - editSettings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
@@ -571,9 +565,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a Recommend rule.
-
         Return a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+        Required API Key ACLs:
+          - settings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
@@ -630,9 +625,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RuleResponse:
         """
-        Get a Recommend rule.
-
         Return a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+        Required API Key ACLs:
+          - settings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
@@ -669,9 +665,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a Recommend task's status.
-
         Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+
+        Required API Key ACLs:
+          - editSettings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
@@ -731,9 +728,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetRecommendTaskResponse:
         """
-        Get a Recommend task's status.
-
         Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+
+        Required API Key ACLs:
+          - editSettings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
@@ -756,9 +754,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get recommendations and trending items.
-
         Returns results from either recommendation or trending models:    - **Recommendations** are provided by the [Related Products](https://www.algolia.com/doc/guides/algolia-recommend/overview/#related-products-and-related-content) and [Frequently Bought Together](https://www.algolia.com/doc/guides/algolia-recommend/overview/#frequently-bought-together) models   - **Trending** models are [Trending Items and Trending Facet Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
+
+        Required API Key ACLs:
+          - search
 
         :param get_recommendations_params: (required)
         :type get_recommendations_params: GetRecommendationsParams
@@ -791,9 +790,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetRecommendationsResponse:
         """
-        Get recommendations and trending items.
-
         Returns results from either recommendation or trending models:    - **Recommendations** are provided by the [Related Products](https://www.algolia.com/doc/guides/algolia-recommend/overview/#related-products-and-related-content) and [Frequently Bought Together](https://www.algolia.com/doc/guides/algolia-recommend/overview/#frequently-bought-together) models   - **Trending** models are [Trending Items and Trending Facet Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
+
+        Required API Key ACLs:
+          - search
 
         :param get_recommendations_params: (required)
         :type get_recommendations_params: GetRecommendationsParams
@@ -821,9 +821,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        List Recommend rules.
-
         List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+        Required API Key ACLs:
+          - settings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
@@ -876,9 +877,10 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRecommendRulesResponse:
         """
-        List Recommend rules.
-
         List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+
+        Required API Key ACLs:
+          - settings
 
         :param index_name: Index on which to perform the request. (required)
         :type index_name: str
