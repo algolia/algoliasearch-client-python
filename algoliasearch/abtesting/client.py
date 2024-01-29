@@ -109,10 +109,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Creates an A/B test.
+        Create an A/B test.
 
-        Required API Key ACLs:
-          - editSettings
+        Creates an A/B test.
 
         :param add_ab_tests_request: (required)
         :type add_ab_tests_request: AddABTestsRequest
@@ -145,10 +144,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Creates an A/B test.
+        Create an A/B test.
 
-        Required API Key ACLs:
-          - editSettings
+        Creates an A/B test.
 
         :param add_ab_tests_request: (required)
         :type add_ab_tests_request: AddABTestsRequest
@@ -176,8 +174,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -223,8 +222,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -252,8 +252,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -297,8 +298,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -330,8 +332,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -386,8 +389,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -423,8 +427,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -479,8 +484,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -503,10 +509,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Delete an A/B test.
 
-        Required API Key ACLs:
-          - editSettings
+        Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
 
         :param id: Unique A/B test ID. (required)
         :type id: int
@@ -534,10 +539,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Delete an A/B test.
 
-        Required API Key ACLs:
-          - editSettings
+        Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
 
         :param id: Unique A/B test ID. (required)
         :type id: int
@@ -554,10 +558,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Get A/B test details.
 
-        Required API Key ACLs:
-          - analytics
+        Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
 
         :param id: Unique A/B test ID. (required)
         :type id: int
@@ -583,10 +586,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTest:
         """
-        Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Get A/B test details.
 
-        Required API Key ACLs:
-          - analytics
+        Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
 
         :param id: Unique A/B test ID. (required)
         :type id: int
@@ -626,8 +628,7 @@ class AbtestingClient:
         """
         List all A/B tests.
 
-        Required API Key ACLs:
-          - analytics
+        List all A/B tests.
 
         :param offset: Position of the starting record. Used for paging. 0 is the first record.
         :type offset: int
@@ -691,8 +692,7 @@ class AbtestingClient:
         """
         List all A/B tests.
 
-        Required API Key ACLs:
-          - analytics
+        List all A/B tests.
 
         :param offset: Position of the starting record. Used for paging. 0 is the first record.
         :type offset: int
@@ -717,10 +717,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Stop an A/B test.
 
-        Required API Key ACLs:
-          - editSettings
+        If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
 
         :param id: Unique A/B test ID. (required)
         :type id: int
@@ -746,10 +745,9 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Stop an A/B test.
 
-        Required API Key ACLs:
-          - editSettings
+        If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
 
         :param id: Unique A/B test ID. (required)
         :type id: int

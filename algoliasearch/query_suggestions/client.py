@@ -121,10 +121,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
+        Create a configuration.
 
-        Required API Key ACLs:
-          - editSettings
+        Create a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
 
         :param query_suggestions_configuration_with_index: (required)
         :type query_suggestions_configuration_with_index: QuerySuggestionsConfigurationWithIndex
@@ -157,10 +156,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
-        Create a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
+        Create a configuration.
 
-        Required API Key ACLs:
-          - editSettings
+        Create a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
 
         :param query_suggestions_configuration_with_index: (required)
         :type query_suggestions_configuration_with_index: QuerySuggestionsConfigurationWithIndex
@@ -188,8 +186,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -235,8 +234,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -264,8 +264,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -309,8 +310,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -342,8 +344,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -398,8 +401,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -435,8 +439,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -491,8 +496,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -517,10 +523,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
+        Delete a configuration.
 
-        Required API Key ACLs:
-          - editSettings
+        Delete a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -552,10 +557,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
-        Delete a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
+        Delete a configuration.
 
-        Required API Key ACLs:
-          - editSettings
+        Delete a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -570,10 +574,9 @@ class QuerySuggestionsClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        List all Query Suggestions configurations of your Algolia application.
+        List configurations.
 
-        Required API Key ACLs:
-          - settings
+        List all Query Suggestions configurations of your Algolia application.
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -592,10 +595,9 @@ class QuerySuggestionsClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> List[QuerySuggestionsConfigurationResponse]:
         """
-        List all Query Suggestions configurations of your Algolia application.
+        List configurations.
 
-        Required API Key ACLs:
-          - settings
+        List all Query Suggestions configurations of your Algolia application.
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[QuerySuggestionsConfigurationResponse]' result object.
@@ -612,10 +614,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a single Query Suggestions configuration.
+        Get a configuration.
 
-        Required API Key ACLs:
-          - settings
+        Get a single Query Suggestions configuration.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -647,10 +648,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> QuerySuggestionsConfigurationResponse:
         """
-        Get a single Query Suggestions configuration.
+        Get a configuration.
 
-        Required API Key ACLs:
-          - settings
+        Get a single Query Suggestions configuration.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -669,10 +669,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Report the status of a Query Suggestions index.
+        Get configuration status.
 
-        Required API Key ACLs:
-          - settings
+        Report the status of a Query Suggestions index.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -704,10 +703,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetConfigStatus200Response:
         """
-        Report the status of a Query Suggestions index.
+        Get configuration status.
 
-        Required API Key ACLs:
-          - settings
+        Report the status of a Query Suggestions index.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -726,10 +724,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the logs for a single Query Suggestions index.
+        Get logs.
 
-        Required API Key ACLs:
-          - settings
+        Get the logs for a single Query Suggestions index.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -761,10 +758,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetLogFile200Response:
         """
-        Get the logs for a single Query Suggestions index.
+        Get logs.
 
-        Required API Key ACLs:
-          - settings
+        Get the logs for a single Query Suggestions index.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -784,10 +780,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update a QuerySuggestions configuration.
+        Update a configuration.
 
-        Required API Key ACLs:
-          - editSettings
+        Update a QuerySuggestions configuration.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
@@ -832,10 +827,9 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
-        Update a QuerySuggestions configuration.
+        Update a configuration.
 
-        Required API Key ACLs:
-          - editSettings
+        Update a QuerySuggestions configuration.
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str

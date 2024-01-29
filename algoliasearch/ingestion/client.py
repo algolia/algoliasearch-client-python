@@ -173,10 +173,7 @@ class IngestionClient:
         """
         Create a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Create a authentication.
 
         :param authentication_create:  (required)
         :type authentication_create: AuthenticationCreate
@@ -211,10 +208,7 @@ class IngestionClient:
         """
         Create a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Create a authentication.
 
         :param authentication_create:  (required)
         :type authentication_create: AuthenticationCreate
@@ -235,10 +229,7 @@ class IngestionClient:
         """
         Create a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Create a destination.
 
         :param destination_create:  (required)
         :type destination_create: DestinationCreate
@@ -273,10 +264,7 @@ class IngestionClient:
         """
         Create a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Create a destination.
 
         :param destination_create:  (required)
         :type destination_create: DestinationCreate
@@ -297,10 +285,7 @@ class IngestionClient:
         """
         Create a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Create a source.
 
         :param source_create:  (required)
         :type source_create: SourceCreate
@@ -335,10 +320,7 @@ class IngestionClient:
         """
         Create a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Create a source.
 
         :param source_create:  (required)
         :type source_create: SourceCreate
@@ -357,6 +339,7 @@ class IngestionClient:
         """
         Create a task.
 
+        Create a task.
 
         :param task_create:  (required)
         :type task_create: TaskCreate
@@ -391,6 +374,7 @@ class IngestionClient:
         """
         Create a task.
 
+        Create a task.
 
         :param task_create:  (required)
         :type task_create: TaskCreate
@@ -416,8 +400,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -463,8 +448,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -492,8 +478,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -537,8 +524,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -570,8 +558,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -626,8 +615,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -663,8 +653,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -719,8 +710,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -745,12 +737,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the authentication of the given authenticationID.
+        Delete a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Soft delete the authentication of the given authenticationID.
 
         :param authentication_id: The authentication UUID. (required)
         :type authentication_id: str
@@ -782,12 +771,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the authentication of the given authenticationID.
+        Delete a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Soft delete the authentication of the given authenticationID.
 
         :param authentication_id: The authentication UUID. (required)
         :type authentication_id: str
@@ -808,12 +794,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the destination of the given destinationID.
+        Delete a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Soft delete the destination of the given destinationID.
 
         :param destination_id: The destination UUID. (required)
         :type destination_id: str
@@ -845,12 +828,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the destination of the given destinationID.
+        Delete a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Soft delete the destination of the given destinationID.
 
         :param destination_id: The destination UUID. (required)
         :type destination_id: str
@@ -869,12 +849,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the source of the given sourceID.
+        Delete a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Soft delete the source of the given sourceID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -904,12 +881,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the source of the given sourceID.
+        Delete a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Soft delete the source of the given sourceID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -926,8 +900,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the task of the given taskID.
+        Delete a task.
 
+        Soft delete the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -955,8 +930,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the task of the given taskID.
+        Delete a task.
 
+        Soft delete the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -973,12 +949,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Disable the task of the given taskID.
+        Disable a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Disable the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -1008,12 +981,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Disable the task of the given taskID.
+        Disable a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Disable the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -1030,12 +1000,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Enable the task of the given taskID.
+        Enable a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Enable the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -1065,12 +1032,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Enable the task of the given taskID.
+        Enable a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Enable the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -1089,12 +1053,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the authentication of the given authenticationID.
+        Get a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the authentication of the given authenticationID.
 
         :param authentication_id: The authentication UUID. (required)
         :type authentication_id: str
@@ -1126,12 +1087,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Authentication:
         """
-        Get the authentication of the given authenticationID.
+        Get a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the authentication of the given authenticationID.
 
         :param authentication_id: The authentication UUID. (required)
         :type authentication_id: str
@@ -1172,12 +1130,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of authentications for the given query parameters, with pagination details.
+        Get a list of authentications.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of authentications for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -1248,12 +1203,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListAuthenticationsResponse:
         """
-        Get a list of authentications for the given query parameters, with pagination details.
+        Get a list of authentications.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of authentications for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -1284,12 +1236,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the destination of the given destinationID.
+        Get a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the destination of the given destinationID.
 
         :param destination_id: The destination UUID. (required)
         :type destination_id: str
@@ -1321,12 +1270,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Destination:
         """
-        Get the destination of the given destinationID.
+        Get a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the destination of the given destinationID.
 
         :param destination_id: The destination UUID. (required)
         :type destination_id: str
@@ -1365,12 +1311,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of destinations for the given query parameters, with pagination details.
+        Get a list of destinations.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of destinations for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -1441,12 +1384,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListDestinationsResponse:
         """
-        Get a list of destinations for the given query parameters, with pagination details.
+        Get a list of destinations.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of destinations for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -1481,12 +1421,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieve a stream listing for a given Singer specification compatible docker type source ID.
+        Retrieve a stream listing.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Retrieve a stream listing for a given Singer specification compatible docker type source ID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -1516,12 +1453,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DockerSourceStreams:
         """
-        Retrieve a stream listing for a given Singer specification compatible docker type source ID.
+        Retrieve a stream listing.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Retrieve a stream listing for a given Singer specification compatible docker type source ID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -1541,12 +1475,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a single event for a specific runID.
+        Get an event.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a single event for a specific runID.
 
         :param run_id: The run UUID. (required)
         :type run_id: str
@@ -1582,12 +1513,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Event:
         """
-        Get a single event for a specific runID.
+        Get an event.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a single event for a specific runID.
 
         :param run_id: The run UUID. (required)
         :type run_id: str
@@ -1641,12 +1569,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of events associated to the given runID, for the given query parameters.
+        Get a list of events.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of events associated to the given runID, for the given query parameters.
 
         :param run_id: The run UUID. (required)
         :type run_id: str
@@ -1747,12 +1672,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListEventsResponse:
         """
-        Get a list of events associated to the given runID, for the given query parameters.
+        Get a list of events.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of events associated to the given runID, for the given query parameters.
 
         :param run_id: The run UUID. (required)
         :type run_id: str
@@ -1796,12 +1718,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a single run for the given ID.
+        Get a run.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a single run for the given ID.
 
         :param run_id: The run UUID. (required)
         :type run_id: str
@@ -1827,12 +1746,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Run:
         """
-        Get a single run for the given ID.
+        Get a run.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a single run for the given ID.
 
         :param run_id: The run UUID. (required)
         :type run_id: str
@@ -1882,12 +1798,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of runs for the given query parameters, with pagination details.
+        Get a list of runs.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of runs for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -1977,12 +1890,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunListResponse:
         """
-        Get a list of runs for the given query parameters, with pagination details.
+        Get a list of runs.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of runs for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -2023,12 +1933,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the source of the given sourceID.
+        Get a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the source of the given sourceID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -2058,12 +1965,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Source:
         """
-        Get the source of the given sourceID.
+        Get a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the source of the given sourceID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -2104,12 +2008,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of sources for the given query parameters, with pagination details.
+        Get a list of sources.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of sources for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -2182,12 +2083,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListSourcesResponse:
         """
-        Get a list of sources for the given query parameters, with pagination details.
+        Get a list of sources.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of sources for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -2222,12 +2120,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the task of the given taskID.
+        Get a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -2253,12 +2148,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Task:
         """
-        Get the task of the given taskID.
+        Get a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -2309,12 +2201,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of tasks for the given query parameters, with pagination details.
+        Get a list of tasks.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of tasks for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -2409,12 +2298,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponse:
         """
-        Get a list of tasks for the given query parameters, with pagination details.
+        Get a list of tasks.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Get a list of tasks for the given query parameters, with pagination details.
 
         :param items_per_page: The number of items per page to return.
         :type items_per_page: int
@@ -2458,12 +2344,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Run the task of the given taskID.
+        Run a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Run the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -2491,12 +2374,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
-        Run the task of the given taskID.
+        Run a task.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Run the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -2513,12 +2393,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among authentications with a defined set of parameters.
+        Search among authentications.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among authentications with a defined set of parameters.
 
         :param authentication_search: (required)
         :type authentication_search: AuthenticationSearch
@@ -2551,12 +2428,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Authentication]:
         """
-        Search among authentications with a defined set of parameters.
+        Search among authentications.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among authentications with a defined set of parameters.
 
         :param authentication_search: (required)
         :type authentication_search: AuthenticationSearch
@@ -2575,12 +2449,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among destinations with a defined set of parameters.
+        Search among destinations.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among destinations with a defined set of parameters.
 
         :param destination_search: (required)
         :type destination_search: DestinationSearch
@@ -2613,12 +2484,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Destination]:
         """
-        Search among destinations with a defined set of parameters.
+        Search among destinations.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among destinations with a defined set of parameters.
 
         :param destination_search: (required)
         :type destination_search: DestinationSearch
@@ -2637,12 +2505,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among sources with a defined set of parameters.
+        Search among sources.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among sources with a defined set of parameters.
 
         :param source_search: (required)
         :type source_search: SourceSearch
@@ -2675,12 +2540,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Source]:
         """
-        Search among sources with a defined set of parameters.
+        Search among sources.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among sources with a defined set of parameters.
 
         :param source_search: (required)
         :type source_search: SourceSearch
@@ -2697,12 +2559,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among tasks with a defined set of parameters.
+        Search among tasks.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among tasks with a defined set of parameters.
 
         :param task_search: (required)
         :type task_search: TaskSearch
@@ -2735,12 +2594,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Task]:
         """
-        Search among tasks with a defined set of parameters.
+        Search among tasks.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Search among tasks with a defined set of parameters.
 
         :param task_search: (required)
         :type task_search: TaskSearch
@@ -2757,12 +2613,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Trigger a stream listing request for a Singer specification compatible docker type source.
+        Trigger a stream listing request.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Trigger a stream listing request for a Singer specification compatible docker type source.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -2792,12 +2645,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DockerSourceDiscover:
         """
-        Trigger a stream listing request for a Singer specification compatible docker type source.
+        Trigger a stream listing request.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Trigger a stream listing request for a Singer specification compatible docker type source.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -2819,12 +2669,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the authentication of the given authenticationID.
+        Update a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Update the authentication of the given authenticationID.
 
         :param authentication_id: The authentication UUID. (required)
         :type authentication_id: str
@@ -2869,12 +2716,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AuthenticationUpdateResponse:
         """
-        Update the authentication of the given authenticationID.
+        Update a authentication.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Update the authentication of the given authenticationID.
 
         :param authentication_id: The authentication UUID. (required)
         :type authentication_id: str
@@ -2898,12 +2742,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the destination of the given destinationID.
+        Update a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Update the destination of the given destinationID.
 
         :param destination_id: The destination UUID. (required)
         :type destination_id: str
@@ -2948,12 +2789,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DestinationUpdateResponse:
         """
-        Update the destination of the given destinationID.
+        Update a destination.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Update the destination of the given destinationID.
 
         :param destination_id: The destination UUID. (required)
         :type destination_id: str
@@ -2975,12 +2813,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the source of the given sourceID.
+        Update a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Update the source of the given sourceID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -3023,12 +2858,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceUpdateResponse:
         """
-        Update the source of the given sourceID.
+        Update a source.
 
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
+        Update the source of the given sourceID.
 
         :param source_id: The source UUID. (required)
         :type source_id: str
@@ -3050,8 +2882,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the task of the given taskID.
+        Update a task.
 
+        Update the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str
@@ -3092,8 +2925,9 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Update the task of the given taskID.
+        Update a task.
 
+        Update the task of the given taskID.
 
         :param task_id: The task UUID. (required)
         :type task_id: str

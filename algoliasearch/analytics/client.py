@@ -163,8 +163,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -210,8 +211,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -239,8 +241,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -284,8 +287,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -317,8 +321,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -373,8 +378,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -410,8 +416,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -466,8 +473,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -508,10 +516,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the average click position for the complete time range and for individual days. > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Get average click position.
 
-        Required API Key ACLs:
-          - analytics
+        Return the average click position for the complete time range and for individual days. > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -575,10 +582,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetAverageClickPositionResponse:
         """
-        Return the average click position for the complete time range and for individual days. > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Get average click position.
 
-        Required API Key ACLs:
-          - analytics
+        Return the average click position for the complete time range and for individual days. > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -621,10 +627,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Show the number of clicks events and their associated position in the search results.  > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Get click positions.
 
-        Required API Key ACLs:
-          - analytics
+        Show the number of clicks events and their associated position in the search results.  > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -688,10 +693,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetClickPositionsResponse:
         """
-        Show the number of clicks events and their associated position in the search results.  > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Get click positions.
 
-        Required API Key ACLs:
-          - analytics
+        Show the number of clicks events and their associated position in the search results.  > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -734,10 +738,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+        Get click-through rate (CTR).
 
-        Required API Key ACLs:
-          - analytics
+        Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
 
         :param index: Index name to target. (required)
         :type index: str
@@ -801,10 +804,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetClickThroughRateResponse:
         """
-        Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+        Get click-through rate (CTR).
 
-        Required API Key ACLs:
-          - analytics
+        Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
 
         :param index: Index name to target. (required)
         :type index: str
@@ -847,10 +849,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+        Get conversion rate (CR).
 
-        Required API Key ACLs:
-          - analytics
+        Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
 
         :param index: Index name to target. (required)
         :type index: str
@@ -914,10 +915,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetConversationRateResponse:
         """
-        Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+        Get conversion rate (CR).
 
-        Required API Key ACLs:
-          - analytics
+        Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
 
         :param index: Index name to target. (required)
         :type index: str
@@ -960,10 +960,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+        Get no click rate.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1027,10 +1026,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetNoClickRateResponse:
         """
-        Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+        Get no click rate.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1073,10 +1071,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the rate at which searches didn't return any results.
+        Get no results rate.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the rate at which searches didn't return any results.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1140,10 +1137,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetNoResultsRateResponse:
         """
-        Returns the rate at which searches didn't return any results.
+        Get no results rate.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the rate at which searches didn't return any results.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1186,10 +1182,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the number of searches within a time range.
+        Get number of searches.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the number of searches within a time range.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1253,10 +1248,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetSearchesCountResponse:
         """
-        Returns the number of searches within a time range.
+        Get number of searches.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the number of searches within a time range.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1309,10 +1303,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the most popular of the last 1,000 searches that didn't lead to any clicks.
+        Get top searches with no clicks.
 
-        Required API Key ACLs:
-          - analytics
+        Return the most popular of the last 1,000 searches that didn't lead to any clicks.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1394,10 +1387,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetSearchesNoClicksResponse:
         """
-        Return the most popular of the last 1,000 searches that didn't lead to any clicks.
+        Get top searches with no clicks.
 
-        Required API Key ACLs:
-          - analytics
+        Return the most popular of the last 1,000 searches that didn't lead to any clicks.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1454,10 +1446,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the most popular of the latest 1,000 searches that didn't return any results.
+        Get top searches with no results.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the most popular of the latest 1,000 searches that didn't return any results.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1539,10 +1530,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetSearchesNoResultsResponse:
         """
-        Returns the most popular of the latest 1,000 searches that didn't return any results.
+        Get top searches with no results.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the most popular of the latest 1,000 searches that didn't return any results.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1571,10 +1561,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every 5&nbsp;minutes.
+        Get Analytics API status.
 
-        Required API Key ACLs:
-          - analytics
+        Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every 5&nbsp;minutes.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1606,10 +1595,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetStatusResponse:
         """
-        Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every 5&nbsp;minutes.
+        Get Analytics API status.
 
-        Required API Key ACLs:
-          - analytics
+        Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every 5&nbsp;minutes.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1654,10 +1642,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns top countries. Limited to the 1,000 most frequent ones.
+        Get top countries.
 
-        Required API Key ACLs:
-          - analytics
+        Returns top countries. Limited to the 1,000 most frequent ones.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1739,10 +1726,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopCountriesResponse:
         """
-        Returns top countries. Limited to the 1,000 most frequent ones.
+        Get top countries.
 
-        Required API Key ACLs:
-          - analytics
+        Returns top countries. Limited to the 1,000 most frequent ones.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1800,10 +1786,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
+        Get top filterable attributes.
 
-        Required API Key ACLs:
-          - analytics
+        Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1890,10 +1875,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopFilterAttributesResponse:
         """
-        Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
+        Get top filterable attributes.
 
-        Required API Key ACLs:
-          - analytics
+        Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -1961,10 +1945,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
+        Get top filter values for an attribute.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
 
         :param attribute: Attribute name. (required)
         :type attribute: str
@@ -2061,10 +2044,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopFilterForAttributeResponse:
         """
-        Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
+        Get top filter values for an attribute.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
 
         :param attribute: Attribute name. (required)
         :type attribute: str
@@ -2134,10 +2116,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
+        Get top filters for a no result search.
 
-        Required API Key ACLs:
-          - analytics
+        Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -2224,10 +2205,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopFiltersNoResultsResponse:
         """
-        Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
+        Get top filters for a no result search.
 
-        Required API Key ACLs:
-          - analytics
+        Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -2300,10 +2280,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the most popular clicked results in the last 1,000 searches.
+        Get top hits.
 
-        Required API Key ACLs:
-          - analytics
+        Return the most popular clicked results in the last 1,000 searches.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -2400,10 +2379,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopHitsResponse:
         """
-        Return the most popular clicked results in the last 1,000 searches.
+        Get top hits.
 
-        Required API Key ACLs:
-          - analytics
+        Return the most popular clicked results in the last 1,000 searches.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -2487,10 +2465,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
+        Get top searches.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -2599,10 +2576,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopSearchesResponse:
         """
-        Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
+        Get top searches.
 
-        Required API Key ACLs:
-          - analytics
+        Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -2664,10 +2640,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the count of unique users.
+        Get user count.
 
-        Required API Key ACLs:
-          - analytics
+        Return the count of unique users.
 
         :param index: Index name to target. (required)
         :type index: str
@@ -2731,10 +2706,9 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetUsersCountResponse:
         """
-        Return the count of unique users.
+        Get user count.
 
-        Required API Key ACLs:
-          - analytics
+        Return the count of unique users.
 
         :param index: Index name to target. (required)
         :type index: str

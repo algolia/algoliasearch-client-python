@@ -126,8 +126,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -173,8 +174,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -202,8 +204,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -247,8 +250,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -280,8 +284,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -336,8 +341,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -373,8 +379,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -429,8 +436,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        Send requests to the Algolia REST API.
 
+        This method allow you to send requests to the Algolia REST API.
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
         :type path: str
@@ -458,10 +466,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete the user profile and all its associated data.  Returns, as part of the response, a date until which the data can safely be considered as deleted for the given user. This means if you send events for the given user before this date, they will be ignored. Any data received after the deletedUntil date will start building a new user profile.  It might take a couple hours for the deletion request to be fully processed.
+        Delete a user profile.
 
-        Required API Key ACLs:
-          - recommendation
+        Delete the user profile and all its associated data.  Returns, as part of the response, a date until which the data can safely be considered as deleted for the given user. This means if you send events for the given user before this date, they will be ignored. Any data received after the deletedUntil date will start building a new user profile.  It might take a couple hours for the deletion request to be fully processed.
 
         :param user_token: userToken representing the user for which to fetch the Personalization profile. (required)
         :type user_token: str
@@ -496,10 +503,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteUserProfileResponse:
         """
-        Delete the user profile and all its associated data.  Returns, as part of the response, a date until which the data can safely be considered as deleted for the given user. This means if you send events for the given user before this date, they will be ignored. Any data received after the deletedUntil date will start building a new user profile.  It might take a couple hours for the deletion request to be fully processed.
+        Delete a user profile.
 
-        Required API Key ACLs:
-          - recommendation
+        Delete the user profile and all its associated data.  Returns, as part of the response, a date until which the data can safely be considered as deleted for the given user. This means if you send events for the given user before this date, they will be ignored. Any data received after the deletedUntil date will start building a new user profile.  It might take a couple hours for the deletion request to be fully processed.
 
         :param user_token: userToken representing the user for which to fetch the Personalization profile. (required)
         :type user_token: str
@@ -514,10 +520,9 @@ class PersonalizationClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        The strategy contains information on the events and facets that impact user profiles and personalized search results.
+        Get the current strategy.
 
-        Required API Key ACLs:
-          - recommendation
+        The strategy contains information on the events and facets that impact user profiles and personalized search results.
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -536,10 +541,9 @@ class PersonalizationClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> PersonalizationStrategyParams:
         """
-        The strategy contains information on the events and facets that impact user profiles and personalized search results.
+        Get the current strategy.
 
-        Required API Key ACLs:
-          - recommendation
+        The strategy contains information on the events and facets that impact user profiles and personalized search results.
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'PersonalizationStrategyParams' result object.
@@ -559,10 +563,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the user profile built from Personalization strategy.  The profile is structured by facet name used in the strategy. Each facet value is mapped to its score. Each score represents the user affinity for a specific facet value given the userToken past events and the Personalization strategy defined. Scores are bounded to 20. The last processed event timestamp is provided using the ISO 8601 format for debugging purposes.
+        Get a user profile.
 
-        Required API Key ACLs:
-          - recommendation
+        Get the user profile built from Personalization strategy.  The profile is structured by facet name used in the strategy. Each facet value is mapped to its score. Each score represents the user affinity for a specific facet value given the userToken past events and the Personalization strategy defined. Scores are bounded to 20. The last processed event timestamp is provided using the ISO 8601 format for debugging purposes.
 
         :param user_token: userToken representing the user for which to fetch the Personalization profile. (required)
         :type user_token: str
@@ -597,10 +600,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetUserTokenResponse:
         """
-        Get the user profile built from Personalization strategy.  The profile is structured by facet name used in the strategy. Each facet value is mapped to its score. Each score represents the user affinity for a specific facet value given the userToken past events and the Personalization strategy defined. Scores are bounded to 20. The last processed event timestamp is provided using the ISO 8601 format for debugging purposes.
+        Get a user profile.
 
-        Required API Key ACLs:
-          - recommendation
+        Get the user profile built from Personalization strategy.  The profile is structured by facet name used in the strategy. Each facet value is mapped to its score. Each score represents the user affinity for a specific facet value given the userToken past events and the Personalization strategy defined. Scores are bounded to 20. The last processed event timestamp is provided using the ISO 8601 format for debugging purposes.
 
         :param user_token: userToken representing the user for which to fetch the Personalization profile. (required)
         :type user_token: str
@@ -619,10 +621,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        A strategy defines the events and facets that impact user profiles and personalized search results.
+        Set a new strategy.
 
-        Required API Key ACLs:
-          - recommendation
+        A strategy defines the events and facets that impact user profiles and personalized search results.
 
         :param personalization_strategy_params: (required)
         :type personalization_strategy_params: PersonalizationStrategyParams
@@ -655,10 +656,9 @@ class PersonalizationClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SetPersonalizationStrategyResponse:
         """
-        A strategy defines the events and facets that impact user profiles and personalized search results.
+        Set a new strategy.
 
-        Required API Key ACLs:
-          - recommendation
+        A strategy defines the events and facets that impact user profiles and personalized search results.
 
         :param personalization_strategy_params: (required)
         :type personalization_strategy_params: PersonalizationStrategyParams
