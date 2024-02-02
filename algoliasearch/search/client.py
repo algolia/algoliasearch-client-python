@@ -180,7 +180,7 @@ class SearchClient:
     async def wait_for_task(
         self,
         index_name: str,
-        task_id: str,
+        task_id: int,
         timeout: RetryTimeout = RetryTimeout(),
         max_retries: int = 50,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -201,7 +201,7 @@ class SearchClient:
             aggregator=_aggregator,
             validate=lambda _resp: _resp.status == "published",
             timeout=lambda: timeout(self._retry_count),
-            error_validate=lambda: self._retry_count >= max_retries,
+            error_validate=lambda x: self._retry_count >= max_retries,
             error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
         )
 
