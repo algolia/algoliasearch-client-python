@@ -1,7 +1,9 @@
 from copy import deepcopy
 from typing import Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import quote
 
 from algoliasearch.http.base_config import BaseConfig
+from algoliasearch.http.serializer import QueryParametersSerializer
 
 try:
     from typing import Self
@@ -26,7 +28,12 @@ class RequestOptions:
     ) -> None:
         self._config = config
         self.headers = headers
-        self.query_parameters = query_parameters
+        self.query_parameters = {
+            k: quote(v)
+            for k, v in QueryParametersSerializer(
+                query_parameters
+            ).query_parameters.items()
+        }
         self.timeouts = timeouts
         self.data = data
 

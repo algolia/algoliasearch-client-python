@@ -1,7 +1,6 @@
 from asyncio import TimeoutError
 from json import loads
 from typing import Any, Dict, List
-from urllib.parse import urlencode
 
 from aiohttp import ClientSession, TCPConnector
 from async_timeout import timeout
@@ -15,7 +14,6 @@ from algoliasearch.http.exceptions import (
 from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
-from algoliasearch.http.serializer import QueryParametersSerializer
 from algoliasearch.http.verb import Verb
 
 
@@ -85,13 +83,11 @@ class Transporter:
         if query_parameters is not None and len(query_parameters) > 0:
             path = "{}?{}".format(
                 path,
-                urlencode(
-                    sorted(
-                        QueryParametersSerializer(
-                            query_parameters=query_parameters
-                        ).query_parameters.items(),
-                        key=lambda val: val[0],
-                    )
+                "&".join(
+                    [
+                        "{}={}".format(key, value)
+                        for key, value in query_parameters.items()
+                    ]
                 ),
             )
 
@@ -174,9 +170,7 @@ class EchoTransporter(Transporter):
                 "connect": request_options.timeouts["connect"],
                 "response": self._timeout,
             },
-            query_parameters=QueryParametersSerializer(
-                query_parameters=request_options.query_parameters
-            ).query_parameters,
+            query_parameters=request_options.query_parameters,
             headers=dict(request_options.headers),
             data=request_options.data,
             raw_data=request_options.data,
