@@ -1,16 +1,18 @@
 from platform import python_version
-from typing import Optional
+from typing import Optional, Self
 
 from algoliasearch import __version__
 
 
 class UserAgent:
-    value = "Algolia for Python ({}); Python ({})".format(
-        __version__, str(python_version())
-    )
+    def get(self) -> str:
+        return self.value
 
-    def get() -> str:
-        return UserAgent.value
+    def add(self, segment: str, version: Optional[str] = __version__) -> Self:
+        self.value += "; {} ({})".format(segment, version)
+        return self
 
-    def add(segment: str, version: Optional[str] = __version__) -> None:
-        UserAgent.value += "; {} ({})".format(segment, version)
+    def __init__(self) -> None:
+        self.value = "Algolia for Python ({}); Python ({})".format(
+            __version__, str(python_version())
+        )

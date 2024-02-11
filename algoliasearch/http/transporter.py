@@ -27,6 +27,7 @@ class Transporter:
         self._config = config
         self._retry_strategy = RetryStrategy()
         self._session = None
+        self._hosts = []
 
     async def __aenter__(self) -> None:
         return self
