@@ -23,58 +23,65 @@ class Variant(BaseModel):
         description="Number of add-to-cart events for this variant.",
         alias="addToCartCount",
     )
-    add_to_cart_rate: Union[StrictFloat, StrictInt] = Field(
+    add_to_cart_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
         description="Variant's [add-to-cart rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#add-to-cart-rate).",
         alias="addToCartRate",
     )
-    average_click_position: StrictInt = Field(
+    average_click_position: Optional[StrictInt] = Field(
         description="Variant's [average click position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position).",
         alias="averageClickPosition",
     )
     click_count: StrictInt = Field(
         description="Number of click events for this variant.", alias="clickCount"
     )
-    click_through_rate: Union[StrictFloat, StrictInt] = Field(
+    click_through_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
         description="Variant's [click-through rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).",
         alias="clickThroughRate",
     )
     conversion_count: StrictInt = Field(
         description="Number of click events for this variant.", alias="conversionCount"
     )
-    conversion_rate: Union[StrictFloat, StrictInt] = Field(
+    conversion_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
         description="Variant's [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).",
         alias="conversionRate",
     )
-    currencies: Dict[str, CurrenciesValue] = Field(description="A/B test currencies.")
+    currencies: Optional[Dict[str, CurrenciesValue]] = Field(
+        default=None, description="A/B test currencies."
+    )
     description: StrictStr = Field(description="A/B test description.")
+    estimated_sample_size: Optional[StrictInt] = Field(
+        default=None,
+        description="The estimated number of searches that will need to be run to achieve the desired confidence level and statistical power. A `minimumDetectableEffect` must be set in the `configuration` object for this to be used.",
+        alias="estimatedSampleSize",
+    )
     filter_effects: Optional[FilterEffects] = Field(default=None, alias="filterEffects")
     index: StrictStr = Field(description="A/B test index.")
-    no_result_count: StrictInt = Field(
+    no_result_count: Optional[StrictInt] = Field(
         description="Number of [searches without results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results) for that variant.",
         alias="noResultCount",
     )
     purchase_count: StrictInt = Field(
         description="Number of purchase events for this variant.", alias="purchaseCount"
     )
-    purchase_rate: Union[StrictFloat, StrictInt] = Field(
+    purchase_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
         description="Variant's [purchase rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#purchase-rate).",
         alias="purchaseRate",
     )
-    search_count: StrictInt = Field(
+    search_count: Optional[StrictInt] = Field(
         description="Number of searches carried out during the A/B test.",
         alias="searchCount",
     )
-    tracked_search_count: StrictInt = Field(
+    tracked_search_count: Optional[StrictInt] = Field(
         description="Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.",
         alias="trackedSearchCount",
     )
     traffic_percentage: StrictInt = Field(
         description="A/B test traffic percentage.", alias="trafficPercentage"
     )
-    user_count: StrictInt = Field(
+    user_count: Optional[StrictInt] = Field(
         description="Number of users during the A/B test.", alias="userCount"
     )
-    tracked_user_count: StrictInt = Field(
+    tracked_user_count: Optional[StrictInt] = Field(
         description="Number of users that performed a tracked search during the A/B test.",
         alias="trackedUserCount",
     )
@@ -116,6 +123,71 @@ class Variant(BaseModel):
         # filter_effects
         if self.filter_effects:
             _dict["filterEffects"] = self.filter_effects.to_dict()
+        # set to None if add_to_cart_rate (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.add_to_cart_rate is None
+            and "add_to_cart_rate" in self.model_fields_set
+        ):
+            _dict["addToCartRate"] = None
+
+        # set to None if average_click_position (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.average_click_position is None
+            and "average_click_position" in self.model_fields_set
+        ):
+            _dict["averageClickPosition"] = None
+
+        # set to None if click_through_rate (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.click_through_rate is None
+            and "click_through_rate" in self.model_fields_set
+        ):
+            _dict["clickThroughRate"] = None
+
+        # set to None if conversion_rate (nullable) is None
+        # and model_fields_set contains the field
+        if self.conversion_rate is None and "conversion_rate" in self.model_fields_set:
+            _dict["conversionRate"] = None
+
+        # set to None if no_result_count (nullable) is None
+        # and model_fields_set contains the field
+        if self.no_result_count is None and "no_result_count" in self.model_fields_set:
+            _dict["noResultCount"] = None
+
+        # set to None if purchase_rate (nullable) is None
+        # and model_fields_set contains the field
+        if self.purchase_rate is None and "purchase_rate" in self.model_fields_set:
+            _dict["purchaseRate"] = None
+
+        # set to None if search_count (nullable) is None
+        # and model_fields_set contains the field
+        if self.search_count is None and "search_count" in self.model_fields_set:
+            _dict["searchCount"] = None
+
+        # set to None if tracked_search_count (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.tracked_search_count is None
+            and "tracked_search_count" in self.model_fields_set
+        ):
+            _dict["trackedSearchCount"] = None
+
+        # set to None if user_count (nullable) is None
+        # and model_fields_set contains the field
+        if self.user_count is None and "user_count" in self.model_fields_set:
+            _dict["userCount"] = None
+
+        # set to None if tracked_user_count (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.tracked_user_count is None
+            and "tracked_user_count" in self.model_fields_set
+        ):
+            _dict["trackedUserCount"] = None
+
         return _dict
 
     @classmethod
@@ -143,6 +215,7 @@ class Variant(BaseModel):
                 if obj.get("currencies") is not None
                 else None,
                 "description": obj.get("description"),
+                "estimatedSampleSize": obj.get("estimatedSampleSize"),
                 "filterEffects": FilterEffects.from_dict(obj.get("filterEffects"))
                 if obj.get("filterEffects") is not None
                 else None,
