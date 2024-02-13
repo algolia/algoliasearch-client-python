@@ -203,3 +203,95 @@ class UserInsightsClient:
             },
             request_options,
         )
+
+    def add_to_cart_object_ids(
+        self,
+        event_name,
+        index_name,
+        object_ids,
+        request_options=None,
+    ):
+        # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
+
+        return self._insights_client.send_event(
+            {
+                "eventType": "conversion",
+                "eventSubtype": "addToCart",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+            },
+            request_options,
+        )
+
+    def add_to_cart_object_ids_after_search(
+        self,
+        event_name,
+        index_name,
+        object_ids,
+        positions,
+        query_id,
+        request_options=None,
+    ):
+        # type: (str, str, List[str], List[int], str, Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
+
+        return self._insights_client.send_event(
+            {
+                "eventType": "conversion",
+                "eventSubtype": "addToCart",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+                "positions": positions,
+                "queryId": query_id,
+            },
+            request_options,
+        )
+
+    def purchased_object_ids(
+        self,
+        event_name,
+        index_name,
+        object_ids,
+        request_options=None,
+    ):
+        # type: (str, str, List[str], Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
+
+        return self._insights_client.send_event(
+            {
+                "eventType": "conversion",
+                "eventSubtype": "purchase",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+            },
+            request_options,
+        )
+
+    def purchased_object_ids_after_search(
+        self,
+        event_name,
+        index_name,
+        object_ids,
+        positions,
+        query_id,
+        request_options=None,
+    ):
+        # type: (str, str, List[str], List[int], str, Optional[Union[dict, RequestOptions]]) -> dict  # noqa: E501
+
+        return self._insights_client.send_event(
+            {
+                "eventType": "conversion",
+                "eventSubtype": "purchase",
+                "eventName": event_name,
+                "index": index_name,
+                "userToken": self._user_token,
+                "objectIds": object_ids,
+                "positions": positions,
+                "queryId": query_id,
+            },
+            request_options,
+        )
