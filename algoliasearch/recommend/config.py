@@ -32,10 +32,19 @@ class RecommendConfig(BaseConfig):
 
         self.hosts = HostsCollection(
             [
-                Host("{}-dsn.algolia.net".format(self.app_id), 10, CallType.READ),
-                Host("{}.algolia.net".format(self.app_id), 10, CallType.WRITE),
+                Host(
+                    url="{}-dsn.algolia.net".format(self.app_id),
+                    priority=10,
+                    accept=CallType.READ,
+                ),
+                Host(
+                    url="{}.algolia.net".format(self.app_id),
+                    priority=10,
+                    accept=CallType.WRITE,
+                ),
                 Host("{}-1.algolianet.com".format(self.app_id)),
                 Host("{}-2.algolianet.com".format(self.app_id)),
                 Host("{}-3.algolianet.com".format(self.app_id)),
-            ]
+            ],
+            reorder_hosts=True,
         )

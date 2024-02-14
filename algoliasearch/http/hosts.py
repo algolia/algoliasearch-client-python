@@ -6,9 +6,16 @@ class Host:
     TTL = 300.0
 
     def __init__(
-        self, url: str, priority: Optional[int] = 0, accept: Optional[int] = None
+        self,
+        url: str,
+        scheme: str = "https",
+        port: Optional[int] = None,
+        priority: Optional[int] = 0,
+        accept: Optional[int] = None,
     ) -> None:
         self.url = url
+        self.scheme = scheme
+        self.port = port
         self.priority = cast(int, priority)
         self.accept = (CallType.WRITE | CallType.READ) if accept is None else accept
 
@@ -21,15 +28,15 @@ class Host:
 
 
 class HostsCollection:
-    def __init__(self, hosts: List[Host]) -> None:
+    def __init__(self, hosts: List[Host], reorder_hosts=False) -> None:
         self._hosts = hosts
 
         for host in self._hosts:
             host.reset()
 
-        shuffle(self._hosts)
-
-        self._hosts = sorted(self._hosts, key=lambda x: x.priority, reverse=True)
+        if reorder_hosts:
+            shuffle(self._hosts)
+            self._hosts = sorted(self._hosts, key=lambda x: x.priority, reverse=True)
 
     def read(self) -> List[Host]:
         return [host for host in self._hosts if host.accept & CallType.READ]

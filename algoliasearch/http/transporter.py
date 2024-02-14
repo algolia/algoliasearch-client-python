@@ -93,7 +93,11 @@ class Transporter:
             )
 
         for host in self._retry_strategy.valid_hosts(self._hosts):
-            url = "https://{}{}".format(host.url, path)
+            url = "{}://{}{}".format(
+                host.scheme,
+                host.url + (":{}".format(host.port) if host.port else ""),
+                path,
+            )
 
             proxy = None
             if url.startswith("https"):
@@ -102,7 +106,7 @@ class Transporter:
                 proxy = self._config.proxies.get("http")
 
             try:
-                async with timeout(self._timeout):
+                async with timeout(self._timeout / 1000):
                     resp = await self._session.request(
                         method=verb,
                         url=url,
