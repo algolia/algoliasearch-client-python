@@ -29,7 +29,7 @@ class RequestOptions:
         self._config = config
         self.headers = headers
         self.query_parameters = {
-            k: quote(v)
+            quote(k): quote(v)
             for k, v in QueryParametersSerializer(
                 query_parameters
             ).query_parameters.items()
