@@ -1,3 +1,7 @@
+## [4.0.0b4](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b3...4.0.0b4)
+
+- [69602c03a](https://github.com/algolia/api-clients-automation/commit/69602c03a) fix(python): wait for task helper ([#2646](https://github.com/algolia/api-clients-automation/pull/2646)) by [@kai687](https://github.com/kai687/)
+
 ## [4.0.0b3](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b2...4.0.0b3)
 
 - [379fbc501](https://github.com/algolia/api-clients-automation/commit/379fbc501) fix(specs): correct `searchSynonyms` parameters ([#2595](https://github.com/algolia/api-clients-automation/pull/2595)) by [@morganleroi](https://github.com/morganleroi/)
