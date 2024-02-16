@@ -16,9 +16,6 @@ class BaseQuerySuggestionsConfigurationResponse(BaseModel):
     BaseQuerySuggestionsConfigurationResponse
     """
 
-    app_id: Optional[StrictStr] = Field(
-        default=None, description="Your Algolia application ID.", alias="appId"
-    )
     source_indices_api_key: Optional[StrictStr] = Field(
         default=None,
         description="API key used to read from your source index.",
@@ -73,7 +70,6 @@ class BaseQuerySuggestionsConfigurationResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "appId": obj.get("appId"),
                 "sourceIndicesAPIKey": obj.get("sourceIndicesAPIKey"),
                 "suggestionsIndicesAPIKey": obj.get("suggestionsIndicesAPIKey"),
                 "externalIndicesAPIKey": obj.get("externalIndicesAPIKey")
