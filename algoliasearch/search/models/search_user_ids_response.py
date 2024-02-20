@@ -58,8 +58,6 @@ class SearchUserIdsResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in hits (list)
         _items = []
         if self.hits:
             for _item in self.hits:
@@ -83,10 +81,8 @@ class SearchUserIdsResponse(BaseModel):
                 if obj.get("hits") is not None
                 else None,
                 "nbHits": obj.get("nbHits"),
-                "page": obj.get("page") if obj.get("page") is not None else 0,
-                "hitsPerPage": obj.get("hitsPerPage")
-                if obj.get("hitsPerPage") is not None
-                else 20,
+                "page": obj.get("page"),
+                "hitsPerPage": obj.get("hitsPerPage"),
                 "updatedAt": obj.get("updatedAt"),
             }
         )

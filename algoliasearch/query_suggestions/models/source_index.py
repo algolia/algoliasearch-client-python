@@ -76,8 +76,6 @@ class SourceIndex(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in facets (list)
         _items = []
         if self.facets:
             for _item in self.facets:
@@ -113,17 +111,13 @@ class SourceIndex(BaseModel):
         _obj = cls.model_validate(
             {
                 "indexName": obj.get("indexName"),
-                "replicas": obj.get("replicas")
-                if obj.get("replicas") is not None
-                else False,
+                "replicas": obj.get("replicas"),
                 "analyticsTags": obj.get("analyticsTags"),
                 "facets": [Facet.from_dict(_item) for _item in obj.get("facets")]
                 if obj.get("facets") is not None
                 else None,
-                "minHits": obj.get("minHits") if obj.get("minHits") is not None else 5,
-                "minLetters": obj.get("minLetters")
-                if obj.get("minLetters") is not None
-                else 4,
+                "minHits": obj.get("minHits"),
+                "minLetters": obj.get("minLetters"),
                 "generate": obj.get("generate"),
                 "external": obj.get("external"),
             }

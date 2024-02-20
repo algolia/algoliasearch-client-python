@@ -68,12 +68,8 @@ class TrendingItemsQuery(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # query_parameters
         if self.query_parameters:
             _dict["queryParameters"] = self.query_parameters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # fallback_parameters
         if self.fallback_parameters:
             _dict["fallbackParameters"] = self.fallback_parameters.to_dict()
         return _dict
@@ -91,9 +87,7 @@ class TrendingItemsQuery(BaseModel):
             {
                 "indexName": obj.get("indexName"),
                 "threshold": obj.get("threshold"),
-                "maxRecommendations": obj.get("maxRecommendations")
-                if obj.get("maxRecommendations") is not None
-                else 0,
+                "maxRecommendations": obj.get("maxRecommendations"),
                 "facetName": obj.get("facetName"),
                 "facetValue": obj.get("facetValue"),
                 "model": obj.get("model"),

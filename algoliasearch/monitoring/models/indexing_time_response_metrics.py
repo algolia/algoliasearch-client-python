@@ -45,8 +45,6 @@ class IndexingTimeResponseMetrics(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in indexing (dict of array)
         _field_dict_of_array = {}
         if self.indexing:
             for _key in self.indexing:

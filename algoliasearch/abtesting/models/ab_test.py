@@ -80,8 +80,6 @@ class ABTest(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in variants (list)
         _items = []
         if self.variants:
             for _item in self.variants:

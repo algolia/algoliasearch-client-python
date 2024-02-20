@@ -90,12 +90,8 @@ class RankingInfo(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # matched_geo_location
         if self.matched_geo_location:
             _dict["matchedGeoLocation"] = self.matched_geo_location.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # personalization
         if self.personalization:
             _dict["personalization"] = self.personalization.to_dict()
         return _dict

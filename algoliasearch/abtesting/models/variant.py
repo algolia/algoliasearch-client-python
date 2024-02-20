@@ -111,16 +111,12 @@ class Variant(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in currencies (dict)
         _field_dict = {}
         if self.currencies:
             for _key in self.currencies:
                 if self.currencies[_key]:
                     _field_dict[_key] = self.currencies[_key].to_dict()
             _dict["currencies"] = _field_dict
-        # override the default output from pydantic by calling `to_dict()` of
-        # filter_effects
         if self.filter_effects:
             _dict["filterEffects"] = self.filter_effects.to_dict()
         # set to None if add_to_cart_rate (nullable) is None

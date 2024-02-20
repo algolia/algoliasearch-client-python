@@ -70,9 +70,7 @@ class Condition(BaseModel):
             {
                 "pattern": obj.get("pattern"),
                 "anchoring": obj.get("anchoring"),
-                "alternatives": obj.get("alternatives")
-                if obj.get("alternatives") is not None
-                else False,
+                "alternatives": obj.get("alternatives"),
                 "context": obj.get("context"),
             }
         )

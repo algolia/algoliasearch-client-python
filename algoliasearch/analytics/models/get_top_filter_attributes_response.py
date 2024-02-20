@@ -49,8 +49,6 @@ class GetTopFilterAttributesResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in attributes (list)
         _items = []
         if self.attributes:
             for _item in self.attributes:

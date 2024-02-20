@@ -50,8 +50,6 @@ class GetTopFiltersNoResultsValues(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in values (list)
         _items = []
         if self.values:
             for _item in self.values:

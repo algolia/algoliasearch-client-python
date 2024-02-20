@@ -49,12 +49,8 @@ class FacetOrdering(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # facets
         if self.facets:
             _dict["facets"] = self.facets.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in values (dict)
         _field_dict = {}
         if self.values:
             for _key in self.values:

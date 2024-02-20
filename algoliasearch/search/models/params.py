@@ -56,22 +56,14 @@ class Params(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # query
         if self.query:
             _dict["query"] = self.query.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # automatic_facet_filters
         if self.automatic_facet_filters:
             _dict["automaticFacetFilters"] = self.automatic_facet_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # automatic_optional_facet_filters
         if self.automatic_optional_facet_filters:
             _dict[
                 "automaticOptionalFacetFilters"
             ] = self.automatic_optional_facet_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # rendering_content
         if self.rendering_content:
             _dict["renderingContent"] = self.rendering_content.to_dict()
         return _dict

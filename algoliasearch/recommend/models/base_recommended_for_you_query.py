@@ -56,12 +56,8 @@ class BaseRecommendedForYouQuery(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # query_parameters
         if self.query_parameters:
             _dict["queryParameters"] = self.query_parameters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # fallback_parameters
         if self.fallback_parameters:
             _dict["fallbackParameters"] = self.fallback_parameters.to_dict()
         return _dict

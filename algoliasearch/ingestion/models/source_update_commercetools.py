@@ -58,8 +58,6 @@ class SourceUpdateCommercetools(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # custom_fields
         if self.custom_fields:
             _dict["customFields"] = self.custom_fields.to_dict()
         return _dict

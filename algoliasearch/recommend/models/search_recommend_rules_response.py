@@ -54,8 +54,6 @@ class SearchRecommendRulesResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in hits (list)
         _items = []
         if self.hits:
             for _item in self.hits:
@@ -79,7 +77,7 @@ class SearchRecommendRulesResponse(BaseModel):
                 if obj.get("hits") is not None
                 else None,
                 "nbHits": obj.get("nbHits"),
-                "page": obj.get("page") if obj.get("page") is not None else 0,
+                "page": obj.get("page"),
                 "nbPages": obj.get("nbPages"),
             }
         )

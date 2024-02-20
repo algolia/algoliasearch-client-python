@@ -61,8 +61,6 @@ class SourceCommercetools(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # custom_fields
         if self.custom_fields:
             _dict["customFields"] = self.custom_fields.to_dict()
         return _dict
@@ -82,9 +80,7 @@ class SourceCommercetools(BaseModel):
                 "locales": obj.get("locales"),
                 "url": obj.get("url"),
                 "projectKey": obj.get("projectKey"),
-                "fallbackIsInStockValue": obj.get("fallbackIsInStockValue")
-                if obj.get("fallbackIsInStockValue") is not None
-                else True,
+                "fallbackIsInStockValue": obj.get("fallbackIsInStockValue"),
                 "customFields": CommercetoolsCustomFields.from_dict(
                     obj.get("customFields")
                 )

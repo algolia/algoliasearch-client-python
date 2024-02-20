@@ -83,13 +83,11 @@ class SearchRulesParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "query": obj.get("query") if obj.get("query") is not None else "",
+                "query": obj.get("query"),
                 "anchoring": obj.get("anchoring"),
                 "context": obj.get("context"),
                 "page": obj.get("page"),
-                "hitsPerPage": obj.get("hitsPerPage")
-                if obj.get("hitsPerPage") is not None
-                else 20,
+                "hitsPerPage": obj.get("hitsPerPage"),
                 "enabled": obj.get("enabled"),
                 "requestOptions": obj.get("requestOptions"),
             }

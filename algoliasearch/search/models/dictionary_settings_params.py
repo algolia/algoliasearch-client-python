@@ -45,8 +45,6 @@ class DictionarySettingsParams(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # disable_standard_entries
         if self.disable_standard_entries:
             _dict["disableStandardEntries"] = self.disable_standard_entries.to_dict()
         return _dict

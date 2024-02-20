@@ -45,8 +45,6 @@ class GetTopCountriesResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in countries (list)
         _items = []
         if self.countries:
             for _item in self.countries:

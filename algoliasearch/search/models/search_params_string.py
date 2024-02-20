@@ -56,7 +56,5 @@ class SearchParamsString(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"params": obj.get("params") if obj.get("params") is not None else ""}
-        )
+        _obj = cls.model_validate({"params": obj.get("params")})
         return _obj

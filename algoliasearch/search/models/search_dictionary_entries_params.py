@@ -66,11 +66,9 @@ class SearchDictionaryEntriesParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "query": obj.get("query") if obj.get("query") is not None else "",
-                "page": obj.get("page") if obj.get("page") is not None else 0,
-                "hitsPerPage": obj.get("hitsPerPage")
-                if obj.get("hitsPerPage") is not None
-                else 20,
+                "query": obj.get("query"),
+                "page": obj.get("page"),
+                "hitsPerPage": obj.get("hitsPerPage"),
                 "language": obj.get("language"),
             }
         )

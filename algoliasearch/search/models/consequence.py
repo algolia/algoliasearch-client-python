@@ -64,20 +64,14 @@ class Consequence(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # params
         if self.params:
             _dict["params"] = self.params.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in promote (list)
         _items = []
         if self.promote:
             for _item in self.promote:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["promote"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in hide (list)
         _items = []
         if self.hide:
             for _item in self.hide:
@@ -108,9 +102,7 @@ class Consequence(BaseModel):
                 "promote": [Promote.from_dict(_item) for _item in obj.get("promote")]
                 if obj.get("promote") is not None
                 else None,
-                "filterPromotes": obj.get("filterPromotes")
-                if obj.get("filterPromotes") is not None
-                else False,
+                "filterPromotes": obj.get("filterPromotes"),
                 "hide": [ConsequenceHide.from_dict(_item) for _item in obj.get("hide")]
                 if obj.get("hide") is not None
                 else None,

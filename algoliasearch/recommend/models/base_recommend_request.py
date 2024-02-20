@@ -67,9 +67,7 @@ class BaseRecommendRequest(BaseModel):
             {
                 "indexName": obj.get("indexName"),
                 "threshold": obj.get("threshold"),
-                "maxRecommendations": obj.get("maxRecommendations")
-                if obj.get("maxRecommendations") is not None
-                else 0,
+                "maxRecommendations": obj.get("maxRecommendations"),
             }
         )
         return _obj

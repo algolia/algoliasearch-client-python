@@ -55,16 +55,12 @@ class PersonalizationStrategyParams(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in event_scoring (list)
         _items = []
         if self.event_scoring:
             for _item in self.event_scoring:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["eventScoring"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in facet_scoring (list)
         _items = []
         if self.facet_scoring:
             for _item in self.facet_scoring:

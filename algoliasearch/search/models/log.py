@@ -81,8 +81,6 @@ class Log(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in inner_queries (list)
         _items = []
         if self.inner_queries:
             for _item in self.inner_queries:

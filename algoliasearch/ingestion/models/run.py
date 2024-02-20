@@ -75,8 +75,6 @@ class Run(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # progress
         if self.progress:
             _dict["progress"] = self.progress.to_dict()
         return _dict

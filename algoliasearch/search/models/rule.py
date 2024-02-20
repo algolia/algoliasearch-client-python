@@ -66,20 +66,14 @@ class Rule(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in conditions (list)
         _items = []
         if self.conditions:
             for _item in self.conditions:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["conditions"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # consequence
         if self.consequence:
             _dict["consequence"] = self.consequence.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in validity (list)
         _items = []
         if self.validity:
             for _item in self.validity:
@@ -109,9 +103,7 @@ class Rule(BaseModel):
                 if obj.get("consequence") is not None
                 else None,
                 "description": obj.get("description"),
-                "enabled": obj.get("enabled")
-                if obj.get("enabled") is not None
-                else True,
+                "enabled": obj.get("enabled"),
                 "validity": [
                     TimeRange.from_dict(_item) for _item in obj.get("validity")
                 ]

@@ -140,9 +140,7 @@ class BaseIndexSettings(BaseModel):
         _obj = cls.model_validate(
             {
                 "replicas": obj.get("replicas"),
-                "paginationLimitedTo": obj.get("paginationLimitedTo")
-                if obj.get("paginationLimitedTo") is not None
-                else 1000,
+                "paginationLimitedTo": obj.get("paginationLimitedTo"),
                 "unretrievableAttributes": obj.get("unretrievableAttributes"),
                 "disableTypoToleranceOnWords": obj.get("disableTypoToleranceOnWords"),
                 "attributesToTransliterate": obj.get("attributesToTransliterate"),
@@ -152,15 +150,11 @@ class BaseIndexSettings(BaseModel):
                 "disablePrefixOnAttributes": obj.get("disablePrefixOnAttributes"),
                 "allowCompressionOfIntegerArray": obj.get(
                     "allowCompressionOfIntegerArray"
-                )
-                if obj.get("allowCompressionOfIntegerArray") is not None
-                else False,
+                ),
                 "numericAttributesForFiltering": obj.get(
                     "numericAttributesForFiltering"
                 ),
-                "separatorsToIndex": obj.get("separatorsToIndex")
-                if obj.get("separatorsToIndex") is not None
-                else "",
+                "separatorsToIndex": obj.get("separatorsToIndex"),
                 "searchableAttributes": obj.get("searchableAttributes"),
                 "userData": obj.get("userData"),
                 "customNormalization": obj.get("customNormalization"),

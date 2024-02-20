@@ -69,8 +69,6 @@ class UserHit(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # highlight_result
         if self.highlight_result:
             _dict["_highlightResult"] = self.highlight_result.to_dict()
         return _dict

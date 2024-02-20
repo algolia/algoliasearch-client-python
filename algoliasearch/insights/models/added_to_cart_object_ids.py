@@ -118,16 +118,12 @@ class AddedToCartObjectIDs(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in object_data (list)
         _items = []
         if self.object_data:
             for _item in self.object_data:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["objectData"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # value
         if self.value:
             _dict["value"] = self.value.to_dict()
         return _dict

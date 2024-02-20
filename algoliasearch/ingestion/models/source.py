@@ -60,8 +60,6 @@ class Source(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # input
         if self.input:
             _dict["input"] = self.input.to_dict()
         return _dict

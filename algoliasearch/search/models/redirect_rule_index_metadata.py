@@ -51,8 +51,6 @@ class RedirectRuleIndexMetadata(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # data
         if self.data:
             _dict["data"] = self.data.to_dict()
         return _dict

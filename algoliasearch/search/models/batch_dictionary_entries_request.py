@@ -47,8 +47,6 @@ class BatchDictionaryEntriesRequest(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # body
         if self.body:
             _dict["body"] = self.body.to_dict()
         return _dict

@@ -51,12 +51,8 @@ class FilterEffects(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # outliers
         if self.outliers:
             _dict["outliers"] = self.outliers.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # empty_search
         if self.empty_search:
             _dict["emptySearch"] = self.empty_search.to_dict()
         return _dict

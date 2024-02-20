@@ -69,10 +69,8 @@ class SearchUserIdsParams(BaseModel):
             {
                 "query": obj.get("query"),
                 "clusterName": obj.get("clusterName"),
-                "page": obj.get("page") if obj.get("page") is not None else 0,
-                "hitsPerPage": obj.get("hitsPerPage")
-                if obj.get("hitsPerPage") is not None
-                else 20,
+                "page": obj.get("page"),
+                "hitsPerPage": obj.get("hitsPerPage"),
             }
         )
         return _obj

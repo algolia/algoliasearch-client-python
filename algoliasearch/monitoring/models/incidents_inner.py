@@ -49,7 +49,6 @@ class IncidentsInner(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of v
         if self.v:
             _dict["v"] = self.v.to_dict()
         return _dict

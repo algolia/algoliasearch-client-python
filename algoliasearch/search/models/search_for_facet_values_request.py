@@ -68,13 +68,9 @@ class SearchForFacetValuesRequest(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "params": obj.get("params") if obj.get("params") is not None else "",
-                "facetQuery": obj.get("facetQuery")
-                if obj.get("facetQuery") is not None
-                else "",
-                "maxFacetHits": obj.get("maxFacetHits")
-                if obj.get("maxFacetHits") is not None
-                else 10,
+                "params": obj.get("params"),
+                "facetQuery": obj.get("facetQuery"),
+                "maxFacetHits": obj.get("maxFacetHits"),
             }
         )
         return _obj

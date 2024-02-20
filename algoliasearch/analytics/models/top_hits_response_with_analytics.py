@@ -45,8 +45,6 @@ class TopHitsResponseWithAnalytics(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in hits (list)
         _items = []
         if self.hits:
             for _item in self.hits:

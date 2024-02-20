@@ -81,16 +81,12 @@ class QuerySuggestionsConfigurationResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in source_indices (list)
         _items = []
         if self.source_indices:
             for _item in self.source_indices:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["sourceIndices"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # languages
         if self.languages:
             _dict["languages"] = self.languages.to_dict()
         # set to None if exclude (nullable) is None
@@ -113,9 +109,7 @@ class QuerySuggestionsConfigurationResponse(BaseModel):
             {
                 "sourceIndicesAPIKey": obj.get("sourceIndicesAPIKey"),
                 "suggestionsIndicesAPIKey": obj.get("suggestionsIndicesAPIKey"),
-                "externalIndicesAPIKey": obj.get("externalIndicesAPIKey")
-                if obj.get("externalIndicesAPIKey") is not None
-                else "",
+                "externalIndicesAPIKey": obj.get("externalIndicesAPIKey"),
                 "indexName": obj.get("indexName"),
                 "sourceIndices": [
                     SourceIndex.from_dict(_item) for _item in obj.get("sourceIndices")
@@ -126,12 +120,8 @@ class QuerySuggestionsConfigurationResponse(BaseModel):
                 if obj.get("languages") is not None
                 else None,
                 "exclude": obj.get("exclude"),
-                "enablePersonalization": obj.get("enablePersonalization")
-                if obj.get("enablePersonalization") is not None
-                else False,
-                "allowSpecialCharacters": obj.get("allowSpecialCharacters")
-                if obj.get("allowSpecialCharacters") is not None
-                else False,
+                "enablePersonalization": obj.get("enablePersonalization"),
+                "allowSpecialCharacters": obj.get("allowSpecialCharacters"),
             }
         )
         return _obj

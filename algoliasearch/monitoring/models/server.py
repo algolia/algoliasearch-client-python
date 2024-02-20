@@ -76,12 +76,8 @@ class Server(BaseModel):
             {
                 "name": obj.get("name"),
                 "region": obj.get("region"),
-                "is_slave": obj.get("is_slave")
-                if obj.get("is_slave") is not None
-                else False,
-                "is_replica": obj.get("is_replica")
-                if obj.get("is_replica") is not None
-                else False,
+                "is_slave": obj.get("is_slave"),
+                "is_replica": obj.get("is_replica"),
                 "cluster": obj.get("cluster"),
                 "status": obj.get("status"),
                 "type": obj.get("type"),

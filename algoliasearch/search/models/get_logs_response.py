@@ -45,8 +45,6 @@ class GetLogsResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in logs (list)
         _items = []
         if self.logs:
             for _item in self.logs:

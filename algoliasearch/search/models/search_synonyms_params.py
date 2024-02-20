@@ -67,12 +67,10 @@ class SearchSynonymsParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "query": obj.get("query") if obj.get("query") is not None else "",
+                "query": obj.get("query"),
                 "type": obj.get("type"),
-                "page": obj.get("page") if obj.get("page") is not None else 0,
-                "hitsPerPage": obj.get("hitsPerPage")
-                if obj.get("hitsPerPage") is not None
-                else 20,
+                "page": obj.get("page"),
+                "hitsPerPage": obj.get("hitsPerPage"),
             }
         )
         return _obj

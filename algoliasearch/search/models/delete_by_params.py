@@ -72,20 +72,12 @@ class DeleteByParams(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # facet_filters
         if self.facet_filters:
             _dict["facetFilters"] = self.facet_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # numeric_filters
         if self.numeric_filters:
             _dict["numericFilters"] = self.numeric_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # tag_filters
         if self.tag_filters:
             _dict["tagFilters"] = self.tag_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # around_radius
         if self.around_radius:
             _dict["aroundRadius"] = self.around_radius.to_dict()
         return _dict
@@ -104,16 +96,14 @@ class DeleteByParams(BaseModel):
                 "facetFilters": FacetFilters.from_dict(obj.get("facetFilters"))
                 if obj.get("facetFilters") is not None
                 else None,
-                "filters": obj.get("filters") if obj.get("filters") is not None else "",
+                "filters": obj.get("filters"),
                 "numericFilters": NumericFilters.from_dict(obj.get("numericFilters"))
                 if obj.get("numericFilters") is not None
                 else None,
                 "tagFilters": TagFilters.from_dict(obj.get("tagFilters"))
                 if obj.get("tagFilters") is not None
                 else None,
-                "aroundLatLng": obj.get("aroundLatLng")
-                if obj.get("aroundLatLng") is not None
-                else "",
+                "aroundLatLng": obj.get("aroundLatLng"),
                 "aroundRadius": AroundRadius.from_dict(obj.get("aroundRadius"))
                 if obj.get("aroundRadius") is not None
                 else None,

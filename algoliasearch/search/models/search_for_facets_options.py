@@ -72,12 +72,8 @@ class SearchForFacetsOptions(BaseModel):
             {
                 "facet": obj.get("facet"),
                 "indexName": obj.get("indexName"),
-                "facetQuery": obj.get("facetQuery")
-                if obj.get("facetQuery") is not None
-                else "",
-                "maxFacetHits": obj.get("maxFacetHits")
-                if obj.get("maxFacetHits") is not None
-                else 10,
+                "facetQuery": obj.get("facetQuery"),
+                "maxFacetHits": obj.get("maxFacetHits"),
                 "type": obj.get("type"),
             }
         )

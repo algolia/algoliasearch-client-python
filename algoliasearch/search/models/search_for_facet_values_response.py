@@ -54,8 +54,6 @@ class SearchForFacetValuesResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in facet_hits (list)
         _items = []
         if self.facet_hits:
             for _item in self.facet_hits:

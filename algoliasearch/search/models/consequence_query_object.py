@@ -48,8 +48,6 @@ class ConsequenceQueryObject(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in edits (list)
         _items = []
         if self.edits:
             for _item in self.edits:

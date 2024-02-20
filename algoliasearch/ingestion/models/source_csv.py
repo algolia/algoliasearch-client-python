@@ -79,9 +79,7 @@ class SourceCSV(BaseModel):
                 "uniqueIDColumn": obj.get("uniqueIDColumn"),
                 "mapping": dict((_k, _v) for _k, _v in obj.get("mapping").items()),
                 "method": obj.get("method"),
-                "delimiter": obj.get("delimiter")
-                if obj.get("delimiter") is not None
-                else ",",
+                "delimiter": obj.get("delimiter"),
             }
         )
         return _obj

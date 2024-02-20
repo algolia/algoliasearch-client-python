@@ -99,23 +99,13 @@ class GetApiKeyResponse(BaseModel):
                 "value": obj.get("value"),
                 "createdAt": obj.get("createdAt"),
                 "acl": obj.get("acl"),
-                "description": obj.get("description")
-                if obj.get("description") is not None
-                else "",
+                "description": obj.get("description"),
                 "indexes": obj.get("indexes"),
-                "maxHitsPerQuery": obj.get("maxHitsPerQuery")
-                if obj.get("maxHitsPerQuery") is not None
-                else 0,
-                "maxQueriesPerIPPerHour": obj.get("maxQueriesPerIPPerHour")
-                if obj.get("maxQueriesPerIPPerHour") is not None
-                else 0,
-                "queryParameters": obj.get("queryParameters")
-                if obj.get("queryParameters") is not None
-                else "",
+                "maxHitsPerQuery": obj.get("maxHitsPerQuery"),
+                "maxQueriesPerIPPerHour": obj.get("maxQueriesPerIPPerHour"),
+                "queryParameters": obj.get("queryParameters"),
                 "referers": obj.get("referers"),
-                "validity": obj.get("validity")
-                if obj.get("validity") is not None
-                else 0,
+                "validity": obj.get("validity"),
             }
         )
         return _obj

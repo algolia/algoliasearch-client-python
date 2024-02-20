@@ -46,12 +46,8 @@ class UserHighlightResult(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # user_id
         if self.user_id:
             _dict["userID"] = self.user_id.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # cluster_name
         if self.cluster_name:
             _dict["clusterName"] = self.cluster_name.to_dict()
         return _dict

@@ -54,8 +54,6 @@ class BatchDictionaryEntriesParams(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in requests (list)
         _items = []
         if self.requests:
             for _item in self.requests:
@@ -77,9 +75,7 @@ class BatchDictionaryEntriesParams(BaseModel):
             {
                 "clearExistingDictionaryEntries": obj.get(
                     "clearExistingDictionaryEntries"
-                )
-                if obj.get("clearExistingDictionaryEntries") is not None
-                else False,
+                ),
                 "requests": [
                     BatchDictionaryEntriesRequest.from_dict(_item)
                     for _item in obj.get("requests")

@@ -45,8 +45,6 @@ class IncidentsResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in incidents (dict of array)
         _field_dict_of_array = {}
         if self.incidents:
             for _key in self.incidents:

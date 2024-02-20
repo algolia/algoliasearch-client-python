@@ -47,16 +47,10 @@ class Languages(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # plurals
         if self.plurals:
             _dict["plurals"] = self.plurals.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # stopwords
         if self.stopwords:
             _dict["stopwords"] = self.stopwords.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # compounds
         if self.compounds:
             _dict["compounds"] = self.compounds.to_dict()
         # set to None if plurals (nullable) is None

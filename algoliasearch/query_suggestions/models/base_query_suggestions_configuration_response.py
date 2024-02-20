@@ -72,9 +72,7 @@ class BaseQuerySuggestionsConfigurationResponse(BaseModel):
             {
                 "sourceIndicesAPIKey": obj.get("sourceIndicesAPIKey"),
                 "suggestionsIndicesAPIKey": obj.get("suggestionsIndicesAPIKey"),
-                "externalIndicesAPIKey": obj.get("externalIndicesAPIKey")
-                if obj.get("externalIndicesAPIKey") is not None
-                else "",
+                "externalIndicesAPIKey": obj.get("externalIndicesAPIKey"),
             }
         )
         return _obj

@@ -45,8 +45,6 @@ class SearchResponses(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in results (list)
         _items = []
         if self.results:
             for _item in self.results:

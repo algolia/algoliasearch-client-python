@@ -250,32 +250,18 @@ class IndexSettingsAsSearchParams(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # typo_tolerance
         if self.typo_tolerance:
             _dict["typoTolerance"] = self.typo_tolerance.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # ignore_plurals
         if self.ignore_plurals:
             _dict["ignorePlurals"] = self.ignore_plurals.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # remove_stop_words
         if self.remove_stop_words:
             _dict["removeStopWords"] = self.remove_stop_words.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # semantic_search
         if self.semantic_search:
             _dict["semanticSearch"] = self.semantic_search.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # distinct
         if self.distinct:
             _dict["distinct"] = self.distinct.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # rendering_content
         if self.rendering_content:
             _dict["renderingContent"] = self.rendering_content.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # re_ranking_apply_filter
         if self.re_ranking_apply_filter:
             _dict["reRankingApplyFilter"] = self.re_ranking_apply_filter.to_dict()
         # set to None if re_ranking_apply_filter (nullable) is None
@@ -303,40 +289,22 @@ class IndexSettingsAsSearchParams(BaseModel):
                 "attributesToRetrieve": obj.get("attributesToRetrieve"),
                 "ranking": obj.get("ranking"),
                 "customRanking": obj.get("customRanking"),
-                "relevancyStrictness": obj.get("relevancyStrictness")
-                if obj.get("relevancyStrictness") is not None
-                else 100,
+                "relevancyStrictness": obj.get("relevancyStrictness"),
                 "attributesToHighlight": obj.get("attributesToHighlight"),
                 "attributesToSnippet": obj.get("attributesToSnippet"),
-                "highlightPreTag": obj.get("highlightPreTag")
-                if obj.get("highlightPreTag") is not None
-                else "<em>",
-                "highlightPostTag": obj.get("highlightPostTag")
-                if obj.get("highlightPostTag") is not None
-                else "</em>",
-                "snippetEllipsisText": obj.get("snippetEllipsisText")
-                if obj.get("snippetEllipsisText") is not None
-                else "…",
+                "highlightPreTag": obj.get("highlightPreTag"),
+                "highlightPostTag": obj.get("highlightPostTag"),
+                "snippetEllipsisText": obj.get("snippetEllipsisText"),
                 "restrictHighlightAndSnippetArrays": obj.get(
                     "restrictHighlightAndSnippetArrays"
-                )
-                if obj.get("restrictHighlightAndSnippetArrays") is not None
-                else False,
-                "hitsPerPage": obj.get("hitsPerPage")
-                if obj.get("hitsPerPage") is not None
-                else 20,
-                "minWordSizefor1Typo": obj.get("minWordSizefor1Typo")
-                if obj.get("minWordSizefor1Typo") is not None
-                else 4,
-                "minWordSizefor2Typos": obj.get("minWordSizefor2Typos")
-                if obj.get("minWordSizefor2Typos") is not None
-                else 8,
+                ),
+                "hitsPerPage": obj.get("hitsPerPage"),
+                "minWordSizefor1Typo": obj.get("minWordSizefor1Typo"),
+                "minWordSizefor2Typos": obj.get("minWordSizefor2Typos"),
                 "typoTolerance": TypoTolerance.from_dict(obj.get("typoTolerance"))
                 if obj.get("typoTolerance") is not None
                 else None,
-                "allowTyposOnNumericTokens": obj.get("allowTyposOnNumericTokens")
-                if obj.get("allowTyposOnNumericTokens") is not None
-                else True,
+                "allowTyposOnNumericTokens": obj.get("allowTyposOnNumericTokens"),
                 "disableTypoToleranceOnAttributes": obj.get(
                     "disableTypoToleranceOnAttributes"
                 ),
@@ -346,28 +314,18 @@ class IndexSettingsAsSearchParams(BaseModel):
                 "removeStopWords": RemoveStopWords.from_dict(obj.get("removeStopWords"))
                 if obj.get("removeStopWords") is not None
                 else None,
-                "keepDiacriticsOnCharacters": obj.get("keepDiacriticsOnCharacters")
-                if obj.get("keepDiacriticsOnCharacters") is not None
-                else "",
+                "keepDiacriticsOnCharacters": obj.get("keepDiacriticsOnCharacters"),
                 "queryLanguages": obj.get("queryLanguages"),
-                "decompoundQuery": obj.get("decompoundQuery")
-                if obj.get("decompoundQuery") is not None
-                else True,
-                "enableRules": obj.get("enableRules")
-                if obj.get("enableRules") is not None
-                else True,
-                "enablePersonalization": obj.get("enablePersonalization")
-                if obj.get("enablePersonalization") is not None
-                else False,
+                "decompoundQuery": obj.get("decompoundQuery"),
+                "enableRules": obj.get("enableRules"),
+                "enablePersonalization": obj.get("enablePersonalization"),
                 "queryType": obj.get("queryType"),
                 "removeWordsIfNoResults": obj.get("removeWordsIfNoResults"),
                 "mode": obj.get("mode"),
                 "semanticSearch": SemanticSearch.from_dict(obj.get("semanticSearch"))
                 if obj.get("semanticSearch") is not None
                 else None,
-                "advancedSyntax": obj.get("advancedSyntax")
-                if obj.get("advancedSyntax") is not None
-                else False,
+                "advancedSyntax": obj.get("advancedSyntax"),
                 "optionalWords": obj.get("optionalWords"),
                 "disableExactOnAttributes": obj.get("disableExactOnAttributes"),
                 "exactOnSingleWordQuery": obj.get("exactOnSingleWordQuery"),
@@ -376,35 +334,21 @@ class IndexSettingsAsSearchParams(BaseModel):
                 "distinct": Distinct.from_dict(obj.get("distinct"))
                 if obj.get("distinct") is not None
                 else None,
-                "replaceSynonymsInHighlight": obj.get("replaceSynonymsInHighlight")
-                if obj.get("replaceSynonymsInHighlight") is not None
-                else False,
-                "minProximity": obj.get("minProximity")
-                if obj.get("minProximity") is not None
-                else 1,
+                "replaceSynonymsInHighlight": obj.get("replaceSynonymsInHighlight"),
+                "minProximity": obj.get("minProximity"),
                 "responseFields": obj.get("responseFields"),
-                "maxFacetHits": obj.get("maxFacetHits")
-                if obj.get("maxFacetHits") is not None
-                else 10,
-                "maxValuesPerFacet": obj.get("maxValuesPerFacet")
-                if obj.get("maxValuesPerFacet") is not None
-                else 100,
-                "sortFacetValuesBy": obj.get("sortFacetValuesBy")
-                if obj.get("sortFacetValuesBy") is not None
-                else "count",
+                "maxFacetHits": obj.get("maxFacetHits"),
+                "maxValuesPerFacet": obj.get("maxValuesPerFacet"),
+                "sortFacetValuesBy": obj.get("sortFacetValuesBy"),
                 "attributeCriteriaComputedByMinProximity": obj.get(
                     "attributeCriteriaComputedByMinProximity"
-                )
-                if obj.get("attributeCriteriaComputedByMinProximity") is not None
-                else False,
+                ),
                 "renderingContent": RenderingContent.from_dict(
                     obj.get("renderingContent")
                 )
                 if obj.get("renderingContent") is not None
                 else None,
-                "enableReRanking": obj.get("enableReRanking")
-                if obj.get("enableReRanking") is not None
-                else True,
+                "enableReRanking": obj.get("enableReRanking"),
                 "reRankingApplyFilter": ReRankingApplyFilter.from_dict(
                     obj.get("reRankingApplyFilter")
                 )

@@ -49,20 +49,14 @@ class ListEventsResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in events (list)
         _items = []
         if self.events:
             for _item in self.events:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["events"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # pagination
         if self.pagination:
             _dict["pagination"] = self.pagination.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # window
         if self.window:
             _dict["window"] = self.window.to_dict()
         return _dict

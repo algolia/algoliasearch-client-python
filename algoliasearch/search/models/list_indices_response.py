@@ -50,8 +50,6 @@ class ListIndicesResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in items (list)
         _items = []
         if self.items:
             for _item in self.items:

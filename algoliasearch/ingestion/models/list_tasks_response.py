@@ -47,16 +47,12 @@ class ListTasksResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in tasks (list)
         _items = []
         if self.tasks:
             for _item in self.tasks:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["tasks"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # pagination
         if self.pagination:
             _dict["pagination"] = self.pagination.to_dict()
         return _dict

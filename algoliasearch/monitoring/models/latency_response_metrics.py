@@ -45,8 +45,6 @@ class LatencyResponseMetrics(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in latency (dict of array)
         _field_dict_of_array = {}
         if self.latency:
             for _key in self.latency:

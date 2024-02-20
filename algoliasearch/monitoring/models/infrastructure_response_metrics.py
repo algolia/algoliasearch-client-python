@@ -60,8 +60,6 @@ class InfrastructureResponseMetrics(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in cpu_usage (dict of array)
         _field_dict_of_array = {}
         if self.cpu_usage:
             for _key in self.cpu_usage:
@@ -70,8 +68,6 @@ class InfrastructureResponseMetrics(BaseModel):
                         _item.to_dict() for _item in self.cpu_usage[_key]
                     ]
             _dict["cpu_usage"] = _field_dict_of_array
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in ram_indexing_usage (dict of array)
         _field_dict_of_array = {}
         if self.ram_indexing_usage:
             for _key in self.ram_indexing_usage:
@@ -80,8 +76,6 @@ class InfrastructureResponseMetrics(BaseModel):
                         _item.to_dict() for _item in self.ram_indexing_usage[_key]
                     ]
             _dict["ram_indexing_usage"] = _field_dict_of_array
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in ram_search_usage (dict of array)
         _field_dict_of_array = {}
         if self.ram_search_usage:
             for _key in self.ram_search_usage:
@@ -90,8 +84,6 @@ class InfrastructureResponseMetrics(BaseModel):
                         _item.to_dict() for _item in self.ram_search_usage[_key]
                     ]
             _dict["ram_search_usage"] = _field_dict_of_array
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in ssd_usage (dict of array)
         _field_dict_of_array = {}
         if self.ssd_usage:
             for _key in self.ssd_usage:
@@ -100,8 +92,6 @@ class InfrastructureResponseMetrics(BaseModel):
                         _item.to_dict() for _item in self.ssd_usage[_key]
                     ]
             _dict["ssd_usage"] = _field_dict_of_array
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in avg_build_time (dict of array)
         _field_dict_of_array = {}
         if self.avg_build_time:
             for _key in self.avg_build_time:

@@ -97,12 +97,8 @@ class FetchedIndex(BaseModel):
                 "dataSize": obj.get("dataSize"),
                 "fileSize": obj.get("fileSize"),
                 "lastBuildTimeS": obj.get("lastBuildTimeS"),
-                "numberOfPendingTasks": obj.get("numberOfPendingTasks")
-                if obj.get("numberOfPendingTasks") is not None
-                else 0,
-                "pendingTask": obj.get("pendingTask")
-                if obj.get("pendingTask") is not None
-                else False,
+                "numberOfPendingTasks": obj.get("numberOfPendingTasks"),
+                "pendingTask": obj.get("pendingTask"),
                 "primary": obj.get("primary"),
                 "replicas": obj.get("replicas"),
             }

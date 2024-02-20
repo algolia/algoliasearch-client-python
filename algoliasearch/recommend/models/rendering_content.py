@@ -45,8 +45,6 @@ class RenderingContent(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # facet_ordering
         if self.facet_ordering:
             _dict["facetOrdering"] = self.facet_ordering.to_dict()
         return _dict

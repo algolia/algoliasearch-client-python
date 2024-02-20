@@ -67,10 +67,8 @@ class AutomaticFacetFilter(BaseModel):
         _obj = cls.model_validate(
             {
                 "facet": obj.get("facet"),
-                "score": obj.get("score") if obj.get("score") is not None else 1,
-                "disjunctive": obj.get("disjunctive")
-                if obj.get("disjunctive") is not None
-                else False,
+                "score": obj.get("score"),
+                "disjunctive": obj.get("disjunctive"),
             }
         )
         return _obj

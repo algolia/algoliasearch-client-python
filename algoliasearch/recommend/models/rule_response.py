@@ -63,20 +63,14 @@ class RuleResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # metadata
         if self.metadata:
             _dict["_metadata"] = self.metadata.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # each item in conditions (list)
         _items = []
         if self.conditions:
             for _item in self.conditions:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["conditions"] = _items
-        # override the default output from pydantic by calling `to_dict()` of
-        # consequence
         if self.consequence:
             _dict["consequence"] = self.consequence.to_dict()
         return _dict
@@ -105,9 +99,7 @@ class RuleResponse(BaseModel):
                 if obj.get("consequence") is not None
                 else None,
                 "description": obj.get("description"),
-                "enabled": obj.get("enabled")
-                if obj.get("enabled") is not None
-                else True,
+                "enabled": obj.get("enabled"),
             }
         )
         return _obj

@@ -185,28 +185,16 @@ class BaseSearchParams(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # facet_filters
         if self.facet_filters:
             _dict["facetFilters"] = self.facet_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # optional_filters
         if self.optional_filters:
             _dict["optionalFilters"] = self.optional_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # numeric_filters
         if self.numeric_filters:
             _dict["numericFilters"] = self.numeric_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # tag_filters
         if self.tag_filters:
             _dict["tagFilters"] = self.tag_filters.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # around_radius
         if self.around_radius:
             _dict["aroundRadius"] = self.around_radius.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # around_precision
         if self.around_precision:
             _dict["aroundPrecision"] = self.around_precision.to_dict()
         return _dict
@@ -222,11 +210,9 @@ class BaseSearchParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "query": obj.get("query") if obj.get("query") is not None else "",
-                "similarQuery": obj.get("similarQuery")
-                if obj.get("similarQuery") is not None
-                else "",
-                "filters": obj.get("filters") if obj.get("filters") is not None else "",
+                "query": obj.get("query"),
+                "similarQuery": obj.get("similarQuery"),
+                "filters": obj.get("filters"),
                 "facetFilters": FacetFilters.from_dict(obj.get("facetFilters"))
                 if obj.get("facetFilters") is not None
                 else None,
@@ -239,23 +225,15 @@ class BaseSearchParams(BaseModel):
                 "tagFilters": TagFilters.from_dict(obj.get("tagFilters"))
                 if obj.get("tagFilters") is not None
                 else None,
-                "sumOrFiltersScores": obj.get("sumOrFiltersScores")
-                if obj.get("sumOrFiltersScores") is not None
-                else False,
+                "sumOrFiltersScores": obj.get("sumOrFiltersScores"),
                 "restrictSearchableAttributes": obj.get("restrictSearchableAttributes"),
                 "facets": obj.get("facets"),
-                "facetingAfterDistinct": obj.get("facetingAfterDistinct")
-                if obj.get("facetingAfterDistinct") is not None
-                else False,
-                "page": obj.get("page") if obj.get("page") is not None else 0,
+                "facetingAfterDistinct": obj.get("facetingAfterDistinct"),
+                "page": obj.get("page"),
                 "offset": obj.get("offset"),
                 "length": obj.get("length"),
-                "aroundLatLng": obj.get("aroundLatLng")
-                if obj.get("aroundLatLng") is not None
-                else "",
-                "aroundLatLngViaIP": obj.get("aroundLatLngViaIP")
-                if obj.get("aroundLatLngViaIP") is not None
-                else False,
+                "aroundLatLng": obj.get("aroundLatLng"),
+                "aroundLatLngViaIP": obj.get("aroundLatLngViaIP"),
                 "aroundRadius": AroundRadius.from_dict(obj.get("aroundRadius"))
                 if obj.get("aroundRadius") is not None
                 else None,
@@ -267,30 +245,16 @@ class BaseSearchParams(BaseModel):
                 "insidePolygon": obj.get("insidePolygon"),
                 "naturalLanguages": obj.get("naturalLanguages"),
                 "ruleContexts": obj.get("ruleContexts"),
-                "personalizationImpact": obj.get("personalizationImpact")
-                if obj.get("personalizationImpact") is not None
-                else 100,
+                "personalizationImpact": obj.get("personalizationImpact"),
                 "userToken": obj.get("userToken"),
-                "getRankingInfo": obj.get("getRankingInfo")
-                if obj.get("getRankingInfo") is not None
-                else False,
+                "getRankingInfo": obj.get("getRankingInfo"),
                 "explain": obj.get("explain"),
-                "synonyms": obj.get("synonyms")
-                if obj.get("synonyms") is not None
-                else True,
-                "clickAnalytics": obj.get("clickAnalytics")
-                if obj.get("clickAnalytics") is not None
-                else False,
-                "analytics": obj.get("analytics")
-                if obj.get("analytics") is not None
-                else True,
+                "synonyms": obj.get("synonyms"),
+                "clickAnalytics": obj.get("clickAnalytics"),
+                "analytics": obj.get("analytics"),
                 "analyticsTags": obj.get("analyticsTags"),
-                "percentileComputation": obj.get("percentileComputation")
-                if obj.get("percentileComputation") is not None
-                else True,
-                "enableABTest": obj.get("enableABTest")
-                if obj.get("enableABTest") is not None
-                else True,
+                "percentileComputation": obj.get("percentileComputation"),
+                "enableABTest": obj.get("enableABTest"),
             }
         )
         return _obj

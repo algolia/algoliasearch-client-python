@@ -69,12 +69,8 @@ class ObjectDataAfterSearch(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # price
         if self.price:
             _dict["price"] = self.price.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # discount
         if self.discount:
             _dict["discount"] = self.discount.to_dict()
         return _dict

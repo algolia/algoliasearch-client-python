@@ -202,24 +202,16 @@ class BaseSearchResponse(BaseModel):
             },
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # exhaustive
         if self.exhaustive:
             _dict["exhaustive"] = self.exhaustive.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in facets_stats (dict)
         _field_dict = {}
         if self.facets_stats:
             for _key in self.facets_stats:
                 if self.facets_stats[_key]:
                     _field_dict[_key] = self.facets_stats[_key].to_dict()
             _dict["facets_stats"] = _field_dict
-        # override the default output from pydantic by calling `to_dict()` of
-        # redirect
         if self.redirect:
             _dict["redirect"] = self.redirect.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of
-        # rendering_content
         if self.rendering_content:
             _dict["renderingContent"] = self.rendering_content.to_dict()
         # puts key-value pairs in additional_properties in the top level
@@ -262,16 +254,14 @@ class BaseSearchResponse(BaseModel):
                 )
                 if obj.get("facets_stats") is not None
                 else None,
-                "hitsPerPage": obj.get("hitsPerPage")
-                if obj.get("hitsPerPage") is not None
-                else 20,
+                "hitsPerPage": obj.get("hitsPerPage"),
                 "index": obj.get("index"),
                 "indexUsed": obj.get("indexUsed"),
                 "message": obj.get("message"),
                 "nbHits": obj.get("nbHits"),
                 "nbPages": obj.get("nbPages"),
                 "nbSortedHits": obj.get("nbSortedHits"),
-                "page": obj.get("page") if obj.get("page") is not None else 0,
+                "page": obj.get("page"),
                 "parsedQuery": obj.get("parsedQuery"),
                 "processingTimeMS": obj.get("processingTimeMS"),
                 "processingTimingsMS": obj.get("processingTimingsMS"),

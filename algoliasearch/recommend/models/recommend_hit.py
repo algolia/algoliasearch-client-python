@@ -77,24 +77,18 @@ class RecommendHit(BaseModel):
             },
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in highlight_result (dict)
         _field_dict = {}
         if self.highlight_result:
             for _key in self.highlight_result:
                 if self.highlight_result[_key]:
                     _field_dict[_key] = self.highlight_result[_key].to_dict()
             _dict["_highlightResult"] = _field_dict
-        # override the default output from pydantic by calling `to_dict()` of
-        # each value in snippet_result (dict)
         _field_dict = {}
         if self.snippet_result:
             for _key in self.snippet_result:
                 if self.snippet_result[_key]:
                     _field_dict[_key] = self.snippet_result[_key].to_dict()
             _dict["_snippetResult"] = _field_dict
-        # override the default output from pydantic by calling `to_dict()` of
-        # ranking_info
         if self.ranking_info:
             _dict["_rankingInfo"] = self.ranking_info.to_dict()
         # puts key-value pairs in additional_properties in the top level
