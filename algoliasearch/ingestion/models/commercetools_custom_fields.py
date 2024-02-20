@@ -10,27 +10,20 @@ from typing import Any, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictStr
 
-from algoliasearch.ingestion.models.commercetools_custom_fields import (
-    CommercetoolsCustomFields,
-)
 
-
-class SourceUpdateCommercetools(BaseModel):
+class CommercetoolsCustomFields(BaseModel):
     """
-    SourceUpdateCommercetools
+    Custom fields from Commercetools to index in the records (see https://docs.commercetools.com/tutorials/custom-types).
     """
 
-    store_keys: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="Unique and immutable key of the referenced Store.",
-        alias="storeKeys",
+    inventory: Optional[List[StrictStr]] = Field(
+        default=None, description="Inventory custom fields."
     )
-    locales: Optional[List[StrictStr]] = Field(
-        default=None,
-        description='Array of locales that must match the following pattern: ^[a-z]{2}(-[A-Z]{2})?$. For example ["fr-FR", "en"]. ',
+    price: Optional[List[StrictStr]] = Field(
+        default=None, description="Price custom fields."
     )
-    custom_fields: Optional[CommercetoolsCustomFields] = Field(
-        default=None, alias="customFields"
+    category: Optional[List[StrictStr]] = Field(
+        default=None, description="Category custom fields."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -40,7 +33,7 @@ class SourceUpdateCommercetools(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of SourceUpdateCommercetools from a JSON string"""
+        """Create an instance of CommercetoolsCustomFields from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -58,15 +51,11 @@ class SourceUpdateCommercetools(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of
-        # custom_fields
-        if self.custom_fields:
-            _dict["customFields"] = self.custom_fields.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of SourceUpdateCommercetools from a dict"""
+        """Create an instance of CommercetoolsCustomFields from a dict"""
         if obj is None:
             return None
 
@@ -75,13 +64,9 @@ class SourceUpdateCommercetools(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "storeKeys": obj.get("storeKeys"),
-                "locales": obj.get("locales"),
-                "customFields": CommercetoolsCustomFields.from_dict(
-                    obj.get("customFields")
-                )
-                if obj.get("customFields") is not None
-                else None,
+                "inventory": obj.get("inventory"),
+                "price": obj.get("price"),
+                "category": obj.get("category"),
             }
         )
         return _obj
