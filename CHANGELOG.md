@@ -1,3 +1,8 @@
+## [4.0.0b5](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b4...4.0.0b5)
+
+- [6624759e1](https://github.com/algolia/api-clients-automation/commit/6624759e1) feat(specs): add CustomFields to CT Source Input ([#2742](https://github.com/algolia/api-clients-automation/pull/2742)) by [@damcou](https://github.com/damcou/)
+- [ef37e65b7](https://github.com/algolia/api-clients-automation/commit/ef37e65b7) fix(clients): add e2e tests for analytics API ([#2737](https://github.com/algolia/api-clients-automation/pull/2737)) by [@millotp](https://github.com/millotp/)
+
 ## [4.0.0b4](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b3...4.0.0b4)
 
 - [69602c03a](https://github.com/algolia/api-clients-automation/commit/69602c03a) fix(python): wait for task helper ([#2646](https://github.com/algolia/api-clients-automation/pull/2646)) by [@kai687](https://github.com/kai687/)
