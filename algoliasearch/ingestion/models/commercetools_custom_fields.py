@@ -51,6 +51,21 @@ class CommercetoolsCustomFields(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        # set to None if inventory (nullable) is None
+        # and model_fields_set contains the field
+        if self.inventory is None and "inventory" in self.model_fields_set:
+            _dict["inventory"] = None
+
+        # set to None if price (nullable) is None
+        # and model_fields_set contains the field
+        if self.price is None and "price" in self.model_fields_set:
+            _dict["price"] = None
+
+        # set to None if category (nullable) is None
+        # and model_fields_set contains the field
+        if self.category is None and "category" in self.model_fields_set:
+            _dict["category"] = None
+
         return _dict
 
     @classmethod
