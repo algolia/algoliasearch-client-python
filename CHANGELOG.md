@@ -1,3 +1,8 @@
+## [4.0.0b6](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b5...4.0.0b6)
+
+- [dc622f77c](https://github.com/algolia/api-clients-automation/commit/dc622f77c) fix(python): remove default values ([#2750](https://github.com/algolia/api-clients-automation/pull/2750)) by [@shortcuts](https://github.com/shortcuts/)
+- [4f6e2d0b3](https://github.com/algolia/api-clients-automation/commit/4f6e2d0b3) fix(specs): allow custom fields to be nullable ([#2746](https://github.com/algolia/api-clients-automation/pull/2746)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0b5](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b4...4.0.0b5)
 
 - [6624759e1](https://github.com/algolia/api-clients-automation/commit/6624759e1) feat(specs): add CustomFields to CT Source Input ([#2742](https://github.com/algolia/api-clients-automation/pull/2742)) by [@damcou](https://github.com/damcou/)
