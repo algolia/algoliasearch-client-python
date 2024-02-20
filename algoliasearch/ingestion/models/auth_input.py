@@ -33,8 +33,6 @@ class AuthInput(BaseModel):
         Union[AuthAPIKey, AuthAlgolia, AuthBasic, AuthGoogleServiceAccount, AuthOAuth]
     ] = None
 
-    model_config = {"validate_assignment": True}
-
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:

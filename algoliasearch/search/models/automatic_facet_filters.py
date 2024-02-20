@@ -22,8 +22,6 @@ class AutomaticFacetFilters(BaseModel):
     oneof_schema_2_validator: Optional[List[StrictStr]] = None
     actual_instance: Optional[Union[List[AutomaticFacetFilter], List[str]]] = None
 
-    model_config = {"validate_assignment": True}
-
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:

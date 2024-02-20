@@ -10,14 +10,14 @@ from typing import Any, Dict, Optional, Self
 
 from pydantic import BaseModel, Field, StrictStr
 
-from algoliasearch.ingestion.models.auth_input import AuthInput
+from algoliasearch.ingestion.models.auth_input_partial import AuthInputPartial
 from algoliasearch.ingestion.models.authentication_type import AuthenticationType
 from algoliasearch.ingestion.models.platform import Platform
 
 
 class Authentication(BaseModel):
     """
-    An authentication is used to login into a Source or a Destination.
+    An authentication is used to login into a Source or a Destination, with obfuscated input.
     """
 
     authentication_id: StrictStr = Field(
@@ -26,7 +26,7 @@ class Authentication(BaseModel):
     type: AuthenticationType
     name: StrictStr = Field(description="An human readable name describing the object.")
     platform: Optional[Platform] = None
-    input: AuthInput
+    input: AuthInputPartial
     created_at: StrictStr = Field(
         description="Date of creation (RFC3339 format).", alias="createdAt"
     )
@@ -65,6 +65,11 @@ class Authentication(BaseModel):
         # input
         if self.input:
             _dict["input"] = self.input.to_dict()
+        # set to None if platform (nullable) is None
+        # and model_fields_set contains the field
+        if self.platform is None and "platform" in self.model_fields_set:
+            _dict["platform"] = None
+
         return _dict
 
     @classmethod
@@ -82,7 +87,7 @@ class Authentication(BaseModel):
                 "type": obj.get("type"),
                 "name": obj.get("name"),
                 "platform": obj.get("platform"),
-                "input": AuthInput.from_dict(obj.get("input"))
+                "input": AuthInputPartial.from_dict(obj.get("input"))
                 if obj.get("input") is not None
                 else None,
                 "createdAt": obj.get("createdAt"),

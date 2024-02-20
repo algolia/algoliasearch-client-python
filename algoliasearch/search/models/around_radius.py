@@ -22,8 +22,6 @@ class AroundRadius(BaseModel):
     oneof_schema_2_validator: Optional[AroundRadiusAll] = None
     actual_instance: Optional[Union[AroundRadiusAll, int]] = None
 
-    model_config = {"validate_assignment": True}
-
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:

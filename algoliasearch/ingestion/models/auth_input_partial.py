@@ -39,8 +39,6 @@ class AuthInputPartial(BaseModel):
         ]
     ] = None
 
-    model_config = {"validate_assignment": True}
-
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:

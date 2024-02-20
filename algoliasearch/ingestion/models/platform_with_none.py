@@ -23,8 +23,6 @@ class PlatformWithNone(BaseModel):
     oneof_schema_2_validator: Optional[PlatformNone] = None
     actual_instance: Optional[Union[Platform, PlatformNone]] = None
 
-    model_config = {"validate_assignment": True}
-
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:

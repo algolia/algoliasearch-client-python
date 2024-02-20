@@ -25,7 +25,7 @@ class DestinationUpdate(BaseModel):
     )
     input: Optional[DestinationInput] = None
     authentication_id: Optional[StrictStr] = Field(
-        default=None, alias="authenticationID"
+        default=None, description="The authentication UUID.", alias="authenticationID"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

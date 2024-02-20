@@ -19,8 +19,7 @@ class SourceBigCommerce(BaseModel):
     SourceBigCommerce
     """
 
-    store_hash: Optional[StrictStr] = Field(
-        default=None,
+    store_hash: StrictStr = Field(
         description="The store hash identifying the store the shopper is signing in to.",
         alias="storeHash",
     )

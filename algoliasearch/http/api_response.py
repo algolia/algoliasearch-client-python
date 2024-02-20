@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from re import match
 from typing import Any, Dict, Generic, Optional, TypeVar
 
@@ -50,7 +51,7 @@ class ApiResponse(Generic[T]):
     def to_json(self) -> str:
         return str(self.__dict__)
 
-    def deserialize(self, klass: any = None) -> T:
+    def deserialize(self, klass: any = None, data: any = None) -> T:
         """Deserializes dict, list, str into an object.
 
         :param data: dict, list or str.
@@ -58,30 +59,36 @@ class ApiResponse(Generic[T]):
 
         :return: object.
         """
-        if self.raw_data is None:
+        if data is None:
+            data = self.raw_data
+        if data is None:
             return None
+
+        if hasattr(klass, "__origin__") and klass.__origin__ is list:
+            sub_kls = klass.__args__[0]
+            arr = json.loads(data)
+            return [self.deserialize(sub_kls, sub_data) for sub_data in arr]
 
         if isinstance(klass, str):
             if klass.startswith("List["):
                 sub_kls = match(r"List\[(.*)]", klass).group(1)
-                return [
-                    self.__deserialize(sub_data, sub_kls) for sub_data in self.raw_data
-                ]
+                return [self.deserialize(sub_kls, sub_data) for sub_data in data]
 
             if klass.startswith("Dict["):
                 sub_kls = match(r"Dict\[([^,]*), (.*)]", klass).group(2)
-                return {
-                    k: self.__deserialize(v, sub_kls) for k, v in self.raw_data.items()
-                }
+                return {k: self.deserialize(sub_kls, v) for k, v in data.items()}
 
         if klass in self.PRIMITIVE_TYPES:
             try:
-                return klass(self.raw_data)
+                return klass(data)
             except UnicodeEncodeError:
-                return str(self.raw_data)
+                return str(data)
             except TypeError:
-                return self.raw_data
-        elif klass == object:
-            return self.raw_data
-        else:
-            return klass.from_json(self.raw_data)
+                return data
+        if klass == object:
+            return data
+
+        if isinstance(data, str):
+            return klass.from_json(data)
+
+        return klass.from_dict(data)

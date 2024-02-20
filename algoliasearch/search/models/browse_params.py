@@ -23,8 +23,6 @@ class BrowseParams(BaseModel):
     oneof_schema_2_validator: Optional[BrowseParamsObject] = None
     actual_instance: Optional[Union[BrowseParamsObject, SearchParamsString]] = None
 
-    model_config = {"validate_assignment": True}
-
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:
