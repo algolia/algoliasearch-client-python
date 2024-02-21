@@ -322,24 +322,25 @@ class SearchClient:
     async def browse_synonyms(
         self,
         index_name: str,
-        aggregator: Optional[Callable[[SearchSynonymsResponse], None]],
+        aggregator: Callable[[SearchSynonymsResponse], None],
         search_synonyms_params: Optional[SearchSynonymsParams] = SearchSynonymsParams(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
-        search_synonyms_params.page = 0
+        if search_synonyms_params.page is None:
+            search_synonyms_params.page = 0
         search_synonyms_params.hits_per_page = 1000
 
         async def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
-            if _prev is not None:
-                search_synonyms_params.page = _prev.page + 1
-            return await self.search_synonyms(
+            resp = await self.search_synonyms(
                 index_name=index_name,
                 search_synonyms_params=search_synonyms_params,
                 request_options=request_options,
             )
+            search_synonyms_params.page += 1
+            return resp
 
         return await create_iterable(
             func=_func,
