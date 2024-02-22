@@ -448,7 +448,7 @@ class SearchClient:
 
         responses.append(copy_resp)
 
-        await self.wait_for_task(index_name=tmp_index_name, task_id=copy_resp.task_id)
+        await self.wait_for_task(index_name=index_name, task_id=copy_resp.task_id)
 
         requests: List[BatchRequest] = []
 
@@ -476,7 +476,7 @@ class SearchClient:
 
         responses.append(move_resp)
 
-        await self.wait_for_task(index_name=index_name, task_id=move_resp.task_id)
+        await self.wait_for_task(index_name=tmp_index_name, task_id=move_resp.task_id)
 
         return responses
 
