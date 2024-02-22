@@ -9,9 +9,22 @@ import base64
 import hashlib
 import hmac
 from json import dumps
+from random import choice
 from re import search
+from string import ascii_letters
 from time import time
-from typing import Annotated, Any, Callable, Dict, List, Optional, Self, Tuple, Union
+from typing import (
+    Annotated,
+    Any,
+    Callable,
+    Dict,
+    Iterator,
+    List,
+    Optional,
+    Self,
+    Tuple,
+    Union,
+)
 from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
@@ -39,6 +52,7 @@ from algoliasearch.search.models.batch_dictionary_entries_params import (
     BatchDictionaryEntriesParams,
 )
 from algoliasearch.search.models.batch_params import BatchParams
+from algoliasearch.search.models.batch_request import BatchRequest
 from algoliasearch.search.models.batch_response import BatchResponse
 from algoliasearch.search.models.batch_write_params import BatchWriteParams
 from algoliasearch.search.models.browse_params import BrowseParams
@@ -78,6 +92,7 @@ from algoliasearch.search.models.replace_source_response import ReplaceSourceRes
 from algoliasearch.search.models.rule import Rule
 from algoliasearch.search.models.save_object_response import SaveObjectResponse
 from algoliasearch.search.models.save_synonym_response import SaveSynonymResponse
+from algoliasearch.search.models.scope_type import ScopeType
 from algoliasearch.search.models.search_dictionary_entries_params import (
     SearchDictionaryEntriesParams,
 )
@@ -397,6 +412,73 @@ class SearchClient:
             raise ValidUntilNotFoundException("valid_until not found in api key.")
 
         return int(validity.group(1)) - int(round(time()))
+
+    def create_temporary_name(self, index_name: str) -> str:
+        """
+        Helper: Creates a temporary index name from the given `index_name`.
+        """
+        return "{}_tmp_{}".format(
+            index_name, "".join(choice(ascii_letters) for i in range(10))
+        )
+
+    async def replace_all_objects(
+        self,
+        index_name: str,
+        objects: Union[List[Dict[str, Any]], Iterator[Dict[str, Any]]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[ApiResponse[str]]:
+        """
+        Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
+        """
+        tmp_index_name = self.create_temporary_name(index_name)
+        responses: List[ApiResponse[str]] = []
+        copy_resp = await self.operation_index(
+            index_name=index_name,
+            operation_index_params=OperationIndexParams(
+                operation="copy",
+                destination=tmp_index_name,
+                scope=[
+                    ScopeType("settings"),
+                    ScopeType("synonyms"),
+                    ScopeType("rules"),
+                ],
+            ),
+            request_options=request_options,
+        )
+
+        responses.append(copy_resp)
+
+        await self.wait_for_task(index_name=tmp_index_name, task_id=copy_resp.task_id)
+
+        requests: List[BatchRequest] = []
+
+        for obj in objects:
+            requests.append(BatchRequest(action="addObject", body=obj))
+
+        save_resp = await self.batch(
+            index_name=tmp_index_name,
+            batch_write_params=BatchWriteParams(requests=requests),
+            request_options=request_options,
+        )
+
+        responses.append(save_resp)
+
+        await self.wait_for_task(index_name=tmp_index_name, task_id=save_resp.task_id)
+
+        move_resp = await self.operation_index(
+            index_name=tmp_index_name,
+            operation_index_params=OperationIndexParams(
+                operation="move",
+                destination=index_name,
+            ),
+            request_options=request_options,
+        )
+
+        responses.append(move_resp)
+
+        await self.wait_for_task(index_name=index_name, task_id=move_resp.task_id)
+
+        return responses
 
     async def add_api_key_with_http_info(
         self,
