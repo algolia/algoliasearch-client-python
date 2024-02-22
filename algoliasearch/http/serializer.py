@@ -23,6 +23,8 @@ class QueryParametersSerializer:
 
     def __init__(self, query_parameters: Dict[str, Any]) -> None:
         self.query_parameters = {}
+        if query_parameters is None:
+            return
         for key, value in query_parameters.items():
             self.query_parameters[key] = self.parse(value)
 
