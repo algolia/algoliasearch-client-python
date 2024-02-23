@@ -13,18 +13,7 @@ from random import choice
 from re import search
 from string import ascii_letters
 from time import time
-from typing import (
-    Annotated,
-    Any,
-    Callable,
-    Dict,
-    Iterator,
-    List,
-    Optional,
-    Self,
-    Tuple,
-    Union,
-)
+from typing import Annotated, Any, Callable, Dict, List, Optional, Self, Tuple, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
@@ -41,6 +30,7 @@ from algoliasearch.http.serializer import QueryParametersSerializer, bodySeriali
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 from algoliasearch.search.config import SearchConfig
+from algoliasearch.search.models.action import Action
 from algoliasearch.search.models.add_api_key_response import AddApiKeyResponse
 from algoliasearch.search.models.api_key import ApiKey
 from algoliasearch.search.models.assign_user_id_params import AssignUserIdParams
@@ -421,10 +411,41 @@ class SearchClient:
             index_name, "".join(choice(ascii_letters) for i in range(10))
         )
 
+    async def chunked_batch(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        action: Action = "addObject",
+        wait_for_tasks: bool = False,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[BatchResponse]:
+        """
+        Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `batch` requests.
+        """
+        requests: List[BatchRequest] = []
+        responses: List[BatchResponse] = []
+        for j, obj in enumerate(objects):
+            requests.append(BatchRequest(action=action, body=obj))
+            if j % 1000 == 0:
+                responses.append(
+                    await self.batch(
+                        index_name=index_name,
+                        batch_write_params=BatchWriteParams(requests=requests),
+                        request_options=request_options,
+                    )
+                )
+                requests = []
+        if wait_for_tasks:
+            for response in responses:
+                await self.wait_for_task(
+                    index_name=index_name, task_id=response.task_id
+                )
+        return responses
+
     async def replace_all_objects(
         self,
         index_name: str,
-        objects: Union[List[Dict[str, Any]], Iterator[Dict[str, Any]]],
+        objects: List[Dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[ApiResponse[str]]:
         """
@@ -450,20 +471,14 @@ class SearchClient:
 
         await self.wait_for_task(index_name=index_name, task_id=copy_resp.task_id)
 
-        requests: List[BatchRequest] = []
-
-        for obj in objects:
-            requests.append(BatchRequest(action="addObject", body=obj))
-
-        save_resp = await self.batch(
+        save_resp = await self.chunked_batch(
             index_name=tmp_index_name,
-            batch_write_params=BatchWriteParams(requests=requests),
+            objects=objects,
+            wait_for_tasks=True,
             request_options=request_options,
         )
 
-        responses.append(save_resp)
-
-        await self.wait_for_task(index_name=tmp_index_name, task_id=save_resp.task_id)
+        responses += save_resp
 
         move_resp = await self.operation_index(
             index_name=tmp_index_name,
