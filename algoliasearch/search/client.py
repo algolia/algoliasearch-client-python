@@ -424,9 +424,9 @@ class SearchClient:
         """
         requests: List[BatchRequest] = []
         responses: List[BatchResponse] = []
-        for j, obj in enumerate(objects):
+        for i, obj in enumerate(objects):
             requests.append(BatchRequest(action=action, body=obj))
-            if j % 1000 == 0:
+            if i % 1000 == 0:
                 responses.append(
                     await self.batch(
                         index_name=index_name,
@@ -471,14 +471,14 @@ class SearchClient:
 
         await self.wait_for_task(index_name=index_name, task_id=copy_resp.task_id)
 
-        save_resp = await self.chunked_batch(
+        save_resps = await self.chunked_batch(
             index_name=tmp_index_name,
             objects=objects,
             wait_for_tasks=True,
             request_options=request_options,
         )
 
-        responses += save_resp
+        responses += save_resps
 
         move_resp = await self.operation_index(
             index_name=tmp_index_name,
