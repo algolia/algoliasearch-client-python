@@ -1,3 +1,12 @@
+## [4.0.0b7](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b6...4.0.0b7)
+
+- [d48e2f624](https://github.com/algolia/api-clients-automation/commit/d48e2f624) fix(specs): add missing attributes for CT Source update ([#2792](https://github.com/algolia/api-clients-automation/pull/2792)) by [@damcou](https://github.com/damcou/)
+- [71317bfe4](https://github.com/algolia/api-clients-automation/commit/71317bfe4) feat(python): add `chunked_batch` ([#2763](https://github.com/algolia/api-clients-automation/pull/2763)) by [@shortcuts](https://github.com/shortcuts/)
+- [f3e894002](https://github.com/algolia/api-clients-automation/commit/f3e894002) fix(clients): replace all objects ([#2762](https://github.com/algolia/api-clients-automation/pull/2762)) by [@shortcuts](https://github.com/shortcuts/)
+- [c8415455e](https://github.com/algolia/api-clients-automation/commit/c8415455e) feat(python): add `replace_all_objects` ([#2756](https://github.com/algolia/api-clients-automation/pull/2756)) by [@shortcuts](https://github.com/shortcuts/)
+- [13ab22ca1](https://github.com/algolia/api-clients-automation/commit/13ab22ca1) feat(python): add `generate_secured_api_key` and `get_secured_api_key_remaining_validity` ([#2753](https://github.com/algolia/api-clients-automation/pull/2753)) by [@shortcuts](https://github.com/shortcuts/)
+- [92cd1c793](https://github.com/algolia/api-clients-automation/commit/92cd1c793) fix(clients): browse synonyms page not in response ([#2757](https://github.com/algolia/api-clients-automation/pull/2757)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0b6](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b5...4.0.0b6)
 
 - [dc622f77c](https://github.com/algolia/api-clients-automation/commit/dc622f77c) fix(python): remove default values ([#2750](https://github.com/algolia/api-clients-automation/pull/2750)) by [@shortcuts](https://github.com/shortcuts/)
