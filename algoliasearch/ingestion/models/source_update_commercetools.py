@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, Field, StrictBool, StrictStr
 
 from algoliasearch.ingestion.models.commercetools_custom_fields import (
     CommercetoolsCustomFields,
@@ -28,6 +28,12 @@ class SourceUpdateCommercetools(BaseModel):
     locales: Optional[List[StrictStr]] = Field(
         default=None,
         description='Array of locales that must match the following pattern: ^[a-z]{2}(-[A-Z]{2})?$. For example ["fr-FR", "en"]. ',
+    )
+    url: Optional[StrictStr] = None
+    fallback_is_in_stock_value: Optional[StrictBool] = Field(
+        default=None,
+        description="Determines the value that will be stored in the Algolia record if there's no inventory information on the product. ",
+        alias="fallbackIsInStockValue",
     )
     custom_fields: Optional[CommercetoolsCustomFields] = Field(
         default=None, alias="customFields"
@@ -75,6 +81,8 @@ class SourceUpdateCommercetools(BaseModel):
             {
                 "storeKeys": obj.get("storeKeys"),
                 "locales": obj.get("locales"),
+                "url": obj.get("url"),
+                "fallbackIsInStockValue": obj.get("fallbackIsInStockValue"),
                 "customFields": CommercetoolsCustomFields.from_dict(
                     obj.get("customFields")
                 )
