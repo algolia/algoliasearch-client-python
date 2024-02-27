@@ -20,11 +20,7 @@ from pydantic import Field, StrictBool, StrictInt, StrictStr
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.exceptions import RequestException, ValidUntilNotFoundException
-from algoliasearch.http.helpers import (
-    RetryTimeout,
-    SecuredApiKeyRestrictions,
-    create_iterable,
-)
+from algoliasearch.http.helpers import RetryTimeout, create_iterable
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer, bodySerializer
 from algoliasearch.http.transporter import Transporter
@@ -102,6 +98,9 @@ from algoliasearch.search.models.search_synonyms_params import SearchSynonymsPar
 from algoliasearch.search.models.search_synonyms_response import SearchSynonymsResponse
 from algoliasearch.search.models.search_user_ids_params import SearchUserIdsParams
 from algoliasearch.search.models.search_user_ids_response import SearchUserIdsResponse
+from algoliasearch.search.models.secured_api_key_restrictions import (
+    SecuredAPIKeyRestrictions,
+)
 from algoliasearch.search.models.source import Source
 from algoliasearch.search.models.synonym_hit import SynonymHit
 from algoliasearch.search.models.update_api_key_response import UpdateApiKeyResponse
@@ -365,7 +364,7 @@ class SearchClient:
     def generate_secured_api_key(
         self,
         parent_api_key: str,
-        restrictions: Optional[SecuredApiKeyRestrictions] = SecuredApiKeyRestrictions(),
+        restrictions: Optional[SecuredAPIKeyRestrictions] = SecuredAPIKeyRestrictions(),
     ) -> str:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
@@ -373,7 +372,7 @@ class SearchClient:
         query_parameters = dumps(
             QueryParametersSerializer(
                 restrictions.to_dict()
-                if isinstance(restrictions, SecuredApiKeyRestrictions)
+                if isinstance(restrictions, SecuredAPIKeyRestrictions)
                 else restrictions
             ).query_parameters
         )

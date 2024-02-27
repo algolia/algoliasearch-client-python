@@ -15,6 +15,7 @@ search/models/advanced_syntax_features.py
 search/models/alternatives_as_exact.py
 search/models/anchoring.py
 search/models/api_key.py
+search/models/api_key_operation.py
 search/models/around_precision.py
 search/models/around_precision_from_value_inner.py
 search/models/around_radius.py
@@ -149,6 +150,7 @@ search/models/search_type_default.py
 search/models/search_type_facet.py
 search/models/search_user_ids_params.py
 search/models/search_user_ids_response.py
+search/models/secured_api_key_restrictions.py
 search/models/semantic_search.py
 search/models/snippet_result.py
 search/models/snippet_result_option.py
