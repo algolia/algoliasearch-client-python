@@ -417,6 +417,7 @@ class SearchClient:
         objects: List[Dict[str, Any]],
         action: Action = "addObject",
         wait_for_tasks: bool = False,
+        batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -426,7 +427,7 @@ class SearchClient:
         responses: List[BatchResponse] = []
         for i, obj in enumerate(objects):
             requests.append(BatchRequest(action=action, body=obj))
-            if i % 1000 == 0:
+            if i % batch_size == 0:
                 responses.append(
                     await self.batch(
                         index_name=index_name,
@@ -446,14 +447,15 @@ class SearchClient:
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
+        batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[ApiResponse[str]]:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
         """
         tmp_index_name = self.create_temporary_name(index_name)
-        responses: List[ApiResponse[str]] = []
-        copy_resp = await self.operation_index(
+
+        copy_operation_response = await self.operation_index(
             index_name=index_name,
             operation_index_params=OperationIndexParams(
                 operation="copy",
@@ -466,21 +468,19 @@ class SearchClient:
             ),
             request_options=request_options,
         )
+        await self.wait_for_task(
+            index_name=index_name, task_id=copy_operation_response.task_id
+        )
 
-        responses.append(copy_resp)
-
-        await self.wait_for_task(index_name=index_name, task_id=copy_resp.task_id)
-
-        save_resps = await self.chunked_batch(
+        batch_responses = await self.chunked_batch(
             index_name=tmp_index_name,
             objects=objects,
             wait_for_tasks=True,
+            batch_size=batch_size,
             request_options=request_options,
         )
 
-        responses += save_resps
-
-        move_resp = await self.operation_index(
+        move_operation_response = await self.operation_index(
             index_name=tmp_index_name,
             operation_index_params=OperationIndexParams(
                 operation="move",
@@ -488,12 +488,15 @@ class SearchClient:
             ),
             request_options=request_options,
         )
+        await self.wait_for_task(
+            index_name=tmp_index_name, task_id=move_operation_response.task_id
+        )
 
-        responses.append(move_resp)
-
-        await self.wait_for_task(index_name=tmp_index_name, task_id=move_resp.task_id)
-
-        return responses
+        return {
+            "copy_operation_response": copy_operation_response,
+            "batch_responses": batch_responses,
+            "move_operation_response": move_operation_response,
+        }
 
     async def add_api_key_with_http_info(
         self,
