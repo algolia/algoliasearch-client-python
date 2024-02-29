@@ -131,6 +131,11 @@ class BaseSearchResponse(BaseModel):
         description="Lets you store custom data in your indices.",
         alias="userData",
     )
+    query_id: Optional[StrictStr] = Field(
+        default=None,
+        description="Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/).",
+        alias="queryID",
+    )
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
         "abTestID",
@@ -160,6 +165,7 @@ class BaseSearchResponse(BaseModel):
         "serverTimeMS",
         "serverUsed",
         "userData",
+        "queryID",
     ]
 
     @field_validator("around_lat_lng")
@@ -277,6 +283,7 @@ class BaseSearchResponse(BaseModel):
                 "serverTimeMS": obj.get("serverTimeMS"),
                 "serverUsed": obj.get("serverUsed"),
                 "userData": obj.get("userData"),
+                "queryID": obj.get("queryID"),
             }
         )
         # store additional fields in additional_properties

@@ -132,6 +132,11 @@ class BrowseResponse(BaseModel):
         description="Lets you store custom data in your indices.",
         alias="userData",
     )
+    query_id: Optional[StrictStr] = Field(
+        default=None,
+        description="Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/).",
+        alias="queryID",
+    )
     hits: List[Hit]
     query: StrictStr = Field(description="Text to search for in an index.")
     params: StrictStr = Field(
@@ -250,6 +255,7 @@ class BrowseResponse(BaseModel):
                 "serverTimeMS": obj.get("serverTimeMS"),
                 "serverUsed": obj.get("serverUsed"),
                 "userData": obj.get("userData"),
+                "queryID": obj.get("queryID"),
                 "hits": [Hit.from_dict(_item) for _item in obj.get("hits")]
                 if obj.get("hits") is not None
                 else None,
