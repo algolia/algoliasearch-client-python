@@ -132,6 +132,11 @@ class RecommendationsResults(BaseModel):
         description="Lets you store custom data in your indices.",
         alias="userData",
     )
+    query_id: Optional[StrictStr] = Field(
+        default=None,
+        description="Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/).",
+        alias="queryID",
+    )
     hits: List[RecommendationsHit]
     query: Optional[StrictStr] = Field(
         default="", description="Text to search for in an index."
@@ -248,6 +253,7 @@ class RecommendationsResults(BaseModel):
                 "serverTimeMS": obj.get("serverTimeMS"),
                 "serverUsed": obj.get("serverUsed"),
                 "userData": obj.get("userData"),
+                "queryID": obj.get("queryID"),
                 "hits": [
                     RecommendationsHit.from_dict(_item) for _item in obj.get("hits")
                 ]

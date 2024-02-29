@@ -1,6 +1,5 @@
 ../.gitignore
 ../pyproject.toml
-.openapi-generator-ignore
 __init__.py
 http/__init__.py
 search/__init__.py
